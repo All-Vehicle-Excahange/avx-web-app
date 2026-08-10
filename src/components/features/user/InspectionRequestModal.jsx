@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { X, Check } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -19,6 +20,7 @@ import AddMoneyPopup from "@/components/features/consult/details/components/AddM
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [animate, setAnimate] = useState(false);
   const [step, setStep] = useState(1);
@@ -435,16 +437,16 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           relative z-50 mx-3
           w-full md:w-[85%] lg:w-[70%]  
           max-w-md md:max-w-none
-          h-[70vh] md:h-auto  
-          md:max-h-[62%]
+          ${step === 1 || step === 3 ? "h-[60vh]" : "h-[75vh]"}
           flex md:flex
           rounded-2xl md:rounded-2xl
           bg-secondary overflow-hidden text-primary
           border border-third/50 shadow-2xl
           transition-all duration-300 ease-out
-          ${animate
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-4"
+          ${
+            animate
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 translate-y-4"
           }
         `}
       >
@@ -457,7 +459,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
         </div>
 
         {/* CONTENT */}
-        <div className="p-4 md:p-6 space-y-5 w-full md:w-[50%] overflow-y-auto custom-scrollbar">
+        <div className="p-3.5 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-5 w-full md:w-[50%] flex flex-col justify-center overflow-y-auto custom-scrollbar">
           {/* ---- STEP 0: Already Submitted ---- */}
           {step === 0 && existingInspection && (
             <>
@@ -489,32 +491,32 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   <span className="text-third">Inspection Type</span>
                   <span className="font-semibold">
                     {existingInspection.inspectionType ===
-                      "VIDEO_CALL_WITH_REPORT"
+                    "VIDEO_CALL_WITH_REPORT"
                       ? "Video Call + Report"
                       : "Report Only"}
                   </span>
                 </div>
                 {existingInspection.inspectionType ===
                   "VIDEO_CALL_WITH_REPORT" && (
-                    <>
+                  <>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-third">WhatsApp Number</span>
+                      <span className="font-semibold">
+                        {existingInspection.whatsappNumber}
+                      </span>
+                    </div>
+                    {existingInspection.videoCallScheduledAt && (
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-third">WhatsApp Number</span>
+                        <span className="text-third">Scheduled At</span>
                         <span className="font-semibold">
-                          {existingInspection.whatsappNumber}
+                          {new Date(existingInspection.videoCallScheduledAt)
+                            .toLocaleDateString("en-GB")
+                            .replace(/\//g, "/")}
                         </span>
                       </div>
-                      {existingInspection.videoCallScheduledAt && (
-                        <div className="flex justify-between items-center text-sm">
-                          <span className="text-third">Scheduled At</span>
-                          <span className="font-semibold">
-                            {new Date(existingInspection.videoCallScheduledAt)
-                              .toLocaleDateString("en-GB")
-                              .replace(/\//g, "/")}
-                          </span>
-                        </div>
-                      )}
-                    </>
-                  )}
+                    )}
+                  </>
+                )}
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-third">Status</span>
                   <span className="px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium text-xs">
@@ -610,16 +612,16 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           {/* ---- STEP 2: Payment ---- */}
           {step === 2 && (
             <>
-              <h2 className="text-2xl font-bold text-center">
+              <h2 className="text-xl sm:text-2xl font-bold text-center">
                 {isFree ? "Confirm your request" : "Complete your payment"}
               </h2>
-              <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80">
-                <div className="flex justify-between items-center text-sm">
+              <div className="border border-third/30 rounded-2xl p-3.5 sm:p-5 space-y-2.5 sm:space-y-4 bg-secondary/80">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-third">Inspection Type</span>
                   <span className="font-semibold">Inspection Report Only</span>
                 </div>
-                <div className="border-t border-third/30 my-2" />
-                <div className="flex justify-between items-center text-lg font-bold">
+                <div className="border-t border-third/30 my-1 sm:my-2" />
+                <div className="flex justify-between items-center text-base sm:text-lg font-bold">
                   <span>Total Amount</span>
                   <div className="flex items-center gap-2">
                     <span className="text-primary font-bold">
@@ -629,7 +631,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                     </span>
                     {!isFree && discount > 0 && (
                       <>
-                        <span className="text-sm text-third line-through font-normal">
+                        <span className="text-xs sm:text-sm text-third line-through font-normal">
                           ₹{originalPrice.toLocaleString("en-IN")}
                         </span>
                         <span className="text-xs text-green-500 font-semibold">
@@ -643,26 +645,32 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 {/* Payment Methods Selection for Consultants */}
                 {!isFree && isConsultant && (
                   <>
-                    <div className="border-t border-third/30 my-2" />
-                    <div className="space-y-3">
-                      <label className="text-[11px] font-bold text-third uppercase tracking-wider block">
+                    <div className="border-t border-third/30 my-1 sm:my-2" />
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[10px] sm:text-[11px] font-bold text-third uppercase tracking-wider block">
                         Select Payment Method
                       </label>
-                      <div className="grid grid-cols-1 gap-2.5">
+                      <div className="grid grid-cols-1 gap-2 sm:gap-2.5">
                         {/* Pay with Wallet */}
                         <button
                           type="button"
                           onClick={() => setPaymentMethod("WALLET")}
-                          className={`flex items-center justify-between p-3.5 rounded-xl border transition-all text-left cursor-pointer
-                            ${paymentMethod === "WALLET"
-                              ? "bg-primary/5 border-primary text-primary"
-                              : "bg-transparent border-third/20 text-third hover:border-third/40"
+                          className={`flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl border transition-all text-left cursor-pointer
+                            ${
+                              paymentMethod === "WALLET"
+                                ? "bg-primary/5 border-primary text-primary"
+                                : "bg-transparent border-third/20 text-third hover:border-third/40"
                             }`}
                         >
-                          <div className="space-y-1">
-                            <p className="text-sm font-semibold">Reecomm Wallet</p>
-                            <p className="text-xs text-zinc-400">
-                              Balance: ₹{walletBalance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                          <div className="space-y-0.5 sm:space-y-1">
+                            <p className="text-xs sm:text-sm font-semibold">
+                              Reecomm Wallet
+                            </p>
+                            <p className="text-[11px] sm:text-xs text-zinc-400">
+                              Balance: ₹
+                              {walletBalance.toLocaleString("en-IN", {
+                                minimumFractionDigits: 2,
+                              })}
                             </p>
                             {walletBalance < discountPrice && (
                               <p className="text-[10px] text-red-400 font-medium animate-pulse">
@@ -681,15 +689,20 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                         <button
                           type="button"
                           onClick={() => setPaymentMethod("RAZORPAY")}
-                          className={`flex items-center justify-between p-3.5 rounded-xl border transition-all text-left cursor-pointer
-                            ${paymentMethod === "RAZORPAY"
-                              ? "bg-primary/5 border-primary text-primary"
-                              : "bg-transparent border-third/20 text-third hover:border-third/40"
+                          className={`flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl border transition-all text-left cursor-pointer
+                            ${
+                              paymentMethod === "RAZORPAY"
+                                ? "bg-primary/5 border-primary text-primary"
+                                : "bg-transparent border-third/20 text-third hover:border-third/40"
                             }`}
                         >
-                          <div className="space-y-1">
-                            <p className="text-sm font-semibold">Razorpay</p>
-                            <p className="text-xs text-zinc-400">UPI, Card, Netbanking</p>
+                          <div className="space-y-0.5 sm:space-y-1">
+                            <p className="text-xs sm:text-sm font-semibold">
+                              Razorpay
+                            </p>
+                            <p className="text-[11px] sm:text-xs text-zinc-400">
+                              UPI, Card, Netbanking
+                            </p>
                           </div>
                           {paymentMethod === "RAZORPAY" && (
                             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-secondary">
@@ -702,14 +715,14 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   </>
                 )}
               </div>
-              <p className="text-xs text-third text-center">
+              <p className="text-[11px] sm:text-xs text-third text-center">
                 {isFree
                   ? "By clicking Confirm Request, you agree to submit the inspection request."
                   : paymentMethod === "WALLET" && isConsultant
                     ? "Confirm payment from your Reecomm Wallet to register inspection."
                     : "By clicking Confirm Payment, you agree to complete the payment workflow."}
               </p>
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-end gap-3 pt-1 sm:pt-2">
                 <Button
                   variant="ghost"
                   size="md"
@@ -764,6 +777,19 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   Thank you! Your inspection request has been registered. Our
                   team will contact you shortly.
                 </p>
+                <div className="pt-2">
+                  <Button
+                    variant="ghost"
+                    size="md"
+                    onClick={() => {
+                      handleClose();
+                      router.push("/consult/dashboard/inspection");
+                    }}
+                    showIcon={false}
+                  >
+                    See Inspection
+                  </Button>
+                </div>
               </div>
             </>
           )}
