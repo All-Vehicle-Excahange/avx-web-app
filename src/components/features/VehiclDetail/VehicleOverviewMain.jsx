@@ -213,8 +213,8 @@ export default function VehicleOverview({ vehicle }) {
                 ) : (
                   <AlertCircle />
                 ),
-              label: "Challan Status",
-              value: vehicle?.challanStatus || "Clear",
+              label: "Challan",
+              value: vehicle?.challanStatus || "Info available in Inspection",
             },
             {
               icon: <Truck />,
