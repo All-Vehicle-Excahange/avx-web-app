@@ -21,11 +21,12 @@ export default function FeedbackPopup({
     createdAt: new Date("2026-06-26").toISOString(),
     rating: 5,
     reviewTitle: "Excellent service!",
-    reviewText: "The overall experience was fantastic. The team was very professional and everything was handled smoothly.",
+    reviewText:
+      "The overall experience was fantastic. The team was very professional and everything was handled smoothly.",
     images: [
       { imageUrl: "/auth-image-1.webp" },
-      { imageUrl: "/auth-image-1.webp" }
-    ]
+      { imageUrl: "/auth-image-1.webp" },
+    ],
   };
 
   const dataToShow = reviewData || mockReview;
@@ -136,10 +137,14 @@ export default function FeedbackPopup({
 
             <div className="absolute bottom-12 right-8 z-10 flex flex-col items-end text-right">
               <h3 className="text-2xl font-bold text-white mb-2">
-                {isReview ? "Review" : "Feedback"}
+                {isReview
+                  ? "Review"
+                  : "Your review helps the next buyer decide."}
               </h3>
               <p className="text-white/90 text-[13px] max-w-[180px] mb-3 leading-snug">
-                {isReview ? "Share your experience with us." : "Help us improve our service."}
+                {isReview
+                  ? "Share your experience with us."
+                  : "HAll reviews are verified and publicly visible on the consultant's storefront."}
               </p>
               <div className="w-8 h-[3px] bg-fourth rounded-full"></div>
             </div>
@@ -153,7 +158,9 @@ export default function FeedbackPopup({
               <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6">
                 <X size={32} className="text-white/40" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Not Eligible</h3>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Not Eligible
+              </h3>
               <p className="text-white/60 text-sm max-w-sm">
                 You are not eligible to write a review at this time.
               </p>
@@ -165,15 +172,20 @@ export default function FeedbackPopup({
                 <div className="flex flex-col gap-1 mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-medium text-sm border border-white/10 shrink-0">
-                      {dataToShow?.reviewedBy?.firstname?.[0] || <User size={16} />}
+                      {dataToShow?.reviewedBy?.firstname?.[0] || (
+                        <User size={16} />
+                      )}
                     </div>
                     <div>
                       <h4 className="font-semibold text-white text-base">
-                        {dataToShow?.reviewedBy?.firstname || "User"} {dataToShow?.reviewedBy?.lastname || ""}
+                        {dataToShow?.reviewedBy?.firstname || "User"}{" "}
+                        {dataToShow?.reviewedBy?.lastname || ""}
                       </h4>
                       <p className="text-white/40 text-[11px] mt-0.5">
                         Reviewed on{" "}
-                        {new Date(dataToShow?.createdAt || Date.now()).toLocaleDateString("en-IN", {
+                        {new Date(
+                          dataToShow?.createdAt || Date.now(),
+                        ).toLocaleDateString("en-IN", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",
@@ -214,9 +226,17 @@ export default function FeedbackPopup({
                 {dataToShow?.images && dataToShow.images.length > 0 && (
                   <div className="flex flex-wrap gap-4 mt-6">
                     {dataToShow.images.map((img, idx) => (
-                      <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-white/10 shrink-0">
-                        <Image src={img.imageUrl || img}
-                          loading="lazy" alt="review image" fill className="object-cover" />
+                      <div
+                        key={idx}
+                        className="relative w-24 h-24 rounded-xl overflow-hidden border border-white/10 shrink-0"
+                      >
+                        <Image
+                          src={img.imageUrl || img}
+                          loading="lazy"
+                          alt="review image"
+                          fill
+                          className="object-cover"
+                        />
                       </div>
                     ))}
                   </div>
@@ -228,7 +248,7 @@ export default function FeedbackPopup({
               {/* Header - Sticky */}
               <div className="p-8 pb-4 md:p-12 md:pb-6 flex-shrink-0">
                 <h3 className="text-2xl font-bold mb-2 text-primary">
-                  {isReview ? "Write a review" : "Send Feedback"}
+                  {isReview ? "Write a review" : "Rate your experience"}
                 </h3>
                 {isReview && (
                   <div className="flex items-center gap-1 mt-3">
@@ -236,8 +256,9 @@ export default function FeedbackPopup({
                       <Star
                         key={star}
                         size={28}
-                        className={`cursor-pointer transition-colors ${rating >= star ? "fill-primary/90" : "text-third/40"
-                          }`}
+                        className={`cursor-pointer transition-colors ${
+                          rating >= star ? "fill-primary/90" : "text-third/40"
+                        }`}
                         onClick={() => setRating(star)}
                       />
                     ))}
@@ -349,7 +370,7 @@ export default function FeedbackPopup({
                     locked={
                       isReview
                         ? rating === 0 ||
-                        (!reviewTitle.trim() && !reviewText.trim())
+                          (!reviewTitle.trim() && !reviewText.trim())
                         : !reviewText.trim()
                     }
                     className="w-full h-11 text-sm font-bold flex items-center justify-center gap-2"

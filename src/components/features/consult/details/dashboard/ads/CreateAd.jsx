@@ -39,6 +39,12 @@ export default function CreateAd() {
   const campaignIdParam = query?.campaignId;
   const vehicleIdParam = query?.vehicleId;
   const [curStep, setCurStep] = useState(1);
+  const [maxStepReached, setMaxStepReached] = useState(1);
+
+  useEffect(() => {
+    setMaxStepReached((prev) => Math.max(prev, curStep));
+  }, [curStep]);
+
   const [isLaunching, setIsLaunching] = useState(false);
   const [isLaunched, setIsLaunched] = useState(false);
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
@@ -464,20 +470,20 @@ export default function CreateAd() {
   };
 
   // Validation per step
-  const isStepValid = () => {
-    switch (curStep) {
+  const checkStepValid = (stepNo) => {
+    switch (stepNo) {
       case 1:
-        return (
+        return !!(
           state.campaignType !== null && state.name && state.name.trim() !== ""
         );
       case 2:
-        return state.placement && state.placement.length > 0;
+        return !!(state.placement && state.placement.length > 0);
       case 3:
         return state.billing !== null;
       case 4:
         return state.campaignType === "profile" || state.vehicle !== null;
       case 5:
-        return (
+        return !!(
           state.dailyBudget >= 100 &&
           state.maxBid >= 1 &&
           state.startDate !== "" &&
@@ -489,6 +495,21 @@ export default function CreateAd() {
       default:
         return false;
     }
+  };
+
+  const isStepValid = () => checkStepValid(curStep);
+
+  const canNavigateToStep = (stepNum) => {
+    if (stepNum === curStep) return false;
+    if (stepNum < curStep) return true; // Always allow going back
+    if (stepNum > maxStepReached) return false;
+
+    // Check if all steps from 1 to stepNum - 1 are valid
+    for (let s = 1; s < stepNum; s++) {
+      if (s === 4 && state.campaignType === "profile") continue;
+      if (!checkStepValid(s)) return false;
+    }
+    return true;
   };
 
   if (isLoadingDraft) {
@@ -540,16 +561,20 @@ export default function CreateAd() {
           {steps.map((step, idx) => {
             const isActive = curStep === step.num;
             const isDone = curStep > step.num;
+            const isClickable = canNavigateToStep(step.num);
 
             return (
               <div
                 key={step.num}
-                className="flex-1 flex flex-col items-center relative"
+                onClick={() => isClickable && setCurStep(step.num)}
+                className={`flex-1 flex flex-col items-center relative ${
+                  isClickable ? "cursor-pointer group" : ""
+                }`}
               >
                 {/* Horizontal Line connector */}
                 {idx < steps.length - 1 && (
                   <div
-                    className={`absolute top-3.5 left-[50%] right-[-50%] h-[3px] transition-colors duration-500 z-0 ${
+                    className={`absolute top-3.5 left-[calc(50%+16px)] right-[calc(-50%+16px)] h-[3px] transition-colors duration-500 z-0 ${
                       isDone ? "bg-primary" : "bg-third/20"
                     }`}
                   />
@@ -559,10 +584,14 @@ export default function CreateAd() {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 relative z-10 ${
                     isDone
-                      ? "bg-primary text-secondary"
+                      ? `bg-primary text-secondary ${isClickable ? "group-hover:scale-110" : ""}`
                       : isActive
                         ? "bg-primary text-secondary ring-4 ring-primary/20"
-                        : "bg-white/5 border border-third/30 text-third"
+                        : `bg-white/5 border border-third/30 text-third ${
+                            isClickable
+                              ? "group-hover:border-primary group-hover:text-primary group-hover:scale-110"
+                              : ""
+                          }`
                   }`}
                 >
                   {isDone ? <Check size={14} strokeWidth={3} /> : step.num}
@@ -574,8 +603,8 @@ export default function CreateAd() {
                     isActive
                       ? "text-primary"
                       : isDone
-                        ? "text-primary/80"
-                        : "text-third"
+                        ? `text-primary/80 ${isClickable ? "group-hover:text-primary" : ""}`
+                        : `text-third ${isClickable ? "group-hover:text-primary/80" : ""}`
                   }`}
                 >
                   {step.label}
@@ -752,7 +781,7 @@ export default function CreateAd() {
               </div>
               <h3 className="text-lg font-bold text-primary">Insufficient Wallet Balance</h3>
               <p className="text-sm text-third">
-                You don't have enough funds in your wallet to launch this boost. 
+                You don&apos;t have enough funds in your wallet to launch this boost. 
                 Required minimum balance is <strong>₹{state.dailyBudget}</strong>, but your current balance is <strong>₹{balance}</strong>.
               </p>
             </div>
