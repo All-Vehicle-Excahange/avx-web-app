@@ -8,9 +8,10 @@ import { useCompareStore } from "@/stores/useCompareStore";
 import VehicleComparePopup from "@/components/ui/VehicleComparePopup";
 import { useUIStore } from "@/stores/useUIStore";
 
-// Button size
 const BTN = 56; // 14 * 4 = 56px (w-14 h-14)
-const MARGIN = 16; // gap from screen edge
+const MARGIN_X = 16;
+const MARGIN_TOP = 90;
+const MARGIN_BOTTOM = 90;
 
 export default function GlobalCompareButton() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function GlobalCompareButton() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Track which corner the button is resting at (for initial placement)
+  // Track which corner the button is resting at
   // 0 = bottom-left (default), 1 = bottom-right, 2 = top-right, 3 = top-left
   const [corner, setCorner] = useState(0);
 
@@ -31,32 +32,34 @@ export default function GlobalCompareButton() {
     const W = window.innerWidth;
     const H = window.innerHeight;
 
-    // Current centre of button in viewport coords
-    const cx = x.get() + MARGIN + BTN / 2; // default anchor is bottom-left
-    const cy = y.get() + H - MARGIN - BTN / 2;
+    // Base position is right: MARGIN_X, bottom: MARGIN_BOTTOM
+    // x = 0 is right. Negative x moves left.
+    const targetX_Right = 0;
+    const targetX_Left = -(W - (MARGIN_X * 2) - BTN);
+    
+    // y = 0 is bottom. Negative y moves up.
+    const targetY_Bottom = 0;
+    const targetY_Top = -(H - MARGIN_TOP - MARGIN_BOTTOM - BTN);
 
-    // Four corner centres
+    const currentX = x.get();
+    const currentY = y.get();
+
     const corners = [
-      { x: MARGIN + BTN / 2,     y: H - MARGIN - BTN / 2, id: 0 }, // bottom-left
-      { x: W - MARGIN - BTN / 2, y: H - MARGIN - BTN / 2, id: 1 }, // bottom-right
-      { x: W - MARGIN - BTN / 2, y: MARGIN + BTN / 2,     id: 2 }, // top-right
-      { x: MARGIN + BTN / 2,     y: MARGIN + BTN / 2,     id: 3 }, // top-left
+      { x: targetX_Left, y: targetY_Bottom, id: 0 }, // bottom-left
+      { x: targetX_Right, y: targetY_Bottom, id: 1 }, // bottom-right
+      { x: targetX_Right, y: targetY_Top, id: 2 }, // top-right
+      { x: targetX_Left, y: targetY_Top, id: 3 }, // top-left
     ];
 
-    // Find nearest corner
     let nearest = corners[0];
     let minDist = Infinity;
     for (const c of corners) {
-      const d = Math.hypot(cx - c.x, cy - c.y);
+      const d = Math.hypot(currentX - c.x, currentY - c.y);
       if (d < minDist) { minDist = d; nearest = c; }
     }
 
-    // Convert nearest corner to offset relative to bottom-left anchor
-    const targetX = nearest.x - (MARGIN + BTN / 2);
-    const targetY = nearest.y - (H - MARGIN - BTN / 2);
-
-    animate(x, targetX, { type: "spring", stiffness: 400, damping: 30 });
-    animate(y, targetY, { type: "spring", stiffness: 400, damping: 30 });
+    animate(x, nearest.x, { type: "spring", stiffness: 400, damping: 30 });
+    animate(y, nearest.y, { type: "spring", stiffness: 400, damping: 30 });
     setCorner(nearest.id);
   };
 
@@ -71,8 +74,8 @@ export default function GlobalCompareButton() {
             x,
             y,
             position: "fixed",
-            left: MARGIN,
-            bottom: MARGIN,
+            right: MARGIN_X,
+            bottom: MARGIN_BOTTOM,
             zIndex: 2000,
           }}
           onDragEnd={snapToNearestCorner}

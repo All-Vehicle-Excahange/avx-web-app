@@ -13,17 +13,32 @@ import {
 import Button from "@/components/ui/button";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleSpecificationQuery } from "@/queries/vehicle.queries";
+import {
+  getVehicleSpecificationQuery,
+  getVehicleExtraDetailsQuery,
+} from "@/queries/vehicle.queries";
 import SpecificationPopup from "./SpecificationPopup";
 import SkeletonBox from "@/components/ui/skeleton/SkeletonBox";
 
 export default function VehicleOverview({ vehicle, open, setOpen }) {
   const [openSpec, setOpenSpec] = useState(false);
 
-  const { data: specDataResponse } = useQuery({
+  const { data: specDataResponse, isLoading: isSpecLoading } = useQuery({
     ...getVehicleSpecificationQuery(vehicle?.variantId),
     enabled: !!vehicle?.variantId && open,
   });
+
+  const { data: extraData, isLoading: isExtraLoading } = useQuery({
+    ...getVehicleExtraDetailsQuery(vehicle?.id),
+    enabled: !!vehicle?.id && open,
+  });
+
+  const hasSpecData =
+    specDataResponse?.specifications &&
+    Object.keys(specDataResponse.specifications).length > 0;
+  const hasExtraData = Array.isArray(extraData) && extraData.length > 0;
+  const hasAnyData = hasSpecData || hasExtraData;
+  const isLoadingData = isSpecLoading || isExtraLoading;
 
   const specData =
     specDataResponse?.specifications?.["Engine & Transmission"] || {};
@@ -38,7 +53,7 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
 
   return (
     <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
-      {/* 🔥 Blur Background (same as aside) */}
+      {/* Blur Background (same as aside) */}
       {/* Adjusted padding to px-4 on mobile and px-6 on md screens */}
       <div
         className="flex justify-between items-center px-4 md:px-6 py-3 text-primary cursor-pointer"
@@ -118,16 +133,18 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
                 />
 
                 {/* VIEW FULL REPORT BUTTON: Added col-span-2 for mobile, md:col-span-3 for desktop */}
-                <div className="col-span-2 md:col-span-3 flex justify-end pt-2">
-                  <Button
-                    onClick={() => setOpenSpec(true)}
-                    type="button"
-                    showIcon={true}
-                    variant="outline"
-                  >
-                    View Full Specification
-                  </Button>
-                </div>
+                {hasAnyData && (
+                  <div className="col-span-2 md:col-span-3 flex justify-end pt-2">
+                    <Button
+                      onClick={() => setOpenSpec(true)}
+                      type="button"
+                      showIcon={true}
+                      variant="outline"
+                    >
+                      View Full Specification
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
