@@ -15,10 +15,8 @@ import {
   CheckCircle,
   TrendingUp,
   BarChart3,
-  PhoneCall,
-  Mail,
-  ArrowRight,
   HelpCircle,
+  Headset,
 } from "lucide-react";
 import {
   FaInstagram,
@@ -92,7 +90,7 @@ export default function StartLandingPage() {
         "Connect with dealers, consultants, and industry pros. Get exclusive business tips, updates, and early access to Reecomm.",
       image: "/growing-business.webp",
       buttonText: "Join on WhatsApp",
-      href: "https://whatsapp.com/channel/0029Vb8nchQDuMRksRpT4Y1B",
+      href: "https://chat.whatsapp.com/Bk7zQNXZ5aDAgtgV4oirHQ",
       target: "_blank",
       rel: "noopener noreferrer",
       buttonVariant: "ghost",
@@ -250,32 +248,6 @@ export default function StartLandingPage() {
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 mt-6">
               <Link
-                href="https://wa.me/918460160697"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-[#25D366]/20 hover:border-[#25D366] hover:text-[#25D366] transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
-              >
-                <FaWhatsapp className="text-lg text-[#25D366] group-hover:scale-110 transition-transform" />
-                <span>Chat on WhatsApp</span>
-              </Link>
-
-              <Link
-                href="tel:+919876543210"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-fourth/20 hover:border-[#FACC15] hover:text-fourth transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
-              >
-                <PhoneCall className="h-4 w-4 text-fourth group-hover:scale-110 transition-transform" />
-                <span>Call Us</span>
-              </Link>
-
-              <Link
-                href="mailto:support@reecomm.com"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-white/15 hover:border-white hover:text-white transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
-              >
-                <Mail className="h-4 w-4 text-third group-hover:text-white group-hover:scale-110 transition-transform" />
-                <span>Email Us</span>
-              </Link>
-
-              <Link
                 href="/help"
                 className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#333] bg-[#1c1d22] text-primary hover:bg-fourth/20 hover:border-fourth hover:text-fourth transition-all duration-300 cursor-pointer font-medium text-sm sm:text-base shadow-md group"
               >
@@ -286,13 +258,15 @@ export default function StartLandingPage() {
           </div>
 
           <div className="hidden sm:flex relative w-64 sm:w-72 md:w-80 h-36 sm:h-44 md:h-48 items-center justify-center shrink-0">
-            <Image
-              src="/cs.webp"
-              alt="Reecomm Help & Support"
-              fill
-              sizes="(max-width: 768px) 250px, 320px"
-              className="object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
-            />
+            <div className="relative flex items-center justify-center">
+              {/* Background glowing effect */}
+              <div className="absolute bg-fourth/20 rounded-full blur-[50px] w-32 h-32 md:w-40 md:h-40"></div>
+              {/* SVG Icon */}
+              <Headset
+                className="relative w-28 h-28 md:w-36 md:h-36 text-fourth drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                strokeWidth={1.5}
+              />
+            </div>
           </div>
         </motion.div>
 
