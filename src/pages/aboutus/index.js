@@ -39,7 +39,7 @@ function index() {
           property="og:description"
           content="India&apos;s used vehicle market is massive and unstructured. Reecomm is the trust infrastructure that organizes it — verified consultants, inspection-backed listings, and professional growth tools."
         />
-        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
           property="og:image:alt"
           content="Reecomm — India&apos;s trusted used vehicle marketplace connecting verified consultants and confident buyers"
@@ -53,7 +53,7 @@ function index() {
           name="twitter:description"
           content="We&apos;re building the trust infrastructure India&apos;s used vehicle market has needed for years. Verified consultants. Confident buyers. One organized ecosystem."
         />
-        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India&apos;s trusted used vehicle marketplace" />
       </Head>
       <Navbar scrolled={true} />

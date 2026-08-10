@@ -40,7 +40,7 @@ function index() {
           property="og:description"
           content="Reecomm is the platform built for professional automotive consultants. Scale your business, list and track your vehicles, build client trust, and work at any scale."
         />
-        <meta property="og:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
           property="og:image:alt"
           content="Reecomm — India's trusted used vehicle marketplace become a consultant guide"
@@ -54,7 +54,7 @@ function index() {
           name="twitter:description"
           content="Access advanced storefront tools, manage your inventory from a single dashboard, and reach verified buyers."
         />
-        <meta name="twitter:image" content="https://reecomm.com/logo/logo.webp" />
+        <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />
       </Head>
       <Navbar />

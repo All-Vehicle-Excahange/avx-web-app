@@ -25,7 +25,7 @@ function StartPage() {
           property="og:description"
           content="Choose your option on Reecomm: sell your personal vehicle, start a professional digital showroom, or buy inspected pre-owned vehicles."
         />
-        <meta property="og:image" content="https://www.reecomm.com/logo/logo.webp" />
+        <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
