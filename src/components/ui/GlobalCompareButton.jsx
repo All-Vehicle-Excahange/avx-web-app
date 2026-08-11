@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { ArrowLeftRight } from "lucide-react";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ export default function GlobalCompareButton() {
   const router = useRouter();
   const { isOpen, closeCompare, openCompare, selectedVehicle } =
     useCompareStore();
-  const { isSearchDropdownOpen } = useUIStore();
+  const { isSearchDropdownOpen, isAccountPopupOpen } = useUIStore();
 
   const isDetailPage = router.pathname.includes("/vehicle/details/");
 
@@ -27,6 +27,33 @@ export default function GlobalCompareButton() {
   // Track which corner the button is resting at
   // 0 = bottom-left (default), 1 = bottom-right, 2 = top-right, 3 = top-left
   const [corner, setCorner] = useState(0);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Check initial state
+    if (typeof window !== "undefined") {
+      setIsModalOpen(document.body.style.overflow === "hidden");
+
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === "attributes" &&
+            mutation.attributeName === "style"
+          ) {
+            setIsModalOpen(document.body.style.overflow === "hidden");
+          }
+        });
+      });
+
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ["style"],
+      });
+
+      return () => observer.disconnect();
+    }
+  }, []);
 
   const snapToNearestCorner = () => {
     const W = window.innerWidth;
@@ -65,7 +92,7 @@ export default function GlobalCompareButton() {
 
   return (
     <>
-      {!isSearchDropdownOpen && (
+      {!isSearchDropdownOpen && !isAccountPopupOpen && !isModalOpen && (
         <motion.button
           drag
           dragMomentum={false}

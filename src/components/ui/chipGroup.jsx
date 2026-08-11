@@ -100,7 +100,7 @@ export default function ChipGroup({
       {searchable && (
         <div className="mb-4">
           <InputField
-            variant="colored"
+            variant={variant === "outlineDark" ? "default" : "colored"}
             placeholder={`Search ${(title || "").toLowerCase()}...`}
             value={currentSearch}
             onChange={(e) => {

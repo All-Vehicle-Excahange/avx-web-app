@@ -27,7 +27,7 @@ function InputField({
     colored:
       `border border-primary/20 text-primary placeholder:text-primary/40 ${isReadOnlyOrDisabled ? "" : "focus:border-primary/40 focus:ring-1 focus:ring-primary/40"}`,
     search:
-      `border border-secondary/60 text-text-black ${isReadOnlyOrDisabled ? "" : "focus:border-primary/50 focus:ring-1 focus:ring-primary/50"}`,
+      `border border-secondary/60 text-black ${isReadOnlyOrDisabled ? "" : "focus:border-primary/50 focus:ring-1 focus:ring-primary/50"}`,
   };
 
   return (
