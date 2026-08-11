@@ -124,7 +124,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   }, [pathname, searchParams]);
 
   /* ================= BANNER STATES & UI STATES ================= */
-  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden, setIsSearchDropdownOpen } =
+  const { isMobileBannerVisible, hideMobileBanner, isMobileBannerTempHidden, setIsSearchDropdownOpen, setIsAccountPopupOpen } =
     useUIStore();
 
   /* ================= SEARCH STATES ================= */
@@ -182,6 +182,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       setIsSearchDropdownOpen(false);
     };
   }, [showDropdown]);
+
+  // Sync account popup state
+  useEffect(() => {
+    if (setIsAccountPopupOpen) {
+      setIsAccountPopupOpen(accountOpen);
+    }
+  }, [accountOpen, setIsAccountPopupOpen]);
 
   // Animated Placeholder State
   const originalPlaceholderTexts = [

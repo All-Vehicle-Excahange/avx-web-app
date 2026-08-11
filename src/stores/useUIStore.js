@@ -15,6 +15,9 @@ export const useUIStore = create(
 
       isSearchDropdownOpen: false,
       setIsSearchDropdownOpen: (isOpen) => set({ isSearchDropdownOpen: isOpen }),
+
+      isAccountPopupOpen: false,
+      setIsAccountPopupOpen: (isOpen) => set({ isAccountPopupOpen: isOpen }),
     }),
     {
       name: "ui-storage",
