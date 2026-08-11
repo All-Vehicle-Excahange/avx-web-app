@@ -2060,7 +2060,7 @@ export default function SearchWithCard({
                 title=""
                 items={brands}
                 selected={selectedBrands}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={brandHasMore}
@@ -2080,7 +2080,7 @@ export default function SearchWithCard({
                 title=""
                 items={models}
                 selected={selectedModels}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={modelHasMore}
@@ -2149,7 +2149,7 @@ export default function SearchWithCard({
                 items={variants}
                 selected={selectedVariants}
                 onChange={handleVariantChange}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={variantHasMore}
@@ -2724,7 +2724,7 @@ export default function SearchWithCard({
                 title=""
                 items={brands}
                 selected={selectedBrands}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={brandHasMore}
@@ -2744,7 +2744,7 @@ export default function SearchWithCard({
                 title=""
                 items={models}
                 selected={selectedModels}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={modelHasMore}
@@ -2807,7 +2807,7 @@ export default function SearchWithCard({
                 items={variants}
                 selected={selectedVariants}
                 onChange={handleVariantChange}
-                showMore={false}
+                showMore={true}
                 searchable={true}
                 serverPagination={true}
                 hasMore={variantHasMore}

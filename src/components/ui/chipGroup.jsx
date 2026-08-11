@@ -138,26 +138,29 @@ export default function ChipGroup({
         )}
       </div>
 
-      {/* View More Toggle */}
-      {showMore && !serverPagination && filteredItems.length > limit && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end cursor-pointer"
-        >
-          {expanded ? "View Less" : "View More"}
-        </button>
-      )}
+      {/* Action Buttons */}
+      <div className="flex gap-4 mt-3 self-end">
+        {/* View More Toggle (Local Expand) */}
+        {showMore && filteredItems.length > limit && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-third font-medium text-sm underline hover:text-primary/70 cursor-pointer"
+          >
+            {expanded ? "View Less" : "View More"}
+          </button>
+        )}
 
-      {/* Server Pagination View More */}
-      {serverPagination && hasMore && (
-        <button
-          onClick={onLoadMore}
-          disabled={isLoading}
-          className="mt-3 text-third font-medium text-sm underline hover:text-primary/70 self-end disabled:opacity-50 cursor-pointer"
-        >
-          {isLoading ? "Loading..." : "View More"}
-        </button>
-      )}
+        {/* Server Pagination Load More */}
+        {serverPagination && hasMore && (!showMore || expanded || filteredItems.length <= limit) && (
+          <button
+            onClick={onLoadMore}
+            disabled={isLoading}
+            className="text-third font-medium text-sm underline hover:text-primary/70 disabled:opacity-50 cursor-pointer"
+          >
+            {isLoading ? "Loading..." : "Load More"}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
