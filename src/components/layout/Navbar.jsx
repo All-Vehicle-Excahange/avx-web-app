@@ -295,10 +295,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           return s;
         });
 
-        // Dynamically fetch registered auto consultants / storefronts from search index
+        // Dynamically fetch registered auto consultants / storefronts from static search index
         let consultantsList = [];
         try {
-          const searchIndexRes = await fetch("/api/v1/website/search/index");
+          const searchIndexRes = await fetch("/search_index.json");
           if (searchIndexRes.ok) {
             const indexData = await searchIndexRes.json();
             if (Array.isArray(indexData)) {

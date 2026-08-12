@@ -259,7 +259,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
       let consultantsList = [];
       try {
-        const searchIndexRes = await fetch("/api/v1/website/search/index");
+        const searchIndexRes = await fetch("/search_index.json");
         if (searchIndexRes.ok) {
           const indexData = await searchIndexRes.json();
           if (Array.isArray(indexData)) {
