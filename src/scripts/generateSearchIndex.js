@@ -295,13 +295,16 @@ async function fetchAutoConsultants() {
           'consultant', 'auto consultant', 'dealer', 'storefront'
         ]);
 
+        const uniqueId = store.id ? `consultant_${store.id}` : `consultant_${store.username}`;
+
         consultants.push({
-          id: `consultant_${store.username}`,
+          id: uniqueId,
           title: title,
           keywords: Array.from(keywords).filter(Boolean),
           type: 'consultant',
           params: {
-            username: store.username
+            username: store.username,
+            ...(store.id ? { consultationId: store.id } : {})
           }
         });
       }
@@ -410,6 +413,27 @@ async function generateSearchIndex() {
 
   // 3. Fetch all registered Auto Consultants / Storefronts from Backend API
   const consultantItems = await fetchAutoConsultants();
+  const activeConsultantUsernames = new Set();
+  const activeConsultantIds = new Set();
+
+  for (const item of consultantItems) {
+    if (item.params?.username) activeConsultantUsernames.add(item.params.username.toLowerCase());
+    if (item.params?.consultationId) activeConsultantIds.add(item.params.consultationId);
+  }
+
+  // Remove any obsolete consultant entries from itemsMap (e.g. defaultItems or old username keys)
+  for (const [key, val] of itemsMap.entries()) {
+    if (val.type === 'consultant') {
+      const u = val.params?.username ? val.params.username.toLowerCase() : '';
+      const cId = val.params?.consultationId;
+      if (key.startsWith('consultant_') || u) {
+        if ((cId && !activeConsultantIds.has(cId)) || (u && !activeConsultantUsernames.has(u))) {
+          itemsMap.delete(key);
+        }
+      }
+    }
+  }
+
   for (const item of consultantItems) {
     itemsMap.set(item.id, item);
   }
@@ -426,6 +450,13 @@ async function generateSearchIndex() {
         if (!item.link) continue;
         const parsed = parseUrlPath(item.link);
         if (parsed) {
+          // Skip obsolete consultant URLs if username isn't active in API
+          if (parsed.type === 'consultant') {
+            const u = parsed.params?.username?.toLowerCase();
+            if (u && activeConsultantUsernames.size > 0 && !activeConsultantUsernames.has(u)) {
+              continue;
+            }
+          }
           if (item.brand) parsed.params.makerName = item.brand;
           if (item.model) parsed.params.modelName = item.model;
           if (item.label) parsed.title = item.label;
@@ -468,12 +499,20 @@ async function generateSearchIndex() {
         const subUrls = await fetchSitemapLocs(urlTag);
         for (const subUrl of subUrls) {
           const item = parseUrlPath(subUrl);
+          if (item && item.type === 'consultant') {
+            const u = item.params?.username?.toLowerCase();
+            if (u && activeConsultantUsernames.size > 0 && !activeConsultantUsernames.has(u)) continue;
+          }
           if (item && !itemsMap.has(item.id)) {
             itemsMap.set(item.id, item);
           }
         }
       } else {
         const item = parseUrlPath(urlTag);
+        if (item && item.type === 'consultant') {
+          const u = item.params?.username?.toLowerCase();
+          if (u && activeConsultantUsernames.size > 0 && !activeConsultantUsernames.has(u)) continue;
+        }
         if (item && !itemsMap.has(item.id)) {
           itemsMap.set(item.id, item);
         }
