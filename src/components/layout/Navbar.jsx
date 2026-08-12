@@ -318,6 +318,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           console.error("Failed to load storefront/consultants list in suggestions", err);
         }
 
+
         globalSuggestionsData = [...loadedSuggestions, ...consultantsList];
 
         const rawBrands = loadedSuggestions.reduce((acc, s) => {
