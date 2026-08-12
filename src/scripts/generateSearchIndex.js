@@ -269,15 +269,28 @@ function generateBrandLocationCombinations() {
  */
 async function fetchAutoConsultants() {
   const consultants = [];
+  const processedIds = [];
   try {
     const cleanApiUrl = API_BASE_URL.replace(/\/$/, '');
     let pageNo = 1;
     let totalPages = 1;
 
-    console.log(`[Cron] Fetching auto consultants from ${cleanApiUrl}/homefeed/consultations/seo...`);
+    // Try unsynced endpoint first for delta sync
+    let endpoint = `${cleanApiUrl}/homefeed/consultations/seo/unsynced`;
+    console.log(`[Cron] Checking for unsynced auto consultants from ${endpoint}...`);
+
+    let res = await fetch(`${endpoint}?pageNo=1&size=100`);
+    if (!res.ok) {
+      // Fallback to full fetch endpoint
+      endpoint = `${cleanApiUrl}/homefeed/consultations/seo`;
+      console.log(`[Cron] Fetching all auto consultants from ${endpoint}...`);
+      res = await fetch(`${endpoint}?pageNo=1&size=100`);
+    }
 
     while (pageNo <= totalPages) {
-      const res = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=${pageNo}&size=100`);
+      if (pageNo > 1) {
+        res = await fetch(`${endpoint}?pageNo=${pageNo}&size=100`);
+      }
       if (!res.ok) break;
 
       const data = await res.json();
@@ -285,6 +298,8 @@ async function fetchAutoConsultants() {
 
       for (const store of list) {
         if (!store.username) continue;
+        if (store.id) processedIds.push(store.id);
+
         const title = store.consultationName || toTitleCase(store.username);
 
         const keywords = new Set([
@@ -312,6 +327,23 @@ async function fetchAutoConsultants() {
       totalPages = data?.pageResponse?.totalPages || 1;
       pageNo++;
     }
+
+    // Mark processed consultant IDs as SEO synced in backend
+    if (processedIds.length > 0 && endpoint.includes('/unsynced')) {
+      try {
+        const markRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo/mark-synced`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(processedIds)
+        });
+        if (markRes.ok) {
+          console.log(`[Cron] Successfully marked ${processedIds.length} consultants as SEO synced in backend.`);
+        }
+      } catch (markErr) {
+        console.warn('[Cron] Warning marking consultants as synced:', markErr.message);
+      }
+    }
+
     console.log(`[Cron] Successfully loaded ${consultants.length} auto-consultants.`);
   } catch (err) {
     console.warn('[Cron] Warning fetching auto consultants:', err.message);
