@@ -295,30 +295,24 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           return s;
         });
 
-        // Dynamically fetch registered auto consultants / storefronts
+        // Dynamically fetch registered auto consultants / storefronts from search index
         let consultantsList = [];
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
-          const cleanApiUrl = apiUrl.replace(/\/$/, "");
-          let pageNo = 1;
-          let totalPages = 1;
-
-          while (pageNo <= totalPages) {
-            const consultRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo?pageNo=${pageNo}&size=100`);
-            if (!consultRes.ok) break;
-            const consultData = await consultRes.json();
-            if (consultData?.data && Array.isArray(consultData.data)) {
-              const mapped = consultData.data.map((store) => ({
-                id: `consult-${store.id}`,
-                label: store.consultationName || store.username || "",
-                username: store.username || "",
-                type: "consultant",
-                link: `/auto-consultant/${store.username}`,
-              })).filter((c) => c.label && c.username);
-              consultantsList.push(...mapped);
+          const searchIndexRes = await fetch("/api/v1/website/search/index");
+          if (searchIndexRes.ok) {
+            const indexData = await searchIndexRes.json();
+            if (Array.isArray(indexData)) {
+              consultantsList = indexData
+                .filter((item) => item.type === "consultant" && item.params?.username)
+                .map((item) => ({
+                  id: item.id,
+                  label: item.title || item.params.username || "",
+                  username: item.params.username || "",
+                  type: "consultant",
+                  link: `/auto-consultant/${item.params.username}`,
+                }))
+                .filter((c) => c.label && c.username);
             }
-            totalPages = consultData?.pageResponse?.totalPages || 1;
-            pageNo++;
           }
         } catch (err) {
           console.error("Failed to load storefront/consultants list in suggestions", err);
