@@ -16,12 +16,13 @@ const sections = [
   { id: "listings", num: "04", title: "Listings & Quality" },
   { id: "pricing", num: "05", title: "Pricing & Market Data" },
   { id: "payments", num: "06", title: "Payments & Invoicing" },
-  { id: "ppc", num: "07", title: "Sponsored PPC Listings" },
-  { id: "conduct", num: "08", title: "Prohibited Activities" },
-  { id: "liability", num: "09", title: "Limitation of Liability" },
-  { id: "termination", num: "10", title: "Account Termination" },
-  { id: "governing", num: "11", title: "Governing Law" },
-  { id: "contact", num: "12", title: "Contact Information" },
+  { id: "subscriptions", num: "07", title: "Auto-Renewable Subscriptions" },
+  { id: "ppc", num: "08", title: "Sponsored PPC Listings" },
+  { id: "conduct", num: "09", title: "Prohibited Activities" },
+  { id: "liability", num: "10", title: "Limitation of Liability" },
+  { id: "termination", num: "11", title: "Account Termination" },
+  { id: "governing", num: "12", title: "Governing Law" },
+  { id: "contact", num: "13", title: "Contact Information" },
 ];
 
 const summaryCards = [
@@ -353,13 +354,41 @@ export default function TermsAndConditions() {
               <SectionTitle>Payments & Invoicing</SectionTitle>
               <Body className="mb-5">Information on payments made to the platform for services.</Body>
               <BulletList items={[
-                "Online payments for eligible platform services (PPC promotions, subscription plans, etc.) are securely processed through Razorpay.",
+                "Online payments for eligible platform services (PPC promotions, subscription plans, etc.) are securely processed through Razorpay or official App Store / Play Store in-app purchase systems.",
                 "Payment processing is provided under the merchant account of Quba Infotech, the proprietor and operator of the Reecomm platform, and applicable GST invoices are issued by Quba Infotech where required.",
               ]} />
             </div>
 
-            <div id="ppc" className="py-11 border-b border-primary/7">
+            <div id="subscriptions" className="py-11 border-b border-primary/7">
               <SectionNum n="07" />
+              <SectionTitle>Auto-Renewable Subscriptions</SectionTitle>
+              <Body className="mb-5">Terms and rules governing auto-renewing dealer subscriptions and membership plans.</Body>
+              <SubLabel>Subscription Services & Duration</SubLabel>
+              <BulletList items={[
+                "Reecomm offers auto-renewable subscription tiers (e.g., Monthly or Annual Dealer Tiers) providing premium features including storefront hosting, increased vehicle listing limits, verified status badges, and enhanced search indexing priority.",
+                "Subscription durations, pricing, and feature entitlements are clearly disclosed prior to purchase on the billing and subscription selection page."
+              ]} />
+              <SubLabel>Automatic Renewal & Billing</SubLabel>
+              <BulletList items={[
+                "Payment will be charged to your account (Apple ID Account, Google Play Account, or Razorpay payment method under Quba Infotech) at confirmation of purchase.",
+                "Subscriptions automatically renew at the end of each billing period (monthly, quarterly, or annually) unless auto-renewal is turned off or cancelled at least 24 hours prior to the end of the current billing cycle.",
+                "Your account will be charged for renewal within 24 hours prior to the end of the current billing period at the then-prevailing subscription rate."
+              ]} />
+              <SubLabel>Subscription Management & Cancellation</SubLabel>
+              <BulletList items={[
+                "You can manage your subscriptions and turn off auto-renewal at any time by navigating to your Account Settings within the Reecomm application, or through your Apple ID / Google Play Store Account Settings after purchase.",
+                "Cancellation takes effect at the expiration of the current paid billing period. You will retain access to subscription features until the period ends.",
+                "Subscription payments are non-refundable for partial billing periods, except where mandated by local consumer protection laws."
+              ]} />
+              <SubLabel>Price Modifications & Lapses</SubLabel>
+              <BulletList items={[
+                "We reserve the right to modify subscription fees upon reasonable advance notice. Any price adjustments will take effect at the start of the next billing period following notice.",
+                "If a subscription lapses due to cancellation or billing failure, premium storefront listings and features may be deprioritized or hidden. Your account data remains preserved and will be fully restored upon subscription renewal."
+              ]} />
+            </div>
+
+            <div id="ppc" className="py-11 border-b border-primary/7">
+              <SectionNum n="08" />
               <SectionTitle>Sponsored PPC Listings</SectionTitle>
               <Body className="mb-5">Our Pay-Per-Click advertising system guidelines.</Body>
               <BulletList items={[
@@ -370,7 +399,7 @@ export default function TermsAndConditions() {
             </div>
 
             <div id="conduct" className="py-11 border-b border-primary/7">
-              <SectionNum n="08" />
+              <SectionNum n="09" />
               <SectionTitle>Prohibited Activities</SectionTitle>
               <Body className="mb-5">Help us keep the marketplace safe and professional.</Body>
               <BulletList items={[
@@ -381,7 +410,7 @@ export default function TermsAndConditions() {
             </div>
 
             <div id="liability" className="py-11 border-b border-primary/7">
-              <SectionNum n="09" />
+              <SectionNum n="10" />
               <SectionTitle>Limitation of Liability</SectionTitle>
               <Body className="mb-5">Legal liability caps regarding vehicle listings and deals.</Body>
               <BulletList items={[
@@ -392,7 +421,7 @@ export default function TermsAndConditions() {
             </div>
 
             <div id="termination" className="py-11 border-b border-primary/7">
-              <SectionNum n="10" />
+              <SectionNum n="11" />
               <SectionTitle>Account Termination</SectionTitle>
               <Body className="mb-5">Guidelines for account closure or restriction.</Body>
               <BulletList items={[
@@ -402,7 +431,7 @@ export default function TermsAndConditions() {
             </div>
 
             <div id="governing" className="py-11 border-b border-primary/7">
-              <SectionNum n="11" />
+              <SectionNum n="12" />
               <SectionTitle>Governing Law</SectionTitle>
               <Body className="mb-5">Legal jurisdiction details.</Body>
               <BulletList items={[
@@ -412,7 +441,7 @@ export default function TermsAndConditions() {
             </div>
 
             <div id="contact" className="py-11">
-              <SectionNum n="12" />
+              <SectionNum n="13" />
               <SectionTitle>Contact Information</SectionTitle>
               <Body className="mb-4">{"Reach out to us for terms-related questions."}</Body>
               <div className="border border-primary/8 rounded-md overflow-hidden">

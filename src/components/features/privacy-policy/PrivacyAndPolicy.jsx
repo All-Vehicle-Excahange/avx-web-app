@@ -266,8 +266,8 @@ export default function PrivacyPolicy() {
               <Body>{"We collect what's needed to run Reecomm services — nothing extra."}</Body>
               <SubLabel>Personal Info</SubLabel>
               <BulletList items={["Name, phone number, email address", "Location (city / region)"]} />
-              <SubLabel>Account Info</SubLabel>
-              <BulletList items={["Profile details and preferences", "Saved vehicles and watchlists"]} />
+              <SubLabel>Account & Subscription Info</SubLabel>
+              <BulletList items={["Profile details and preferences", "Subscription plan tier, status, renewal dates, and transaction history", "Saved vehicles and watchlists"]} />
               <SubLabel>Activity Data</SubLabel>
               <BulletList items={["Listings you create or manage", "Inquiries sent and received", "Inspection requests and history"]} />
               <SubLabel>Device & Usage</SubLabel>
@@ -351,14 +351,14 @@ export default function PrivacyPolicy() {
             <div id="third" className="py-11 border-b border-primary/7">
               <SectionNum n="07" />
               <SectionTitle>Third-Party Services</SectionTitle>
-              <Body className="mb-5">Reecomm uses third-party tools for core infrastructure only.</Body>
+              <Body className="mb-5">Reecomm uses third-party tools for core infrastructure and billing only.</Body>
               <BulletList items={[
-                "Hosting and content delivery",
-                "Payment processing (securely handled by Razorpay under the merchant account of Quba Infotech, issuing GST invoices where required)",
+                "Hosting and content delivery infrastructure",
+                "Payment & Subscription processing (securely processed via Apple In-App Purchase, Google Play Billing, or Razorpay under the merchant account of Quba Infotech, issuing GST invoices where required)",
                 "Analytics and performance monitoring",
                 "Communication and notification services",
               ]} />
-              <Body className="mt-5">Each provider has their own privacy policy. We vet all partners.</Body>
+              <Body className="mt-5">Each provider processes billing and subscription data under their respective privacy policies. We do not store sensitive payment card details on our servers.</Body>
             </div>
 
             <div id="retention" className="py-11 border-b border-primary/7">
