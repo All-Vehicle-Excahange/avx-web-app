@@ -183,6 +183,11 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
                                   ? "Free"
                                   : `₹${discountPrice.toLocaleString("en-IN")}`}
                               </span>
+                              {!isFree && (
+                                <span className="text-xs text-third font-normal">
+                                  (+18% GST)
+                                </span>
+                              )}
                               {!isFree && discount > 0 && (
                                 <>
                                   <span className="text-xs text-third line-through">

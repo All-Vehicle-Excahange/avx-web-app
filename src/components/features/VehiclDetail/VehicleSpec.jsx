@@ -536,7 +536,10 @@ export default function VehicleSpec({
                               Complete physical inspection with digital report
                             </p>
                             <p className="text-sm font-medium mt-1">
-                              ₹{reportOnlyPrice.toLocaleString("en-IN")}
+                              ₹{reportOnlyPrice.toLocaleString("en-IN")}{" "}
+                              <span className="text-xs text-third font-normal">
+                                (+18% GST)
+                              </span>
                             </p>
                           </div>
                         </label>
@@ -571,7 +574,10 @@ export default function VehicleSpec({
                             </p>
                             <p className="text-sm font-medium mt-1">
                               ₹
-                              {videoCallWithReportPrice.toLocaleString("en-IN")}
+                              {videoCallWithReportPrice.toLocaleString("en-IN")}{" "}
+                              <span className="text-xs text-third font-normal">
+                                (+18% GST)
+                              </span>
                             </p>
                           </div>
                         </label>
@@ -838,7 +844,10 @@ export default function VehicleSpec({
                             Complete physical inspection with digital report
                           </p>
                           <p className="text-sm font-medium mt-1">
-                            ₹{reportOnlyPrice.toLocaleString("en-IN")}
+                            ₹{reportOnlyPrice.toLocaleString("en-IN")}{" "}
+                            <span className="text-xs text-third font-normal">
+                              (+18% GST)
+                            </span>
                           </p>
                         </div>
                       </label>
@@ -862,7 +871,10 @@ export default function VehicleSpec({
                             digital report
                           </p>
                           <p className="text-sm font-medium mt-1">
-                            ₹{videoCallWithReportPrice.toLocaleString("en-IN")}
+                            ₹{videoCallWithReportPrice.toLocaleString("en-IN")}{" "}
+                            <span className="text-xs text-third font-normal">
+                              (+18% GST)
+                            </span>
                           </p>
                         </div>
                       </label>
@@ -1055,96 +1067,125 @@ export default function VehicleSpec({
               )}
 
               {/* ---- STEP 2: Payment ---- */}
-              {step === 2 && (
-                <div className="space-y-6">
-                  {/* Header with Shield Icon */}
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1">
-                      <h2 className="text-xl font-bold text-white">
-                        Complete your payment
-                      </h2>
-                      <p className="text-xs text-zinc-400 mt-1">
-                        Please review your details and confirm to complete the
-                        payment.
+              {step === 2 && (() => {
+                const baseInspectionAmount =
+                  inspectionType === "video"
+                    ? videoCallWithReportPrice
+                    : reportOnlyPrice;
+                const gstAmount = Number(
+                  (baseInspectionAmount * 0.18).toFixed(2)
+                );
+                const selectedTotalPrice = Number(
+                  (baseInspectionAmount + gstAmount).toFixed(2)
+                );
+
+                return (
+                  <div className="space-y-6">
+                    {/* Header with Shield Icon */}
+                    <div className="flex items-start gap-4">
+                      <div className="flex-1">
+                        <h2 className="text-xl font-bold text-white">
+                          Complete your payment
+                        </h2>
+                        <p className="text-xs text-zinc-400 mt-1">
+                          Please review your details and confirm to complete the
+                          payment.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Details Box */}
+                    <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80 divide-y divide-third/20">
+                      <div className="flex justify-between items-center text-sm pb-3">
+                        <span className="text-third">Inspection Type</span>
+                        <span className="font-semibold text-white">
+                          {inspectionType === "video"
+                            ? "Video Call + Report"
+                            : "Inspection Report Only"}
+                        </span>
+                      </div>
+                      {inspectionType === "video" && (
+                        <>
+                          <div className="flex justify-between items-center text-sm py-3">
+                            <span className="text-third">WhatsApp Number</span>
+                            <span className="font-semibold text-white">
+                              {mobileNumber}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center text-sm py-3">
+                            <span className="text-third">Scheduled Slot</span>
+                            <div className="flex items-center gap-1.5 text-xs text-white font-semibold">
+                              <Calendar size={14} className="text-third" />
+                              <span>
+                                {inspectionDate?.toLocaleDateString("en-GB", {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </span>
+                              <span className="text-third/50 mx-0.5">|</span>
+                              <Clock size={14} className="text-third" />
+                              <span>{inspectionTime?.label}</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                      <div className="flex justify-between items-center text-sm py-3">
+                        <span className="text-third">Inspection Amount</span>
+                        <span className="font-semibold text-white">
+                          ₹{baseInspectionAmount.toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm py-3">
+                        <span className="text-third">18% GST Amount</span>
+                        <span className="font-semibold text-white">
+                          ₹{gstAmount.toLocaleString("en-IN", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pt-4 text-base font-bold">
+                        <span>Total Amount</span>
+                        <span className="text-white text-xl font-extrabold">
+                          ₹{selectedTotalPrice.toLocaleString("en-IN", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Agree Text with Lock Icon */}
+                    <div className="flex items-start gap-2.5 px-1 py-1 text-zinc-400">
+                      <Lock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
+                      <p className="text-xs leading-normal">
+                        By clicking Confirm Payment, you agree to complete the
+                        payment workflow.
                       </p>
                     </div>
-                  </div>
 
-                  {/* Details Box */}
-                  <div className="border border-third/30 rounded-2xl p-5 space-y-4 bg-secondary/80 divide-y divide-third/20">
-                    <div className="flex justify-between items-center text-sm pb-3">
-                      <span className="text-third">Inspection Type</span>
-                      <span className="font-semibold text-white">
-                        {inspectionType === "video"
-                          ? "Video Call + Report"
-                          : "Inspection Report Only"}
-                      </span>
-                    </div>
-                    {inspectionType === "video" && (
-                      <>
-                        <div className="flex justify-between items-center text-sm py-3">
-                          <span className="text-third">WhatsApp Number</span>
-                          <span className="font-semibold text-white">
-                            {mobileNumber}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-sm py-3">
-                          <span className="text-third">Scheduled Slot</span>
-                          <div className="flex items-center gap-1.5 text-xs text-white font-semibold">
-                            <Calendar size={14} className="text-third" />
-                            <span>
-                              {inspectionDate?.toLocaleDateString("en-GB", {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              })}
-                            </span>
-                            <span className="text-third/50 mx-0.5">|</span>
-                            <Clock size={14} className="text-third" />
-                            <span>{inspectionTime?.label}</span>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                    <div className="flex justify-between items-center pt-4 text-base font-bold">
-                      <span>Total Amount</span>
-                      <span className="text-white text-xl font-extrabold">
-                        {inspectionType === "video"
-                          ? `₹${videoCallWithReportPrice.toLocaleString("en-IN")}`
-                          : `₹${reportOnlyPrice.toLocaleString("en-IN")}`}
-                      </span>
+                    {/* Footer Buttons */}
+                    <div className="flex justify-end gap-3 pt-2">
+                      <Button
+                        onClick={() => setStep(1)}
+                        disabled={isSubmitting}
+                        variant="outlineSecondary"
+                      >
+                        Back
+                      </Button>
+                      <Button
+                        onClick={() => handlePayment()}
+                        disabled={isSubmitting}
+                        loading={isSubmitting}
+                        variant="ghost"
+                      >
+                        <span className="mt-0.5">Confirm Payment</span>
+                      </Button>
                     </div>
                   </div>
-
-                  {/* Agree Text with Lock Icon */}
-                  <div className="flex items-start gap-2.5 px-1 py-1 text-zinc-400">
-                    <Lock size={14} className="text-zinc-500 shrink-0 mt-0.5" />
-                    <p className="text-xs leading-normal">
-                      By clicking Confirm Payment, you agree to complete the
-                      payment workflow.
-                    </p>
-                  </div>
-
-                  {/* Footer Buttons */}
-                  <div className="flex justify-end gap-3 pt-2">
-                    <Button
-                      onClick={() => setStep(1)}
-                      disabled={isSubmitting}
-                      variant="outlineSecondary"
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      onClick={() => handlePayment()}
-                      disabled={isSubmitting}
-                      loading={isSubmitting}
-                      variant="ghost"
-                    >
-                      <span className="mt-0.5">Confirm Payment</span>
-                    </Button>
-                  </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* ---- STEP 3: Success ---- */}
               {step === 3 && (

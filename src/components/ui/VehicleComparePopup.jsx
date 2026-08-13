@@ -313,8 +313,30 @@ export default function VehicleComparePopup({
         { label: "CNG Fitted", val1: v1?.isCngFitted ? "Yes" : "No", val2: v2?.isCngFitted ? "Yes" : "No" },
     ] : [];
 
+    const formatInspectionRating = (v) => {
+        if (!v) return "-";
+        const isSelf = v.inspectionStatus === "SELF_INSPECTED";
+        const isReecomm = v.inspectionStatus === "AVX_INSPECTED" || v.inspectionStatus === "REECOMM_INSPECTED" || v.inspectionStatus === "AI_INSPECTED";
+        const typeStr = isSelf ? "Self Inspected" : isReecomm ? "Reecomm Inspected" : (v.inspectionStatus ? v.inspectionStatus.replace(/_/g, " ") : "Self Inspected");
+        const rating = v.avxInspectionRating || v.rating;
+        
+        if (rating) {
+            return `${rating} (${typeStr})`;
+        }
+        return typeStr;
+    };
+
     const conditionFields = isComparing && fullCompareData ? [
-        { label: "Inspection Rating", val1: v1?.avxInspectionRating || "Good", val2: v2?.avxInspectionRating || "Good" },
+        { 
+            label: "Inspection Type", 
+            val1: v1?.inspectionStatus === "SELF_INSPECTED" ? "Self Inspected" : (v1?.inspectionStatus === "AVX_INSPECTED" || v1?.avxInspectionRating) ? "Reecomm Inspected" : "Self Inspected",
+            val2: v2?.inspectionStatus === "SELF_INSPECTED" ? "Self Inspected" : (v2?.inspectionStatus === "AVX_INSPECTED" || v2?.avxInspectionRating) ? "Reecomm Inspected" : "Self Inspected"
+        },
+        { 
+            label: "Inspection Rating", 
+            val1: formatInspectionRating(v1), 
+            val2: formatInspectionRating(v2)
+        },
         { label: "Spare Key", val1: v1?.spareKey ? "Available" : "No", val2: v2?.spareKey ? "Available" : "No" },
         { label: "Spare Wheel", val1: v1?.spareWheel ? "Available" : "No", val2: v2?.spareWheel ? "Available" : "No" },
         { label: "Test Drive", val1: v1?.testDriveAvl ? "Available" : "Not Available", val2: v2?.testDriveAvl ? "Available" : "Not Available" },
@@ -337,13 +359,14 @@ export default function VehicleComparePopup({
                 onClick={(e) => e.stopPropagation()}
                 style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
             >
-                <div className="bg-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 flex items-center justify-between border-b border-primary/10 shadow-sm shrink-0 z-20 relative">
+                <div className="sticky top-0 bg-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 flex items-center justify-between border-b border-primary/10 shadow-sm shrink-0 z-30">
                     <h2 className="text-lg sm:text-2xl font-bold text-primary m-0">
                         Compare Vehicles
                     </h2>
                     <button
                         onClick={triggerClose}
-                        className="bg-white cursor-pointer p-1 rounded-full hover:opacity-70 text-secondary shadow-md"
+                        className="bg-white cursor-pointer p-1.5 sm:p-2 rounded-full hover:opacity-80 text-black shadow-md transition-all shrink-0"
+                        aria-label="Close modal"
                     >
                         <X size={18} className="text-black sm:w-5 sm:h-5" />
                     </button>
