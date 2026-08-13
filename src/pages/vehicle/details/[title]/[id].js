@@ -149,7 +149,9 @@ function Index({ seo }) {
         <meta name="robots" content="index, follow" />
 
         {/* Canonical URL */}
-        {seo?.canonical && <link key="canonical" rel="canonical" href={seo.canonical} />}
+        {seo?.canonical && (
+          <link key="canonical" rel="canonical" href={seo.canonical} />
+        )}
 
         {/* JSON-LD Structured Data: Car */}
         {vehicleSchema && (
@@ -189,9 +191,9 @@ function Index({ seo }) {
       <Layout>
         <VehiclDetail initialOverview={null} initialSummary={null} />
       </Layout>
-      <Layout>
+      {/* <Layout>
         <AvxProcess />
-      </Layout>
+      </Layout> */}
       <DownloadAppSection fullWidth />
 
       <FooterLink />
@@ -226,7 +228,7 @@ export async function getStaticPaths() {
     paths: [],
     // 'blocking' will wait for the HTML to be generated on the first request
     // before sending it to the browser, ensuring perfect SEO for the first hit
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 }
 
@@ -234,29 +236,39 @@ export async function getStaticProps(context) {
   const { params } = context;
   const { title, id } = params || {};
 
-  const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
+  const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost")
+    ? "http"
+    : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
   const canonicalUrl = `${protocol}://${host}/vehicle/details/${title}/${id}`;
 
   // ── Fallback SEO from slug ──────────────────────────────────────────────
   let finalTitle = "Vehicle Details | Reecomm";
-  let finalDescription = "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
+  let finalDescription =
+    "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo.webp`;
 
   if (title) {
     // Regex matches slugs like: buy-used-[brand-model]-[year]-[type]-[city]
-    const pattern = /^buy-used-(.+?)-(\d{4})-(?:cars|two-wheelers|vehicles)-(.+)$/i;
+    const pattern =
+      /^buy-used-(.+?)-(\d{4})-(?:cars|two-wheelers|vehicles)-(.+)$/i;
     const match = title.match(pattern);
 
     if (match) {
-      const brandModel = match[1].replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const brandModel = match[1]
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       const year = match[2];
-      const city = match[3].replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const city = match[3]
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
 
       finalTitle = `${year} ${brandModel} for Sale in ${city} | Reecomm`;
       finalDescription = `Buy used ${year} ${brandModel} in ${city} at Reecomm. View detailed specs, inspection report, photos, and price details.`;
     } else {
-      const cleanTitle = title.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const cleanTitle = title
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       finalTitle = `${cleanTitle} | Reecomm`;
       finalDescription = `Buy ${cleanTitle} at Reecomm. View specs, photos, price, and contact details.`;
     }
@@ -267,14 +279,15 @@ export async function getStaticProps(context) {
   // invisible to them, so we MUST resolve the image server-side.
   if (id) {
     try {
-      const backendUrl = process.env.BACKEND_URL || "https://api.reecomm.online";
+      const backendUrl =
+        process.env.BACKEND_URL || "https://api.reecomm.online";
       const res = await fetch(
         `${backendUrl}/api/v1/website/vehicle/detail-page/${id}`,
         {
           headers: { Accept: "application/json" },
           // 4-second timeout — if the API is slow, fall back gracefully
           signal: AbortSignal.timeout(4000),
-        }
+        },
       );
 
       if (res.ok) {
@@ -284,9 +297,7 @@ export async function getStaticProps(context) {
         if (v) {
           // Real thumbnail from the vehicle record
           const thumbnail =
-            v.thumbnailUrl ||
-            v.vehicleImages?.[0]?.imageUrl ||
-            "";
+            v.thumbnailUrl || v.vehicleImages?.[0]?.imageUrl || "";
 
           if (thumbnail) finalImageUrl = thumbnail;
 
@@ -295,10 +306,7 @@ export async function getStaticProps(context) {
           const make = v.makerName || "";
           const model = v.modelName || "";
           const variant = v.variantName || "";
-          const city =
-            v.vehicleAddress?.city ||
-            v.address?.city ||
-            "India";
+          const city = v.vehicleAddress?.city || v.address?.city || "India";
           const priceRaw = v.price;
           const price = priceRaw
             ? priceRaw >= 100000

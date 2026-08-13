@@ -573,6 +573,11 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                               ? "Free"
                               : `₹${discountPrice.toLocaleString("en-IN")}`}
                           </span>
+                          {!isFree && (
+                            <span className="text-xs text-third font-normal">
+                              (+18% GST)
+                            </span>
+                          )}
                           {!isFree && discount > 0 && (
                             <>
                               <span className="text-xs text-third line-through">
@@ -620,27 +625,69 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                   <span className="text-third">Inspection Type</span>
                   <span className="font-semibold">Inspection Report Only</span>
                 </div>
-                <div className="border-t border-third/30 my-1 sm:my-2" />
-                <div className="flex justify-between items-center text-base sm:text-lg font-bold">
-                  <span>Total Amount</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-primary font-bold">
-                      {isFree
-                        ? "₹0 (Free)"
-                        : `₹${discountPrice.toLocaleString("en-IN")}`}
-                    </span>
-                    {!isFree && discount > 0 && (
+                {!isFree ? (
+                  (() => {
+                    const baseInspectionAmount = discountPrice;
+                    const gstAmount = Number(
+                      (baseInspectionAmount * 0.18).toFixed(2)
+                    );
+                    const selectedTotalPrice = Number(
+                      (baseInspectionAmount + gstAmount).toFixed(2)
+                    );
+                    return (
                       <>
-                        <span className="text-xs sm:text-sm text-third line-through font-normal">
-                          ₹{originalPrice.toLocaleString("en-IN")}
-                        </span>
-                        <span className="text-xs text-green-500 font-semibold">
-                          ({discount}% off)
-                        </span>
+                        <div className="border-t border-third/30 my-1 sm:my-2" />
+                        <div className="flex justify-between items-center text-xs sm:text-sm">
+                          <span className="text-third">Inspection Amount</span>
+                          <span className="font-semibold">
+                            ₹{baseInspectionAmount.toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs sm:text-sm">
+                          <span className="text-third">18% GST Amount</span>
+                          <span className="font-semibold">
+                            ₹
+                            {gstAmount.toLocaleString("en-IN", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })}
+                          </span>
+                        </div>
+                        <div className="border-t border-third/30 my-1 sm:my-2" />
+                        <div className="flex justify-between items-center text-base sm:text-lg font-bold">
+                          <span>Total Amount</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-primary font-bold">
+                              ₹
+                              {selectedTotalPrice.toLocaleString("en-IN", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              })}
+                            </span>
+                            {discount > 0 && (
+                              <>
+                                <span className="text-xs sm:text-sm text-third line-through font-normal">
+                                  ₹{originalPrice.toLocaleString("en-IN")}
+                                </span>
+                                <span className="text-xs text-green-500 font-semibold">
+                                  ({discount}% off)
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </>
-                    )}
-                  </div>
-                </div>
+                    );
+                  })()
+                ) : (
+                  <>
+                    <div className="border-t border-third/30 my-1 sm:my-2" />
+                    <div className="flex justify-between items-center text-base sm:text-lg font-bold">
+                      <span>Total Amount</span>
+                      <span className="text-primary font-bold">₹0 (Free)</span>
+                    </div>
+                  </>
+                )}
 
                 {/* Payment Methods Selection for Consultants */}
                 {!isFree && isConsultant && (
