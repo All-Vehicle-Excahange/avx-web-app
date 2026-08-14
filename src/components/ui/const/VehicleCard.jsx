@@ -17,7 +17,7 @@ import { addWishList, removeWishList } from "@/services/user.service";
 import { addClickEvent } from "@/services/ppc.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
-import { createSlug } from "@/lib/helper";
+import { createSlug, generateVehicleUrl } from "@/lib/helper";
 import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
@@ -211,9 +211,11 @@ export default function VehicleCard({
     }
   };
 
+  const targetBaseUrl = generateVehicleUrl(data);
+
   const handleCardClick = () => {
     handleAdClick();
-    let url = `/vehicle/details/${slug}/${data.id}?source=${source}`;
+    let url = `${targetBaseUrl}?source=${source}`;
     if (data?.sponsored) {
       url += `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`;
     }
@@ -384,7 +386,7 @@ export default function VehicleCard({
 
               <div className="hidden md:block">
                 <Button
-                  href={`/vehicle/details/${slug}/${data.id}?source=${source}${data?.sponsored
+                  href={`${targetBaseUrl}?source=${source}${data?.sponsored
                     ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
                     : ""
                     }`}

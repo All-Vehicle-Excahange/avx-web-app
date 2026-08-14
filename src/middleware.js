@@ -71,8 +71,18 @@ export async function middleware(request) {
           const vehicle = json?.data;
           if (vehicle?.id) {
             const slug = buildVehicleSlug(vehicle) || "vehicle";
+            const consultantSlug =
+              vehicle.consultantUsername ||
+              vehicle.storefrontUsername ||
+              vehicle.consultantSlug ||
+              vehicle.username;
+
+            const targetPath = consultantSlug
+              ? `/vehicle/details/${consultantSlug}/${slug}/${vehicle.id}`
+              : `/vehicle/details/consualt/${slug}/${vehicle.id}`;
+
             const canonicalUrl = request.nextUrl.clone();
-            canonicalUrl.pathname = `/vehicle/details/${slug}/${vehicle.id}`;
+            canonicalUrl.pathname = targetPath;
 
             // Prevent infinite redirect loop if already on canonical URL
             if (canonicalUrl.pathname !== pathname) {

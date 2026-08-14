@@ -29,6 +29,11 @@ import SummaryRight from "./SummaryRight";
 import VehicleSpecsConsualt from "./VehicleSpecsConsualt";
 import InspectionTrackingModal from "../../user/InspectionTrackingModal";
 
+import Testimonials from "../../VehiclDetail/Testimonials";
+import SpecialOffer from "../../VehiclDetail/SpecialOffer";
+import SimulerVehicle from "../../VehiclDetail/SimulerVehicle";
+import ReletedConsualt from "../../VehiclDetail/ReletedConsualt";
+
 export default function ConsualtVehicleDetails({
   initialOverview = null,
   initialSummary = null,
@@ -143,7 +148,14 @@ export default function ConsualtVehicleDetails({
   };
 
   const router = useRouter();
-  const id = router.query.id;
+  const { id: queryId, slug } = router.query || {};
+  const id =
+    queryId ||
+    (Array.isArray(slug) && slug.length > 0
+      ? slug[slug.length - 1]
+      : typeof slug === "string"
+      ? slug
+      : null);
 
   const { data: vehicleOverview, isLoading: isOverviewLoading } = useQuery({
     ...getVehicleOverviewQuery(id),
@@ -285,8 +297,19 @@ export default function ConsualtVehicleDetails({
                   onRequestInspection={handleRequestInspection}
                   isCheckingInspection={isCheckingInspection}
                 />
+                <Testimonials summary={vehicleSummary} />
+                <SpecialOffer />
               </aside>
             </section>
+          </section>
+
+          <section className="pt-12 flex flex-col gap-12">
+            <SimulerVehicle vehicleOverview={vehicleOverview} />
+            <ReletedConsualt
+              limit={4}
+              vehicleOverview={vehicleOverview}
+              vehicleSummary={vehicleSummary}
+            />
           </section>
         </div>
       </main>

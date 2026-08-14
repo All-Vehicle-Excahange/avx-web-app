@@ -61,25 +61,43 @@ export default async function handler(req, res) {
       if (!vehicle.id) continue;
 
       const slug = generateSlug(vehicle);
-      const loc = `${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`;
+      const consultantSlug =
+        vehicle.consultantUsername ||
+        vehicle.storefrontUsername ||
+        vehicle.consultantSlug ||
+        vehicle.username;
+
+      const urlsToEmit = [];
       const lastmod = vehicle.updatedAt || vehicle.createdAt || new Date().toISOString();
 
-      xml += `  <url>\n`;
-      xml += `    <loc>${loc}</loc>\n`;
-      xml += `    <lastmod>${new Date(lastmod).toISOString()}</lastmod>\n`;
-      xml += `    <changefreq>daily</changefreq>\n`;
-      xml += `    <priority>0.8</priority>\n`;
-
-      // Add image tag if thumbnailUrl exists (helps Google Images indexing)
-      if (vehicle.thumbnailUrl) {
-        const title = `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
-        xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(vehicle.thumbnailUrl)}</image:loc>\n`;
-        xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
-        xml += `    </image:image>\n`;
+      if (consultantSlug) {
+        // 1. Consultant-scoped vehicle URL
+        urlsToEmit.push(`${BASE_URL}/vehicle/details/${consultantSlug}/${slug}/${vehicle.id}`);
+        // 2. Standard direct vehicle URL
+        urlsToEmit.push(`${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`);
+      } else {
+        // Standard direct vehicle URL
+        urlsToEmit.push(`${BASE_URL}/vehicle/details/consualt/${slug}/${vehicle.id}`);
       }
 
-      xml += `  </url>\n`;
+      for (const loc of urlsToEmit) {
+        xml += `  <url>\n`;
+        xml += `    <loc>${loc}</loc>\n`;
+        xml += `    <lastmod>${new Date(lastmod).toISOString()}</lastmod>\n`;
+        xml += `    <changefreq>daily</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+
+        // Add image tag if thumbnailUrl exists (helps Google Images indexing)
+        if (vehicle.thumbnailUrl) {
+          const title = `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
+          xml += `    <image:image>\n`;
+          xml += `      <image:loc>${escapeXml(vehicle.thumbnailUrl)}</image:loc>\n`;
+          xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
+          xml += `    </image:image>\n`;
+        }
+
+        xml += `  </url>\n`;
+      }
     }
 
     xml += `</urlset>`;

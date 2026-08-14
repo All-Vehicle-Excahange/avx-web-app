@@ -86,6 +86,23 @@ export const generateVehicleSlug = (data) => {
     .replace(/^-/, "");
 };
 
+export const generateVehicleUrl = (data, consultantSlug) => {
+  if (!data?.id) return "/search";
+  const slug = generateVehicleSlug(data);
+  const consultPart =
+    consultantSlug ||
+    data?.consultantUsername ||
+    data?.storefrontUsername ||
+    data?.username ||
+    data?.consultantSlug;
+
+  if (consultPart && consultPart !== "consualt") {
+    return `/vehicle/details/${consultPart}/${slug}/${data.id}`;
+  }
+  return `/vehicle/details/consualt/${slug}/${data.id}`;
+};
+
+
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   // Check if the API response has any real content beyond metadata
   const metaOnlyKeys = new Set([
