@@ -10,29 +10,21 @@ import axios from "axios";
  * use inside getServerSideProps, API routes, and sitemap generators.
  */
 
-function getApiBaseUrl() {
-  if (process.env.API_BASE_URL && process.env.API_BASE_URL.startsWith('http')) {
-    return process.env.API_BASE_URL;
-  }
-  if (process.env.BACKEND_URL && process.env.BACKEND_URL.startsWith('http')) {
-    return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/v1/website`;
-  }
-  const envUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (envUrl && envUrl.startsWith('http')) {
-    return envUrl;
-  }
-  return "https://api.reecomm.online/api/v1/website";
+let rawApiUrl =
+  process.env.API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://api.reecomm.online/api/v1/website";
+
+if (!rawApiUrl.startsWith("http")) {
+  const backendHost = process.env.BACKEND_URL || "https://api.reecomm.online";
+  rawApiUrl = `${backendHost.replace(/\/$/, "")}${rawApiUrl.startsWith("/") ? "" : "/"}${rawApiUrl}`;
 }
 
-const BASE_URL = getApiBaseUrl();
+const BASE_URL = rawApiUrl.replace(/\/$/, "");
 
 const seoAxios = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    "User-Agent": "Mozilla/5.0 (compatible; ReecommSeoBot/1.0)",
-    "Accept": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
   timeout: 15000,
 });
 
