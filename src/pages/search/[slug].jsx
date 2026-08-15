@@ -56,9 +56,18 @@ function SlugSearchPage({ seo, initialFilters }) {
           content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
         />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
+
+        {/* Schema.org ItemList JSON-LD */}
+        {seo?.schemaJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(seo.schemaJsonLd) }}
+          />
+        )}
       </Head>
       <Suspense fallback={null}>
         <SearchContent
+          seo={seo}
           initialFilters={initialFilters}
           pageResponse={pageResponse}
           setPageResponse={setPageResponse}
@@ -77,6 +86,7 @@ function SlugSearchPage({ seo, initialFilters }) {
 }
 
 function SearchContent({
+  seo,
   initialFilters,
   pageResponse,
   setPageResponse,
@@ -95,6 +105,7 @@ function SearchContent({
   return (
     <>
       <SearchHeader
+        h1Title={seo?.h1Title}
         pageResponse={pageResponse}
         activeFilters={activeFilters}
         onRemoveFilter={removeFilterHandler}
@@ -135,57 +146,73 @@ function SearchContent({
 
 export async function getServerSideProps(context) {
   const { slug } = context.params;
+  const initialFilters = {};
 
-  if (!slug.startsWith("buy-used-")) {
-    return { notFound: true };
+  const cleanSlug = Array.isArray(slug) ? slug.join("/") : slug;
+
+  let vehicleType = "";
+  let city = "";
+  let details = cleanSlug;
+
+  if (details.startsWith("buy-used-")) {
+    details = details.slice("buy-used-".length);
   }
 
-  let normalizedSlug = slug;
+  if (details.includes("-two-wheelers")) {
+    vehicleType = "two-wheelers";
+    const parts = details.split("-two-wheelers");
+    details = parts[0];
+    city = parts[1] ? parts[1].replace(/^-/, "") : "";
+  } else if (details.includes("-cars")) {
+    vehicleType = "cars";
+    const parts = details.split("-cars");
+    details = parts[0];
+    city = parts[1] ? parts[1].replace(/^-/, "") : "";
+  } else if (details.endsWith("-two-wheelers")) {
+    vehicleType = "two-wheelers";
+    details = details.slice(0, -"-two-wheelers".length);
+  } else if (details.endsWith("-cars")) {
+    vehicleType = "cars";
+    details = details.slice(0, -"-cars".length);
+  }
+
+  initialFilters.vehicleType = vehicleType === "two-wheelers" ? "two-wheelers" : "cars";
+
   let budgetFilter = null;
+  let fuelTypeFilter = null;
+  let transmissionFilter = null;
+  let bodyTypeFilter = null;
 
-  if (slug.includes("-under-")) {
-    const budgetMatch = slug.match(/-under-(\d+(?:\.\d+)?)-?(lakhs|lakh|k)/);
-    if (budgetMatch) {
-      let value = parseFloat(budgetMatch[1]);
-      if (budgetMatch[2] === "k") {
-        value = value / 100; // e.g. 50k -> 0.5 Lakh (50,000 Rs)
-      }
-      budgetFilter = `0-${value}`;
-      normalizedSlug = slug.replace(/-under-\d+(?:\.\d+)?-?(?:lakhs|lakh|k)/, "");
-    }
-  } else if (slug.includes("-above-")) {
-    const budgetMatch = slug.match(/-above-(\d+)-lakhs/);
-    if (budgetMatch) {
-      budgetFilter = `${budgetMatch[1]}-200`;
-      normalizedSlug = slug.replace(/-above-\d+-lakhs/, "");
-    }
+  if (details.includes("under-3-lakhs")) {
+    budgetFilter = "0-300000";
+    details = details.replace("under-3-lakhs", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-5-lakhs")) {
+    budgetFilter = "0-500000";
+    details = details.replace("under-5-lakhs", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-10-lakhs")) {
+    budgetFilter = "0-1000000";
+    details = details.replace("under-10-lakhs", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-15-lakhs")) {
+    budgetFilter = "0-1500000";
+    details = details.replace("under-15-lakhs", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-50k")) {
+    budgetFilter = "0-50000";
+    details = details.replace("under-50k", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-1-lakh")) {
+    budgetFilter = "0-100000";
+    details = details.replace("under-1-lakh", "").replace(/^-+|-+$/g, "");
+  } else if (details.includes("under-2-lakh")) {
+    budgetFilter = "0-200000";
+    details = details.replace("under-2-lakh", "").replace(/^-+|-+$/g, "");
   }
-
-  const regex = /^buy-used-(?:(.+)-)?(cars|two-wheelers)(?:-(.+))?$/;
-  const match = normalizedSlug.match(regex);
-
-  if (!match) {
-    return { notFound: true };
-  }
-
-  const detailsRaw = match[1] || "";
-  const vehicleTypeParam = match[2];
-  const city = match[3] || "";
-
-  const initialFilters = {
-    vehicleType: vehicleTypeParam,
-  };
 
   if (budgetFilter) {
-    initialFilters.budget = budgetFilter;
+    const [min, max] = budgetFilter.split("-");
+    initialFilters.minBudget = parseInt(min);
+    initialFilters.maxBudget = parseInt(max);
   }
 
-  // Parse fuelType, transmission, and bodyType from detailsRaw
-  let fuelTypeFilter = "";
-  let transmissionFilter = "";
-  let bodyTypeFilter = "";
-  let details = detailsRaw;
-
+  const detailsRaw = details.toLowerCase();
   if (detailsRaw.includes("petrol")) {
     fuelTypeFilter = "Petrol";
     details = details.replace("petrol", "").replace(/^-+|-+$/g, "");
@@ -357,31 +384,44 @@ export async function getServerSideProps(context) {
   }
 
   const brandPart = brandName ? `${brandName} ` : "";
-  const modelPart = initialFilters.model ? `${initialFilters.model} ` : (modelName ? `${modelName} ` : "");
-  const cityPart = initialFilters.cityName ? ` in ${initialFilters.cityName}` : "";
+  const resolvedModel = initialFilters.model || (modelName ? modelName.replace(/-/g, " ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") : "");
+  const modelPart = resolvedModel ? `${resolvedModel} ` : "";
+  const cityPart = initialFilters.cityName ? ` in ${initialFilters.cityName}` : (initialFilters.stateName ? ` in ${initialFilters.stateName}` : "");
   
   let budgetPart = "";
   if (budgetFilter) {
     const [min, max] = budgetFilter.split("-");
     if (min === "0") {
-      budgetPart = ` under ${max} Lakh`;
+      budgetPart = ` under ₹${parseInt(max) >= 100000 ? parseInt(max)/100000 + ' Lakhs' : max}`;
     } else {
-      budgetPart = ` above ${min} Lakh`;
+      budgetPart = ` ₹${parseInt(min)/100000} - ₹${parseInt(max)/100000} Lakhs`;
     }
   }
 
   const vehicleWord = initialFilters.vehicleType === "two-wheelers" ? "Two Wheelers" : "Cars";
-  const typePart = (fuelTypeFilter || transmissionFilter) ? `${fuelTypeFilter || transmissionFilter} ` : "";
+  const typeParts = [fuelTypeFilter, transmissionFilter, bodyTypeFilter ? bodyTypeFilter.charAt(0).toUpperCase() + bodyTypeFilter.slice(1) : ""].filter(Boolean);
+  const typePart = typeParts.length > 0 ? `${typeParts.join(" ")} ` : "";
 
-  const dynamicTitle = `Used ${typePart}${brandPart}${modelPart}${vehicleWord}${budgetPart}${cityPart} | Reecomm`;
-  const dynamicDescription = `Browse verified used ${typePart}${brandPart}${modelPart}${vehicleWord.toLowerCase()}${budgetPart}${cityPart}. Every Reecomm listing is certified, inspected, and fairly priced.`;
+  const h1Title = `Used ${typePart}${brandPart}${modelPart}${vehicleWord} for Sale${cityPart}${budgetPart}`;
+  const dynamicTitle = `Used ${typePart}${brandPart}${modelPart}${vehicleWord}${cityPart}${budgetPart} - Certified & Inspected | Reecomm`;
+  const dynamicDescription = `Find verified used ${typePart.toLowerCase()}${brandPart}${modelPart}${vehicleWord.toLowerCase()} for sale${cityPart}${budgetPart}. 100% certified with multi-point inspection, warranty options, and direct seller deals on Reecomm.`;
+
+  const schemaJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": h1Title,
+    "url": `https://www.reecomm.com/search/${cleanSlug}`,
+    "description": dynamicDescription
+  };
 
   return {
     props: {
       seo: {
         title: dynamicTitle,
         description: dynamicDescription,
-        canonical: `https://www.reecomm.com/search/${slug}`,
+        h1Title: h1Title,
+        canonical: `https://www.reecomm.com/search/${cleanSlug}`,
+        schemaJsonLd: schemaJsonLd
       },
       initialFilters,
     },

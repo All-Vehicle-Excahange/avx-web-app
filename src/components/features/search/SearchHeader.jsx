@@ -188,8 +188,7 @@ export default function SearchHeader({
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary flex items-center gap-1.5">
                 <span>
-                  Used {brandParam ? `${brandParam} ` : ""}
-                  {bodyType ? `${bodyType}s` : vehicleType || "Vehicles"}
+                  {h1Title || `Used ${brandParam ? `${brandParam} ` : ""}${bodyType ? `${bodyType}s` : vehicleType || "Vehicles"}`}
                 </span>
               </h1>
 
