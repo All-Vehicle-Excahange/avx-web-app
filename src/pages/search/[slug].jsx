@@ -9,6 +9,7 @@ import FooterLink from "@/components/layout/FooterLink";
 import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
+import ZeroInventoryFallback from "@/components/features/search/ZeroInventoryFallback";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 
 function SlugSearchPage({ seo, initialFilters }) {
@@ -31,6 +32,9 @@ function SlugSearchPage({ seo, initialFilters }) {
           name="description"
           content={seo?.description || "Browse verified used vehicles for sale."}
         />
+        {/* Dynamic Robots Tag (Tier A & B: index, follow | Tier C: noindex, follow) */}
+        <meta name="robots" content={seo?.robots || "index, follow"} />
+
         {/* Canonical — each slug page gets its own unique canonical */}
         {seo?.canonical && (
           <link key="canonical" rel="canonical" href={seo.canonical} />
@@ -112,6 +116,18 @@ function SearchContent({
       />
 
       <Layout>
+        {!isLoading && pageResponse.totalElements === 0 && (
+          <ZeroInventoryFallback
+            brandName={initialFilters.brandName}
+            modelName={initialFilters.model}
+            cityName={initialFilters.cityName}
+            stateName={initialFilters.stateName}
+            vehicleType={initialFilters.vehicleType}
+            fuelType={initialFilters.fuelType}
+            bodyType={initialFilters.bodyType}
+          />
+        )}
+
         <SearchWithCard
           initialFilters={initialFilters}
           onPageResponseChange={setPageResponse}
@@ -280,15 +296,14 @@ export async function getServerSideProps(context) {
     initialFilters.bodyType = bodyTypeFilter;
   }
 
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
-  const nodeApiUrl = (process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
+  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website").replace(/\/$/, "");
 
   // 1. Resolve City ID / State ID
   if (city) {
     const searchLocation = city.replace(/-/g, " ");
     initialFilters.cityName = searchLocation.charAt(0).toUpperCase() + searchLocation.slice(1);
     initialFilters.location = initialFilters.cityName;
-    
+
     try {
       const cityRes = await fetch(`${apiUrl}/util/address/search-cities-states?searchText=${encodeURIComponent(searchLocation)}`);
       if (cityRes.ok) {
@@ -356,25 +371,6 @@ export async function getServerSideProps(context) {
         if (modelName) {
           const rawModelName = modelName.replace(/-/g, " ");
           initialFilters.model = rawModelName.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-          
-          // 2. Resolve Model ID
-          try {
-            const bodyTypeParam = initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
-            const modelRes = await fetch(`${nodeApiUrl}/search/models?search=${rawModelName}&makerId=${id}&bodyType=${bodyTypeParam}`);
-            if (modelRes.ok) {
-              const modelJson = await modelRes.json();
-              const foundModel = modelJson?.data?.find(m => {
-                const name = m.modelName || m.modelDisplayName || m.model_name || "";
-                return name.toLowerCase().replace(/[\s-]/g, "") === rawModelName.toLowerCase().replace(/[\s-]/g, "");
-              });
-              if (foundModel) {
-                initialFilters.modelId = foundModel.modelId || foundModel.model_id;
-                initialFilters.model = foundModel.modelName || foundModel.modelDisplayName || foundModel.model_name;
-              }
-            }
-          } catch (e) {
-            console.error("Model resolution failed:", e);
-          }
         }
       }
     } else {
@@ -383,11 +379,56 @@ export async function getServerSideProps(context) {
     }
   }
 
+  // 2. Fetch inventory count to determine SEO Tier (A, B, or C)
+  let totalCount = 0;
+  try {
+    const filterPayload = {
+      makerId: initialFilters.makerId ? parseInt(initialFilters.makerId) : undefined,
+      cityId: initialFilters.cityId ? parseInt(initialFilters.cityId) : undefined,
+      stateId: initialFilters.stateId ? parseInt(initialFilters.stateId) : undefined,
+      fuelType: initialFilters.fuelType,
+      minBudget: initialFilters.minBudget,
+      maxBudget: initialFilters.maxBudget
+    };
+    const vtParam = initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "FOUR_WHEELER";
+    const res = await fetch(`${apiUrl}/vehicle/filter/sections?pageNo=1&size=1&vehicleType=${vtParam}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(filterPayload)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      totalCount = data?.pageResponse?.totalElements || (data?.data ? data.data.length : 0);
+    }
+  } catch (e) {
+    console.error("SSR count check failed:", e.message);
+  }
+
+  const MAJOR_CITIES = ["ahmedabad", "mumbai", "delhi", "bangalore", "hyderabad", "chennai", "kolkata", "pune", "jaipur", "surat", "vadodara", "rajkot", "lucknow", "indore", "chandigarh", "nagpur", "palanpur"];
+  const MAJOR_BRANDS = ["hyundai", "maruti suzuki", "honda", "toyota", "mahindra", "tata", "kia", "bmw", "audi", "mercedes benz", "mg", "skoda", "volkswagen", "bajaj", "hero", "royal enfield", "tvs", "yamaha"];
+
+  const isStrategicCity = city && MAJOR_CITIES.includes(city.toLowerCase());
+  const isStrategicBrand = brandName && MAJOR_BRANDS.includes(brandName.toLowerCase());
+  const isCategoryLanding = !city && !brandName;
+
+  let robots = "index, follow";
+  let tier = "Tier A";
+
+  if (totalCount === 0) {
+    if (isStrategicCity || isStrategicBrand || isCategoryLanding) {
+      robots = "index, follow";
+      tier = "Tier B";
+    } else {
+      robots = "noindex, follow";
+      tier = "Tier C";
+    }
+  }
+
   const brandPart = brandName ? `${brandName} ` : "";
   const resolvedModel = initialFilters.model || (modelName ? modelName.replace(/-/g, " ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") : "");
   const modelPart = resolvedModel ? `${resolvedModel} ` : "";
   const cityPart = initialFilters.cityName ? ` in ${initialFilters.cityName}` : (initialFilters.stateName ? ` in ${initialFilters.stateName}` : "");
-  
+
   let budgetPart = "";
   if (budgetFilter) {
     const [min, max] = budgetFilter.split("-");
@@ -421,7 +462,9 @@ export async function getServerSideProps(context) {
         description: dynamicDescription,
         h1Title: h1Title,
         canonical: `https://www.reecomm.com/search/${cleanSlug}`,
-        schemaJsonLd: schemaJsonLd
+        schemaJsonLd: schemaJsonLd,
+        robots: robots,
+        tier: tier
       },
       initialFilters,
     },
