@@ -296,7 +296,12 @@ export async function getServerSideProps(context) {
     initialFilters.bodyType = bodyTypeFilter;
   }
 
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website").replace(/\/$/, "");
+  let rawApiUrl = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.online/api/v1/website";
+  if (!rawApiUrl.startsWith("http")) {
+    const backendHost = process.env.BACKEND_URL || "https://api.reecomm.online";
+    rawApiUrl = `${backendHost.replace(/\/$/, "")}${rawApiUrl.startsWith("/") ? "" : "/"}${rawApiUrl}`;
+  }
+  const apiUrl = rawApiUrl.replace(/\/$/, "");
 
   // 1. Resolve City ID / State ID
   if (city) {

@@ -16,6 +16,7 @@ const sortOptions = [
 ];
 
 export default function SearchHeader({
+  h1Title,
   pageResponse = {},
   activeFilters = [],
   onRemoveFilter,

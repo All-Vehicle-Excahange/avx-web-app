@@ -657,6 +657,9 @@ export default function SearchWithCard({
       transmission: trans,
       bodyType: body,
     });
+    // DO NOT wipe or replace state if we are on a pre-defined SEO slug route
+    if (pathname && pathname.startsWith("/search/buy-used-")) return;
+
     const currentSlug = pathname.split("/").pop();
 
     if (
@@ -668,10 +671,6 @@ export default function SearchWithCard({
       !trans &&
       !body
     ) {
-      // If we are currently on an SEO slug page but filters are empty, go back to base search
-      if (currentSlug && currentSlug.startsWith("buy-used-")) {
-        window.history.replaceState(null, "", "/search");
-      }
       return;
     }
 
@@ -1781,8 +1780,10 @@ export default function SearchWithCard({
 
   const handleClearFilters = async () => {
     isSelfTriggered.current = false;
-    // Remove query parameters from URL to clear top search bar
-    window.history.replaceState(null, "", "/search");
+    // Remove query parameters from URL to clear top search bar if on base /search
+    if (pathname === "/search") {
+      window.history.replaceState(null, "", "/search");
+    }
 
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
