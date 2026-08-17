@@ -659,23 +659,7 @@ export default function SearchWithCard({
     });
     const currentSlug = pathname.split("/").pop();
 
-    if (
-      !brandName &&
-      !locationName &&
-      !budgetParam &&
-      !isTwoWheeler &&
-      !fuel &&
-      !trans &&
-      !body
-    ) {
-      // If we are currently on an SEO slug page but filters are empty, go back to base search
-      if (currentSlug && currentSlug.startsWith("buy-used-")) {
-        window.history.replaceState(null, "", "/search");
-      }
-      return;
-    }
-
-    if (targetSlug !== currentSlug) {
+    if (targetSlug && targetSlug !== currentSlug) {
       window.history.replaceState(null, "", `/search/${targetSlug}`);
     }
   }, [
@@ -1782,7 +1766,7 @@ export default function SearchWithCard({
   const handleClearFilters = async () => {
     isSelfTriggered.current = false;
     // Remove query parameters from URL to clear top search bar
-    window.history.replaceState(null, "", "/search");
+    window.history.replaceState(null, "", "/search/buy-used-cars");
 
     // Remove saved location from localStorage
     localStorage.removeItem("avx_saved_location");
