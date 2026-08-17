@@ -62,10 +62,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-black/45 z-0" />
 
       {/*  TOP GRADIENT SCRIM (KEY FIX) */}
-      <div
-        className="absolute top-0 left-0 right-0 h-32 z-1
-    bg-linear-to-b from-black/70 via-black/40 to-transparent"
-      />
+      <div className="absolute top-0 left-0 right-0 h-32 z-1 bg-linear-to-b from-black/70 via-black/40 to-transparent" />
 
       {/* Navbar */}
       <StickyHeroNavbar onScrollChange={setCollapsed} />

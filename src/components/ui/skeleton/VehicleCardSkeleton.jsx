@@ -7,15 +7,7 @@ import SkeletonBox from "./SkeletonBox";
  */
 export default function VehicleCardSkeleton() {
   return (
-    <div
-      className="
-        group/card relative flex flex-row md:flex-col
-        rounded-2xl overflow-hidden
-        text-primary
-        md:max-w-sm w-full sm:w-[392px]
-        border-2 border-third/20
-        h-full md:h-[500px]"
-    >
+    <div className="group/card relative flex flex-row md:flex-col rounded-2xl overflow-hidden text-primary md:max-w-sm w-full sm:w-[392px] border-2 border-third/20 h-full md:h-[500px]">
       <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
         {/* IMAGE SKELETON */}
         <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-62 md:w-full shrink-0 p-2">
