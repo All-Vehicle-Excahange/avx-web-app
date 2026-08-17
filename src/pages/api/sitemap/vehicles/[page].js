@@ -81,11 +81,25 @@ export default async function handler(req, res) {
       xml += `    <changefreq>daily</changefreq>\n`;
       xml += `    <priority>0.8</priority>\n`;
 
-      // Add image tag if thumbnailUrl exists (helps Google Images indexing)
-      if (vehicle.thumbnailUrl) {
+      // Add all vehicle photos for Google Images SEO
+      const images = [];
+      if (vehicle.thumbnailUrl) images.push(vehicle.thumbnailUrl);
+      if (Array.isArray(vehicle.imageUrls)) {
+        vehicle.imageUrls.forEach((img) => {
+          if (img && typeof img === "string" && !images.includes(img)) images.push(img);
+        });
+      }
+      if (Array.isArray(vehicle.vehiclePhotos)) {
+        vehicle.vehiclePhotos.forEach((img) => {
+          const url = typeof img === "string" ? img : img?.url || img?.photoUrl;
+          if (url && !images.includes(url)) images.push(url);
+        });
+      }
+
+      for (const imgUrl of images) {
         const title = `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(vehicle.thumbnailUrl)}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
         xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
         xml += `    </image:image>\n`;
       }

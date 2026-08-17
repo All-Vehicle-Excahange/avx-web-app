@@ -39,7 +39,19 @@ function Index({ seo }) {
           unitCode: "KMT",
         },
         numberOfPreviousOwners: vehicle.ownership,
-        image: vehicle.thumbnailUrl || vehicle.imageUrls?.[0],
+        image: Array.from(
+          new Set(
+            [
+              vehicle.thumbnailUrl,
+              ...(Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls : []),
+              ...(Array.isArray(vehicle.vehiclePhotos)
+                ? vehicle.vehiclePhotos.map((p) =>
+                    typeof p === "string" ? p : p?.url || p?.photoUrl
+                  )
+                : []),
+            ].filter(Boolean)
+          )
+        ),
         description: seo?.description,
         url: seo?.url,
         vehicleConfiguration: vehicle.variantName,
