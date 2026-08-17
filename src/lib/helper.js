@@ -99,7 +99,7 @@ export const generateVehicleUrl = (data, consultantSlug) => {
   if (consultPart && consultPart !== "consualt") {
     return `/vehicle/details/${consultPart}/${slug}/${data.id}`;
   }
-  return `/vehicle/details/consualt/${slug}/${data.id}`;
+  return `/vehicle/details/${slug}/${data.id}`;
 };
 
 
