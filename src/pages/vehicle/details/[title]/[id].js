@@ -11,6 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getVehicleOverviewQuery } from "@/queries/vehicle.queries";
 import { generateDynamicPageTitle, generateDynamicMetaDescription } from "@/lib/helper";
 
+import VehicleSeoLinkHub from "@/components/features/VehiclDetail/VehicleSeoLinkHub";
+
 function Index({ seo }) {
   const router = useRouter();
   const { id } = router.query || {};
@@ -21,6 +23,43 @@ function Index({ seo }) {
   });
 
   const vehicle = vehicleOverview || {};
+
+  const consultantUsername =
+    vehicle.consultantUsername ||
+    vehicle.consultantSlug ||
+    vehicle.vehicleOwner?.username ||
+    vehicle.username;
+  const consultantName = vehicle.consultantName || vehicle.sellerName;
+  const cityName = (vehicle.cityName || vehicle.address?.city || "").split(",")[0].trim();
+  const stateName = (vehicle.stateName || vehicle.address?.state || "").trim();
+
+  // Dynamic Seller Schema (AutoDealer for consultants, Person for individuals)
+  const sellerSchema = consultantUsername
+    ? {
+        "@type": "AutoDealer",
+        name: consultantName || "Auto Consultant",
+        url: `https://www.reecomm.com/auto-consultant/${consultantUsername}`,
+        ...(cityName && {
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: cityName,
+            addressRegion: stateName || "",
+            addressCountry: "IN",
+          },
+        }),
+      }
+    : {
+        "@type": "Person",
+        name: vehicle.userSellerName || vehicle.ownerName || "Individual Seller",
+        ...(cityName && {
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: cityName,
+            addressRegion: stateName || "",
+            addressCountry: "IN",
+          },
+        }),
+      };
 
   // ─── JSON-LD: Car Schema (uses @type: Car — more specific than Vehicle) ──
   const vehicleSchema = vehicle.id
@@ -61,40 +100,58 @@ function Index({ seo }) {
           priceCurrency: "INR",
           availability: "https://schema.org/InStock",
           itemCondition: "https://schema.org/UsedCondition",
-          seller: { "@type": "Organization", name: "Reecomm" },
+          seller: sellerSchema,
         },
       }
     : null;
 
-  // ─── JSON-LD: Breadcrumb Schema ─────────────────────────────────────
+  // ─── JSON-LD: Clean Breadcrumb Schema ─────────────────────────────────────
+  const brandSlug = (vehicle.makerName || "").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  const citySlug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+  const breadcrumbElements = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://www.reecomm.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Used Cars",
+      item: "https://www.reecomm.com/search/buy-used-cars",
+    },
+  ];
+
+  if (brandSlug) {
+    breadcrumbElements.push({
+      "@type": "ListItem",
+      position: 3,
+      name: vehicle.makerName,
+      item: `https://www.reecomm.com/search/buy-used-${brandSlug}-cars`,
+    });
+  }
+
+  if (brandSlug && citySlug) {
+    breadcrumbElements.push({
+      "@type": "ListItem",
+      position: 4,
+      name: `${vehicle.makerName} in ${cityName}`,
+      item: `https://www.reecomm.com/search/buy-used-${brandSlug}-cars-${citySlug}`,
+    });
+  }
+
+  breadcrumbElements.push({
+    "@type": "ListItem",
+    position: breadcrumbElements.length + 1,
+    name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""}`.trim(),
+  });
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.reecomm.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Used Cars",
-        item: "https://www.reecomm.com/search",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: vehicle.makerName || "Brands",
-        item: `https://www.reecomm.com/search?brand=${encodeURIComponent(vehicle.makerName || "")}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""}`.trim(),
-      },
-    ],
+    itemListElement: breadcrumbElements,
   };
 
   // ─── Display SEO Values ─────────────────────────────────────────────
@@ -174,8 +231,7 @@ function Index({ seo }) {
       {/* <Layout>
         <AvxProcess />
       </Layout> */}
-      <DownloadAppSection fullWidth />
-
+      <VehicleSeoLinkHub vehicleOverview={vehicle} />
       <FooterLink />
       <Footer />
     </>
