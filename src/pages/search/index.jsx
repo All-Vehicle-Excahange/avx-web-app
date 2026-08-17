@@ -141,38 +141,22 @@ function SearchContent({
 export async function getServerSideProps(context) {
   const { query } = context;
 
-  const brand = query.brand || "";
-  const model = query.model || "";
-  const bodyType = query.bodyType || "";
   const vehicleType = query.vehicleType || "";
-  const location = query.location || "";
-
   const vtLower = vehicleType.toLowerCase();
   const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
 
-  const label = isTwoWheeler ? "Two-Wheelers" : "Cars";
-  const locPart = location ? ` in ${location}` : "";
+  // Canonical SEO redirect from generic /search to rich slug /search/buy-used-cars
+  const targetSlug = isTwoWheeler ? "buy-used-two-wheelers" : "buy-used-cars";
 
-  const brandPart = brand ? `${brand} ` : "";
-  const modelPart = model ? `${model} ` : "";
-  const bodyPart = bodyType ? `${bodyType} ` : "";
-
-  const dynamicTitle = `Used ${brandPart}${modelPart}${bodyPart}${label} | Reecomm`;
-
-  const descLocPart = location ? ` across ${location}` : "";
-  let dynamicDescription = "";
-  if (isTwoWheeler) {
-    dynamicDescription = `Browse verified used two-wheelers${descLocPart}. Inspected scooters, commuter bikes, and sports bikes — all with transparent pricing.`;
-  } else {
-    dynamicDescription = `Browse verified used cars${descLocPart}. Every Reecomm listing is certified, inspected, and fairly priced. Find your next car today.`;
-  }
+  // Omit vehicleType from query params since it's encoded in the slug
+  const queryParams = new URLSearchParams(query);
+  queryParams.delete("vehicleType");
+  const queryString = queryParams.toString();
 
   return {
-    props: {
-      seo: {
-        title: dynamicTitle,
-        description: dynamicDescription,
-      },
+    redirect: {
+      destination: `/search/${targetSlug}${queryString ? `?${queryString}` : ""}`,
+      permanent: false,
     },
   };
 }
