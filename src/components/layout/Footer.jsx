@@ -12,9 +12,9 @@ import Image from "next/image";
 
 const footerLinks = {
   buy: [
-    { label: "Browse all vehicles", href: "/search" },
-    { label: "Browse Cars", href: "/search?vehicleType=4 Wheeler" },
-    { label: "Browse Two-wheelers", href: "/search?vehicleType=2 Wheeler" },
+    { label: "Browse all vehicles", href: "/search/buy-used-cars" },
+    { label: "Browse Cars", href: "/search/buy-used-cars" },
+    { label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" },
     {
       label: "Reecomm Inspected Vehicles",
       href: "/search?reccomInspected=true",

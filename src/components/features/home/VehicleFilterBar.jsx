@@ -908,56 +908,35 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         setActiveTab(null);
         setMobileOpen(false);
       } else {
-        const vtLower = vehicleType.toLowerCase().replace(/_/g, " ");
-        const isCar =
-          vtLower.includes("car") ||
-          vtLower.includes("4 wheeler") ||
-          vtLower.includes("four wheeler") ||
-          vtLower.includes("4-wheeler") ||
-          vtLower.includes("four-wheeler");
+        const vtLower = vehicleType ? vehicleType.toLowerCase().replace(/_/g, " ") : "";
+        const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
+        const vehicleKind = isTwoWheeler ? "two-wheelers" : "cars";
 
-        if (isCar) {
-          // Generate SEO-friendly slug
-          let slug = "buy-used-";
-          if (brand) {
-            slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
-          }
-          slug += "cars";
-          if (location) {
-            const cityName = location
-              .split(",")[0]
-              .trim()
-              .toLowerCase()
-              .replace(/\s+/g, "-");
-            slug += "-" + cityName;
-          }
-
-          // Other filters as query params (excluding brand/model/city IDs as they are resolved from the slug)
-          const queryParams = new URLSearchParams({
-            ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-            ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-            ...(budget && { budget }),
-          }).toString();
-
-          await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
-          setActiveTab(null);
-          setMobileOpen(false);
-        } else {
-          const query = new URLSearchParams({
-            ...(location && { location }),
-            ...(cityId && { cityId }),
-            ...(stateId && { stateId }),
-            ...(vehicleType && { vehicleType }),
-            ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-            ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-            ...(brand && { brand }),
-            ...(makerId && { makerId }),
-            ...(budget && { budget }),
-          }).toString();
-          await push(`/search?${query}`);
-          setActiveTab(null);
-          setMobileOpen(false);
+        // Generate SEO-friendly slug
+        let slug = "buy-used-";
+        if (brand) {
+          slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
         }
+        slug += vehicleKind;
+        if (location) {
+          const cityName = location
+            .split(",")[0]
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+          slug += "-" + cityName;
+        }
+
+        // Other filters as query params
+        const queryParams = new URLSearchParams({
+          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
+          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
+          ...(budget && { budget }),
+        }).toString();
+
+        await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+        setActiveTab(null);
+        setMobileOpen(false);
       }
     } finally {
       setIsSearching(false);
