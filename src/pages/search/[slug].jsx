@@ -389,6 +389,9 @@ export async function getServerSideProps(context) {
     console.error("Search count resolution failed:", e);
   }
 
+  const vehicleWord = initialFilters.vehicleType === "two-wheelers" ? "Two Wheelers" : "Cars";
+  const typePart = (fuelTypeFilter || transmissionFilter) ? `${fuelTypeFilter || transmissionFilter} ` : "";
+
   const countPrefix = totalCount > 0 ? `${totalCount}+ ` : "";
   const dynamicTitle = `${countPrefix}Used ${typePart}${brandPart}${modelPart}${vehicleWord}${budgetPart}${cityPart} - Buy Second Hand ${brandPart}${modelPart}on Reecomm`.replace(/\s+/g, " ");
   const dynamicDescription = `Find ${countPrefix}verified used ${typePart}${brandPart}${modelPart}${vehicleWord.toLowerCase()}${budgetPart}${cityPart} starting at best market prices. Compare certified pre-owned ${brandPart}${modelPart}models with AVX inspection report, photos & price details on Reecomm.`.replace(/\s+/g, " ");
