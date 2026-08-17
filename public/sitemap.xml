@@ -2,13 +2,13 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Vehicle Listings (dynamic, paginated) -->
   <sitemap>
-    <loc>https://www.reecomm.com/api/sitemap/vehicles.xml</loc>
-    <lastmod>2026-06-18T00:00:00Z</lastmod>
+    <loc>https://www.reecomm.com/api/sitemap/vehicles/1.xml</loc>
+    <lastmod>2026-08-17T10:35:00Z</lastmod>
   </sitemap>
   <!-- Storefront Listings (dynamic, paginated) -->
   <sitemap>
-    <loc>https://www.reecomm.com/api/sitemap/storefronts.xml</loc>
-    <lastmod>2026-06-18T00:00:00Z</lastmod>
+    <loc>https://www.reecomm.com/api/sitemap/storefronts/1.xml</loc>
+    <lastmod>2026-08-17T10:35:00Z</lastmod>
   </sitemap>
   <!-- Geo-Brands & City Combinations (dynamic) -->
   <sitemap>

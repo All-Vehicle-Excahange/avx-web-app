@@ -9,6 +9,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleOverviewQuery } from "@/queries/vehicle.queries";
+import { generateDynamicPageTitle, generateDynamicMetaDescription } from "@/lib/helper";
 
 function Index({ seo }) {
   const router = useRouter();
@@ -99,46 +100,13 @@ function Index({ seo }) {
 
   // 2. If client-side query loads vehicle data, update SEO values dynamically!
   if (vehicleOverview) {
-    const year = vehicleOverview.yearOfMfg || vehicleOverview.year || "";
-    const make = vehicleOverview.makerName || "";
-    const model = vehicleOverview.modelName || "";
-    const variant = vehicleOverview.variantName || "";
-    const city =
-      vehicleOverview.address?.city || vehicleOverview.location || "India";
-
-    const formattedPrice = formatPrice(vehicleOverview.price);
-    const kms = vehicleOverview.kmDriven
-      ? Number(vehicleOverview.kmDriven).toLocaleString("en-IN")
-      : "0";
-
-    const fuel = formatTextCap(
-      vehicleOverview.fuelType || vehicleOverview.fuel || "",
-    );
-    const transmission = formatTextCap(
-      vehicleOverview.transmissionType || vehicleOverview.transmission || "",
-    );
-    const inspectionText = vehicleOverview.avxInspectionRating
-      ? "Reecomm Inspected"
-      : "Seller listed";
-
     vehicleImageUrl =
       vehicleOverview.thumbnailUrl || vehicleOverview.imageUrls?.[0] || "";
 
-    displayTitle =
-      `${year} ${make} ${model} ${variant} for Sale in ${city} — ₹${formattedPrice} | Reecomm`
-        .replace(/\s+/g, " ")
-        .trim();
-    displayDescription =
-      `Buy this ${year} ${make} ${model} in ${city} for ₹${formattedPrice}. ${kms} km driven · ${fuel} · ${transmission}. ${inspectionText}. View full specs, photos, and contact the seller on Reecomm.`
-        .replace(/\s+/g, " ")
-        .trim();
-    ogTitle = `${year} ${make} ${model} · ₹${formattedPrice} · ${city}`
-      .replace(/\s+/g, " ")
-      .trim();
-    ogDescription =
-      `${kms} km · ${fuel} · ${transmission} ${vehicleOverview.avxInspectionRating ? "· ✓ Reecomm Inspected" : ""}`
-        .replace(/\s+/g, " ")
-        .trim();
+    displayTitle = generateDynamicPageTitle(vehicleOverview);
+    displayDescription = generateDynamicMetaDescription(vehicleOverview);
+    ogTitle = displayTitle;
+    ogDescription = displayDescription;
   }
 
   return (

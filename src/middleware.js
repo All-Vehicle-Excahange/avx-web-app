@@ -47,6 +47,19 @@ export async function middleware(request) {
 
   if (parts.length === 0) return NextResponse.next();
 
+  // ── 1. Virtual Rewrite for 3-Segment Consultant URLs ─────────────────────
+  // /vehicle/details/{consultant-username}/{slug}/{id} -> /vehicle/details/{slug}/{id}
+  if (parts.length === 5 && parts[0] === "vehicle" && parts[1] === "details") {
+    const consultantUsername = parts[2];
+    const slug = parts[3];
+    const id = parts[4];
+
+    if (UUID_REGEX.test(id) || id.length > 5) {
+      const targetUrl = new URL(`/vehicle/details/${slug}/${id}`, request.url);
+      targetUrl.searchParams.set("consultantUsername", consultantUsername);
+      return NextResponse.rewrite(targetUrl);
+    }
+  }
   const isShortRoute = (parts[0] === "c" || parts[0] === "car") && parts.length >= 2;
   const isUuidDetailsRoute = parts.length === 3 && parts[0] === "vehicle" && parts[1] === "details";
 

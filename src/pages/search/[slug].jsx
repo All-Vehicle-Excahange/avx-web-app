@@ -370,11 +370,28 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const vehicleWord = initialFilters.vehicleType === "two-wheelers" ? "Two Wheelers" : "Cars";
-  const typePart = (fuelTypeFilter || transmissionFilter) ? `${fuelTypeFilter || transmissionFilter} ` : "";
+  let totalCount = 0;
+  try {
+    const countParams = new URLSearchParams();
+    countParams.set("pageNo", "1");
+    countParams.set("size", "1");
+    if (initialFilters.makerId) countParams.set("makerId", initialFilters.makerId);
+    if (initialFilters.modelId) countParams.set("modelId", initialFilters.modelId);
+    if (initialFilters.stateId) countParams.set("stateId", initialFilters.stateId);
+    if (initialFilters.cityId) countParams.set("cityId", initialFilters.cityId);
 
-  const dynamicTitle = `Used ${typePart}${brandPart}${modelPart}${vehicleWord}${budgetPart}${cityPart} | Reecomm`;
-  const dynamicDescription = `Browse verified used ${typePart}${brandPart}${modelPart}${vehicleWord.toLowerCase()}${budgetPart}${cityPart}. Every Reecomm listing is certified, inspected, and fairly priced.`;
+    const countRes = await fetch(`${nodeApiUrl}/search?${countParams.toString()}`);
+    if (countRes.ok) {
+      const countJson = await countRes.json();
+      totalCount = countJson?.pageResponse?.totalElements || countJson?.totalElements || 0;
+    }
+  } catch (e) {
+    console.error("Search count resolution failed:", e);
+  }
+
+  const countPrefix = totalCount > 0 ? `${totalCount}+ ` : "";
+  const dynamicTitle = `${countPrefix}Used ${typePart}${brandPart}${modelPart}${vehicleWord}${budgetPart}${cityPart} - Buy Second Hand ${brandPart}${modelPart}on Reecomm`.replace(/\s+/g, " ");
+  const dynamicDescription = `Find ${countPrefix}verified used ${typePart}${brandPart}${modelPart}${vehicleWord.toLowerCase()}${budgetPart}${cityPart} starting at best market prices. Compare certified pre-owned ${brandPart}${modelPart}models with AVX inspection report, photos & price details on Reecomm.`.replace(/\s+/g, " ");
 
   return {
     props: {

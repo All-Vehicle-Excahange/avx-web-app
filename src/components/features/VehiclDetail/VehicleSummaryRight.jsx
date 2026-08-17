@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Star, MapPin, Loader2, ExternalLink } from "lucide-react";
+import { Star, MapPin, Loader2, ExternalLink, Pencil } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -13,6 +13,7 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -20,8 +21,11 @@ export default function VehicleSummaryRight({
   adId,
   sponsored,
   billingType,
+  onRequestInspection,
+  isCheckingInspection,
 }) {
   const queryClient = useQueryClient();
+  const { push } = useRouter();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -37,6 +41,37 @@ export default function VehicleSummaryRight({
   const [loading, setLoading] = useState(false);
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const user = useAuthStore((state) => state.user);
+
+  const isOwner = Boolean(
+    user &&
+      (
+        (user?.id && vehicle?.vehicleOwner?.id && String(user.id) === String(vehicle.vehicleOwner.id)) ||
+        (user?.id && vehicle?.userId && String(user.id) === String(vehicle.userId)) ||
+        (user?.consultantId && vehicle?.consultantId && String(user.consultantId) === String(vehicle.consultantId)) ||
+        (user?.consultationId && vehicle?.consultantId && String(user.consultationId) === String(vehicle.consultantId)) ||
+        (user?.id && vehicle?.consultantId && String(user.id) === String(vehicle.consultantId)) ||
+        (user?.id && vehicle?.consultationId && String(user.id) === String(vehicle.consultationId)) ||
+        (user?.phone && vehicle?.vehicleOwner?.phone && user.phone === vehicle.vehicleOwner.phone) ||
+        (user?.mobile && vehicle?.vehicleOwner?.phone && user.mobile === vehicle.vehicleOwner.phone) ||
+        (user?.phoneNumber && vehicle?.vehicleOwner?.phone && user.phoneNumber === vehicle.vehicleOwner.phone)
+      )
+  );
+
+  useEffect(() => {
+    console.log("=== VehicleSummaryRight Owner Debug ===", {
+      user,
+      userId: user?.id,
+      userConsultantId: user?.consultantId || user?.consultationId,
+      userPhone: user?.phone || user?.mobile || user?.phoneNumber,
+      vehicleOwner: vehicle?.vehicleOwner,
+      vehicleOwnerId: vehicle?.vehicleOwner?.id,
+      vehicleUserId: vehicle?.userId,
+      vehicleConsultantId: vehicle?.consultantId || vehicle?.consultationId,
+      vehicleOwnerPhone: vehicle?.vehicleOwner?.phone,
+      isOwnerResult: isOwner,
+    });
+  }, [user, vehicle, isOwner]);
 
   const {
     data: eligibilityData,
@@ -118,20 +153,32 @@ export default function VehicleSummaryRight({
 
             {vehicleOwnerRole === "CONSULTATION" ? (
               <>
-                {/* Label row + Visit Storefront on same line */}
+                {/* Label row + Visit Storefront + Edit button on same line */}
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs uppercase tracking-[0.1em] text-fourth font-bold">
                     Listed By Auto Consult
                   </span>
-                  {summary?.consultationName && (
-                    <Link
-                      href={`/auto-consultant/${summary?.username || 1}`}
-                      className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
-                    >
-                      Visit Storefront
-                      <ExternalLink size={11} className="inline" />
-                    </Link>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {isOwner && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => setIsDownloadOpen(true)}
+                        size="sm"
+                        className="py-1 px-2.5 text-xs border border-white/20 hover:bg-white/10 rounded-lg flex items-center gap-1"
+                      >
+                        <Pencil size={12} className="mr-0.5" /> Edit
+                      </Button>
+                    )}
+                    {summary?.consultationName && (
+                      <Link
+                        href={`/auto-consultant/${summary?.username || 1}`}
+                        className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
+                      >
+                        Visit Storefront
+                        <ExternalLink size={11} className="inline" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
 
                 {/* Consultant name — clickable → storefront */}
@@ -165,9 +212,21 @@ export default function VehicleSummaryRight({
               </>
             ) : (
               <>
-                <span className="text-xs uppercase tracking-[0.1em] text-third font-medium">
-                  Private Seller
-                </span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs uppercase tracking-[0.1em] text-third font-medium">
+                    Private Seller
+                  </span>
+                  {isOwner && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => setIsDownloadOpen(true)}
+                      size="sm"
+                      className="py-1 px-2.5 text-xs border border-white/20 hover:bg-white/10 rounded-lg flex items-center gap-1"
+                    >
+                      <Pencil size={12} className="mr-0.5" /> Edit
+                    </Button>
+                  )}
+                </div>
                 <p className="text-xl font-bold text-primary leading-tight -mt-1">
                   {[
                     vehicle?.vehicleOwner?.firstname,
@@ -284,33 +343,59 @@ export default function VehicleSummaryRight({
 
           {/* ACTION BUTTONS (DESKTOP) */}
           <div className="hidden lg:grid grid-cols-2 gap-2 pt-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              showIcon={false}
-              className="rounded-full"
-              loading={loading || isCheckingInquiry}
-              disabled={vehicle?.isVehicleSold}
-              onClick={() => {
-                if (!isLoggedIn) {
-                  pendingAction.current = "request";
-                  setIsLoginOpen(true);
-                } else {
-                  handleRequestInquiry();
-                }
-              }}
-            >
-              {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
-            </Button>
+            {isOwner ? (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  showIcon={false}
+                  className="rounded-full"
+                  onClick={onRequestInspection || (() => setIsDownloadOpen(true))}
+                  loading={isCheckingInspection}
+                >
+                  Request Inspection
+                </Button>
 
-            <Button
-              variant="outline"
-              size="sm"
-              showIcon={false}
-              onClick={() => setIsDownloadOpen(true)}
-            >
-              {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
-            </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  showIcon={false}
+                  onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}
+                >
+                  Boost Listing
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  showIcon={false}
+                  className="rounded-full"
+                  loading={loading || isCheckingInquiry}
+                  disabled={vehicle?.isVehicleSold}
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      pendingAction.current = "request";
+                      setIsLoginOpen(true);
+                    } else {
+                      handleRequestInquiry();
+                    }
+                  }}
+                >
+                  {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  showIcon={false}
+                  onClick={() => setIsDownloadOpen(true)}
+                >
+                  {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </aside>
@@ -327,33 +412,56 @@ export default function VehicleSummaryRight({
         </div>
 
         <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            showIcon={false}
-            className=""
-            loading={loading || isCheckingInquiry}
-            onClick={() => {
-              if (!isLoggedIn) {
-                pendingAction.current = "request";
-                setIsLoginOpen(true);
-              } else {
-                handleRequestInquiry();
-              }
-            }}
-          >
-            Request Vehicle
-          </Button>
+          {isOwner ? (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                onClick={onRequestInspection || (() => setIsDownloadOpen(true))}
+                loading={isCheckingInspection}
+              >
+                Request Inspection
+              </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            showIcon={false}
-            className=""
-            onClick={() => setIsDownloadOpen(true)}
-          >
-            Chat
-          </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                showIcon={false}
+                onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}
+              >
+                Boost
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                loading={loading || isCheckingInquiry}
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    pendingAction.current = "request";
+                    setIsLoginOpen(true);
+                  } else {
+                    handleRequestInquiry();
+                  }
+                }}
+              >
+                Request Vehicle
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                showIcon={false}
+                onClick={() => setIsDownloadOpen(true)}
+              >
+                Chat
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

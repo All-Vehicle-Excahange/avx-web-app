@@ -10,9 +10,17 @@ import axios from "axios";
  * use inside getServerSideProps, API routes, and sitemap generators.
  */
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://reecomm-spring-fcde06afd95d.herokuapp.com/api/v1/website";
+const getBackendUrl = () => {
+  const envUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "";
+  if (envUrl.startsWith("http://") || envUrl.startsWith("https://")) {
+    return envUrl.endsWith("/api/v1/website")
+      ? envUrl
+      : `${envUrl.replace(/\/$/, "")}/api/v1/website`;
+  }
+  return "https://api.reecomm.online/api/v1/website";
+};
+
+const BASE_URL = getBackendUrl();
 
 const seoAxios = axios.create({
   baseURL: BASE_URL,

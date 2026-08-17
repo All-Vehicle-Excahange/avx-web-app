@@ -19,15 +19,18 @@ import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
 import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getVehicleOverviewQuery,
   getVehicleSummaryQuery,
   getVehicleInspectionDetailsQuery,
+  getActiveInspectionQuery,
 } from "@/queries/vehicle.queries";
 import ReletedConsualt from "./ReletedConsualt";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 import SpecialOffer from "./SpecialOffer";
+import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
+import toast from "react-hot-toast";
 
 export default function VehicleDetails({
   initialOverview = null,
@@ -92,6 +95,7 @@ export default function VehicleDetails({
     });
   };
   const router = useRouter();
+  const queryClient = useQueryClient();
   const id = router.query?.id;
   const sponsored = router.query?.sponsored;
   const billingType = router.query?.billingType;
@@ -116,6 +120,57 @@ export default function VehicleDetails({
     ...getVehicleInspectionDetailsQuery(id),
     enabled: !!id && (isConditionOpen || isInspectionOpen),
   });
+
+  const [trackingInspection, setTrackingInspection] = useState(null);
+  const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
+  const [isCheckingInspection, setIsCheckingInspection] = useState(false);
+  const inspectionSpecsRef = useRef(null);
+
+  const handleOpenTracking = (data) => {
+    setTrackingInspection(data);
+    setTimeout(() => setAnimateTrackingModal(true), 10);
+  };
+
+  const handleCloseTracking = () => {
+    setAnimateTrackingModal(false);
+    setTimeout(() => {
+      setTrackingInspection(null);
+    }, 300);
+  };
+
+  const handleRequestInspection = async () => {
+    if (!id) return;
+    setIsCheckingInspection(true);
+    try {
+      const data = await queryClient.fetchQuery(getActiveInspectionQuery(id));
+      if (data) {
+        if (data.inspectionRequestStatus === "PAYMENT_PENDING") {
+          if (inspectionSpecsRef.current) {
+            inspectionSpecsRef.current.openModal();
+          }
+        } else {
+          handleOpenTracking(data);
+        }
+      } else {
+        if (inspectionSpecsRef.current) {
+          inspectionSpecsRef.current.openModal();
+        }
+      }
+    } catch (error) {
+      if (error?.response?.status === 404 || error?.status === 404) {
+        if (inspectionSpecsRef.current) {
+          inspectionSpecsRef.current.openModal();
+        }
+      } else {
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to check inspection status.",
+        );
+      }
+    } finally {
+      setIsCheckingInspection(false);
+    }
+  };
 
   const vehicleSummary = vehicleSummaryData || {};
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
@@ -233,6 +288,7 @@ export default function VehicleDetails({
 
                 <div ref={inspectionRef}>
                   <VehicleSpec
+                    ref={inspectionSpecsRef}
                     vehicle={vehicleOverview}
                     open={isInspectionOpen}
                     setOpen={setIsInspectionOpen}
@@ -251,6 +307,8 @@ export default function VehicleDetails({
                   adId={adId}
                   sponsored={sponsored}
                   billingType={billingType}
+                  onRequestInspection={handleRequestInspection}
+                  isCheckingInspection={isCheckingInspection}
                 />
                 <Testimonials summary={vehicleSummary} />
                 <SpecialOffer />
@@ -267,6 +325,14 @@ export default function VehicleDetails({
           </section>
         </div>
       </main>
+      {trackingInspection && (
+        <InspectionTrackingModal
+          inspection={trackingInspection}
+          onClose={handleCloseTracking}
+          animateModal={animateTrackingModal}
+          vehicle={vehicleOverview}
+        />
+      )}
     </>
   );
 }

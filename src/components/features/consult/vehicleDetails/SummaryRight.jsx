@@ -14,9 +14,43 @@ import toast from "react-hot-toast";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import InspectionRequestModal from "@/components/features/user/InspectionRequestModal";
 
+import { useAuthStore } from "@/stores/useAuthStore";
+
 export default function SummaryRight({ vehicle, summary }) {
   const queryClient = useQueryClient();
   const { push } = useRouter();
+  const user = useAuthStore((state) => state.user);
+
+  const isOwner = Boolean(
+    user &&
+      (
+        (user?.id && vehicle?.vehicleOwner?.id && String(user.id) === String(vehicle.vehicleOwner.id)) ||
+        (user?.id && vehicle?.userId && String(user.id) === String(vehicle.userId)) ||
+        (user?.consultantId && vehicle?.consultantId && String(user.consultantId) === String(vehicle.consultantId)) ||
+        (user?.consultationId && vehicle?.consultantId && String(user.consultationId) === String(vehicle.consultationId)) ||
+        (user?.id && vehicle?.consultantId && String(user.id) === String(vehicle.consultantId)) ||
+        (user?.id && vehicle?.consultationId && String(user.id) === String(vehicle.consultationId)) ||
+        (user?.phone && vehicle?.vehicleOwner?.phone && user.phone === vehicle.vehicleOwner.phone) ||
+        (user?.mobile && vehicle?.vehicleOwner?.phone && user.mobile === vehicle.vehicleOwner.phone) ||
+        (user?.phoneNumber && vehicle?.vehicleOwner?.phone && user.phoneNumber === vehicle.vehicleOwner.phone)
+      )
+  );
+
+  useEffect(() => {
+    console.log("=== SummaryRight Owner Debug ===", {
+      user,
+      userId: user?.id,
+      userConsultantId: user?.consultantId || user?.consultationId,
+      userPhone: user?.phone || user?.mobile || user?.phoneNumber,
+      vehicleOwner: vehicle?.vehicleOwner,
+      vehicleOwnerId: vehicle?.vehicleOwner?.id,
+      vehicleUserId: vehicle?.userId,
+      vehicleConsultantId: vehicle?.consultantId || vehicle?.consultationId,
+      vehicleOwnerPhone: vehicle?.vehicleOwner?.phone,
+      isOwnerResult: isOwner,
+    });
+  }, [user, vehicle, isOwner]);
+
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [prevTotalInquiryCount, setPrevTotalInquiryCount] = useState(
@@ -105,13 +139,15 @@ export default function SummaryRight({ vehicle, summary }) {
               </h2>
             </div>
 
-            <Button
-              variant="ghost"
-              onClick={() => setIsDownloadOpen(true)}
-              size="sm"
-            >
-              <Pencil size={14} className="mr-2" /> Edit
-            </Button>
+            {isOwner && (
+              <Button
+                variant="ghost"
+                onClick={() => setIsDownloadOpen(true)}
+                size="sm"
+              >
+                <Pencil size={14} className="mr-2" /> Edit
+              </Button>
+            )}
           </div>
 
           <div className="border-t border-third/40" />

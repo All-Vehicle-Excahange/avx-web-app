@@ -61,7 +61,18 @@ export default async function handler(req, res) {
       if (!vehicle.id) continue;
 
       const slug = generateSlug(vehicle);
-      const loc = `${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`;
+      const consultantUsername =
+        vehicle.consultantUsername ||
+        vehicle.consultantSlug ||
+        vehicle.vehicleOwner?.username ||
+        vehicle.username ||
+        (vehicle.consultantName
+          ? vehicle.consultantName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
+          : null);
+
+      const loc = consultantUsername
+        ? `${BASE_URL}/vehicle/details/${consultantUsername}/${slug}/${vehicle.id}`
+        : `${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`;
       const lastmod = vehicle.updatedAt || vehicle.createdAt || new Date().toISOString();
 
       xml += `  <url>\n`;

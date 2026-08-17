@@ -86,6 +86,106 @@ export const generateVehicleSlug = (data) => {
     .replace(/^-/, "");
 };
 
+export const generateVehicleUrl = (vehicle) => {
+  if (!vehicle || !vehicle.id) return "/search";
+
+  const slug = generateVehicleSlug(vehicle);
+  const consultantUsername =
+    vehicle.consultantUsername ||
+    vehicle.consultantSlug ||
+    vehicle.vehicleOwner?.username ||
+    vehicle.username ||
+    (vehicle.consultantName
+      ? vehicle.consultantName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
+      : null);
+
+  if (consultantUsername) {
+    return `/vehicle/details/${consultantUsername}/${slug}/${vehicle.id}`;
+  }
+  return `/vehicle/details/${slug}/${vehicle.id}`;
+};
+
+export const generateDynamicPageTitle = (vehicle) => {
+  if (!vehicle) return "Vehicle Details | Reecomm";
+
+  const year = vehicle.yearOfMfg || "";
+  const make = vehicle.makerName || vehicle.makeName || "";
+  const model = vehicle.modelName || "";
+  const variant = vehicle.variantName || "";
+  const baseName = [year, make, model, variant].filter(Boolean).join(" ");
+
+  const city = (
+    vehicle.cityName ||
+    vehicle.city ||
+    vehicle.address?.city ||
+    vehicle.vehicleAddress?.city ||
+    ""
+  ).split(",")[0].trim();
+
+  const formattedPrice = vehicle.price
+    ? typeof vehicle.price === "number"
+      ? vehicle.price >= 100000
+        ? `${(vehicle.price / 100000).toFixed(2).replace(/\.00$/, "")}L`
+        : vehicle.price.toLocaleString("en-IN")
+      : vehicle.price
+    : "";
+
+  const locationPart = city ? ` for Sale in ${city}` : "";
+  const pricePart = formattedPrice ? ` | ₹${formattedPrice}` : "";
+
+  return `Used ${baseName}${locationPart}${pricePart} | Reecomm`;
+};
+
+export const generateDynamicMetaDescription = (vehicle, summary = {}) => {
+  if (!vehicle) return "Buy verified used vehicles on Reecomm. View detailed specs, photos, price, and contact information.";
+
+  const year = vehicle.yearOfMfg || "";
+  const make = vehicle.makerName || vehicle.makeName || "";
+  const model = vehicle.modelName || "";
+  const variant = vehicle.variantName || "";
+  const baseName = [year, make, model, variant].filter(Boolean).join(" ");
+
+  const city = (
+    vehicle.cityName ||
+    vehicle.city ||
+    vehicle.address?.city ||
+    vehicle.vehicleAddress?.city ||
+    summary?.address?.city ||
+    ""
+  ).split(",")[0].trim();
+
+  const formattedPrice = vehicle.price
+    ? typeof vehicle.price === "number"
+      ? vehicle.price >= 100000
+        ? `${(vehicle.price / 100000).toFixed(2).replace(/\.00$/, "")} Lakh`
+        : `₹${vehicle.price.toLocaleString("en-IN")}`
+      : vehicle.price
+    : "";
+
+  const km = vehicle.kmDriven
+    ? typeof vehicle.kmDriven === "number"
+      ? `${vehicle.kmDriven.toLocaleString("en-IN")} km`
+      : vehicle.kmDriven
+    : "";
+
+  const ownership = vehicle.ownership
+    ? `${vehicle.ownership}${typeof vehicle.ownership === "number" ? (vehicle.ownership === 1 ? "st" : vehicle.ownership === 2 ? "nd" : "rd") : ""} Owner`
+    : "";
+
+  const fuel = vehicle.fuelType || "";
+  const transmission = vehicle.transmissionType || "";
+  const rating = vehicle.avxInspectionRating ? `AVX Inspected (Rating: ${vehicle.avxInspectionRating}/10)` : "Reecomm Inspected";
+
+  const sellerName = summary?.consultationName || vehicle.consultantName || (vehicle.vehicleOwner ? `${vehicle.vehicleOwner.firstname || ""} ${vehicle.vehicleOwner.lastname || ""}`.trim() : null);
+
+  const specsList = [km, ownership, fuel, transmission].filter(Boolean).join(", ");
+  const locationText = city ? ` in ${city}` : "";
+  const priceText = formattedPrice ? ` for ${formattedPrice}` : "";
+  const sellerText = sellerName ? `. Listed by ${sellerName}` : "";
+
+  return `Buy certified used ${baseName}${locationText}${priceText}. ${specsList ? `${specsList}. ` : ""}${rating} with verified report${sellerText}. View HD photos, specs & book test drive on Reecomm.`;
+};
+
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {
   // Check if the API response has any real content beyond metadata
   const metaOnlyKeys = new Set([
