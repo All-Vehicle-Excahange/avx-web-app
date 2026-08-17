@@ -11,8 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getVehicleOverviewQuery } from "@/queries/vehicle.queries";
 import { generateDynamicPageTitle, generateDynamicMetaDescription } from "@/lib/helper";
 
-import VehicleSeoLinkHub from "@/components/features/VehiclDetail/VehicleSeoLinkHub";
-
 function Index({ seo }) {
   const router = useRouter();
   const { id } = router.query || {};
@@ -24,41 +22,20 @@ function Index({ seo }) {
 
   const vehicle = vehicleOverview || {};
 
-  const consultantUsername =
-    vehicle.consultantUsername ||
-    vehicle.consultantSlug ||
-    vehicle.vehicleOwner?.username ||
-    vehicle.username;
-  const consultantName = vehicle.consultantName || vehicle.sellerName;
-  const cityName = (vehicle.cityName || vehicle.address?.city || "").split(",")[0].trim();
-  const stateName = (vehicle.stateName || vehicle.address?.state || "").trim();
-
-  // Dynamic Seller Schema (AutoDealer for consultants, Person for individuals)
-  const sellerSchema = consultantUsername
+  // ─── Determine E-E-A-T Seller Type (AutoDealer vs Person) ──────────
+  const isConsultant =
+    vehicle.sellerType === "CONSULTANT" ||
+    !!vehicle.consultantName ||
+    !!vehicle.consultantUsername;
+  const sellerSchema = isConsultant
     ? {
         "@type": "AutoDealer",
-        name: consultantName || "Auto Consultant",
-        url: `https://www.reecomm.com/auto-consultant/${consultantUsername}`,
-        ...(cityName && {
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: cityName,
-            addressRegion: stateName || "",
-            addressCountry: "IN",
-          },
-        }),
+        name: vehicle.consultantName || vehicle.consultantUsername || "Certified Auto Consultant",
+        ...(vehicle.consultantLogo && { logo: vehicle.consultantLogo }),
       }
     : {
         "@type": "Person",
-        name: vehicle.userSellerName || vehicle.ownerName || "Individual Seller",
-        ...(cityName && {
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: cityName,
-            addressRegion: stateName || "",
-            addressCountry: "IN",
-          },
-        }),
+        name: "Verified Individual Owner",
       };
 
   // ─── JSON-LD: Car Schema (uses @type: Car — more specific than Vehicle) ──
@@ -105,11 +82,33 @@ function Index({ seo }) {
       }
     : null;
 
-  // ─── JSON-LD: Clean Breadcrumb Schema ─────────────────────────────────────
-  const brandSlug = (vehicle.makerName || "").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-  const citySlug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  // ─── JSON-LD: Canonical Breadcrumb Schema ───────────────────────────
+  const brandSlug = (vehicle.makerName || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+  const citySlug = (vehicle.cityName || vehicle.address?.city || "")
+    .split(",")[0]
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+  const kindSlug = (vehicle.vehicleType || "")
+    .toUpperCase()
+    .includes("TWO")
+    ? "two-wheelers"
+    : "cars";
 
-  const breadcrumbElements = [
+  const brandSearchUrl = brandSlug
+    ? `https://www.reecomm.com/search/buy-used-${brandSlug}-${kindSlug}`
+    : `https://www.reecomm.com/search/buy-used-${kindSlug}`;
+
+  const cityBrandSearchUrl =
+    brandSlug && citySlug
+      ? `https://www.reecomm.com/search/buy-used-${brandSlug}-${kindSlug}-${citySlug}`
+      : brandSearchUrl;
+
+  const breadcrumbItems = [
     {
       "@type": "ListItem",
       position: 1,
@@ -119,39 +118,39 @@ function Index({ seo }) {
     {
       "@type": "ListItem",
       position: 2,
-      name: "Used Cars",
-      item: "https://www.reecomm.com/search/buy-used-cars",
+      name: kindSlug === "two-wheelers" ? "Used Two Wheelers" : "Used Cars",
+      item: `https://www.reecomm.com/search/buy-used-${kindSlug}`,
     },
   ];
 
-  if (brandSlug) {
-    breadcrumbElements.push({
+  if (vehicle.makerName) {
+    breadcrumbItems.push({
       "@type": "ListItem",
       position: 3,
-      name: vehicle.makerName,
-      item: `https://www.reecomm.com/search/buy-used-${brandSlug}-cars`,
+      name: `Used ${vehicle.makerName} ${kindSlug === "two-wheelers" ? "Two Wheelers" : "Cars"}`,
+      item: brandSearchUrl,
     });
   }
 
-  if (brandSlug && citySlug) {
-    breadcrumbElements.push({
+  if (citySlug) {
+    breadcrumbItems.push({
       "@type": "ListItem",
-      position: 4,
-      name: `${vehicle.makerName} in ${cityName}`,
-      item: `https://www.reecomm.com/search/buy-used-${brandSlug}-cars-${citySlug}`,
+      position: breadcrumbItems.length + 1,
+      name: `Used ${vehicle.makerName || ""} ${kindSlug === "two-wheelers" ? "Two Wheelers" : "Cars"} in ${vehicle.cityName || vehicle.address?.city || ""}`.trim(),
+      item: cityBrandSearchUrl,
     });
   }
 
-  breadcrumbElements.push({
+  breadcrumbItems.push({
     "@type": "ListItem",
-    position: breadcrumbElements.length + 1,
-    name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""}`.trim(),
+    position: breadcrumbItems.length + 1,
+    name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim(),
   });
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: breadcrumbElements,
+    itemListElement: breadcrumbItems,
   };
 
   // ─── Display SEO Values ─────────────────────────────────────────────
@@ -190,7 +189,7 @@ function Index({ seo }) {
           <link key="canonical" rel="canonical" href={seo.canonical} />
         )}
 
-        {/* JSON-LD Structured Data: Car */}
+        {/* JSON-LD Structured Data: Vehicle Schema */}
         {vehicleSchema && (
           <script
             type="application/ld+json"
@@ -216,6 +215,10 @@ function Index({ seo }) {
         {vehicleImageUrl && (
           <meta property="og:image:alt" content={displayTitle} />
         )}
+        {vehicle.price && (
+          <meta property="product:price:amount" content={String(vehicle.price)} />
+        )}
+        <meta property="product:price:currency" content="INR" />
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -231,7 +234,8 @@ function Index({ seo }) {
       {/* <Layout>
         <AvxProcess />
       </Layout> */}
-      <VehicleSeoLinkHub vehicleOverview={vehicle} />
+      <DownloadAppSection fullWidth />
+
       <FooterLink />
       <Footer />
     </>

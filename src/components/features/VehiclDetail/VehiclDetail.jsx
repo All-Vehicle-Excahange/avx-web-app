@@ -27,6 +27,7 @@ import {
   getActiveInspectionQuery,
 } from "@/queries/vehicle.queries";
 import ReletedConsualt from "./ReletedConsualt";
+import SeoInternalLinkHub from "./SeoInternalLinkHub";
 import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkeleton";
 import SpecialOffer from "./SpecialOffer";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
@@ -322,6 +323,7 @@ export default function VehicleDetails({
               vehicleOverview={vehicleOverview}
               vehicleSummary={vehicleSummary}
             />
+            <SeoInternalLinkHub vehicleOverview={vehicleOverview} />
           </section>
         </div>
       </main>
