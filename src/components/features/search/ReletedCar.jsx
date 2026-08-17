@@ -101,7 +101,7 @@ function ReletedCar() {
             <span className="text-fourth">Top Releted </span> Vehicles For You
           </h2>
           <p className="text-third">
-            Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+            Handpicked pre-owned vehicles matching your preferences with certified inspection reports.
           </p>
         </div>
 

@@ -53,7 +53,7 @@ export default function ConsultantSliderSection({
               </div>
             )}
             <p className="text-third mt-1">
-              {description || "Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur.."}
+              {description || "Discover verified auto consultants and certified pre-owned deals near you."}
             </p>
           </div>
         </div>

@@ -77,7 +77,7 @@ function SimulerVehicle({ vehicleOverview }) {
                 </h2>
 
                 <p className="text-third">
-                    Lorem ipsum dolor sit amet consectetur dolor sit amet consectetur..
+                    Explore similar certified pre-owned vehicles with verified inspection reports and best market prices.
                 </p>
             </div>
 
