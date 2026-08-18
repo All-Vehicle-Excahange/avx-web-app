@@ -261,6 +261,51 @@ function generateBrandLocationCombinations() {
     }
   }
 
+  // Brand + Model + City combinations
+  const popularCarModels = [
+    { brand: "Hyundai", model: "Grand i10", brandSlug: "hyundai", modelSlug: "grand-i10" },
+    { brand: "Hyundai", model: "Creta", brandSlug: "hyundai", modelSlug: "creta" },
+    { brand: "Hyundai", model: "i20", brandSlug: "hyundai", modelSlug: "i20" },
+    { brand: "Hyundai", model: "Verna", brandSlug: "hyundai", modelSlug: "verna" },
+    { brand: "Maruti Suzuki", model: "Swift", brandSlug: "maruti-suzuki", modelSlug: "swift" },
+    { brand: "Maruti Suzuki", model: "Baleno", brandSlug: "maruti-suzuki", modelSlug: "baleno" },
+    { brand: "Maruti Suzuki", model: "Wagon R", brandSlug: "maruti-suzuki", modelSlug: "wagon-r" },
+    { brand: "Maruti Suzuki", model: "Brezza", brandSlug: "maruti-suzuki", modelSlug: "brezza" },
+    { brand: "Mahindra", model: "Thar", brandSlug: "mahindra", modelSlug: "thar" },
+    { brand: "Mahindra", model: "Scorpio", brandSlug: "mahindra", modelSlug: "scorpio" },
+    { brand: "Tata", model: "Nexon", brandSlug: "tata", modelSlug: "nexon" },
+    { brand: "Tata", model: "Punch", brandSlug: "tata", modelSlug: "punch" },
+    { brand: "Toyota", model: "Fortuner", brandSlug: "toyota", modelSlug: "fortuner" },
+    { brand: "Toyota", model: "Innova", brandSlug: "toyota", modelSlug: "innova" }
+  ];
+
+  for (const { brand, model, brandSlug, modelSlug } of popularCarModels) {
+    for (const city of popularCities) {
+      const citySlug = city.toLowerCase().replace(/\s+/g, '-');
+      const slug = `buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`;
+
+      items.push({
+        id: `filter_${slug.replace(/-/g, '_')}`,
+        title: `Used ${brand} ${model} Cars in ${city}`,
+        keywords: [
+          brand.toLowerCase(),
+          model.toLowerCase(),
+          city.toLowerCase(),
+          `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
+          `used ${brand.toLowerCase()} ${model.toLowerCase()} in ${city.toLowerCase()}`,
+          `used ${brand.toLowerCase()} ${model.toLowerCase()} cars in ${city.toLowerCase()}`
+        ],
+        type: 'vehicle_filter',
+        params: {
+          makerName: brand,
+          modelName: model,
+          city: city,
+          vehicleType: 'FOUR_WHEELER'
+        }
+      });
+    }
+  }
+
   return items;
 }
 
