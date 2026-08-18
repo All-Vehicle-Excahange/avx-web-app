@@ -6,25 +6,25 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
 
   const brand = vehicleOverview.makerName || "";
   const model = vehicleOverview.modelName || "";
-  const city = (vehicleOverview.cityName || vehicleOverview.address?.city || "")
+  const year = vehicleOverview.yearOfMfg || vehicleOverview.year || "";
+  const fuel = vehicleOverview.fuelType || "";
+  const body = vehicleOverview.bodyType || "";
+  const price = vehicleOverview.price || 0;
+  const city = (vehicleOverview.cityName || vehicleOverview.address?.city || vehicleOverview.location || "")
     .split(",")[0]
     .trim();
 
   const brandSlug = brand.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const modelSlug = model.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+  const fuelSlug = fuel.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+  const bodySlug = body.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+
+  const priceLakhs = price ? Math.ceil(price / 100000) : 0;
 
   const links = [];
 
-  // 1. Specific Brand + City Link
-  if (brandSlug && citySlug) {
-    links.push({
-      label: `Used ${brand} Cars in ${city}`,
-      href: `/search/buy-used-${brandSlug}-cars-${citySlug}`,
-    });
-  }
-
-  // 2. Specific Brand + Model Link
+  // 1. Dynamic Brand + Model
   if (brandSlug && modelSlug) {
     links.push({
       label: `Used ${brand} ${model} Cars`,
@@ -32,15 +32,7 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
     });
   }
 
-  // 3. City Link
-  if (citySlug) {
-    links.push({
-      label: `Used Cars in ${city}`,
-      href: `/search/buy-used-cars-${citySlug}`,
-    });
-  }
-
-  // 4. Popular Brand Links
+  // 2. Dynamic Brand Only
   if (brandSlug) {
     links.push({
       label: `Buy Used ${brand} Cars`,
@@ -48,13 +40,58 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
     });
   }
 
-  // 5. High Authority Category & Price Links
+  // 3. Dynamic Brand + Model + Year
+  if (brandSlug && modelSlug && year) {
+    links.push({
+      label: `${year} ${brand} ${model}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-${year}-cars`,
+    });
+  }
+
+  // 4. Dynamic Brand + City
+  if (brandSlug && citySlug) {
+    links.push({
+      label: `Used ${brand} Cars in ${city}`,
+      href: `/search/buy-used-${brandSlug}-cars-${citySlug}`,
+    });
+  }
+
+  // 5. Dynamic City Only
+  if (citySlug) {
+    links.push({
+      label: `Used Cars in ${city}`,
+      href: `/search/buy-used-cars-${citySlug}`,
+    });
+  }
+
+  // 6. Dynamic Fuel Type
+  if (fuel) {
+    links.push({
+      label: `Used ${fuel} Cars`,
+      href: `/search/buy-used-cars?fuelType=${encodeURIComponent(fuel.toUpperCase())}`,
+    });
+  }
+
+  // 7. Dynamic Body Type
+  if (body) {
+    links.push({
+      label: `Used ${body} Cars`,
+      href: `/search/buy-used-cars?bodyType=${encodeURIComponent(body.toUpperCase())}`,
+    });
+  }
+
+  // 8. Dynamic Price Band
+  if (priceLakhs > 0) {
+    links.push({
+      label: `Used Cars under ₹${priceLakhs} Lakhs`,
+      href: `/search/buy-used-cars-under-${priceLakhs}-lakhs`,
+    });
+  }
+
+  // 9. High Authority Master Pillar Links
   links.push(
     { label: "Browse All Used Cars", href: "/search/buy-used-cars" },
     { label: "Used Two Wheelers", href: "/search/buy-used-two-wheelers" },
-    { label: "Used Cars Under ₹2 Lakhs", href: "/search/buy-used-cars-under-2-lakhs" },
-    { label: "Used Cars Under ₹5 Lakhs", href: "/search/buy-used-cars-under-5-lakhs" },
-    { label: "Used Cars Under ₹10 Lakhs", href: "/search/buy-used-cars-under-10-lakhs" },
     { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
     { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
     { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" }
