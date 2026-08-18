@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-export default function SeoInternalLinkHub({ vehicleOverview }) {
+export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) {
   if (!vehicleOverview) return null;
 
   const brand = vehicleOverview.makerName || "";
@@ -10,15 +10,24 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
   const fuel = vehicleOverview.fuelType || "";
   const body = vehicleOverview.bodyType || "";
   const price = vehicleOverview.price || 0;
-  const city = (vehicleOverview.cityName || vehicleOverview.address?.city || vehicleOverview.location || "")
+
+  const city = (
+    vehicleSummary?.address?.city ||
+    vehicleOverview?.vehicleAddress?.city ||
+    vehicleOverview?.cityName ||
+    vehicleOverview?.address?.city ||
+    vehicleOverview?.location ||
+    ""
+  )
     .split(",")[0]
     .trim();
 
   const state = (
-    vehicleOverview.stateName ||
-    vehicleOverview.address?.state ||
-    vehicleOverview.address?.stateName ||
-    (vehicleOverview.location && vehicleOverview.location.includes(",")
+    vehicleSummary?.address?.state ||
+    vehicleOverview?.vehicleAddress?.state ||
+    vehicleOverview?.stateName ||
+    vehicleOverview?.address?.state ||
+    (vehicleOverview?.location && vehicleOverview.location.includes(",")
       ? vehicleOverview.location.split(",").pop().trim()
       : "") ||
     ""

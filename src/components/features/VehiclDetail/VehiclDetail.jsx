@@ -323,7 +323,10 @@ export default function VehicleDetails({
               vehicleOverview={vehicleOverview}
               vehicleSummary={vehicleSummary}
             />
-            <SeoInternalLinkHub vehicleOverview={vehicleOverview} />
+            <SeoInternalLinkHub
+              vehicleOverview={vehicleOverview}
+              vehicleSummary={vehicleSummary}
+            />
           </section>
         </div>
       </main>
