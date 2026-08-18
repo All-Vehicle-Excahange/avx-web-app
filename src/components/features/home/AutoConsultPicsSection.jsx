@@ -28,7 +28,7 @@ export default function AutoConsultPicsSection(props) {
   }
 
   return (
-    <div className="w-full py-10 ">
+    <div className="w-full py-8">
       {/* Header */}
       <div className="flex flex-col items-start gap-2">
         <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) {
   if (!vehicleOverview) return null;
@@ -139,23 +140,25 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
   );
 
   return (
-    <section className="w-full mt-8 p-6 bg-white border border-gray-100 rounded-2xl shadow-xs">
-      <div className="flex flex-col gap-2 mb-4">
-        <span className="text-xs font-semibold uppercase tracking-wider text-fourth">
+    <section className="w-full rounded-2xl">
+      <div className="flex flex-col gap-1.5 mb-5">
+        <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
           Popular Searches
-        </span>
-        <h3 className="text-lg font-bold text-gray-900 font-primary">
+          <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
+        </p>
+        <h3 className="text-xl font-bold text-primary font-primary">
           Explore Related Pre-Owned Vehicles
         </h3>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {uniqueLinks.map((link, idx) => (
           <Link
             key={idx}
             href={link.href}
-            className="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-50 text-gray-700 hover:bg-fourth/10 hover:text-fourth border border-gray-200/60 transition-colors duration-150"
+            className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full text-primary border-2 border-third/30 hover:bg-third/10 transition-colors duration-300 ease-in-out group"
           >
             {link.label}
+            <ArrowUpRight className="w-4 h-4 text-third/70 group-hover:text-primary transition-colors" />
           </Link>
         ))}
       </div>
