@@ -123,6 +123,25 @@ export default function App({ Component, pageProps }) {
               rel="canonical"
               href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
             />
+
+            {/* Google Tag (gtag.js) */}
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID || "G-F3BG6WGRJK"}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gtag.GA_TRACKING_ID || "G-F3BG6WGRJK"}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+
             <script
               dangerouslySetInnerHTML={{
                 __html: `
@@ -138,26 +157,6 @@ export default function App({ Component, pageProps }) {
               }}
             />
           </Head>
-
-          {/* GOOGLE ANALYTICS */}
-          <Script
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-          />
-
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-          window.dataLayer = window.dataLayer || [];
-
-          function gtag(){dataLayer.push(arguments);}
-
-          gtag('js', new Date());
-
-          gtag('config', '${gtag.GA_TRACKING_ID}', {
-            page_path: window.location.pathname,
-          });
-        `}
-          </Script>
 
           {/* GLOBAL LOADER */}
           {loading && <GlobalLoader />}
