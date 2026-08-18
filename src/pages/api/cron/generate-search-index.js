@@ -29,11 +29,13 @@ export default async function handler(req, res) {
     let vehicleCount = 0;
     let consultantCount = 0;
     let categoryCount = 0;
+    let vehiclesList = [];
 
     // ── 1. Notify Google Indexing API for Published Vehicles ──────────────
     try {
       const { data: vehicles } = await getSeoVehicles(1, 10);
       if (vehicles && vehicles.length > 0) {
+        vehiclesList = vehicles;
         const batchSize = 5;
         for (let i = 0; i < vehicles.length; i += batchSize) {
           const chunk = vehicles.slice(i, i + batchSize);
@@ -83,8 +85,8 @@ export default async function handler(req, res) {
       ]);
 
       // Dynamically extract all active brand, model, city & brand+city combinations from live vehicles
-      if (vehicles && vehicles.length > 0) {
-        vehicles.forEach((vehicle) => {
+      if (vehiclesList && vehiclesList.length > 0) {
+        vehiclesList.forEach((vehicle) => {
           const brandSlug = (vehicle.makerName || "")
             .toLowerCase()
             .replace(/\s+/g, "-")
