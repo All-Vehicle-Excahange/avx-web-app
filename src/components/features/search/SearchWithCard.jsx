@@ -752,36 +752,47 @@ export default function SearchWithCard({
       });
     }
 
-    // Synchronize active filters when removed via SearchHeader chips, Clear All, or when navigating via global search
+    // Synchronize active filters when removed via SearchHeader chips, Clear All, or when navigating via global search/SEO slugs
+    const activeMakerId = makerId || initialFilters.makerId;
     const qBrand = searchParams.get("brand") || searchParams.get("makerId");
-    if (!qBrand || qBrand.toLowerCase() === "all") {
+    if (qBrand?.toLowerCase() === "all") {
       setSelectedBrands([]);
-    } else if (makerId) {
-      setSelectedBrands([String(makerId)]);
+    } else if (activeMakerId) {
+      setSelectedBrands([String(activeMakerId)]);
+    } else if (qBrand) {
+      setSelectedBrands([String(qBrand)]);
     }
 
-    const qBodyType = searchParams.get("bodyType");
+    const activeModelId = modelIdParam || initialFilters.modelId;
+    const qModel = searchParams.get("model") || searchParams.get("modelId");
+    if (qModel?.toLowerCase() === "all") {
+      setSelectedModels([]);
+    } else if (activeModelId) {
+      setSelectedModels([String(activeModelId)]);
+    }
+
+    const qBodyType = searchParams.get("bodyType") || initialFilters.bodyType;
     if (!qBodyType || qBodyType.toLowerCase() === "all") {
       setSelectedBodyType([]);
     } else {
       setSelectedBodyType([qBodyType.toLowerCase()]);
     }
 
-    const qFuelType = searchParams.get("fuelType");
+    const qFuelType = searchParams.get("fuelType") || initialFilters.fuelType;
     if (!qFuelType || qFuelType.toLowerCase() === "all") {
       setSelectedFuelTypes([]);
     } else {
       setSelectedFuelTypes([qFuelType]);
     }
 
-    const qTransmission = searchParams.get("transmission");
+    const qTransmission = searchParams.get("transmission") || initialFilters.transmission;
     if (!qTransmission || qTransmission.toLowerCase() === "all") {
       setSelectedTransmissionTypes([]);
     } else {
       setSelectedTransmissionTypes([qTransmission.toLowerCase()]);
     }
 
-    const qBudget = searchParams.get("budget");
+    const qBudget = searchParams.get("budget") || initialFilters.budget;
     const qMinPrice = searchParams.get("minPrice");
     const qMaxPrice = searchParams.get("maxPrice");
     if (!qBudget && !qMinPrice && !qMaxPrice && !searchParams.get("price")) {
@@ -816,11 +827,12 @@ export default function SearchWithCard({
       setSelectedSellerType([qSeller]);
     }
 
-    const qStateId = searchParams.get("stateId");
-    const qCityId = searchParams.get("cityId");
-    const qTownId = searchParams.get("townId");
-    const qLocation = searchParams.get("location");
-    if (!qStateId && !qCityId && !qTownId && !qLocation) {
+    const effectiveStateId = searchParams.get("stateId") || initialFilters.stateId;
+    const effectiveCityId = searchParams.get("cityId") || initialFilters.cityId;
+    const effectiveTownId = searchParams.get("townId") || initialFilters.townId;
+    const effectiveLocation = searchParams.get("location") || initialFilters.location;
+
+    if (!effectiveStateId && !effectiveCityId && !effectiveTownId && !effectiveLocation) {
       setSelectedStateId(null);
       setSelectedStateName("");
       setSelectedCityId(null);
@@ -828,38 +840,31 @@ export default function SearchWithCard({
       setSelectedTownId(null);
       setSelectedTownName("");
     } else {
-      if (qStateId) {
-        setSelectedStateId(Number(qStateId));
-        setSelectedStateName(searchParams.get("stateName") || "");
+      if (effectiveStateId) {
+        setSelectedStateId(Number(effectiveStateId));
+        setSelectedStateName(searchParams.get("stateName") || initialFilters.stateName || "");
       } else {
         setSelectedStateId(null);
         setSelectedStateName("");
       }
-      if (qCityId) {
-        setSelectedCityId(Number(qCityId));
-        setSelectedCityName(searchParams.get("cityName") || "");
+      if (effectiveCityId) {
+        setSelectedCityId(Number(effectiveCityId));
+        setSelectedCityName(searchParams.get("cityName") || initialFilters.cityName || "");
       } else {
         setSelectedCityId(null);
         setSelectedCityName("");
       }
-      if (qTownId) {
-        setSelectedTownId(Number(qTownId));
-        setSelectedTownName(searchParams.get("townName") || "");
+      if (effectiveTownId) {
+        setSelectedTownId(Number(effectiveTownId));
+        setSelectedTownName(searchParams.get("townName") || initialFilters.townName || "");
       } else {
         setSelectedTownId(null);
         setSelectedTownName("");
       }
     }
 
-    const qModel = searchParams.get("model") || searchParams.get("modelId");
-    if (!qModel) {
-      setSelectedModels([]);
-    } else if (modelIdParam) {
-      setSelectedModels([String(modelIdParam)]);
-    }
-
     const qVariant =
-      searchParams.get("variant") || searchParams.get("variantId");
+      searchParams.get("variant") || searchParams.get("variantId") || initialFilters.variantId;
     if (!qVariant) {
       setSelectedVariants([]);
     } else if (variantIdParam) {
