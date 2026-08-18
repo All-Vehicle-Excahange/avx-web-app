@@ -311,8 +311,11 @@ export async function getServerSideProps(context) {
     initialFilters.bodyType = bodyTypeFilter;
   }
 
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
-  const nodeApiUrl = (process.env.NEXT_PUBLIC_NODE_API_URL || "https://api.reecomm.com/api/v1").replace(/\/$/, "");
+  const backendHost = (process.env.BACKEND_URL || "https://api.reecomm.online").replace(/\/$/, "");
+  const apiUrl = `${backendHost}/api/v1/website`;
+  const nodeApiUrl = (process.env.NEXT_PUBLIC_NODE_API_URL && process.env.NEXT_PUBLIC_NODE_API_URL.startsWith("http")
+    ? process.env.NEXT_PUBLIC_NODE_API_URL
+    : `${backendHost}/api/v1/vehicle-lookup/lookup`).replace(/\/$/, "");
 
   // 1. Resolve City ID / State ID
   if (city) {

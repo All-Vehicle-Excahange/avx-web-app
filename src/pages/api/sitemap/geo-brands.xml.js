@@ -75,7 +75,36 @@ export default async function handler(req, res) {
       });
     });
 
-    // 5. Add Brand + Model & Brand + Model + City URLs from searchSuggestions.json
+    // 5. Add Brand + Model & Brand + Model + City URLs
+    const popularCarModels = [
+      { brand: "hyundai", model: "grand-i10" },
+      { brand: "hyundai", model: "creta" },
+      { brand: "hyundai", model: "i20" },
+      { brand: "hyundai", model: "verna" },
+      { brand: "maruti-suzuki", model: "swift" },
+      { brand: "maruti-suzuki", model: "baleno" },
+      { brand: "maruti-suzuki", model: "wagon-r" },
+      { brand: "maruti-suzuki", model: "brezza" },
+      { brand: "mahindra", model: "thar" },
+      { brand: "mahindra", model: "xuv700" },
+      { brand: "mahindra", model: "scorpio" },
+      { brand: "tata", model: "nexon" },
+      { brand: "tata", model: "punch" },
+      { brand: "tata", model: "harrier" },
+      { brand: "toyota", model: "fortuner" },
+      { brand: "toyota", model: "innova" },
+    ];
+
+    popularCarModels.forEach(({ brand, model }) => {
+      addUrl(`/search/buy-used-${brand}-${model}-cars`, 0.8, "daily");
+      cities.forEach((city) => {
+        addUrl(`/search/buy-used-${brand}-${model}-cars-${city}`, 0.7, "weekly");
+      });
+      states.forEach((state) => {
+        addUrl(`/search/buy-used-${brand}-${model}-cars-${state}`, 0.6, "weekly");
+      });
+    });
+
     searchSuggestions.forEach((item) => {
       if (item.link) {
         addUrl(item.link, 0.7, "weekly");
