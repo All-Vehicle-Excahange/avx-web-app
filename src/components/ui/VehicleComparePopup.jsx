@@ -350,12 +350,12 @@ export default function VehicleComparePopup({
 
     const modalContent = (
         <div
-            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4 overflow-hidden py-6 sm:py-8"
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 py-6 sm:p-4 sm:py-8 overflow-hidden"
             onClick={triggerClose}
             style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}
         >
             <div
-                className="w-full max-w-[850px] max-h-[95vh] sm:max-h-[90vh] rounded-xl sm:rounded-2xl bg-secondary shadow-2xl relative flex flex-col overflow-hidden"
+                className="w-full max-w-[850px] max-h-full sm:max-h-[90vh] rounded-xl sm:rounded-2xl bg-secondary shadow-2xl relative flex flex-col overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
                 style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}
             >

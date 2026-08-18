@@ -336,7 +336,7 @@ export default function VehicleCard({
                 <div className="flex items-center gap-1.5 mt-1">
                   <p className="text-xs md:text-sm text-primary/90 flex items-center gap-1.5 truncate">
                     <User className="w-3.5 h-3.5 shrink-0" />{" "}
-                    <span className="truncate">{mapped.userName || "john doe"}</span>
+                    <span className="truncate capitalize">{mapped.userName || "john doe"}</span>
                   </p>
                   {data?.tierTitle === "PREMIUM" && (
                     <Image
@@ -356,7 +356,7 @@ export default function VehicleCard({
                   title={mapped.location || "Chhapi, Gujarat"}
                 >
                   <MapPinned className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">{mapped.location || "Chhapi, Gujarat"}</span>
+                  <span className="truncate capitalize">{mapped.location || "Chhapi, Gujarat"}</span>
                 </p>
               </div>
             </div>
