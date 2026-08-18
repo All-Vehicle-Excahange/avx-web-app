@@ -14,9 +14,20 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
     .split(",")[0]
     .trim();
 
+  const state = (
+    vehicleOverview.stateName ||
+    vehicleOverview.address?.state ||
+    vehicleOverview.address?.stateName ||
+    (vehicleOverview.location && vehicleOverview.location.includes(",")
+      ? vehicleOverview.location.split(",").pop().trim()
+      : "") ||
+    ""
+  );
+
   const brandSlug = brand.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const modelSlug = model.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+  const stateSlug = state.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const fuelSlug = fuel.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const bodySlug = body.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
 
@@ -24,7 +35,23 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
 
   const links = [];
 
-  // 1. Dynamic Brand + Model
+  // 1. Dynamic Brand + Model + City (e.g. Used Hyundai Creta Cars in Palanpur)
+  if (brandSlug && modelSlug && citySlug) {
+    links.push({
+      label: `Used ${brand} ${model} Cars in ${city}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`,
+    });
+  }
+
+  // 2. Dynamic Brand + Model + State (e.g. Used Hyundai Creta Cars in Gujarat)
+  if (brandSlug && modelSlug && stateSlug && stateSlug !== citySlug) {
+    links.push({
+      label: `Used ${brand} ${model} Cars in ${state}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-cars-${stateSlug}`,
+    });
+  }
+
+  // 3. Dynamic Brand + Model (e.g. Used Hyundai Creta Cars)
   if (brandSlug && modelSlug) {
     links.push({
       label: `Used ${brand} ${model} Cars`,
@@ -32,7 +59,7 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
     });
   }
 
-  // 2. Dynamic Brand Only
+  // 4. Dynamic Brand Only (e.g. Buy Used Hyundai Cars)
   if (brandSlug) {
     links.push({
       label: `Buy Used ${brand} Cars`,
@@ -40,15 +67,15 @@ export default function SeoInternalLinkHub({ vehicleOverview }) {
     });
   }
 
-  // 3. Dynamic Brand + Model + Year
-  if (brandSlug && modelSlug && year) {
+  // 5. Dynamic Brand + State (e.g. Used Hyundai Cars in Gujarat)
+  if (brandSlug && stateSlug && stateSlug !== citySlug) {
     links.push({
-      label: `${year} ${brand} ${model}`,
-      href: `/search/buy-used-${brandSlug}-${modelSlug}-${year}-cars`,
+      label: `Used ${brand} Cars in ${state}`,
+      href: `/search/buy-used-${brandSlug}-cars-${stateSlug}`,
     });
   }
 
-  // 4. Dynamic Brand + City
+  // 6. Dynamic Brand + City (e.g. Used Hyundai Cars in Palanpur)
   if (brandSlug && citySlug) {
     links.push({
       label: `Used ${brand} Cars in ${city}`,
