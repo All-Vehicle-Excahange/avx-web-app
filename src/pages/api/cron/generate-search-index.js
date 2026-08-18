@@ -121,6 +121,7 @@ export default async function handler(req, res) {
     // ── 4. Notify Google Indexing API for XML Sitemap Index Files ────────
     let sitemapCount = 0;
     const SITEMAP_URLS = [
+      `${BASE_URL}/sitemap.xml`,
       `${BASE_URL}/api/sitemap/vehicles.xml`,
       `${BASE_URL}/api/sitemap/vehicles/1.xml`,
       `${BASE_URL}/api/sitemap/storefronts.xml`,
