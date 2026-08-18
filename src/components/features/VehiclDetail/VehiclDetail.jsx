@@ -165,7 +165,7 @@ export default function VehicleDetails({
       } else {
         toast.error(
           error?.response?.data?.message ||
-            "Failed to check inspection status.",
+          "Failed to check inspection status.",
         );
       }
     } finally {
@@ -212,7 +212,7 @@ export default function VehicleDetails({
       </div>
 
       <main className=" text-secondary w-full">
-        <div className="w-full py-6 pb-24 lg:pb-6">
+        <div className="w-full py-6 pb-12 md:pb-12   lg:pb-6">
           {/* HEADER */}
           <section className="relative">
             <div ref={headerRef} className="lg:sticky top-16 md:pb-4 z-40">
@@ -316,7 +316,7 @@ export default function VehicleDetails({
               </aside>
             </section>
           </section>
-          <section className="pt-12 flex flex-col gap-12">
+          <section className="pt-6 md:pt-12 flex flex-col gap-6 md:gap-12">
             <SimulerVehicle vehicleOverview={vehicleOverview} />
             <ReletedConsualt
               limit={4}
