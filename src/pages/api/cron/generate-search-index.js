@@ -118,14 +118,41 @@ export default async function handler(req, res) {
       console.error("[Cron API Categories Google Indexing Error]:", catErr.message);
     }
 
+    // ── 4. Submit XML Sitemaps to Google Indexing API & Google Search Engine ──
+    let sitemapCount = 0;
+    const SITEMAP_URLS = [
+      `${BASE_URL}/api/sitemap/vehicles.xml`,
+      `${BASE_URL}/api/sitemap/vehicles/1.xml`,
+      `${BASE_URL}/api/sitemap/storefronts.xml`,
+      `${BASE_URL}/api/sitemap/storefronts/1.xml`,
+      `${BASE_URL}/api/sitemap/geo-brands.xml`,
+    ];
+
+    try {
+      await Promise.all(
+        SITEMAP_URLS.map(async (sitemapUrl) => {
+          const notifyResult = await notifyGoogleIndexing(sitemapUrl, "URL_UPDATED");
+          if (notifyResult.success) sitemapCount++;
+
+          // Ping Google Search Engine for Sitemap Refresh
+          try {
+            await fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`);
+          } catch (e) {}
+        })
+      );
+    } catch (smErr) {
+      console.error("[Cron API Sitemap Indexing Error]:", smErr.message);
+    }
+
     return res.status(200).json({
       success: true,
-      message: `Search index generated with ${items.length} items. Google Indexing notified for ${vehicleCount} vehicles, ${consultantCount} storefronts, and ${categoryCount} popular search pages.`,
+      message: `Search index generated with ${items.length} items. Google Indexing notified for ${vehicleCount} vehicles, ${consultantCount} storefronts, ${categoryCount} search pages, and ${sitemapCount} XML sitemaps.`,
       totalEntries: items.length,
       googleIndexing: {
         vehiclesNotified: vehicleCount,
         consultantsNotified: consultantCount,
         categoriesNotified: categoryCount,
+        sitemapsNotified: sitemapCount,
       },
       timestamp: new Date().toISOString(),
     });
