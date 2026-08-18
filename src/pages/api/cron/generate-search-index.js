@@ -118,7 +118,7 @@ export default async function handler(req, res) {
       console.error("[Cron API Categories Google Indexing Error]:", catErr.message);
     }
 
-    // ── 4. Submit XML Sitemaps to Google Indexing API & Google Search Engine ──
+    // ── 4. Notify Google Indexing API for XML Sitemap Index Files ────────
     let sitemapCount = 0;
     const SITEMAP_URLS = [
       `${BASE_URL}/api/sitemap/vehicles.xml`,
@@ -133,20 +133,15 @@ export default async function handler(req, res) {
         SITEMAP_URLS.map(async (sitemapUrl) => {
           const notifyResult = await notifyGoogleIndexing(sitemapUrl, "URL_UPDATED");
           if (notifyResult.success) sitemapCount++;
-
-          // Ping Google Search Engine for Sitemap Refresh
-          try {
-            await fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`);
-          } catch (e) {}
         })
       );
     } catch (smErr) {
-      console.error("[Cron API Sitemap Indexing Error]:", smErr.message);
+      console.error("[Cron API Sitemaps Google Indexing Error]:", smErr.message);
     }
 
     return res.status(200).json({
       success: true,
-      message: `Search index generated with ${items.length} items. Google Indexing notified for ${vehicleCount} vehicles, ${consultantCount} storefronts, ${categoryCount} search pages, and ${sitemapCount} XML sitemaps.`,
+      message: `Search index generated with ${items.length} items. Google Indexing notified for ${vehicleCount} vehicles, ${consultantCount} storefronts, ${categoryCount} popular categories, and ${sitemapCount} XML sitemaps.`,
       totalEntries: items.length,
       googleIndexing: {
         vehiclesNotified: vehicleCount,
