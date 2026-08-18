@@ -5,36 +5,7 @@ import { notifyGoogleIndexing } from "@/lib/googleIndexing";
 
 const BASE_URL = "https://www.reecomm.com";
 
-const POPULAR_SEARCH_SLUGS = [
-  "buy-used-cars",
-  "buy-used-two-wheelers",
-  "buy-used-hyundai-creta-cars",
-  "buy-used-maruti-suzuki-swift-cars",
-  "buy-used-mahindra-thar-cars",
-  "buy-used-tata-nexon-cars",
-  "buy-used-hyundai-cars-surat",
-  "buy-used-hyundai-cars-palanpur",
-  "buy-used-hyundai-cars-ahmedabad",
-  "buy-used-maruti-suzuki-cars-surat",
-  "buy-used-maruti-suzuki-cars-palanpur",
-  "buy-used-maruti-suzuki-cars-ahmedabad",
-  "buy-used-tata-cars-surat",
-  "buy-used-tata-cars-ahmedabad",
-  "buy-used-mahindra-cars-surat",
-  "buy-used-mahindra-cars-ahmedabad",
-  "buy-used-cars-palanpur",
-  "buy-used-cars-ahmedabad",
-  "buy-used-cars-surat",
-  "buy-used-cars-rajkot",
-  "buy-used-cars-mumbai",
-  "buy-used-cars-delhi",
-  "buy-used-cars-under-2-lakhs",
-  "buy-used-cars-under-5-lakhs",
-  "buy-used-cars-under-10-lakhs",
-  "buy-used-cars-under-15-lakhs",
-  "buy-used-cars-under-20-lakhs",
-  "buy-used-cars-under-25-lakhs",
-];
+
 
 /**
  * Cron API Handler: GET /api/cron/generate-search-index
@@ -101,11 +72,61 @@ export default async function handler(req, res) {
       console.error("[Cron API Consultants Google Indexing Error]:", cErr.message);
     }
 
-    // ── 3. Notify Google Indexing API for Popular Category Pages ─────────
+    // ── 3. Notify Google Indexing API for Dynamic Search Category Slugs ──
     try {
+      const dynamicSlugs = new Set([
+        "buy-used-cars",
+        "buy-used-two-wheelers",
+        "buy-used-cars-under-2-lakhs",
+        "buy-used-cars-under-5-lakhs",
+        "buy-used-cars-under-10-lakhs",
+      ]);
+
+      // Dynamically extract all active brand, model, city & brand+city combinations from live vehicles
+      if (vehicles && vehicles.length > 0) {
+        vehicles.forEach((vehicle) => {
+          const brandSlug = (vehicle.makerName || "")
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w-]/g, "");
+          const modelSlug = (vehicle.modelName || "")
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w-]/g, "");
+          const citySlug = (vehicle.cityName || vehicle.address?.city || "")
+            .split(",")[0]
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w-]/g, "");
+          const kindSlug = (vehicle.vehicleType || "")
+            .toUpperCase()
+            .includes("TWO")
+            ? "two-wheelers"
+            : "cars";
+
+          if (brandSlug) {
+            dynamicSlugs.add(`buy-used-${brandSlug}-${kindSlug}`);
+          }
+          if (brandSlug && modelSlug) {
+            dynamicSlugs.add(`buy-used-${brandSlug}-${modelSlug}-${kindSlug}`);
+          }
+          if (citySlug) {
+            dynamicSlugs.add(`buy-used-cars-${citySlug}`);
+          }
+          if (brandSlug && citySlug) {
+            dynamicSlugs.add(`buy-used-${brandSlug}-${kindSlug}-${citySlug}`);
+          }
+          if (brandSlug && modelSlug && citySlug) {
+            dynamicSlugs.add(`buy-used-${brandSlug}-${modelSlug}-${kindSlug}-${citySlug}`);
+          }
+        });
+      }
+
+      const slugList = Array.from(dynamicSlugs);
       const batchSize = 5;
-      for (let i = 0; i < POPULAR_SEARCH_SLUGS.length; i += batchSize) {
-        const chunk = POPULAR_SEARCH_SLUGS.slice(i, i + batchSize);
+      for (let i = 0; i < slugList.length; i += batchSize) {
+        const chunk = slugList.slice(i, i + batchSize);
         await Promise.all(
           chunk.map(async (slug) => {
             const fullUrl = `${BASE_URL}/search/${slug}`;
