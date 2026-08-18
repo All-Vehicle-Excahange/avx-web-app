@@ -45,17 +45,17 @@ export default function VehicleSummaryRight({
 
   const isOwner = Boolean(
     user &&
-      (
-        (user?.id && vehicle?.vehicleOwner?.id && String(user.id) === String(vehicle.vehicleOwner.id)) ||
-        (user?.id && vehicle?.userId && String(user.id) === String(vehicle.userId)) ||
-        (user?.consultantId && vehicle?.consultantId && String(user.consultantId) === String(vehicle.consultantId)) ||
-        (user?.consultationId && vehicle?.consultantId && String(user.consultationId) === String(vehicle.consultantId)) ||
-        (user?.id && vehicle?.consultantId && String(user.id) === String(vehicle.consultantId)) ||
-        (user?.id && vehicle?.consultationId && String(user.id) === String(vehicle.consultationId)) ||
-        (user?.phone && vehicle?.vehicleOwner?.phone && user.phone === vehicle.vehicleOwner.phone) ||
-        (user?.mobile && vehicle?.vehicleOwner?.phone && user.mobile === vehicle.vehicleOwner.phone) ||
-        (user?.phoneNumber && vehicle?.vehicleOwner?.phone && user.phoneNumber === vehicle.vehicleOwner.phone)
-      )
+    (
+      (user?.id && vehicle?.vehicleOwner?.id && String(user.id) === String(vehicle.vehicleOwner.id)) ||
+      (user?.id && vehicle?.userId && String(user.id) === String(vehicle.userId)) ||
+      (user?.consultantId && vehicle?.consultantId && String(user.consultantId) === String(vehicle.consultantId)) ||
+      (user?.consultationId && vehicle?.consultantId && String(user.consultationId) === String(vehicle.consultantId)) ||
+      (user?.id && vehicle?.consultantId && String(user.id) === String(vehicle.consultantId)) ||
+      (user?.id && vehicle?.consultationId && String(user.id) === String(vehicle.consultationId)) ||
+      (user?.phone && vehicle?.vehicleOwner?.phone && user.phone === vehicle.vehicleOwner.phone) ||
+      (user?.mobile && vehicle?.vehicleOwner?.phone && user.mobile === vehicle.vehicleOwner.phone) ||
+      (user?.phoneNumber && vehicle?.vehicleOwner?.phone && user.phoneNumber === vehicle.vehicleOwner.phone)
+    )
   );
 
   useEffect(() => {
@@ -184,7 +184,7 @@ export default function VehicleSummaryRight({
                 {/* Consultant name — clickable → storefront */}
                 <Link
                   href={`/auto-consultant/${summary?.username || 1}`}
-                  className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all"
+                  className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all capitalize"
                 >
                   {summary?.consultationName || "Auto Consultant"}
                 </Link>

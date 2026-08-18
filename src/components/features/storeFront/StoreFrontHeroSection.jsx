@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   MapPin,
-  MessageCircle,
   Star,
   Users,
   Briefcase,
@@ -239,7 +238,7 @@ export default function StoreFrontHeroSection() {
             <div className="flex-1 space-y-4 pt-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-3xl font-semibold text-primary leading-tight">
+                  <h1 className="text-3xl font-semibold text-primary leading-tight capitalize">
                     {storeDetails.consultationName}
                   </h1>
 
@@ -254,7 +253,7 @@ export default function StoreFrontHeroSection() {
 
                 <p className="flex items-center gap-1.5 text-third mt-1">
                   <MapPin className="w-4 h-4 shrink-0" />
-                  <span className="text-sm">
+                  <span className="text-sm capitalize">
                     {[
                       storeDetails?.address?.address,
                       storeDetails?.address?.town,
@@ -314,7 +313,7 @@ export default function StoreFrontHeroSection() {
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="w-full lg:w-80 space-y-6 pt-2">
+            <div className="w-full lg:w-80 space-y-6">
               {storeDetails?.services?.length > 0 && (
                 <div className="space-y-3">
                   <p className="text-[11px] font-bold uppercase tracking-wider text-third">
@@ -334,16 +333,7 @@ export default function StoreFrontHeroSection() {
                 </div>
               )}
 
-              <div className="flex gap-3 pt-15">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setIsDownloadAppOpen(true)}
-                >
-                  Start Chat
-                  <MessageCircle className="ml-2 w-4 h-4" />
-                </Button>
-
+              <div className="flex gap-3 justify-end">
                 <Button
                   size="sm"
                   variant="ghost"

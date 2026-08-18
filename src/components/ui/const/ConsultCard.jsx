@@ -137,7 +137,7 @@ export default function ConsultantCard(props) {
         </div>
         {/* TITLE */}
         <div className="pl-20">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-primary">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-primary capitalize">
             {data?.name}
 
           </h3>

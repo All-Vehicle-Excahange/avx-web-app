@@ -23,8 +23,8 @@ const ShowcaseSection = () => {
         const list = Array.isArray(res?.data?.content)
           ? res.data.content
           : Array.isArray(res?.data)
-          ? res.data
-          : [];
+            ? res.data
+            : [];
         setVehicle(list);
         setTotalCount(res?.pagination?.totalElements || res?.pagination?.total || list.length);
       } catch (error) {
@@ -57,7 +57,7 @@ const ShowcaseSection = () => {
             <span className="text-fourth">Continue </span> Where you Left Off
           </h2>
           <p className="text-third w-4xl">
-            your saved searches, wishlisted vehicles, and recent views are all here waiting.
+            Your saved searches, wishlisted vehicles, and recent views are all here waiting.
           </p>
         </div>
       </div>

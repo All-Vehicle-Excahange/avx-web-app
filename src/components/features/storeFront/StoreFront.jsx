@@ -31,12 +31,12 @@ export default function StoreFront() {
         {/* HERO */}
         <StoreFrontHeroSection />
 
-        <div className="px-1 sm:px-0 py-5">
+        <div className="px-1 sm:px-0 py-3">
           <section className="w-full">
             <div className="flex flex-col gap-6 3xl:max-w-[1480px] 3xl:mx-auto">
               {/* TABS */}
-              <div className="w-full px-1 sm:px-0 mx-auto 3xl:container overflow-x-auto no-scrollbar">
-                <div className="flex  gap-10 border-b border-third/30 min-w-max">
+              <div className="w-full px-2 sm:px-0 mx-auto 3xl:container overflow-x-auto no-scrollbar border-b border-third/30">
+                <div className="flex gap-8 min-w-max">
                   {[
                     { id: "inventory", label: "Inventory" },
                     { id: "aboutus", label: "About Us" },
@@ -46,16 +46,15 @@ export default function StoreFront() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`hover:cursor-pointer relative py-4 text-sm font-medium transition whitespace-nowrap
-        ${activeTab === tab.id
+                      className={`relative py-2.5 text-sm font-medium transition-colors whitespace-nowrap outline-none cursor-pointer
+                        ${activeTab === tab.id
                           ? "text-primary"
                           : "text-third hover:text-primary"
                         }`}
                     >
                       {tab.label}
-
                       {activeTab === tab.id && (
-                        <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                        <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-primary rounded-t-full" />
                       )}
                     </button>
                   ))}
