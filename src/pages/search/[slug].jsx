@@ -56,6 +56,51 @@ function SlugSearchPage({ seo, initialFilters }) {
           content={seo?.description || "Browse verified used vehicles for sale on Reecomm."}
         />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
+
+        {/* JSON-LD Structured Data: Breadcrumb Trail */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://www.reecomm.com",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Used Cars",
+                  item: "https://www.reecomm.com/search/buy-used-cars",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: seo?.title || "Search Results",
+                  item: seo?.canonical || "https://www.reecomm.com/search/buy-used-cars",
+                },
+              ],
+            }),
+          }}
+        />
+
+        {/* JSON-LD Structured Data: ItemList for SERP Rich Carousels */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              name: seo?.title || "Used Cars for Sale on Reecomm",
+              description: seo?.description || "Browse pre-owned cars for sale.",
+              url: seo?.canonical || "https://www.reecomm.com/search/buy-used-cars",
+            }),
+          }}
+        />
       </Head>
       <Suspense fallback={null}>
         <SearchContent
