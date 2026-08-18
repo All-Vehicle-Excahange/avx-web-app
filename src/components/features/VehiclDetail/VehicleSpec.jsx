@@ -35,6 +35,7 @@ import {
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import { getInspectionPricForBuyerQuery } from "@/queries/inspection.queries";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { customEvent } from "@/lib/fpixel";
 
 export default function VehicleSpec({
   open,
@@ -257,6 +258,15 @@ export default function VehicleSpec({
           : { inspectionType: "REPORT_ONLY" };
       const response = await createInpection(vehicle.id, payload);
       if (response?.success) {
+        // Meta Pixel Custom Event: InspectionRequest
+        customEvent("InspectionRequest", {
+          content_type: "vehicle",
+          content_ids: [String(vehicle.id)],
+          content_name:
+            `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""}`.trim() ||
+            "Vehicle Inspection Request",
+        });
+
         const id = response.data?.id || response.id;
         if (id) {
           setCreatedInspectionId(id);

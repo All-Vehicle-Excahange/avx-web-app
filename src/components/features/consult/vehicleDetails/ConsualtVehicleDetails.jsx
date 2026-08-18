@@ -28,6 +28,8 @@ import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkele
 import SummaryRight from "./SummaryRight";
 import VehicleSpecsConsualt from "./VehicleSpecsConsualt";
 import InspectionTrackingModal from "../../user/InspectionTrackingModal";
+import { useEffect } from "react";
+import { event } from "@/lib/fpixel";
 
 export default function ConsualtVehicleDetails({
   initialOverview = null,
@@ -47,6 +49,7 @@ export default function ConsualtVehicleDetails({
   const [trackingInspection, setTrackingInspection] = useState(null);
   const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
   const [isCheckingInspection, setIsCheckingInspection] = useState(false);
+  const trackedVehicleIdRef = useRef(null);
 
   const handleOpenTracking = (data) => {
     setTrackingInspection(data);
@@ -167,6 +170,20 @@ export default function ConsualtVehicleDetails({
 
   const vehicleSummary = vehicleSummaryData || {};
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
+
+  useEffect(() => {
+    if (vehicleOverview?.id && trackedVehicleIdRef.current !== vehicleOverview.id) {
+      trackedVehicleIdRef.current = vehicleOverview.id;
+      const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
+      event("ViewContent", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleOverview.id)],
+        content_name: vehicleName || "Vehicle Details",
+        value: Number(vehicleOverview.price) || 0,
+        currency: "INR",
+      });
+    }
+  }, [vehicleOverview?.id]);
 
   //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {

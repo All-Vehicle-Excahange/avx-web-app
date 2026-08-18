@@ -32,6 +32,7 @@ import VehicleDetailsSkeleton from "@/components/ui/skeleton/VehicleDetailsSkele
 import SpecialOffer from "./SpecialOffer";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import toast from "react-hot-toast";
+import { event } from "@/lib/fpixel";
 
 export default function VehicleDetails({
   initialOverview = null,
@@ -126,6 +127,21 @@ export default function VehicleDetails({
   const [animateTrackingModal, setAnimateTrackingModal] = useState(false);
   const [isCheckingInspection, setIsCheckingInspection] = useState(false);
   const inspectionSpecsRef = useRef(null);
+  const trackedVehicleIdRef = useRef(null);
+
+  useEffect(() => {
+    if (vehicleOverview?.id && trackedVehicleIdRef.current !== vehicleOverview.id) {
+      trackedVehicleIdRef.current = vehicleOverview.id;
+      const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
+      event("ViewContent", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleOverview.id)],
+        content_name: vehicleName || "Vehicle Details",
+        value: Number(vehicleOverview.price) || 0,
+        currency: "INR",
+      });
+    }
+  }, [vehicleOverview?.id]);
 
   const handleOpenTracking = (data) => {
     setTrackingInspection(data);

@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 import Head from "next/head";
 import Layout from "@/components/layout/Layout";
 import SearchHeader from "@/components/features/search/SearchHeader";
@@ -10,6 +10,7 @@ import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
+import { event } from "@/lib/fpixel";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
@@ -22,6 +23,18 @@ function SlugSearchPage({ seo, initialFilters }) {
   const [relatedVehicles, setRelatedVehicles] = useState([]);
   const [consultants, setConsultants] = useState([]);
   const [consultPayload, setConsultPayload] = useState(null);
+
+  const trackedSearchRef = useRef(null);
+
+  useEffect(() => {
+    const query = seo?.title || initialFilters?.searchQuery || initialFilters?.slug || "Used Cars";
+    if (query && trackedSearchRef.current !== query) {
+      trackedSearchRef.current = query;
+      event("Search", {
+        search_string: query,
+      });
+    }
+  }, [seo?.title, initialFilters]);
 
   return (
     <>

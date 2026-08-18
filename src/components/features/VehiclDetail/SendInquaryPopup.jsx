@@ -9,6 +9,7 @@ import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
 import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
+import { event } from "@/lib/fpixel";
 
 function SendInquaryPopup({
   onClose,
@@ -67,6 +68,15 @@ function SendInquaryPopup({
       });
 
       if (onSuccess) onSuccess();
+
+      // Meta Pixel Event Tracking: Lead
+      event("Lead", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name:
+          `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""}`.trim() ||
+          "Vehicle Inquiry",
+      });
 
       // Track CPI Inquiry if sponsored & billingType is CPI
       if (
