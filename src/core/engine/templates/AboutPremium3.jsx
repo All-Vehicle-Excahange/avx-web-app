@@ -577,7 +577,7 @@ export default function AboutPremium3({
   return (
     <>
       {/* ═════════ HERO ═════════ */}
-      <section className="relative w-full min-h-screen flex flex-col overflow-hidden py-12">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
         <div className="absolute inset-0 z-0">
           <Image src={
             d.customHeroImage1 ||
@@ -586,7 +586,7 @@ export default function AboutPremium3({
           } loading="lazy" alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-secondary/60" />
         </div>
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center pt-16 pb-8">
+        <div className="relative z-10 flex flex-col items-center justify-center container mx-auto px-4 w-full text-center">
           <div className="flex flex-col gap-8 mb-6">
             <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold">
               Hero
@@ -602,8 +602,8 @@ export default function AboutPremium3({
         </div>
       </section>
       {/* ═════════ MISSION & VISION ═════════ */}
-      <section className="relative py-12 overflow-hidden px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="mx-auto w-full relative">
             <div className="flex flex-col items-center gap-3 mb-12">
               <div className="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
@@ -634,7 +634,7 @@ export default function AboutPremium3({
               </div>
             </div>
             {/* VISION */}
-            <div className="relative">
+            <div className="relative mb-24">
               <div className="ml-auto w-[85%] lg:w-[70%] md:w-[75%] h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <Image src={
                   d.customVisionImage1 ||
@@ -655,8 +655,8 @@ export default function AboutPremium3({
         </div>
       </section>
       {/* ═════════ STATS ═════════ */}
-      <section className="relative flex flex-col justify-center items-center py-4 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div className="flex flex-col gap-8">
@@ -698,8 +698,8 @@ export default function AboutPremium3({
         </div>
       </section>
       {/* ═════════ SERVICES ═════════ */}
-      <section className="relative flex flex-col justify-center items-center px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="mx-auto w-full flex flex-col gap-6">
             <div className="grid gap-5 items-end">
               <div className="flex flex-col gap-5">

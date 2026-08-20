@@ -29,7 +29,7 @@ export const EngineRenderer = ({
   }, [mode]);
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col">
       {sections.map((section, index) => {
         const Component = TEMPLATE_REGISTRY[section.type];
 

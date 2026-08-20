@@ -5,7 +5,7 @@ import axiosInstance, {
 } from "@/lib/axiosInstance";
 
 const ENDPOINT = {
-  getMakersByFuelOrBodyType: "/search/fuelTypesandbodyTypesmakers",
+  getMakersByFuelOrBodyType: "/search/makers",
   getFilteredVehicles: "/vehicle/filter/sections",
   getAndSearchMakers: "/search/makers",
   getAndSearchModel: "/search/models",

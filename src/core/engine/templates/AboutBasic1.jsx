@@ -121,7 +121,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
   // Synchronize transformed draft data with the parent state once on load
   React.useEffect(() => {
     if (!rawData) return;
-    
+
     let hasChanges = false;
     const updatedData = { ...data };
 
@@ -432,8 +432,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         </div>
 
         <div className="flex justify-end mt-8 border-t border-third/30 pt-6">
-          <Button 
-            onClick={handleSaveAndNext} 
+          <Button
+            onClick={handleSaveAndNext}
             disabled={isSaving}
             variant="ghost"
           >
@@ -447,8 +447,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
   // ================= FRONT =================
   return (
     <>
-      <section className="relative flex items-center justify-center py-12 min-h-screen">
-        <div className="w-full mx-auto flex flex-col items-center text-center gap-10">
+      <section className="relative flex items-center justify-center container">
+        <div className="w-full mx-auto flex flex-col items-center text-center gap-6 md:gap-8">
           {/* Top Label */}
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
             Our Story
@@ -469,8 +469,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         </div>
       </section>
 
-      <section className="relative py-12 px-2 lg:px-4 ">
-        <div className=" w-full flex flex-col gap-16">
+      <section className="relative container mt-0">
+        <div className=" w-full flex flex-col gap-6 md:gap-8">
           {/* ── MAIN HEADING ───────────────── */}
           <div className="flex flex-col  gap-6 max-w-2xl text-center">
             <p className=" text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -482,7 +482,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
           </div>
 
           {/* Mission Row */}
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start  pt-12">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start pt-6">
             <div className="w-full lg:w-1/3">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.missionTitle}
@@ -497,7 +497,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
           </div>
 
           {/* Vision Row */}
-          <div className="flex flex-col lg:flex-row-reverse gap-10 lg:gap-20 items-start pt-12">
+          <div className="flex flex-col lg:flex-row-reverse gap-10 lg:gap-20 items-start pt-6">
             <div className="w-full lg:w-1/3">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.visionTitle}
@@ -514,8 +514,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         </div>
       </section>
 
-      <section className="relative py-12 px-2 lg:px-4   bg-primary text-secondary">
-        <div className=" container  w-full flex flex-col items-center gap-16 text-center">
+      <section className="relative container bg-primary text-secondary">
+        <div className=" py-6 md:py-10 w-full flex flex-col items-center gap-6 md:gap-8 text-center">
           {/* ── HEADING ───────────────── */}
           <div className="flex flex-col gap-6 max-w-2xl">
             <p className="text-sm tracking-[0.4em] uppercase text-secondary/60 font-semibold">
@@ -552,8 +552,8 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
         </div>
       </section>
 
-      <section className="relative py-12 px-2 lg:px-4   ">
-        <div className=" w-full flex flex-col gap-16">
+      <section className="relative container">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
           {/* Header Section: Vertical Stack */}
           <div className="flex flex-col gap-6 max-w-2xl">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -579,7 +579,7 @@ function AboutBasic1({ data: rawData, isEditing, onUpdate, onNextTab, errors, ru
               return (
                 <div
                   key={index}
-                  className={`${colSpan} flex flex-col justify-between p-8 lg:p-12 border border-third/10 bg-primary/5 hover:bg-primary/10     transition-all duration-300 min-h-[300px]`}
+                  className={`${colSpan} flex flex-col justify-between p-8 lg:p-12 border border-third/10 bg-primary/5 hover:bg-primary/10     transition-all duration-300 min-h-[240px]`}
                 >
                   <div className="flex flex-col gap-6">
                     {typeof service.icon === 'string' && service.icon.startsWith('<svg') ? (

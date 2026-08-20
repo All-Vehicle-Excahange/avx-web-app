@@ -1176,11 +1176,13 @@ export default function VehicleSpec({
                     </div>
 
                     {/* Footer Buttons */}
-                    <div className="flex justify-end gap-3 pt-2">
+                    <div className="flex flex-row justify-end gap-3 pt-2 w-full">
                       <Button
                         onClick={() => setStep(1)}
                         disabled={isSubmitting}
                         variant="outlineSecondary"
+                        size="sm"
+                        className="flex-1 sm:flex-none whitespace-nowrap"
                       >
                         Back
                       </Button>
@@ -1189,6 +1191,8 @@ export default function VehicleSpec({
                         disabled={isSubmitting}
                         loading={isSubmitting}
                         variant="ghost"
+                        size="sm"
+                        className="flex-1 sm:flex-none whitespace-nowrap"
                       >
                         <span className="mt-0.5">Confirm Payment</span>
                       </Button>

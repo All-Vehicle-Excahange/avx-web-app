@@ -1309,8 +1309,8 @@ export default function WhyBuyPremium1({
   return (
     <>
       {/* ═════════ HERO ═════════ */}
-      <section className="relative w-full min-h-screen flex items-center overflow-hidden px-2 lg:px-4 py-12">
-        <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 items-center">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
+        <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 items-center px-4">
           {/* LEFT CONTENT */}
           <div>
             <p className="mb-4 text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -1361,8 +1361,8 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ EXPERIENCE ═════════ */}
-      <section className="w-full py-12 bg-primary border-y border-secondary/10 px-4 lg:px-8">
-        <div className="container max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <section className="relative w-full overflow-hidden bg-primary border-y border-secondary/10 mt-3 md:mt-6">
+        <div className="container max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center px-4 lg:px-8 py-8 lg:py-12">
           {/* LEFT */}
           <div className="flex flex-col gap-6">
             <p className="text-sm tracking-[0.4em] uppercase text-secondary/70 font-semibold">
@@ -1442,8 +1442,8 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ VEHICLE SELECTION ═════════ */}
-      <section className="relative w-full py-12 overflow-hidden px-2 sm:px-4">
-        <div className="container">
+      <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           {/* BACKGROUND IMAGE STRIP */}
           <div
             ref={scrollRef}
@@ -1484,8 +1484,8 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ PROCESS ═════════ */}
-      <section className="w-full py-12 px-2 sm:px-4 overflow-hidden">
-        <div className="container max-w-7xl mx-auto">
+      <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto">
           {/* HEADER */}
           <div className="text-center flex flex-col items-center gap-4 mb-16">
             <p className="text-xs tracking-[0.5em] uppercase text-third/60 font-semibold">
@@ -1555,8 +1555,8 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ INSPECTION ═════════ */}
-      <section className="w-full py-12 overflow-hidden px-2 sm:px-4">
-        <div className="container max-w-7xl mx-auto">
+      <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto">
           {/* TOP HEADER */}
           <div className="flex flex-col items-center text-center mb-20 gap-4">
             <p className="text-sm tracking-[0.5em] uppercase text-third font-semibold">
@@ -1624,7 +1624,7 @@ export default function WhyBuyPremium1({
         </div>
       </section>
       {/* ═════════ COMMITMENT ═════════ */}
-      <section className="relative w-full min-h-[800px] flex items-center px-3 justify-center py-12 overflow-hidden bg-secondary">
+      <section className="relative w-full min-h-[600px] flex items-center justify-center overflow-hidden bg-secondary mt-3 md:mt-6">
         {/* BACKGROUND */}
         <div className="absolute inset-0 z-0">
           {(data.customWhyBuyCustomerCommitment1 || data.customerCommitmentTemplate1?.imageUrl) ? (
@@ -1632,7 +1632,7 @@ export default function WhyBuyPremium1({
           ) : null}
           <div className="absolute inset-0 bg-linear-to-b from-secondary via-transparent to-secondary" />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-10 lg:py-16">
           {/* LEFT SIDE: CONTENT */}
           <div className="flex flex-col items-start gap-6 text-left">
             <div className="flex flex-col gap-2">
@@ -1682,8 +1682,8 @@ export default function WhyBuyPremium1({
       </section>
       {/* ═════════ GALLERY ═════════ */}
       {galleryImages.length > 0 && (
-        <section className="w-full py-12 overflow-hidden px-4 sm:px-8">
-          <div className="container max-w-7xl mx-auto flex flex-col gap-12">
+        <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+          <div className="w-full max-w-7xl mx-auto flex flex-col gap-12">
             {/* HEADER */}
             <div className="flex flex-col gap-4 max-w-2xl">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -1736,8 +1736,8 @@ export default function WhyBuyPremium1({
       )}
       {/* ═════════ TESTIMONIALS ═════════ */}
       {data.featuredReviews && data.featuredReviews.length > 0 && (
-        <section className="w-full py-12 bg-primary px-2 lg:px-4">
-          <div className="container max-w-7xl mx-3 flex flex-col gap-12">
+        <section className="relative w-full overflow-hidden bg-primary mt-3 md:mt-6">
+          <div className="container max-w-7xl mx-auto px-4 lg:px-8 py-8 lg:py-12 flex flex-col gap-12">
             {/* HEADER */}
             <div className="flex flex-col gap-4 max-w-2xl">
               <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">

@@ -581,8 +581,8 @@ export default function AboutPremium1({
   return (
     <>
       {/* ═════════ HERO ═════════ */}
-      <section className="w-full min-h-screen flex items-center justify-center py-12 pt-20">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
+        <div className="relative z-10 container mx-auto grid lg:grid-cols-2 gap-12 items-center px-4">
           {/* LEFT CONTENT */}
           <div className="relative z-10">
             <p className="mb-4 text-xs tracking-[0.5em] uppercase text-third font-semibold">
@@ -612,9 +612,8 @@ export default function AboutPremium1({
         </div>
       </section>
       {/* ═════════ MISSION & VISION ═════════ */}
-      <section className="relative py-12 px-2 lg:px-4 overflow-hidden">
-        <div className="container">
-          <div className="max-w-[1600px] mx-auto relative z-10">
+      <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full max-w-[1600px] mx-auto">
             {/* ── HEADING ── */}
             <div className="flex flex-col gap-6 max-w-2xl text-center mx-auto mb-16">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -669,13 +668,12 @@ export default function AboutPremium1({
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </section>
       {/* ═════════ STATS ═════════ */}
-      <section className="relative py-12 bg-primary text-secondary overflow-hidden">
-        <div className="container">
-          <div className="px-4 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+      <section className="relative w-full overflow-hidden bg-primary text-secondary mt-3 md:mt-6">
+        <div className="container mx-auto">
+          <div className="w-full px-4 lg:px-8 grid lg:grid-cols-2 gap-16 items-center py-8 lg:py-12">
             <div className="flex flex-col gap-6">
               <p className="text-sm tracking-[0.4em] uppercase text-secondary/60 font-semibold">
                 Impact
@@ -720,8 +718,8 @@ export default function AboutPremium1({
         </div>
       </section>
       {/* ═════════ SERVICES ═════════ */}
-      <section className="relative py-20 px-4 text-primary font-[Poppins]">
-        <div className="container mx-auto max-w-7xl">
+      <section className="relative container w-full mt-3 md:mt-6 text-primary font-[Poppins]">
+        <div className="w-full">
           {/* HEADER */}
           <div className="max-w-2xl mb-16">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-4">

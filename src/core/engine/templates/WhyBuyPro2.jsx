@@ -1257,9 +1257,9 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 1 — HERO
       ═══════════════════════════════════════ */}
-      <section className=" py-12 px-2 lg:px-4 relative flex items-center justify-center overflow-hidden min-h-screen">
-        <div className="container">
-          <div className=" grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
+        <div className="relative z-10 container mx-auto flex flex-col justify-center px-4">
+          <div className="w-full grid lg:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* LEFT CONTENT */}
             <div>
               <h1 className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary mb-5">
@@ -1310,9 +1310,9 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 2 — STORY
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
-          <div className="grid max-w-7xl mx-auto grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="relative w-full overflow-hidden bg-fourth mt-3 md:mt-6">
+        <div className="container mx-auto">
+          <div className="w-full grid max-w-7xl mx-auto grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center py-8 lg:py-12 ">
             {/* LEFT — text */}
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-primary/60 font-semibold mb-2">
@@ -1346,9 +1346,8 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 3 — SELECTION
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="pt-10 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* LEFT — TEXT */}
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
@@ -1394,15 +1393,14 @@ export default function WhyBuyPro2({
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* ═══════════════════════════════════════
           SECTION 4 — PROCESS
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-3 mb-14">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-3">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Process
             </p>
@@ -1465,10 +1463,10 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 5 — INSPECTION
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
           {/* header */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-end">
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
                 Inspection
@@ -1532,9 +1530,9 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 6 — COMMITMENT  (bg-fourth)
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
-          <div className=" max-w-5xl mx-auto text-center">
+      <section className="relative w-full overflow-hidden bg-fourth mt-3 md:mt-6">
+        <div className="container mx-auto">
+          <div className="w-full max-w-5xl mx-auto text-center flex flex-col gap-6 md:gap-8 py-8 lg:py-12 px-4">
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-primary/60 font-semibold mb-3">
                 Commitment
@@ -1552,7 +1550,7 @@ export default function WhyBuyPro2({
             </div>
 
             {/* image strip */}
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {commitmentImages.length > 0 ? commitmentImages.map((img, i) => (
                 <div key={i} className={`relative rounded-xl overflow-hidden ${i === 1 ? "lg:scale-105 lg:-translate-y-2 z-10" : ""}`}>
                   <div className="w-full aspect-4/3">
@@ -1572,9 +1570,9 @@ export default function WhyBuyPro2({
       {/* ═══════════════════════════════════════
           SECTION 7 — GALLERY
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-3 mb-10">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-3">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Gallery
             </p>
@@ -1629,10 +1627,10 @@ export default function WhyBuyPro2({
           SECTION 8 — TESTIMONIALS
       ═══════════════════════════════════════ */}
       {data.testimonials && data.testimonials.length > 0 && (
-        <section className="py-12 px-2 lg:px-4">
-          <div className="container">
+        <section className="relative container w-full mt-3 md:mt-6">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
             {/* header */}
-            <div className="flex items-end justify-between mb-12">
+            <div className="flex items-end justify-between">
               <div className="flex flex-col gap-3">
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
                   Reviews

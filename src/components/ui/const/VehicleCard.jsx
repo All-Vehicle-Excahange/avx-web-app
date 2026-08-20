@@ -8,6 +8,7 @@ import {
   User,
   Users,
   ArrowLeftRight,
+  CarFront,
 } from "lucide-react";
 import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "../button";
@@ -253,12 +254,18 @@ export default function VehicleCard({
                 </div>
               )}
 
-              <Image
-                src={mapped.image}
-                alt={mapped.title}
-                fill
-                className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
-              />
+              {mapped.image ? (
+                <Image
+                  src={mapped.image}
+                  alt={mapped.title}
+                  fill
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A] transition-transform duration-500 group-hover/card:scale-110">
+                  <CarFront className="w-12 h-12 text-gray-400" />
+                </div>
+              )}
 
               {/* ✅ Compare Button */}
               <button

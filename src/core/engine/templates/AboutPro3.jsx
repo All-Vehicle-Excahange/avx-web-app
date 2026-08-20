@@ -505,7 +505,7 @@ export default function AboutPro3({
   return (
     <>
       {/* HERO */}
-      <section className="relative min-h-screen py-12 flex flex-col overflow-hidden">
+      <section className="relative w-full overflow-hidden flex items-center min-h-[60vh] md:min-h-[80vh] py-16 md:py-24">
         {data.aboutHeroTemplate1?.imageUrl && (
           <>
             <Image src={data.aboutHeroTemplate1.imageUrl} loading="lazy" alt="Hero" fill unoptimized className="absolute inset-0 w-full h-full object-cover" />
@@ -513,11 +513,11 @@ export default function AboutPro3({
             <div className="absolute inset-0 bg-linear-to-b from-secondary/20 via-secondary/40 to-secondary" />
           </>
         )}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-8 text-center px-2 lg:px-4 pt-16 pb-6">
+        <div className="relative z-10 container mx-auto flex items-center justify-center text-center flex-col gap-6 md:gap-8 px-4">
           <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold ">
             Hero
           </p>
-          <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] ">
+          <h2 className="flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
             <span>{data.aboutHeroTitle}</span>
           </h2>
           <div
@@ -528,19 +528,17 @@ export default function AboutPro3({
       </section>
 
       {/* MISSION / VISION */}
-      <section className="relative py-8 overflow-hidden px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col items-center gap-3 mb-12 ">
-            <div className="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
-              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Mission / Vision
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                Mission <span className="text-primary">& Vision</span>
-              </h2>
-            </div>
+      <section className="relative container w-full overflow-hidden mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col items-center text-center gap-6 md:gap-8 max-w-2xl mx-auto">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Mission / Vision
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              Mission <span className="text-primary">& Vision</span>
+            </h2>
           </div>
-          <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+          <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 md:gap-8">
             <div className="mv-card relative rounded-2xl overflow-hidden shadow-2xl border border-third/10 py-14">
               {data.aboutMissionTemplate1?.imageUrl && (
                 <>
@@ -590,9 +588,8 @@ export default function AboutPro3({
       </section>
 
       {/* STATS */}
-      <section className="relative overflow-hidden px-2 lg:px-4">
-        <div className="container">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+      <section className="relative container w-full overflow-hidden mt-3 md:mt-6">
+        <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-6 md:gap-8 items-center">
             <div className="flex flex-col gap-6">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 Stats
@@ -620,22 +617,20 @@ export default function AboutPro3({
               ))}
             </div>
           </div>
-        </div>
       </section>
 
       {/* SERVICES */}
-      <section className="relative px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto w-full">
-            <div className="mb-8 max-w-3xl">
-              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-8">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+            <div className="max-w-3xl flex flex-col gap-6 md:gap-8">
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 Our Services
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary font-[Montserrat]">
                 {data.aboutServicesTitle}
               </h2>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {(data.services || []).map((item, i) => {
                 return (
                   <div
@@ -664,7 +659,6 @@ export default function AboutPro3({
                 );
               })}
             </div>
-          </div>
         </div>
       </section>
     </>

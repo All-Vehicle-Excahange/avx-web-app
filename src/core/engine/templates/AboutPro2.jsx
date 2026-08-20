@@ -574,7 +574,7 @@ export default function AboutPro2({
       {/* ════════════════════════════════════════
           HERO
           ════════════════════════════════════════ */}
-      <section className="relative h-screen px-2 lg:px-4 overflow-hidden">
+      <section className="relative w-full overflow-hidden flex items-center min-h-[60vh] md:min-h-[80vh] py-10 md:py-24">
         {/* BACKGROUND IMAGE */}
         {data.aboutHeroTemplate1?.imageUrl ? (
           <>
@@ -588,7 +588,7 @@ export default function AboutPro2({
             <span className="text-third/40 text-sm">Hero image not set</span>
           </div>
         )}
-        <div className="container relative z-10 h-full flex flex-col justify-center">
+        <div className="relative z-10 container mx-auto flex flex-col justify-center gap-6 md:gap-8 px-4">
           {/* heading + description (stacked) */}
           <div className="flex flex-col gap-6 max-w-2xl">
             <div className="flex flex-col gap-5">
@@ -614,11 +614,10 @@ export default function AboutPro2({
       {/* ════════════════════════════════════════
           MISSION & VISION
           ════════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
             {/* heading row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-end">
               <div>
                 <EyeBrow>What Drives Us</EyeBrow>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -677,20 +676,18 @@ export default function AboutPro2({
                 );
               })}
             </div>
-          </div>
         </div>
       </section>
       {/* ════════════════════════════════════════
           STATS
           ════════════════════════════════════════ */}
-      <section className="py-12  ">
-        <div className=" overflow-hidden bg-fourth">
-          <div className="container">
-            <div className="px-2 lg:px-4">
+      <section className="relative w-full overflow-hidden bg-fourth mt-3 md:mt-6">
+        <div className="container mx-auto">
+          <div className="w-full flex flex-col py-5 lg:py-8">
               {/* ── TOP: heading + description ── */}
               <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-primary/10">
                 {/* left — eyebrow + title */}
-                <div className="flex flex-col justify-center gap-5 py-14 lg:border-r border-primary/10">
+                <div className="flex flex-col justify-center gap-5 py-5 lg:border-r border-primary/10">
                   <EyeBrow>By The Numbers</EyeBrow>
                   <h2
                     className="font-[Montserrat] font-bold text-primary leading-[1.08]"
@@ -702,7 +699,7 @@ export default function AboutPro2({
                   <div className="w-8 h-px bg-primary/30" />
                 </div>
                 {/* right — statsDesc from json */}
-                <div className="flex flex-col justify-center px-2 lg:px-4 py-14">
+                <div className="flex flex-col justify-center px-2 lg:px-4 py-5 lg:py-8">
                   <div
                     className="font-[Poppins] text-[13.5px] text-primary/65 leading-[1.9]"
                     dangerouslySetInnerHTML={{
@@ -740,18 +737,16 @@ export default function AboutPro2({
                   </div>
                 ))}
               </div>
-            </div>
           </div>
         </div>
       </section>
       {/* ════════════════════════════════════════
           SERVICES
           ════════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        {/* ── heading row — split with border ── */}
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2  mb-5">
-            <div className="flex flex-col gap-4 pb-10 lg:pr-16 ">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div className="flex flex-col gap-6 md:gap-8">
               <EyeBrow>Services</EyeBrow>
               <h2
                 className="font-[Montserrat] font-bold text-primary leading-[1.08]"
@@ -760,7 +755,7 @@ export default function AboutPro2({
                 {data.aboutServicesTitle}
               </h2>
             </div>
-            <div className="flex flex-col justify-center pb-10 lg:pl-16">
+            <div className="flex flex-col justify-center">
               <div
                 className="font-[Poppins] text-[13.5px] text-third/65 leading-[1.9]"
                 dangerouslySetInnerHTML={{ __html: data.aboutServicesDescription }}
@@ -768,9 +763,7 @@ export default function AboutPro2({
             </div>
           </div>
           {/* ── 2×2 pro cards ── */}
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-[25px]"
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
             {data.services.map((svc, i) => {
               return (
                 <div

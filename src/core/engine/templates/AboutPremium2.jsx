@@ -627,9 +627,9 @@ export default function AboutPremium2({
       {/* ════════════════════════════════════════
           HERO
           ════════════════════════════════════════ */}
-      <section className="relative px-2 lg:px-4 overflow-hidden">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
         {/* HERO BACKGROUND (VIDEO/IMAGE) */}
-        <div className="absolute inset-0 h-screen overflow-hidden">
+        <div className="absolute inset-0 z-0">
           {(d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl) ? (
             <Image src={d.customHeroImage1 || d.customHeroImageUrl1 || d.heroTemplate1?.imageUrl} loading="lazy" alt="Background" width={800} height={500} unoptimized className="w-full h-full object-cover" />
           ) : (
@@ -640,8 +640,7 @@ export default function AboutPremium2({
           <div className="absolute inset-0 bg-black/60" />
         </div>
 
-        <div className="container relative z-10 h-screen flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="relative z-10 container mx-auto grid lg:grid-cols-2 gap-12 items-center px-4 w-full">
             {/* HERO TEXT */}
             <div className="flex flex-col gap-6 max-w-2xl text-left">
               <div className="flex flex-col gap-6">
@@ -672,13 +671,12 @@ export default function AboutPremium2({
               </div>
             </div>
           </div>
-        </div>
       </section>
       {/* ════════════════════════════════════════
           MISSION & VISION
           ════════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full">
           {/* heading row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-28 items-end mb-16">
             <div>
@@ -763,11 +761,11 @@ export default function AboutPremium2({
       {/* ════════════════════════════════════════
           STATS
           ════════════════════════════════════════ */}
-      <section className="py-12">
-        <div className="relative overflow-hidden bg-fourth/95 border border-primary/10 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="relative w-full overflow-hidden bg-fourth/95 border border-primary/10 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]">
           <div className="absolute inset-0 bg-linear-to-br from-white/5 via-transparent to-black/10 pointer-events-none" />
-          <div className="px-2 lg:px-4">
-            <div className="container">
+          <div className="container mx-auto px-4">
+            <div className="w-full">
               {/* TOP */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 py-16 border-b border-primary/10 relative z-10">
                 <div className="flex flex-col justify-center gap-6">
@@ -815,8 +813,8 @@ export default function AboutPremium2({
       {/* ════════════════════════════════════════
           SERVICES
           ════════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 overflow-hidden">
-        <div className="container">
+      <section className="relative container w-full mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           {/* heading */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-16">
             <div className="flex flex-col gap-5">
