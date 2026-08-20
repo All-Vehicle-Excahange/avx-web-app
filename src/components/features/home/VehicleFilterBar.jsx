@@ -589,21 +589,22 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     currentBody = bodyType,
   ) => {
     try {
-      if (currentFuel && currentBody) {
+      const mappedBodyType =
+        vehicleType &&
+          (vehicleType.toLowerCase().includes("2") ||
+            vehicleType.toLowerCase().includes("two"))
+          ? "TWO_WHEELER"
+          : "FOUR_WHEELER";
+          
+      if (currentFuel) {
         const res = await getMakersByFuelOrBodyType({
           fuelType: currentFuel.toUpperCase(),
-          bodyType: currentBody.toUpperCase(),
+          bodyType: mappedBodyType,
           page: 1,
           limit: 100,
         });
         setBrandOptions(res.data || []);
       } else {
-        const mappedBodyType =
-          vehicleType &&
-            (vehicleType.toLowerCase().includes("2") ||
-              vehicleType.toLowerCase().includes("two"))
-            ? "TWO_WHEELER"
-            : "FOUR_WHEELER";
         const res = await getAndSearchMakers({
           searchTerm: "",
           page: 1,
@@ -1581,18 +1582,24 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     onClick={() => handleActiveTabChange("brand")}
                   >
                     <div className="lg-label">Brand</div>
-                    <input
-                      ref={brandInputRef}
-                      type="text"
-                      placeholder={brand || "Search brand"}
-                      className="lg-input"
-                      value={brandSearch}
-                      onChange={(e) => setBrandSearch(e.target.value)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleActiveTabChange("brand");
-                      }}
-                    />
+                    {activeTab === "brand" ? (
+                      <input
+                        ref={brandInputRef}
+                        type="text"
+                        placeholder={brand || "Search brand"}
+                        className="lg-input"
+                        value={brandSearch}
+                        onChange={(e) => setBrandSearch(e.target.value)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleActiveTabChange("brand");
+                        }}
+                      />
+                    ) : (
+                      <div className={brand ? "lg-value" : "lg-value placeholder"}>
+                        {brand || "Search brand"}
+                      </div>
+                    )}
                     {activeTab === "brand" && (
                       <div className="absolute top-[110%] left-0 z-50 dropdown-active w-[300px] lg-glass-dropdown rounded-xl p-2">
                         <div className="flex justify-between items-center px-2 py-1 mb-1 border-b border-white/10">

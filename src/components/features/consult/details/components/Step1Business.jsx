@@ -22,6 +22,7 @@ import {
   Tag,
 } from "lucide-react";
 import Image from "next/image";
+import { useAuthStore } from "@/stores/useAuthStore";
 import CustomSelect from "@/components/ui/custom-select";
 import DropzoneUpload from "@/components/ui/DropzoneUpload";
 import SleekInput from "@/components/ui/sleekInput";
@@ -54,19 +55,23 @@ export default function Step1Business({
     return { label: year, value: year };
   });
 
+  const user = useAuthStore((state) => state.user);
+
   const [form, setForm] = useState({
     logo: null,
     banner: null,
     consultationName: initialData?.consultationName || "",
     username: initialData?.username || "",
     ownerName: initialData?.ownerName || "",
-    companyEmail: initialData?.companyEmail || "",
+    companyEmail: initialData?.companyEmail || user?.email || "",
     establishmentYear: initialData?.establishmentYear
       ? String(initialData.establishmentYear)
       : "",
     vehicleTypes: initialData?.vehicleTypes || [],
     services: initialData?.services || [],
   });
+
+  const hasUserEmail = Boolean(user?.email || initialData?.companyEmail);
 
   const [usernameStatus, setUsernameStatus] = useState({
     loading: false,
@@ -500,7 +505,7 @@ export default function Step1Business({
             />
           )}
 
-          {(!readOnly || form.companyEmail) && (
+          {hasUserEmail && (!readOnly || form.companyEmail) && (
             <SleekInput
               label="Company Email"
               type="email"

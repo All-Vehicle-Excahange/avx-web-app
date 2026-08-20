@@ -88,7 +88,7 @@ export default function SearchWithCard({
   }, [vehicleType]);
   const fuelType = searchParams.get("fuelType") || initialFilters.fuelType;
 
-  const rawBrand = searchParams.get("brand") || initialFilters.brand;
+  const rawBrand = searchParams.get("brand") || initialFilters.brand || initialFilters.brandName;
   const rawMakerId = searchParams.get("makerId") || initialFilters.makerId;
   const isNumeric = (val) => val && !isNaN(val) && val.trim() !== "";
 
@@ -180,6 +180,25 @@ export default function SearchWithCard({
   const [brandHasMore, setBrandHasMore] = useState(true);
   const [brandLoading, setBrandLoading] = useState(false);
 
+  // Auto-resolve string brand names to numeric IDs using fetched brands
+  useEffect(() => {
+    if (brands.length === 0 || selectedBrands.length === 0) return;
+
+    let updated = false;
+    const resolved = selectedBrands.map((val) => {
+      if (isNaN(val)) {
+        const match = brands.find((b) => b.label?.toLowerCase() === String(val).toLowerCase());
+        if (match) {
+          updated = true;
+          return String(match.value);
+        }
+      }
+      return val;
+    });
+
+    if (updated) setSelectedBrands(resolved);
+  }, [brands, selectedBrands]);
+
   // ── Model states ──
   const [models, setModels] = useState([]);
   const [selectedModels, setSelectedModels] = useState(() =>
@@ -215,9 +234,9 @@ export default function SearchWithCard({
   const [yearLoading, setYearLoading] = useState(false);
   const [selectedBodyType, setSelectedBodyType] = useState(() =>
     bodyType
-      ? [bodyType.toLowerCase()]
+      ? bodyType.toLowerCase().split(",").map(s => s.trim())
       : initialFilters.bodyType
-        ? [initialFilters.bodyType.toLowerCase()]
+        ? initialFilters.bodyType.toLowerCase().split(",").map(s => s.trim())
         : [],
   );
   const [selectedRating, setSelectedRating] = useState([]);
@@ -228,7 +247,7 @@ export default function SearchWithCard({
 
   // ── Add these ──
   const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
-    () => (transmission ? [transmission.toLowerCase()] : []),
+    () => (transmission ? transmission.toLowerCase().split(",").map(s => s.trim()) : []),
   );
   const [selectedVariants, setSelectedVariants] = useState(() =>
     variantIdParam ? [variantIdParam] : [],
@@ -245,7 +264,10 @@ export default function SearchWithCard({
   ]);
   const [fuelLoading, setFuelLoading] = useState(false);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState(() =>
-    fuelType ? [fuelType] : [],
+    fuelType ? fuelType.split(",").map(f => {
+      const t = f.trim();
+      return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+    }) : [],
   );
 
   // ── Transmission Type states ──
@@ -391,7 +413,7 @@ export default function SearchWithCard({
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
 
     if (selectedBrands.length > 0)
-      payload.makerIds = selectedBrands.map(Number);
+      payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
 
     if (selectedModels.length > 0)
       payload.modelIds = selectedModels.map(Number);
@@ -437,7 +459,7 @@ export default function SearchWithCard({
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
     if (selectedBrands.length > 0)
-      payload.makerIds = selectedBrands.map(Number);
+      payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
     if (selectedModels.length > 0)
       payload.modelIds = selectedModels.map(Number);
 
@@ -754,7 +776,7 @@ export default function SearchWithCard({
 
     // Synchronize active filters when removed via SearchHeader chips, Clear All, or when navigating via global search/SEO slugs
     const activeMakerId = makerId || initialFilters.makerId;
-    const qBrand = searchParams.get("brand") || searchParams.get("makerId");
+    const qBrand = searchParams.get("brand") || searchParams.get("makerId") || initialFilters.brand || initialFilters.brandName;
     if (qBrand?.toLowerCase() === "all") {
       setSelectedBrands([]);
     } else if (activeMakerId) {
@@ -775,21 +797,24 @@ export default function SearchWithCard({
     if (!qBodyType || qBodyType.toLowerCase() === "all") {
       setSelectedBodyType([]);
     } else {
-      setSelectedBodyType([qBodyType.toLowerCase()]);
+      setSelectedBodyType(qBodyType.toLowerCase().split(",").map(s => s.trim()));
     }
 
     const qFuelType = searchParams.get("fuelType") || initialFilters.fuelType;
     if (!qFuelType || qFuelType.toLowerCase() === "all") {
       setSelectedFuelTypes([]);
     } else {
-      setSelectedFuelTypes([qFuelType]);
+      setSelectedFuelTypes(qFuelType.split(",").map(f => {
+        const t = f.trim();
+        return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+      }));
     }
 
     const qTransmission = searchParams.get("transmission") || initialFilters.transmission;
     if (!qTransmission || qTransmission.toLowerCase() === "all") {
       setSelectedTransmissionTypes([]);
     } else {
-      setSelectedTransmissionTypes([qTransmission.toLowerCase()]);
+      setSelectedTransmissionTypes(qTransmission.toLowerCase().split(",").map(s => s.trim()));
     }
 
     const qBudget = searchParams.get("budget") || initialFilters.budget;
@@ -824,7 +849,7 @@ export default function SearchWithCard({
     if (!qSeller) {
       setSelectedSellerType([]);
     } else {
-      setSelectedSellerType([qSeller]);
+      setSelectedSellerType([qSeller.toUpperCase()]);
     }
 
     const effectiveStateId = searchParams.get("stateId") || initialFilters.stateId;
@@ -1515,15 +1540,27 @@ export default function SearchWithCard({
   )`;
   };
 
-  const vehicleTypes = [
-    { value: "suv", label: "SUV" },
-    { value: "sedan", label: "Sedan" },
-    { value: "hatchback", label: "Hatchback" },
-    { value: "muv", label: "MUV" },
-    { value: "truck", label: "Truck" },
-    { value: "coupe", label: "Coupe" },
-    { value: "convertible", label: "Convertible" },
-  ];
+  const vehicleTypes = useMemo(() => {
+    if (apiBodyType === "TWO_WHEELER") {
+      return [
+        { value: "scooters", label: "Scooters" },
+        { value: "commuter bikes", label: "Commuter Bikes" },
+        { value: "sports bikes", label: "Sports Bikes" },
+        { value: "cruiser & retro", label: "Cruiser & Retro" },
+        { value: "adventure & touring", label: "Adventure & Touring" },
+        { value: "electric 2w", label: "Electric 2W" },
+      ];
+    }
+    return [
+      { value: "suv", label: "SUV" },
+      { value: "sedan", label: "Sedan" },
+      { value: "hatchback", label: "Hatchback" },
+      { value: "muv", label: "MUV" },
+      { value: "truck", label: "Truck" },
+      { value: "coupe", label: "Coupe" },
+      { value: "convertible", label: "Convertible" },
+    ];
+  }, [apiBodyType]);
 
   const ratings = [
     { value: "4.5", label: "⭐ 4.5+ Rating" },
@@ -2299,19 +2336,35 @@ export default function SearchWithCard({
                   });
                 }}
               />
-              <Chip
-                className="h-10"
-                label="SUV"
-                selected={selectedBodyType.includes("suv")}
-                variant="outline"
-                onClick={() => {
-                  setSelectedBodyType((prev) =>
-                    prev.includes("suv")
-                      ? prev.filter((b) => b !== "suv")
-                      : [...prev, "suv"],
-                  );
-                }}
-              />
+              {apiBodyType === "TWO_WHEELER" ? (
+                <Chip
+                  className="h-10"
+                  label="Scooters"
+                  selected={selectedBodyType.includes("scooters")}
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedBodyType((prev) =>
+                      prev.includes("scooters")
+                        ? prev.filter((b) => b !== "scooters")
+                        : [...prev, "scooters"],
+                    );
+                  }}
+                />
+              ) : (
+                <Chip
+                  className="h-10"
+                  label="SUV"
+                  selected={selectedBodyType.includes("suv")}
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedBodyType((prev) =>
+                      prev.includes("suv")
+                        ? prev.filter((b) => b !== "suv")
+                        : [...prev, "suv"],
+                    );
+                  }}
+                />
+              )}
               <Chip
                 className="h-10"
                 label="Diesel"
