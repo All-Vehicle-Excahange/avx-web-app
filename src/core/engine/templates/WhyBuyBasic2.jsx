@@ -563,17 +563,15 @@ export default function WhyBuyHereBasic2({
                 <div
                   key={review.id}
                   onClick={() => toggleReviewSelection(review.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                    isSelected
+                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isSelected
                       ? "border-fourth bg-fourth/10 shadow-md"
                       : "border-third/20 bg-primary/5 hover:border-third/40"
-                  }`}
+                    }`}
                 >
                   {/* Selection indicator */}
                   <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? "border-fourth bg-fourth" : "border-third/40"
-                    }`}
+                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? "border-fourth bg-fourth" : "border-third/40"
+                      }`}
                   >
                     {isSelected && (
                       <CheckCircle2 size={14} className="text-secondary" />
@@ -635,8 +633,8 @@ export default function WhyBuyHereBasic2({
   return (
     <>
       {/* SECTION 1 — HERO */}
-      <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
-        <div className="w-[70%] mx-auto text-center">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="w-full flex flex-col items-center text-center gap-6 md:gap-8 w-[70%] mx-auto">
           <EyeBrow center>Why Choose Us</EyeBrow>
           <h1 className="text-[clamp(28px,5vw,54px)] font-bold leading-[1.15] text-primary font-[Montserrat] mb-6">
             {data.whyBuyHeroTitle}
@@ -649,9 +647,9 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 2 — STORY */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="relative container w-full bg-fourth mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 py-6 md:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
             <div>
               <EyeBrow>Our Story</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -669,9 +667,9 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 3 — SELECTION */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
             <div>
               <EyeBrow>Selection</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -694,9 +692,9 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 4 — PROCESS */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-3 mb-10">
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-3">
             <EyeBrow>Process</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.processTitle} <span className="text-primary">Works</span>
@@ -708,14 +706,14 @@ export default function WhyBuyHereBasic2({
           </div>
 
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
             variants={stagger}
           >
             {data.processSteps.map((s, i) => (
               <div
                 key={i}
                 variants={fadeUp}
-                className="group relative border border-third/10 rounded-2xl p-7 flex flex-col gap-5 hover:border-primary/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                className="group relative border border-third/10 rounded-2xl p-5 md:p-7 flex flex-col gap-5 hover:border-primary/30 transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
               >
                 <span className="font-[Montserrat] font-bold text-[11px] tracking-[0.18em] text-third/40 absolute top-5 right-5">
                   {String(i + 1).padStart(2, "0")}
@@ -744,9 +742,9 @@ export default function WhyBuyHereBasic2({
         </div>
       </section>
 
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* Left Column: Title & Description */}
             <div className="space-y-6">
               <div>
@@ -779,9 +777,9 @@ export default function WhyBuyHereBasic2({
       </section>
 
       {/* SECTION 6 — COMMITMENT */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <section className="relative container w-full bg-fourth mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 py-6 md:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
             <div>
               <EyeBrow>Commitment</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -803,9 +801,9 @@ export default function WhyBuyHereBasic2({
 
       {/* SECTION 7 — FEATURED REVIEWS */}
       {testimonials && testimonials.length > 0 && (
-        <section className="py-12 px-2 lg:px-4">
-          <div className="container">
-            <div className="flex flex-col gap-3 mb-12">
+        <section className="relative container w-full mt-6 md:mt-10">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
+            <div className="flex flex-col gap-3">
               <EyeBrow>Reviews</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
                 {data.testimonialTitle}

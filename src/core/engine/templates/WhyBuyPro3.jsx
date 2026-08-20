@@ -1296,7 +1296,7 @@ export default function WhyBuyPro3({
   return (
     <>
       {/* ===== Hero Section ===== */}
-      <section className="relative w-full overflow-hidden min-h-screen">
+      <section className="relative w-full overflow-hidden flex items-center min-h-[60vh] md:min-h-[80vh] py-16 md:py-24">
         {heroImages[active] ? (
           <Image src={heroImages[active]} loading="lazy" alt="vehicle" fill unoptimized className="absolute inset-0 w-full h-full object-cover" style={{
             opacity: fading ? 0 : 1,
@@ -1309,8 +1309,8 @@ export default function WhyBuyPro3({
           </div>
         )}
         <div className="absolute inset-0 bg-linear-to-t from-secondary/70 via-secondary/50 to-secondary/30" />
-        <div className="absolute inset-0 flex items-center justify-center px-8">
-          <div className="max-w-3xl w-full flex flex-col items-center text-center gap-6">
+        <div className="relative z-10 container mx-auto flex items-center justify-center text-center px-4">
+          <div className="w-full max-w-3xl flex flex-col items-center gap-6 md:gap-8">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Why Choose Us
             </p>
@@ -1326,291 +1326,277 @@ export default function WhyBuyPro3({
         </div>
       </section>
       {/* ===== AboutUs Section ===== */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="flex flex-col lg:flex-row gap-6 items-stretch justify-center">
-              <div className="flex flex-col justify-center lg:w-[44%] ">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  About Us
-                </p>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mt-4">
-                  {data.whyBuyStoryTitle}
-                </h2>
-                <div
-                  className="flex flex-col gap-6 mt-8 max-w-md text-primary/75 text-lg leading-relaxed font-[Poppins]"
-                  dangerouslySetInnerHTML={{
-                    __html: data.whyBuyStoryDescription,
-                  }}
-                />
-              </div>
-              <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] ">
-                {storyImages[0] ? (
-                  <Image src={storyImages[0]} loading="lazy" alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
-                ) : (
-                  <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                    <span className="text-third/40 text-xs">Story image 1</span>
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-linear-to-t from-secondary/80 via-transparent to-secondary/20" />
-              </div>
-              <div className="flex lg:flex-col gap-4 lg:w-[26%] ">
-                {[1, 2].map((idx) => (
-                  <div key={idx} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
-                    {storyImages[idx] ? (
-                      <Image src={storyImages[idx]} loading="lazy" alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
-                    ) : (
-                      <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
-                        <span className="text-third/40 text-xs">Story image {idx + 1}</span>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-linear-to-br from-transparent to-secondary/60" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* ===== Vehicle Approach Section ===== */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="flex flex-col gap-6 max-w-3xl mx-auto mb-14">
-              <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Vehicle Approach
-              </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                {data.whyBuyVehicleSelectionTitle}
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-stretch justify-center">
+            <div className="flex flex-col justify-center lg:w-[44%] ">
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                About Us
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mt-4">
+                {data.whyBuyStoryTitle}
               </h2>
               <div
-                className="text-primary/70 text-base font-[Poppins] leading-relaxed max-w-2xl"
+                className="flex flex-col gap-6 mt-8 max-w-md text-primary/75 text-lg leading-relaxed font-[Poppins]"
                 dangerouslySetInnerHTML={{
-                  __html: data.whyBuyVehicleSelectionDescription,
+                  __html: data.whyBuyStoryDescription,
                 }}
               />
             </div>
-            <div className="flex gap-4 h-[260px]">
-              <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
-                {vehicleSelectionImages[0] ? <Image src={vehicleSelectionImages[0]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>}
-              </div>
-              <div className="w-[25%] flex flex-col gap-4 md:block">
-                <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  {vehicleSelectionImages[1] ? <Image src={vehicleSelectionImages[1]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>}
+            <div className="relative overflow-hidden rounded-2xl group lg:w-[26.5%] min-h-[500px] ">
+              {storyImages[0] ? (
+                <Image src={storyImages[0]} loading="lazy" alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+              ) : (
+                <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                  <span className="text-third/40 text-xs">Story image 1</span>
                 </div>
-                <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
-                  {vehicleSelectionImages[2] ? <Image src={vehicleSelectionImages[2]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>}
-                </div>
-              </div>
-              <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
-                {vehicleSelectionImages[3] ? <Image src={vehicleSelectionImages[3]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 4</span></div>}
-              </div>
+              )}
+              <div className="absolute inset-0 bg-linear-to-t from-secondary/80 via-transparent to-secondary/20" />
             </div>
-          </div>
-        </div>
-      </section>
-      {/* ===== How Buying Work Section ===== */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-12 lg:gap-20">
-              {/* LEFT — header */}
-              <div className="flex flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  Buying Process
-                </p>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.whyBuyProcessTitle}
-                </h2>
-                <div className="w-10 h-0.5 bg-fourth/50" />
-                <div
-                  className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-sm"
-                  dangerouslySetInnerHTML={{
-                    __html: data.whyBuyProcessDescription,
-                  }}
-                />
-              </div>
-
-              {/* RIGHT — process steps */}
-              <div className="flex flex-col gap-0">
-                {data.processSteps?.map((step, i) => {
-                  const Icon = iconMap[step.icon] || Search;
-                  return (
-                    <div
-                      key={i}
-                      className="group relative grid grid-cols-[auto_1fr] gap-6 py-8 border-b border-third/8 last:border-b-0"
-                    >
-                      {/* left column: step line + icon */}
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/4 transition-all duration-300">
-                          {typeof step.icon === "string" &&
-                            step.icon.startsWith("<svg") ? (
-                            <div
-                              className="text-primary [&>svg]:w-5 [&>svg]:h-5 group-hover:text-fourth transition-colors duration-300"
-                              dangerouslySetInnerHTML={{ __html: step.icon }}
-                            />
-                          ) : (
-                            <Icon
-                              size={18}
-                              strokeWidth={1.5}
-                              className="text-primary/60 group-hover:text-fourth transition-colors duration-300"
-                            />
-                          )}
-                        </div>
-                        {/* vertical connector */}
-                        {i < (data.processSteps?.length || 0) - 1 && (
-                          <div className="flex-1 w-px bg-third/10 group-hover:bg-fourth/20 transition-colors duration-300" />
-                        )}
-                      </div>
-
-                      {/* right column: content */}
-                      <div className="flex flex-col gap-2 pt-1">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] tracking-[0.3em] text-third/30 font-bold font-[Montserrat]">
-                            STEP {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <div className="w-6 h-px bg-third/15 group-hover:w-10 group-hover:bg-fourth/40 transition-all duration-300" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-primary font-[Montserrat] leading-snug group-hover:translate-x-1 transition-transform duration-300">
-                          {step.title}
-                        </h3>
-                        <div
-                          className="text-[13px] text-third/55 leading-[1.85] font-[Poppins] max-w-md"
-                          dangerouslySetInnerHTML={{ __html: step.description }}
-                        />
-                      </div>
+            <div className="flex lg:flex-col gap-4 lg:w-[26%] ">
+              {[1, 2].map((idx) => (
+                <div key={idx} className="relative flex-1 overflow-hidden rounded-2xl group min-h-60">
+                  {storyImages[idx] ? (
+                    <Image src={storyImages[idx]} loading="lazy" alt="" fill unoptimized className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700" />
+                  ) : (
+                    <div className="absolute inset-0 bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center">
+                      <span className="text-third/40 text-xs">Story image {idx + 1}</span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* ===== Reecomm Inspection Section ===== */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                    Reecomm Inspection
-                  </p>
-                </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.whyBuyInspectionTitle}
-                </h2>
-                <div
-                  className="max-w-xs text-third/55 text-sm font-[Poppins] leading-[1.8] border-l border-third/10"
-                  dangerouslySetInnerHTML={{
-                    __html: data.whyBuyInspectionDescription,
-                  }}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-px bg-third/10 border border-third/10 rounded-2xl overflow-hidden">
-              {data.inspectionPoints?.map((point, i) => (
-                <div
-                  key={i}
-                  onMouseEnter={() => setAvxInspectionHovered(i)}
-                  className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
-                >
-                  <Image src={inspectionImages[i] || ""} loading="lazy" alt={point} fill unoptimized className={`absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700 ${!inspectionImages[i] ? "hidden" : ""}`} />
-                  <div className="relative z-10 flex flex-col justify-between h-full">
-                    <div className="flex justify-between items-start">
-                      <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
-                        0{i + 1}
-                      </span>
-                      <div
-                        className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? "bg-third/5 border-third" : "bg-secondary/40 backdrop-blur-md"}`}
-                      >
-                        <Check
-                          size={16}
-                          className={
-                            avxInspectionHovered === i
-                              ? "text-primary"
-                              : "text-third/20"
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-bold font-[Montserrat] text-primary uppercase tracking-tight leading-tight">
-                        {point.split(" ").slice(0, 2).join(" ")}
-                      </h3>
-                      <div
-                        className="text-xs text-third/40 font-[Poppins] leading-relaxed uppercase tracking-wider"
-                        dangerouslySetInnerHTML={{ __html: point }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`absolute bottom-0 left-0 h-1 bg-third transition-all duration-500 ${avxInspectionHovered === i ? "w-full" : "w-0"}`}
-                  />
+                  )}
+                  <div className="absolute inset-0 bg-linear-to-br from-transparent to-secondary/60" />
                 </div>
               ))}
             </div>
           </div>
         </div>
       </section>
-      {/* ===== Customer Commitment Section ===== */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="bg-secondary/10 border border-third/10 rounded-3xl p-10 md:p-14 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-              <div className="flex flex-col gap-6 items-center">
-                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                  Our Promise
-                </p>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  {data.whyBuyCustomerCommitmentTitle}
-                </h2>
-                <div
-                  className="text-third/55 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-3xl italic"
-                  dangerouslySetInnerHTML={{
-                    __html: data.whyBuyCustomerCommitmentDescription,
-                  }}
-                />
-                <div className="h-px w-1/4 bg-linear-to-r from-transparent via-third/10 to-transparent mt-4" />
+      {/* ===== Vehicle Approach Section ===== */}
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-6 md:gap-8 max-w-3xl mx-auto">
+            <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Vehicle Approach
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              {data.whyBuyVehicleSelectionTitle}
+            </h2>
+            <div
+              className="text-primary/70 text-base font-[Poppins] leading-relaxed max-w-2xl"
+              dangerouslySetInnerHTML={{
+                __html: data.whyBuyVehicleSelectionDescription,
+              }}
+            />
+          </div>
+          <div className="flex gap-4 h-[260px]">
+            <div className="w-[48%] md:w-[35%] rounded-3xl overflow-hidden border border-third/10">
+              {vehicleSelectionImages[0] ? <Image src={vehicleSelectionImages[0]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 1</span></div>}
+            </div>
+            <div className="w-[25%] flex flex-col gap-4 md:block">
+              <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
+                {vehicleSelectionImages[1] ? <Image src={vehicleSelectionImages[1]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 2</span></div>}
               </div>
+              <div className="h-1/2 rounded-2xl overflow-hidden border border-third/10">
+                {vehicleSelectionImages[2] ? <Image src={vehicleSelectionImages[2]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 3</span></div>}
+              </div>
+            </div>
+            <div className="w-[48%] md:w-[40%] rounded-3xl overflow-hidden border border-third/10">
+              {vehicleSelectionImages[3] ? <Image src={vehicleSelectionImages[3]} loading="lazy" alt="" width={800} height={500} unoptimized className="w-full h-full object-cover" /> : <div className="w-full h-full bg-third/10 border-2 border-dashed border-third/20 flex items-center justify-center"><span className="text-third/40 text-xs">Image 4</span></div>}
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* ===== How Buying Work Section ===== */}
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-6 md:gap-8">
+          {/* LEFT — header */}
+          <div className="flex flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Buying Process
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+              {data.whyBuyProcessTitle}
+            </h2>
+            <div className="w-10 h-0.5 bg-fourth/50" />
+            <div
+              className="text-third/55 text-base font-[Poppins] leading-relaxed max-w-sm"
+              dangerouslySetInnerHTML={{
+                __html: data.whyBuyProcessDescription,
+              }}
+            />
+          </div>
+
+          {/* RIGHT — process steps */}
+          <div className="flex flex-col gap-0">
+            {data.processSteps?.map((step, i) => {
+              const Icon = iconMap[step.icon] || Search;
+              return (
+                <div
+                  key={i}
+                  className="group relative grid grid-cols-[auto_1fr] gap-6 py-8 border-b border-third/8 last:border-b-0"
+                >
+                  {/* left column: step line + icon */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl border border-third/12 flex items-center justify-center group-hover:border-fourth/40 group-hover:bg-fourth/4 transition-all duration-300">
+                      {typeof step.icon === "string" &&
+                        step.icon.startsWith("<svg") ? (
+                        <div
+                          className="text-primary [&>svg]:w-5 [&>svg]:h-5 group-hover:text-fourth transition-colors duration-300"
+                          dangerouslySetInnerHTML={{ __html: step.icon }}
+                        />
+                      ) : (
+                        <Icon
+                          size={18}
+                          strokeWidth={1.5}
+                          className="text-primary/60 group-hover:text-fourth transition-colors duration-300"
+                        />
+                      )}
+                    </div>
+                    {/* vertical connector */}
+                    {i < (data.processSteps?.length || 0) - 1 && (
+                      <div className="flex-1 w-px bg-third/10 group-hover:bg-fourth/20 transition-colors duration-300" />
+                    )}
+                  </div>
+
+                  {/* right column: content */}
+                  <div className="flex flex-col gap-2 pt-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] tracking-[0.3em] text-third/30 font-bold font-[Montserrat]">
+                        STEP {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="w-6 h-px bg-third/15 group-hover:w-10 group-hover:bg-fourth/40 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-primary font-[Montserrat] leading-snug group-hover:translate-x-1 transition-transform duration-300">
+                      {step.title}
+                    </h3>
+                    <div
+                      className="text-[13px] text-third/55 leading-[1.85] font-[Poppins] max-w-md"
+                      dangerouslySetInnerHTML={{ __html: step.description }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+      {/* ===== Reecomm Inspection Section ===== */}
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 md:gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Reecomm Inspection
+                </p>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.whyBuyInspectionTitle}
+              </h2>
+              <div
+                className="max-w-xs text-third/55 text-sm font-[Poppins] leading-[1.8] border-l border-third/10"
+                dangerouslySetInnerHTML={{
+                  __html: data.whyBuyInspectionDescription,
+                }}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-px bg-third/10 border border-third/10 rounded-2xl overflow-hidden">
+            {data.inspectionPoints?.map((point, i) => (
+              <div
+                key={i}
+                onMouseEnter={() => setAvxInspectionHovered(i)}
+                className="relative bg-secondary/10 p-10 flex flex-col gap-12 transition-colors group cursor-default h-full min-h-60"
+              >
+                <Image src={inspectionImages[i] || ""} loading="lazy" alt={point} fill unoptimized className={`absolute inset-0 w-full h-full object-cover grayscale brightness-[0.15] group-hover:brightness-[0.45] transition-all duration-700 ${!inspectionImages[i] ? "hidden" : ""}`} />
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                  <div className="flex justify-between items-start">
+                    <span className="text-2xl font-black font-[Montserrat] text-third/10 group-hover:text-third/20 transition-colors">
+                      0{i + 1}
+                    </span>
+                    <div
+                      className={`w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center transition-all ${avxInspectionHovered === i ? "bg-third/5 border-third" : "bg-secondary/40 backdrop-blur-md"}`}
+                    >
+                      <Check
+                        size={16}
+                        className={
+                          avxInspectionHovered === i
+                            ? "text-primary"
+                            : "text-third/20"
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold font-[Montserrat] text-primary uppercase tracking-tight leading-tight">
+                      {point.split(" ").slice(0, 2).join(" ")}
+                    </h3>
+                    <div
+                      className="text-xs text-third/40 font-[Poppins] leading-relaxed uppercase tracking-wider"
+                      dangerouslySetInnerHTML={{ __html: point }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className={`absolute bottom-0 left-0 h-1 bg-third transition-all duration-500 ${avxInspectionHovered === i ? "w-full" : "w-0"}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* ===== Customer Commitment Section ===== */}
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="bg-secondary/10 border border-third/10 rounded-3xl p-10 md:p-14 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="flex flex-col gap-6 items-center">
+              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                Our Promise
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                {data.whyBuyCustomerCommitmentTitle}
+              </h2>
+              <div
+                className="text-third/55 text-base md:text-lg font-[Poppins] leading-[1.9] max-w-3xl italic"
+                dangerouslySetInnerHTML={{
+                  __html: data.whyBuyCustomerCommitmentDescription,
+                }}
+              />
+              <div className="h-px w-1/4 bg-linear-to-r from-transparent via-third/10 to-transparent mt-4" />
             </div>
           </div>
         </div>
       </section>
       {/* ===== Gallery Section ===== */}
-      <section className="py-12 overflow-hidden px-2 lg:px-4">
-        <div className="container">
-          <div className="mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex flex-col gap-6">
-                <div>
-                  <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                    Gallery
-                  </p>
-                </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
-                  Our Showcase
-                </h2>
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-6">
+              <div>
+                <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+                  Gallery
+                </p>
               </div>
-              <Camera size={32} className="text-third/10 hidden md:block" />
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
+                Our Showcase
+              </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryImages.length > 0 ? galleryImages.map((img, i) => (
-                <div
-                  key={i}
-                  className={`relative rounded-2xl overflow-hidden border border-third/10 group
+            <Camera size={32} className="text-third/10 hidden md:block" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {galleryImages.length > 0 ? galleryImages.map((img, i) => (
+              <div
+                key={i}
+                className={`relative rounded-2xl overflow-hidden border border-third/10 group
                                         ${i % 3 === 0 ? "md:col-span-2 aspect-video" : "aspect-square"}
                                     `}
-                >
-                  <Image src={img} loading="lazy" alt={`Gallery item ${i + 1}`} width={800} height={500} unoptimized className="w-full h-full object-cover brightness-50 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000" />
-                </div>
-              )) : (
-                <div className="col-span-3 h-40 bg-third/10 border-2 border-dashed border-third/20 rounded-2xl flex items-center justify-center">
-                  <span className="text-third/40 text-sm">Gallery images not set</span>
-                </div>
-              )}
-            </div>
+              >
+                <Image src={img} loading="lazy" alt={`Gallery item ${i + 1}`} width={800} height={500} unoptimized className="w-full h-full object-cover brightness-50 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000" />
+              </div>
+            )) : (
+              <div className="col-span-3 h-40 bg-third/10 border-2 border-dashed border-third/20 rounded-2xl flex items-center justify-center">
+                <span className="text-third/40 text-sm">Gallery images not set</span>
+              </div>
+            )}
           </div>
         </div>
       </section>

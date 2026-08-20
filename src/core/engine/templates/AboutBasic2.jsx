@@ -453,8 +453,8 @@ function AboutBasic2({
 
   return (
     <>
-      <section className="relative flex items-center justify-center min-h-screen py-14 lg:py-24">
-        <div className="px-5 flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="w-full flex flex-col items-center text-center gap-6 md:gap-8 ">
           <div>
             <EyeBrow>About Us</EyeBrow>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.1] text-primary font-[Montserrat]">
@@ -471,9 +471,9 @@ function AboutBasic2({
         </div>
       </section>
 
-      <section className="py-14 lg:py-20">
-        <div className="px-2 lg:px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-end">
             <div>
               <EyeBrow>What Drives Us</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -492,12 +492,12 @@ function AboutBasic2({
           </div>
 
           <div
-            className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8"
             variants={stagger}
           >
             <div
               variants={fadeUp}
-              className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+              className="group flex flex-col gap-5 p-5 md:p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
@@ -516,7 +516,7 @@ function AboutBasic2({
 
             <div
               variants={fadeUp}
-              className="group flex flex-col gap-5 p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+              className="group flex flex-col gap-5 p-5 md:p-8 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold font-[Montserrat]">
@@ -536,8 +536,8 @@ function AboutBasic2({
         </div>
       </section>
 
-      <section className="py-12 lg:py-16 bg-fourth">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center px-10">
+      <section className="relative container w-full bg-fourth mt-6 md:mt-10">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center py-6 md:py-10">
           <div>
             <EyeBrow>By The Numbers</EyeBrow>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-4">
@@ -568,9 +568,9 @@ function AboutBasic2({
         </div>
       </section>
 
-      <section className="py-14 lg:py-20">
-        <div className="px-2 lg:px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end mb-12">
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-end">
             <div>
               <EyeBrow>Services</EyeBrow>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
@@ -588,7 +588,7 @@ function AboutBasic2({
           </div>
 
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8"
             variants={stagger}
           >
             {(data.services || []).map((svc, i) => {
@@ -596,12 +596,12 @@ function AboutBasic2({
                 <div
                   key={i}
                   variants={fadeUp}
-                  className="group flex flex-col gap-5 p-7 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
+                  className="group flex flex-col gap-5 p-5 md:p-7 border border-third/10 rounded-2xl hover:border-primary/25 transition-all duration-300 hover:shadow-[0_10px_40px_-10px_rgba(230,230,230,0.15)]"
                 >
                   <div className="flex items-center justify-between">
                     <div className="w-10 h-10 rounded-xl border border-third/10 flex items-center justify-center group-hover:border-fourth/40 transition-colors duration-300">
                       {typeof svc.icon === "string" &&
-                      svc.icon.startsWith("<svg") ? (
+                        svc.icon.startsWith("<svg") ? (
                         <div
                           className="text-fourth [&>svg]:w-5 [&>svg]:h-5"
                           dangerouslySetInnerHTML={{ __html: svc.icon }}

@@ -657,8 +657,8 @@ export default function WhyBuyBasic3({
   return (
     <>
       {/* ===== Hero Section ===== */}
-      <section className="relative flex items-center justify-center overflow-hidden min-h-screen py-12">
-        <div className="relative flex flex-col items-center text-center gap-8 max-w-3xl">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="relative w-full flex flex-col items-center text-center gap-6 md:gap-8">
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
             Why Choose Us
           </p>
@@ -672,10 +672,10 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== AboutUs Section ===== */}
-      <section className="relative flex flex-col justify-center items-center py-12">
-        <div className="mx-auto w-full flex flex-col gap-13">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-            <div className="flex flex-col gap-6">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-start">
+            <div className="flex flex-col gap-6 md:gap-8">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                 About Us
               </p>
@@ -683,8 +683,8 @@ export default function WhyBuyBasic3({
                 <span className="text-primary"> {data.storyTitle}</span>
               </h2>
             </div>
-            <div className="flex flex-col gap-10">
-              <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 md:gap-8">
+              <div className="flex flex-col gap-6 md:gap-8">
                 <div
                   className="text-third/70 text-lg md:text-xl font-[Poppins] leading-relaxed"
                   dangerouslySetInnerHTML={{
@@ -706,10 +706,10 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== Vehicle Approach Section ===== */}
-      <section className="relative py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="border border-third/10 rounded-3xl p-10 md:p-16 relative shadow-2xl">
-            <div className="flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 max-w-6xl mx-auto">
+          <div className="border border-third/10 rounded-3xl p-6 md:p-16 relative shadow-2xl">
+            <div className="flex flex-col items-center text-center gap-6 md:gap-8">
               <div className="flex items-center gap-3">
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                   Vehicle Approach
@@ -730,9 +730,9 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== How Buying Work Section ===== */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto flex flex-col gap-15">
-          <div className="flex flex-col sm:justify-between gap-8 pb-12 border-b border-third/10">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 max-w-7xl mx-auto">
+          <div className="flex flex-col sm:justify-between gap-6 md:gap-8 pb-4 md:pb-12 border-b border-third/10">
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
                 <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -757,7 +757,7 @@ export default function WhyBuyBasic3({
                   className={`group flex flex-col sm:flex-row items-stretch gap-0 border border-third/10 rounded-2xl overflow-hidden hover:border-third/25 transition-all duration-300 ${isEven ? "" : "sm:flex-row-reverse"}`}
                 >
                   <div
-                    className="flex sm:flex-col items-center justify-between sm:justify-center gap-4 px-8 py-6 sm:py-10 sm:w-48 border-b sm:border-b-0 border-third/10 sm:border-r group-hover:bg-primary/4 transition-colors duration-300"
+                    className="flex sm:flex-col items-center justify-between sm:justify-center gap-4 px-4 sm:px-8 py-4 sm:py-10 sm:w-48 border-b sm:border-b-0 border-third/10 sm:border-r group-hover:bg-primary/4 transition-colors duration-300"
                     style={
                       isEven
                         ? {}
@@ -774,7 +774,7 @@ export default function WhyBuyBasic3({
                       {getIcon(step.icon)}
                     </div>
                   </div>
-                  <div className="flex flex-col justify-center gap-2 px-8 py-8 flex-1">
+                  <div className="flex flex-col justify-center gap-2 px-4 sm:px-8 py-4 sm:py-8 flex-1">
                     <h3 className="text-lg font-semibold text-primary font-[Montserrat]">
                       {step.title}
                     </h3>
@@ -789,10 +789,10 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== Reecomm Inspection Section ===== */}
-      <section className="py-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col gap-16">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-start">
-            <div className="flex flex-col gap-8">
+      <section className="relative container w-full overflow-hidden mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 md:gap-8 items-start">
+            <div className="flex flex-col gap-6 md:gap-8">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
                 Reecomm Inspection
               </p>
@@ -808,7 +808,7 @@ export default function WhyBuyBasic3({
               {data.inspectionPoints.map((point, i) => (
                 <div
                   key={i}
-                  className="group flex items-center justify-between gap-6 py-5 hover:translate-x-1 transition-transform duration-300"
+                  className="group flex items-center justify-between gap-6 py-3 md:py-5 hover:translate-x-1 transition-transform duration-300"
                 >
                   <div className="flex items-center gap-4">
                     <span className="text-[10px] font-bold tracking-[2px] text-third/25 font-[Montserrat] shrink-0">
@@ -838,10 +838,10 @@ export default function WhyBuyBasic3({
         </div>
       </section>
       {/* ===== Customer Commitment Section ===== */}
-      <section className="py-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative container w-full overflow-hidden mt-3 md:mt-6">
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 md:gap-8">
           <div className="relative flex flex-col lg:flex-row items-center lg:items-stretch gap-0 border border-third/10 rounded-2xl overflow-hidden">
-            <div className="flex flex-col justify-between gap-8 p-10 lg:p-14 lg:w-[45%] border-b lg:border-b-0 lg:border-r border-third/10">
+            <div className="flex flex-col justify-between gap-6 md:gap-8 p-6 lg:p-14 lg:w-[45%] border-b lg:border-b-0 lg:border-r border-third/10">
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-3">
                   <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
@@ -859,7 +859,7 @@ export default function WhyBuyBasic3({
                 </span>
               </div>
             </div>
-            <div className="relative flex flex-col justify-center gap-8 p-10 lg:p-14 flex-1 overflow-hidden">
+            <div className="relative flex flex-col justify-center gap-6 md:gap-8 p-6 lg:p-14 flex-1 overflow-hidden">
               <Quote
                 size={40}
                 className="absolute top-6 right-8 text-third/20"
@@ -896,9 +896,9 @@ export default function WhyBuyBasic3({
       </section>
       {/* ===== Testimonials Section ===== */}
       {testimonials && testimonials.length > 0 && (
-        <section className="relative py-12">
-          <div className="mx-auto w-full">
-            <div className="flex flex-col items-center gap-10">
+        <section className="relative container w-full mt-3 md:mt-6">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
+            <div className="flex flex-col items-center gap-6 md:gap-8">
               <div className="flex flex-col items-center gap-4 text-center">
                 <span className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
                   Feedback
@@ -912,7 +912,7 @@ export default function WhyBuyBasic3({
                 {testimonials.map((t, i) => (
                   <div
                     key={i}
-                    className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col items-center text-center gap-8 p-8 md:p-12 border border-third/15 rounded-2xl bg-primary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
+                    className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col items-center text-center gap-8 p-5 md:p-12 border border-third/15 rounded-2xl bg-primary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
                   >
                     <div className="absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center bg-primary/5">
                       <Quote className="w-5 h-5 text-third/30" />

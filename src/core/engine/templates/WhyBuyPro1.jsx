@@ -1002,22 +1002,22 @@ export default function WhyBuyPro1({
   return (
     <>
       {/* HERO */}
-      <section className="relative px-4 w-full min-h-screen flex items-center overflow-hidden py-12 md:py-32">
-        <div className="container relative grid md:grid-cols-2 gap-1 items-center">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="w-full grid md:grid-cols-2 gap-6 md:gap-8 items-center">
           {/* ── LEFT CONTENT ───────────────── */}
-          <div className="relative z-10 md:pr-10">
-            <p className="mb-4 text-sm tracking-[0.4em] uppercase text-third font-semibold">
+          <div className="relative z-10 flex flex-col gap-6 md:gap-8">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Trusted Auto Consultants
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] text-primary font-[Montserrat]">
               {data.whyBuyHeroTitle}
             </h2>
             <div
-              className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins] mt-2"
+              className="max-w-2xl text-base leading-relaxed text-third md:text-lg font-[Poppins]"
               dangerouslySetInnerHTML={{ __html: data.whyBuyHeroDescription }}
             />
             {/* ── MOBILE IMAGES (ONLY 2) ───────────────── */}
-            <div className="grid grid-cols-2 gap-3 mt-8 md:hidden">
+            <div className="grid grid-cols-2 gap-6 md:gap-8 md:hidden">
               {[data.whyBuyHeroTemplate1, data.whyBuyHeroTemplate2].map(
                 (img, i) => (
                   <div key={i} className="w-full h-36 rounded-xl overflow-hidden">
@@ -1071,10 +1071,10 @@ export default function WhyBuyPro1({
       </section>
 
       {/* EXPERIENCE */}
-      <section className="w-full py-12 bg-primary border-y border-secondary/10 px-4">
-        <div className=" container max-w-7xl  sm:px-6 grid md:grid-cols-2 gap-14 items-center">
+      <section className="relative container w-full bg-primary border-y border-secondary/10 mt-3 md:mt-6">
+        <div className="w-full grid md:grid-cols-2 gap-6 md:gap-8 items-center py-6 md:py-10">
           {/* ── LEFT CONTENT ───────────────── */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 md:gap-8">
             <p className="text-sm tracking-[0.4em] uppercase text-secondary/70 font-semibold">
               Consultant Story
             </p>
@@ -1123,9 +1123,9 @@ export default function WhyBuyPro1({
       </section>
 
       {/* SELECTION */}
-      <section className="w-full py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="max-w-7xl    flex flex-col gap-10">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
             {/* ── HEADER ───────────────── */}
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Our Standards
@@ -1135,7 +1135,7 @@ export default function WhyBuyPro1({
             </h2>
 
             {/* ── CONTENT GRID ───────────────── */}
-            <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
               {/* LEFT TEXT */}
               <div
                 className="flex flex-col gap-4 border-l-2 border-primary/40 pl-5 text-third text-lg font-[Poppins] leading-relaxed space-y-2"
@@ -1175,10 +1175,10 @@ export default function WhyBuyPro1({
       </section>
 
       {/* PROCESS */}
-      <section className="w-full py-12 sm:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12 lg:gap-16">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 md:gap-8">
           {/* HEADER */}
-          <div className="max-w-2xl flex flex-col gap-4">
+          <div className="max-w-2xl flex flex-col gap-6 md:gap-8">
             <p className="text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] uppercase text-third font-semibold">
               Simple Process
             </p>
@@ -1235,10 +1235,10 @@ export default function WhyBuyPro1({
       </section>
 
       {/* inspection section */}
-      <section className="w-full py-12 px-2 lg:px-4">
-        <div className="container max-w-7xl mx-auto  grid md:grid-cols-2 gap-16 items-center">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full max-w-7xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center">
           {/* ── LEFT CONTENT ───────────────── */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 md:gap-8">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Independent Verification
             </p>
@@ -1284,7 +1284,7 @@ export default function WhyBuyPro1({
       </section>
 
       {/* SERVICES */}
-      <section className="relative w-full py-12 overflow-hidden">
+      <section className="relative w-full overflow-hidden min-h-[50vh] flex items-center py-16 md:py-24 mt-3 md:mt-6">
         {/* ── BACKGROUND ───────────────── */}
         <div className="absolute inset-0">
           {/* image */}
@@ -1304,8 +1304,8 @@ export default function WhyBuyPro1({
         </div>
 
         {/* ── CONTENT ───────────────── */}
-        <div className="relative z-10 flex items-center justify-center text-center px-4">
-          <div className="max-w-3xl flex flex-col items-center gap-6">
+        <div className="relative z-10 container mx-auto flex items-center justify-center text-center px-4">
+          <div className="w-full max-w-3xl flex flex-col items-center gap-6 md:gap-8">
             {/* small label */}
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Commitment
@@ -1328,7 +1328,7 @@ export default function WhyBuyPro1({
       </section>
 
       {/* GALLERY */}
-      <section className="w-full py-12 px-2 lg:px-4 ">
+      <section className="w-full py-12">
         <div className="container max-w-7xl  flex flex-col gap-10">
           {/* ── HEADER (CSS UNCHANGED) ── */}
           <div className="flex flex-col gap-4 max-w-2xl">

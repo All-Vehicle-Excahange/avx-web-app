@@ -414,9 +414,9 @@ function AboutBasic3({
   }
   return (
     <>
-      <section className="relative flex flex-col justify-center min-h-screen items-center py-12">
-        <div className="mx-auto w-full flex flex-col gap-14">
-          <div className="flex flex-col items-center text-center gap-10 max-w-3xl mx-auto">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="w-full flex flex-col items-center text-center gap-6 md:gap-8 ">
             <p className="text-sm tracking-[0.45em] uppercase text-third font-semibold">
               Hero
             </p>
@@ -430,9 +430,10 @@ function AboutBasic3({
           </div>
         </div>
       </section>
-      <section className="relative flex flex-col items-center py-12">
-        <div className="mx-auto w-full flex flex-col gap-16">
-          <div className="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
+
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="w-full flex flex-col items-center text-center gap-6 md:gap-8 max-w-2xl mx-auto">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Mission / Vision
             </p>
@@ -440,7 +441,7 @@ function AboutBasic3({
               Direction We<span className="text-primary"> Move</span>
             </h2>
           </div>
-          <div className="relative max-w-4xl mx-auto flex flex-col gap-16">
+          <div className="relative w-full max-w-4xl mx-auto flex flex-col gap-6 md:gap-8">
             <div className="hidden lg:block absolute left-1/2 top-0 w-px h-full bg-third/20 -translate-x-1/2" />
             <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center">
               <div className="lg:col-start-1 flex flex-col gap-4 pr-0 lg:pr-10 text-left lg:text-right">
@@ -480,9 +481,10 @@ function AboutBasic3({
           </div>
         </div>
       </section>
-      <section className="relative flex flex-col justify-center items-center py-12">
-        <div className="relative z-10 mx-auto w-full flex flex-col gap-16">
-          <div className="flex flex-col gap-6">
+
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Stats
             </p>
@@ -494,7 +496,7 @@ function AboutBasic3({
               dangerouslySetInnerHTML={{ __html: data.aboutUsDescription }}
             />
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {data.stats.map((item, i) => (
               <div key={i} className="flex flex-col gap-3">
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary font-[Montserrat]">
@@ -508,9 +510,10 @@ function AboutBasic3({
           </div>
         </div>
       </section>
-      <section className="relative flex flex-col justify-center items-center py-12">
-        <div className="mx-auto w-full max-w-6xl grid lg:grid-cols-2 gap-16">
-          <div className="flex flex-col gap-6 max-w-xl">
+      
+      <section className="relative container w-full mt-6 md:mt-10">
+        <div className="w-full grid lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
+          <div className="w-full flex flex-col gap-6 md:gap-8 max-w-xl">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Our Services
             </p>
@@ -522,7 +525,7 @@ function AboutBasic3({
               dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
             />
           </div>
-          <div className="flex flex-col gap-12">
+          <div className="w-full flex flex-col gap-6 md:gap-8">
             {data.services.map((service, i) => (
               <div
                 key={i}

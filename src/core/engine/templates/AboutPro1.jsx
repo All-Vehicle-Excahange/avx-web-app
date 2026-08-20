@@ -514,7 +514,7 @@ function AboutPro1({
   return (
     <>
       {/* HERO */}
-      <section className="relative w-full min-h-screen overflow-hidden flex  px-4 lg:px-8 py-12">
+      <section className="relative w-full overflow-hidden flex items-center min-h-[60vh] md:min-h-[80vh] py-16 md:py-24">
         {/* BACKGROUND IMAGE */}
         {data.heroTemplate1?.imageUrl ? (
           <>
@@ -535,8 +535,8 @@ function AboutPro1({
         )}
 
         {/* CONTENT */}
-        <div className="relative z-10 w-full flex items-center justify-center text-center flex-col gap-2 m-w-7xl">
-          <p className="mb-6 text-sm tracking-[0.4em] uppercase text-third font-semibold">
+        <div className="relative z-10 container mx-auto flex items-center justify-center text-center flex-col gap-6 md:gap-8 px-4">
+          <p className="text-sm tracking-[0.4em] uppercase text-primary/80 font-semibold">
             Hero
           </p>
 
@@ -552,9 +552,9 @@ function AboutPro1({
       </section>
 
       {/* ═════════ MISSION / VISION (UNCHANGED) ═════════ */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-6 max-w-2xl text-center mx-auto mb-16">
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-6 md:gap-8 max-w-2xl text-center mx-auto">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Purpose
             </p>
@@ -563,7 +563,7 @@ function AboutPro1({
             </h2>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
             {/* MISSION */}
             <div className="relative min-h-80 rounded-2xl overflow-hidden border border-third/10 shadow-2xl">
               {data.missionTemplate1?.imageUrl ? (
@@ -616,14 +616,14 @@ function AboutPro1({
       </section>
 
       {/* ═════════ STATS (WITH HOVER BACK) ═════════ */}
-      <section className="relative py-12 px-2 lg:px-4 bg-primary text-secondary overflow-hidden">
-        <div className="container">
+      <section className="relative container w-full bg-primary text-secondary overflow-hidden mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8 py-6 md:py-10">
           <div className="absolute inset-0 flex justify-center pointer-events-none">
             <div className="w-[600px] h-[600px] bg-fourth/10 blur-[140px] rounded-full"></div>
           </div>
 
-          <div className="relative max-w-5xl mx-auto text-center">
-            <div className="flex flex-col gap-6 mb-20">
+          <div className="relative w-full max-w-5xl mx-auto flex flex-col gap-6 md:gap-8 text-center">
+            <div className="flex flex-col gap-6 md:gap-8">
               <p className="text-sm tracking-[0.4em] uppercase text-secondary/60 font-semibold">
                 Impact
               </p>
@@ -644,7 +644,7 @@ function AboutPro1({
               {(data.stats || []).map((item, index) => (
                 <div
                   key={index}
-                  className="relative p-10 group border border-secondary/10 hover:bg-secondary/5 transition-all duration-500"
+                  className="relative p-6 md:p-10 group border border-secondary/10 hover:bg-secondary/5 transition-all duration-500"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 border border-fourth/30"></div>
 
@@ -663,60 +663,58 @@ function AboutPro1({
       </section>
 
       {/* ═════════ SERVICES (HOVER FIXED BACK) ═════════ */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
-          <div className="flex flex-col gap-16">
-            <div className="flex flex-col gap-6 max-w-2xl">
-              <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
-                Services
-              </p>
+      <section className="relative container w-full mt-3 md:mt-6">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-6 md:gap-8 max-w-2xl">
+            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
+              Services
+            </p>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary font-[Montserrat]">
-                {data.servicesTitle}
-              </h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary font-[Montserrat]">
+              {data.servicesTitle}
+            </h2>
 
-              <div
-                className="text-third/70 text-lg font-[Poppins] border-l-2 border-primary/30 pl-6"
-                dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
-              />
-            </div>
+            <div
+              className="text-third/70 text-lg font-[Poppins] border-l-2 border-primary/30 pl-6"
+              dangerouslySetInnerHTML={{ __html: data.servicesDesc }}
+            />
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              {(data.services || []).map((service, index) => {
-                const colSpan =
-                  index === 0 || index === 3
-                    ? "md:col-span-7"
-                    : "md:col-span-5";
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+            {(data.services || []).map((service, index) => {
+              const colSpan =
+                index === 0 || index === 3
+                  ? "md:col-span-7"
+                  : "md:col-span-5";
 
-                return (
-                  <div
-                    key={index}
-                    className={`${colSpan} flex flex-col justify-between p-8 lg:p-12 border border-third/10 bg-primary/5 hover:bg-primary/10 transition-all duration-300 min-h-[300px]`}
-                  >
-                    <div className="flex flex-col gap-6">
-                      {typeof service.icon === "string" &&
-                        service.icon.startsWith("<svg") ? (
-                        <div
-                          className="text-third [&>svg]:w-10 [&>svg]:h-10 transition-colors duration-300"
-                          dangerouslySetInnerHTML={{ __html: service.icon }}
-                        />
-                      ) : (
-                        <div className="w-10 h-10 bg-third/20 rounded flex items-center justify-center text-xs text-third">
-                          Icon
-                        </div>
-                      )}
-                      <h3 className="text-2xl md:text-3xl font-semibold text-primary font-[Montserrat]">
-                        {service.title}
-                      </h3>
-                    </div>
-
-                    <p className="text-third/60 text-md md:text-lg font-[Poppins] max-w-xs">
-                      {service.desc}
-                    </p>
+              return (
+                <div
+                  key={index}
+                  className={`${colSpan} flex flex-col justify-between p-8 lg:p-12 border border-third/10 bg-primary/5 hover:bg-primary/10 transition-all duration-300 min-h-[300px]`}
+                >
+                  <div className="flex flex-col gap-6">
+                    {typeof service.icon === "string" &&
+                      service.icon.startsWith("<svg") ? (
+                      <div
+                        className="text-third [&>svg]:w-10 [&>svg]:h-10 transition-colors duration-300"
+                        dangerouslySetInnerHTML={{ __html: service.icon }}
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-third/20 rounded flex items-center justify-center text-xs text-third">
+                        Icon
+                      </div>
+                    )}
+                    <h3 className="text-2xl md:text-3xl font-semibold text-primary font-[Montserrat]">
+                      {service.title}
+                    </h3>
                   </div>
-                );
-              })}
-            </div>
+
+                  <p className="text-third/60 text-md md:text-lg font-[Poppins] max-w-xs">
+                    {service.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

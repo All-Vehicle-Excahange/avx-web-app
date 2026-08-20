@@ -660,9 +660,9 @@ function WhyBuyBasic1({
 
   return (
     <>
-      <section className="relative container w-full overflow-hidden flex items-center min-h-fit py-12 md:py-36">
-        <div className="container relative">
-          <p className="mb-4 text-sm tracking-[0.4em] uppercase text-third font-semibold">
+      <section className="relative container w-full overflow-hidden flex items-center">
+        <div className="relative flex flex-col gap-6 md:gap-8">
+          <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
             Trusted Auto Consultants
           </p>
 
@@ -683,8 +683,8 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className="w-full py-12  bg-primary border-y border-secondary/10">
-        <div className="w-full max-w-[1480px]   mx-auto px-4 sm:px-6 flex flex-col gap-6 ">
+      <section className="relative container w-full bg-primary border-y border-secondary/10">
+        <div className="w-full flex flex-col gap-6 md:gap-8 py-6 md:py-10">
           {/* HEADER */}
           <p className="text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] uppercase text-secondary/70 font-semibold font-[Montserrat]">
             Consultant Story
@@ -704,8 +704,8 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className="container w-full py-12">
-        <div className="max-w-7xl mx-4 flex flex-col gap-8">
+      <section className="relative container w-full">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
           {/* ── HEADER ───────────────── */}
           <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
             Our Standards
@@ -724,8 +724,8 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className="container w-full py-12 ">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col gap-12 md:gap-16">
+      <section className="relative container w-full">
+        <div className="w-full flex flex-col gap-6 md:gap-8">
           {/* HEADER */}
           <div className="flex flex-col gap-3 sm:gap-4 max-w-xl md:max-w-2xl">
             <p className="text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
@@ -784,8 +784,8 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className=" container w-full py-12">
-        <div className="max-w-7xl mx-4 grid md:grid-cols-2 gap-12">
+      <section className="relative container w-full">
+        <div className="w-full grid md:grid-cols-2 gap-6 md:gap-8">
           {/* ── LEFT SIDE ───────────────── */}
           <div className="flex flex-col gap-4">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
@@ -820,8 +820,8 @@ function WhyBuyBasic1({
         </div>
       </section>
 
-      <section className="container w-full py-12">
-        <div className="max-w-7xl mx-4 flex justify-center">
+      <section className="relative container w-full">
+        <div className="w-full flex justify-center">
           {/* ── CENTER BLOCK ───────────────── */}
           <div className="max-w-2xl text-center flex flex-col gap-6">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold font-[Montserrat]">
@@ -846,8 +846,8 @@ function WhyBuyBasic1({
       </section>
 
       {data.featuredReviews && data.featuredReviews.length > 0 && (
-        <section className="w-full py-12 bg-primary px-4">
-          <div className=" container max-w-7xl mx-3 px-4 sm:px-6 flex flex-col gap-12">
+        <section className="relative container w-full bg-primary mt-6 md:mt-10">
+          <div className="w-full flex flex-col gap-6 md:gap-8 py-6 md:py-10">
             {/* HEADER */}
             <div className="flex flex-col gap-4 max-w-2xl">
               <p className="text-sm tracking-[0.35em] uppercase text-secondary/70 font-semibold font-[Montserrat]">

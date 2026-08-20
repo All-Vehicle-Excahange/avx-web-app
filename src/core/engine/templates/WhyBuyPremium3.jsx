@@ -1102,7 +1102,7 @@ export default function WhyBuyPremium3({
       {/* ===== Hero Section ===== */}
       <section className="w-full flex flex-col">
         <div className="w-full flex flex-col items-center">
-          <div className="relative w-full h-screen min-h-screen">
+          <div className="relative w-full min-h-[70vh] flex flex-col justify-center py-20 pb-40">
             {(
               data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl
             )?.includes(".mp4") ? (
@@ -1168,8 +1168,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== AboutUs Section ===== */}
-      <section className="relative flex flex-col justify-center items-center py-12 px-2 lg:px-4 overflow-hidden">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="relative z-10 mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div className="flex flex-col gap-6">
@@ -1218,9 +1218,9 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== Vehicle Approach Section ===== */}
-      <section className="relative flex flex-col justify-center items-center py-12 overflow-hidden">
-        <div className="container">
-          <div className="mx-auto w-full px-2 lg:px-4">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
+          <div className="mx-auto w-full">
             <div className="relative w-full h-[500px] sm:h-[460px] lg:h-[520px] rounded-3xl overflow-hidden">
               {[
                 data.customWhyBuyVehicleSelection1 ||
@@ -1291,8 +1291,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== How Buying Work Section ===== */}
-      <section className="w-full py-20 flex justify-center px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="flex flex-col gap-12">
             {/* Section header */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
@@ -1495,8 +1495,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== Reecomm Inspection Section ===== */}
-      <section className="relative flex flex-col justify-center items-center py-12 overflow-hidden px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="mx-auto w-full flex flex-col gap-8 relative z-10">
             <div className="flex flex-col gap-4">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -1617,8 +1617,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== Customer Commitment Section ===== */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="relative flex items-center justify-center">
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
               {[
@@ -1656,8 +1656,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== Gallery Section ===== */}
-      <section className="w-full flex justify-center pt-12 px-4 sm:px-6 lg:px-0">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="w-full flex flex-col gap-9 lg:gap-3">
             <div className="flex flex-col gap-4 justify-center items-center">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
@@ -1728,8 +1728,8 @@ export default function WhyBuyPremium3({
         </div>
       </section>
       {/* ===== Testimonials Section ===== */}
-      <section className="relative py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="mx-auto w-full">
             <div className="flex flex-col items-center gap-10">
               <div className="flex flex-col items-center gap-4 text-center">
@@ -1740,8 +1740,8 @@ export default function WhyBuyPremium3({
                   {data.testimonialTitle}
                 </h2>
               </div>
-              {/* TESTIMONIALS - Horizontal Scrollable */}
-              <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory w-full">
+              {/* TESTIMONIALS - Grid on LG, Scrollable on SM */}
+              <div className="flex lg:grid lg:grid-cols-3 overflow-x-auto lg:overflow-visible gap-6 pb-12 lg:pb-0 no-scrollbar snap-x snap-mandatory lg:snap-none w-full">
                 {(data.featuredReviews || data.testimonials || []).map(
                   (t, i) => {
                     const reviewText = t.reviewText || t.review || "";
@@ -1751,7 +1751,7 @@ export default function WhyBuyPremium3({
                     return (
                       <div
                         key={i}
-                        className="min-w-[300px] md:min-w-[450px] snap-center relative flex flex-col gap-6 p-8 md:p-10 border border-third/15 rounded-3xl bg-secondary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
+                        className="min-w-[300px] md:min-w-[400px] lg:min-w-0 snap-center lg:snap-align-none relative flex flex-col gap-6 p-8 md:p-10 border border-third/15 rounded-3xl bg-secondary/5 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 shadow-xl hover:shadow-primary/5"
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex gap-1.5">

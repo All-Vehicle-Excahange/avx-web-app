@@ -1032,9 +1032,9 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 1 — HERO (image background)
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative w-full overflow-hidden flex items-center py-10 md:py-16">
         {/* HERO BACKGROUND (Video/Image) */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 z-0">
           {(() => {
             const src = data.customWhyBuyHero1 || data.whyBuyHeroTemplate1?.imageUrl;
             if (!src) return (
@@ -1051,8 +1051,8 @@ export default function WhyBuyPremium2({
         </div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
-        <div className="container">
-          <div className="relative z-10 w-full max-w-6xl">
+        <div className="relative z-10 container mx-auto px-4 w-full">
+          <div className="w-full max-w-6xl">
             <div className="max-w-xl">
               <h1 className="sm:text-4xl lg:text-5xl text-4xl font-semibold leading-[1.05] text-primary font-[Montserrat] mb-6">
                 {data.whyBuyHeroTitle}
@@ -1068,8 +1068,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 2 — STORY
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
+      <section className="relative w-full overflow-hidden bg-fourth mt-3 md:mt-6">
+        <div className="container mx-auto px-4 lg:px-8 py-8 lg:py-12">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
             <div>
               <p className="text-xs tracking-[0.35em] uppercase text-primary/60 mb-4">
@@ -1109,8 +1109,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 3 — SELECTION
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="pt-10 grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3">
@@ -1156,8 +1156,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 4 — PROCESS
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="flex flex-col items-center text-center gap-4 sm:gap-6 mb-10 sm:mb-16 mx-auto max-w-3xl px-2">
             <p className="text-xs sm:text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Process
@@ -1202,8 +1202,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 5 — INSPECTION
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="grid lg:grid-cols-2 gap-10 mb-14">
             <div>
               <p className="text-sm tracking-[0.4em] uppercase text-third mb-3">
@@ -1273,8 +1273,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 6 — COMMITMENT
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4 bg-fourth">
-        <div className="container">
+      <section className="relative w-full overflow-hidden bg-fourth mt-3 md:mt-6">
+        <div className="container mx-auto px-4 lg:px-8 py-8 lg:py-12">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-5 items-center">
             <div className="max-w-md">
               <p className="text-xs tracking-[0.35em] uppercase text-primary/60 mb-4">
@@ -1315,8 +1315,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 7 — GALLERY
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="flex flex-col gap-3 mb-14">
             <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold">
               Gallery
@@ -1371,8 +1371,8 @@ export default function WhyBuyPremium2({
       {/* ═══════════════════════════════════════
           SECTION 8 — TESTIMONIALS
       ═══════════════════════════════════════ */}
-      <section className="py-12 px-2 lg:px-4">
-        <div className="container">
+      <section className="relative container mx-auto w-full px-4 lg:px-8 mt-3 md:mt-6 overflow-hidden">
+        <div className="w-full">
           <div className="flex items-end justify-between mb-12">
             <div className="flex flex-col gap-3">
               <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-2">
@@ -1383,8 +1383,8 @@ export default function WhyBuyPremium2({
               </h2>
             </div>
           </div>
-          {/* TESTIMONIALS - Horizontal Scrollable */}
-          <div className="flex overflow-x-auto gap-6 pb-12 no-scrollbar snap-x snap-mandatory">
+          {/* TESTIMONIALS - Grid on LG, Scrollable on SM */}
+          <div className="flex lg:grid lg:grid-cols-3 overflow-x-auto lg:overflow-visible gap-6 pb-12 lg:pb-0 no-scrollbar snap-x snap-mandatory lg:snap-none">
             {(data.featuredReviews || data.testimonials || []).map((t, i) => {
               const reviewText = t.reviewText || t.review;
               const reviewerName = t.reviewerName || t.name;
@@ -1392,7 +1392,7 @@ export default function WhyBuyPremium2({
               return (
                 <div
                   key={`${reviewerName}-${i}`}
-                  className="min-w-[300px] md:min-w-[450px] snap-center group relative rounded-3xl p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-500 overflow-hidden h-full flex flex-col shadow-xl hover:shadow-primary/5"
+                  className="min-w-[300px] md:min-w-[400px] lg:min-w-0 snap-center lg:snap-align-none group relative rounded-3xl p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 hover:border-primary/30 transition-all duration-500 overflow-hidden h-full flex flex-col shadow-xl hover:shadow-primary/5"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-linear-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
 
