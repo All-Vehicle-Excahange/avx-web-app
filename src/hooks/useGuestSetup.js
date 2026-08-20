@@ -11,6 +11,8 @@ export default function useGuestSetup() {
   useEffect(() => {
     if (!authInitialized) return;
 
+    let timeoutId;
+
     const hasTokenInUrl =
       typeof window !== "undefined" &&
       (window.location.search?.includes("magicToken=") ||
@@ -21,11 +23,19 @@ export default function useGuestSetup() {
     if (!isLoggedIn && !hasTokenInUrl) {
       (async () => {
         const existingId = await getGuestId();
-        if (!existingId) {
+        
+        timeoutId = setTimeout(() => {
           openLoginPopup();
-        }
+        }, 25000);
+
         setupGuestUser();
       })();
     }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [isLoggedIn, authInitialized, openLoginPopup]);
 }

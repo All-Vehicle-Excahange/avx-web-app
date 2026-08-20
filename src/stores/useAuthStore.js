@@ -186,7 +186,7 @@ export const useAuthStore = create((set) => ({
           token: null,
           isLoggedIn: false,
           authInitialized: true,
-          isLoginPopupOpen: hasTokenInUrl ? false : true,
+          isLoginPopupOpen: false,
         });
         localStorage.removeItem("user");
       }
