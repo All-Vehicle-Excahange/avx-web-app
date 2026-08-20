@@ -740,18 +740,18 @@ export default function BillingComponent() {
                       {getStatusBadge(item.paymentStatus)}
                     </td>
                     <td className="py-4">
-                      {item.invoiceId && item.invoiceUrl ? (
+                      {item.invoiceUrl && (item.invoiceNumber || item.invoiceId) ? (
                         <a
                           href={item.invoiceUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 text-primary hover:underline w-fit"
                         >
-                          <Download size={14} /> {item.invoiceId}
+                          <Download size={14} /> {item.invoiceNumber || item.invoiceId}
                         </a>
-                      ) : item.invoiceId ? (
+                      ) : (item.invoiceNumber || item.invoiceId) ? (
                         <span className="text-third text-sm">
-                          {item.invoiceId}
+                          {item.invoiceNumber || item.invoiceId}
                         </span>
                       ) : (
                         <span className="text-third text-xs">—</span>
