@@ -80282,6 +80282,7026 @@
     }
   },
   {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_latur",
+    "title": "Used Hyundai Grand I10 Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_hansi",
+    "title": "Used Hyundai Grand I10 Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_ludhiana",
+    "title": "Used Hyundai Grand I10 Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_agra",
+    "title": "Used Hyundai Grand I10 Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_nashik",
+    "title": "Used Hyundai Grand I10 Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_bhopal",
+    "title": "Used Hyundai Grand I10 Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_patna",
+    "title": "Used Hyundai Grand I10 Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_nagpur",
+    "title": "Used Hyundai Grand I10 Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_coimbatore",
+    "title": "Used Hyundai Grand I10 Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_maharashtra",
+    "title": "Used Hyundai Grand I10 Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_karnataka",
+    "title": "Used Hyundai Grand I10 Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_telangana",
+    "title": "Used Hyundai Grand I10 Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_gujarat",
+    "title": "Used Hyundai Grand I10 Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_tamil_nadu",
+    "title": "Used Hyundai Grand I10 Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_west_bengal",
+    "title": "Used Hyundai Grand I10 Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_punjab",
+    "title": "Used Hyundai Grand I10 Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_rajasthan",
+    "title": "Used Hyundai Grand I10 Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_uttar_pradesh",
+    "title": "Used Hyundai Grand I10 Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_haryana",
+    "title": "Used Hyundai Grand I10 Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_madhya_pradesh",
+    "title": "Used Hyundai Grand I10 Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_andhra_pradesh",
+    "title": "Used Hyundai Grand I10 Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_kerala",
+    "title": "Used Hyundai Grand I10 Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_bihar",
+    "title": "Used Hyundai Grand I10 Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "grand i10",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Grand I10",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_latur",
+    "title": "Used Hyundai Creta Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_hansi",
+    "title": "Used Hyundai Creta Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_ludhiana",
+    "title": "Used Hyundai Creta Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_agra",
+    "title": "Used Hyundai Creta Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_nashik",
+    "title": "Used Hyundai Creta Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_bhopal",
+    "title": "Used Hyundai Creta Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_patna",
+    "title": "Used Hyundai Creta Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_nagpur",
+    "title": "Used Hyundai Creta Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_coimbatore",
+    "title": "Used Hyundai Creta Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_maharashtra",
+    "title": "Used Hyundai Creta Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_karnataka",
+    "title": "Used Hyundai Creta Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_telangana",
+    "title": "Used Hyundai Creta Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_gujarat",
+    "title": "Used Hyundai Creta Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_tamil_nadu",
+    "title": "Used Hyundai Creta Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_west_bengal",
+    "title": "Used Hyundai Creta Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_punjab",
+    "title": "Used Hyundai Creta Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_rajasthan",
+    "title": "Used Hyundai Creta Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_uttar_pradesh",
+    "title": "Used Hyundai Creta Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_haryana",
+    "title": "Used Hyundai Creta Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_madhya_pradesh",
+    "title": "Used Hyundai Creta Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_andhra_pradesh",
+    "title": "Used Hyundai Creta Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_kerala",
+    "title": "Used Hyundai Creta Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_bihar",
+    "title": "Used Hyundai Creta Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "creta",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_latur",
+    "title": "Used Hyundai I20 Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_hansi",
+    "title": "Used Hyundai I20 Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_ludhiana",
+    "title": "Used Hyundai I20 Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_agra",
+    "title": "Used Hyundai I20 Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_nashik",
+    "title": "Used Hyundai I20 Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_bhopal",
+    "title": "Used Hyundai I20 Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_patna",
+    "title": "Used Hyundai I20 Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_nagpur",
+    "title": "Used Hyundai I20 Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_coimbatore",
+    "title": "Used Hyundai I20 Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_maharashtra",
+    "title": "Used Hyundai I20 Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_karnataka",
+    "title": "Used Hyundai I20 Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_telangana",
+    "title": "Used Hyundai I20 Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_gujarat",
+    "title": "Used Hyundai I20 Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_tamil_nadu",
+    "title": "Used Hyundai I20 Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_west_bengal",
+    "title": "Used Hyundai I20 Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_punjab",
+    "title": "Used Hyundai I20 Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_rajasthan",
+    "title": "Used Hyundai I20 Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_uttar_pradesh",
+    "title": "Used Hyundai I20 Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_haryana",
+    "title": "Used Hyundai I20 Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_madhya_pradesh",
+    "title": "Used Hyundai I20 Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_andhra_pradesh",
+    "title": "Used Hyundai I20 Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_kerala",
+    "title": "Used Hyundai I20 Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_bihar",
+    "title": "Used Hyundai I20 Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "i20",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "I20",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_latur",
+    "title": "Used Hyundai Verna Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_hansi",
+    "title": "Used Hyundai Verna Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_ludhiana",
+    "title": "Used Hyundai Verna Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_agra",
+    "title": "Used Hyundai Verna Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_nashik",
+    "title": "Used Hyundai Verna Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_bhopal",
+    "title": "Used Hyundai Verna Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_patna",
+    "title": "Used Hyundai Verna Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_nagpur",
+    "title": "Used Hyundai Verna Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_coimbatore",
+    "title": "Used Hyundai Verna Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_maharashtra",
+    "title": "Used Hyundai Verna Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_karnataka",
+    "title": "Used Hyundai Verna Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_telangana",
+    "title": "Used Hyundai Verna Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_gujarat",
+    "title": "Used Hyundai Verna Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_tamil_nadu",
+    "title": "Used Hyundai Verna Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_west_bengal",
+    "title": "Used Hyundai Verna Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_punjab",
+    "title": "Used Hyundai Verna Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_rajasthan",
+    "title": "Used Hyundai Verna Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_uttar_pradesh",
+    "title": "Used Hyundai Verna Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_haryana",
+    "title": "Used Hyundai Verna Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_madhya_pradesh",
+    "title": "Used Hyundai Verna Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_andhra_pradesh",
+    "title": "Used Hyundai Verna Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_kerala",
+    "title": "Used Hyundai Verna Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_bihar",
+    "title": "Used Hyundai Verna Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "hyundai",
+      "verna",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_latur",
+    "title": "Used Maruti Suzuki Swift Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_hansi",
+    "title": "Used Maruti Suzuki Swift Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_ludhiana",
+    "title": "Used Maruti Suzuki Swift Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_agra",
+    "title": "Used Maruti Suzuki Swift Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_nashik",
+    "title": "Used Maruti Suzuki Swift Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_bhopal",
+    "title": "Used Maruti Suzuki Swift Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_patna",
+    "title": "Used Maruti Suzuki Swift Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_nagpur",
+    "title": "Used Maruti Suzuki Swift Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_coimbatore",
+    "title": "Used Maruti Suzuki Swift Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_maharashtra",
+    "title": "Used Maruti Suzuki Swift Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_karnataka",
+    "title": "Used Maruti Suzuki Swift Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_telangana",
+    "title": "Used Maruti Suzuki Swift Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_tamil_nadu",
+    "title": "Used Maruti Suzuki Swift Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_west_bengal",
+    "title": "Used Maruti Suzuki Swift Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_punjab",
+    "title": "Used Maruti Suzuki Swift Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_rajasthan",
+    "title": "Used Maruti Suzuki Swift Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_uttar_pradesh",
+    "title": "Used Maruti Suzuki Swift Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_haryana",
+    "title": "Used Maruti Suzuki Swift Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_madhya_pradesh",
+    "title": "Used Maruti Suzuki Swift Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_andhra_pradesh",
+    "title": "Used Maruti Suzuki Swift Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_kerala",
+    "title": "Used Maruti Suzuki Swift Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_bihar",
+    "title": "Used Maruti Suzuki Swift Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "swift",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_latur",
+    "title": "Used Maruti Suzuki Baleno Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_hansi",
+    "title": "Used Maruti Suzuki Baleno Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_ludhiana",
+    "title": "Used Maruti Suzuki Baleno Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_agra",
+    "title": "Used Maruti Suzuki Baleno Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_nashik",
+    "title": "Used Maruti Suzuki Baleno Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_bhopal",
+    "title": "Used Maruti Suzuki Baleno Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_patna",
+    "title": "Used Maruti Suzuki Baleno Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_nagpur",
+    "title": "Used Maruti Suzuki Baleno Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_coimbatore",
+    "title": "Used Maruti Suzuki Baleno Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_maharashtra",
+    "title": "Used Maruti Suzuki Baleno Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_karnataka",
+    "title": "Used Maruti Suzuki Baleno Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_telangana",
+    "title": "Used Maruti Suzuki Baleno Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_gujarat",
+    "title": "Used Maruti Suzuki Baleno Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_tamil_nadu",
+    "title": "Used Maruti Suzuki Baleno Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_west_bengal",
+    "title": "Used Maruti Suzuki Baleno Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_punjab",
+    "title": "Used Maruti Suzuki Baleno Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_rajasthan",
+    "title": "Used Maruti Suzuki Baleno Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_uttar_pradesh",
+    "title": "Used Maruti Suzuki Baleno Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_haryana",
+    "title": "Used Maruti Suzuki Baleno Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_madhya_pradesh",
+    "title": "Used Maruti Suzuki Baleno Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_andhra_pradesh",
+    "title": "Used Maruti Suzuki Baleno Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_kerala",
+    "title": "Used Maruti Suzuki Baleno Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_bihar",
+    "title": "Used Maruti Suzuki Baleno Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "baleno",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_latur",
+    "title": "Used Maruti Suzuki Wagon R Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_hansi",
+    "title": "Used Maruti Suzuki Wagon R Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_ludhiana",
+    "title": "Used Maruti Suzuki Wagon R Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_agra",
+    "title": "Used Maruti Suzuki Wagon R Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_nashik",
+    "title": "Used Maruti Suzuki Wagon R Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_bhopal",
+    "title": "Used Maruti Suzuki Wagon R Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_patna",
+    "title": "Used Maruti Suzuki Wagon R Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_nagpur",
+    "title": "Used Maruti Suzuki Wagon R Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_coimbatore",
+    "title": "Used Maruti Suzuki Wagon R Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_maharashtra",
+    "title": "Used Maruti Suzuki Wagon R Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_karnataka",
+    "title": "Used Maruti Suzuki Wagon R Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_telangana",
+    "title": "Used Maruti Suzuki Wagon R Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_gujarat",
+    "title": "Used Maruti Suzuki Wagon R Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_tamil_nadu",
+    "title": "Used Maruti Suzuki Wagon R Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_west_bengal",
+    "title": "Used Maruti Suzuki Wagon R Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_punjab",
+    "title": "Used Maruti Suzuki Wagon R Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_rajasthan",
+    "title": "Used Maruti Suzuki Wagon R Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_uttar_pradesh",
+    "title": "Used Maruti Suzuki Wagon R Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_haryana",
+    "title": "Used Maruti Suzuki Wagon R Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_madhya_pradesh",
+    "title": "Used Maruti Suzuki Wagon R Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_andhra_pradesh",
+    "title": "Used Maruti Suzuki Wagon R Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_kerala",
+    "title": "Used Maruti Suzuki Wagon R Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_bihar",
+    "title": "Used Maruti Suzuki Wagon R Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "wagon r",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_latur",
+    "title": "Used Maruti Suzuki Brezza Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_hansi",
+    "title": "Used Maruti Suzuki Brezza Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_ludhiana",
+    "title": "Used Maruti Suzuki Brezza Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_agra",
+    "title": "Used Maruti Suzuki Brezza Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_nashik",
+    "title": "Used Maruti Suzuki Brezza Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_bhopal",
+    "title": "Used Maruti Suzuki Brezza Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_patna",
+    "title": "Used Maruti Suzuki Brezza Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_nagpur",
+    "title": "Used Maruti Suzuki Brezza Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_coimbatore",
+    "title": "Used Maruti Suzuki Brezza Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_maharashtra",
+    "title": "Used Maruti Suzuki Brezza Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_karnataka",
+    "title": "Used Maruti Suzuki Brezza Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_telangana",
+    "title": "Used Maruti Suzuki Brezza Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_gujarat",
+    "title": "Used Maruti Suzuki Brezza Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_tamil_nadu",
+    "title": "Used Maruti Suzuki Brezza Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_west_bengal",
+    "title": "Used Maruti Suzuki Brezza Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_punjab",
+    "title": "Used Maruti Suzuki Brezza Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_rajasthan",
+    "title": "Used Maruti Suzuki Brezza Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_uttar_pradesh",
+    "title": "Used Maruti Suzuki Brezza Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_haryana",
+    "title": "Used Maruti Suzuki Brezza Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_madhya_pradesh",
+    "title": "Used Maruti Suzuki Brezza Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_andhra_pradesh",
+    "title": "Used Maruti Suzuki Brezza Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_kerala",
+    "title": "Used Maruti Suzuki Brezza Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_brezza_cars_bihar",
+    "title": "Used Maruti Suzuki Brezza Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "maruti suzuki",
+      "brezza",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Maruti Suzuki",
+      "modelName": "Brezza",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_latur",
+    "title": "Used Mahindra Thar Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_hansi",
+    "title": "Used Mahindra Thar Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_ludhiana",
+    "title": "Used Mahindra Thar Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_agra",
+    "title": "Used Mahindra Thar Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_nashik",
+    "title": "Used Mahindra Thar Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_bhopal",
+    "title": "Used Mahindra Thar Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_patna",
+    "title": "Used Mahindra Thar Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_nagpur",
+    "title": "Used Mahindra Thar Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_coimbatore",
+    "title": "Used Mahindra Thar Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_maharashtra",
+    "title": "Used Mahindra Thar Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_karnataka",
+    "title": "Used Mahindra Thar Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_telangana",
+    "title": "Used Mahindra Thar Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_gujarat",
+    "title": "Used Mahindra Thar Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_tamil_nadu",
+    "title": "Used Mahindra Thar Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_west_bengal",
+    "title": "Used Mahindra Thar Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_punjab",
+    "title": "Used Mahindra Thar Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_rajasthan",
+    "title": "Used Mahindra Thar Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_uttar_pradesh",
+    "title": "Used Mahindra Thar Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_haryana",
+    "title": "Used Mahindra Thar Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_madhya_pradesh",
+    "title": "Used Mahindra Thar Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_andhra_pradesh",
+    "title": "Used Mahindra Thar Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_kerala",
+    "title": "Used Mahindra Thar Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_bihar",
+    "title": "Used Mahindra Thar Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_mumbai",
+    "title": "Used Mahindra Xuv700 Cars in Mumbai",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_delhi",
+    "title": "Used Mahindra Xuv700 Cars in Delhi",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_bangalore",
+    "title": "Used Mahindra Xuv700 Cars in Bangalore",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_hyderabad",
+    "title": "Used Mahindra Xuv700 Cars in Hyderabad",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_ahmedabad",
+    "title": "Used Mahindra Xuv700 Cars in Ahmedabad",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_chennai",
+    "title": "Used Mahindra Xuv700 Cars in Chennai",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_kolkata",
+    "title": "Used Mahindra Xuv700 Cars in Kolkata",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_pune",
+    "title": "Used Mahindra Xuv700 Cars in Pune",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_jaipur",
+    "title": "Used Mahindra Xuv700 Cars in Jaipur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_latur",
+    "title": "Used Mahindra Xuv700 Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_palanpur",
+    "title": "Used Mahindra Xuv700 Cars in Palanpur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_hansi",
+    "title": "Used Mahindra Xuv700 Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_ludhiana",
+    "title": "Used Mahindra Xuv700 Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_agra",
+    "title": "Used Mahindra Xuv700 Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_nashik",
+    "title": "Used Mahindra Xuv700 Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_bhopal",
+    "title": "Used Mahindra Xuv700 Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_patna",
+    "title": "Used Mahindra Xuv700 Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_vadodara",
+    "title": "Used Mahindra Xuv700 Cars in Vadodara",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_surat",
+    "title": "Used Mahindra Xuv700 Cars in Surat",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_rajkot",
+    "title": "Used Mahindra Xuv700 Cars in Rajkot",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_lucknow",
+    "title": "Used Mahindra Xuv700 Cars in Lucknow",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_indore",
+    "title": "Used Mahindra Xuv700 Cars in Indore",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_chandigarh",
+    "title": "Used Mahindra Xuv700 Cars in Chandigarh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_nagpur",
+    "title": "Used Mahindra Xuv700 Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_coimbatore",
+    "title": "Used Mahindra Xuv700 Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_maharashtra",
+    "title": "Used Mahindra Xuv700 Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_karnataka",
+    "title": "Used Mahindra Xuv700 Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_telangana",
+    "title": "Used Mahindra Xuv700 Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_gujarat",
+    "title": "Used Mahindra Xuv700 Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_tamil_nadu",
+    "title": "Used Mahindra Xuv700 Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_west_bengal",
+    "title": "Used Mahindra Xuv700 Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_punjab",
+    "title": "Used Mahindra Xuv700 Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_rajasthan",
+    "title": "Used Mahindra Xuv700 Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_uttar_pradesh",
+    "title": "Used Mahindra Xuv700 Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_haryana",
+    "title": "Used Mahindra Xuv700 Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_madhya_pradesh",
+    "title": "Used Mahindra Xuv700 Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_andhra_pradesh",
+    "title": "Used Mahindra Xuv700 Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_kerala",
+    "title": "Used Mahindra Xuv700 Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_xuv700_cars_bihar",
+    "title": "Used Mahindra Xuv700 Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "xuv700",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Xuv700",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_latur",
+    "title": "Used Mahindra Scorpio Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_hansi",
+    "title": "Used Mahindra Scorpio Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_ludhiana",
+    "title": "Used Mahindra Scorpio Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_agra",
+    "title": "Used Mahindra Scorpio Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_nashik",
+    "title": "Used Mahindra Scorpio Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_bhopal",
+    "title": "Used Mahindra Scorpio Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_patna",
+    "title": "Used Mahindra Scorpio Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_nagpur",
+    "title": "Used Mahindra Scorpio Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_coimbatore",
+    "title": "Used Mahindra Scorpio Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_maharashtra",
+    "title": "Used Mahindra Scorpio Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_karnataka",
+    "title": "Used Mahindra Scorpio Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_telangana",
+    "title": "Used Mahindra Scorpio Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_gujarat",
+    "title": "Used Mahindra Scorpio Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_tamil_nadu",
+    "title": "Used Mahindra Scorpio Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_west_bengal",
+    "title": "Used Mahindra Scorpio Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_punjab",
+    "title": "Used Mahindra Scorpio Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_rajasthan",
+    "title": "Used Mahindra Scorpio Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_uttar_pradesh",
+    "title": "Used Mahindra Scorpio Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_haryana",
+    "title": "Used Mahindra Scorpio Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_madhya_pradesh",
+    "title": "Used Mahindra Scorpio Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_andhra_pradesh",
+    "title": "Used Mahindra Scorpio Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_kerala",
+    "title": "Used Mahindra Scorpio Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_bihar",
+    "title": "Used Mahindra Scorpio Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "scorpio",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_latur",
+    "title": "Used Tata Nexon Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_hansi",
+    "title": "Used Tata Nexon Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_ludhiana",
+    "title": "Used Tata Nexon Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_agra",
+    "title": "Used Tata Nexon Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_nashik",
+    "title": "Used Tata Nexon Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_bhopal",
+    "title": "Used Tata Nexon Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_patna",
+    "title": "Used Tata Nexon Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_nagpur",
+    "title": "Used Tata Nexon Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_coimbatore",
+    "title": "Used Tata Nexon Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_maharashtra",
+    "title": "Used Tata Nexon Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_karnataka",
+    "title": "Used Tata Nexon Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_telangana",
+    "title": "Used Tata Nexon Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_gujarat",
+    "title": "Used Tata Nexon Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_tamil_nadu",
+    "title": "Used Tata Nexon Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_west_bengal",
+    "title": "Used Tata Nexon Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_punjab",
+    "title": "Used Tata Nexon Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_rajasthan",
+    "title": "Used Tata Nexon Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_uttar_pradesh",
+    "title": "Used Tata Nexon Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_haryana",
+    "title": "Used Tata Nexon Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_madhya_pradesh",
+    "title": "Used Tata Nexon Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_andhra_pradesh",
+    "title": "Used Tata Nexon Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_kerala",
+    "title": "Used Tata Nexon Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_nexon_cars_bihar",
+    "title": "Used Tata Nexon Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "nexon",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Nexon",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_latur",
+    "title": "Used Tata Punch Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_hansi",
+    "title": "Used Tata Punch Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_ludhiana",
+    "title": "Used Tata Punch Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_agra",
+    "title": "Used Tata Punch Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_nashik",
+    "title": "Used Tata Punch Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_bhopal",
+    "title": "Used Tata Punch Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_patna",
+    "title": "Used Tata Punch Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_nagpur",
+    "title": "Used Tata Punch Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_coimbatore",
+    "title": "Used Tata Punch Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_maharashtra",
+    "title": "Used Tata Punch Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_karnataka",
+    "title": "Used Tata Punch Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_telangana",
+    "title": "Used Tata Punch Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_gujarat",
+    "title": "Used Tata Punch Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_tamil_nadu",
+    "title": "Used Tata Punch Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_west_bengal",
+    "title": "Used Tata Punch Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_punjab",
+    "title": "Used Tata Punch Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_rajasthan",
+    "title": "Used Tata Punch Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_uttar_pradesh",
+    "title": "Used Tata Punch Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_haryana",
+    "title": "Used Tata Punch Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_madhya_pradesh",
+    "title": "Used Tata Punch Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_andhra_pradesh",
+    "title": "Used Tata Punch Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_kerala",
+    "title": "Used Tata Punch Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_punch_cars_bihar",
+    "title": "Used Tata Punch Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "punch",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Punch",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_chennai",
+    "title": "Used Tata Harrier Cars in Chennai",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_kolkata",
+    "title": "Used Tata Harrier Cars in Kolkata",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_latur",
+    "title": "Used Tata Harrier Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_palanpur",
+    "title": "Used Tata Harrier Cars in Palanpur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_hansi",
+    "title": "Used Tata Harrier Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_ludhiana",
+    "title": "Used Tata Harrier Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_agra",
+    "title": "Used Tata Harrier Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_nashik",
+    "title": "Used Tata Harrier Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_bhopal",
+    "title": "Used Tata Harrier Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_patna",
+    "title": "Used Tata Harrier Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_vadodara",
+    "title": "Used Tata Harrier Cars in Vadodara",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_lucknow",
+    "title": "Used Tata Harrier Cars in Lucknow",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_indore",
+    "title": "Used Tata Harrier Cars in Indore",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_nagpur",
+    "title": "Used Tata Harrier Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_coimbatore",
+    "title": "Used Tata Harrier Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_maharashtra",
+    "title": "Used Tata Harrier Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_karnataka",
+    "title": "Used Tata Harrier Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_telangana",
+    "title": "Used Tata Harrier Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_gujarat",
+    "title": "Used Tata Harrier Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_tamil_nadu",
+    "title": "Used Tata Harrier Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_west_bengal",
+    "title": "Used Tata Harrier Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_punjab",
+    "title": "Used Tata Harrier Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_rajasthan",
+    "title": "Used Tata Harrier Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_uttar_pradesh",
+    "title": "Used Tata Harrier Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_haryana",
+    "title": "Used Tata Harrier Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_madhya_pradesh",
+    "title": "Used Tata Harrier Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_andhra_pradesh",
+    "title": "Used Tata Harrier Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_kerala",
+    "title": "Used Tata Harrier Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_bihar",
+    "title": "Used Tata Harrier Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "tata",
+      "harrier",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_latur",
+    "title": "Used Toyota Fortuner Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_hansi",
+    "title": "Used Toyota Fortuner Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_ludhiana",
+    "title": "Used Toyota Fortuner Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_agra",
+    "title": "Used Toyota Fortuner Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_nashik",
+    "title": "Used Toyota Fortuner Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_bhopal",
+    "title": "Used Toyota Fortuner Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_patna",
+    "title": "Used Toyota Fortuner Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_nagpur",
+    "title": "Used Toyota Fortuner Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_coimbatore",
+    "title": "Used Toyota Fortuner Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_maharashtra",
+    "title": "Used Toyota Fortuner Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_karnataka",
+    "title": "Used Toyota Fortuner Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_telangana",
+    "title": "Used Toyota Fortuner Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_gujarat",
+    "title": "Used Toyota Fortuner Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_tamil_nadu",
+    "title": "Used Toyota Fortuner Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_west_bengal",
+    "title": "Used Toyota Fortuner Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_punjab",
+    "title": "Used Toyota Fortuner Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_rajasthan",
+    "title": "Used Toyota Fortuner Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_uttar_pradesh",
+    "title": "Used Toyota Fortuner Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_haryana",
+    "title": "Used Toyota Fortuner Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_madhya_pradesh",
+    "title": "Used Toyota Fortuner Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_andhra_pradesh",
+    "title": "Used Toyota Fortuner Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_kerala",
+    "title": "Used Toyota Fortuner Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_fortuner_cars_bihar",
+    "title": "Used Toyota Fortuner Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "fortuner",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Fortuner",
+      "city": "Bihar"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_latur",
+    "title": "Used Toyota Innova Cars in Latur",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "latur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Latur"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_hansi",
+    "title": "Used Toyota Innova Cars in Hansi",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "hansi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Hansi"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_ludhiana",
+    "title": "Used Toyota Innova Cars in Ludhiana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "ludhiana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Ludhiana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_agra",
+    "title": "Used Toyota Innova Cars in Agra",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "agra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Agra"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_nashik",
+    "title": "Used Toyota Innova Cars in Nashik",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "nashik"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Nashik"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_bhopal",
+    "title": "Used Toyota Innova Cars in Bhopal",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "bhopal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Bhopal"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_patna",
+    "title": "Used Toyota Innova Cars in Patna",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "patna"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Patna"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_nagpur",
+    "title": "Used Toyota Innova Cars in Nagpur",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "nagpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Nagpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_coimbatore",
+    "title": "Used Toyota Innova Cars in Coimbatore",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "coimbatore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Coimbatore"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_maharashtra",
+    "title": "Used Toyota Innova Cars in Maharashtra",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "maharashtra"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Maharashtra"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_karnataka",
+    "title": "Used Toyota Innova Cars in Karnataka",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "karnataka"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Karnataka"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_telangana",
+    "title": "Used Toyota Innova Cars in Telangana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "telangana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Telangana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_gujarat",
+    "title": "Used Toyota Innova Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_tamil_nadu",
+    "title": "Used Toyota Innova Cars in Tamil Nadu",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "tamil nadu"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Tamil Nadu"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_west_bengal",
+    "title": "Used Toyota Innova Cars in West Bengal",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "west bengal"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "West Bengal"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_punjab",
+    "title": "Used Toyota Innova Cars in Punjab",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "punjab"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Punjab"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_rajasthan",
+    "title": "Used Toyota Innova Cars in Rajasthan",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "rajasthan"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Rajasthan"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_uttar_pradesh",
+    "title": "Used Toyota Innova Cars in Uttar Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "uttar pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Uttar Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_haryana",
+    "title": "Used Toyota Innova Cars in Haryana",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "haryana"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Haryana"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_madhya_pradesh",
+    "title": "Used Toyota Innova Cars in Madhya Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "madhya pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Madhya Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_andhra_pradesh",
+    "title": "Used Toyota Innova Cars in Andhra Pradesh",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "andhra pradesh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Andhra Pradesh"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_kerala",
+    "title": "Used Toyota Innova Cars in Kerala",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "kerala"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Kerala"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_cars_bihar",
+    "title": "Used Toyota Innova Cars in Bihar",
+    "keywords": [
+      "used car",
+      "car",
+      "toyota",
+      "innova",
+      "bihar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Toyota",
+      "modelName": "Innova",
+      "city": "Bihar"
+    }
+  },
+  {
     "id": "filter_buy_used_cars",
     "title": "Used Cars",
     "keywords": [

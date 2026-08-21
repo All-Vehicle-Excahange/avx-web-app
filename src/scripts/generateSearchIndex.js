@@ -599,12 +599,15 @@ async function generateSearchIndex() {
 
   const finalIndexItems = Array.from(itemsMap.values());
 
-  if (!fs.existsSync(PUBLIC_DIR)) {
-    fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(PUBLIC_DIR)) {
+      fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+    }
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(finalIndexItems, null, 2), 'utf8');
+    console.log(`[Cron] Successfully generated search index with ${finalIndexItems.length} entries at ${OUTPUT_FILE}`);
+  } catch (err) {
+    console.warn(`[Cron] File write skipped (read-only filesystem): ${err.message}`);
   }
-
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(finalIndexItems, null, 2), 'utf8');
-  console.log(`[Cron] Successfully generated search index with ${finalIndexItems.length} entries at ${OUTPUT_FILE}`);
   return finalIndexItems;
 }
 
