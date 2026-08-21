@@ -25,10 +25,31 @@ export default function GlobalCompareButton() {
   const y = useMotionValue(0);
 
   // Track which corner the button is resting at
-  // 0 = bottom-left (default), 1 = bottom-right, 2 = top-right, 3 = top-left
-  const [corner, setCorner] = useState(0);
+  // 0 = bottom-left, 1 = bottom-right (default), 2 = top-right, 3 = top-left
+  const [corner, setCorner] = useState(1);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const updatePositionForCorner = (currentCorner) => {
+    const W = document.documentElement.clientWidth;
+    const H = window.innerHeight;
+
+    const targetX_Right = 0;
+    const targetX_Left = -(W - (MARGIN_X * 2) - BTN);
+    const targetY_Bottom = 0;
+    const targetY_Top = -(H - MARGIN_TOP - MARGIN_BOTTOM - BTN);
+
+    let targetX = targetX_Right;
+    let targetY = targetY_Bottom;
+
+    if (currentCorner === 0) { targetX = targetX_Left; targetY = targetY_Bottom; }
+    else if (currentCorner === 1) { targetX = targetX_Right; targetY = targetY_Bottom; }
+    else if (currentCorner === 2) { targetX = targetX_Right; targetY = targetY_Top; }
+    else if (currentCorner === 3) { targetX = targetX_Left; targetY = targetY_Top; }
+
+    x.set(targetX);
+    y.set(targetY);
+  };
 
   useEffect(() => {
     // Check initial state
@@ -51,12 +72,20 @@ export default function GlobalCompareButton() {
         attributeFilter: ["style"],
       });
 
-      return () => observer.disconnect();
+      const handleResize = () => {
+        updatePositionForCorner(corner);
+      };
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        observer.disconnect();
+        window.removeEventListener("resize", handleResize);
+      };
     }
-  }, []);
+  }, [corner]);
 
   const snapToNearestCorner = () => {
-    const W = window.innerWidth;
+    const W = document.documentElement.clientWidth;
     const H = window.innerHeight;
 
     // Base position is right: MARGIN_X, bottom: MARGIN_BOTTOM
