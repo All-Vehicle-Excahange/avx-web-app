@@ -1559,6 +1559,8 @@ export default function SearchWithCard({
       { value: "truck", label: "Truck" },
       { value: "coupe", label: "Coupe" },
       { value: "convertible", label: "Convertible" },
+      { value: "luxury suv", label: "Luxury SUV" },
+      { value: "luxury sedan", label: "Luxury Sedan" },
     ];
   }, [apiBodyType]);
 
@@ -2592,8 +2594,8 @@ export default function SearchWithCard({
                 key={tab.name}
                 onClick={() => setActiveFilterTab(tab.name)}
                 className={`px-4 py-3 cursor-pointer text-sm flex items-center justify-between ${activeFilterTab === tab.name
-                    ? "bg-secondary/10 font-semibold"
-                    : "hover:bg-secondary/5"
+                  ? "bg-secondary/10 font-semibold"
+                  : "hover:bg-secondary/5"
                   }`}
               >
                 <span>{tab.name}</span>
