@@ -240,6 +240,7 @@ export default function KycForm() {
           if (b.logo instanceof File) payload.append("logo", b.logo);
           if (b.banner instanceof File) payload.append("banner", b.banner);
           payload.append("consultationName", b.consultationName || "");
+          payload.append("username", b.username || "");
           payload.append("ownerName", b.ownerName || "");
           payload.append("companyEmail", b.companyEmail || "");
           payload.append("establishmentYear", b.establishmentYear || "");
@@ -267,6 +268,7 @@ export default function KycForm() {
         if (b.logo instanceof File) payload.append("logo", b.logo);
         if (b.banner instanceof File) payload.append("banner", b.banner);
         payload.append("consultationName", b.consultationName || "");
+        payload.append("username", b.username || "");
         payload.append("ownerName", b.ownerName || "");
         payload.append("companyEmail", b.companyEmail || "");
         payload.append("establishmentYear", b.establishmentYear || "");
@@ -529,7 +531,7 @@ export default function KycForm() {
               <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px]" />
             </div>
 
-            <div className="relative z-10 flex flex-col justify-between h-full p-10">
+            <div className="relative z-10 flex flex-col justify-between h-full p-6 lg:p-8 xl:p-10 overflow-y-auto custom-scrollbar">
               {/* Top: Intro and Benefits list */}
               <div className="space-y-8">
                 <div className="space-y-2">
@@ -574,7 +576,7 @@ export default function KycForm() {
               </div>
 
               {/* Bottom: Vertical Stepper Progress */}
-              <div className="flex flex-col gap-10 border-t border-white/10 pt-6">
+              <div className="flex flex-col gap-6 xl:gap-10 border-t border-white/10 pt-6 mt-6">
                 {[
                   {
                     num: 1,
@@ -596,14 +598,14 @@ export default function KycForm() {
                   const isFullySubmitted =
                     existing?.business?.isSubmitted &&
                     existing?.business?.verificationStatus !==
-                      "REQUEST_CHANGES";
+                    "REQUEST_CHANGES";
                   const isClickable = isFullySubmitted
                     ? item.num === 4
                     : item.num === 1 ||
-                      (item.num === 2 && !!existing?.business) ||
-                      (item.num === 3 && !!existing?.address) ||
-                      (item.num === 4 &&
-                        (!!existing?.kyc || existing?.business?.isSubmitted));
+                    (item.num === 2 && !!existing?.business) ||
+                    (item.num === 3 && !!existing?.address) ||
+                    (item.num === 4 &&
+                      (!!existing?.kyc || existing?.business?.isSubmitted));
 
                   return (
                     <div
@@ -615,7 +617,7 @@ export default function KycForm() {
                     >
                       {/* Vertical line connecting steps */}
                       {i < arr.length - 1 && (
-                        <div className="absolute left-[15px] top-8 -bottom-10 w-0.5 bg-white/10">
+                        <div className="absolute left-[15px] top-8 -bottom-6 xl:-bottom-10 w-0.5 bg-white/10">
                           <div
                             className="w-full bg-white transition-all duration-550"
                             style={{
@@ -628,13 +630,12 @@ export default function KycForm() {
                       {/* Circle Indicator */}
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-350 shrink-0 border text-xs font-bold relative z-10
-                        ${
-                          step > item.num
+                        ${step > item.num
                             ? "bg-white text-secondary border-white"
                             : step === item.num
                               ? "bg-white text-secondary border-white ring-4 ring-white/15"
                               : "bg-transparent border-white/20 text-white/40"
-                        }
+                          }
                       `}
                       >
                         {step > item.num ? (
@@ -749,13 +750,12 @@ export default function KycForm() {
                           <div className="flex flex-col items-center relative gap-3">
                             <div
                               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0
-                          ${
-                            step > item.num
-                              ? "bg-primary text-secondary"
-                              : step === item.num
-                                ? "bg-primary text-secondary ring-8 ring-primary/10"
-                                : "bg-secondary border-2 border-third/10 text-third/40"
-                          }`}
+                          ${step > item.num
+                                  ? "bg-primary text-secondary"
+                                  : step === item.num
+                                    ? "bg-primary text-secondary ring-8 ring-primary/10"
+                                    : "bg-secondary border-2 border-third/10 text-third/40"
+                                }`}
                             >
                               {step > item.num ? (
                                 <svg
@@ -832,7 +832,7 @@ export default function KycForm() {
                       {step === 4 &&
                         (existing?.business?.isSubmitted !== false ||
                           existing?.business?.verificationStatus ===
-                            "REQUEST_CHANGES") &&
+                          "REQUEST_CHANGES") &&
                         !showPreview && (
                           <Step4Verification
                             existing={existing}
@@ -843,7 +843,7 @@ export default function KycForm() {
                       {step === 4 &&
                         ((existing?.business?.isSubmitted === false &&
                           existing?.business?.verificationStatus !==
-                            "REQUEST_CHANGES") ||
+                          "REQUEST_CHANGES") ||
                           showPreview) && (
                           <PreviewAndEdite
                             existing={existing}

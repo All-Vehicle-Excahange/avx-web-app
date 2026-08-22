@@ -196,13 +196,13 @@ export default function Step2Address({
         className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-20"
       >
         <div>
-          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2 mb-3">
             <MapPin size={16} className="text-primary/70" />
             Address Details
           </h3>
-          <p className="text-xs text-third/60 mt-1">
+          {/* <p className="text-xs text-third/60 mt-1">
             Specify the physical location of your consulting showroom or office.
-          </p>
+          </p> */}
         </div>
 
         {(!readOnly || form.address) && (
@@ -230,33 +230,31 @@ export default function Step2Address({
           initialLat={form.latitude}
           initialLng={form.longitude}
           readOnly={readOnly}
-          onChangeLocation={(lat, lng) => {
+          addressQuery={form.address}
+          onChangeLocation={(lat, lng, fetchedAddress) => {
             const updated = {
               ...form,
               latitude: lat,
               longitude: lng,
               mapUrl: `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`,
             };
+            if (fetchedAddress) {
+              updated.address = fetchedAddress;
+            }
             handleFormChange(updated);
           }}
         />
 
-        {(!readOnly || form.mapUrl) && (
-          <SleekInput
-            label="Map URL"
-            placeholder="e.g. https://maps.google.com/..."
-            readOnly={readOnly}
-            value={form.mapUrl}
-            icon={Link}
-            onChange={(e) => {
-              const val = e.target.value;
-              const updated = { ...form, mapUrl: val };
-              handleFormChange(updated);
-            }}
-          />
+        {form.mapUrl && (
+          <div className="flex items-center gap-1.5 px-2 py-1.5 bg-white/5 rounded-lg border border-white/5">
+            <Link size={12} className="text-third/40 shrink-0" />
+            <span className="text-[10px] text-third/50 truncate select-all">
+              {form.mapUrl}
+            </span>
+          </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-3">
           {/* ===== STATE ===== */}
           {(!readOnly || form.stateName) && (
             <div className="flex flex-col space-y-1.5 w-full">

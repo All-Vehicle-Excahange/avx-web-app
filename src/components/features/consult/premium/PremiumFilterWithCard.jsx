@@ -152,6 +152,8 @@ export default function FilterWithCard({
       logo: item.logoUrl || "/default-logo.png",
 
       isSponsored: item.tierTitle === "PRO",
+      tierTitle: item.tierTitle || item.tierTille,
+      isActiveTier: item.isActiveTier,
     }));
   };
 
