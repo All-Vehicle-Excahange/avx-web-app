@@ -11,7 +11,6 @@ import { useUIStore } from "@/stores/useUIStore";
 const BTN = 56; // 14 * 4 = 56px (w-14 h-14)
 const MARGIN_X = 16;
 const MARGIN_TOP = 90;
-const MARGIN_BOTTOM = 90;
 
 export default function GlobalCompareButton() {
   const router = useRouter();
@@ -20,6 +19,19 @@ export default function GlobalCompareButton() {
   const { isSearchDropdownOpen, isAccountPopupOpen } = useUIStore();
 
   const isDetailPage = router.pathname.includes("/vehicle/details/");
+  
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleResize = () => setIsMobile(window.innerWidth < 1024);
+      handleResize(); // Initial check
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+
+  const MARGIN_BOTTOM = isDetailPage ? 90 : (isMobile ? 88 : 24);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -82,7 +94,12 @@ export default function GlobalCompareButton() {
         window.removeEventListener("resize", handleResize);
       };
     }
-  }, [corner]);
+  }, [corner, MARGIN_BOTTOM]);
+
+  // If MARGIN_BOTTOM changes (e.g. crossing mobile breakpoint), snap to update bounds
+  useEffect(() => {
+    updatePositionForCorner(corner);
+  }, [MARGIN_BOTTOM]);
 
   const snapToNearestCorner = () => {
     const W = document.documentElement.clientWidth;

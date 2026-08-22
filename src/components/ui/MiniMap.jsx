@@ -8,16 +8,17 @@ export default function MiniMap({
   initialLng,
   onChangeLocation,
   readOnly = false,
+  addressQuery = "",
 }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerInstanceRef = useRef(null);
+  const lastReverseGeocodedRef = useRef("");
   
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
+  const [initialAddress] = useState(addressQuery);
 
   // Default coordinate fallback: Gujarat, India (22.2587, 71.1924)
   const GUJARAT_LAT = 22.2587;
@@ -85,19 +86,18 @@ export default function MiniMap({
 
     // Custom CSS-based marker icon for a modern red pinpoint look
     const iconHtml = `
-      <div class="relative flex items-center justify-center">
-        <div class="absolute w-8 h-8 rounded-full bg-primary/35 animate-ping"></div>
-        <div class="w-5.5 h-5.5 rounded-full bg-primary border-2 border-white shadow-xl flex items-center justify-center">
-          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
-        </div>
+      <div class="relative flex flex-col items-center justify-center drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] cursor-pointer group">
+        <svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-200 group-hover:-translate-y-1">
+          <path d="M16 0C7.163 0 0 7.163 0 16C0 28 16 40 16 40C16 40 32 28 32 16C32 7.163 24.837 0 16 0ZM16 22C12.686 22 10 19.314 10 16C10 12.686 12.686 10 16 10C19.314 10 22 12.686 22 16C22 19.314 19.314 22 16 22Z" fill="#EA4335"/>
+        </svg>
       </div>
     `;
 
     const customIcon = L.divIcon({
       html: iconHtml,
-      className: "custom-map-marker-container",
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+      className: "bg-transparent border-none",
+      iconSize: [32, 40],
+      iconAnchor: [16, 40],
     });
 
     const marker = L.marker([lat, lng], {
@@ -108,8 +108,20 @@ export default function MiniMap({
 
     // Handle marker drag / map clicks
     if (!readOnly) {
-      const updateLocation = (newLat, newLng) => {
+      const updateLocation = async (newLat, newLng) => {
         onChangeLocation(newLat, newLng);
+        
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLng}`);
+          const data = await res.json();
+          if (data && data.display_name) {
+             const shortAddress = data.display_name.split(',').slice(0, 3).join(', '); // keep it reasonably short
+             lastReverseGeocodedRef.current = shortAddress;
+             onChangeLocation(newLat, newLng, shortAddress);
+          }
+        } catch (e) {
+          console.warn("Reverse geocode failed", e);
+        }
       };
 
       marker.on("dragend", () => {
@@ -262,45 +274,42 @@ export default function MiniMap({
     );
   };
 
-  // 5. Free geocoding search (OpenStreetMap Nominatim)
-  const handleSearchSubmit = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
+  // 5. Auto-Geocoding when addressQuery changes
+  useEffect(() => {
+    if (!addressQuery || addressQuery === initialAddress || addressQuery === lastReverseGeocodedRef.current || !leafletLoaded || readOnly) return;
+    
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+            addressQuery
+          )}&countrycodes=in`
+        );
+        const data = await response.json();
 
-    setIsSearching(true);
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}&countrycodes=in` // prioritize searches in India
-      );
-      const data = await response.json();
+        if (data && data.length > 0) {
+          const result = data[0];
+          const newLat = parseFloat(result.lat);
+          const newLng = parseFloat(result.lon);
 
-      if (data && data.length > 0) {
-        const result = data[0];
-        const newLat = parseFloat(result.lat);
-        const newLng = parseFloat(result.lon);
-
-        if (mapInstanceRef.current && markerInstanceRef.current) {
-          markerInstanceRef.current.setLatLng([newLat, newLng]);
-          mapInstanceRef.current.setView([newLat, newLng], 15);
-          onChangeLocation(newLat, newLng);
+          if (mapInstanceRef.current && markerInstanceRef.current) {
+            markerInstanceRef.current.setLatLng([newLat, newLng]);
+            mapInstanceRef.current.setView([newLat, newLng], 15);
+            onChangeLocation(newLat, newLng);
+          }
         }
-      } else {
-        alert("Location not found. Please try another term.");
+      } catch (err) {
+        console.warn("Auto-search error:", err);
       }
-    } catch (err) {
-      console.error("Search error:", err);
-      alert("Failed to search location.");
-    } finally {
-      setIsSearching(false);
-    }
-  };
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [addressQuery, leafletLoaded, readOnly, initialAddress, onChangeLocation]);
 
   return (
     <div className="w-full flex flex-col space-y-3">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 px-1">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 px-1 mt-2">
         <span className="text-xs font-semibold uppercase tracking-wider text-third/80">
           Showroom Location on Google Maps
         </span>
@@ -320,26 +329,6 @@ export default function MiniMap({
         )}
       </div>
 
-      {/* Free Address Search Box */}
-      {!readOnly && leafletLoaded && (
-        <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-          <input
-            type="text"
-            placeholder="Search address or location..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-20 py-2.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white placeholder-third/40 focus:outline-none focus:border-primary transition-all"
-          />
-          <Search size={14} className="absolute left-3 text-third/50" />
-          <button
-            type="submit"
-            disabled={isSearching}
-            className="absolute right-2.5 px-3 py-1 bg-primary text-secondary text-[10px] font-bold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-60 cursor-pointer"
-          >
-            {isSearching ? "Searching..." : "Search"}
-          </button>
-        </form>
-      )}
 
       {/* Google Maps Styled Map Container */}
       <div
@@ -359,7 +348,7 @@ export default function MiniMap({
         )}
       </div>
       {!readOnly && (
-        <p className="text-[10px] text-third/50 px-1">
+        <p className="text-[10px] mb-3 text-third/50 px-1">
           * Drag the pin or click on the map to select your exact showroom location.
         </p>
       )}

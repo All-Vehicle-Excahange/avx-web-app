@@ -44,6 +44,16 @@ export default function CustomSelect({
 
   const wrapperRef = useRef(null);
   const listRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Auto-focus input when opened
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+      // Select the text so typing immediately overwrites it instead of appending
+      inputRef.current.select();
+    }
+  }, [open]);
 
   // 🔹 Find selected option (derived state)
   const selectedOption = useMemo(
@@ -126,8 +136,10 @@ export default function CustomSelect({
         break;
       case "Enter":
         e.preventDefault();
-        if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
-          onChange(filteredOptions[focusedIndex].value);
+        const targetIndex = focusedIndex >= 0 ? focusedIndex : 0;
+        
+        if (filteredOptions.length > 0 && targetIndex < filteredOptions.length) {
+          onChange(filteredOptions[targetIndex].value);
           setOpen(false);
         } else if (onCreateNew && search.trim() && !isCreating) {
           const exactMatch = options.find((o) =>
@@ -163,6 +175,7 @@ export default function CustomSelect({
         }}
       >
         <input
+          ref={inputRef}
           value={search}
           onChange={(e) => {
             if (disabled || readOnly) return;

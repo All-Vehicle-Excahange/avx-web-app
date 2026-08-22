@@ -125,13 +125,13 @@ export default function ConsultantCard(props) {
         {" "}
         {/* PROFILE LOGO */}
         <div className="absolute">
-          <div className="w-16 h-16 rounded-full border-2 border-secondary overflow-hidden bg-primary">
+          <div className="w-16 h-16 rounded-full border-2 border-secondary overflow-hidden bg-white">
             <Image
               src={data?.logo || "https://i.pravatar.cc/150?img=32"}
               alt="profile"
               width={64}
               height={64}
-              className="object-cover"
+              className="object-contain h-full w-full"
             />
           </div>
         </div>

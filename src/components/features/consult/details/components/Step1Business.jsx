@@ -293,13 +293,13 @@ export default function Step1Business({
               <Briefcase size={16} className="text-primary/70" />
               Brand & Identity
             </h3>
-            <p className="text-xs text-third/60 mt-1">
+            {/* <p className="text-xs text-third/60 mt-1">
               Upload your company logo and banner image to customize your store
               presence.
-            </p>
+            </p> */}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center mt-3">
             {/* Logo column */}
             <div className="flex flex-col items-center gap-3 md:col-span-1">
               <span className="text-xs font-semibold text-third/70 uppercase tracking-wider">
@@ -308,9 +308,8 @@ export default function Step1Business({
               <div className="relative group">
                 <div
                   onClick={() => !readOnly && logoRef.current.click()}
-                  className={`relative w-28 h-28 rounded-full border-2 border-white/10 bg-white/2 backdrop-blur-sm overflow-hidden flex items-center justify-center transition-colors duration-200 ${
-                    !readOnly ? "cursor-pointer hover:border-primary group" : ""
-                  }`}
+                  className={`relative w-28 h-28 rounded-full border-2 border-white/10 bg-white/2 backdrop-blur-sm overflow-hidden flex items-center justify-center transition-colors duration-200 ${!readOnly ? "cursor-pointer hover:border-primary group" : ""
+                    }`}
                 >
                   {!logo ? (
                     <span className="text-third/65 transition-transform duration-300 group-hover:scale-110">
@@ -415,13 +414,13 @@ export default function Step1Business({
             <Building2 size={16} className="text-primary/70" />
             Business Details
           </h3>
-          <p className="text-xs text-third/60 mt-1">
+          {/* <p className="text-xs text-third/60 mt-1">
             Provide the name, email, and establishment year of your consulting
             business.
-          </p>
+          </p> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-3">
           {(!readOnly || form.consultationName) && (
             <SleekInput
               label="Consultation Name"
@@ -433,7 +432,23 @@ export default function Step1Business({
               onChange={(e) => {
                 const rawVal = e.target.value;
                 const val = rawVal.replace(/[^a-zA-Z\s]/g, "");
-                handleInput("consultationName", val);
+
+                const oldGenerated = (form.consultationName || "").trim().replace(/\s+/g, "_").toLowerCase();
+                const newGenerated = val.trim().replace(/\s+/g, "_").toLowerCase();
+
+                if (!form.username || form.username === oldGenerated) {
+                  const updatedForm = { ...form, consultationName: val, username: newGenerated };
+                  setForm(updatedForm);
+                  if (onChange) {
+                    onChange(updatedForm, JSON.stringify(updatedForm) !== JSON.stringify(initialData));
+                  }
+                  if (errors.consultationName) {
+                    setErrors((prev) => ({ ...prev, consultationName: "" }));
+                  }
+                } else {
+                  handleInput("consultationName", val);
+                }
+
                 if (!val.trim()) {
                   setErrors((p) => ({ ...p, consultationName: "Consultation Name is required" }));
                 } else if (rawVal !== val) {
@@ -445,7 +460,7 @@ export default function Step1Business({
             />
           )}
 
-          {isUpdateMode && (!readOnly || form.username) && (
+          {(!readOnly || form.username) && (
             <div className="flex flex-col w-full">
               <SleekInput
                 label="Username"
@@ -454,16 +469,15 @@ export default function Step1Business({
                 value={form.username}
                 icon={Globe}
                 onChange={(e) =>
-                  handleInput("username", e.target.value.toLowerCase().trim())
+                  handleInput("username", e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))
                 }
               />
               {usernameStatus.message && (
                 <div
-                  className={`flex items-center gap-1 text-[10px] mt-1 ml-1 font-medium ${
-                    usernameStatus.available
-                      ? "text-emerald-400"
-                      : "text-rose-400"
-                  }`}
+                  className={`flex items-center gap-1 text-[10px] mt-1 ml-1 font-medium ${usernameStatus.available
+                    ? "text-emerald-400"
+                    : "text-rose-400"
+                    }`}
                 >
                   {usernameStatus.available ? (
                     <Check size={10} />
@@ -505,7 +519,7 @@ export default function Step1Business({
             />
           )}
 
-          {hasUserEmail && (!readOnly || form.companyEmail) && (
+          {(!readOnly || form.companyEmail) && (
             <SleekInput
               label="Company Email"
               type="email"
@@ -572,271 +586,268 @@ export default function Step1Business({
         form.vehicleTypes.length > 0 ||
         !readOnly ||
         form.services.length > 0) && (
-        <motion.div
-          variants={itemVariants}
-          className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-10"
-        >
-          <div>
-            <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
-              <Tag size={16} className="text-primary/70" />
-              Operations & Offerings
-            </h3>
-            <p className="text-xs text-third/60 mt-1">
-              Select the vehicle segments and business services your
-              consultation supports.
-            </p>
-          </div>
+          <motion.div
+            variants={itemVariants}
+            className="bg-transparent sm:bg-white/2 sm:backdrop-blur-md border-0 sm:border border-white/5 rounded-2xl px-0 py-4 sm:p-6 shadow-none sm:shadow-2xl sm:hover:border-white/6 transition-all duration-300 relative z-10"
+          >
+            <div>
+              <h3 className="text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
+                <Tag size={16} className="text-primary/70" />
+                Operations & Offerings
+              </h3>
+              {/* <p className="text-xs text-third/60 mt-1">
+                Select the vehicle segments and business services your
+                consultation supports.
+              </p> */}
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Vehicle Types */}
-            {(!readOnly || form.vehicleTypes.length > 0) && (
-              <div className="flex flex-col space-y-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
-                  Vehicle Types
-                </h4>
-                <div className="flex flex-wrap gap-2.5">
-                  {[
-                    {
-                      label: "Two Wheelers",
-                      value: "TWO_WHEELER",
-                      icon: Bike,
-                    },
-                    {
-                      label: "Four Wheelers",
-                      value: "FOUR_WHEELER",
-                      icon: Car,
-                    },
-                  ].map((item) => {
-                    const isSelected = form.vehicleTypes.includes(item.value);
-                    const Icon = item.icon;
-                    if (readOnly && !isSelected) return null;
-                    return (
-                      <button
-                        key={item.value}
-                        type="button"
-                        disabled={readOnly}
-                        onClick={() => {
-                          const updated = isSelected
-                            ? form.vehicleTypes.filter((v) => v !== item.value)
-                            : [...form.vehicleTypes, item.value];
-                          handleInput("vehicleTypes", updated);
-                        }}
-                        className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
-                          ${
-                            isSelected
-                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
-                              : readOnly
-                                ? "hidden"
-                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
-                          }
-                        `}
-                      >
-                        <Icon size={14} strokeWidth={2} />
-                        {item.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Services */}
-            {(!readOnly || form.services.length > 0) && (
-              <div className="flex flex-col space-y-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
-                  Services
-                </h4>
-                <div className="flex flex-wrap gap-2.5 items-center">
-                  {[
-                    { label: "Buy", value: "BUY", icon: ShoppingBag },
-                    { label: "Sell", value: "SELL", icon: DollarSign },
-                    {
-                      label: "Exchange",
-                      value: "EXCHANGE",
-                      icon: ArrowLeftRight,
-                    },
-                    { label: "Finance", value: "FINANCE", icon: Coins },
-                  ].map((item) => {
-                    const isSelected = form.services.includes(item.value);
-                    const Icon = item.icon;
-                    if (readOnly && !isSelected) return null;
-                    return (
-                      <button
-                        key={item.value}
-                        type="button"
-                        disabled={readOnly}
-                        onClick={() => {
-                          const isAlreadySelected = form.services.includes(
-                            item.value,
-                          );
-                          if (!isAlreadySelected && form.services.length >= 4) {
-                            setErrors((prev) => ({
-                              ...prev,
-                              services:
-                                "You can select a maximum of 4 services.",
-                            }));
-                            return;
-                          }
-                          setErrors((prev) => ({ ...prev, services: "" }));
-                          const updated = isAlreadySelected
-                            ? form.services.filter((s) => s !== item.value)
-                            : [...form.services, item.value];
-                          handleInput("services", updated);
-                        }}
-                        className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
-                          ${
-                            isSelected
-                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
-                              : readOnly
-                                ? "hidden"
-                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
-                          }
-                        `}
-                      >
-                        <Icon size={14} strokeWidth={2} />
-                        {item.label}
-                      </button>
-                    );
-                  })}
-
-                  {/* Custom Services */}
-                  <AnimatePresence>
-                    {customServices.map((item) => {
-                      const isSelected = form.services.includes(item.value);
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
+              {/* Vehicle Types */}
+              {(!readOnly || form.vehicleTypes.length > 0) && (
+                <div className="flex flex-col space-y-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
+                    Vehicle Types
+                  </h4>
+                  <div className="flex flex-wrap gap-2.5">
+                    {[
+                      {
+                        label: "Two Wheelers",
+                        value: "TWO_WHEELER",
+                        icon: Bike,
+                      },
+                      {
+                        label: "Four Wheelers",
+                        value: "FOUR_WHEELER",
+                        icon: Car,
+                      },
+                    ].map((item) => {
+                      const isSelected = form.vehicleTypes.includes(item.value);
+                      const Icon = item.icon;
                       if (readOnly && !isSelected) return null;
                       return (
-                        <motion.div
+                        <button
                           key={item.value}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.15 }}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-300
-                            ${
-                              isSelected
-                                ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
-                                : readOnly
-                                  ? "hidden"
-                                  : "bg-white/2 text-third border-white/6"
+                          type="button"
+                          disabled={readOnly}
+                          onClick={() => {
+                            const updated = isSelected
+                              ? form.vehicleTypes.filter((v) => v !== item.value)
+                              : [...form.vehicleTypes, item.value];
+                            handleInput("vehicleTypes", updated);
+                          }}
+                          className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
+                          ${isSelected
+                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                              : readOnly
+                                ? "hidden"
+                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
                             }
-                          `}
+                        `}
                         >
-                          <button
-                            type="button"
-                            disabled={readOnly}
-                            onClick={() => {
-                              const isAlreadySelected = form.services.includes(
-                                item.value,
-                              );
-                              if (
-                                !isAlreadySelected &&
-                                form.services.length >= 4
-                              ) {
-                                setErrors((prev) => ({
-                                  ...prev,
-                                  services:
-                                    "You can select a maximum of 4 services.",
-                                }));
-                                return;
-                              }
-                              setErrors((prev) => ({ ...prev, services: "" }));
-                              const updated = isAlreadySelected
-                                ? form.services.filter((s) => s !== item.value)
-                                : [...form.services, item.value];
-                              handleInput("services", updated);
-                            }}
-                          >
-                            {item.label}
-                          </button>
-                          {!readOnly && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleRemoveCustomService(item.value)
-                              }
-                              className="ml-0.5 opacity-60 hover:opacity-100 cursor-pointer"
-                            >
-                              <X className="w-3 h-3" />
-                            </button>
-                          )}
-                        </motion.div>
+                          <Icon size={14} strokeWidth={2} />
+                          {item.label}
+                        </button>
                       );
                     })}
-                  </AnimatePresence>
+                  </div>
+                </div>
+              )}
 
-                  {/* Add Service Trigger Button or Input */}
-                  {!readOnly && (
-                    <div className="relative">
-                      <AnimatePresence mode="wait">
-                        {addingService ? (
+              {/* Services */}
+              {(!readOnly || form.services.length > 0) && (
+                <div className="flex flex-col space-y-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-third/80 ml-1">
+                    Services
+                  </h4>
+                  <div className="flex flex-wrap gap-2.5 items-center">
+                    {[
+                      { label: "Buy", value: "BUY", icon: ShoppingBag },
+                      { label: "Sell", value: "SELL", icon: DollarSign },
+                      {
+                        label: "Exchange",
+                        value: "EXCHANGE",
+                        icon: ArrowLeftRight,
+                      },
+                      { label: "Finance", value: "FINANCE", icon: Coins },
+                    ].map((item) => {
+                      const isSelected = form.services.includes(item.value);
+                      const Icon = item.icon;
+                      if (readOnly && !isSelected) return null;
+                      return (
+                        <button
+                          key={item.value}
+                          type="button"
+                          disabled={readOnly}
+                          onClick={() => {
+                            const isAlreadySelected = form.services.includes(
+                              item.value,
+                            );
+                            if (!isAlreadySelected && form.services.length >= 4) {
+                              setErrors((prev) => ({
+                                ...prev,
+                                services:
+                                  "You can select a maximum of 4 services.",
+                              }));
+                              return;
+                            }
+                            setErrors((prev) => ({ ...prev, services: "" }));
+                            const updated = isAlreadySelected
+                              ? form.services.filter((s) => s !== item.value)
+                              : [...form.services, item.value];
+                            handleInput("services", updated);
+                          }}
+                          className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium border transition-all duration-300 rounded-xl
+                          ${isSelected
+                              ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                              : readOnly
+                                ? "hidden"
+                                : "bg-white/2 text-third border-white/6 hover:border-white/20 hover:bg-white/2 hover:cursor-pointer"
+                            }
+                        `}
+                        >
+                          <Icon size={14} strokeWidth={2} />
+                          {item.label}
+                        </button>
+                      );
+                    })}
+
+                    {/* Custom Services */}
+                    <AnimatePresence>
+                      {customServices.map((item) => {
+                        const isSelected = form.services.includes(item.value);
+                        if (readOnly && !isSelected) return null;
+                        return (
                           <motion.div
-                            key="input"
+                            key={item.value}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.15 }}
-                            className="flex items-center gap-1.5"
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-300
+                            ${isSelected
+                                ? "bg-primary text-secondary border-primary shadow-[0_0_15px_rgba(255,254,247,0.03)]"
+                                : readOnly
+                                  ? "hidden"
+                                  : "bg-white/2 text-third border-white/6"
+                              }
+                          `}
                           >
-                            <input
-                              ref={serviceInputRef}
-                              autoFocus
-                              type="text"
-                              value={serviceInput}
-                              onChange={(e) => setServiceInput(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") handleAddCustomService();
-                                if (e.key === "Escape") {
+                            <button
+                              type="button"
+                              disabled={readOnly}
+                              onClick={() => {
+                                const isAlreadySelected = form.services.includes(
+                                  item.value,
+                                );
+                                if (
+                                  !isAlreadySelected &&
+                                  form.services.length >= 4
+                                ) {
+                                  setErrors((prev) => ({
+                                    ...prev,
+                                    services:
+                                      "You can select a maximum of 4 services.",
+                                  }));
+                                  return;
+                                }
+                                setErrors((prev) => ({ ...prev, services: "" }));
+                                const updated = isAlreadySelected
+                                  ? form.services.filter((s) => s !== item.value)
+                                  : [...form.services, item.value];
+                                handleInput("services", updated);
+                              }}
+                            >
+                              {item.label}
+                            </button>
+                            {!readOnly && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveCustomService(item.value)
+                                }
+                                className="ml-0.5 opacity-60 hover:opacity-100 cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            )}
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
+
+                    {/* Add Service Trigger Button or Input */}
+                    {!readOnly && (
+                      <div className="relative">
+                        <AnimatePresence mode="wait">
+                          {addingService ? (
+                            <motion.div
+                              key="input"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.15 }}
+                              className="flex items-center gap-1.5"
+                            >
+                              <input
+                                ref={serviceInputRef}
+                                autoFocus
+                                type="text"
+                                value={serviceInput}
+                                onChange={(e) => setServiceInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") handleAddCustomService();
+                                  if (e.key === "Escape") {
+                                    setAddingService(false);
+                                    setServiceInput("");
+                                  }
+                                }}
+                                placeholder="Service name..."
+                                className="h-8.5 px-3 text-xs rounded-xl border border-white/6 bg-white/2 text-primary outline-none w-32 focus:border-primary transition-all duration-300"
+                              />
+                              <button
+                                type="button"
+                                onClick={handleAddCustomService}
+                                className="w-7.5 h-7.5 rounded-xl cursor-pointer bg-primary text-secondary flex items-center justify-center hover:opacity-85 transition"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
                                   setAddingService(false);
                                   setServiceInput("");
-                                }
-                              }}
-                              placeholder="Service name..."
-                              className="h-8.5 px-3 text-xs rounded-xl border border-white/6 bg-white/2 text-primary outline-none w-32 focus:border-primary transition-all duration-300"
-                            />
-                            <button
+                                }}
+                                className="w-7.5 h-7.5 cursor-pointer rounded-xl border border-white/6 text-third/80 flex items-center justify-center hover:bg-white/2 transition"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </motion.div>
+                          ) : (
+                            <motion.button
+                              key="button"
                               type="button"
-                              onClick={handleAddCustomService}
-                              className="w-7.5 h-7.5 rounded-xl cursor-pointer bg-primary text-secondary flex items-center justify-center hover:opacity-85 transition"
+                              onClick={() => setAddingService(true)}
+                              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-dashed border-white/6 text-third/75 text-xs hover:border-primary hover:text-primary transition-all duration-300 hover:cursor-pointer bg-white/2"
                             >
-                              <Check className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setAddingService(false);
-                                setServiceInput("");
-                              }}
-                              className="w-7.5 h-7.5 cursor-pointer rounded-xl border border-white/6 text-third/80 flex items-center justify-center hover:bg-white/2 transition"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </motion.div>
-                        ) : (
-                          <motion.button
-                            key="button"
-                            type="button"
-                            onClick={() => setAddingService(true)}
-                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-dashed border-white/6 text-third/75 text-xs hover:border-primary hover:text-primary transition-all duration-300 hover:cursor-pointer bg-white/2"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            Add Custom
-                          </motion.button>
-                        )}
-                      </AnimatePresence>
-                    </div>
+                              <Plus className="w-3.5 h-3.5" />
+                              Add Custom
+                            </motion.button>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+                  </div>
+
+                  {errors.services && (
+                    <p className="text-rose-500 text-[10px] mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
+                      {errors.services}
+                    </p>
                   )}
                 </div>
-
-                {errors.services && (
-                  <p className="text-rose-500 text-[10px] mt-2 ml-1 animate-in fade-in slide-in-from-top-1">
-                    {errors.services}
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
+              )}
+            </div>
+          </motion.div>
+        )}
 
       {/* ===== BACKEND ERROR ===== */}
       {backendError &&

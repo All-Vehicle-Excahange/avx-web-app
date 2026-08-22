@@ -191,12 +191,12 @@ export default function Step3KYC({
             <CreditCard size={16} className="text-primary/70" />
             PAN Card Verification
           </h3>
-          <p className="text-xs text-third/60 mt-1">
+          {/* <p className="text-xs text-third/60 mt-1">
             Provide your 10-digit Permanent Account Number and upload the document.
-          </p>
+          </p> */}
         </div>
 
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 gap-5 mt-3">
           <SleekInput
             label="PAN Card Number"
             placeholder="e.g. ABCDE1234F"
@@ -256,12 +256,12 @@ export default function Step3KYC({
             <Fingerprint size={16} className="text-primary/70" />
             Aadhaar Card Verification
           </h3>
-          <p className="text-xs text-third/60 mt-1">
+          {/* <p className="text-xs text-third/60 mt-1">
             Provide your 12-digit Aadhaar number and upload front and back photos.
-          </p>
+          </p> */}
         </div>
 
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 gap-5 mt-3">
           <SleekInput
             label="Aadhaar Card Number"
             placeholder="1234-5678-9012"
@@ -327,8 +327,7 @@ export default function Step3KYC({
 
 
         {!errors.aadhar && submitAttempted && errors.atLeastOne && (
-          <p className="text-rose-500 text-sm font-medium mt-1 ml-1 flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
-            <ShieldAlert size={16} className="text-rose-500" />
+          <p className="text-rose-500 text-xs mt-2 ml-1">
             {errors.atLeastOne}
           </p>
         )}
@@ -344,12 +343,12 @@ export default function Step3KYC({
             <ReceiptText size={16} className="text-primary/70" />
             GST Registration <span className="text-third/40 text-[10px]  normal-case tracking-normal ml-1">(Optional)</span>
           </h3>
-          <p className="text-xs text-third/60 mt-1">
+          {/* <p className="text-xs text-third/60 mt-1">
             If your business is GST registered, provide details and certificate upload.
-          </p>
+          </p> */}
         </div>
 
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 gap-5 mt-3">
           <SleekInput
             label="GST Number"
             placeholder="e.g. 07ABCDE1234F1Z5"

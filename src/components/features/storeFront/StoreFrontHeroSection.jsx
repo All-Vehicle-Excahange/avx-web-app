@@ -172,26 +172,29 @@ export default function StoreFrontHeroSection() {
 
   return (
     <>
-      <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-none sm:shadow-sm">
+      <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-xl md:rounded-2xl overflow-hidden shadow-none sm:shadow-sm">
         {/* ================= BANNER ================= */}
-        <div
-          className="w-full h-54 md:h-80 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${storeDetails.bannerUrl})`,
-          }}
-        />
+        <div className="relative w-full h-[200px] sm:h-[290px] md:h-[350px]">
+          <Image
+            src={storeDetails.bannerUrl}
+            alt="Store Banner"
+            fill
+            className="object-cover object-center block"
+            priority
+          />
+        </div>
 
         {/* ================= CONTENT AREA ================= */}
         <div className="px-4 sm:px-6 md:px-10 py-4 relative">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* LEFT COLUMN */}
             <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
-              <div className="relative w-42 h-42 rounded-full overflow-hidden bg-primary border-4 border-white shadow-xl">
+              <div className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl">
                 <Image
                   src={storeDetails.logoUrl}
                   alt="Consultant Logo"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
               </div>
