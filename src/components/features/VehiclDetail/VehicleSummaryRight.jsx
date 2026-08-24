@@ -14,6 +14,7 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { trackInquiryClick } from "@/lib/gtag";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -101,6 +102,14 @@ export default function VehicleSummaryRight({
 
   const handleRequestInquiry = async () => {
     if (!vehicleId) return;
+
+    // Track GA4 inquire_initiated Event
+    const vehicleName = `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
+    trackInquiryClick({
+      vehicle_id: vehicleId,
+      vehicle_name: vehicleName || "Vehicle Details",
+      seller_type: vehicle?.sellerType || vehicleOwnerRole,
+    });
 
     setLoading(true);
     try {
@@ -488,6 +497,7 @@ export default function VehicleSummaryRight({
           onClose={() => setIsPopupOpen(false)}
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
+          vehicle={vehicle}
           onSuccess={handleInquirySuccess}
           adId={adId}
           sponsored={sponsored}

@@ -33,6 +33,7 @@ import SpecialOffer from "./SpecialOffer";
 import InspectionTrackingModal from "@/components/features/user/InspectionTrackingModal";
 import toast from "react-hot-toast";
 import { event } from "@/lib/fpixel";
+import { trackViewVehicle } from "@/lib/gtag";
 
 export default function VehicleDetails({
   initialOverview = null,
@@ -133,6 +134,8 @@ export default function VehicleDetails({
     if (vehicleOverview?.id && trackedVehicleIdRef.current !== vehicleOverview.id) {
       trackedVehicleIdRef.current = vehicleOverview.id;
       const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
+      
+      // Facebook Pixel Event
       event("ViewContent", {
         content_type: "vehicle",
         content_ids: [String(vehicleOverview.id)],
@@ -140,8 +143,17 @@ export default function VehicleDetails({
         value: Number(vehicleOverview.price) || 0,
         currency: "INR",
       });
+
+      // GA4 Event
+      trackViewVehicle({
+        vehicle_id: vehicleOverview.id,
+        vehicle_name: vehicleName || "Vehicle Details",
+        vehicle_type: vehicleOverview.vehicleType || "",
+        price: vehicleOverview.price || 0,
+        seller_type: vehicleOverview.sellerType || vehicleOverview.vehicleOwner?.userRole || "USER",
+      });
     }
-  }, [vehicleOverview?.id]);
+  }, [vehicleOverview]);
 
   const handleOpenTracking = (data) => {
     setTrackingInspection(data);

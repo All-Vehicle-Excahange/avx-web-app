@@ -10,11 +10,13 @@ import { sendInquary } from "@/services/vehicle.service";
 import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { event } from "@/lib/fpixel";
+import { trackInquirySubmit } from "@/lib/gtag";
 
 function SendInquaryPopup({
   onClose,
   consultName = "Consultant",
   vehicleId,
+  vehicle,
   onSuccess,
   adId,
   sponsored,
@@ -69,13 +71,22 @@ function SendInquaryPopup({
 
       if (onSuccess) onSuccess();
 
+      const vehicleName =
+        `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
+
       // Meta Pixel Event Tracking: Lead
       event("Lead", {
         content_type: "vehicle",
         content_ids: [String(vehicleId)],
-        content_name:
-          `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""}`.trim() ||
-          "Vehicle Inquiry",
+        content_name: vehicleName || "Vehicle Inquiry",
+      });
+
+      // GA4 Event Tracking: inquiry_submit
+      trackInquirySubmit({
+        vehicle_id: vehicleId,
+        vehicle_name: vehicleName || "Vehicle Inquiry",
+        inquiry_type: title || "General Inquiry",
+        seller_type: vehicle?.sellerType || vehicle?.vehicleOwner?.userRole || "",
       });
 
       // Track CPI Inquiry if sponsored & billingType is CPI
