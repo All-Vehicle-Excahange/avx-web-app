@@ -122,11 +122,17 @@ const Footer = () => {
                 Buy smart. Sell fair. Move forward.
               </p>
             </div>
-            <p className="text-primary/60 text-[12px] leading-relaxed lg:pr-4">
-              India&apos;s trusted marketplace for used cars and two-wheelers.
-              Verified listings, transparent prices, and real auto consultants —
-              all in one place.
-            </p>
+            <div className="flex flex-col gap-3">
+              <p className="text-primary/60 text-[12px] leading-relaxed lg:pr-4">
+                India&apos;s trusted marketplace for used cars and two-wheelers.
+                Verified listings, transparent prices, and real auto consultants —
+                all in one place.
+              </p>
+              <p className="text-primary/60 text-[12px] leading-relaxed lg:pr-4">
+                First Floor, Loriya Complex, Part B/D, Survey No 268/2, Chhapi,
+                Palanpur Ahmedabad Highway, Banas Kantha, Pin 385210
+              </p>
+            </div>
 
             <div className="flex flex-row items-center gap-2.5 sm:gap-3 mt-2 flex-wrap">
               {/* Google Play */}
@@ -281,7 +287,7 @@ const Footer = () => {
           </div>
 
           <div className="text-center text-[12px] text-primary/40 flex flex-col gap-1 mb-6 md:mb-0 shrink-0 mx-4">
-            <p>&copy; 2026 Reecomm. All Rights Reserved.</p>
+            <p> Reecomm 2026 All Rights Reserved.</p>
             <p>
               Reecomm is a product owned and operated by{" "}
               <Link
