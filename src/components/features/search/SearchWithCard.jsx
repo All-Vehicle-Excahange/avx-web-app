@@ -56,6 +56,25 @@ function useIsMobile() {
   return isMobile;
 }
 
+const DEFAULT_FUEL_TYPES = [
+  { value: "Petrol", label: "Petrol" },
+  { value: "Diesel", label: "Diesel" },
+  { value: "Electric", label: "Electric" },
+  { value: "Hybrid", label: "Hybrid" },
+  { value: "LPG", label: "LPG" },
+  { value: "CNG", label: "CNG" },
+];
+
+const standardizeFuelType = (fuelStr) => {
+  if (!fuelStr) return "";
+  const t = fuelStr.trim();
+  const match = DEFAULT_FUEL_TYPES.find(
+    (f) => f.value.toLowerCase() === t.toLowerCase()
+  );
+  if (match) return match.value;
+  return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+};
+
 export default function SearchWithCard({
   onPageResponseChange,
   onFilterChange,
@@ -254,20 +273,10 @@ export default function SearchWithCard({
   );
 
   // ── Fuel Type states ──
-  const [fuelTypes, setFuelTypes] = useState([
-    { value: "Petrol", label: "Petrol" },
-    { value: "Diesel", label: "Diesel" },
-    { value: "Electric", label: "Electric" },
-    { value: "Hybrid", label: "Hybrid" },
-    { value: "LPG", label: "LPG" },
-    { value: "CNG", label: "CNG" },
-  ]);
+  const [fuelTypes, setFuelTypes] = useState(DEFAULT_FUEL_TYPES);
   const [fuelLoading, setFuelLoading] = useState(false);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState(() =>
-    fuelType ? fuelType.split(",").map(f => {
-      const t = f.trim();
-      return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
-    }) : [],
+    fuelType ? fuelType.split(",").map((f) => standardizeFuelType(f)) : [],
   );
 
   // ── Transmission Type states ──
@@ -804,10 +813,7 @@ export default function SearchWithCard({
     if (!qFuelType || qFuelType.toLowerCase() === "all") {
       setSelectedFuelTypes([]);
     } else {
-      setSelectedFuelTypes(qFuelType.split(",").map(f => {
-        const t = f.trim();
-        return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
-      }));
+      setSelectedFuelTypes(qFuelType.split(",").map((f) => standardizeFuelType(f)));
     }
 
     const qTransmission = searchParams.get("transmission") || initialFilters.transmission;
@@ -1309,44 +1315,22 @@ export default function SearchWithCard({
 
         if (res.success && Array.isArray(res.data)) {
           const realFuelTypes = res.data.map((fuel) => {
-            const standardized =
-              fuel.charAt(0).toUpperCase() + fuel.slice(1).toLowerCase();
+            const std = standardizeFuelType(fuel);
             return {
-              value: standardized,
-              label: standardized,
+              value: std,
+              label: std,
             };
           });
           setFuelTypes(realFuelTypes);
         } else {
-          setFuelTypes([
-            { value: "Petrol", label: "Petrol" },
-            { value: "Diesel", label: "Diesel" },
-            { value: "Electric", label: "Electric" },
-            { value: "Hybrid", label: "Hybrid" },
-            { value: "LPG", label: "LPG" },
-            { value: "CNG", label: "CNG" },
-          ]);
+          setFuelTypes(DEFAULT_FUEL_TYPES);
         }
       } else {
-        setFuelTypes([
-          { value: "Petrol", label: "Petrol" },
-          { value: "Diesel", label: "Diesel" },
-          { value: "Electric", label: "Electric" },
-          { value: "Hybrid", label: "Hybrid" },
-          { value: "LPG", label: "LPG" },
-          { value: "CNG", label: "CNG" },
-        ]);
+        setFuelTypes(DEFAULT_FUEL_TYPES);
       }
     } catch (err) {
       console.error("Fuel types error:", err);
-      setFuelTypes([
-        { value: "Petrol", label: "Petrol" },
-        { value: "Diesel", label: "Diesel" },
-        { value: "Electric", label: "Electric" },
-        { value: "Hybrid", label: "Hybrid" },
-        { value: "LPG", label: "LPG" },
-        { value: "CNG", label: "CNG" },
-      ]);
+      setFuelTypes(DEFAULT_FUEL_TYPES);
     } finally {
       setFuelLoading(false);
     }
