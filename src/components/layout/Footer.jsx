@@ -287,7 +287,7 @@ const Footer = () => {
           </div>
 
           <div className="text-center text-[12px] text-primary/40 flex flex-col gap-1 mb-6 md:mb-0 shrink-0 mx-4">
-            <p> Reecomm 2026 All Rights Reserved.</p>
+            <p> Reecomm &copy; {new Date().getFullYear()} All Rights Reserved.</p>
             <p>
               Reecomm is a product owned and operated by{" "}
               <Link
