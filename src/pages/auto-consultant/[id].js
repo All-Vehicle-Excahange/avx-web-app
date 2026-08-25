@@ -48,20 +48,20 @@ function StoreFrontPage({ seo }) {
         {seo?.canonical && <link key="canonical" rel="canonical" href={seo.canonical} />}
 
         {/* OpenGraph Tags for Social Sharing */}
-        <meta property="og:site_name" content="Reecomm" />
-        <meta property="og:title" content={displayTitle} />
-        <meta property="og:description" content={displayDescription} />
-        <meta property="og:type" content="website" />
-        {seo?.url && <meta property="og:url" content={seo.url} />}
-        {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
-        {displayImage && <meta property="og:image" content={displayImage} />}
+        <meta key="og:site_name" property="og:site_name" content="Reecomm" />
+        <meta key="og:title" property="og:title" content={displayTitle} />
+        <meta key="og:description" property="og:description" content={displayDescription} />
+        <meta key="og:type" property="og:type" content="website" />
+        {seo?.url && <meta key="og:url" property="og:url" content={seo.url} />}
+        {seo?.canonical && <meta key="og:url" property="og:url" content={seo.canonical} />}
+        {displayImage && <meta key="og:image" property="og:image" content={displayImage} />}
 
         {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@reecomm" />
-        <meta name="twitter:title" content={displayTitle} />
-        <meta name="twitter:description" content={displayDescription} />
-        {displayImage && <meta name="twitter:image" content={displayImage} />}
+        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
+        <meta key="twitter:site" name="twitter:site" content="@reecomm" />
+        <meta key="twitter:title" name="twitter:title" content={displayTitle} />
+        <meta key="twitter:description" name="twitter:description" content={displayDescription} />
+        {displayImage && <meta key="twitter:image" name="twitter:image" content={displayImage} />}
       </Head>
       <StoreFront />
     </>
