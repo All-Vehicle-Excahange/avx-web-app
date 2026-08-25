@@ -79,6 +79,7 @@ export default function SearchWithCard({
   onPageResponseChange,
   onFilterChange,
   onRemoveFilterHandlerChange,
+  onClearAllHandlerChange,
   onRelatedChange,
   onConsultChange,
   onConsultPayloadChange,
@@ -1540,9 +1541,6 @@ export default function SearchWithCard({
       { value: "sedan", label: "Sedan" },
       { value: "hatchback", label: "Hatchback" },
       { value: "muv", label: "MUV" },
-      { value: "truck", label: "Truck" },
-      { value: "coupe", label: "Coupe" },
-      { value: "convertible", label: "Convertible" },
       { value: "luxury suv", label: "Luxury SUV" },
       { value: "luxury sedan", label: "Luxury Sedan" },
     ];
@@ -1599,8 +1597,8 @@ export default function SearchWithCard({
     if (selectedStateName) locationParts.push(selectedStateName);
     if (selectedTownName) locationParts.push(selectedTownName);
     if (locationParts.length > 0) tags.push(locationParts.join(", "));
-    if (minPrice > 0 || maxPrice < MAX) {
-      if (minPrice === 0 && maxPrice < MAX) {
+    if (minPrice > MIN || maxPrice < MAX) {
+      if (minPrice === MIN && maxPrice < MAX) {
         const label = maxPrice < 100000 ? `₹${Math.round(maxPrice / 1000)}k` : `₹${(maxPrice / 100000).toFixed(1)}L`;
         tags.push(`Under ${label}`);
       } else {
@@ -1681,6 +1679,10 @@ export default function SearchWithCard({
         );
         return;
       }
+      if (String(resolvedBrandName).toLowerCase() === lower && selectedBrands.length > 0) {
+        setSelectedBrands([]);
+        return;
+      }
       // 6. Model
       const modelObj = models.find(
         (m) => String(m.label || "").toLowerCase() === lower,
@@ -1689,6 +1691,10 @@ export default function SearchWithCard({
         setSelectedModels((prev) =>
           prev.filter((val) => val !== modelObj.value),
         );
+        return;
+      }
+      if (String(resolvedModelName).toLowerCase() === lower && selectedModels.length > 0) {
+        setSelectedModels([]);
         return;
       }
       // 7. Variant
@@ -1707,7 +1713,7 @@ export default function SearchWithCard({
         lower.includes("under") ||
         lower.includes("l–")
       ) {
-        setMinPrice(0);
+        setMinPrice(MIN);
         setMaxPrice(MAX);
         return;
       }
@@ -1759,6 +1765,8 @@ export default function SearchWithCard({
       selectedCityName,
       selectedStateName,
       selectedTownName,
+      resolvedBrandName,
+      resolvedModelName,
     ],
   );
 
@@ -1767,6 +1775,12 @@ export default function SearchWithCard({
       onRemoveFilterHandlerChange(() => handleRemoveFilter);
     }
   }, [onRemoveFilterHandlerChange, handleRemoveFilter]);
+
+  useEffect(() => {
+    if (onClearAllHandlerChange) {
+      onClearAllHandlerChange(() => handleClearFilters);
+    }
+  }, [onClearAllHandlerChange]);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -1846,8 +1860,8 @@ export default function SearchWithCard({
     setVariantHasMore(false);
 
     // Reset price & km
-    setMinPrice(50000);
-    setMaxPrice(2000000);
+    setMinPrice(MIN);
+    setMaxPrice(MAX);
     setKmDistance(0);
 
     // Reset pagination

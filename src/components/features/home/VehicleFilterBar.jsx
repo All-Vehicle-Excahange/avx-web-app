@@ -43,6 +43,7 @@ export const FOUR_WHEELER_TYPES = [
   { key: "Sedan", label: "Sedan" },
   { key: "Hatchback", label: "Hatchback" },
   { key: "suv", label: "SUV" },
+  { key: "muv", label: "MUV" },
   { key: "Luxury SUV", label: "Luxury SUV" },
   { key: "Luxury Sedan", label: "Luxury Sedan" },
 ];
@@ -368,7 +369,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     setMobileOpen(false);
     setActiveTab(null);
     setVehicleSearchQuery("");
-    push(`/search?q=${encodeURIComponent(cleanQuery)}`);
+    let searchSlug = cleanQuery.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
+    let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
+    push(finalUrl.replace(/-+/g, '-'));
   };
 
   const [priceRange, setPriceRange] = useState("");

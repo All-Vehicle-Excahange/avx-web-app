@@ -213,7 +213,7 @@ export async function getServerSideProps(context) {
         description: finalDescription,
         ogTitle: finalTitle,
         ogDescription: finalDescription,
-        image: `${protocol}://${host}/logo/logo.webp`,
+        image: `${protocol}://${host}/logo/logo1.webp`,
         url: currentUrl,
       },
     },
