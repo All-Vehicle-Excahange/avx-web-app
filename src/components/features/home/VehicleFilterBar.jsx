@@ -266,13 +266,31 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           if (Array.isArray(indexData)) {
             consultantsList = indexData
               .filter((item) => item.type === "consultant" && item.params?.username)
-              .map((item) => ({
-                id: item.id,
-                label: item.title || item.params.username || "",
-                username: item.params.username || "",
-                type: "consultant",
-                link: `/auto-consultant/${item.params.username}`,
-              }))
+              .map((item) => {
+                const username = item.params.username || "";
+                const cleanSlug = username.replace(/\d+$/, "");
+                const rawTitle = (item.title || "").trim();
+                const looksLikeDigitSlug =
+                  !rawTitle ||
+                  rawTitle.toLowerCase() === username.toLowerCase() ||
+                  /\d{4,}$/.test(rawTitle);
+                let label = looksLikeDigitSlug
+                  ? cleanSlug || username
+                  : rawTitle;
+                if (label === label.toUpperCase() && label.length > 2) {
+                  label = label.charAt(0) + label.slice(1).toLowerCase();
+                }
+                return {
+                  id: item.id,
+                  label,
+                  username,
+                  searchTokens: [label, cleanSlug, ...(item.keywords || [])]
+                    .filter(Boolean)
+                    .map((t) => String(t).toLowerCase()),
+                  type: "consultant",
+                  link: `/auto-consultant/${username}`,
+                };
+              })
               .filter((c) => c.label && c.username);
           }
         }
@@ -300,9 +318,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     const matches = suggestionsData
       .filter((s) => {
         const labelMatch = s.label.toLowerCase().includes(q);
-        const usernameMatch =
-          s.username && s.username.toLowerCase().includes(q);
-        return labelMatch || usernameMatch;
+        const tokenMatch = Array.isArray(s.searchTokens)
+          ? s.searchTokens.some((t) => t.includes(q))
+          : false;
+        const cleanUser =
+          s.username && String(s.username).replace(/\d+$/, "").toLowerCase();
+        const cleanUserMatch = cleanUser && cleanUser.includes(q);
+        return labelMatch || tokenMatch || cleanUserMatch;
       })
       .slice(0, 8);
 

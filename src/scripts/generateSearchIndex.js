@@ -349,10 +349,11 @@ async function fetchAutoConsultants() {
           ? store.consultationName.trim()
           : humanizeConsultationTitle(store.username);
 
+        // Search keywords: clean slug + name words only — never raw digit usernames
+        const cleanSlug = stripTrailingDigits(store.username).toLowerCase();
         const keywords = new Set([
-          store.username.toLowerCase(),
-          ...(store.previousUsername ? [store.previousUsername.toLowerCase()] : []),
-          ...(title.toLowerCase().split(/\s+/)),
+          ...(cleanSlug ? [cleanSlug] : []),
+          ...(title.toLowerCase().split(/\s+/).filter((w) => w && !/^\d+$/.test(w))),
           ...(store.cityName ? [store.cityName.toLowerCase()] : []),
           ...(store.stateName ? [store.stateName.toLowerCase()] : []),
           'consultant', 'auto consultant', 'dealer', 'storefront'
@@ -388,10 +389,15 @@ function StringUtilsHasText(s) {
   return typeof s === 'string' && s.trim().length > 0;
 }
 
+/** Strip trailing digit suffix from username (e.g. naammotors663505 → naammotors). */
+function stripTrailingDigits(username) {
+  return String(username || '').replace(/\d+$/, '').trim();
+}
+
 /** Display title from username without showing raw digit slug. */
 function humanizeConsultationTitle(username) {
   if (!username) return 'Auto Consultant';
-  const stripped = String(username).replace(/\d+$/, '').replace(/[-_]+/g, ' ').trim();
+  const stripped = stripTrailingDigits(username).replace(/[-_]+/g, ' ').trim();
   return toTitleCase(stripped || username);
 }
 
