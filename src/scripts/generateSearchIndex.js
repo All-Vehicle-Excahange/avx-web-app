@@ -2,10 +2,19 @@ const fs = require('fs');
 const path = require('path');
 
 const SITEMAP_URL = process.env.SITEMAP_URL || 'https://www.reecomm.com/sitemap.xml';
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.reecomm.online/api/v1/website';
+const API_BASE_URL =
+  process.env.BACKEND_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://api.reecomm.online/api/v1/website';
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 const OUTPUT_FILE = path.join(PUBLIC_DIR, 'search_index.json');
+
+function normalizeApiBase(url) {
+  const clean = String(url || '').replace(/\/$/, '');
+  if (clean.endsWith('/api/v1/website')) return clean;
+  return `${clean}/api/v1/website`;
+}
 
 // List of known car & bike makers for accurate brand & model extraction
 const KNOWN_MAKERS = [
@@ -50,19 +59,9 @@ function parseUrlPath(urlStr) {
 
   const parts = cleanPath.split('/').filter(Boolean);
 
-  // 1. Consultant / Storefront Pages: /auto-consultant/{username} or /storefront/{username}
+  // 1. Consultant / Storefront Pages — skip URL-only rows (API supplies titles)
   if ((parts[0] === 'auto-consultant' || parts[0] === 'storefront') && parts[1]) {
-    const username = parts[1];
-    const cleanName = toTitleCase(username);
-    return {
-      id: `consultant_${username}`,
-      title: cleanName,
-      keywords: cleanName.toLowerCase().split(' ').concat([username.toLowerCase(), 'consultant', 'dealer', 'storefront']),
-      type: 'consultant',
-      params: {
-        username: username
-      }
-    };
+    return null;
   }
 
   // 2. Used Vehicle Filters: /used-cars/{maker}/{model}/{city}
@@ -222,7 +221,7 @@ function parseUrlPath(urlStr) {
       title: title,
       keywords: Array.from(new Set(keywords.map(k => String(k).toLowerCase()))),
       type: 'vehicle_filter',
-      params: params
+      params: { ...params, slug: searchSlug }
     };
   }
 
@@ -255,7 +254,8 @@ function generateBrandLocationCombinations() {
         params: {
           makerName: brand,
           city: city,
-          vehicleType: 'FOUR_WHEELER'
+          vehicleType: 'FOUR_WHEELER',
+          slug
         }
       });
     }
@@ -300,7 +300,8 @@ function generateBrandLocationCombinations() {
           makerName: brand,
           modelName: model,
           city: city,
-          vehicleType: 'FOUR_WHEELER'
+          vehicleType: 'FOUR_WHEELER',
+          slug
         }
       });
     }
@@ -316,19 +317,18 @@ async function fetchAutoConsultants() {
   const consultants = [];
   const processedIds = [];
   try {
-    const cleanApiUrl = API_BASE_URL.replace(/\/$/, '');
+    const cleanApiUrl = normalizeApiBase(API_BASE_URL).replace(/\/$/, '');
     let pageNo = 1;
     let totalPages = 1;
 
-    // Try unsynced endpoint first for delta sync
-    let endpoint = `${cleanApiUrl}/homefeed/consultations/seo/unsynced`;
-    console.log(`[Cron] Checking for unsynced auto consultants from ${endpoint}...`);
+    // Prefer full SEO list so titles/usernames stay complete (not only unsynced delta)
+    let endpoint = `${cleanApiUrl}/homefeed/consultations/seo`;
+    console.log(`[Cron] Fetching all auto consultants from ${endpoint}...`);
 
     let res = await fetch(`${endpoint}?pageNo=1&size=100`);
     if (!res.ok) {
-      // Fallback to full fetch endpoint
-      endpoint = `${cleanApiUrl}/homefeed/consultations/seo`;
-      console.log(`[Cron] Fetching all auto consultants from ${endpoint}...`);
+      endpoint = `${cleanApiUrl}/homefeed/consultations/seo/unsynced`;
+      console.log(`[Cron] Fallback unsynced consultants from ${endpoint}...`);
       res = await fetch(`${endpoint}?pageNo=1&size=100`);
     }
 
@@ -345,11 +345,14 @@ async function fetchAutoConsultants() {
         if (!store.username) continue;
         if (store.id) processedIds.push(store.id);
 
-        const title = store.consultationName || toTitleCase(store.username);
+        const title = StringUtilsHasText(store.consultationName)
+          ? store.consultationName.trim()
+          : humanizeConsultationTitle(store.username);
 
         const keywords = new Set([
           store.username.toLowerCase(),
-          ...(title.toLowerCase().split(' ')),
+          ...(store.previousUsername ? [store.previousUsername.toLowerCase()] : []),
+          ...(title.toLowerCase().split(/\s+/)),
           ...(store.cityName ? [store.cityName.toLowerCase()] : []),
           ...(store.stateName ? [store.stateName.toLowerCase()] : []),
           'consultant', 'auto consultant', 'dealer', 'storefront'
@@ -364,6 +367,7 @@ async function fetchAutoConsultants() {
           type: 'consultant',
           params: {
             username: store.username,
+            ...(store.previousUsername ? { previousUsername: store.previousUsername } : {}),
             ...(store.id ? { consultationId: store.id } : {})
           }
         });
@@ -373,27 +377,22 @@ async function fetchAutoConsultants() {
       pageNo++;
     }
 
-    // Mark processed consultant IDs as SEO synced in backend
-    if (processedIds.length > 0 && endpoint.includes('/unsynced')) {
-      try {
-        const markRes = await fetch(`${cleanApiUrl}/homefeed/consultations/seo/mark-synced`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(processedIds)
-        });
-        if (markRes.ok) {
-          console.log(`[Cron] Successfully marked ${processedIds.length} consultants as SEO synced in backend.`);
-        }
-      } catch (markErr) {
-        console.warn('[Cron] Warning marking consultants as synced:', markErr.message);
-      }
-    }
-
     console.log(`[Cron] Successfully loaded ${consultants.length} auto-consultants.`);
   } catch (err) {
     console.warn('[Cron] Warning fetching auto consultants:', err.message);
   }
   return consultants;
+}
+
+function StringUtilsHasText(s) {
+  return typeof s === 'string' && s.trim().length > 0;
+}
+
+/** Display title from username without showing raw digit slug. */
+function humanizeConsultationTitle(username) {
+  if (!username) return 'Auto Consultant';
+  const stripped = String(username).replace(/\d+$/, '').replace(/[-_]+/g, ' ').trim();
+  return toTitleCase(stripped || username);
 }
 
 /**
@@ -464,16 +463,8 @@ async function generateSearchIndex() {
       type: 'vehicle_filter',
       params: {
         avxInspected: true,
-        vehicleType: 'FOUR_WHEELER'
-      }
-    },
-    {
-      id: 'consultant_hannans_consultant',
-      title: 'Hannans Consultant',
-      keywords: ['hannan', 'consultant', 'dealer', 'storefront'],
-      type: 'consultant',
-      params: {
-        username: 'hannans-consultant'
+        vehicleType: 'FOUR_WHEELER',
+        slug: 'buy-used-inspected-cars'
       }
     }
   ];

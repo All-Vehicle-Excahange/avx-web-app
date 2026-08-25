@@ -4,12 +4,33 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
-import { getStoreFrontByUsername } from "@/services/user.service";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
+import axios from "axios";
+
+async function fetchStoreFrontServer(username) {
+  const envUrl =
+    process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "";
+  let base = "https://api.reecomm.online/api/v1/website";
+  if (envUrl.startsWith("http")) {
+    base = envUrl.endsWith("/api/v1/website")
+      ? envUrl
+      : `${envUrl.replace(/\/$/, "")}/api/v1/website`;
+  }
+  try {
+    const res = await axios.get(
+      `${base}/consultation/detail-page/by-username/${encodeURIComponent(username)}`,
+      { timeout: 12000, headers: { Accept: "application/json" } }
+    );
+    return res.data?.data || res.data || null;
+  } catch (e) {
+    console.warn("[auto-consultant SSR] fetch failed:", e.message);
+    return null;
+  }
+}
 
 function StoreFrontPage({ seo }) {
   const router = useRouter();
-  
+
   if (router.isFallback) {
     return <StoreFrontHeroSkeleton />;
   }
@@ -21,12 +42,11 @@ function StoreFrontPage({ seo }) {
     enabled: !!id,
   });
 
-  // Start with server-rendered/fallback values
   let displayTitle = seo?.title || "StoreFront Details | Reecomm";
-  let displayDescription = seo?.description || "View storefront, inventory, and reviews.";
+  let displayDescription =
+    seo?.description || "View storefront, inventory, and reviews.";
   let displayImage = seo?.image || "";
 
-  // If client-side query loads the storefront data, update the SEO tags dynamically
   if (storeDetails) {
     const fetchedStoreName = storeDetails.consultationName || "";
     if (fetchedStoreName) {
@@ -44,24 +64,20 @@ function StoreFrontPage({ seo }) {
         <title>{displayTitle}</title>
         <meta name="description" content={displayDescription} />
 
-        {/* Canonical */}
-        {seo?.canonical && <link key="canonical" rel="canonical" href={seo.canonical} />}
+        {seo?.canonical && (
+          <link key="canonical" rel="canonical" href={seo.canonical} />
+        )}
 
-        {/* OpenGraph Tags for Social Sharing */}
-        <meta key="og:site_name" property="og:site_name" content="Reecomm" />
-        <meta key="og:title" property="og:title" content={displayTitle} />
-        <meta key="og:description" property="og:description" content={displayDescription} />
-        <meta key="og:type" property="og:type" content="website" />
-        {seo?.url && <meta key="og:url" property="og:url" content={seo.url} />}
-        {seo?.canonical && <meta key="og:url" property="og:url" content={seo.canonical} />}
-        {displayImage && <meta key="og:image" property="og:image" content={displayImage} />}
+        <meta property="og:title" content={displayTitle} />
+        <meta property="og:description" content={displayDescription} />
+        {displayImage && <meta property="og:image" content={displayImage} />}
+        {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
+        <meta property="og:type" content="profile" />
 
-        {/* Twitter Card Tags */}
-        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
-        <meta key="twitter:site" name="twitter:site" content="@reecomm" />
-        <meta key="twitter:title" name="twitter:title" content={displayTitle} />
-        <meta key="twitter:description" name="twitter:description" content={displayDescription} />
-        {displayImage && <meta key="twitter:image" name="twitter:image" content={displayImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={displayTitle} />
+        <meta name="twitter:description" content={displayDescription} />
+        {displayImage && <meta name="twitter:image" content={displayImage} />}
       </Head>
       <StoreFront />
     </>
@@ -82,55 +98,57 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const { params } = context;
   const { id } = params || {};
-
-  // Construct the full current URL dynamically using params
-  const protocol = process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? "http" : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
-  const currentUrl = `${protocol}://${host}/auto-consultant/${id}`;
+  const canonicalBase = `https://${host}/auto-consultant`;
 
-  // Fallback slug formatting (fast and synchronous)
-  let finalTitle = id
-    ? id
-        .toString()
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
-    : "StoreFront Details";
-
-  let storefrontImageUrl = `${protocol}://${host}/logo/logo1.webp`;
-
-  try {
-    if (id) {
-      const baseUrl = process.env.BACKEND_URL || (process.env.NEXT_PUBLIC_NODE_API_URL ? process.env.NEXT_PUBLIC_NODE_API_URL.split('/api/')[0] : 'https://api.reecomm.online');
-      const apiUrl = `${baseUrl}/api/v1/website/consultation/detail-page/by-username/${id}`;
-      const res = await fetch(apiUrl);
-      if (res.ok) {
-        const response = await res.json();
-        if (response && response.data) {
-          const storeDetails = response.data;
-          if (storeDetails.consultationName) {
-            finalTitle = storeDetails.consultationName;
-          }
-          if (storeDetails.logoUrl) {
-            storefrontImageUrl = storeDetails.logoUrl;
-          } else if (storeDetails.bannerUrl) {
-            storefrontImageUrl = storeDetails.bannerUrl;
-          }
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Failed to fetch storefront details for SEO:", error);
+  if (!id) {
+    return { notFound: true, revalidate: 60 };
   }
+
+  const store = await fetchStoreFrontServer(id);
+
+  // previousUsername / digit slug → 301 to current clean username
+  if (
+    store?.username &&
+    String(store.username).toLowerCase() !== String(id).toLowerCase()
+  ) {
+    return {
+      redirect: {
+        destination: `/auto-consultant/${store.username}`,
+        permanent: true,
+      },
+    };
+  }
+
+  const consultationName =
+    store?.consultationName ||
+    String(id)
+      .replace(/\d+$/, "")
+      .replace(/[-_]+/g, " ")
+      .trim();
+
+  const displayName =
+    consultationName && consultationName.length > 1
+      ? consultationName
+          .split(" ")
+          .filter(Boolean)
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(" ")
+      : "StoreFront Details";
+
+  const currentUsername = store?.username || id;
+  const currentUrl = `${canonicalBase}/${currentUsername}`;
+  const storefrontImageUrl =
+    store?.logoUrl || `https://${host}/logo/logo.webp`;
 
   return {
     props: {
       seo: {
-        title: `${finalTitle} | Reecomm`,
-        description: `View the ${finalTitle} storefront, certified inventory, and customer reviews on Reecomm.`,
+        title: `${displayName} | Reecomm`,
+        description: `View the ${displayName} storefront, certified inventory, and customer reviews on Reecomm.`,
         image: storefrontImageUrl,
         url: currentUrl,
-        canonical: `https://www.reecomm.com/auto-consultant/${id}`,
+        canonical: currentUrl,
       },
     },
     revalidate: 60,

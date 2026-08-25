@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Vehicle Listings (dynamic, paginated) -->
+  <!-- Vehicle Listings (dynamic, paginated INDEX — all pages) -->
   <sitemap>
-    <loc>https://www.reecomm.com/api/sitemap/vehicles/1.xml</loc>
-    <lastmod>2026-08-17T10:35:00Z</lastmod>
+    <loc>https://www.reecomm.com/api/sitemap/vehicles.xml</loc>
+    <lastmod>2026-08-25T00:00:00Z</lastmod>
   </sitemap>
-  <!-- Storefront Listings (dynamic, paginated) -->
+  <!-- Storefront Listings (dynamic, paginated INDEX — all consultants) -->
   <sitemap>
-    <loc>https://www.reecomm.com/api/sitemap/storefronts/1.xml</loc>
-    <lastmod>2026-08-17T10:35:00Z</lastmod>
+    <loc>https://www.reecomm.com/api/sitemap/storefronts.xml</loc>
+    <lastmod>2026-08-25T00:00:00Z</lastmod>
   </sitemap>
   <!-- Geo-Brands & City Combinations (dynamic) -->
   <sitemap>
     <loc>https://www.reecomm.com/api/sitemap/geo-brands.xml</loc>
     <lastmod>2026-07-03T12:00:00Z</lastmod>
+  </sitemap>
+  <!-- Search slug landings from search_index (dynamic) -->
+  <sitemap>
+    <loc>https://www.reecomm.com/api/sitemap/search-pages.xml</loc>
+    <lastmod>2026-08-25T00:00:00Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.reecomm.com/pages-sitemap.xml</loc>
