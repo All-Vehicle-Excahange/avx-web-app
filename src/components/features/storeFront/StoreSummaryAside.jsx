@@ -15,7 +15,7 @@ export default function StoreSummaryAside() {
 
   return (
     <aside className="hidden lg:flex h-fit relative w-[340px]  border border-third/40 p-6 flex-col gap-6 overflow-y-auto shrink-0 rounded-2xl">
-      {/* 🔥 Blurred background */}
+      {/*  Blurred background */}
       <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover opacity-40 blur-lg z-0" />
 
       {/* CONTENT */}
@@ -39,11 +39,10 @@ export default function StoreSummaryAside() {
                 <button
                   key={type.value}
                   onClick={() => setVehicleType(type.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs border transition ${
-                    isActive
-                      ? "bg-primary text-secondary border-primary"
-                      : "border-third/40 text-primary hover:bg-primary/20"
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-xs border transition ${isActive
+                    ? "bg-primary text-secondary border-primary"
+                    : "border-third/40 text-primary hover:bg-primary/20"
+                    }`}
                 >
                   {type.label}
                 </button>

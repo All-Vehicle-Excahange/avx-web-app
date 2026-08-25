@@ -23,7 +23,7 @@ const DATA = {
     titleTop: "A marketplace designed",
     titleBottom: "for confident buying decisions",
     desc: "Reecomm helps buyers navigate pre-owned vehicles with clarity. Verified consultants, structured listings, and transparent communication replace guesswork with confidence.",
-    cta: { text: "Browse Vehicles →", href: "/vehicles" },
+    cta: { text: "Browse Vehicles →", href: "/" },
     features: [
       {
         icon: <CheckCircle size={22} />,
@@ -58,7 +58,7 @@ const DATA = {
     titleTop: "A platform built",
     titleBottom: "for serious automotive consultants",
     desc: "Reecomm empowers consultants with structured visibility, measurable performance, and scalable growth — without compromising credibility.",
-    cta: { text: "Become a Consultant →", href: "/consultant" },
+    cta: { text: "Become a Consultant →", href: "/become-consultant" },
     features: [
       {
         icon: <Store size={22} />,
@@ -129,11 +129,10 @@ export default function ConsultantsAndBuyers() {
             <button
               ref={buyersRef}
               onClick={() => setActive("buyers")}
-              className={`relative z-10 px-8 py-3 text-sm uppercase tracking-widest transition
-                ${
-                  active === "buyers"
-                    ? "text-black"
-                    : "text-neutral-300 hover:text-white"
+              className={`relative z-10 px-8 py-3 text-sm uppercase tracking-widest transition cursor-pointer
+                ${active === "buyers"
+                  ? "text-black"
+                  : "text-neutral-300 hover:text-white"
                 }`}
             >
               For Buyers
@@ -142,11 +141,10 @@ export default function ConsultantsAndBuyers() {
             <button
               ref={consultantsRef}
               onClick={() => setActive("consultants")}
-              className={`relative z-10 px-10 py-3 text-sm uppercase tracking-widest transition
-                ${
-                  active === "consultants"
-                    ? "text-black"
-                    : "text-neutral-300 hover:text-white"
+              className={`relative z-10 px-10 py-3 text-sm uppercase tracking-widest transition cursor-pointer
+                ${active === "consultants"
+                  ? "text-black"
+                  : "text-neutral-300 hover:text-white"
                 }`}
             >
               For Consultants
@@ -185,19 +183,19 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
         <span className="absolute left-0 -bottom-3 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
       </p>
 
-       <h2
-              className="
+      <h2
+        className="
               text-3xl sm:text-4xl lg:text-5xl
               font-semibold
               leading-[1.05]
               text-primary
               font-[Montserrat]
             "
-            >
-              {titleTop}
-              <br />  
-              <span className="text-fourth/80">{titleBottom}</span>
-            </h2>
+      >
+        {titleTop}
+        <br />
+        <span className="text-fourth/80">{titleBottom}</span>
+      </h2>
 
       <p className="mt-12 max-w-xl text-xl leading-relaxed text-neutral-300 ">
         {desc}

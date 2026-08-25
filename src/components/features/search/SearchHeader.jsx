@@ -19,6 +19,7 @@ export default function SearchHeader({
   pageResponse = {},
   activeFilters = [],
   onRemoveFilter,
+  onClearAll,
 }) {
   const [open, setOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -368,13 +369,26 @@ export default function SearchHeader({
                 </button>
               )}
 
-              <Link
-                href="/search"
-                onClick={() => setShowFilters(false)}
-                className="text-xs font-semibold underline text-primary/80 hover:text-primary transition-colors cursor-pointer ml-1"
-              >
-                Clear All
-              </Link>
+              {onClearAll ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowFilters(false);
+                    onClearAll();
+                  }}
+                  className="text-xs font-semibold underline text-primary/80 hover:text-primary transition-colors cursor-pointer ml-1"
+                >
+                  Clear All
+                </button>
+              ) : (
+                <Link
+                  href="/search"
+                  onClick={() => setShowFilters(false)}
+                  className="text-xs font-semibold underline text-primary/80 hover:text-primary transition-colors cursor-pointer ml-1"
+                >
+                  Clear All
+                </Link>
+              )}
             </div>
           )}
         </div>

@@ -97,7 +97,7 @@ export async function getStaticProps(context) {
         .join(" ")
     : "StoreFront Details";
 
-  let storefrontImageUrl = `${protocol}://${host}/logo/logo.webp`;
+  let storefrontImageUrl = `${protocol}://${host}/logo/logo1.webp`;
 
   return {
     props: {

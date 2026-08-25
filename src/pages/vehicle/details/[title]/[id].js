@@ -286,7 +286,7 @@ export async function getStaticProps(context) {
   let finalTitle = "Vehicle Details | Reecomm";
   let finalDescription =
     "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
-  let finalImageUrl = `${protocol}://${host}/logo/logo.webp`;
+  let finalImageUrl = `${protocol}://${host}/logo/logo1.webp`;
 
   if (title) {
     // Regex matches slugs like: buy-used-[brand-model]-[year]-[type]-[city]
