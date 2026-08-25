@@ -101,16 +101,20 @@ export async function getStaticProps(context) {
 
   try {
     if (id) {
-      const response = await getStoreFrontByUsername(id);
-      if (response && response.data) {
-        const storeDetails = response.data;
-        if (storeDetails.consultationName) {
-          finalTitle = storeDetails.consultationName;
-        }
-        if (storeDetails.bannerUrl) {
-          storefrontImageUrl = storeDetails.bannerUrl;
-        } else if (storeDetails.logoUrl) {
-          storefrontImageUrl = storeDetails.logoUrl;
+      const apiUrl = `${process.env.BACKEND_URL}/api/v1/website/consultation/detail-page/by-username/${id}`;
+      const res = await fetch(apiUrl);
+      if (res.ok) {
+        const response = await res.json();
+        if (response && response.data) {
+          const storeDetails = response.data;
+          if (storeDetails.consultationName) {
+            finalTitle = storeDetails.consultationName;
+          }
+          if (storeDetails.logoUrl) {
+            storefrontImageUrl = storeDetails.logoUrl;
+          } else if (storeDetails.bannerUrl) {
+            storefrontImageUrl = storeDetails.bannerUrl;
+          }
         }
       }
     }
