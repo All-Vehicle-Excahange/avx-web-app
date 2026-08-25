@@ -75,7 +75,7 @@ export default StoreFrontPage;
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: true,
+    fallback: "blocking",
   };
 }
 
@@ -101,7 +101,8 @@ export async function getStaticProps(context) {
 
   try {
     if (id) {
-      const apiUrl = `${process.env.BACKEND_URL}/api/v1/website/consultation/detail-page/by-username/${id}`;
+      const baseUrl = process.env.BACKEND_URL || (process.env.NEXT_PUBLIC_NODE_API_URL ? process.env.NEXT_PUBLIC_NODE_API_URL.split('/api/')[0] : 'https://api.reecomm.online');
+      const apiUrl = `${baseUrl}/api/v1/website/consultation/detail-page/by-username/${id}`;
       const res = await fetch(apiUrl);
       if (res.ok) {
         const response = await res.json();
