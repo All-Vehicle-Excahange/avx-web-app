@@ -10,7 +10,8 @@
     "test:jest:watch": "jest --watch",
     "lint": "eslint",
     "generate:search-index": "node src/scripts/generateSearchIndex.js",
-    "generate:sitemaps": "node src/scripts/generateSitemaps.js"
+    "generate:sitemaps": "node src/scripts/generateSitemaps.js",
+    "notify:storefronts": "node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps"
   },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",

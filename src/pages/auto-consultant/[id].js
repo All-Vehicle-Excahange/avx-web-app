@@ -105,11 +105,32 @@ export async function getStaticProps(context) {
     return { notFound: true, revalidate: 60 };
   }
 
-  const store = await fetchStoreFrontServer(id);
+  let store = await fetchStoreFrontServer(id);
+
+  // Digit / stale slug: API may 404 if previousUsername wasn't saved — try clean base
+  if (!store) {
+    const cleanBase = String(id).replace(/\d+$/, "");
+    if (
+      cleanBase &&
+      cleanBase.toLowerCase() !== String(id).toLowerCase() &&
+      /\d{4,}$/.test(String(id))
+    ) {
+      const byClean = await fetchStoreFrontServer(cleanBase);
+      if (byClean?.username) {
+        return {
+          redirect: {
+            destination: `/auto-consultant/${byClean.username}`,
+            permanent: true,
+          },
+        };
+      }
+    }
+    return { notFound: true, revalidate: 60 };
+  }
 
   // previousUsername / digit slug → 301 to current clean username
   if (
-    store?.username &&
+    store.username &&
     String(store.username).toLowerCase() !== String(id).toLowerCase()
   ) {
     return {
@@ -121,7 +142,7 @@ export async function getStaticProps(context) {
   }
 
   const consultationName =
-    store?.consultationName ||
+    store.consultationName ||
     String(id)
       .replace(/\d+$/, "")
       .replace(/[-_]+/g, " ")
@@ -136,10 +157,10 @@ export async function getStaticProps(context) {
           .join(" ")
       : "StoreFront Details";
 
-  const currentUsername = store?.username || id;
+  const currentUsername = store.username || id;
   const currentUrl = `${canonicalBase}/${currentUsername}`;
   const storefrontImageUrl =
-    store?.logoUrl || `https://${host}/logo/logo.webp`;
+    store.logoUrl || `https://${host}/logo/logo.webp`;
 
   return {
     props: {

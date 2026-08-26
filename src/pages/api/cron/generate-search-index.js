@@ -21,6 +21,7 @@ const MAX_SEARCH_NOTIFY = 500;
 
 /**
  * Cron API Handler: GET /api/cron/generate-search-index
+ * Optional: ?only=storefronts  — Google notify for storefronts page 1 only (no vehicles/search burn)
  */
 export default async function handler(req, res) {
   const authHeader = req.headers.authorization;
@@ -29,6 +30,87 @@ export default async function handler(req, res) {
     authHeader !== `Bearer ${process.env.CRON_SECRET}`
   ) {
     return res.status(401).json({ error: "Unauthorized cron trigger" });
+  }
+
+  const only = String(req.query.only || "").toLowerCase();
+
+  // Lightweight path: storefronts / storefronts/1.xml only
+  if (only === "storefronts" || only === "storefront") {
+    try {
+      let consultantCount = 0;
+      let deletedCount = 0;
+      let sitemapCount = 0;
+      const page = Math.max(1, parseInt(String(req.query.page || "1"), 10) || 1);
+
+      // Priority SERP fix for Aabad Motors
+      try {
+        const d = await notifyGoogleIndexing(
+          `${BASE_URL}/auto-consultant/aabadmotors487206`,
+          "URL_DELETED"
+        );
+        if (d.success) deletedCount++;
+        const u = await notifyGoogleIndexing(
+          `${BASE_URL}/auto-consultant/aabadmotors`,
+          "URL_UPDATED"
+        );
+        if (u.success) consultantCount++;
+      } catch (e) {
+        console.warn("[Cron] aabad priority notify failed:", e.message);
+      }
+
+      for (const sm of [
+        `${BASE_URL}/api/sitemap/storefronts.xml`,
+        `${BASE_URL}/api/sitemap/storefronts/${page}.xml`,
+      ]) {
+        try {
+          const r = await notifyGoogleIndexing(sm, "URL_UPDATED");
+          if (r.success) sitemapCount++;
+        } catch (e) {
+          console.warn("[Cron] storefront sitemap notify failed:", e.message);
+        }
+      }
+
+      const { data: consultants } = await getSeoConsultations(page, PAGE_SIZE);
+      for (let i = 0; i < (consultants || []).length; i += BATCH) {
+        const chunk = consultants.slice(i, i + BATCH);
+        await Promise.all(
+          chunk.map(async (store) => {
+            try {
+              if (!store.username) return;
+              if (store.username === "aabadmotors") return; // already priority-updated
+              const fullUrl = `${BASE_URL}/auto-consultant/${store.username}`;
+              const r = await notifyGoogleIndexing(fullUrl, "URL_UPDATED");
+              if (r.success) consultantCount++;
+              if (
+                store.previousUsername &&
+                store.previousUsername !== store.username
+              ) {
+                const oldUrl = `${BASE_URL}/auto-consultant/${store.previousUsername}`;
+                const d = await notifyGoogleIndexing(oldUrl, "URL_DELETED");
+                if (d.success) deletedCount++;
+              }
+            } catch (e) {
+              console.warn("[Cron] storefront notify failed:", e.message);
+            }
+          })
+        );
+      }
+
+      return res.status(200).json({
+        success: true,
+        mode: "storefronts-only",
+        page,
+        googleIndexing: {
+          consultantsNotified: consultantCount,
+          previousUsernamesDeleted: deletedCount,
+          sitemapsNotified: sitemapCount,
+        },
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("[Cron storefronts-only Error]:", error);
+      return res.status(500).json({ success: false, error: error.message });
+    }
   }
 
   try {
