@@ -1,7 +1,5 @@
-import HomePage from "@/components/features/consult/details/HomePage";
 import AccountabilityTrust from "@/components/features/consult/landing/AccountabilityTrust";
 import ConsultantHeroSection from "@/components/features/consult/landing/ConsultantHero";
-import ConsultCta from "@/components/features/consult/landing/ConsultCta";
 import GrowthTools from "@/components/features/consult/landing/GrowthTools";
 import OnboardingProcess from "@/components/features/consult/landing/OnBoardingProcess";
 import PerformanceDashboard from "@/components/features/consult/landing/PerformanceDashboard";
@@ -17,6 +15,12 @@ import Head from "next/head";
 import React from "react";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
+import MetaPixelTracker from "@/components/analytics/MetaPixelTracker";
+
+const CONSULT_PAGE_VIEW_PARAMS = {
+  content_name: "Become a Consultant",
+  content_category: "consultant",
+};
 
 function index() {
   return (
@@ -57,6 +61,10 @@ function index() {
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />
       </Head>
+      <MetaPixelTracker
+        eventName="ConsultPageView"
+        params={CONSULT_PAGE_VIEW_PARAMS}
+      />
       <Navbar />
 
       <ConsultantHeroSection />

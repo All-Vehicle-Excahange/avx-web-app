@@ -13,6 +13,7 @@ import {
   getActiveSubscription,
 } from "@/services/subscription.service";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { event, customEvent } from "@/lib/fpixel";
 
 export default function Subscription() {
   const { push, query } = useRouter();
@@ -21,6 +22,13 @@ export default function Subscription() {
   const [selectedTierId, setSelectedTierId] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [billingCycle, setBillingCycle] = useState("MONTHLY");
+
+  useEffect(() => {
+    customEvent("PricingPlan", {
+      content_name: "Consultant Pricing",
+      content_category: "subscription",
+    });
+  }, []);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -93,6 +101,20 @@ export default function Subscription() {
       }
 
       const selectedTier = tiers.find((t) => t.id === activeTierId);
+
+      const planValue =
+        billingCycle === "YEARLY"
+          ? Number(selectedTier?.yearlyPrice) || 0
+          : Number(selectedTier?.monthlyPrice) || 0;
+
+      event("InitiateCheckout", {
+        value: planValue,
+        currency: "INR",
+        content_name: selectedTier?.title || "Consultant Plan",
+        content_ids: selectedTier?.id ? [selectedTier.id] : [],
+        content_type: "consultant_subscription",
+        num_items: 1,
+      });
 
       // Create subscription in the backend
       let response;
@@ -197,6 +219,14 @@ export default function Subscription() {
           contact: prefillContact,
         },
         handler: async function (paymentResponse) {
+          event("Subscribe", {
+            value: planValue,
+            currency: "INR",
+            predicted_ltv: planValue,
+            content_name: selectedTier?.title || "Consultant Plan",
+            content_ids: selectedTier?.id ? [selectedTier.id] : [],
+            billing_cycle: billingCycle,
+          });
           if (query?.redirect) {
             push(
               `/consult/kyc?redirect=${encodeURIComponent(query.redirect)}`,

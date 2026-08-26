@@ -9,6 +9,12 @@ import NoCommissionModel from "@/components/features/consult/pricing/NoCommissio
 import FAQ from "@/components/features/consult/pricing/Faq";
 import TierCta from "@/components/features/consult/pricing/TierCta";
 import PlanComplareTable from "@/components/features/consult/pricing/PlanComplareTable";
+import MetaPixelTracker from "@/components/analytics/MetaPixelTracker";
+
+const PRICING_PLAN_PARAMS = {
+  content_name: "Consultant Pricing",
+  content_category: "subscription",
+};
 
 function index() {
   return (
@@ -20,6 +26,7 @@ function index() {
           content="Join Reecomm as a consultant and earn through vehicle inspections while growing your business with our advanced tools."
         />
       </Head>
+      <MetaPixelTracker eventName="PricingPlan" params={PRICING_PLAN_PARAMS} />
       <Navbar />
 
       <FullPricing />

@@ -25,6 +25,7 @@ import {
 } from "@/services/subscription.service";
 import DowngradeModal from "./DowngradeModal";
 import BillingSummaryModal from "./BillingSummaryModal";
+import { event } from "@/lib/fpixel";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -244,6 +245,19 @@ export default function FullPricing() {
 
       const { razorpaySubscriptionId, shortUrl } = response.data;
 
+      const planValue = yearly
+        ? Number(tier.yearlyPrice) || 0
+        : Number(tier.monthlyPrice) || 0;
+
+      event("InitiateCheckout", {
+        value: planValue,
+        currency: "INR",
+        content_name: tier.title || "Consultant Plan",
+        content_ids: tier.id ? [tier.id] : [],
+        content_type: "consultant_subscription",
+        num_items: 1,
+      });
+
       // If SDK subscription ID is not available but shortUrl is, open hosted checkout in a popup window
       if (!razorpaySubscriptionId && shortUrl) {
         const width = 500;
@@ -314,6 +328,15 @@ export default function FullPricing() {
           contact: prefillContact,
         },
         handler: async function (paymentResponse) {
+          event("Subscribe", {
+            value: planValue,
+            currency: "INR",
+            predicted_ltv: planValue,
+            content_name: tier.title || "Consultant Plan",
+            content_ids: tier.id ? [tier.id] : [],
+            billing_cycle: yearly ? "YEARLY" : "MONTHLY",
+          });
+
           // Fetch fresh tier data and persist it so UI shows "Active" correctly
           try {
             const tierRes = await getSellerTier();
