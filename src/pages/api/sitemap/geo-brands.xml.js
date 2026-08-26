@@ -93,6 +93,11 @@ export default async function handler(req, res) {
       { brand: "tata", model: "harrier" },
       { brand: "toyota", model: "fortuner" },
       { brand: "toyota", model: "innova" },
+      { brand: "ford", model: "ecosport" },
+      { brand: "honda", model: "city" },
+      { brand: "honda", model: "amaze" },
+      { brand: "kia", model: "seltos" },
+      { brand: "kia", model: "sonet" },
     ];
 
     popularCarModels.forEach(({ brand, model }) => {

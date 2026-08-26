@@ -131,7 +131,10 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
     { label: "Used Two Wheelers", href: "/search/buy-used-two-wheelers" },
     { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
     { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
-    { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" }
+    { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
+    { label: "Used Hyundai Creta Cars in Palanpur", href: "/search/buy-used-hyundai-creta-cars-palanpur" },
+    { label: "Used Ford Ecosport Cars in Palanpur", href: "/search/buy-used-ford-ecosport-cars-palanpur" },
+    { label: "Used Hyundai Creta Cars", href: "/search/buy-used-hyundai-creta-cars" }
   );
 
   // Filter out duplicates

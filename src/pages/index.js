@@ -25,23 +25,28 @@ function Home() {
     <>
       <Head>
         <title>
-          Reecomm - Buy & Sell Used Cars Online in India | Best Deals on Second
-          Hand Cars
+          Used Cars for Sale in India | Reecomm — Buy & Sell Second Hand Cars
         </title>
         <meta
           name="description"
-          content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process."
+          content="Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports — buy and sell second-hand cars online across India."
         />
         <meta
           name="keywords"
-          content="buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
+          content="used cars, used car reecomm, buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
         />
 
         {/* Open Graph Meta Tags for Social Sharing (WhatsApp, Facebook, etc.) */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.reecomm.com/" />
-        <meta property="og:title" content="Reecomm - Buy & Sell Used Cars Online in India" />
-        <meta property="og:description" content="Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm." />
+        <meta
+          property="og:title"
+          content="Used Cars for Sale in India | Reecomm"
+        />
+        <meta
+          property="og:description"
+          content="Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports before you buy."
+        />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="1200" />
@@ -61,7 +66,7 @@ function Home() {
               url: "https://www.reecomm.com",
               logo: "https://www.reecomm.com/logo/logo1.webp",
               description:
-                "Certified and verified second-hand cars for sale. Buy and sell used cars online at best prices with Reecomm. Expert inspection and transparent process.",
+                "Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports — buy and sell second-hand cars online across India.",
               sameAs: [
                 "https://www.facebook.com/reecomm",
                 "https://twitter.com/reecomm",

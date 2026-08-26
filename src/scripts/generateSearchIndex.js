@@ -238,7 +238,7 @@ function generateBrandLocationCombinations() {
     'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore', 'Chandigarh'
   ];
 
-  const topBrands = ['Kia', 'Hyundai', 'Maruti Suzuki', 'Honda', 'Tata', 'Toyota', 'Mahindra', 'BMW', 'Audi', 'Mercedes Benz', 'MG', 'Skoda', 'Volkswagen'];
+  const topBrands = ['Kia', 'Hyundai', 'Maruti Suzuki', 'Honda', 'Tata', 'Toyota', 'Mahindra', 'BMW', 'Audi', 'Mercedes Benz', 'MG', 'Skoda', 'Volkswagen', 'Ford'];
 
   for (const brand of topBrands) {
     for (const city of popularCities) {
@@ -276,7 +276,12 @@ function generateBrandLocationCombinations() {
     { brand: "Tata", model: "Nexon", brandSlug: "tata", modelSlug: "nexon" },
     { brand: "Tata", model: "Punch", brandSlug: "tata", modelSlug: "punch" },
     { brand: "Toyota", model: "Fortuner", brandSlug: "toyota", modelSlug: "fortuner" },
-    { brand: "Toyota", model: "Innova", brandSlug: "toyota", modelSlug: "innova" }
+    { brand: "Toyota", model: "Innova", brandSlug: "toyota", modelSlug: "innova" },
+    { brand: "Ford", model: "Ecosport", brandSlug: "ford", modelSlug: "ecosport" },
+    { brand: "Honda", model: "City", brandSlug: "honda", modelSlug: "city" },
+    { brand: "Honda", model: "Amaze", brandSlug: "honda", modelSlug: "amaze" },
+    { brand: "Kia", model: "Seltos", brandSlug: "kia", modelSlug: "seltos" },
+    { brand: "Kia", model: "Sonet", brandSlug: "kia", modelSlug: "sonet" },
   ];
 
   for (const { brand, model, brandSlug, modelSlug } of popularCarModels) {
@@ -293,7 +298,9 @@ function generateBrandLocationCombinations() {
           city.toLowerCase(),
           `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
           `used ${brand.toLowerCase()} ${model.toLowerCase()} in ${city.toLowerCase()}`,
-          `used ${brand.toLowerCase()} ${model.toLowerCase()} cars in ${city.toLowerCase()}`
+          `used ${brand.toLowerCase()} ${model.toLowerCase()} cars in ${city.toLowerCase()}`,
+          // common misspellings for discovery
+          ...(modelSlug === 'creta' ? ['creata', 'used creata', 'used creta'] : []),
         ],
         type: 'vehicle_filter',
         params: {

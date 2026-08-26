@@ -19,7 +19,7 @@
   },
   {
     "id": "used_cars_suv_under_5_lakh",
-    "title": "SUVs Under \u20b95 Lakhs",
+    "title": "SUVs Under ₹5 Lakhs",
     "keywords": [
       "suv",
       "under 5 lakh",
@@ -3792,6 +3792,294 @@
     }
   },
   {
+    "id": "filter_buy_used_ford_cars_ahmedabad",
+    "title": "Used Ford Cars in Ahmedabad",
+    "keywords": [
+      "ford",
+      "ahmedabad",
+      "used car",
+      "ford cars in ahmedabad",
+      "used ford cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_mumbai",
+    "title": "Used Ford Cars in Mumbai",
+    "keywords": [
+      "ford",
+      "mumbai",
+      "used car",
+      "ford cars in mumbai",
+      "used ford cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_delhi",
+    "title": "Used Ford Cars in Delhi",
+    "keywords": [
+      "ford",
+      "delhi",
+      "used car",
+      "ford cars in delhi",
+      "used ford cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_bangalore",
+    "title": "Used Ford Cars in Bangalore",
+    "keywords": [
+      "ford",
+      "bangalore",
+      "used car",
+      "ford cars in bangalore",
+      "used ford cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_hyderabad",
+    "title": "Used Ford Cars in Hyderabad",
+    "keywords": [
+      "ford",
+      "hyderabad",
+      "used car",
+      "ford cars in hyderabad",
+      "used ford cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_chennai",
+    "title": "Used Ford Cars in Chennai",
+    "keywords": [
+      "ford",
+      "chennai",
+      "used car",
+      "ford cars in chennai",
+      "used ford cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_kolkata",
+    "title": "Used Ford Cars in Kolkata",
+    "keywords": [
+      "ford",
+      "kolkata",
+      "used car",
+      "ford cars in kolkata",
+      "used ford cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_pune",
+    "title": "Used Ford Cars in Pune",
+    "keywords": [
+      "ford",
+      "pune",
+      "used car",
+      "ford cars in pune",
+      "used ford cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_jaipur",
+    "title": "Used Ford Cars in Jaipur",
+    "keywords": [
+      "ford",
+      "jaipur",
+      "used car",
+      "ford cars in jaipur",
+      "used ford cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_surat",
+    "title": "Used Ford Cars in Surat",
+    "keywords": [
+      "ford",
+      "surat",
+      "used car",
+      "ford cars in surat",
+      "used ford cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_rajkot",
+    "title": "Used Ford Cars in Rajkot",
+    "keywords": [
+      "ford",
+      "rajkot",
+      "used car",
+      "ford cars in rajkot",
+      "used ford cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_vadodara",
+    "title": "Used Ford Cars in Vadodara",
+    "keywords": [
+      "ford",
+      "vadodara",
+      "used car",
+      "ford cars in vadodara",
+      "used ford cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_palanpur",
+    "title": "Used Ford Cars in Palanpur",
+    "keywords": [
+      "ford",
+      "palanpur",
+      "used car",
+      "ford cars in palanpur",
+      "used ford cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_lucknow",
+    "title": "Used Ford Cars in Lucknow",
+    "keywords": [
+      "ford",
+      "lucknow",
+      "used car",
+      "ford cars in lucknow",
+      "used ford cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_indore",
+    "title": "Used Ford Cars in Indore",
+    "keywords": [
+      "ford",
+      "indore",
+      "used car",
+      "ford cars in indore",
+      "used ford cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_cars_chandigarh",
+    "title": "Used Ford Cars in Chandigarh",
+    "keywords": [
+      "ford",
+      "chandigarh",
+      "used car",
+      "ford cars in chandigarh",
+      "used ford cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-cars-chandigarh"
+    }
+  },
+  {
     "id": "filter_buy_used_hyundai_grand_i10_cars_ahmedabad",
     "title": "Used Hyundai Grand i10 Cars in Ahmedabad",
     "keywords": [
@@ -4120,7 +4408,10 @@
       "ahmedabad",
       "used hyundai creta",
       "used hyundai creta in ahmedabad",
-      "used hyundai creta cars in ahmedabad"
+      "used hyundai creta cars in ahmedabad",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4140,7 +4431,10 @@
       "mumbai",
       "used hyundai creta",
       "used hyundai creta in mumbai",
-      "used hyundai creta cars in mumbai"
+      "used hyundai creta cars in mumbai",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4160,7 +4454,10 @@
       "delhi",
       "used hyundai creta",
       "used hyundai creta in delhi",
-      "used hyundai creta cars in delhi"
+      "used hyundai creta cars in delhi",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4180,7 +4477,10 @@
       "bangalore",
       "used hyundai creta",
       "used hyundai creta in bangalore",
-      "used hyundai creta cars in bangalore"
+      "used hyundai creta cars in bangalore",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4200,7 +4500,10 @@
       "hyderabad",
       "used hyundai creta",
       "used hyundai creta in hyderabad",
-      "used hyundai creta cars in hyderabad"
+      "used hyundai creta cars in hyderabad",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4220,7 +4523,10 @@
       "chennai",
       "used hyundai creta",
       "used hyundai creta in chennai",
-      "used hyundai creta cars in chennai"
+      "used hyundai creta cars in chennai",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4240,7 +4546,10 @@
       "kolkata",
       "used hyundai creta",
       "used hyundai creta in kolkata",
-      "used hyundai creta cars in kolkata"
+      "used hyundai creta cars in kolkata",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4260,7 +4569,10 @@
       "pune",
       "used hyundai creta",
       "used hyundai creta in pune",
-      "used hyundai creta cars in pune"
+      "used hyundai creta cars in pune",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4280,7 +4592,10 @@
       "jaipur",
       "used hyundai creta",
       "used hyundai creta in jaipur",
-      "used hyundai creta cars in jaipur"
+      "used hyundai creta cars in jaipur",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4300,7 +4615,10 @@
       "surat",
       "used hyundai creta",
       "used hyundai creta in surat",
-      "used hyundai creta cars in surat"
+      "used hyundai creta cars in surat",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4320,7 +4638,10 @@
       "rajkot",
       "used hyundai creta",
       "used hyundai creta in rajkot",
-      "used hyundai creta cars in rajkot"
+      "used hyundai creta cars in rajkot",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4340,7 +4661,10 @@
       "vadodara",
       "used hyundai creta",
       "used hyundai creta in vadodara",
-      "used hyundai creta cars in vadodara"
+      "used hyundai creta cars in vadodara",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4360,7 +4684,10 @@
       "palanpur",
       "used hyundai creta",
       "used hyundai creta in palanpur",
-      "used hyundai creta cars in palanpur"
+      "used hyundai creta cars in palanpur",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4380,7 +4707,10 @@
       "lucknow",
       "used hyundai creta",
       "used hyundai creta in lucknow",
-      "used hyundai creta cars in lucknow"
+      "used hyundai creta cars in lucknow",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4400,7 +4730,10 @@
       "indore",
       "used hyundai creta",
       "used hyundai creta in indore",
-      "used hyundai creta cars in indore"
+      "used hyundai creta cars in indore",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -4420,7 +4753,10 @@
       "chandigarh",
       "used hyundai creta",
       "used hyundai creta in chandigarh",
-      "used hyundai creta cars in chandigarh"
+      "used hyundai creta cars in chandigarh",
+      "creata",
+      "used creata",
+      "used creta"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -8269,6 +8605,1606 @@
       "city": "Chandigarh",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-innova-cars-chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_ahmedabad",
+    "title": "Used Ford Ecosport Cars in Ahmedabad",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "ahmedabad",
+      "used ford ecosport",
+      "used ford ecosport in ahmedabad",
+      "used ford ecosport cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_mumbai",
+    "title": "Used Ford Ecosport Cars in Mumbai",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "mumbai",
+      "used ford ecosport",
+      "used ford ecosport in mumbai",
+      "used ford ecosport cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_delhi",
+    "title": "Used Ford Ecosport Cars in Delhi",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "delhi",
+      "used ford ecosport",
+      "used ford ecosport in delhi",
+      "used ford ecosport cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_bangalore",
+    "title": "Used Ford Ecosport Cars in Bangalore",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "bangalore",
+      "used ford ecosport",
+      "used ford ecosport in bangalore",
+      "used ford ecosport cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_hyderabad",
+    "title": "Used Ford Ecosport Cars in Hyderabad",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "hyderabad",
+      "used ford ecosport",
+      "used ford ecosport in hyderabad",
+      "used ford ecosport cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_chennai",
+    "title": "Used Ford Ecosport Cars in Chennai",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "chennai",
+      "used ford ecosport",
+      "used ford ecosport in chennai",
+      "used ford ecosport cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_kolkata",
+    "title": "Used Ford Ecosport Cars in Kolkata",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "kolkata",
+      "used ford ecosport",
+      "used ford ecosport in kolkata",
+      "used ford ecosport cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_pune",
+    "title": "Used Ford Ecosport Cars in Pune",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "pune",
+      "used ford ecosport",
+      "used ford ecosport in pune",
+      "used ford ecosport cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_jaipur",
+    "title": "Used Ford Ecosport Cars in Jaipur",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "jaipur",
+      "used ford ecosport",
+      "used ford ecosport in jaipur",
+      "used ford ecosport cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_surat",
+    "title": "Used Ford Ecosport Cars in Surat",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "surat",
+      "used ford ecosport",
+      "used ford ecosport in surat",
+      "used ford ecosport cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_rajkot",
+    "title": "Used Ford Ecosport Cars in Rajkot",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "rajkot",
+      "used ford ecosport",
+      "used ford ecosport in rajkot",
+      "used ford ecosport cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_vadodara",
+    "title": "Used Ford Ecosport Cars in Vadodara",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "vadodara",
+      "used ford ecosport",
+      "used ford ecosport in vadodara",
+      "used ford ecosport cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_palanpur",
+    "title": "Used Ford Ecosport Cars in Palanpur",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "palanpur",
+      "used ford ecosport",
+      "used ford ecosport in palanpur",
+      "used ford ecosport cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_lucknow",
+    "title": "Used Ford Ecosport Cars in Lucknow",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "lucknow",
+      "used ford ecosport",
+      "used ford ecosport in lucknow",
+      "used ford ecosport cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_indore",
+    "title": "Used Ford Ecosport Cars in Indore",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "indore",
+      "used ford ecosport",
+      "used ford ecosport in indore",
+      "used ford ecosport cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_ecosport_cars_chandigarh",
+    "title": "Used Ford Ecosport Cars in Chandigarh",
+    "keywords": [
+      "ford",
+      "ecosport",
+      "chandigarh",
+      "used ford ecosport",
+      "used ford ecosport in chandigarh",
+      "used ford ecosport cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Ecosport",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-ecosport-cars-chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_ahmedabad",
+    "title": "Used Honda City Cars in Ahmedabad",
+    "keywords": [
+      "honda",
+      "city",
+      "ahmedabad",
+      "used honda city",
+      "used honda city in ahmedabad",
+      "used honda city cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_mumbai",
+    "title": "Used Honda City Cars in Mumbai",
+    "keywords": [
+      "honda",
+      "city",
+      "mumbai",
+      "used honda city",
+      "used honda city in mumbai",
+      "used honda city cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_delhi",
+    "title": "Used Honda City Cars in Delhi",
+    "keywords": [
+      "honda",
+      "city",
+      "delhi",
+      "used honda city",
+      "used honda city in delhi",
+      "used honda city cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_bangalore",
+    "title": "Used Honda City Cars in Bangalore",
+    "keywords": [
+      "honda",
+      "city",
+      "bangalore",
+      "used honda city",
+      "used honda city in bangalore",
+      "used honda city cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_hyderabad",
+    "title": "Used Honda City Cars in Hyderabad",
+    "keywords": [
+      "honda",
+      "city",
+      "hyderabad",
+      "used honda city",
+      "used honda city in hyderabad",
+      "used honda city cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_chennai",
+    "title": "Used Honda City Cars in Chennai",
+    "keywords": [
+      "honda",
+      "city",
+      "chennai",
+      "used honda city",
+      "used honda city in chennai",
+      "used honda city cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_kolkata",
+    "title": "Used Honda City Cars in Kolkata",
+    "keywords": [
+      "honda",
+      "city",
+      "kolkata",
+      "used honda city",
+      "used honda city in kolkata",
+      "used honda city cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_pune",
+    "title": "Used Honda City Cars in Pune",
+    "keywords": [
+      "honda",
+      "city",
+      "pune",
+      "used honda city",
+      "used honda city in pune",
+      "used honda city cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_jaipur",
+    "title": "Used Honda City Cars in Jaipur",
+    "keywords": [
+      "honda",
+      "city",
+      "jaipur",
+      "used honda city",
+      "used honda city in jaipur",
+      "used honda city cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_surat",
+    "title": "Used Honda City Cars in Surat",
+    "keywords": [
+      "honda",
+      "city",
+      "surat",
+      "used honda city",
+      "used honda city in surat",
+      "used honda city cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_rajkot",
+    "title": "Used Honda City Cars in Rajkot",
+    "keywords": [
+      "honda",
+      "city",
+      "rajkot",
+      "used honda city",
+      "used honda city in rajkot",
+      "used honda city cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_vadodara",
+    "title": "Used Honda City Cars in Vadodara",
+    "keywords": [
+      "honda",
+      "city",
+      "vadodara",
+      "used honda city",
+      "used honda city in vadodara",
+      "used honda city cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_palanpur",
+    "title": "Used Honda City Cars in Palanpur",
+    "keywords": [
+      "honda",
+      "city",
+      "palanpur",
+      "used honda city",
+      "used honda city in palanpur",
+      "used honda city cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_lucknow",
+    "title": "Used Honda City Cars in Lucknow",
+    "keywords": [
+      "honda",
+      "city",
+      "lucknow",
+      "used honda city",
+      "used honda city in lucknow",
+      "used honda city cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_indore",
+    "title": "Used Honda City Cars in Indore",
+    "keywords": [
+      "honda",
+      "city",
+      "indore",
+      "used honda city",
+      "used honda city in indore",
+      "used honda city cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_city_cars_chandigarh",
+    "title": "Used Honda City Cars in Chandigarh",
+    "keywords": [
+      "honda",
+      "city",
+      "chandigarh",
+      "used honda city",
+      "used honda city in chandigarh",
+      "used honda city cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "City",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-city-cars-chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_ahmedabad",
+    "title": "Used Honda Amaze Cars in Ahmedabad",
+    "keywords": [
+      "honda",
+      "amaze",
+      "ahmedabad",
+      "used honda amaze",
+      "used honda amaze in ahmedabad",
+      "used honda amaze cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_mumbai",
+    "title": "Used Honda Amaze Cars in Mumbai",
+    "keywords": [
+      "honda",
+      "amaze",
+      "mumbai",
+      "used honda amaze",
+      "used honda amaze in mumbai",
+      "used honda amaze cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_delhi",
+    "title": "Used Honda Amaze Cars in Delhi",
+    "keywords": [
+      "honda",
+      "amaze",
+      "delhi",
+      "used honda amaze",
+      "used honda amaze in delhi",
+      "used honda amaze cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_bangalore",
+    "title": "Used Honda Amaze Cars in Bangalore",
+    "keywords": [
+      "honda",
+      "amaze",
+      "bangalore",
+      "used honda amaze",
+      "used honda amaze in bangalore",
+      "used honda amaze cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_hyderabad",
+    "title": "Used Honda Amaze Cars in Hyderabad",
+    "keywords": [
+      "honda",
+      "amaze",
+      "hyderabad",
+      "used honda amaze",
+      "used honda amaze in hyderabad",
+      "used honda amaze cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_chennai",
+    "title": "Used Honda Amaze Cars in Chennai",
+    "keywords": [
+      "honda",
+      "amaze",
+      "chennai",
+      "used honda amaze",
+      "used honda amaze in chennai",
+      "used honda amaze cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_kolkata",
+    "title": "Used Honda Amaze Cars in Kolkata",
+    "keywords": [
+      "honda",
+      "amaze",
+      "kolkata",
+      "used honda amaze",
+      "used honda amaze in kolkata",
+      "used honda amaze cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_pune",
+    "title": "Used Honda Amaze Cars in Pune",
+    "keywords": [
+      "honda",
+      "amaze",
+      "pune",
+      "used honda amaze",
+      "used honda amaze in pune",
+      "used honda amaze cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_jaipur",
+    "title": "Used Honda Amaze Cars in Jaipur",
+    "keywords": [
+      "honda",
+      "amaze",
+      "jaipur",
+      "used honda amaze",
+      "used honda amaze in jaipur",
+      "used honda amaze cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_surat",
+    "title": "Used Honda Amaze Cars in Surat",
+    "keywords": [
+      "honda",
+      "amaze",
+      "surat",
+      "used honda amaze",
+      "used honda amaze in surat",
+      "used honda amaze cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_rajkot",
+    "title": "Used Honda Amaze Cars in Rajkot",
+    "keywords": [
+      "honda",
+      "amaze",
+      "rajkot",
+      "used honda amaze",
+      "used honda amaze in rajkot",
+      "used honda amaze cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_vadodara",
+    "title": "Used Honda Amaze Cars in Vadodara",
+    "keywords": [
+      "honda",
+      "amaze",
+      "vadodara",
+      "used honda amaze",
+      "used honda amaze in vadodara",
+      "used honda amaze cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_palanpur",
+    "title": "Used Honda Amaze Cars in Palanpur",
+    "keywords": [
+      "honda",
+      "amaze",
+      "palanpur",
+      "used honda amaze",
+      "used honda amaze in palanpur",
+      "used honda amaze cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_lucknow",
+    "title": "Used Honda Amaze Cars in Lucknow",
+    "keywords": [
+      "honda",
+      "amaze",
+      "lucknow",
+      "used honda amaze",
+      "used honda amaze in lucknow",
+      "used honda amaze cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_indore",
+    "title": "Used Honda Amaze Cars in Indore",
+    "keywords": [
+      "honda",
+      "amaze",
+      "indore",
+      "used honda amaze",
+      "used honda amaze in indore",
+      "used honda amaze cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_honda_amaze_cars_chandigarh",
+    "title": "Used Honda Amaze Cars in Chandigarh",
+    "keywords": [
+      "honda",
+      "amaze",
+      "chandigarh",
+      "used honda amaze",
+      "used honda amaze in chandigarh",
+      "used honda amaze cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Honda",
+      "modelName": "Amaze",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-honda-amaze-cars-chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_ahmedabad",
+    "title": "Used Kia Seltos Cars in Ahmedabad",
+    "keywords": [
+      "kia",
+      "seltos",
+      "ahmedabad",
+      "used kia seltos",
+      "used kia seltos in ahmedabad",
+      "used kia seltos cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_mumbai",
+    "title": "Used Kia Seltos Cars in Mumbai",
+    "keywords": [
+      "kia",
+      "seltos",
+      "mumbai",
+      "used kia seltos",
+      "used kia seltos in mumbai",
+      "used kia seltos cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_delhi",
+    "title": "Used Kia Seltos Cars in Delhi",
+    "keywords": [
+      "kia",
+      "seltos",
+      "delhi",
+      "used kia seltos",
+      "used kia seltos in delhi",
+      "used kia seltos cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_bangalore",
+    "title": "Used Kia Seltos Cars in Bangalore",
+    "keywords": [
+      "kia",
+      "seltos",
+      "bangalore",
+      "used kia seltos",
+      "used kia seltos in bangalore",
+      "used kia seltos cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_hyderabad",
+    "title": "Used Kia Seltos Cars in Hyderabad",
+    "keywords": [
+      "kia",
+      "seltos",
+      "hyderabad",
+      "used kia seltos",
+      "used kia seltos in hyderabad",
+      "used kia seltos cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_chennai",
+    "title": "Used Kia Seltos Cars in Chennai",
+    "keywords": [
+      "kia",
+      "seltos",
+      "chennai",
+      "used kia seltos",
+      "used kia seltos in chennai",
+      "used kia seltos cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_kolkata",
+    "title": "Used Kia Seltos Cars in Kolkata",
+    "keywords": [
+      "kia",
+      "seltos",
+      "kolkata",
+      "used kia seltos",
+      "used kia seltos in kolkata",
+      "used kia seltos cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_pune",
+    "title": "Used Kia Seltos Cars in Pune",
+    "keywords": [
+      "kia",
+      "seltos",
+      "pune",
+      "used kia seltos",
+      "used kia seltos in pune",
+      "used kia seltos cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_jaipur",
+    "title": "Used Kia Seltos Cars in Jaipur",
+    "keywords": [
+      "kia",
+      "seltos",
+      "jaipur",
+      "used kia seltos",
+      "used kia seltos in jaipur",
+      "used kia seltos cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_surat",
+    "title": "Used Kia Seltos Cars in Surat",
+    "keywords": [
+      "kia",
+      "seltos",
+      "surat",
+      "used kia seltos",
+      "used kia seltos in surat",
+      "used kia seltos cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_rajkot",
+    "title": "Used Kia Seltos Cars in Rajkot",
+    "keywords": [
+      "kia",
+      "seltos",
+      "rajkot",
+      "used kia seltos",
+      "used kia seltos in rajkot",
+      "used kia seltos cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_vadodara",
+    "title": "Used Kia Seltos Cars in Vadodara",
+    "keywords": [
+      "kia",
+      "seltos",
+      "vadodara",
+      "used kia seltos",
+      "used kia seltos in vadodara",
+      "used kia seltos cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_palanpur",
+    "title": "Used Kia Seltos Cars in Palanpur",
+    "keywords": [
+      "kia",
+      "seltos",
+      "palanpur",
+      "used kia seltos",
+      "used kia seltos in palanpur",
+      "used kia seltos cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_lucknow",
+    "title": "Used Kia Seltos Cars in Lucknow",
+    "keywords": [
+      "kia",
+      "seltos",
+      "lucknow",
+      "used kia seltos",
+      "used kia seltos in lucknow",
+      "used kia seltos cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_indore",
+    "title": "Used Kia Seltos Cars in Indore",
+    "keywords": [
+      "kia",
+      "seltos",
+      "indore",
+      "used kia seltos",
+      "used kia seltos in indore",
+      "used kia seltos cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_seltos_cars_chandigarh",
+    "title": "Used Kia Seltos Cars in Chandigarh",
+    "keywords": [
+      "kia",
+      "seltos",
+      "chandigarh",
+      "used kia seltos",
+      "used kia seltos in chandigarh",
+      "used kia seltos cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Seltos",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-chandigarh"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_ahmedabad",
+    "title": "Used Kia Sonet Cars in Ahmedabad",
+    "keywords": [
+      "kia",
+      "sonet",
+      "ahmedabad",
+      "used kia sonet",
+      "used kia sonet in ahmedabad",
+      "used kia sonet cars in ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_mumbai",
+    "title": "Used Kia Sonet Cars in Mumbai",
+    "keywords": [
+      "kia",
+      "sonet",
+      "mumbai",
+      "used kia sonet",
+      "used kia sonet in mumbai",
+      "used kia sonet cars in mumbai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Mumbai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-mumbai"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_delhi",
+    "title": "Used Kia Sonet Cars in Delhi",
+    "keywords": [
+      "kia",
+      "sonet",
+      "delhi",
+      "used kia sonet",
+      "used kia sonet in delhi",
+      "used kia sonet cars in delhi"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Delhi",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-delhi"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_bangalore",
+    "title": "Used Kia Sonet Cars in Bangalore",
+    "keywords": [
+      "kia",
+      "sonet",
+      "bangalore",
+      "used kia sonet",
+      "used kia sonet in bangalore",
+      "used kia sonet cars in bangalore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Bangalore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-bangalore"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_hyderabad",
+    "title": "Used Kia Sonet Cars in Hyderabad",
+    "keywords": [
+      "kia",
+      "sonet",
+      "hyderabad",
+      "used kia sonet",
+      "used kia sonet in hyderabad",
+      "used kia sonet cars in hyderabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Hyderabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-hyderabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_chennai",
+    "title": "Used Kia Sonet Cars in Chennai",
+    "keywords": [
+      "kia",
+      "sonet",
+      "chennai",
+      "used kia sonet",
+      "used kia sonet in chennai",
+      "used kia sonet cars in chennai"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Chennai",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-chennai"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_kolkata",
+    "title": "Used Kia Sonet Cars in Kolkata",
+    "keywords": [
+      "kia",
+      "sonet",
+      "kolkata",
+      "used kia sonet",
+      "used kia sonet in kolkata",
+      "used kia sonet cars in kolkata"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Kolkata",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-kolkata"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_pune",
+    "title": "Used Kia Sonet Cars in Pune",
+    "keywords": [
+      "kia",
+      "sonet",
+      "pune",
+      "used kia sonet",
+      "used kia sonet in pune",
+      "used kia sonet cars in pune"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Pune",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-pune"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_jaipur",
+    "title": "Used Kia Sonet Cars in Jaipur",
+    "keywords": [
+      "kia",
+      "sonet",
+      "jaipur",
+      "used kia sonet",
+      "used kia sonet in jaipur",
+      "used kia sonet cars in jaipur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Jaipur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-jaipur"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_surat",
+    "title": "Used Kia Sonet Cars in Surat",
+    "keywords": [
+      "kia",
+      "sonet",
+      "surat",
+      "used kia sonet",
+      "used kia sonet in surat",
+      "used kia sonet cars in surat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Surat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-surat"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_rajkot",
+    "title": "Used Kia Sonet Cars in Rajkot",
+    "keywords": [
+      "kia",
+      "sonet",
+      "rajkot",
+      "used kia sonet",
+      "used kia sonet in rajkot",
+      "used kia sonet cars in rajkot"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Rajkot",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-rajkot"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_vadodara",
+    "title": "Used Kia Sonet Cars in Vadodara",
+    "keywords": [
+      "kia",
+      "sonet",
+      "vadodara",
+      "used kia sonet",
+      "used kia sonet in vadodara",
+      "used kia sonet cars in vadodara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Vadodara",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-vadodara"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_palanpur",
+    "title": "Used Kia Sonet Cars in Palanpur",
+    "keywords": [
+      "kia",
+      "sonet",
+      "palanpur",
+      "used kia sonet",
+      "used kia sonet in palanpur",
+      "used kia sonet cars in palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_lucknow",
+    "title": "Used Kia Sonet Cars in Lucknow",
+    "keywords": [
+      "kia",
+      "sonet",
+      "lucknow",
+      "used kia sonet",
+      "used kia sonet in lucknow",
+      "used kia sonet cars in lucknow"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Lucknow",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-lucknow"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_indore",
+    "title": "Used Kia Sonet Cars in Indore",
+    "keywords": [
+      "kia",
+      "sonet",
+      "indore",
+      "used kia sonet",
+      "used kia sonet in indore",
+      "used kia sonet cars in indore"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Indore",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-indore"
+    }
+  },
+  {
+    "id": "filter_buy_used_kia_sonet_cars_chandigarh",
+    "title": "Used Kia Sonet Cars in Chandigarh",
+    "keywords": [
+      "kia",
+      "sonet",
+      "chandigarh",
+      "used kia sonet",
+      "used kia sonet in chandigarh",
+      "used kia sonet cars in chandigarh"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Kia",
+      "modelName": "Sonet",
+      "city": "Chandigarh",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-sonet-cars-chandigarh"
     }
   },
   {
@@ -15020,216 +16956,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ford_ecosport_cars_ahmedabad",
-    "title": "Used Ford EcoSport in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Ahmedabad",
-      "slug": "buy-used-ford-ecosport-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_mumbai",
-    "title": "Used Ford EcoSport in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "mumbai",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Mumbai",
-      "slug": "buy-used-ford-ecosport-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_delhi",
-    "title": "Used Ford EcoSport in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "delhi",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Delhi",
-      "slug": "buy-used-ford-ecosport-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_bangalore",
-    "title": "Used Ford EcoSport in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "bangalore",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Bangalore",
-      "slug": "buy-used-ford-ecosport-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_pune",
-    "title": "Used Ford EcoSport in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "pune",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Pune",
-      "slug": "buy-used-ford-ecosport-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_surat",
-    "title": "Used Ford EcoSport in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "surat",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Surat",
-      "slug": "buy-used-ford-ecosport-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_rajkot",
-    "title": "Used Ford EcoSport in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "rajkot",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Rajkot",
-      "slug": "buy-used-ford-ecosport-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_jaipur",
-    "title": "Used Ford EcoSport in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "jaipur",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Jaipur",
-      "slug": "buy-used-ford-ecosport-cars-jaipur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_hyderabad",
-    "title": "Used Ford EcoSport in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "hyderabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Hyderabad",
-      "slug": "buy-used-ford-ecosport-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_chandigarh",
-    "title": "Used Ford EcoSport in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ecosport",
-      "chandigarh",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "EcoSport",
-      "city": "Chandigarh",
-      "slug": "buy-used-ford-ecosport-cars-chandigarh"
-    }
-  },
-  {
     "id": "filter_buy_used_ford_aspire_cars_ahmedabad",
     "title": "Used Ford Aspire in Ahmedabad",
     "keywords": [
@@ -16292,426 +18018,6 @@
       "vehicleType": "FOUR_WHEELER",
       "makerName": "Honda",
       "slug": "buy-used-honda-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_ahmedabad",
-    "title": "Used Honda City in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Ahmedabad",
-      "slug": "buy-used-honda-city-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_mumbai",
-    "title": "Used Honda City in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "mumbai",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Mumbai",
-      "slug": "buy-used-honda-city-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_delhi",
-    "title": "Used Honda City in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "delhi",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Delhi",
-      "slug": "buy-used-honda-city-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_bangalore",
-    "title": "Used Honda City in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "bangalore",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Bangalore",
-      "slug": "buy-used-honda-city-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_pune",
-    "title": "Used Honda City in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "pune",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Pune",
-      "slug": "buy-used-honda-city-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_surat",
-    "title": "Used Honda City in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "surat",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Surat",
-      "slug": "buy-used-honda-city-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_rajkot",
-    "title": "Used Honda City in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "rajkot",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Rajkot",
-      "slug": "buy-used-honda-city-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_jaipur",
-    "title": "Used Honda City in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "jaipur",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Jaipur",
-      "slug": "buy-used-honda-city-cars-jaipur"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_hyderabad",
-    "title": "Used Honda City in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "hyderabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Hyderabad",
-      "slug": "buy-used-honda-city-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_city_cars_chandigarh",
-    "title": "Used Honda City in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "city",
-      "chandigarh",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Chandigarh",
-      "slug": "buy-used-honda-city-cars-chandigarh"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_ahmedabad",
-    "title": "Used Honda Amaze in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Ahmedabad",
-      "slug": "buy-used-honda-amaze-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_mumbai",
-    "title": "Used Honda Amaze in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "mumbai",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Mumbai",
-      "slug": "buy-used-honda-amaze-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_delhi",
-    "title": "Used Honda Amaze in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "delhi",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Delhi",
-      "slug": "buy-used-honda-amaze-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_bangalore",
-    "title": "Used Honda Amaze in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "bangalore",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Bangalore",
-      "slug": "buy-used-honda-amaze-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_pune",
-    "title": "Used Honda Amaze in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "pune",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Pune",
-      "slug": "buy-used-honda-amaze-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_surat",
-    "title": "Used Honda Amaze in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "surat",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Surat",
-      "slug": "buy-used-honda-amaze-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_rajkot",
-    "title": "Used Honda Amaze in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "rajkot",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Rajkot",
-      "slug": "buy-used-honda-amaze-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_jaipur",
-    "title": "Used Honda Amaze in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "jaipur",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Jaipur",
-      "slug": "buy-used-honda-amaze-cars-jaipur"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_hyderabad",
-    "title": "Used Honda Amaze in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "hyderabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Hyderabad",
-      "slug": "buy-used-honda-amaze-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_amaze_cars_chandigarh",
-    "title": "Used Honda Amaze in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "honda",
-      "amaze",
-      "chandigarh",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Chandigarh",
-      "slug": "buy-used-honda-amaze-cars-chandigarh"
     }
   },
   {
@@ -18007,426 +19313,6 @@
       "vehicleType": "FOUR_WHEELER",
       "makerName": "Kia",
       "slug": "buy-used-kia-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_ahmedabad",
-    "title": "Used Kia Seltos in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Ahmedabad",
-      "slug": "buy-used-kia-seltos-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_mumbai",
-    "title": "Used Kia Seltos in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "mumbai",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Mumbai",
-      "slug": "buy-used-kia-seltos-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_delhi",
-    "title": "Used Kia Seltos in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "delhi",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Delhi",
-      "slug": "buy-used-kia-seltos-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_bangalore",
-    "title": "Used Kia Seltos in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "bangalore",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Bangalore",
-      "slug": "buy-used-kia-seltos-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_pune",
-    "title": "Used Kia Seltos in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "pune",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Pune",
-      "slug": "buy-used-kia-seltos-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_surat",
-    "title": "Used Kia Seltos in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "surat",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Surat",
-      "slug": "buy-used-kia-seltos-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_rajkot",
-    "title": "Used Kia Seltos in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "rajkot",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Rajkot",
-      "slug": "buy-used-kia-seltos-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_jaipur",
-    "title": "Used Kia Seltos in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "jaipur",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Jaipur",
-      "slug": "buy-used-kia-seltos-cars-jaipur"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_hyderabad",
-    "title": "Used Kia Seltos in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "hyderabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Hyderabad",
-      "slug": "buy-used-kia-seltos-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_chandigarh",
-    "title": "Used Kia Seltos in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "chandigarh",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Seltos",
-      "city": "Chandigarh",
-      "slug": "buy-used-kia-seltos-cars-chandigarh"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_ahmedabad",
-    "title": "Used Kia Sonet in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Ahmedabad",
-      "slug": "buy-used-kia-sonet-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_mumbai",
-    "title": "Used Kia Sonet in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "mumbai",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Mumbai",
-      "slug": "buy-used-kia-sonet-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_delhi",
-    "title": "Used Kia Sonet in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "delhi",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Delhi",
-      "slug": "buy-used-kia-sonet-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_bangalore",
-    "title": "Used Kia Sonet in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "bangalore",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Bangalore",
-      "slug": "buy-used-kia-sonet-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_pune",
-    "title": "Used Kia Sonet in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "pune",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Pune",
-      "slug": "buy-used-kia-sonet-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_surat",
-    "title": "Used Kia Sonet in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "surat",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Surat",
-      "slug": "buy-used-kia-sonet-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_rajkot",
-    "title": "Used Kia Sonet in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "rajkot",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Rajkot",
-      "slug": "buy-used-kia-sonet-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_jaipur",
-    "title": "Used Kia Sonet in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "jaipur",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Jaipur",
-      "slug": "buy-used-kia-sonet-cars-jaipur"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_hyderabad",
-    "title": "Used Kia Sonet in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "hyderabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Hyderabad",
-      "slug": "buy-used-kia-sonet-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_sonet_cars_chandigarh",
-    "title": "Used Kia Sonet in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "sonet",
-      "chandigarh",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "KIA",
-      "modelName": "Sonet",
-      "city": "Chandigarh",
-      "slug": "buy-used-kia-sonet-cars-chandigarh"
     }
   },
   {
@@ -48019,159 +48905,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ford_cars_mumbai",
-    "title": "Used Ford Cars in Mumbai",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "mumbai"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Mumbai",
-      "slug": "buy-used-ford-cars-mumbai"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_delhi",
-    "title": "Used Ford Cars in Delhi",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "delhi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Delhi",
-      "slug": "buy-used-ford-cars-delhi"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_bangalore",
-    "title": "Used Ford Cars in Bangalore",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "bangalore"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Bangalore",
-      "slug": "buy-used-ford-cars-bangalore"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_hyderabad",
-    "title": "Used Ford Cars in Hyderabad",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "hyderabad"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Hyderabad",
-      "slug": "buy-used-ford-cars-hyderabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_ahmedabad",
-    "title": "Used Ford Cars in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "ahmedabad"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Ahmedabad",
-      "slug": "buy-used-ford-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_chennai",
-    "title": "Used Ford Cars in Chennai",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "chennai"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Chennai",
-      "slug": "buy-used-ford-cars-chennai"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_kolkata",
-    "title": "Used Ford Cars in Kolkata",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "kolkata"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Kolkata",
-      "slug": "buy-used-ford-cars-kolkata"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_pune",
-    "title": "Used Ford Cars in Pune",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "pune"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Pune",
-      "slug": "buy-used-ford-cars-pune"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_jaipur",
-    "title": "Used Ford Cars in Jaipur",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "jaipur"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Jaipur",
-      "slug": "buy-used-ford-cars-jaipur"
-    }
-  },
-  {
     "id": "filter_buy_used_ford_cars_latur",
     "title": "Used Ford Cars in Latur",
     "keywords": [
@@ -48186,23 +48919,6 @@
       "makerName": "Ford",
       "city": "Latur",
       "slug": "buy-used-ford-cars-latur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_palanpur",
-    "title": "Used Ford Cars in Palanpur",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "palanpur"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Palanpur",
-      "slug": "buy-used-ford-cars-palanpur"
     }
   },
   {
@@ -48305,108 +49021,6 @@
       "makerName": "Ford",
       "city": "Patna",
       "slug": "buy-used-ford-cars-patna"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_vadodara",
-    "title": "Used Ford Cars in Vadodara",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "vadodara"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Vadodara",
-      "slug": "buy-used-ford-cars-vadodara"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_surat",
-    "title": "Used Ford Cars in Surat",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "surat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Surat",
-      "slug": "buy-used-ford-cars-surat"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_rajkot",
-    "title": "Used Ford Cars in Rajkot",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "rajkot"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Rajkot",
-      "slug": "buy-used-ford-cars-rajkot"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_lucknow",
-    "title": "Used Ford Cars in Lucknow",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "lucknow"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Lucknow",
-      "slug": "buy-used-ford-cars-lucknow"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_indore",
-    "title": "Used Ford Cars in Indore",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "indore"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Indore",
-      "slug": "buy-used-ford-cars-indore"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_chandigarh",
-    "title": "Used Ford Cars in Chandigarh",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "chandigarh"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "city": "Chandigarh",
-      "slug": "buy-used-ford-cars-chandigarh"
     }
   },
   {
@@ -92469,7 +93083,7 @@
   },
   {
     "id": "filter_buy_used_cars_under_3_lakhs",
-    "title": "Cars Under \u20b93 Lakhs",
+    "title": "Cars Under ₹3 Lakhs",
     "keywords": [
       "used car",
       "car",
@@ -92534,7 +93148,7 @@
   },
   {
     "id": "filter_buy_used_two_wheelers_under_50k",
-    "title": "Bikes Under \u20b950,000",
+    "title": "Bikes Under ₹50,000",
     "keywords": [
       "two wheeler",
       "bike",
@@ -92550,7 +93164,7 @@
   },
   {
     "id": "filter_buy_used_two_wheelers_under_1_lakh",
-    "title": "Bikes Under \u20b91 Lakh",
+    "title": "Bikes Under ₹1 Lakh",
     "keywords": [
       "two wheeler",
       "bike",
@@ -92566,7 +93180,7 @@
   },
   {
     "id": "filter_buy_used_two_wheelers_under_2_lakh",
-    "title": "Bikes Under \u20b92 Lakhs",
+    "title": "Bikes Under ₹2 Lakhs",
     "keywords": [
       "two wheeler",
       "bike",

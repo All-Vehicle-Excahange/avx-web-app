@@ -20,6 +20,7 @@ export default function SearchHeader({
   activeFilters = [],
   onRemoveFilter,
   onClearAll,
+  seoH1,
 }) {
   const [open, setOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -189,8 +190,10 @@ export default function SearchHeader({
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary flex items-center gap-1.5">
                 <span>
-                  Used {brandParam ? `${brandParam} ` : ""}
-                  {bodyType ? `${bodyType}` : vehicleType || "Vehicles"}
+                  {seoH1 ||
+                    `Used ${brandParam ? `${brandParam} ` : ""}${
+                      bodyType ? `${bodyType}` : vehicleType || "Vehicles"
+                    }`}
                 </span>
               </h1>
 

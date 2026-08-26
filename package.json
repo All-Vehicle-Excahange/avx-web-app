@@ -11,7 +11,8 @@
     "lint": "eslint",
     "generate:search-index": "node src/scripts/generateSearchIndex.js",
     "generate:sitemaps": "node src/scripts/generateSitemaps.js",
-    "notify:storefronts": "node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps"
+    "notify:storefronts": "node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps",
+    "notify:search-landings": "node src/scripts/notifyTopSearchLandings.js"
   },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
