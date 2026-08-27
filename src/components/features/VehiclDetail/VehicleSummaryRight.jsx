@@ -15,6 +15,7 @@ import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
+import { customEvent } from "@/lib/fpixel";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -109,6 +110,13 @@ export default function VehicleSummaryRight({
       vehicle_id: vehicleId,
       vehicle_name: vehicleName || "Vehicle Details",
       seller_type: vehicle?.sellerType || vehicleOwnerRole,
+    });
+
+    customEvent("Inquiry", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleId)],
+      content_name: vehicleName || "Vehicle Details",
+      seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
     });
 
     setLoading(true);
