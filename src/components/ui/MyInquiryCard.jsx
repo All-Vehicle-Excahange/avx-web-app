@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Button from "@/components/ui/button";
 import { closeInquiry } from "@/services/inquiry.service";
-import { Lock, MessageCircle, Clock, BadgeCheck } from "lucide-react";
+import { Lock, MessageCircle, Clock, BadgeCheck, CarFront } from "lucide-react";
 import Image from "next/image";
 import CloseInqPopup from "../features/consult/details/dashboard/components/CloseInqPopup";
 import { useState } from "react";
@@ -39,15 +39,12 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
   const isRejected = inquiryStatus === "REJECTED";
   const isClosed = inquiryStatus?.startsWith("CLOSED");
 
-  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${
-    inquiryVehicleResponse.modelName
-  } ${inquiryVehicleResponse.variantName} - ${
-    inquiryVehicleResponse.yearOfMfg
-  }`;
+  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
+    } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
+    }`;
 
   const vehicleImage =
-    inquiryVehicleResponse.thumbnailUrl ||
-    "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg";
+    inquiryVehicleResponse.thumbnailUrl;
 
   // ✅ Handlers
   const handleClose = async (reason) => {
@@ -96,12 +93,18 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
-          <Image
-            src={vehicleImage}
-            alt="Vehicle"
-            fill
-            className="object-cover"
-          />
+          {vehicleImage ? (
+            <Image
+              src={vehicleImage}
+              alt="Vehicle"
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A]">
+              <CarFront className="w-12 h-12 text-gray-400" />
+            </div>
+          )}
         </Link>
 
         {/* ✅ Content */}
@@ -199,6 +202,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
               <Button
                 showIcon={false}
                 variant="ghost"
+                size="sm"
                 onClick={() => setShowClosePopup(true)}
               >
                 <Lock size={16} className="mr-2" />
@@ -208,6 +212,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
               <Button
                 showIcon={false}
                 variant="ghost"
+                size="sm"
                 onClick={() => setShowDownloadPopup(true)}
               >
                 <MessageCircle size={16} className="mr-2" />
@@ -289,9 +294,8 @@ function StatusPill({ status }) {
 
   return (
     <span
-      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${
-        map[status]
-      }`}
+      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${map[status]
+        }`}
     >
       {status.replaceAll("_", " ")}
     </span>

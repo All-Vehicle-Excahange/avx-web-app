@@ -56,16 +56,12 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
   const isRejected = inquiryStatus === "REJECTED";
   const isClosed = inquiryStatus?.startsWith("CLOSED");
 
-  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${
-    inquiryVehicleResponse.modelName
-  } ${inquiryVehicleResponse.variantName} - ${
-    inquiryVehicleResponse.yearOfMfg
-  }`;
+  const vehicleTitle = `${inquiryVehicleResponse.makerName} ${inquiryVehicleResponse.modelName
+    } ${inquiryVehicleResponse.variantName} - ${inquiryVehicleResponse.yearOfMfg
+    }`;
 
   const vehicleImage =
-    inquiryVehicleResponse.thumbnailUrl ||
-    "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg";
-
+    inquiryVehicleResponse.thumbnailUrl;
   //   Handlers
   const handleApprove = async () => {
     if (loadingAction) return;
@@ -460,9 +456,8 @@ function StatusPill({ status }) {
 
   return (
     <span
-      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${
-        map[status]
-      }`}
+      className={`text-[10px] sm:text-xs px-3 py-1 sm:px-4 rounded-full border font-semibold whitespace-nowrap ${map[status]
+        }`}
     >
       {status.replaceAll("_", " ")}
     </span>

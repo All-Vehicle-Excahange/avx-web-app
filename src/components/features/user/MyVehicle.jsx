@@ -146,7 +146,7 @@ function MyVehicle() {
   const filtered = mappedVehicles;
 
   return (
-    <section className="w-full container rounded-2xl p-6 space-y-6">
+    <section className="w-full rounded-2xl py-6 px-2 sm:px-0 space-y-6">
       {/* APPLICATION STATUS WARNING */}
       {/* {user?.userRole === "USER_SELLER_APPLICANT" && (
           <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 p-4 rounded-xl flex items-center gap-3 shadow-sm">
@@ -163,7 +163,7 @@ function MyVehicle() {
           {/* Subtle background glow */}
           <div className="absolute -right-10 -top-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
 
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-4 gap-4">
             <div>
               <h3 className="text-base font-bold text-primary">
                 Vehicle Listing Limit
@@ -172,8 +172,8 @@ function MyVehicle() {
                 Only 1 vehicle can be listed on the marketplace at a time. Once it&apos;s sold or removed, you can list another—up to 3 total listings.
               </p>
             </div>
-            <div className="text-right">
-              <div className="flex items-baseline gap-1">
+            <div className="text-right shrink-0">
+              <div className="flex items-baseline gap-1 whitespace-nowrap">
                 <span className="text-xl font-bold text-primary">
                   {totalPosted}
                 </span>
@@ -197,7 +197,7 @@ function MyVehicle() {
             <button
               key={type.id}
               onClick={() => setActiveType(type.id)}
-              className={`px-6 py-2 rounded-full border text-sm font-semibold transition-all duration-300 cursor-pointer flex items-center gap-2
+              className={`shrink-0 px-6 py-2 rounded-full border text-sm font-semibold transition-all duration-300 cursor-pointer flex items-center gap-2
                 ${activeType === type.id
                   ? "bg-primary text-secondary border-primary "
                   : "bg-third/5 text-primary border-third/20 hover:bg-third/10"

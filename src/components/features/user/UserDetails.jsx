@@ -66,7 +66,7 @@ function UserDetails({ initialTab }) {
   }, [isConsultant, activeTab, push]);
 
   return (
-    <section className="pt-12">
+    <section className="pt-14 md:pt-12">
       <h1 className="text-2xl font-bold">Manage Your Activities</h1>
 
       <div className="flex  gap-10 border-b border-third/30 overflow-x-auto no-scrollbar whitespace-nowrap">
@@ -91,21 +91,21 @@ function UserDetails({ initialTab }) {
             return true;
           })
           .map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => push(`/user/details/${tab.id}`, undefined, { shallow: true })}
-            className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${resolvedTab === tab.id
-              ? "text-primary"
-              : "text-third hover:text-primary"
-              }`}
-          >
-            {tab.label}
+            <button
+              key={tab.id}
+              onClick={() => push(`/user/details/${tab.id}`, undefined, { shallow: true })}
+              className={`relative py-3 text-sm font-medium transition hover:cursor-pointer ${resolvedTab === tab.id
+                ? "text-primary"
+                : "text-third hover:text-primary"
+                }`}
+            >
+              {tab.label}
 
-            {resolvedTab === tab.id && (
-              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
-            )}
-          </button>
-        ))}
+              {resolvedTab === tab.id && (
+                <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+              )}
+            </button>
+          ))}
       </div>
 
       {/* TAB CONTENT */}

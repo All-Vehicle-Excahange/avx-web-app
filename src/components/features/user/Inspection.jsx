@@ -81,7 +81,7 @@ function Inspection() {
   console.log(user?.userRole, "user")
   return (
     <>
-      <section className="w-full container rounded-2xl p-6 space-y-6">
+      <section className="w-full rounded-2xl py-6 px-2 sm:px-0 space-y-6">
         {/* NEW INSPECTION HEADER CARD */}
         <div className="w-full bg-fourth text-white rounded-2xl overflow-hidden shadow-lg border border-fourth">
           {/* Top section: 3 Columns */}
@@ -154,7 +154,7 @@ function Inspection() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
+                className={`shrink-0 relative py-4 text-sm font-medium transition hover:cursor-pointer ${activeTab === tab.id
                   ? "text-primary"
                   : "text-third hover:text-primary"
                   }`}
