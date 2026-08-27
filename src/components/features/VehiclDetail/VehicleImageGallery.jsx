@@ -10,6 +10,7 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
+import { event as metaEvent } from "@/lib/fpixel";
 
 const optimizeVideoUrl = (src) => {
   if (!src) return "";
@@ -53,6 +54,16 @@ export default function VehicleImageGallery({ vehicle }) {
         if (!(res?.success || res?.status)) {
           throw new Error("Failed to add");
         }
+        const contentName =
+          `${vehicle?.yearOfMfg || vehicle?.year || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""}`.trim() ||
+          "Vehicle";
+        metaEvent("AddToWishlist", {
+          content_type: "vehicle",
+          content_ids: [String(vehicleId)],
+          content_name: contentName,
+          value: Number(vehicle?.price) || 0,
+          currency: "INR",
+        });
       }
       lastSyncedValue.current = nextState;
       queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });

@@ -23,6 +23,7 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { event as metaEvent } from "@/lib/fpixel";
 
 export default function VehicleCard({
   data,
@@ -57,6 +58,16 @@ export default function VehicleCard({
         if (!(res?.success || res?.status)) {
           throw new Error("Failed to add");
         }
+        const contentName =
+          `${data?.yearOfMfg || data?.year || ""} ${data?.makerName || ""} ${data?.modelName || ""}`.trim() ||
+          "Vehicle";
+        metaEvent("AddToWishlist", {
+          content_type: "vehicle",
+          content_ids: [String(data.id)],
+          content_name: contentName,
+          value: Number(data?.price) || 0,
+          currency: "INR",
+        });
       }
       lastSyncedValue.current = nextState;
       queryClient.invalidateQueries({ queryKey: ["user-wishlist-infinite"] });

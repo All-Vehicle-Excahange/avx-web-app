@@ -31,6 +31,7 @@ import {
   getRecentSearches,
   deleteAllRecentSearches,
 } from "@/services/user.service";
+import { event as metaEvent } from "@/lib/fpixel";
 
 /* ================= CONSTANTS ================= */
 
@@ -349,6 +350,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     setVehicleSearchQuery("");
 
     if (item.link) {
+      if (
+        item.type !== "consultant" &&
+        typeof item.link === "string" &&
+        item.link.startsWith("/search")
+      ) {
+        metaEvent("Search", {
+          search_string: searchLabel || "vehicle_search",
+        });
+      }
       push(item.link);
       return;
     }
@@ -358,6 +368,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     }
     if (item.type === "brand") {
       const brandName = item.rawLabel || item.brand || item.label;
+      metaEvent("Search", { search_string: brandName || "vehicle_search" });
       push(`/search?brand=${encodeURIComponent(brandName)}`);
       return;
     }
@@ -368,11 +379,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       const modelIdParam = item.modelId
         ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}`
         : "";
+      metaEvent("Search", {
+        search_string: item.label || item.rawLabel || "vehicle_search",
+      });
       push(
         `/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`,
       );
       return;
     }
+    metaEvent("Search", { search_string: searchLabel || "vehicle_search" });
     push(`/search?q=${encodeURIComponent(searchLabel)}`);
   };
 
@@ -381,6 +396,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     const cleanQuery = queryStr.trim();
 
     saveSearchMutation.mutate(cleanQuery);
+    metaEvent("Search", { search_string: cleanQuery });
     setLocalRecentSearches((prev) => {
       const filtered = prev.filter(
         (term) => term.toLowerCase() !== cleanQuery.toLowerCase(),
@@ -937,6 +953,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         const vtLower = vehicleType ? vehicleType.toLowerCase().replace(/_/g, " ") : "";
         const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
         const vehicleKind = isTwoWheeler ? "two-wheelers" : "cars";
+
+        metaEvent("Search", {
+          search_string:
+            vehicleSearchQuery?.trim() ||
+            [brand, vehicleType, location, budget].filter(Boolean).join(" | ") ||
+            "vehicle_search",
+        });
 
         // Generate SEO-friendly slug
         let slug = "buy-used-";

@@ -38,6 +38,18 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveRecentSearch, getRecentSearches, deleteAllRecentSearches } from "@/services/user.service";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import { getAndSearchMakers } from "@/services/filter";
+import { event as metaEvent } from "@/lib/fpixel";
+
+const trackMetaProductSearch = (searchString) => {
+  metaEvent("Search", {
+    search_string: String(searchString || "").trim() || "vehicle_search",
+  });
+};
+
+const isProductSearchLink = (link) =>
+  typeof link === "string" &&
+  (link.startsWith("/search") || link.includes("/search?")) &&
+  !link.includes("/auto-consultant");
 
 const MAKER_NAME_MAPPING = {
   1: "Ashok Leyland",
@@ -797,6 +809,11 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           setIsSearching(true);
                           saveSearchMutation.mutate(selected.label || selected.username || searchQuery.trim());
                           if (selected.link) {
+                            if (isProductSearchLink(selected.link)) {
+                              trackMetaProductSearch(
+                                selected.label || searchQuery.trim(),
+                              );
+                            }
                             push(selected.link);
                             setSearchQuery(selected.label);
                           } else if (selected.username) {
@@ -807,6 +824,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         } else if (searchQuery.trim()) {
                           setIsSearching(true);
                           saveSearchMutation.mutate(searchQuery.trim());
+                          trackMetaProductSearch(searchQuery.trim());
                           const brandParam =
                             selectedBrand !== "All"
                               ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -817,6 +835,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           setShowDropdown(false);
                         } else if (selectedBrand !== "All") {
                           setIsSearching(true);
+                          trackMetaProductSearch(selectedBrand);
                           push(
                             `/search?brand=${encodeURIComponent(selectedBrand)}`,
                           );
@@ -855,6 +874,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     if (searchQuery.trim()) {
                       setIsSearching(true);
                       saveSearchMutation.mutate(searchQuery.trim());
+                      trackMetaProductSearch(searchQuery.trim());
                       const brandParam =
                         selectedBrand !== "All"
                           ? `&brand=${encodeURIComponent(selectedBrand)}`
@@ -865,6 +885,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       setShowDropdown(false);
                     } else if (selectedBrand !== "All") {
                       setIsSearching(true);
+                      trackMetaProductSearch(selectedBrand);
                       push(
                         `/search?brand=${encodeURIComponent(selectedBrand)}`,
                       );
@@ -907,6 +928,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 key={`popular-${idx}`}
                                 onClick={() => {
                                   saveSearchMutation.mutate(brand.makeName);
+                                  trackMetaProductSearch(brand.makeName);
                                   push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
                                   setShowDropdown(false);
                                 }}
@@ -944,6 +966,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                   key={`all-${idx}`}
                                   onClick={() => {
                                     saveSearchMutation.mutate(brand.makeName);
+                                    trackMetaProductSearch(brand.makeName);
                                     push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
                                     setShowDropdown(false);
                                   }}
@@ -1000,6 +1023,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 <div key={item.id || `recent-${idx}`} onClick={() => {
                                   setIsSearching(true);
                                   saveSearchMutation.mutate(item.search);
+                                  trackMetaProductSearch(item.search);
 
                                   let searchSlug = item.search.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
                                   let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
@@ -1027,6 +1051,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               {apiBrandsList.slice(0, 5).map((brand, idx) => (
                                 <div key={`trending-${idx}`} onClick={() => {
                                   saveSearchMutation.mutate(brand.makeName);
+                                  trackMetaProductSearch(brand.makeName);
                                   push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
                                   setShowDropdown(false);
                                 }} className="flex items-center justify-between p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all group">
@@ -1068,6 +1093,14 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                   setIsSearching(true);
                                   saveSearchMutation.mutate(s.label || s.username);
                                   if (s.link) {
+                                    if (
+                                      s.type !== "consultant" &&
+                                      isProductSearchLink(s.link)
+                                    ) {
+                                      trackMetaProductSearch(
+                                        s.label || searchQuery.trim(),
+                                      );
+                                    }
                                     push(s.link);
                                     setShowDropdown(false);
                                     setSearchQuery(s.label);
