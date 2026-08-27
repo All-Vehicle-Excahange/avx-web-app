@@ -483,7 +483,7 @@ function MyProfile() {
   }
 
   return (
-    <section className="w-full py-12 rounded-2xl  space-y-10">
+    <section className="w-full rounded-2xl py-6 px-2 sm:px-0 space-y-6">
       {/* SUSPENSION STATUS BOARD */}
       {suspendData?.isSuspended && (
         <div className="mx-auto max-w-2xl mb-12">
@@ -1226,14 +1226,14 @@ function MyProfile() {
 
         {sellerData && sellerData.verificationStatus === "VERIFIED" && (
           <div className="lg:col-span-2 bg-third/5 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.37)] text-white/60 transition-all duration-300 relative group overflow-hidden">
-            <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+            <div className="flex flex-wrap justify-between items-center gap-4 mb-8 border-b border-white/5 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10">
+                <div className="shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10">
                   <ShieldCheck size={20} className="text-emerald-500" />
                 </div>
-                <h2 className="text-xl font-bold text-primary tracking-tight">Seller Verification Documents</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-primary tracking-tight">Seller Verification Documents</h2>
               </div>
-              <div className="px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-bold rounded-full">
+              <div className="shrink-0 whitespace-nowrap px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-bold rounded-full">
                 VERIFIED SELLER
               </div>
             </div>

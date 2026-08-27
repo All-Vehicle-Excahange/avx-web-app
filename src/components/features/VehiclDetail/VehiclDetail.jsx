@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
+import { motion } from "framer-motion";
 
 // TOP
 import VehicleHeader from "./VehicleHeader";
@@ -97,6 +98,38 @@ export default function VehicleDetails({
       behavior: "smooth",
     });
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isMobile = window.innerWidth < 1024;
+      const dynamicOffset = isMobile ? 130 : 220;
+      
+      const sections = [
+        { id: "inspection", ref: inspectionRef },
+        { id: "condition", ref: conditionRef },
+        { id: "specification", ref: specificationRef },
+        { id: "overview", ref: overviewRef },
+      ];
+
+      for (const section of sections) {
+        if (section.ref.current) {
+          const top = section.ref.current.getBoundingClientRect().top;
+          if (top <= dynamicOffset + 100) { 
+            if (activeTab !== section.id) {
+              setActiveTab(section.id);
+              if (section.id === "specification") setIsSpecOpen(true);
+              if (section.id === "condition") setIsConditionOpen(true);
+              if (section.id === "inspection") setIsInspectionOpen(true);
+            }
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [activeTab]);
   const router = useRouter();
   const queryClient = useQueryClient();
   const id = router.query?.id;
@@ -134,7 +167,7 @@ export default function VehicleDetails({
     if (vehicleOverview?.id && trackedVehicleIdRef.current !== vehicleOverview.id) {
       trackedVehicleIdRef.current = vehicleOverview.id;
       const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
-      
+
       // Facebook Pixel Event
       event("ViewContent", {
         content_type: "vehicle",
@@ -256,7 +289,7 @@ export default function VehicleDetails({
 
                 <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
                   <div className="overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-6 px-2 min-w-max">
+                    <div className="flex gap-6 min-w-max">
                       {[
                         { id: "overview", label: "Overview", ref: overviewRef },
                         {
@@ -287,7 +320,10 @@ export default function VehicleDetails({
                           {tab.label}
 
                           {activeTab === tab.id && (
-                            <span className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" />
+                            <motion.span 
+                              layoutId="activeTabIndicator"
+                              className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" 
+                            />
                           )}
                         </button>
                       ))}

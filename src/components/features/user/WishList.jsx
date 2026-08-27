@@ -132,14 +132,14 @@ function Wishlist() {
 
   return (
     <>
-      <section className="w-full container rounded-2xl p-6 space-y-6">
+      <section className="w-full rounded-2xl py-6 px-2 sm:px-0 space-y-6">
         {/* TABS */}
-        <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
+        <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 flex-nowrap sm:flex-wrap">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition whitespace-nowrap
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition whitespace-nowrap
                 ${activeTab === tab.id
                   ? "bg-primary text-secondary border-primary"
                   : "border-third/50 text-primary hover:bg-third/20"
