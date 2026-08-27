@@ -6,7 +6,7 @@ import SkeletonBox from "./SkeletonBox";
  */
 export default function StoreFrontHeroSkeleton() {
   return (
-    <section className="w-full max-w-[1480px] mt-10 mx-auto border border-third/40 rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-sm">
+    <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-xl md:rounded-2xl overflow-hidden shadow-none sm:shadow-sm">
       {/* Banner */}
       <SkeletonBox className="w-full h-54 md:h-80" rounded="rounded-none" />
 
