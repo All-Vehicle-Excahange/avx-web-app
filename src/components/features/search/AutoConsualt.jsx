@@ -85,7 +85,7 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
 
                             const { bodyTypeLabel, modelLabel, brandLabel } = filterPayload._labels;
 
-                            if (bodyTypeLabel) return `${bodyTypeLabel}s`;
+                            if (bodyTypeLabel) return `${bodyTypeLabel}`;
                             if (modelLabel) return modelLabel;
                             if (brandLabel) return brandLabel;
 
@@ -111,13 +111,13 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
                     (() => {
                         const cityLabel = filterPayload?.cityName || filterPayload?.location || filterPayload?._labels?.cityLabel;
                         const brandLabel = filterPayload?._labels?.brandLabel;
-                        
-                        const title = cityLabel 
+
+                        const title = cityLabel
                             ? `No consultants found in ${cityLabel}`
-                            : brandLabel 
+                            : brandLabel
                                 ? `No consultants found for ${brandLabel} near you`
                                 : "No consultants found near you";
-                                
+
                         const desc = cityLabel
                             ? `We are actively listing consultants from ${cityLabel}. Please check back later.`
                             : brandLabel

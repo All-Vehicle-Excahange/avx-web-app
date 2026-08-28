@@ -42,7 +42,18 @@ let refreshPromise = null;
 
 const forceLogout = () => {
   useAuthStore.getState().logout();
-  useAuthStore.getState().openLoginPopup();
+
+  let hasToken = false;
+  if (typeof window !== "undefined") {
+    hasToken =
+      window.location.search?.includes("magicToken=") ||
+      window.location.search?.includes("token=") ||
+      window.location.pathname.includes("/link-expired");
+  }
+
+  if (!hasToken) {
+    useAuthStore.getState().openLoginPopup();
+  }
   // Do NOT redirect — let the user stay on the current page with the login popup.
 };
 
@@ -53,10 +64,24 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401) {
+      // If a request opts out of token refresh, skip it
+      if (originalRequest._skipRefresh) {
+        return Promise.reject(error);
+      }
+
       const { user, isLoggedIn } = useAuthStore.getState();
 
+      let hasToken = false;
+      if (typeof window !== "undefined") {
+        hasToken =
+          window.location.search?.includes("magicToken=") ||
+          window.location.search?.includes("token=") ||
+          window.location.pathname.includes("/link-expired");
+      }
+
       // Not logged in — just reject silently; don't pop the login dialog.
-      if (!isLoggedIn) {
+      // BUT if it's a magic token URL, we want to attempt the refresh anyway!
+      if (!isLoggedIn && !hasToken) {
         return Promise.reject(error);
       }
 
@@ -108,7 +133,6 @@ axiosInstance.interceptors.response.use(
         // Retry the original request with the new token attached via the request interceptor.
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        console.log("❌ Refresh failed. Logging out...");
         forceLogout();
         return Promise.reject(refreshError);
       }

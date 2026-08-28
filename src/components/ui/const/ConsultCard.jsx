@@ -106,7 +106,7 @@ export default function ConsultantCard(props) {
           />
         </div>
         {String(data?.tierTitle).toUpperCase() === "PREMIUM" && (
-          <div className="absolute top-[2px] right-5 z-[100]">
+          <div className="absolute top-[2px] right-5 z-10">
             {/* Curved 3D Fold on the back side */}
             <div className="absolute top-0 -right-[4px] w-[4px] h-[6px] bg-[#05468E] rounded-tr-[4px]"></div>
 

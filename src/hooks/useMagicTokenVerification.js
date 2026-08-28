@@ -7,7 +7,14 @@ import { logoutUser } from "@/services/auth.service";
 
 export default function useMagicTokenVerification() {
   const router = useRouter();
-  const [verifyingMagicToken, setVerifyingMagicToken] = useState(false);
+  const [verifyingMagicToken, setVerifyingMagicToken] = useState(() => {
+    if (typeof window !== "undefined") {
+      if (window.location.pathname.includes("/link-expired")) return false;
+      const match = window.location.search.match(/[?&](magicToken|token)=([^&]+)/);
+      return !!match;
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -21,7 +28,6 @@ export default function useMagicTokenVerification() {
     if (!tokenFromUrl || router.pathname === "/link-expired") return;
     const clickedLink = router.asPath;
 
-    console.log("[MagicTokenVerification] Starting verification for token:", tokenFromUrl);
     useAuthStore.setState({ isLoginPopupOpen: false });
     setVerifyingMagicToken(true);
 
@@ -38,7 +44,6 @@ export default function useMagicTokenVerification() {
 
       verifyOwnerSignupEmail(tokenFromUrl)
         .then(async (res) => {
-          console.log("[MagicTokenVerification] verify API response:", res);
           if (res.success) {
             if (res.data?.accessToken || res.data?.token) {
               const tokenVal = res.data.accessToken || res.data.token;
@@ -61,7 +66,6 @@ export default function useMagicTokenVerification() {
               { shallow: true }
             );
           } else {
-            console.error("[MagicTokenVerification] API returned success false. Response:", res);
             useAuthStore.setState({ isLoginPopupOpen: false });
             const errorMsg =
               res.message ||
@@ -72,8 +76,6 @@ export default function useMagicTokenVerification() {
           }
         })
         .catch((err) => {
-          console.error("[MagicTokenVerification] API call failed with error:", err);
-          console.error("[MagicTokenVerification] Error Response Data:", err?.response?.data);
           useAuthStore.setState({ isLoginPopupOpen: false });
           const errorMsg =
             err?.response?.data?.message ||

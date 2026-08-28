@@ -139,7 +139,7 @@ export default function TopPicsSection() {
 
       {cardData.length >= 4 && (
         <div className="mt-8 flex justify-end">
-          <Button href="/search" variant="outlineAnimated" size="md">
+          <Button href={`/search?vehicleType=${activeType}`} variant="outlineAnimated" size="md">
             Explore All Vehicles
           </Button>
         </div>

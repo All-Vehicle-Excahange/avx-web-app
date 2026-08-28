@@ -48,6 +48,11 @@ export default function FilterWithCard({
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
   const [avxAssumed, setAvxAssumed] = useState(false);
 
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
+  const sort = searchParams.get("sort");
+
   // ── Services chips (from API) ──
   const [services, setServices] = useState([]);
 
@@ -62,8 +67,10 @@ export default function FilterWithCard({
   const [selectedTownId, setSelectedTownId] = useState(null);
   const [selectedTownName, setSelectedTownName] = useState("");
 
+  const prevPageRef = useRef(1);
+  const prevSortRef = useRef(sort);
   const autoFetchTimerRef = useRef(null);
-  const hasMountedForAutoFetch = useRef(false);
+  const isInitializingFilters = useRef(true);
 
   const isMobile = useIsMobile();
 
@@ -93,10 +100,6 @@ export default function FilterWithCard({
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const sort = searchParams.get("sort");
 
   const getSortConfig = (sortValue) => {
     switch (sortValue) {
@@ -348,10 +351,13 @@ export default function FilterWithCard({
     }
   };
 
-  // Initial fetch on mount (empty payload = default results)
+  // Initial fetch on mount
   useEffect(() => {
-    fetchConsultants(currentPage);
-  }, [currentPage, sort]);
+    fetchConsultants(1, buildPayload());
+    setTimeout(() => {
+      isInitializingFilters.current = false;
+    }, 100);
+  }, []);
 
   const buildPayload = () => {
     const payload = {};
@@ -434,9 +440,19 @@ export default function FilterWithCard({
 
   // Re-fetch when page changes
   useEffect(() => {
+    if (prevPageRef.current === currentPage) return;
+    prevPageRef.current = currentPage;
     const payload = buildPayload();
     fetchConsultants(currentPage, payload);
   }, [currentPage]);
+
+  useEffect(() => {
+    if (prevSortRef.current === sort) return;
+    prevSortRef.current = sort;
+    const payload = buildPayload();
+    setCurrentPage(1);
+    fetchConsultants(1, payload);
+  }, [sort]);
   const handleApplyFilter = async () => {
     if (selectedStateId && selectedStateName) {
       const locationData = {
@@ -483,8 +499,7 @@ export default function FilterWithCard({
     // Reset pagination
     setCurrentPage(1);
 
-    // Fetch default results and scroll to top
-    await fetchConsultants(1, {});
+    // Fetch will be handled automatically by the useEffect watching filter states
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -503,10 +518,7 @@ export default function FilterWithCard({
 
   // ── Auto-fetch when any filter changes ──
   useEffect(() => {
-    if (!hasMountedForAutoFetch.current) {
-      hasMountedForAutoFetch.current = true;
-      return;
-    }
+    if (isInitializingFilters.current) return;
     if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
     autoFetchTimerRef.current = setTimeout(() => {
       const payload = buildPayload();
