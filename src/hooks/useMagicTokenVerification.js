@@ -11,9 +11,17 @@ export default function useMagicTokenVerification() {
 
   useEffect(() => {
     if (!router.isReady) return;
-    const tokenFromUrl = router.query?.magicToken || router.query?.token;
+    let tokenFromUrl = router.query?.magicToken || router.query?.token;
+    if (!tokenFromUrl && typeof window !== "undefined") {
+      const match = window.location.search.match(/[?&](magicToken|token)=([^&]+)/);
+      if (match) {
+        tokenFromUrl = match[2];
+      }
+    }
     if (!tokenFromUrl || router.pathname === "/link-expired") return;
+    const clickedLink = router.asPath;
 
+    console.log("[MagicTokenVerification] Starting verification for token:", tokenFromUrl);
     useAuthStore.setState({ isLoginPopupOpen: false });
     setVerifyingMagicToken(true);
 
@@ -30,6 +38,7 @@ export default function useMagicTokenVerification() {
 
       verifyOwnerSignupEmail(tokenFromUrl)
         .then(async (res) => {
+          console.log("[MagicTokenVerification] verify API response:", res);
           if (res.success) {
             if (res.data?.accessToken || res.data?.token) {
               const tokenVal = res.data.accessToken || res.data.token;
@@ -52,23 +61,26 @@ export default function useMagicTokenVerification() {
               { shallow: true }
             );
           } else {
+            console.error("[MagicTokenVerification] API returned success false. Response:", res);
             useAuthStore.setState({ isLoginPopupOpen: false });
             const errorMsg =
               res.message ||
               "The verification link is invalid or has expired.";
             router.replace(
-              `/link-expired?message=${encodeURIComponent(errorMsg)}&redirect=${encodeURIComponent(targetRedirect)}`
+              `/link-expired?message=${encodeURIComponent(errorMsg)}&token=${encodeURIComponent(tokenFromUrl)}&clickedLink=${encodeURIComponent(clickedLink)}&redirect=${encodeURIComponent(targetRedirect)}`
             );
           }
         })
         .catch((err) => {
+          console.error("[MagicTokenVerification] API call failed with error:", err);
+          console.error("[MagicTokenVerification] Error Response Data:", err?.response?.data);
           useAuthStore.setState({ isLoginPopupOpen: false });
           const errorMsg =
             err?.response?.data?.message ||
             err?.message ||
             "The verification link is invalid or has expired.";
           router.replace(
-            `/link-expired?message=${encodeURIComponent(errorMsg)}&redirect=${encodeURIComponent(targetRedirect)}`
+            `/link-expired?message=${encodeURIComponent(errorMsg)}&token=${encodeURIComponent(tokenFromUrl)}&clickedLink=${encodeURIComponent(clickedLink)}&redirect=${encodeURIComponent(targetRedirect)}`
           );
         })
         .finally(() => {
