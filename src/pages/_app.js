@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }) {
 
   // Custom Hooks for Modularized Functionality
   const { showSplash, handleSplashComplete } = useSplash();
-  useMagicTokenVerification();
+  const { verifyingMagicToken } = useMagicTokenVerification();
   useGuestSetup();
 
   // INITIAL SETUP: Initialize Auth & Send Device Info
@@ -167,15 +167,17 @@ export default function App({ Component, pageProps }) {
           </Head>
 
           {/* GLOBAL LOADER */}
-          {loading && <GlobalLoader />}
+          {(loading || verifyingMagicToken) && <GlobalLoader />}
 
           {/* PAGE RENDER */}
-          {hasFullWidth ? (
-            <Component {...pageProps} />
-          ) : (
-            <Layout>
+          {!verifyingMagicToken && (
+            hasFullWidth ? (
               <Component {...pageProps} />
-            </Layout>
+            ) : (
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            )
           )}
 
           {/* LOGIN POPUP */}

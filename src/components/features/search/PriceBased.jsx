@@ -21,7 +21,7 @@ const PriceBased = ({ data, title, loading = false }) => {
           </p>
 
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-            {title || "SUVs Between ₹8L – ₹12L"}
+            {title || "SUV Between ₹8L – ₹12L"}
           </h2>
           <p className="text-third">
             Discover vehicles tailored to your budget and body type preferences.

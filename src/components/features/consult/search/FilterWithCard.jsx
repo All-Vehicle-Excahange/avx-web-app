@@ -90,7 +90,7 @@ export default function FilterWithCard({
   const prevPageRef = useRef(1);
   const prevSortRef = useRef(sort);
   const autoFetchTimerRef = useRef(null);
-  const hasMountedForAutoFetch = useRef(false);
+  const isInitializingFilters = useRef(true);
 
   const isMobile = useIsMobile();
 
@@ -542,6 +542,11 @@ export default function FilterWithCard({
     if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
 
     fetchConsultants(1, initialPayload);
+
+    // Prevent auto-fetch from triggering due to these initial state updates
+    setTimeout(() => {
+      isInitializingFilters.current = false;
+    }, 100);
   }, []);
 
   const buildPayload = () => {
@@ -674,8 +679,7 @@ export default function FilterWithCard({
 
   // ── Auto-fetch when any filter changes ──
   useEffect(() => {
-    if (!hasMountedForAutoFetch.current) {
-      hasMountedForAutoFetch.current = true;
+    if (isInitializingFilters.current) {
       return;
     }
     if (autoFetchTimerRef.current) clearTimeout(autoFetchTimerRef.current);
@@ -736,8 +740,7 @@ export default function FilterWithCard({
     // Reset pagination
     setCurrentPage(1);
 
-    // Fetch default results and scroll to top
-    await fetchConsultants(1, {});
+    // Fetch will be handled automatically by the useEffect watching filter states
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
