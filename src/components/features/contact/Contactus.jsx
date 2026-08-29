@@ -10,9 +10,9 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Youtube,
   ClipboardCheck,
 } from "lucide-react";
+import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -101,16 +101,16 @@ function Contactus() {
   };
 
   return (
-    <section className="relative w-full min-h-screen py-16 sm:py-24 overflow-hidden">
+    <section className="relative w-full py-12 md:py-10 overflow-hidden">
       <Toaster position="top-center" reverseOrder={false} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4">
         {/* HEADER SECTION */}
         <div className="text-center lg:text-left mb-12 sm:mb-16">
           {/* <p className="text-xs sm:text-sm tracking-[0.45em] uppercase text-fourth font-extrabold mb-3">
             Contact Channels
           </p> */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-primary">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary tracking-tight font-primary">
             Connect with{" "}
             <span className="text-fourth/80  font-secondary relative inline-block">
               Reecomm
@@ -222,9 +222,11 @@ function Contactus() {
                       <p className="text-primary text-sm leading-relaxed">
                         Reecomm Technologies Pvt. Ltd.
                         <br />
-                        Block B, Sector 62, Noida,
+                        First Floor, Loriya Complex, Part B/D,
                         <br />
-                        Uttar Pradesh, India - 201301
+                        Survey No 268/2, Chhapi, Palanpur Ahmedabad Highway,
+                        <br />
+                        Banas Kantha, Pin 385210
                       </p>
                     </div>
                   </div>
@@ -238,32 +240,40 @@ function Contactus() {
                 </p>
                 <div className="flex justify-center lg:justify-start gap-3">
                   <Link
-                    href="#"
+                    href="https://www.facebook.com/reecommindia"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 text-third hover:text-fourth hover:border-fourth hover:scale-105 transition-all duration-300 flex items-center justify-center"
                     aria-label="Visit Facebook"
                   >
                     <Facebook size={16} />
                   </Link>
                   <Link
-                    href="#"
+                    href="https://www.instagram.com/reecommindia"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 text-third hover:text-fourth hover:border-fourth hover:scale-105 transition-all duration-300 flex items-center justify-center"
                     aria-label="Visit Instagram"
                   >
                     <Instagram size={16} />
                   </Link>
                   <Link
-                    href="#"
+                    href="https://www.linkedin.com/company/reecomm"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 text-third hover:text-fourth hover:border-fourth hover:scale-105 transition-all duration-300 flex items-center justify-center"
                     aria-label="Visit LinkedIn"
                   >
                     <Linkedin size={16} />
                   </Link>
                   <Link
-                    href="#"
+                    href="https://www.x.com/Reecommindia"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 text-third hover:text-fourth hover:border-fourth hover:scale-105 transition-all duration-300 flex items-center justify-center"
-                    aria-label="Visit YouTube"
+                    aria-label="Visit X"
                   >
-                    <Youtube size={16} />
+                    <FaXTwitter size={16} />
                   </Link>
                 </div>
               </div>
@@ -382,14 +392,14 @@ function Contactus() {
               </div>
 
               {/* SUBMIT ACTION */}
-              <div className="mt-4">
+              <div className="mt-4 flex justify-end">
                 <Button
                   type="submit"
                   variant="ghost"
                   size="md"
-                  full={true}
+                  full={false}
                   loading={isSubmitting}
-                  className="font-bold tracking-wider uppercase text-xs"
+                  className="font-bold tracking-wider uppercase text-xs px-8"
                 >
                   Send Message
                 </Button>

@@ -1513,6 +1513,38 @@ export default function SearchWithCard({
   )`;
   };
 
+  const handleTrackClick = (e) => {
+    if (e.target.type === "range") return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+    const rawValue = MIN + percentage * (MAX - MIN);
+    const clickedValue = Math.round(rawValue / 1000) * 1000;
+
+    const distToMin = Math.abs(clickedValue - minPrice);
+    const distToMax = Math.abs(clickedValue - maxPrice);
+
+    if (distToMin < distToMax) {
+      setMinPrice(Math.min(clickedValue, maxPrice - 5000));
+    } else {
+      setMaxPrice(Math.max(clickedValue, minPrice + 5000));
+    }
+    handlePriceChangeRelease();
+  };
+
+  const handleKmTrackClick = (e) => {
+    if (e.target.type === "range") return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+    const rawValue = percentage * MAX_KM;
+    const clickedValue = Math.round(rawValue);
+
+    setKmDistance(clickedValue);
+    handlePriceChangeRelease();
+  };
+
+
   const getKmTrackBackground = () => {
     const percent = (kmDistance / MAX_KM) * 100;
 
@@ -2038,7 +2070,7 @@ export default function SearchWithCard({
                     <span>Max Price</span>
                   </div>
 
-                  <div className="relative h-6 flex items-center">
+                  <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleTrackClick}>
                     <div
                       className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                       style={{ background: getTrackBackground() }}
@@ -2193,7 +2225,7 @@ export default function SearchWithCard({
 
             <FilterSection title=" KM Driven" defaultOpen={true}>
               <div className="flex flex-col gap-2 mt-3">
-                <div className="relative h-6 flex items-center">
+                <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleKmTrackClick}>
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getKmTrackBackground() }}
@@ -2723,7 +2755,7 @@ export default function SearchWithCard({
                   <span>Min Price</span>
                   <span>Max Price</span>
                 </div>
-                <div className="relative h-6 flex items-center">
+                <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleTrackClick}>
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getTrackBackground() }}
@@ -2869,7 +2901,7 @@ export default function SearchWithCard({
             {/* ── KM DRIVEN ── */}
             {activeFilterTab === "KM Driven" && (
               <div className="flex flex-col gap-2 mt-3">
-                <div className="relative h-6 flex items-center">
+                <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleKmTrackClick}>
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getKmTrackBackground() }}

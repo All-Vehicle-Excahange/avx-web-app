@@ -368,7 +368,7 @@ html {
   background: transparent;
   outline: none;
   position: absolute;
-  top: 4px;
+  top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -388,6 +388,7 @@ html {
 .dual-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
+  margin-top: -6px;
   width: 18px;
   height: 18px;
   background: var(--color-fourth);

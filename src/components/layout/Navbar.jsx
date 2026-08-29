@@ -1399,7 +1399,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           {!isLoggedIn ? (
                             <span className="font-bold">Sign in</span>
                           ) : (
-                            <span className="font-bold block truncate max-w-[115px] sm:max-w-[130px] lg:max-w-[95px]">
+                            <span className="font-bold block truncate max-w-[115px] sm:max-w-[130px] lg:max-w-[95px] capitalize">
                               Hello, {user?.consultationName || user?.firstname}
                             </span>
                           )}

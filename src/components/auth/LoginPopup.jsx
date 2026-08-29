@@ -299,7 +299,7 @@ function LoginPopup({
   };
 
   const onValidateOtp = async (overrideOtp) => {
-    const finalOtp = overrideOtp ?? otp.join("");
+    const finalOtp = typeof overrideOtp === "string" ? overrideOtp : otp.join("");
 
     if (finalOtp.length !== 6) {
       setOtpError("OTP must be 6 digits");

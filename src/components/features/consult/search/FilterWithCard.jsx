@@ -637,6 +637,25 @@ export default function FilterWithCard({
     )`;
   };
 
+  const handleTrackClick = (e) => {
+    if (e.target.type === "range") return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+    const rawValue = MIN + percentage * (MAX - MIN);
+    const clickedValue = Math.round(rawValue / 50000) * 50000;
+
+    const distToMin = Math.abs(clickedValue - minPrice);
+    const distToMax = Math.abs(clickedValue - maxPrice);
+
+    if (distToMin < distToMax) {
+      setMinPrice(Math.min(clickedValue, maxPrice - 50000));
+    } else {
+      setMaxPrice(Math.max(clickedValue, minPrice + 50000));
+    }
+  };
+
+
   // Re-fetch when page ACTUALLY changes (skips on mount because prevPageRef starts equal to currentPage)
   useEffect(() => {
     if (prevPageRef.current === currentPage) return;
@@ -1104,7 +1123,7 @@ export default function FilterWithCard({
                   <span>Max Price</span>
                 </div>
 
-                <div className="relative h-6 flex items-center">
+                <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleTrackClick}>
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getTrackBackground() }}
@@ -1478,7 +1497,7 @@ export default function FilterWithCard({
                   <span>Min Price</span>
                   <span>Max Price</span>
                 </div>
-                <div className="relative h-6 flex items-center">
+                <div className="relative h-6 flex items-center cursor-pointer" onPointerDown={handleTrackClick}>
                   <div
                     className="absolute w-full h-1.5 rounded-full transition-all duration-300 ease-out"
                     style={{ background: getTrackBackground() }}

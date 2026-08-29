@@ -352,7 +352,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   };
 
   const onValidateOtp = async (overrideOtp) => {
-    const finalOtp = overrideOtp ?? otp.join("");
+    const finalOtp = typeof overrideOtp === "string" ? overrideOtp : otp.join("");
 
     if (finalOtp.length !== 6) {
       setError("root", { type: "manual", message: "OTP must be 6 digits" });

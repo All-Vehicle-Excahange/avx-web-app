@@ -119,7 +119,7 @@ export default function ConsultantsAndBuyers() {
         {/* TOGGLE */}
         {/* ===================== */}
         <div className="mb-24 flex justify-center">
-          <div className="relative inline-flex rounded-full border border-neutral-700 p-1">
+          <div className="relative inline-flex max-w-[95vw] overflow-x-auto sm:overflow-visible rounded-full border border-neutral-700 p-1 custom-scrollbar">
             {/* Slider */}
             <div
               ref={sliderRef}
@@ -129,7 +129,7 @@ export default function ConsultantsAndBuyers() {
             <button
               ref={buyersRef}
               onClick={() => setActive("buyers")}
-              className={`relative z-10 px-8 py-3 text-sm uppercase tracking-widest transition cursor-pointer
+              className={`relative z-10 px-6 sm:px-8 py-2.5 sm:py-3 text-sm uppercase tracking-[0.1em] sm:tracking-widest transition cursor-pointer shrink-0
                 ${active === "buyers"
                   ? "text-black"
                   : "text-neutral-300 hover:text-white"
@@ -141,7 +141,7 @@ export default function ConsultantsAndBuyers() {
             <button
               ref={consultantsRef}
               onClick={() => setActive("consultants")}
-              className={`relative z-10 px-10 py-3 text-sm uppercase tracking-widest transition cursor-pointer
+              className={`relative z-10 px-6 sm:px-10 py-2.5 sm:py-3 text-sm uppercase tracking-[0.1em] sm:tracking-widest transition cursor-pointer shrink-0
                 ${active === "consultants"
                   ? "text-black"
                   : "text-neutral-300 hover:text-white"

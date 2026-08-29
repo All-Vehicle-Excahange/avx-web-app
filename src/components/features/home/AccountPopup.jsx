@@ -229,7 +229,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                       }
                       onClosePopup();
                     }}
-                    className="text-lg font-bold text-primary hover:text-third transition-colors block text-center"
+                    className="text-lg font-bold text-primary hover:text-third transition-colors block text-center capitalize"
                   >
                     Hello,{" "}
                     {user?.consultationName ||
@@ -274,7 +274,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                     }}
                     className="text-lg font-bold text-primary hover:text-third transition-colors inline-flex items-center gap-2"
                   >
-                    <span>
+                    <span className="capitalize">
                       Hello,{" "}
                       {user?.consultationName ||
                         `${user?.firstname} ${user?.lastname}`}
@@ -303,7 +303,7 @@ export default function AccountPopup({ open, onClosePopup }) {
                 <div className="space-y-4 px-2 pt-2 text-left">
                   {/* Single Profile Progress */}
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-third/60">
+                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-third/60">
                       <span>Profile Mastery</span>
                       <span className="text-secondary bg-primary px-2 py-0.5 rounded-full text-[9px]">
                         {Math.round(profileStrength?.profileStrength || 0)}%
