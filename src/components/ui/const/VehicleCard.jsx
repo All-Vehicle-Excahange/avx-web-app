@@ -270,10 +270,10 @@ export default function VehicleCard({
                   src={mapped.image}
                   alt={mapped.title}
                   fill
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A] transition-transform duration-500 group-hover/card:scale-110">
+                <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A]">
                   <CarFront className="w-12 h-12 text-gray-400" />
                 </div>
               )}

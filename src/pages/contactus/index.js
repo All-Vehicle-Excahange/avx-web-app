@@ -16,9 +16,7 @@ function index() {
         />
       </Head>
       <Navbar scrolled={true} />
-      <Layout>
-        <Contactus />
-      </Layout>
+      <Contactus />
       <FooterLink />
       <Footer />
     </>
