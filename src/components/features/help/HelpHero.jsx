@@ -15,34 +15,34 @@ import SupportFlowModal from "./SupportFlowModal";
 
 const QUICK_LINKS = [
   {
-    label: "Reecomm Inspection Process",
+    label: "What is Reecomm Inspection?",
     href: "/help/what-is-avx-inspection",
-    tag: "Popular",
+    tag: "Overview",
   },
   {
-    label: "How to list a vehicle",
-    href: "/help/how-to-list-your-vehicle",
-    tag: "Guide",
+    label: "What does the report include?",
+    href: "/help/what-does-the-report-include",
+    tag: "Reports",
   },
   {
-    label: "Subscription & billing",
-    href: "/help/subscription-tiers-explained",
-    tag: "Billing",
+    label: "Who pays for inspection?",
+    href: "/help/who-pays-for-inspection",
+    tag: "Payments",
   },
   {
-    label: "Apply as a Consultant",
-    href: "/help/how-to-become-a-consultant",
-    tag: "Consultant",
+    label: "How long does inspection take?",
+    href: "/help/how-long-does-inspection-take",
+    tag: "Timeline",
   },
   {
-    label: "PPC campaign setup",
-    href: "/help/how-ppc-vehicle-boost-works",
-    tag: "Boost",
+    label: "Can inspection be requested by buyer?",
+    href: "/help/can-inspection-be-requested-by-buyer",
+    tag: "Buyer",
   },
   {
-    label: "Request an inspection",
-    href: "/help/how-to-request-inspection",
-    tag: "Inspection",
+    label: "Is video inspection available?",
+    href: "/help/is-video-inspection-available",
+    tag: "Remote",
   },
 ];
 
@@ -106,31 +106,33 @@ export default function HelpHero() {
 
   return (
     <>
-      <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden">
-        {/* Ambient radial glows */}
-        {/* <div
-        className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,123,255,0.08) 0%, transparent 70%)",
-        }}
-      />
-       */}
-
-        <div
-          className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none"
-         
+      <section className="relative min-h-[92vh] flex flex-col justify-center">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          {/* Ambient radial glows */}
+          {/* <div
+          className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(0,123,255,0.08) 0%, transparent 70%)",
+          }}
         />
+        */}
 
-        {/* Fine grid overlay */}
-        {/* <div
-        className="absolute inset-0 pointer-events-none opacity-[0.035]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
-        }}
-      /> */}
+          <div
+            className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none"
+           
+          />
+
+          {/* Fine grid overlay */}
+          {/* <div
+          className="absolute inset-0 pointer-events-none opacity-[0.035]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+          }}
+        /> */}
+        </div>
 
         {/* Top edge glow line */}
 
@@ -177,7 +179,7 @@ export default function HelpHero() {
                 </p>
 
                 {/* ── SEARCH BAR ── */}
-                <div className="relative min-w-0">
+                <div className="relative min-w-0 z-50">
                   {/* Glow ring on focus */}
                   <div
                     className={`absolute -inset-0.5 rounded-2xl transition-opacity duration-300 pointer-events-none ${focused ? "opacity-100" : "opacity-0"}`}
@@ -217,7 +219,7 @@ export default function HelpHero() {
                         ⌘ K
                       </span>
                     )}
-                    <button className="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary bg-primary transition-all duration-200 hover:-translate-y-0.5">
+                    <button className="flex items-center gap-2 whitespace-nowrap cursor-pointer px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] font-primary text-secondary bg-primary transition-all duration-200 hover:-translate-y-0.5">
                       <Zap size={11} />
                       Search
                     </button>
@@ -226,7 +228,7 @@ export default function HelpHero() {
                   {/* Dropdown */}
                   {focused && (
                     <div
-                      className="absolute top-[calc(100%+8px)] overflow-scroll scrollbar-hide left-0 right-0 z-50 rounded-2xl border border-white/8 bg-[#252424] shadow-[0_24px_64px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.04)]"
+                      className="absolute top-[calc(100%+8px)] max-h-[300px] overflow-y-auto scrollbar-hide left-0 right-0 z-50 rounded-2xl border border-white/8 bg-[#252424] shadow-[0_24px_64px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.04)]"
                     >
                       <div className="px-4 pt-3 pb-2 text-[9px] tracking-[0.4em] uppercase font-black font-primary text-primary/25 border-b border-white/5">
                         {query ? `Results for "${query}"` : "Quick Links"}

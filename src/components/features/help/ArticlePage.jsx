@@ -264,7 +264,7 @@ export default function ArticleDetailPage() {
                     </p>
                     <p
                       className="text-[11px] mt-0.5 font-secondary"
-                      
+
                     >
                       Our team is available to assist you.
                     </p>
@@ -275,7 +275,7 @@ export default function ArticleDetailPage() {
                     setFeedback("no");
                     setSupportOpen(true);
                   }}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-secondary transition-all duration-300 hover:-translate-y-0.5 bg-white shadow-[0_6px_20px_rgba(0,123,255,0.25)]"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.15em] font-black font-primary text-secondary transition-all duration-300 hover:-translate-y-0.5 bg-white shadow-[0_6px_20px_rgba(0,123,255,0.25)] cursor-pointer"
                 >
                   Contact Support <ArrowUpRight size={11} />
                 </button>

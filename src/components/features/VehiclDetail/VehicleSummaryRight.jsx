@@ -84,6 +84,10 @@ export default function VehicleSummaryRight({
     enabled: !!vehicleId && isLoggedIn,
   });
 
+  const hasActiveInquiry = eligibilityData &&
+    eligibilityData.inquiryStatus !== "CLOSED_BY_VEHICLE_OWNER" &&
+    eligibilityData.inquiryStatus !== "CLOSED_BY_INQUIRER";
+
   useEffect(() => {
     setLocalInquiryCount(vehicle?.totalInquiryCount || 0);
   }, [vehicle?.totalInquiryCount]);
@@ -359,7 +363,7 @@ export default function VehicleSummaryRight({
           <div className="border-t border-third/40" />
 
           {/* ACTION BUTTONS (DESKTOP) */}
-          <div className="hidden lg:grid grid-cols-2 gap-2 pt-2">
+          <div className={`hidden lg:${isOwner ? "grid grid-cols-2" : "flex justify-end"} gap-2 pt-2`}>
             {isOwner ? (
               <>
                 <Button
@@ -384,33 +388,37 @@ export default function VehicleSummaryRight({
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  showIcon={false}
-                  className="rounded-full"
-                  loading={loading || isCheckingInquiry}
-                  disabled={vehicle?.isVehicleSold}
-                  onClick={() => {
-                    if (!isLoggedIn) {
-                      pendingAction.current = "request";
-                      setIsLoginOpen(true);
-                    } else {
-                      handleRequestInquiry();
-                    }
-                  }}
-                >
-                  {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
-                </Button>
+                {!hasActiveInquiry && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    showIcon={false}
+                    className="rounded-full"
+                    loading={loading || isCheckingInquiry}
+                    disabled={vehicle?.isVehicleSold}
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        pendingAction.current = "request";
+                        setIsLoginOpen(true);
+                      } else {
+                        handleRequestInquiry();
+                      }
+                    }}
+                  >
+                    {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
+                  </Button>
+                )}
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  showIcon={false}
-                  onClick={() => setIsDownloadOpen(true)}
-                >
-                  {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
-                </Button>
+                {hasActiveInquiry && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    showIcon={false}
+                    onClick={() => setIsDownloadOpen(true)}
+                  >
+                    {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
+                  </Button>
+                )}
               </>
             )}
           </div>
@@ -452,31 +460,35 @@ export default function VehicleSummaryRight({
             </>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                showIcon={false}
-                loading={loading || isCheckingInquiry}
-                onClick={() => {
-                  if (!isLoggedIn) {
-                    pendingAction.current = "request";
-                    setIsLoginOpen(true);
-                  } else {
-                    handleRequestInquiry();
-                  }
-                }}
-              >
-                Request Vehicle
-              </Button>
+              {!hasActiveInquiry && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  showIcon={false}
+                  loading={loading || isCheckingInquiry}
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      pendingAction.current = "request";
+                      setIsLoginOpen(true);
+                    } else {
+                      handleRequestInquiry();
+                    }
+                  }}
+                >
+                  Request Vehicle
+                </Button>
+              )}
 
-              <Button
-                variant="outline"
-                size="sm"
-                showIcon={false}
-                onClick={() => setIsDownloadOpen(true)}
-              >
-                Chat
-              </Button>
+              {hasActiveInquiry && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  showIcon={false}
+                  onClick={() => setIsDownloadOpen(true)}
+                >
+                  {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
+                </Button>
+              )}
             </>
           )}
         </div>
