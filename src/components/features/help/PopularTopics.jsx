@@ -122,8 +122,9 @@ export default function PopularTopicsGrid() {
             const isHovered = hovered === topic.id;
 
             return (
-              <button
+              <Link
                 key={topic.id}
+                href="/help#faq"
                 onMouseEnter={() => setHovered(topic.id)}
                 onMouseLeave={() => setHovered(null)}
                 className={`group relative flex flex-col justify-between p-6 text-left transition-all duration-350 overflow-hidden rounded-2xl border outline-none min-h-[200px] ${isHovered ? "bg-primary/5 border-white/12 -translate-y-0.5 shadow-[0_8px_30px_rgba(0,0,0,0.4)]" : "bg-primary/3 border-white/5"}`}
@@ -172,7 +173,7 @@ export default function PopularTopicsGrid() {
                     {topic.desc}
                   </p>
                 </div>
-              </button>
+              </Link>
             );
           })}
         </div>
