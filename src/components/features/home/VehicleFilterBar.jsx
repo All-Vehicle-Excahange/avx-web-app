@@ -457,6 +457,42 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     )`;
   };
 
+  const handleTrackClick = (e) => {
+    if (e.target.type === "range") return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+    const rawValue = MIN + percentage * (MAX - MIN);
+    const clickedValue = Math.round(rawValue / 50000) * 50000;
+
+    const distToMin = Math.abs(clickedValue - minPrice);
+    const distToMax = Math.abs(clickedValue - maxPrice);
+
+    if (distToMin < distToMax) {
+      setMinPrice(Math.min(clickedValue, maxPrice - 50000));
+    } else {
+      setMaxPrice(Math.max(clickedValue, minPrice + 50000));
+    }
+  };
+
+  const handleConsultTrackClick = (e) => {
+    if (e.target.type === "range") return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
+    const rawValue = MIN + percentage * (MAX - MIN);
+    const clickedValue = Math.round(rawValue / 50000) * 50000;
+
+    const distToMin = Math.abs(clickedValue - consultMinPrice);
+    const distToMax = Math.abs(clickedValue - consultMaxPrice);
+
+    if (distToMin < distToMax) {
+      setConsultMinPrice(Math.min(clickedValue, consultMaxPrice - 50000));
+    } else {
+      setConsultMaxPrice(Math.max(clickedValue, consultMinPrice + 50000));
+    }
+  };
+
   // Sync range slider state to search budget state
   useEffect(() => {
     if (isFirstRender.current) {
@@ -1874,7 +1910,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 {/* Animated Vertical Slider Placeholder (Desktop Equivalent) */}
-                {!(vehicleSearchQuery || location) && (
+                {!vehicleSearchQuery && (
                   <div className="absolute inset-y-0 left-[46px] right-[40px] pointer-events-none overflow-hidden">
                     <div
                       className={`flex flex-col ${isTransitioning
@@ -1900,32 +1936,25 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 <input
                   type="text"
                   placeholder=""
-                  value={vehicleSearchQuery || location}
+                  value={vehicleSearchQuery}
                   onChange={(e) => {
-                    const val = e.target.value;
-                    setVehicleSearchQuery(val);
-                    handleLocationChange(e);
+                    setVehicleSearchQuery(e.target.value);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      handleVehicleSearchSubmit(vehicleSearchQuery || location);
+                      handleVehicleSearchSubmit(vehicleSearchQuery);
                     }
                   }}
                   onFocus={() => {
                     loadSearchSuggestions();
-                    if (locationSuggestions.length === 0) fetchPopularCities();
                   }}
                   className="flex-1 w-full h-full bg-transparent border-none outline-none text-white px-3 text-[15px] placeholder-transparent z-10 relative"
                 />
-                {(vehicleSearchQuery || location) && (
+                {vehicleSearchQuery && (
                   <button
                     onClick={() => {
                       setVehicleSearchQuery("");
-                      setLocation("");
-                      setCityId(null);
-                      setStateId(null);
-                      fetchPopularCities();
                     }}
                     className="pr-4 text-gray-500 hover:text-white transition-colors cursor-pointer shrink-0 z-10 relative"
                   >
@@ -1934,10 +1963,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 )}
               </div>
 
-              {/* Combined Suggestions dropdown (Vehicles, Brands, Models, Consultants, Cities) */}
-              {((vehicleSearchQuery.trim() &&
-                filteredVehicleSuggestions.length > 0) ||
-                (location.trim() && locationSuggestions.length > 0)) && (
+              {/* Suggestions dropdown (Vehicles, Brands, Models, Consultants) */}
+              {(vehicleSearchQuery.trim() &&
+                filteredVehicleSuggestions.length > 0) && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-[#161616] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl z-[60] max-h-64 overflow-y-auto custom-scrollbar">
                     {/* Vehicle / Brand / Model / Consultant Suggestions */}
                     {filteredVehicleSuggestions.map((item, idx) => (
@@ -1963,43 +1991,6 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                         </div>
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-gray-400 shrink-0 ml-2">
                           {item.type || "search"}
-                        </span>
-                      </button>
-                    ))}
-
-                    {/* City / State Suggestions */}
-                    {locationSuggestions.slice(0, 5).map((item, idx) => (
-                      <button
-                        key={
-                          item.isStateOnly
-                            ? `state-${item.stateId}-${idx}`
-                            : `city-${item.cityId}-${idx}`
-                        }
-                        onClick={() => {
-                          if (item.isStateOnly) {
-                            setLocation(item.stateName);
-                            setCityId(null);
-                            setStateId(item.stateId);
-                          } else {
-                            setLocation(`${item.cityName}, ${item.stateName}`);
-                            setCityId(item.cityId);
-                            setStateId(item.stateId);
-                          }
-                          setVehicleSearchQuery("");
-                        }}
-                        className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 text-left border-b border-neutral-800/40 last:border-none transition-colors"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <MapPin
-                            size={16}
-                            className="text-emerald-400 shrink-0"
-                          />
-                          <span className="text-sm font-semibold text-white truncate">
-                            {item.isStateOnly ? item.stateName : item.cityName}
-                          </span>
-                        </div>
-                        <span className="text-xs text-gray-500 shrink-0">
-                          {item.isStateOnly ? "State" : item.stateName}
                         </span>
                       </button>
                     ))}
@@ -2227,7 +2218,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 <div className="p-4 bg-[#161616] border border-neutral-800/80 rounded-2xl">
-                  <div className="relative h-6 flex items-center mt-1">
+                  <div className="relative h-6 flex items-center mt-1 cursor-pointer" onPointerDown={handleConsultTrackClick}>
                     <div
                       className="absolute w-full h-1.5 rounded-full"
                       style={{ background: getConsultTrackBackground() }}
@@ -2393,7 +2384,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </div>
 
                 <div className="p-4 bg-[#161616] border border-neutral-800/80 rounded-2xl">
-                  <div className="relative h-6 flex items-center mt-1">
+                  <div className="relative h-6 flex items-center mt-1 cursor-pointer" onPointerDown={handleTrackClick}>
                     <div
                       className="absolute w-full h-1.5 rounded-full"
                       style={{ background: getTrackBackground() }}

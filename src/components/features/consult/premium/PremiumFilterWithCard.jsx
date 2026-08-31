@@ -425,14 +425,16 @@ export default function FilterWithCard({
   };
 
   const getTrackBackground = () => {
-    const minPercent = ((minPrice - MIN) / (MAX - MIN)) * 100;
-    const maxPercent = ((maxPrice - MIN) / (MAX - MIN)) * 100;
+    const safeMin = isNaN(minPrice) ? 0 : minPrice;
+    const safeMax = isNaN(maxPrice) ? MAX : maxPrice;
+    const minPercent = ((safeMin - MIN) / (MAX - MIN)) * 100;
+    const maxPercent = ((safeMax - MIN) / (MAX - MIN)) * 100;
     return `linear-gradient(
       to right,
       #e5e7eb 0%,
       #e5e7eb ${minPercent}%,
-      var(--color-fourth) ${minPercent}%,
-      var(--color-fourth) ${maxPercent}%,
+      #3b82f6 ${minPercent}%,
+      #3b82f6 ${maxPercent}%,
       #e5e7eb ${maxPercent}%,
       #e5e7eb 100%
     )`;
@@ -946,8 +948,8 @@ export default function FilterWithCard({
                 </div>
 
                 <div className="flex justify-between text-xs text-primary/70 mb-1">
-                  <span>₹{minPrice.toLocaleString()}</span>
-                  <span>₹{maxPrice.toLocaleString()}</span>
+                  <span>₹{minPrice.toLocaleString("en-IN")}</span>
+                  <span>{isNaN(maxPrice) || maxPrice >= MAX ? `₹${MAX.toLocaleString("en-IN")}+` : `₹${maxPrice.toLocaleString("en-IN")}`}</span>
                 </div>
               </div>
             </FilterSection>
@@ -1286,8 +1288,8 @@ export default function FilterWithCard({
                   />
                 </div>
                 <div className="flex justify-between text-xs text-secondary/70 mb-1">
-                  <span>₹{minPrice.toLocaleString()}</span>
-                  <span>₹{maxPrice.toLocaleString()}</span>
+                  <span>₹{minPrice.toLocaleString("en-IN")}</span>
+                  <span>{isNaN(maxPrice) || maxPrice >= MAX ? `₹${MAX.toLocaleString("en-IN")}+` : `₹${maxPrice.toLocaleString("en-IN")}`}</span>
                 </div>
               </div>
             )}
