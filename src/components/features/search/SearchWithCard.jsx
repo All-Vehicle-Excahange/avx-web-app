@@ -670,7 +670,7 @@ export default function SearchWithCard({
     }
 
     const isTwoWheeler =
-      vehicleType && 
+      vehicleType &&
       (vehicleType.toLowerCase().includes("2") ||
         vehicleType.toLowerCase().includes("two"));
     const fuel = selectedFuelTypes.length === 1 ? selectedFuelTypes[0] : null;
@@ -2482,13 +2482,18 @@ export default function SearchWithCard({
                   selectedBodyType[0].slice(1).toLowerCase()
                   : "";
 
-              let subject = "Vehicles";
+              const isTwoWheeler =
+                vehicleType &&
+                (vehicleType.toLowerCase().includes("2") ||
+                  vehicleType.toLowerCase().includes("two"));
+
+              let subject = isTwoWheeler ? "Bikes" : "Cars";
               if (bodyTypeLabel) {
-                subject = `${bodyTypeLabel}s`;
+                subject = bodyTypeLabel;
               } else if (brandLabel && modelLabel) {
                 subject = `${brandLabel} ${modelLabel}`;
               } else if (brandLabel) {
-                subject = `${brandLabel} Cars`;
+                subject = `${brandLabel} ${isTwoWheeler ? "Bikes" : "Cars"}`;
               }
 
               const dynamicTitle =
