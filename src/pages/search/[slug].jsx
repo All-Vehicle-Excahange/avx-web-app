@@ -11,9 +11,14 @@ import AutoConsualt from "@/components/features/search/AutoConsualt";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { event } from "@/lib/fpixel";
+import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import {
   buildSearchLandingSeo,
-  canonicalizeSearchSlug,
+  buildSearchLandingIntro,
+  buildSearchLandingFaq,
+  buildSearchItemListSchema,
+  resolveSearchSlugRedirect,
+  MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
 
 function SlugSearchPage({ seo, initialFilters }) {
@@ -54,6 +59,9 @@ function SlugSearchPage({ seo, initialFilters }) {
         />
         {seo?.canonical && (
           <link key="canonical" rel="canonical" href={seo.canonical} />
+        )}
+        {seo?.noindex && (
+          <meta name="robots" content="noindex, follow" />
         )}
 
         <meta property="og:type" content="website" />
@@ -125,17 +133,25 @@ function SlugSearchPage({ seo, initialFilters }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              name: seo?.title || "Used Cars for Sale on Reecomm",
-              description:
-                seo?.description || "Browse pre-owned cars for sale.",
-              url:
-                seo?.canonical || "https://www.reecomm.com/search/buy-used-cars",
-            }),
+            __html: JSON.stringify(
+              buildSearchItemListSchema({
+                title: seo?.title,
+                description: seo?.description,
+                canonical: seo?.canonical,
+                vehicles: seo?.initialVehicles || [],
+              })
+            ),
           }}
         />
+
+        {seo?.faqSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(seo.faqSchema),
+            }}
+          />
+        )}
       </Head>
       <Suspense fallback={null}>
         <SearchContent
@@ -199,6 +215,8 @@ function SearchContent({
         />
       </Layout>
 
+      <SearchLandingSeoContent intro={seo?.intro} faqItems={seo?.faqItems} />
+
       <Layout>
         <ReletedToSearch data={relatedVehicles} loading={isLoading} />
       </Layout>
@@ -229,8 +247,8 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  // Additive synonym redirect (e.g. creata → creta)
-  const canonicalSlug = canonicalizeSearchSlug(slug);
+  // Keyword alias + misspelling redirects (bikes → two-wheelers, creta → hyundai-creta)
+  const canonicalSlug = resolveSearchSlugRedirect(slug);
   if (canonicalSlug) {
     const qs = new URLSearchParams(query);
     qs.delete("slug");
@@ -513,6 +531,7 @@ export async function getServerSideProps(context) {
   }
 
   let totalCount = 0;
+  let initialVehicles = [];
   try {
     const isTwo = vehicleTypeParam === "two-wheelers";
     const filterPath = isTwo ? "two-wheeler" : "four-wheeler";
@@ -543,8 +562,8 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const countRes = await fetch(
-      `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=1`,
+    const listRes = await fetch(
+      `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`,
       {
         method: "POST",
         headers: {
@@ -554,12 +573,26 @@ export async function getServerSideProps(context) {
         body: JSON.stringify(body),
       }
     );
-    if (countRes.ok) {
-      const countJson = await countRes.json();
+    if (listRes.ok) {
+      const listJson = await listRes.json();
       totalCount =
-        countJson?.pageResponse?.totalElements ||
-        countJson?.totalElements ||
+        listJson?.pageResponse?.totalElements ||
+        listJson?.totalElements ||
         0;
+      const rawList =
+        listJson?.data ||
+        listJson?.content ||
+        listJson?.vehicles ||
+        [];
+      initialVehicles = Array.isArray(rawList)
+        ? rawList.slice(0, 10).map((v) => ({
+            id: v.id,
+            yearOfMfg: v.yearOfMfg || v.year,
+            makerName: v.makerName || v.makeName,
+            modelName: v.modelName,
+            slug: v.slug,
+          }))
+        : [];
     }
   } catch (e) {
     console.error("Search count resolution failed:", e);
@@ -580,18 +613,41 @@ export async function getServerSideProps(context) {
     !transmissionFilter &&
     !bodyTypeFilter;
 
+  const resolvedModel =
+    initialFilters.model ||
+    (modelName ? modelName.replace(/-/g, " ") : "");
+  const resolvedCity = initialFilters.cityName || "";
+
   const seoBuilt = buildSearchLandingSeo({
     brand: brandName,
-    model:
-      initialFilters.model ||
-      (modelName ? modelName.replace(/-/g, " ") : ""),
-    city: initialFilters.cityName || "",
+    model: resolvedModel,
+    city: resolvedCity,
     vehicleWord,
     typePart,
     budgetPart,
     totalCount,
     isHub,
   });
+
+  const intro = buildSearchLandingIntro({
+    brand: brandName,
+    model: resolvedModel,
+    city: resolvedCity,
+    vehicleWord,
+    budgetPart,
+    totalCount,
+    isHub,
+  });
+
+  const { items: faqItems, schema: faqSchema } = buildSearchLandingFaq({
+    brand: brandName,
+    model: resolvedModel,
+    city: resolvedCity,
+    vehicleWord,
+    isHub,
+  });
+
+  const noindex = !isHub && totalCount < MIN_INDEXABLE_LISTINGS;
 
   return {
     props: {
@@ -600,6 +656,11 @@ export async function getServerSideProps(context) {
         description: seoBuilt.description,
         h1: seoBuilt.h1,
         canonical: `https://www.reecomm.com/search/${slug}`,
+        noindex,
+        intro,
+        faqItems,
+        faqSchema,
+        initialVehicles,
       },
       initialFilters,
     },

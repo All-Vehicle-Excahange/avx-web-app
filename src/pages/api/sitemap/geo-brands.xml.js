@@ -17,7 +17,8 @@ export default async function handler(req, res) {
       "mumbai", "delhi", "bangalore", "hyderabad", "ahmedabad", "chennai",
       "kolkata", "pune", "jaipur", "latur", "palanpur", "hansi", "ludhiana",
       "agra", "nashik", "bhopal", "patna", "vadodara", "surat", "rajkot",
-      "lucknow", "indore", "chandigarh", "nagpur", "coimbatore"
+      "lucknow", "indore", "chandigarh", "nagpur", "coimbatore",
+      "gandhinagar", "visnagar", "kanodar"
     ];
 
     // Popular Indian states
@@ -73,6 +74,10 @@ export default async function handler(req, res) {
       states.forEach((state) => {
         addUrl(`/search/buy-used-${b}-two-wheelers-${state}`, 0.6, "weekly");
       });
+    });
+
+    cities.forEach((city) => {
+      addUrl(`/search/buy-used-two-wheelers-${city}`, 0.75, "weekly");
     });
 
     // 5. Add Brand + Model & Brand + Model + City URLs

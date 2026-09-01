@@ -19,6 +19,7 @@ import Layout from "@/components/layout/Layout";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
 import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
+import HomePopularSearches from "@/components/features/home/HomePopularSearches";
 
 function Home() {
   return (
@@ -87,7 +88,7 @@ function Home() {
               url: "https://www.reecomm.com",
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://www.reecomm.com/search?q={search_term_string}",
+                target: "https://www.reecomm.com/search/buy-used-cars?q={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
@@ -145,6 +146,7 @@ function Home() {
         <AboutSection />
       </Layout>
       <DownloadAppSection />
+      <HomePopularSearches />
       <FooterLink />
       <Footer />
     </>

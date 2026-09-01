@@ -38,7 +38,7 @@ function index() {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://reecomm.com/become-consultant" />
+        <meta property="og:url" content="https://www.reecomm.com/become-consultant" />
         <meta property="og:title" content="Become a Reecomm Consultant — Scale Your Automotive Business" />
         <meta
           property="og:description"

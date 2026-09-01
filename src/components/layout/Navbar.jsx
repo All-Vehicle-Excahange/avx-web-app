@@ -39,10 +39,14 @@ import { saveRecentSearch, getRecentSearches, deleteAllRecentSearches } from "@/
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import { getAndSearchMakers } from "@/services/filter";
 import { event as metaEvent } from "@/lib/fpixel";
+import { trackSearchResults } from "@/lib/gtag";
 
 const trackMetaProductSearch = (searchString) => {
-  metaEvent("Search", {
-    search_string: String(searchString || "").trim() || "vehicle_search",
+  const query = String(searchString || "").trim() || "vehicle_search";
+  metaEvent("Search", { search_string: query });
+  trackSearchResults({
+    search_string: query,
+    search_type: "navbar",
   });
 };
 

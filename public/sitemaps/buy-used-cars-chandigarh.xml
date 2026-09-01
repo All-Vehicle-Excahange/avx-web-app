@@ -6,8 +6,18 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.reecomm.com/search/buy-used-two-wheelers-chandigarh</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://www.reecomm.com/search/buy-used-cars-chandigarh</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.reecomm.com/search/buy-used-two-wheelers-chandigarh</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
   </url>
 </urlset>

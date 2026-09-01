@@ -103,17 +103,19 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
 
   // 6. Dynamic Fuel Type
   if (fuel) {
+    const fuelSlug = fuel.toLowerCase();
     links.push({
       label: `Used ${fuel} Cars`,
-      href: `/search/buy-used-cars?fuelType=${encodeURIComponent(fuel.toUpperCase())}`,
+      href: `/search/buy-used-${fuelSlug}-cars`,
     });
   }
 
   // 7. Dynamic Body Type
   if (body) {
+    const bodySlug = body.toLowerCase().replace(/\s+/g, "-");
     links.push({
       label: `Used ${body} Cars`,
-      href: `/search/buy-used-cars?bodyType=${encodeURIComponent(body.toUpperCase())}`,
+      href: `/search/buy-used-${bodySlug}-cars`,
     });
   }
 
@@ -128,13 +130,19 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
   // 9. High Authority Master Pillar Links
   links.push(
     { label: "Browse All Used Cars", href: "/search/buy-used-cars" },
-    { label: "Used Two Wheelers", href: "/search/buy-used-two-wheelers" },
+    { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
+    { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
+    { label: "Used Hyundai Creta Cars", href: "/search/buy-used-hyundai-creta-cars" },
     { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
+    { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
     { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
     { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
-    { label: "Used Hyundai Creta Cars in Palanpur", href: "/search/buy-used-hyundai-creta-cars-palanpur" },
-    { label: "Used Ford Ecosport Cars in Palanpur", href: "/search/buy-used-ford-ecosport-cars-palanpur" },
-    { label: "Used Hyundai Creta Cars", href: "/search/buy-used-hyundai-creta-cars" }
+    { label: "Used Hyundai Creta in Palanpur", href: "/search/buy-used-hyundai-creta-cars-palanpur" },
+    { label: "Used Ford Ecosport in Palanpur", href: "/search/buy-used-ford-ecosport-cars-palanpur" },
+    {
+      label: "How to Buy a Used Car Safely",
+      href: "/blog/how-to-buy-used-car-safely-india",
+    }
   );
 
   // Filter out duplicates

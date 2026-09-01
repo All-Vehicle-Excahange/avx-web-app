@@ -19,6 +19,7 @@ function index() {
           name="description"
           content="Get help with Reecomm – solutions for vehicle inspections, consultant earnings, and business growth tools."
         />
+        <link rel="canonical" href="https://www.reecomm.com/help" />
       </Head>
       <Navbar />
       <HelpHero />

@@ -80,7 +80,14 @@ export const generateVehicleSlug = (data) => {
     .toLowerCase()
     .replace(/\s+/g, "-");
 
-  return `buy-used-${brandPart}-${modelPart}-${yearPart}-cars-${cityPart}`
+  const isTwoWheeler =
+    (data.vehicleType || data.bodyType || "")
+      .toUpperCase()
+      .includes("TWO") ||
+    (data.vehicleType || "").toUpperCase() === "BIKE";
+  const kind = isTwoWheeler ? "two-wheelers" : "cars";
+
+  return `buy-used-${brandPart}-${modelPart}-${yearPart}-${kind}-${cityPart}`
     .replace(/-+/g, "-")
     .replace(/-$/, "")
     .replace(/^-/, "");

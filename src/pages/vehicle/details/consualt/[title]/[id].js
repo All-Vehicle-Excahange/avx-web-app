@@ -53,7 +53,7 @@ function Index({ seo }) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://reecomm.com",
+        item: "https://www.reecomm.com",
       },
       {
         "@type": "ListItem",

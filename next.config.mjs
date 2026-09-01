@@ -8,6 +8,60 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/used-cars/:path*",
+        destination: "/search/buy-used-cars/:path*",
+        permanent: true,
+      },
+      {
+        source: "/used-bikes/:path*",
+        destination: "/search/buy-used-two-wheelers/:path*",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-bikes",
+        destination: "/search/buy-used-two-wheelers",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-bike",
+        destination: "/search/buy-used-two-wheelers",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-motorcycles",
+        destination: "/search/buy-used-two-wheelers",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-motorcycle",
+        destination: "/search/buy-used-two-wheelers",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-bikes-:city",
+        destination: "/search/buy-used-two-wheelers-:city",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-bike-:city",
+        destination: "/search/buy-used-two-wheelers-:city",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-creta-cars",
+        destination: "/search/buy-used-hyundai-creta-cars",
+        permanent: true,
+      },
+      {
+        source: "/search/buy-used-creta-cars-:city",
+        destination: "/search/buy-used-hyundai-creta-cars-:city",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Only use custom loader in production, fallback to default in dev to avoid missing loader prop error
     loader: process.env.NODE_ENV === "production" ? "custom" : "default",

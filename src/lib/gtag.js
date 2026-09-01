@@ -55,3 +55,15 @@ export const trackInquirySubmit = ({
   });
 };
 
+export const trackSearchResults = ({
+  search_string,
+  results_count,
+  search_type,
+}) => {
+  event("view_search_results", {
+    search_string: String(search_string || "").trim() || "vehicle_search",
+    results_count: Number(results_count) || 0,
+    search_type: search_type || "product",
+  });
+};
+

@@ -32,6 +32,16 @@ import {
   deleteAllRecentSearches,
 } from "@/services/user.service";
 import { event as metaEvent } from "@/lib/fpixel";
+import { trackSearchResults } from "@/lib/gtag";
+
+const trackProductSearch = (searchString, searchType = "filter_bar") => {
+  const query = String(searchString || "").trim() || "vehicle_search";
+  metaEvent("Search", { search_string: query });
+  trackSearchResults({
+    search_string: query,
+    search_type: searchType,
+  });
+};
 
 /* ================= CONSTANTS ================= */
 
@@ -355,9 +365,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         typeof item.link === "string" &&
         item.link.startsWith("/search")
       ) {
-        metaEvent("Search", {
-          search_string: searchLabel || "vehicle_search",
-        });
+        trackProductSearch(searchLabel || "vehicle_search", "filter_bar_suggestion");
       }
       push(item.link);
       return;
@@ -368,7 +376,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     }
     if (item.type === "brand") {
       const brandName = item.rawLabel || item.brand || item.label;
-      metaEvent("Search", { search_string: brandName || "vehicle_search" });
+      trackProductSearch(brandName || "vehicle_search", "filter_bar_brand");
       push(`/search?brand=${encodeURIComponent(brandName)}`);
       return;
     }
@@ -379,15 +387,16 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       const modelIdParam = item.modelId
         ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}`
         : "";
-      metaEvent("Search", {
-        search_string: item.label || item.rawLabel || "vehicle_search",
-      });
+      trackProductSearch(
+        item.label || item.rawLabel || "vehicle_search",
+        "filter_bar_model"
+      );
       push(
         `/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`,
       );
       return;
     }
-    metaEvent("Search", { search_string: searchLabel || "vehicle_search" });
+    trackProductSearch(searchLabel || "vehicle_search", "filter_bar_query");
     push(`/search?q=${encodeURIComponent(searchLabel)}`);
   };
 
@@ -396,7 +405,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     const cleanQuery = queryStr.trim();
 
     saveSearchMutation.mutate(cleanQuery);
-    metaEvent("Search", { search_string: cleanQuery });
+    trackProductSearch(cleanQuery, "filter_bar_submit");
     setLocalRecentSearches((prev) => {
       const filtered = prev.filter(
         (term) => term.toLowerCase() !== cleanQuery.toLowerCase(),
@@ -990,12 +999,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
         const vehicleKind = isTwoWheeler ? "two-wheelers" : "cars";
 
-        metaEvent("Search", {
-          search_string:
-            vehicleSearchQuery?.trim() ||
-            [brand, vehicleType, location, budget].filter(Boolean).join(" | ") ||
-            "vehicle_search",
-        });
+        const searchString =
+          vehicleSearchQuery?.trim() ||
+          [brand, vehicleType, location, budget].filter(Boolean).join(" | ") ||
+          "vehicle_search";
+        trackProductSearch(searchString, "filter_bar_filters");
 
         // Generate SEO-friendly slug
         let slug = "buy-used-";

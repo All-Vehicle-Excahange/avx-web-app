@@ -80,11 +80,17 @@ async function generateSitemaps() {
       let xmlContent = `<?xml version="1.0" encoding="UTF-8"?>\n`;
       xmlContent += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
       
-      // Add state-level search landing page URL
+      // Add state-level search landing page URLs
       xmlContent += `  <url>\n`;
       xmlContent += `    <loc>${BASE_URL}/search/buy-used-cars-${stateSlug}</loc>\n`;
       xmlContent += `    <changefreq>daily</changefreq>\n`;
       xmlContent += `    <priority>0.9</priority>\n`;
+      xmlContent += `  </url>\n`;
+
+      xmlContent += `  <url>\n`;
+      xmlContent += `    <loc>${BASE_URL}/search/buy-used-two-wheelers-${stateSlug}</loc>\n`;
+      xmlContent += `    <changefreq>daily</changefreq>\n`;
+      xmlContent += `    <priority>0.85</priority>\n`;
       xmlContent += `  </url>\n`;
       
       cities.forEach(city => {
@@ -93,6 +99,11 @@ async function generateSitemaps() {
         xmlContent += `    <loc>${BASE_URL}/search/buy-used-cars-${citySlug}</loc>\n`;
         xmlContent += `    <changefreq>daily</changefreq>\n`;
         xmlContent += `    <priority>0.8</priority>\n`;
+        xmlContent += `  </url>\n`;
+        xmlContent += `  <url>\n`;
+        xmlContent += `    <loc>${BASE_URL}/search/buy-used-two-wheelers-${citySlug}</loc>\n`;
+        xmlContent += `    <changefreq>daily</changefreq>\n`;
+        xmlContent += `    <priority>0.75</priority>\n`;
         xmlContent += `  </url>\n`;
       });
       

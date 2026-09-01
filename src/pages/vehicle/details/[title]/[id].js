@@ -38,11 +38,16 @@ function Index({ seo }) {
         name: "Verified Individual Owner",
       };
 
-  // ─── JSON-LD: Car Schema (uses @type: Car — more specific than Vehicle) ──
+  const isTwoWheeler = (vehicle.vehicleType || "")
+    .toUpperCase()
+    .includes("TWO");
+  const vehicleSchemaType = isTwoWheeler ? "Motorcycle" : "Car";
+
+  // ─── JSON-LD: Car / Motorcycle Schema ──
   const vehicleSchema = vehicle.id
     ? {
         "@context": "https://schema.org",
-        "@type": "Car",
+        "@type": vehicleSchemaType,
         name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim(),
         brand: { "@type": "Brand", name: vehicle.makerName },
         model: vehicle.modelName,

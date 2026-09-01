@@ -1408,6 +1408,312 @@ export const MOCK_POSTS = [
     },
     date: "18 July 2026",
   },
+  {
+    id: 14,
+    slug: "/blog/used-hyundai-creta-buying-guide-india",
+    title: "Used Hyundai Creta Buying Guide — Price, Variants & What to Check",
+    category: "Buying Guide",
+    description:
+      "Planning to buy a used Creta? Here is a direct guide to variants, fair price ranges, and inspection checks before you pay.",
+    seoTitle:
+      "Used Hyundai Creta Buying Guide — Price, Variants & Inspection Checklist | Reecomm",
+    seoDescription:
+      "Buying a used Hyundai Creta in India? Compare SX, SX+, diesel and petrol variants, typical price ranges by year and city, and the inspection checks that protect your purchase.",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Used Hyundai Creta Buying Guide — Price, Variants & What to Check",
+        description:
+          "A practical guide to buying a used Hyundai Creta in India — covering variants, pricing, and pre-purchase inspection.",
+        url: "https://www.reecomm.com/blog/used-hyundai-creta-buying-guide-india",
+        datePublished: "2026-09-01",
+        dateModified: "2026-09-01",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: {
+          "@type": "Organization",
+          name: "Reecomm",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.reecomm.com/logo/logo1.webp",
+          },
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "What is a fair price for a used Hyundai Creta?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Used Creta prices depend on year, variant (E, S, SX, SX+), fuel type, km driven, and city. Compare at least 3 similar listings and adjust for inspection findings before negotiating.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Which used Creta variant is best value?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "SX and SX+ variants offer the best balance of features and resale demand. Diesel variants hold strong demand in highway-driven markets; petrol suits primarily city use.",
+            },
+          },
+        ],
+      },
+    ],
+    content: `
+      ### Quick answer
+      A used Hyundai Creta is one of India's most searched used SUVs. Before you buy, match the variant to your needs, verify service history, and get an independent inspection — especially on diesel models with higher km.
+
+      ### Variant guide
+      - **E / S**: Budget entry; fewer features but lower price
+      - **SX / SX+**: Most popular; sunroof, better safety pack on higher trims
+      - **Diesel vs Petrol**: Diesel for highway km; petrol for lower maintenance in city use
+
+      ### What to inspect on a used Creta
+      1. Clutch wear (diesel manual)
+      2. Turbo and EGR health (diesel)
+      3. Suspension bushings and tyre age
+      4. Flood/rust signs in underbody
+      5. RC, insurance, and pending challans
+
+      Browse verified used Creta listings on Reecomm with optional inspection reports.
+    `,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "1 September 2026",
+  },
+  {
+    id: 15,
+    slug: "/blog/used-toyota-cars-india-best-models",
+    title: "Used Toyota Cars in India — Best Models Under ₹10 Lakh",
+    category: "Buying Guide",
+    description:
+      "Toyota holds resale value better than most brands. Here are the used Toyota models worth shortlisting and what to verify before buying.",
+    seoTitle:
+      "Used Toyota Cars in India — Best Models Under ₹10 Lakh (2026) | Reecomm",
+    seoDescription:
+      "Looking for used Toyota cars in India? Compare Innova, Fortuner, Corolla Altis, Etios and Urban Cruiser — plus documents and inspection tips before you buy.",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Used Toyota Cars in India — Best Models Under ₹10 Lakh",
+        url: "https://www.reecomm.com/blog/used-toyota-cars-india-best-models",
+        datePublished: "2026-09-01",
+        dateModified: "2026-09-01",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Which used Toyota car is best under ₹10 lakh?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Corolla Altis, Etios, and older Innova Crysta entries (higher km) are common picks under ₹10 lakh depending on year and city. Always verify service records.",
+            },
+          },
+        ],
+      },
+    ],
+    content: `
+      ### Quick answer
+      Used Toyota cars command strong resale because of reliability and service network. Under ₹10 lakh, look at Corolla Altis, Etios, and select Innova entries — but verify km, accident history, and RC transfer status.
+
+      ### Top used Toyota models
+      | Model | Why buyers choose it |
+      |-------|---------------------|
+      | Innova / Crysta | Space, diesel durability, family use |
+      | Fortuner | SUV demand, strong resale |
+      | Corolla Altis | Comfort, highway stability |
+      | Etios / Liva | Low running cost, easy maintenance |
+      | Urban Cruiser | Compact SUV, city-friendly |
+
+      ### Documents to verify
+      - RC match with seller
+      - Insurance validity
+      - Service history / Toyota service stamps
+      - No pending finance hypothecation
+    `,
+    image: "/blog/blog-2.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "1 September 2026",
+  },
+  {
+    id: 16,
+    slug: "/blog/used-bike-buying-guide-india",
+    title: "Used Bike Buying Guide India — RC, Insurance & Inspection",
+    category: "Buying Guide",
+    description:
+      "Buying a used bike or scooter? Verify RC, insurance, engine health, and ownership transfer before you pay — this guide covers every step.",
+    seoTitle:
+      "Used Bike Buying Guide India — RC, Insurance & What to Check | Reecomm",
+    seoDescription:
+      "Complete used bike buying guide for India: RC verification, insurance transfer, PUC, engine checks, and how to avoid common scams when buying second-hand motorcycles and scooters.",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: "How to Buy a Used Bike Safely in India",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Verify RC and seller identity",
+            text: "Ensure the seller name on RC matches their ID and there is no active loan hypothecation.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Check insurance and PUC",
+            text: "Valid third-party or comprehensive insurance and a current PUC certificate are required for legal riding and transfer.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Inspect engine and frame",
+            text: "Listen for abnormal engine noise, check for frame damage, and verify odometer consistency with service records.",
+          },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "What documents are needed to buy a used bike in India?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "You need the original RC, valid insurance, PUC, seller ID proof, and Form 29/30 for ownership transfer at the RTO.",
+            },
+          },
+        ],
+      },
+    ],
+    content: `
+      ### Quick answer
+      When buying a used bike in India, never skip RC verification, insurance transfer, and a physical inspection. Scams are common on open classifieds — use verified marketplaces with structured listings.
+
+      ### RC & ownership
+      - Seller name must match RC
+      - Check challans on Parivahan / state portals
+      - Clear hypothecation if loan was paid off
+      - Complete Form 29 & 30 at RTO within 14 days of sale
+
+      ### Physical checks
+      - Cold start smoke colour
+      - Chain/sprocket wear
+      - Brake pad thickness
+      - Tyre manufacturing date
+      - Accident repainting signs on frame
+
+      Browse used bikes and scooters on Reecomm with verified consultant listings.
+    `,
+    image: "/blog/blog-3.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "1 September 2026",
+  },
+  {
+    id: 17,
+    slug: "/blog/olx-vs-verified-used-car-marketplaces-india",
+    title: "OLX vs Verified Used Car Marketplaces — What's Safer?",
+    category: "Buying Guide",
+    description:
+      "Open classifieds like OLX have volume but little verification. Here's how verified marketplaces reduce risk when buying used cars and bikes.",
+    seoTitle:
+      "OLX vs Verified Used Car Marketplaces in India — What's Safer? | Reecomm",
+    seoDescription:
+      "Comparing OLX and verified used vehicle marketplaces in India: listing quality, inspection options, seller verification, and which platform is safer for buyers.",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "OLX vs Verified Used Car Marketplaces — What's Safer?",
+        url: "https://www.reecomm.com/blog/olx-vs-verified-used-car-marketplaces-india",
+        datePublished: "2026-09-01",
+        dateModified: "2026-09-01",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Is Reecomm safer than OLX for buying used cars?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Reecomm focuses on verified automotive consultants, structured listings, and optional inspection reports — reducing common classifieds risks like misleading photos, title issues, and unverified sellers.",
+            },
+          },
+        ],
+      },
+    ],
+    content: `
+      ### Quick answer
+      OLX offers the largest volume of listings but minimal seller verification. Verified marketplaces like Reecomm add consultant verification, structured vehicle data, and optional inspections — which materially reduces buyer risk.
+
+      ### Comparison
+      | Factor | Open classifieds (OLX) | Verified marketplace (Reecomm) |
+      |--------|------------------------|--------------------------------|
+      | Seller verification | Limited | Consultant / dealer verification |
+      | Inspection | Buyer arranges independently | Optional Reecomm inspection |
+      | Listing structure | Variable quality | Standardized fields |
+      | Support | Minimal | Inquiry workflow with seller |
+
+      ### When OLX still makes sense
+      OLX works if you are experienced, can inspect yourself, and verify all documents independently. For most buyers, verified listings save time and reduce fraud risk.
+    `,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "1 September 2026",
+  },
+  {
+    id: 18,
+    slug: "/blog/best-used-cars-ahmedabad-under-5-lakh",
+    title: "Best Used Cars in Ahmedabad Under ₹5 Lakh (2026)",
+    category: "Buying Guide",
+    description:
+      "Ahmedabad buyers searching for affordable used cars under ₹5 lakh — here are reliable models and what to check locally.",
+    seoTitle:
+      "Best Used Cars in Ahmedabad Under ₹5 Lakh (2026) | Reecomm",
+    seoDescription:
+      "Top used cars under ₹5 lakh in Ahmedabad: Maruti Swift, Hyundai i10, Honda Amaze, and more — with local buying tips and inspection advice for Gujarat buyers.",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Best Used Cars in Ahmedabad Under ₹5 Lakh",
+        url: "https://www.reecomm.com/blog/best-used-cars-ahmedabad-under-5-lakh",
+        datePublished: "2026-09-01",
+        dateModified: "2026-09-01",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Ahmedabad has strong demand for used cars under ₹5 lakh — especially Maruti Swift, Hyundai i10/i20, Honda Amaze, and Tata Altroz. Compare listings on Reecomm and verify RC transfer at Gujarat RTO.
+
+      ### Popular models under ₹5 lakh
+      - Maruti Swift / Wagon R — low running cost
+      - Hyundai Grand i10 / i20 — city-friendly
+      - Honda Amaze — sedan comfort
+      - Ford Figo / Ecosport (older years) — value picks
+
+      Browse [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) on Reecomm.
+    `,
+    image: "/blog/blog-2.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "1 September 2026",
+  },
 ];
 
 export const CATEGORIES = [

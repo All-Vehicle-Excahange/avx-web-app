@@ -35,6 +35,7 @@ import { getState, getCities, getAllTown } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
 import { generateSeoSlug } from "@/lib/seo";
+import { trackSearchResults } from "@/lib/gtag";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -737,6 +738,16 @@ export default function SearchWithCard({
     };
 
     if (onPageResponseChange) onPageResponseChange(combinedPageResponse);
+
+    const searchLabel =
+      [brandParam, modelParam, selectedCityName || selectedStateName]
+        .filter(Boolean)
+        .join(" ") || pathname?.split("/").pop()?.replace(/-/g, " ") || "vehicle_search";
+    trackSearchResults({
+      search_string: searchLabel,
+      results_count: topPicksPR.totalElements || combinedTotal,
+      search_type: "search_results_page",
+    });
   }, [searchData]);
 
   // Emit consultants callback
