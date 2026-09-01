@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function SearchLandingSeoContent({ intro, faqItems = [] }) {
+  const [openIndex, setOpenIndex] = useState(null);
+
   if (!intro && faqItems.length === 0) return null;
 
   return (
-    <section className="w-full max-w-5xl mx-auto px-4 py-8 md:py-10">
+    <section className="container mx-auto px-4 md:px-8 py-10 md:py-14">
       {intro && (
-        <div className="mb-8">
-          <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+        <div className="mb-10">
+          <p className="text-sm text-primary/80 leading-relaxed font-medium">
             {intro}
           </p>
         </div>
@@ -15,24 +17,36 @@ export default function SearchLandingSeoContent({ intro, faqItems = [] }) {
 
       {faqItems.length > 0 && (
         <div>
-          <h2 className="text-lg md:text-xl font-bold text-primary font-primary mb-4">
+          <h2 className="text-base md:text-lg font-bold text-primary font-primary mb-4 flex items-center gap-2">
+            <span className="w-1 h-5 bg-fourth rounded-full inline-block"></span>
             Frequently Asked Questions
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {faqItems.map((item, idx) => (
               <details
                 key={idx}
-                className="group rounded-xl border border-gray-200 bg-white p-4 open:shadow-sm"
+                open={openIndex === idx}
+                className="group rounded-2xl border border-primary/10 bg-white/5 transition-all duration-300 hover:bg-white/10 hover:border-primary/30 open:bg-white/10 open:border-primary/30 overflow-hidden"
               >
-                <summary className="cursor-pointer font-semibold text-primary list-none flex justify-between items-center">
+                <summary
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenIndex(openIndex === idx ? null : idx);
+                  }}
+                  className="cursor-pointer font-semibold text-primary group-open:text-fourth transition-colors list-none flex justify-between items-center text-sm md:text-base px-5 py-3.5 w-full"
+                >
                   {item.question}
-                  <span className="text-third ml-2 group-open:rotate-180 transition-transform">
-                    ▾
+                  <span className="text-fourth ml-4 group-open:rotate-180 transition-transform duration-300 flex-shrink-0 bg-fourth/20 p-1.5 rounded-full">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </span>
                 </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  {item.answer}
-                </p>
+                <div className="px-5 pb-4 border-t border-primary/10 pt-3">
+                  <p className="text-sm md:text-base text-primary/80 leading-relaxed font-medium">
+                    {item.answer}
+                  </p>
+                </div>
               </details>
             ))}
           </div>

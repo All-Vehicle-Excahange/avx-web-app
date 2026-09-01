@@ -608,12 +608,12 @@ export async function getServerSideProps(context) {
         [];
       initialVehicles = Array.isArray(rawList)
         ? rawList.slice(0, 20).map((v) => ({
-            id: v.id,
-            yearOfMfg: v.yearOfMfg || v.year,
-            makerName: v.makerName || v.makeName,
-            modelName: v.modelName,
-            slug: v.slug,
-            price: v.price,
+            id: v.id || null,
+            yearOfMfg: v.yearOfMfg || v.year || null,
+            makerName: v.makerName || v.makeName || null,
+            modelName: v.modelName || null,
+            slug: v.slug || null,
+            price: v.price || null,
             thumbnailUrl:
               v.thumbnailUrl ||
               v.imageUrl ||
@@ -624,8 +624,8 @@ export async function getServerSideProps(context) {
               v.vehicleOwner?.username ||
               v.username ||
               null,
-            vehicleType: v.vehicleType,
-            cityName: v.cityName || v.address?.city,
+            vehicleType: v.vehicleType || null,
+            cityName: v.cityName || v.address?.city || null,
           }))
         : [];
     }
