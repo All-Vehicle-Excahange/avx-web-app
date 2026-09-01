@@ -84,6 +84,33 @@ function displayVehicleLabel(vehicleWord, isTwoWheeler) {
 }
 
 /**
+ * Extract unique top model names from prefetched vehicles for meta descriptions.
+ */
+export function extractTopModels(vehicles = [], limit = 4) {
+  const seen = new Set();
+  const models = [];
+  for (const v of vehicles) {
+    const maker = (v.makerName || v.makeName || "").trim();
+    const model = (v.modelName || "").trim();
+    if (!model) continue;
+    const label = maker ? `${maker} ${model}` : model;
+    const key = label.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    models.push(label);
+    if (models.length >= limit) break;
+  }
+  return models;
+}
+
+function formatModelList(models = []) {
+  if (!models.length) return "";
+  if (models.length === 1) return models[0];
+  if (models.length === 2) return `${models[0]} and ${models[1]}`;
+  return `${models.slice(0, -1).join(", ")}, and ${models[models.length - 1]}`;
+}
+
+/**
  * @param {object} opts
  */
 export function buildSearchLandingSeo({
@@ -95,6 +122,7 @@ export function buildSearchLandingSeo({
   budgetPart = "",
   totalCount = 0,
   isHub = false,
+  topModels = [],
 } = {}) {
   const count =
     typeof totalCount === "number" && totalCount > 0 ? totalCount : 0;
@@ -134,11 +162,20 @@ export function buildSearchLandingSeo({
   ]);
 
   let title = `${countPrefix}${core}`.trim();
-  if (title.length <= 50) {
+  let h1 = title;
+
+  // OLX-style title for city landing pages: "21+ Used Cars in Palanpur - Buy Second Hand Cars"
+  if (cityT && !brandT && !modelT && !budgetT) {
+    const unit = isTwoWheeler ? "Bikes" : "Cars";
+    const secondHand = isTwoWheeler ? "Second Hand Bikes" : "Second Hand Cars";
+    title = `${countPrefix}Used ${unit} in ${cityT} - Buy ${secondHand}`;
+    h1 = `${countPrefix}Used ${unit} in ${cityT}`;
+  } else if (cityT && (brandT || modelT)) {
+    title = `${countPrefix}${core} - Buy Second Hand ${isTwoWheeler ? "Bikes" : "Cars"}`;
+    h1 = `${countPrefix}${core}`.trim();
+  } else if (title.length <= 50) {
     title = `${title} | Reecomm`;
   }
-
-  const h1 = `${countPrefix}${core}`.trim();
 
   const browseWhat = cleanJoin([
     count > 0 ? `${count}+` : "",
@@ -151,13 +188,20 @@ export function buildSearchLandingSeo({
     cityT ? `in ${cityT}` : "",
   ]);
 
-  const description = `Browse ${browseWhat} on Reecomm. Compare prices, photos, and inspection reports before you buy.`.replace(
+  let description = `Browse ${browseWhat} on Reecomm. Compare prices, photos, and inspection reports before you buy.`.replace(
     /\s+/g,
     " "
   );
 
+  const modelSnippet = formatModelList(topModels);
+  if (cityT && modelSnippet) {
+    description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos, and inspection reports.`;
+  } else if (cityT) {
+    description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+  }
+
   return {
-    title,
+    title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
     h1,
     description:
       description.length > 165
@@ -312,22 +356,54 @@ export function buildSearchItemListSchema({
   description,
   canonical,
   vehicles = [],
+  totalCount = 0,
 }) {
   const itemListElement = vehicles.slice(0, 10).map((v, index) => {
     const name =
-      `${v.yearOfMfg || v.year || ""} ${v.makerName || ""} ${v.modelName || ""}`.trim() ||
+      `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
       "Used Vehicle";
     const slug = v.slug || v.id;
     const url = v.id
       ? `${BASE_URL}/vehicle/details/${slug}/${v.id}`
       : canonical;
+    const image =
+      v.thumbnailUrl ||
+      v.imageUrl ||
+      (Array.isArray(v.vehiclePhotos) ? v.vehiclePhotos[0]?.url : null) ||
+      null;
+    const price = v.price != null ? Number(v.price) : null;
+
+    const carItem = {
+      "@type": "Car",
+      name,
+      url,
+      ...(image ? { image } : {}),
+      ...(price && !Number.isNaN(price)
+        ? {
+            offers: {
+              "@type": "Offer",
+              price: String(price),
+              priceCurrency: "INR",
+              availability: "https://schema.org/InStock",
+              itemCondition: "https://schema.org/UsedCondition",
+            },
+          }
+        : {}),
+    };
+
     return {
       "@type": "ListItem",
       position: index + 1,
       url,
       name,
+      item: carItem,
     };
   });
+
+  const count =
+    typeof totalCount === "number" && totalCount > 0
+      ? totalCount
+      : vehicles.length;
 
   return {
     "@context": "https://schema.org",
@@ -335,7 +411,7 @@ export function buildSearchItemListSchema({
     name: title || "Used Vehicles on Reecomm",
     description: description || "Browse verified used vehicles for sale.",
     url: canonical || `${BASE_URL}/search/buy-used-cars`,
-    numberOfItems: vehicles.length,
+    numberOfItems: count,
     itemListElement,
   };
 }

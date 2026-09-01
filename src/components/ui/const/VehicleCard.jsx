@@ -13,6 +13,7 @@ import {
 import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "../button";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { addClickEvent } from "@/services/ppc.service";
@@ -234,6 +235,15 @@ export default function VehicleCard({
     push(url);
   };
 
+  const detailHref = (() => {
+    let url = generateVehicleUrl(data);
+    url += url.includes("?") ? `&source=${source}` : `?source=${source}`;
+    if (data?.sponsored) {
+      url += `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`;
+    }
+    return url;
+  })();
+
   return (
     <>
       <div
@@ -250,7 +260,12 @@ export default function VehicleCard({
       >
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
-          <div className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2">
+          <Link
+            href={detailHref}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block"
+            aria-label={`View details for ${mapped.title}`}
+          >
             <div className="relative w-full h-full overflow-hidden rounded-xl">
               {/* Inspection Badge */}
               {data?.inspectionBadgeUrl && (
@@ -331,7 +346,7 @@ export default function VehicleCard({
                 )
               ) : null}
             </div>
-          </div>
+          </Link>
 
           {/* CONTENT */}
           <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-3 justify-between min-h-0 overflow-hidden relative">
@@ -346,7 +361,13 @@ export default function VehicleCard({
       line-clamp-2 overflow-hidden
     "
                   >
-                    {mapped.title}
+                    <Link
+                      href={detailHref}
+                      onClick={(e) => e.stopPropagation()}
+                      className="hover:text-fourth transition-colors"
+                    >
+                      {mapped.title}
+                    </Link>
                   </h3>
                 </div>
 

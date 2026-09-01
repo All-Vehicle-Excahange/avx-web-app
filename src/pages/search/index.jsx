@@ -12,6 +12,7 @@ import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import FooterLink from "@/components/layout/FooterLink";
 import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
+import { buildSlugFromSearchQuery } from "@/lib/seo";
 
 function Index({ seo }) {
   const [pageResponse, setPageResponse] = useState({
@@ -144,22 +145,26 @@ function SearchContent({
 export async function getServerSideProps(context) {
   const { query } = context;
 
+  // ?cityName=Palanpur&brand=Ford → /search/buy-used-ford-cars-palanpur (301)
+  const slugFromQuery = buildSlugFromSearchQuery(query);
+  if (slugFromQuery) {
+    return {
+      redirect: {
+        destination: `/search/${slugFromQuery}`,
+        permanent: true,
+      },
+    };
+  }
+
   const vehicleType = query.vehicleType || "";
   const vtLower = vehicleType.toLowerCase();
   const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
-
-  // Canonical SEO redirect from generic /search to rich slug /search/buy-used-cars
   const targetSlug = isTwoWheeler ? "buy-used-two-wheelers" : "buy-used-cars";
-
-  // Omit vehicleType from query params since it's encoded in the slug
-  const queryParams = new URLSearchParams(query);
-  queryParams.delete("vehicleType");
-  const queryString = queryParams.toString();
 
   return {
     redirect: {
-      destination: `/search/${targetSlug}${queryString ? `?${queryString}` : ""}`,
-      permanent: false,
+      destination: `/search/${targetSlug}`,
+      permanent: true,
     },
   };
 }

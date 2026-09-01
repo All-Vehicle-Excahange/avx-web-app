@@ -32,6 +32,13 @@ export const SEO_TARGET_KEYWORDS = [
     horizonMonths: 12,
   },
   {
+    keyword: "used car in palanpur",
+    scope: "Palanpur",
+    page: "/search/buy-used-cars-palanpur",
+    page1Goal: "Top 5",
+    horizonMonths: 3,
+  },
+  {
     keyword: "used creta",
     scope: "Palanpur, Ahmedabad",
     page: "/search/buy-used-hyundai-creta-cars-palanpur",

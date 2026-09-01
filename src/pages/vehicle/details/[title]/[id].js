@@ -360,7 +360,7 @@ export async function getStaticProps(context) {
             : "";
 
           const apiTitle =
-            `${year} ${make} ${model}${variant ? ` ${variant}` : ""} for Sale in ${city} | Reecomm`
+            `Used ${year} ${make} ${model}${variant ? ` ${variant}` : ""} for Sale in ${city.split(",")[0].trim()}${price ? ` | ${price}` : ""} | Reecomm`
               .replace(/\s+/g, " ")
               .trim();
           const apiDescription =

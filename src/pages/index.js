@@ -36,6 +36,7 @@ function Home() {
           name="keywords"
           content="used cars, used car reecomm, buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
         />
+        <link rel="canonical" href="https://www.reecomm.com/" />
 
         {/* Open Graph Meta Tags for Social Sharing (WhatsApp, Facebook, etc.) */}
         <meta property="og:type" content="website" />

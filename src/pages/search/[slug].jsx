@@ -12,14 +12,17 @@ import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
+import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
 import {
   buildSearchLandingSeo,
   buildSearchLandingIntro,
   buildSearchLandingFaq,
   buildSearchItemListSchema,
   resolveSearchSlugRedirect,
+  extractTopModels,
   MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
+import { resolveSlugQueryRedirect } from "@/lib/seo";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
@@ -34,6 +37,8 @@ function SlugSearchPage({ seo, initialFilters }) {
   const [consultPayload, setConsultPayload] = useState(null);
 
   const trackedSearchRef = useRef(null);
+  const ogImage =
+    seo?.ogImage || "https://www.reecomm.com/logo/logo1.webp";
 
   useEffect(() => {
     const query =
@@ -77,7 +82,7 @@ function SlugSearchPage({ seo, initialFilters }) {
         />
         <meta
           property="og:image"
-          content="https://www.reecomm.com/logo/logo1.webp"
+          content={ogImage}
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -95,7 +100,7 @@ function SlugSearchPage({ seo, initialFilters }) {
         />
         <meta
           name="twitter:image"
-          content="https://www.reecomm.com/logo/logo1.webp"
+          content={ogImage}
         />
 
         <script
@@ -139,6 +144,7 @@ function SlugSearchPage({ seo, initialFilters }) {
                 description: seo?.description,
                 canonical: seo?.canonical,
                 vehicles: seo?.initialVehicles || [],
+                totalCount: seo?.totalCount || 0,
               })
             ),
           }}
@@ -215,6 +221,11 @@ function SearchContent({
         />
       </Layout>
 
+      <SearchLandingVehicleLinks
+        vehicles={seo?.initialVehicles}
+        cityName={initialFilters?.cityName}
+      />
+
       <SearchLandingSeoContent intro={seo?.intro} faqItems={seo?.faqItems} />
 
       <Layout>
@@ -245,6 +256,17 @@ export async function getServerSideProps(context) {
 
   if (!slug || typeof slug !== "string") {
     return { notFound: true };
+  }
+
+  // ?cityName=Palanpur on slug hub → /search/buy-used-cars-palanpur (301)
+  const querySlugRedirect = resolveSlugQueryRedirect(slug, query);
+  if (querySlugRedirect && querySlugRedirect !== slug) {
+    return {
+      redirect: {
+        destination: `/search/${querySlugRedirect}`,
+        permanent: true,
+      },
+    };
   }
 
   // Keyword alias + misspelling redirects (bikes → two-wheelers, creta → hyundai-creta)
@@ -585,12 +607,25 @@ export async function getServerSideProps(context) {
         listJson?.vehicles ||
         [];
       initialVehicles = Array.isArray(rawList)
-        ? rawList.slice(0, 10).map((v) => ({
+        ? rawList.slice(0, 20).map((v) => ({
             id: v.id,
             yearOfMfg: v.yearOfMfg || v.year,
             makerName: v.makerName || v.makeName,
             modelName: v.modelName,
             slug: v.slug,
+            price: v.price,
+            thumbnailUrl:
+              v.thumbnailUrl ||
+              v.imageUrl ||
+              v.vehicleImages?.[0]?.imageUrl ||
+              null,
+            consultantUsername:
+              v.consultantUsername ||
+              v.vehicleOwner?.username ||
+              v.username ||
+              null,
+            vehicleType: v.vehicleType,
+            cityName: v.cityName || v.address?.city,
           }))
         : [];
     }
@@ -617,6 +652,7 @@ export async function getServerSideProps(context) {
     initialFilters.model ||
     (modelName ? modelName.replace(/-/g, " ") : "");
   const resolvedCity = initialFilters.cityName || "";
+  const topModels = extractTopModels(initialVehicles);
 
   const seoBuilt = buildSearchLandingSeo({
     brand: brandName,
@@ -627,6 +663,7 @@ export async function getServerSideProps(context) {
     budgetPart,
     totalCount,
     isHub,
+    topModels,
   });
 
   const intro = buildSearchLandingIntro({
@@ -648,6 +685,7 @@ export async function getServerSideProps(context) {
   });
 
   const noindex = !isHub && totalCount < MIN_INDEXABLE_LISTINGS;
+  const firstVehicleImage = initialVehicles[0]?.thumbnailUrl || null;
 
   return {
     props: {
@@ -661,6 +699,8 @@ export async function getServerSideProps(context) {
         faqItems,
         faqSchema,
         initialVehicles,
+        totalCount,
+        ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",
       },
       initialFilters,
     },

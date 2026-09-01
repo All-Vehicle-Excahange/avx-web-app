@@ -18,10 +18,63 @@ const TOP_LANDINGS = [
   "/search/buy-used-ford-ecosport-cars-palanpur",
   "/search/buy-used-cars-palanpur",
   "/search/buy-used-hyundai-cars-palanpur",
+  "/search/buy-used-honda-amaze-cars-palanpur",
   "/api/sitemap/search-pages.xml",
   "/api/sitemap/geo-brands.xml",
   "/sitemap.xml",
 ];
+
+const MAX_PALANPUR_VDPS = 5;
+
+async function fetchPalanpurCityId(apiUrl) {
+  try {
+    const res = await fetch(
+      `${apiUrl}/util/address/search-cities-states?searchText=palanpur`
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    const found = (json?.data || []).find(
+      (c) => String(c.cityName || "").toLowerCase() === "palanpur"
+    );
+    return found?.cityId || null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchPalanpurVehiclePaths(env) {
+  const backendUrl = (
+    env.BACKEND_URL || "https://api.reecomm.online"
+  ).replace(/\/$/, "");
+  const apiUrl = `${backendUrl}/api/v1/website`;
+
+  try {
+    const cityId = await fetchPalanpurCityId(apiUrl);
+    if (!cityId) return [];
+
+    const res = await fetch(
+      `${apiUrl}/vehicle/filter/four-wheeler?pageNo=1&size=${MAX_PALANPUR_VDPS}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cityId: Number(cityId) }),
+      }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    const list = json?.data || json?.content || [];
+    return list
+      .filter((v) => v?.id && v?.slug)
+      .slice(0, MAX_PALANPUR_VDPS)
+      .map((v) => `/vehicle/details/${v.slug}/${v.id}`);
+  } catch (e) {
+    console.warn("Palanpur VDP fetch failed:", e.message);
+    return [];
+  }
+}
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return {};
@@ -76,9 +129,12 @@ async function main() {
   await jwtClient.authorize();
   const indexing = google.indexing({ version: "v3", auth: jwtClient });
 
+  const palanpurVdps = await fetchPalanpurVehiclePaths(env);
+  const allLandings = [...TOP_LANDINGS, ...palanpurVdps];
+
   let ok = 0;
   let fail = 0;
-  for (const loc of TOP_LANDINGS) {
+  for (const loc of allLandings) {
     const url = loc.startsWith("http") ? loc : `${BASE_URL}${loc}`;
     try {
       await indexing.urlNotifications.publish({

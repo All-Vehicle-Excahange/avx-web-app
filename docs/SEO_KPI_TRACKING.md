@@ -59,3 +59,31 @@ Keyword definitions live in `src/data/seoTargetKeywords.js`.
 
 - Beating OLX nationally on "used cars" in 90 days is unrealistic; focus on **city + model long-tail** wins first.
 - Organic Search users show **69% engagement vs 8% Paid Social** in baseline GA4 — prioritize SEO quality over paid volume.
+
+## Palanpur local SEO playbook (off-page)
+
+Complete these manual steps to rank for `used car in palanpur` and enter the Google Maps local pack:
+
+### Google Business Profile
+1. Claim **Reecomm Technologies Pvt. Ltd.** at Palanpur HQ (Chhapi, Banas Kantha, 385210)
+2. Category: Used Car Dealer / Automobile Consultant
+3. Website: `https://www.reecomm.com/search/buy-used-cars-palanpur`
+4. Add 5+ photos; request 3+ reviews mentioning "used cars Palanpur"
+
+### Consultant GBP (repeat per dealer)
+| Dealer | Storefront URL |
+|--------|----------------|
+| Aabad Motors | `https://www.reecomm.com/auto-consultant/aabadmotors` |
+| Fortune Auto | `https://www.reecomm.com/auto-consultant/fortuneauto683178` |
+
+### JustDial + Sulekha
+- List Reecomm HQ with website `https://www.reecomm.com`
+- List each Palanpur dealer with their Reecomm storefront URL
+- NAP must match: +91 84601 60697, Palanpur address on contact page
+
+### Consultant backlinks
+- Email all Palanpur consultants: add link to `/search/buy-used-cars-palanpur` on website/social/GBP
+
+### Track weekly
+- GSC query filter: `palanpur` — position for `used car in palanpur`, `used cars palanpur`
+- `site:reecomm.com palanpur` — count indexed pages (target: 20+ VDPs + city slug)

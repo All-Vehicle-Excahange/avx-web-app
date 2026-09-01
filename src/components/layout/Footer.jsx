@@ -14,6 +14,7 @@ const footerLinks = {
   buy: [
     { label: "Browse all vehicles", href: "/search/buy-used-cars" },
     { label: "Browse Cars", href: "/search/buy-used-cars" },
+    { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
     { label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" },
     {
       label: "Reecomm Inspected Vehicles",

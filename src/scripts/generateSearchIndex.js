@@ -185,34 +185,45 @@ function parseUrlPath(urlStr) {
     }
 
     // Brand and City extraction from buy-used-{brand/model}-cars-{city}
-    const matchGeoBrand = searchSlug.match(/^buy-used-(.+?)-(cars|two-wheelers)(?:-(.+))?$/);
+    const matchGeoBrand = searchSlug.match(/^buy-used-(?:(.+)-)?(cars|two-wheelers)(?:-(.+))?$/);
     if (matchGeoBrand) {
-      const rawBrandModel = matchGeoBrand[1].replace(/-/g, ' ');
+      const rawBrandModel = matchGeoBrand[1]
+        ? matchGeoBrand[1].replace(/-/g, " ")
+        : "";
       const cityOrStateRaw = matchGeoBrand[3];
 
-      // Match against known maker list
-      const matchedMaker = KNOWN_MAKERS.find(m => rawBrandModel.startsWith(m));
+      if (!rawBrandModel && cityOrStateRaw && !cityOrStateRaw.startsWith("under-")) {
+        params.city = toTitleCase(cityOrStateRaw);
+        title = `Used ${isTwoWheeler ? "Bikes" : "Cars"} in ${params.city}`;
+        keywords.push(cityOrStateRaw.replace(/-/g, " "));
+      } else if (rawBrandModel) {
+        const matchedMaker = KNOWN_MAKERS.find((m) => rawBrandModel.startsWith(m));
 
-      if (matchedMaker) {
-        params.makerName = toTitleCase(matchedMaker);
-        const remainingModel = rawBrandModel.slice(matchedMaker.length).trim();
-        if (remainingModel) {
-          params.modelName = toTitleCase(remainingModel);
+        if (matchedMaker) {
+          params.makerName = toTitleCase(matchedMaker);
+          const remainingModel = rawBrandModel.slice(matchedMaker.length).trim();
+          if (remainingModel) {
+            params.modelName = toTitleCase(remainingModel);
+          }
+
+          title = `Used ${params.makerName}${params.modelName ? " " + params.modelName : ""} ${isTwoWheeler ? "Two-Wheelers" : "Cars"}`;
+          keywords.push(matchedMaker);
+          if (params.modelName) keywords.push(params.modelName.toLowerCase());
+        } else if (
+          !["suv", "sedan", "hatchback", "luxury", "electric", "petrol", "diesel", "cng"].includes(
+            matchGeoBrand[1]
+          )
+        ) {
+          params.makerName = toTitleCase(matchGeoBrand[1].replace(/-/g, " "));
+          title = `Used ${params.makerName} ${isTwoWheeler ? "Two-Wheelers" : "Cars"}`;
+          keywords.push(matchGeoBrand[1].replace(/-/g, " "));
         }
 
-        title = `Used ${params.makerName}${params.modelName ? ' ' + params.modelName : ''} ${isTwoWheeler ? 'Two-Wheelers' : 'Cars'}`;
-        keywords.push(matchedMaker);
-        if (params.modelName) keywords.push(params.modelName.toLowerCase());
-      } else if (!['suv', 'sedan', 'hatchback', 'luxury', 'electric', 'petrol', 'diesel', 'cng'].includes(matchGeoBrand[1])) {
-        params.makerName = toTitleCase(matchGeoBrand[1]);
-        title = `Used ${params.makerName} ${isTwoWheeler ? 'Two-Wheelers' : 'Cars'}`;
-        keywords.push(matchGeoBrand[1].replace(/-/g, ' '));
-      }
-
-      if (cityOrStateRaw && !cityOrStateRaw.startsWith('under-')) {
-        params.city = toTitleCase(cityOrStateRaw);
-        title += ` in ${params.city}`;
-        keywords.push(cityOrStateRaw.replace(/-/g, ' '));
+        if (cityOrStateRaw && !cityOrStateRaw.startsWith("under-")) {
+          params.city = toTitleCase(cityOrStateRaw);
+          title += ` in ${params.city}`;
+          keywords.push(cityOrStateRaw.replace(/-/g, " "));
+        }
       }
     }
 
