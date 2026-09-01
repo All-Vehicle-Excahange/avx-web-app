@@ -40,3 +40,10 @@ jobs:
         with:
           commit_message: "chore(cron): auto-update search_index.json and geo sitemaps"
           file_pattern: "public/search_index.json public/sitemaps/*.xml public/sitemap.xml"
+
+      - name: Notify Google (Indexing API + GSC sitemap)
+        env:
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+        run: npm run notify:seo
+        continue-on-error: true
