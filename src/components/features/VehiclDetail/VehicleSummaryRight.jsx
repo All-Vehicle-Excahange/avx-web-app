@@ -465,7 +465,9 @@ export default function VehicleSummaryRight({
                   variant="ghost"
                   size="sm"
                   showIcon={false}
+                  className="rounded-full"
                   loading={loading || isCheckingInquiry}
+                  disabled={vehicle?.isVehicleSold}
                   onClick={() => {
                     if (!isLoggedIn) {
                       pendingAction.current = "request";
@@ -475,7 +477,7 @@ export default function VehicleSummaryRight({
                     }
                   }}
                 >
-                  Request Vehicle
+                  {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
                 </Button>
               )}
 

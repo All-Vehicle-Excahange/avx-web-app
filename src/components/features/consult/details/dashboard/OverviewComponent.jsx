@@ -164,7 +164,7 @@ export default function OverviewComponent() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <div className="flex items-center flex-wrap gap-3">
-              <h1 className="text-xl lg:text-2xl font-bold">
+              <h1 className="text-xl lg:text-2xl font-bold capitalize">
                 Welcome,{" "}
                 {user?.consultationName ||
                   `${user?.firstname || ""} ${user?.lastname || ""}`.trim() ||
@@ -396,15 +396,14 @@ export default function OverviewComponent() {
 
               {/* Response Time Badge */}
               <div
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${
-                  responseStatus.color.includes("green")
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${responseStatus.color.includes("green")
                     ? "text-green-400 border-green-500/25 bg-green-500/10"
                     : responseStatus.color.includes("yellow")
                       ? "text-amber-400 border-amber-500/25 bg-amber-500/10"
                       : responseStatus.color.includes("red")
                         ? "text-red-400 border-red-500/25 bg-red-500/10"
                         : "text-third border-third/25 bg-third/10"
-                }`}
+                  }`}
               >
                 <Zap
                   size={12}
