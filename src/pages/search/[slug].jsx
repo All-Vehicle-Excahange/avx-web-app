@@ -221,13 +221,6 @@ function SearchContent({
         />
       </Layout>
 
-      <SearchLandingVehicleLinks
-        vehicles={seo?.initialVehicles}
-        cityName={initialFilters?.cityName}
-      />
-
-      <SearchLandingSeoContent intro={seo?.intro} faqItems={seo?.faqItems} />
-
       <Layout>
         <ReletedToSearch data={relatedVehicles} loading={isLoading} />
       </Layout>
@@ -239,6 +232,13 @@ function SearchContent({
           loading={isLoading}
         />
       </Layout>
+
+      <SearchLandingVehicleLinks
+        vehicles={seo?.initialVehicles}
+        cityName={initialFilters?.cityName}
+      />
+
+      <SearchLandingSeoContent intro={seo?.intro} faqItems={seo?.faqItems} />
 
       <DownloadAppSection />
 
@@ -303,13 +303,21 @@ export async function getServerSideProps(context) {
         ""
       );
     }
+  } else if (slug.match(/-(\d+(?:\.\d+)?)-to-(\d+(?:\.\d+)?)-lakhs/)) {
+    // Mid-range budget: e.g. "-1-to-2-lakhs", "-2-to-3-lakhs"
+    const budgetMatch = slug.match(/-(\d+(?:\.\d+)?)-to-(\d+(?:\.\d+)?)-lakhs/);
+    if (budgetMatch) {
+      budgetFilter = `${budgetMatch[1]}-${budgetMatch[2]}`;
+      normalizedSlug = slug.replace(/-\d+(?:\.\d+)?-to-\d+(?:\.\d+)?-lakhs/, "");
+    }
   } else if (slug.includes("-above-")) {
     const budgetMatch = slug.match(/-above-(\d+)-lakhs/);
     if (budgetMatch) {
-      budgetFilter = `${budgetMatch[1]}-200`;
+      budgetFilter = `${budgetMatch[1]}-20`;
       normalizedSlug = slug.replace(/-above-\d+-lakhs/, "");
     }
   }
+
 
   const regex = /^buy-used-(?:(.+)-)?(cars|two-wheelers)(?:-(.+))?$/;
   const match = normalizedSlug.match(regex);
@@ -337,59 +345,60 @@ export async function getServerSideProps(context) {
 
   if (detailsRaw.includes("petrol")) {
     fuelTypeFilter = "Petrol";
-    details = details.replace("petrol", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/petrol/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("diesel")) {
     fuelTypeFilter = "Diesel";
-    details = details.replace("diesel", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/diesel/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("cng")) {
     fuelTypeFilter = "CNG";
-    details = details.replace("cng", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/cng/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("electric")) {
     fuelTypeFilter = "Electric";
-    details = details.replace("electric", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/electric/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   }
 
   if (detailsRaw.includes("automatic")) {
     transmissionFilter = "Automatic";
-    details = details.replace("automatic", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/automatic/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("manual")) {
     transmissionFilter = "Manual";
-    details = details.replace("manual", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/manual/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   }
 
   if (detailsRaw.includes("hatchback")) {
-    bodyTypeFilter = "Hatchback";
-    details = details.replace("hatchback", "").replace(/^-+|-+$/g, "");
+    bodyTypeFilter = "hatchback";
+    details = details.replace(/hatchback/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("sedan")) {
-    bodyTypeFilter = "Sedan";
-    details = details.replace("sedan", "").replace(/^-+|-+$/g, "");
+    bodyTypeFilter = "sedan";
+    details = details.replace(/sedan/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("suv")) {
-    bodyTypeFilter = "SUV";
-    details = details.replace("suv", "").replace(/^-+|-+$/g, "");
+    bodyTypeFilter = "suv";
+    details = details.replace(/suv/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("muv")) {
-    bodyTypeFilter = "MUV";
-    details = details.replace("muv", "").replace(/^-+|-+$/g, "");
+    bodyTypeFilter = "muv";
+    details = details.replace(/muv/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("luxury")) {
-    bodyTypeFilter = "Luxury";
-    details = details.replace("luxury", "").replace(/^-+|-+$/g, "");
-  } else if (detailsRaw.includes("scooter")) {
-    bodyTypeFilter = "scooter";
-    details = details.replace("scooter", "").replace(/^-+|-+$/g, "");
+    bodyTypeFilter = "luxury";
+    details = details.replace(/luxury/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("commuter-bikes")) {
     bodyTypeFilter = "commuter_bikes";
-    details = details.replace("commuter-bikes", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/commuter-bikes/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("sports-bikes")) {
     bodyTypeFilter = "sports_bikes";
-    details = details.replace("sports-bikes", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/sports-bikes/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("cruiser-retro")) {
     bodyTypeFilter = "cruiser_retro";
-    details = details.replace("cruiser-retro", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/cruiser-retro/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("adventure-touring")) {
     bodyTypeFilter = "adventure_touring";
-    details = details.replace("adventure-touring", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/adventure-touring/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   } else if (detailsRaw.includes("electric-2w")) {
     bodyTypeFilter = "electric_2w";
-    details = details.replace("electric-2w", "").replace(/^-+|-+$/g, "");
+    details = details.replace(/electric-2w/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+  } else if (detailsRaw.includes("scooters") || detailsRaw.includes("scooter")) {
+    // Match "scooters" first (longer match) to avoid leaving trailing "s"
+    bodyTypeFilter = "scooter";
+    details = details.replace(/scooters?/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   }
 
   if (fuelTypeFilter) {
