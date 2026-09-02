@@ -30,6 +30,7 @@ export default function VehicleCard({
   data,
   onWishlistChange,
   source = "search",
+  isSold = false,
 }) {
   const { push } = useRouter();
   const queryClient = useQueryClient();
@@ -248,21 +249,24 @@ export default function VehicleCard({
     <>
       <div
         onClick={handleCardClick}
-        className="
+        className={`
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
          text-primary
         md:max-w-sm w-full sm:w-[392px]
         border-2 border-third/30
-        hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]
+        cursor-pointer
+        ${!isSold ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : "opacity-60 grayscale-[0.2]"}
         transition-shadow duration-300
-        h-full md:min-h-[420px] cursor-pointer"
+        h-full md:min-h-[420px]`}
       >
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
           <Link
             href={detailHref}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block"
             aria-label={`View details for ${mapped.title}`}
           >
@@ -293,34 +297,47 @@ export default function VehicleCard({
                 </div>
               )}
 
+              {/* Sold Badge */}
+              {isSold && (
+                <div className="absolute top-2 right-2 z-30">
+                  <span className="inline-block bg-black/50 backdrop-blur-md border border-white/20 text-white font-semibold tracking-wider text-xs uppercase px-3 py-1 rounded-md shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
+                    Sold Out
+                  </span>
+                </div>
+              )}
+
               {/* ✅ Compare Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCompare();
-                }}
-                className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
-                  ${isComparing
-                    ? "bg-fourth text-secondary shadow-lg scale-110"
-                    : "bg-black/50 text-white hover:bg-black/70"
-                  }`}
-                title="Add to compare"
-              >
-                <ArrowLeftRight className="w-4 h-4" />
-              </button>
+              {!isSold && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCompare();
+                  }}
+                  className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
+                    ${isComparing
+                      ? "bg-fourth text-secondary shadow-lg scale-110"
+                      : "bg-black/50 text-white hover:bg-black/70"
+                    }`}
+                  title="Add to compare"
+                >
+                  <ArrowLeftRight className="w-4 h-4" />
+                </button>
+              )}
 
               {/* ✅ Wishlist Button (Bottom-Right of Image) */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent card click
-                  handleWishlist();
-                }}
-                className="absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer z-20 hover:bg-black/70"
-              >
-                <Heart
-                  className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
-                />
-              </button>
+              {!isSold && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent card click
+                    handleWishlist();
+                  }}
+                  className="absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer z-20 hover:bg-black/70"
+                >
+                  <Heart
+                    className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
+                  />
+                </button>
+              )}
 
               {/* ✅ Rating Badge (Bottom-Left of Image) */}
               {mapped?.rating ? (

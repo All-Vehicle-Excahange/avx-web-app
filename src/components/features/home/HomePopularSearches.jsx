@@ -14,14 +14,17 @@ const POPULAR_SEARCHES = [
 
 export default function HomePopularSearches() {
   return (
-    <section className="w-full py-10 md:py-12">
-      <div className="max-w-6xl mx-auto px-4">
-        <p className="text-sm uppercase tracking-[0.3em] text-third font-semibold mb-2">
-          Popular Searches
-        </p>
-        <h2 className="text-2xl md:text-3xl font-bold text-primary font-primary mb-6">
-          Find Verified Used Cars & Bikes
-        </h2>
+    <section className="w-full py-4 md:py-7">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="flex flex-col gap-1.5 mb-5">
+          <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+            Popular Searches
+            <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
+          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-primary">
+            Find Verified Used Cars & Bikes
+          </h2>
+        </div>
         <div className="flex flex-wrap gap-2.5">
           {POPULAR_SEARCHES.map((item) => (
             <Link
