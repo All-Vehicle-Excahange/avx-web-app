@@ -7,14 +7,7 @@ import { logoutUser } from "@/services/auth.service";
 
 export default function useMagicTokenVerification() {
   const router = useRouter();
-  const [verifyingMagicToken, setVerifyingMagicToken] = useState(() => {
-    if (typeof window !== "undefined") {
-      if (window.location.pathname.includes("/link-expired")) return false;
-      const match = window.location.search.match(/[?&](magicToken|token)=([^&]+)/);
-      return !!match;
-    }
-    return false;
-  });
+  const [verifyingMagicToken, setVerifyingMagicToken] = useState(false);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -31,9 +24,16 @@ export default function useMagicTokenVerification() {
     useAuthStore.setState({ isLoginPopupOpen: false });
     setVerifyingMagicToken(true);
 
+    const cleanPath = router.asPath.split("?")[0];
+    const urlParams = new URLSearchParams(router.asPath.split("?")[1] || "");
+    urlParams.delete("magicToken");
+    urlParams.delete("token");
+    const newSearch = urlParams.toString();
+    const finalPath = newSearch ? `${cleanPath}?${newSearch}` : cleanPath;
+
     const targetRedirect =
-      router.pathname && !router.pathname.includes("link-expired")
-        ? router.pathname
+      finalPath && !finalPath.includes("link-expired")
+        ? finalPath
         : "/consult/dashboard";
 
     logoutUser()

@@ -1220,11 +1220,14 @@ export default function SearchWithCard({
         bodyType: apiBodyType,
       };
 
-      if (selectedBrands.length > 0) {
-        payload.maker_id = selectedBrands[0];
-      }
-
-      const res = await getAndSearchModel(payload);
+      const res = selectedBrands.length > 0
+        ? await Promise.all(selectedBrands.map((id) => getAndSearchModel({ ...payload, maker_id: id })))
+            .then((responses) => ({
+              success: true,
+              data: responses.flatMap((r) => r.success && r.data ? r.data : []),
+              pagination: { totalPages: Math.max(...responses.map((r) => r.pagination?.totalPages || 1)) },
+            }))
+        : await getAndSearchModel(payload);
 
       if (!res.success) return;
 

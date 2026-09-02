@@ -44,7 +44,7 @@ const RecentrlySold = () => {
         {isLoading
           ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
           : vehicle.map((car) => (
-            <VehicleCard data={car} key={car.id} source="home" />
+            <VehicleCard data={car} key={car.id} source="home" isSold={true} />
           ))
         }
       </div>
