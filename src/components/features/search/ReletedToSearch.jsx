@@ -22,6 +22,10 @@ export default function ReletedToSearch({ data, loading = false }) {
     ? `No related vehicles found for ${searchContext}` 
     : "No related vehicles found";
 
+  if (!loading && cardData.length === 0) {
+    return null;
+  }
+
   return (
     <div className="">
       <div className="flex flex-col items-start gap-2">
@@ -50,11 +54,6 @@ export default function ReletedToSearch({ data, loading = false }) {
               <VehicleCardSkeleton />
             </div>
           ))
-        ) : cardData.length === 0 ? (
-          <EmptyState
-            title={title}
-            description="We are actively sourcing more vehicles that match your preferences. Please check back later."
-          />
         ) : (
           cardData.map((vehicle) => (
             <div

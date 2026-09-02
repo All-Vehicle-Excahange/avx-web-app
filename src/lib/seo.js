@@ -85,17 +85,43 @@ export function generateSeoSlug({ brandName, modelName, cityName, budget, vehicl
   }
 
   let typePart = "";
-  const typeWord = fuelType || transmission || bodyType || "";
-  if (typeWord) {
-    const normalizedWord = typeWord.replace(/_/g, "-");
-    typePart = `${sanitize(normalizedWord)}-`;
+  const types = [];
+  if (fuelType) types.push(sanitize(fuelType));
+  if (transmission) types.push(sanitize(transmission));
+  if (bodyType) {
+    // Normalize body type: replace underscores with hyphens, strip plural "s" suffix
+    // so "scooter" stays "scooter", "commuter_bikes"→"commuter-bikes", "Scooters"→"scooter"
+    const BODY_TYPE_SLUG_MAP = {
+      scooters: "scooter",
+      "commuter bikes": "commuter-bikes",
+      commuter_bikes: "commuter-bikes",
+      "sports bikes": "sports-bikes",
+      sports_bikes: "sports-bikes",
+      "cruiser & retro": "cruiser-retro",
+      "cruiser retro": "cruiser-retro",
+      cruiser_retro: "cruiser-retro",
+      "adventure & touring": "adventure-touring",
+      "adventure touring": "adventure-touring",
+      adventure_touring: "adventure-touring",
+      "electric 2w": "electric-2w",
+      electric_2w: "electric-2w",
+    };
+    const btLower = bodyType.toLowerCase().trim();
+    const mappedBt = BODY_TYPE_SLUG_MAP[btLower] || sanitize(bodyType.replace(/_/g, "-"));
+    types.push(mappedBt);
+  }
+
+  if (types.length > 0) {
+    typePart = `${types.join("-")}-`;
   }
 
   let budgetPart = "";
   if (budget) {
     const [min, max] = budget.split("-");
+    const numMin = parseFloat(min);
     const numMax = parseFloat(max);
-    if (min === "0" && !isNaN(numMax)) {
+    if (numMin === 0 && !isNaN(numMax)) {
+      // "under X lakhs"
       if (numMax === 1) {
         budgetPart = `-under-1-lakh`;
       } else if (numMax < 1) {
@@ -104,6 +130,12 @@ export function generateSeoSlug({ brandName, modelName, cityName, budget, vehicl
       } else {
         budgetPart = `-under-${numMax}-lakhs`;
       }
+    } else if (!isNaN(numMin) && !isNaN(numMax) && numMax >= 20) {
+      // numMax >= 20 means "5L - Above" was selected (stored as "5-20")
+      budgetPart = `-above-${numMin}-lakhs`;
+    } else if (!isNaN(numMin) && !isNaN(numMax)) {
+      // Mid-range like "1-2", "2-3", "4-5" → encode BOTH min and max
+      budgetPart = `-${numMin}-to-${numMax}-lakhs`;
     } else if (min) {
       budgetPart = `-above-${min}-lakhs`;
     }

@@ -14,7 +14,8 @@ import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
 import CustomSelect from "@/components/ui/custom-select";
 import EmptyState from "@/components/ui/EmptyState";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import {
   getFilteredVehiclesQuery,
@@ -93,12 +94,12 @@ export default function SearchWithCard({
 
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
-  const { replace } = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
 
   const vehicleType =
     searchParams.get("vehicleType") || initialFilters.vehicleType;
-  const bodyType = searchParams.get("bodyType");
+  const bodyType = searchParams.get("bodyType") || initialFilters.bodyType;
   const apiBodyType = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
     const normalized = vehicleType.toLowerCase();
@@ -171,9 +172,14 @@ export default function SearchWithCard({
   let budgetMid = 0;
   if (budget) {
     const [min, max] = budget.replace(/\s/g, "").split("-");
+    const numMax = parseFloat(max);
 
     mPrice = parseFloat(min) * 100000;
-    mxPrice = (max && max.toLowerCase() === "above") ? 2000000 : parseFloat(max) * 100000;
+    // numMax >= 20 means "5L - Above" (stored as "5-20") → set to slider MAX
+    // "above" string also maps to MAX for backward compat
+    mxPrice = (!max || max.toLowerCase() === "above" || numMax >= 20)
+      ? 2000000
+      : numMax * 100000;
 
     budgetMid = (mPrice + mxPrice) / 2;
   }
@@ -193,9 +199,13 @@ export default function SearchWithCard({
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState(() =>
-    makerId ? [makerId] : [],
-  );
+  const [selectedBrands, setSelectedBrands] = useState(() => {
+    if (makerId) {
+      // Support comma-separated multiple makeIds (e.g. from ?makerId=1001,1002)
+      return String(makerId).split(",").map(s => s.trim()).filter(Boolean);
+    }
+    return rawBrand ? [String(rawBrand)] : [];
+  });
   const [brandSearch, setBrandSearch] = useState("");
   const [brandPage, setBrandPage] = useState(1);
   const [brandHasMore, setBrandHasMore] = useState(true);
@@ -222,9 +232,13 @@ export default function SearchWithCard({
 
   // ── Model states ──
   const [models, setModels] = useState([]);
-  const [selectedModels, setSelectedModels] = useState(() =>
-    modelIdParam ? [modelIdParam] : [],
-  );
+  const [selectedModels, setSelectedModels] = useState(() => {
+    if (modelIdParam) {
+      // Support comma-separated multiple modelIds
+      return String(modelIdParam).split(",").map(s => s.trim()).filter(Boolean);
+    }
+    return [];
+  });
   const [modelSearch, setModelSearch] = useState("");
   const [modelPage, setModelPage] = useState(1);
   const [modelHasMore, setModelHasMore] = useState(true);
@@ -270,9 +284,12 @@ export default function SearchWithCard({
   const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
     () => (transmission ? transmission.toLowerCase().split(",").map(s => s.trim()) : []),
   );
-  const [selectedVariants, setSelectedVariants] = useState(() =>
-    variantIdParam ? [variantIdParam] : [],
-  );
+  const [selectedVariants, setSelectedVariants] = useState(() => {
+    if (variantIdParam) {
+      return String(variantIdParam).split(",").map(s => s.trim()).filter(Boolean);
+    }
+    return [];
+  });
 
   // ── Fuel Type states ──
   const [fuelTypes, setFuelTypes] = useState(DEFAULT_FUEL_TYPES);
@@ -348,7 +365,8 @@ export default function SearchWithCard({
     );
 
     // Brand
-    setSelectedBrands(initialFilters.makerId ? [initialFilters.makerId] : []);
+    const activeMakerId = initialFilters.makerId || initialFilters.brand || initialFilters.brandName;
+    setSelectedBrands(activeMakerId ? [String(activeMakerId)] : []);
 
     // Model
     setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
@@ -377,8 +395,9 @@ export default function SearchWithCard({
     // Budget
     if (initialFilters.budget) {
       const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
+      const numMax = parseFloat(max);
       setMinPrice(parseFloat(min) * 100000);
-      setMaxPrice(max && max.toLowerCase() === "above" ? 2000000 : parseFloat(max) * 100000);
+      setMaxPrice((!max || max.toLowerCase() === "above" || numMax >= 20) ? 2000000 : numMax * 100000);
     } else {
       setMinPrice(0);
       setMaxPrice(2000000);
@@ -644,7 +663,8 @@ export default function SearchWithCard({
   const topPicksPageResponse =
     searchData?.topPicksVehicles?.pageResponse || null;
 
-  // Sync selected filters to the browser URL (Faceted SEO routing)
+  // Sync selected filters → clean SEO slug URL (zero query params, production-style)
+  // e.g. /search/buy-used-petrol-sedan-hyundai-cars-above-2-lakhs-ahmedabad
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -652,16 +672,12 @@ export default function SearchWithCard({
     const modelName = resolvedModelName;
     const locationName = selectedCityName || selectedStateName;
 
+    // Budget
     let budgetParam = null;
     const currentMinLakh = minPrice / 100000;
     const currentMaxLakh = maxPrice / 100000;
-
-    const isUnder =
-      Math.round(minPrice) === 0 &&
-      currentMaxLakh > 0 &&
-      maxPrice < MAX;
+    const isUnder = Math.round(minPrice) === 0 && currentMaxLakh > 0 && maxPrice < MAX;
     const isAbove = Math.round(currentMinLakh) >= 5 && maxPrice >= 2000000;
-
     if (isUnder) {
       budgetParam = `0-${currentMaxLakh}`;
     } else if (isAbove) {
@@ -670,18 +686,12 @@ export default function SearchWithCard({
       budgetParam = `${currentMinLakh}-${currentMaxLakh}`;
     }
 
-    const isTwoWheeler =
-      vehicleType &&
-      (vehicleType.toLowerCase().includes("2") ||
-        vehicleType.toLowerCase().includes("two"));
-    const fuel = selectedFuelTypes.length === 1 ? selectedFuelTypes[0] : null;
-    const trans =
-      selectedTransmissionTypes.length === 1
-        ? selectedTransmissionTypes[0]
-        : null;
-    const body = selectedBodyType.length === 1 ? selectedBodyType[0] : null;
+    // For SEO slug: use first selected value only (like CarDekho/OLX Autos)
+    const fuel = selectedFuelTypes.length > 0 ? selectedFuelTypes[0] : null;
+    const trans = selectedTransmissionTypes.length > 0 ? selectedTransmissionTypes[0] : null;
+    const body = selectedBodyType.length > 0 ? selectedBodyType[0] : null;
 
-    // Build the target SEO slug
+    // Build clean SEO slug — no query params
     const targetSlug = generateSeoSlug({
       brandName,
       modelName,
@@ -692,19 +702,23 @@ export default function SearchWithCard({
       transmission: trans,
       bodyType: body,
     });
-    const currentSlug = pathname.split("/").pop();
 
-    if (targetSlug && targetSlug !== currentSlug) {
-      window.history.replaceState(null, "", `/search/${targetSlug}`);
+    const slugToUse = targetSlug || "buy-used-cars";
+    const newUrl = `/search/${slugToUse}`;
+
+    // Only push if the path actually changed (avoid infinite loops)
+    if (newUrl !== window.location.pathname) {
+      window.history.replaceState(null, "", newUrl);
     }
   }, [
     resolvedBrandName,
     resolvedModelName,
+    selectedBrands,
+    selectedModels,
     selectedCityName,
     selectedStateName,
     minPrice,
     maxPrice,
-    pathname,
     vehicleType,
     selectedFuelTypes,
     selectedTransmissionTypes,
@@ -1575,12 +1589,12 @@ export default function SearchWithCard({
   const vehicleTypes = useMemo(() => {
     if (apiBodyType === "TWO_WHEELER") {
       return [
-        { value: "scooters", label: "Scooters" },
-        { value: "commuter bikes", label: "Commuter Bikes" },
-        { value: "sports bikes", label: "Sports Bikes" },
-        { value: "cruiser & retro", label: "Cruiser & Retro" },
-        { value: "adventure & touring", label: "Adventure & Touring" },
-        { value: "electric 2w", label: "Electric 2W" },
+        { value: "scooter", label: "Scooters" },
+        { value: "commuter_bikes", label: "Commuter Bikes" },
+        { value: "sports_bikes", label: "Sports Bikes" },
+        { value: "cruiser_retro", label: "Cruiser & Retro" },
+        { value: "adventure_touring", label: "Adventure & Touring" },
+        { value: "electric_2w", label: "Electric 2W" },
       ];
     }
     return [

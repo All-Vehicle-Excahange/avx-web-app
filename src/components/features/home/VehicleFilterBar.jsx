@@ -33,6 +33,7 @@ import {
 } from "@/services/user.service";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
+import { generateSeoSlug } from "@/lib/seo";
 
 const trackProductSearch = (searchString, searchType = "filter_bar") => {
   const query = String(searchString || "").trim() || "vehicle_search";
@@ -659,7 +660,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const bodyTypeOptions = useMemo(() => {
     const types =
       vehicleType === "4 Wheeler" ? FOUR_WHEELER_TYPES : TWO_WHEELER_TYPES;
-    return types.map((t) => ({ label: t.label, value: t.label }));
+    // Use t.key as value so the stored bodyType is always the slug-safe key
+    // e.g. "scooter" not "Scooters", "commuter_bikes" not "Commuter Bikes"
+    return types.map((t) => ({ label: t.label, value: t.key }));
   }, [vehicleType]);
 
   const brandOptionsList = useMemo(() => {
@@ -1005,29 +1008,33 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           "vehicle_search";
         trackProductSearch(searchString, "filter_bar_filters");
 
-        // Generate SEO-friendly slug
-        let slug = "buy-used-";
-        if (brand) {
-          slug += brand.toLowerCase().replace(/\s+/g, "-") + "-";
+        let budgetParam = null;
+        if (budget) {
+          const [minStr, maxStr] = budget.replace(/\s/g, "").split("-");
+          const m = parseFloat(minStr);
+          const x = maxStr && maxStr.toLowerCase() === "above" ? 20 : parseFloat(maxStr);
+          if (!isNaN(m) && !isNaN(x)) {
+            budgetParam = `${m}-${x}`;
+          }
         }
-        slug += vehicleKind;
+        
+        let cityNameStr = "";
         if (location) {
-          const cityName = location
-            .split(",")[0]
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, "-");
-          slug += "-" + cityName;
+          cityNameStr = location.split(",")[0].trim();
         }
 
-        // Other filters as query params
-        const queryParams = new URLSearchParams({
-          ...(bodyType && { bodyType: bodyType.toUpperCase() }),
-          ...(fuelType && { fuelType: fuelType.toUpperCase() }),
-          ...(budget && { budget }),
-        }).toString();
+        const targetSlug = generateSeoSlug({
+          brandName: brand || brandSearch,
+          cityName: cityNameStr,
+          budget: budgetParam,
+          vehicleType: vehicleKind,
+          fuelType: fuelType,
+          bodyType: bodyType,
+        });
 
-        await push(`/search/${slug}${queryParams ? `?${queryParams}` : ""}`);
+        // Pure clean-slug navigation — no query params at all
+        // All filter info is encoded in the slug itself
+        await push(`/search/${targetSlug}`);
         setActiveTab(null);
         setMobileOpen(false);
       }
