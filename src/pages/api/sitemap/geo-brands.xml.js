@@ -12,13 +12,17 @@ export default async function handler(req, res) {
       slug: b.toLowerCase().replace(/\s+/g, "-")
     }));
 
-    // Popular Indian cities to map combinations for search landing pages
+    // Focus + live inventory cities for brand×city landings (cars and bikes stay separate).
+    // Do NOT dump all India cities here — brand×city for 4000+ cities would explode crawl budget.
     const cities = [
+      // Metro / popular
       "mumbai", "delhi", "bangalore", "hyderabad", "ahmedabad", "chennai",
-      "kolkata", "pune", "jaipur", "latur", "palanpur", "hansi", "ludhiana",
+      "kolkata", "pune", "jaipur", "latur", "hansi", "ludhiana",
       "agra", "nashik", "bhopal", "patna", "vadodara", "surat", "rajkot",
       "lucknow", "indore", "chandigarh", "nagpur", "coimbatore",
-      "gandhinagar", "visnagar", "kanodar"
+      // Live inventory / Gujarat focus (cars + bikes brand×city)
+      "palanpur", "gandhinagar", "visnagar", "kanodar", "siddhpur",
+      "mehsana", "chhota-udepur",
     ];
 
     // Popular Indian states

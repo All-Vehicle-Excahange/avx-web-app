@@ -17,12 +17,21 @@ export const SEARCH_SLUG_REDIRECTS = {
   "buy-used-scooters": "buy-used-scooter-two-wheelers",
   "buy-used-creta-cars": "buy-used-hyundai-creta-cars",
   "buy-used-toyota": "buy-used-toyota-cars",
+  // Siddhpur spelling aliases (sidhpur → siddhpur)
+  "buy-used-cars-sidhpur": "buy-used-cars-siddhpur",
+  "buy-used-two-wheelers-sidhpur": "buy-used-two-wheelers-siddhpur",
+  "buy-used-bikes-sidhpur": "buy-used-two-wheelers-siddhpur",
 };
 
 /** Common misspellings → canonical slug segment. */
 export const MODEL_SLUG_SYNONYMS = {
   creata: "creta",
   creatta: "creta",
+};
+
+/** City spelling aliases → canonical city slug segment. */
+export const CITY_SLUG_SYNONYMS = {
+  sidhpur: "siddhpur",
 };
 
 /** Tier-1 cities for enriched local copy (GA4 + inventory focus). */
@@ -32,6 +41,9 @@ export const TIER1_CITIES = [
   "Gandhinagar",
   "Visnagar",
   "Kanodar",
+  "Siddhpur",
+  "Mehsana",
+  "Chhota Udepur",
 ];
 
 /** Minimum listings required to index non-hub landing pages. */
@@ -67,7 +79,10 @@ export function canonicalizeSearchSlug(slug) {
   if (!slug || typeof slug !== "string") return null;
   let next = slug;
   let changed = false;
-  for (const [from, to] of Object.entries(MODEL_SLUG_SYNONYMS)) {
+  for (const [from, to] of Object.entries({
+    ...MODEL_SLUG_SYNONYMS,
+    ...CITY_SLUG_SYNONYMS,
+  })) {
     if (from.toLowerCase() === to.toLowerCase()) continue;
     const re = new RegExp(`(^|-)${from}(-|$)`, "i");
     if (re.test(next)) {
@@ -137,15 +152,18 @@ export function buildSearchLandingSeo({
   const vwLower = isTwoWheeler ? "bikes" : (vehicleWord || "Cars").toLowerCase();
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
+    // Keep cars and bikes as separate hubs — never combine in one title.
     const hubTitle = isTwoWheeler
-      ? "Used Bikes for Sale in India | Reecomm"
-      : "Used Cars for Sale in India | Reecomm";
+      ? "Used Bikes - Buy & Sell Second Hand Bikes on Reecomm"
+      : "Used Cars - Buy & Sell Second Hand Cars on Reecomm";
     const hubDescription = isTwoWheeler
       ? "Browse verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy."
       : "Browse verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.";
     return {
       title: hubTitle,
-      h1: isTwoWheeler ? "Used Bikes for Sale in India" : "Used Cars for Sale in India",
+      h1: isTwoWheeler
+        ? "Used Bikes - Buy & Sell Second Hand Bikes"
+        : "Used Cars - Buy & Sell Second Hand Cars",
       description: hubDescription,
       totalCount: count,
     };
