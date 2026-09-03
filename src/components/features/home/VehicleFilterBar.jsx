@@ -946,23 +946,9 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     try {
       const isConsult = internalActiveType === "consult";
 
-      // Save/overwrite selected location to localStorage
+      // Save/overwrite selected location to localStorage removed
       if (stateId && cityId && location) {
-        const [cityName, stateName] = location
-          .split(", ")
-          .map((str) => str.trim());
-        if (cityName && stateName) {
-          const locationData = {
-            stateId,
-            stateName,
-            cityId,
-            cityName,
-          };
-          localStorage.setItem(
-            "avx_saved_location",
-            JSON.stringify(locationData),
-          );
-        }
+        // Location is already encoded in the URL slug
       } else if (locationSuggestions?.length > 0 && location) {
         // In case they just typed an exact match but didn't click the dropdown
         const locMatch = locationSuggestions.find(
@@ -970,18 +956,6 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             `${l.cityName}, ${l.stateName}`.toLowerCase() ===
             location.toLowerCase(),
         );
-        if (locMatch) {
-          const locationData = {
-            stateId: locMatch.stateId,
-            stateName: locMatch.stateName,
-            cityId: locMatch.cityId,
-            cityName: locMatch.cityName,
-          };
-          localStorage.setItem(
-            "avx_saved_location",
-            JSON.stringify(locationData),
-          );
-        }
       }
 
       if (internalActiveType === "consult") {

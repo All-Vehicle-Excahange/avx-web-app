@@ -187,23 +187,9 @@ export default function FilterWithCard({
     fetchStates();
   }, []);
 
-  // Auto-detect location on mount
+  // Auto-detect location on mount removed as per user request to avoid auto-selecting location
   useEffect(() => {
-    // On mount: only check localStorage for saved location
-    try {
-      const saved = localStorage.getItem("avx_saved_location");
-      if (saved) {
-        const { stateId, stateName, cityId, cityName } = JSON.parse(saved);
-        if (stateId && stateName) {
-          setSelectedStateId(stateId);
-          setSelectedStateName(stateName);
-          setSelectedCityId(cityId || null);
-          setSelectedCityName(cityName || "");
-        }
-      }
-    } catch (e) {
-      console.warn("Failed to read saved location:", e);
-    }
+    // Left empty since we removed the localStorage fallback
   }, []);
 
   // Detect location via geolocation — only when user clicks the icon
@@ -474,15 +460,6 @@ export default function FilterWithCard({
     fetchConsultants(1, payload);
   }, [sort]);
   const handleApplyFilter = async () => {
-    if (selectedStateId && selectedStateName) {
-      const locationData = {
-        stateId: selectedStateId,
-        stateName: selectedStateName,
-        cityId: selectedCityId,
-        cityName: selectedCityName,
-      };
-      localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
-    }
 
     const payload = buildPayload();
     setCurrentPage(1);
@@ -492,9 +469,6 @@ export default function FilterWithCard({
   const handleClearFilters = async () => {
     // Remove query parameters from URL to clear top search bar
     replace(pathname, { scroll: false });
-
-    // Remove saved location from localStorage
-    localStorage.removeItem("avx_saved_location");
 
     // Reset filter states
     setSelectedDistance([]);

@@ -433,8 +433,8 @@ export default function Step1Business({
                 const rawVal = e.target.value;
                 const val = rawVal.replace(/[^a-zA-Z\s]/g, "");
 
-                const oldGenerated = (form.consultationName || "").trim().replace(/\s+/g, "_").toLowerCase();
-                const newGenerated = val.trim().replace(/\s+/g, "_").toLowerCase();
+                const oldGenerated = (form.consultationName || "").trim().replace(/\s+/g, "").toLowerCase();
+                const newGenerated = val.trim().replace(/\s+/g, "").toLowerCase();
 
                 if (!form.username || form.username === oldGenerated) {
                   const updatedForm = { ...form, consultationName: val, username: newGenerated };
@@ -469,7 +469,7 @@ export default function Step1Business({
                 value={form.username}
                 icon={Globe}
                 onChange={(e) =>
-                  handleInput("username", e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))
+                  handleInput("username", e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ""))
                 }
               />
               {usernameStatus.message && (

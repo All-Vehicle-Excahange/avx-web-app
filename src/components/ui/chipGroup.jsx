@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 import Chip from "./chip";
 import InputField from "@/components/ui/inputField";
 
@@ -102,6 +103,8 @@ export default function ChipGroup({
           <InputField
             variant={variant === "outlineDark" ? "default" : "colored"}
             placeholder={`Search ${(title || "").toLowerCase()}...`}
+            icon={Search}
+            clearable={true}
             value={currentSearch}
             onChange={(e) => {
               const newVal = e.target.value;

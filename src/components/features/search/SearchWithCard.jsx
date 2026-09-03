@@ -1142,21 +1142,7 @@ export default function SearchWithCard({
       return; // skip localStorage fallback
     }
 
-    // Priority 2: Fallback to localStorage
-    try {
-      const saved = localStorage.getItem("avx_saved_location");
-      if (saved) {
-        const { stateId, stateName, cityId, cityName } = JSON.parse(saved);
-        if (stateId && stateName) {
-          setSelectedStateId(stateId);
-          setSelectedStateName(stateName);
-          setSelectedCityId(cityId || null);
-          setSelectedCityName(cityName || "");
-        }
-      }
-    } catch (e) {
-      console.warn("Failed to read saved location:", e);
-    }
+    // Priority 2: Fallback to localStorage removed as per user request to avoid auto-selecting location
   }, []);
 
   // Detect location via geolocation — only when user clicks the icon
@@ -1222,11 +1208,11 @@ export default function SearchWithCard({
 
       const res = selectedBrands.length > 0
         ? await Promise.all(selectedBrands.map((id) => getAndSearchModel({ ...payload, maker_id: id })))
-            .then((responses) => ({
-              success: true,
-              data: responses.flatMap((r) => r.success && r.data ? r.data : []),
-              pagination: { totalPages: Math.max(...responses.map((r) => r.pagination?.totalPages || 1)) },
-            }))
+          .then((responses) => ({
+            success: true,
+            data: responses.flatMap((r) => r.success && r.data ? r.data : []),
+            pagination: { totalPages: Math.max(...responses.map((r) => r.pagination?.totalPages || 1)) },
+          }))
         : await getAndSearchModel(payload);
 
       if (!res.success) return;
@@ -1854,15 +1840,6 @@ export default function SearchWithCard({
 
   // Save/overwrite selected location to localStorage on Apply
   const handleApplyFilter = async () => {
-    if (selectedStateId && selectedStateName) {
-      const locationData = {
-        stateId: selectedStateId,
-        stateName: selectedStateName,
-        cityId: selectedCityId,
-        cityName: selectedCityName,
-      };
-      localStorage.setItem("avx_saved_location", JSON.stringify(locationData));
-    }
 
     setCurrentPage(1);
     setDebouncedPayload(buildPayload());
@@ -1874,8 +1851,6 @@ export default function SearchWithCard({
     // Remove query parameters from URL to clear top search bar
     window.history.replaceState(null, "", "/search/buy-used-cars");
 
-    // Remove saved location from localStorage
-    localStorage.removeItem("avx_saved_location");
     // Reset brand & model
     setSelectedBrands([]);
     setSelectedModels([]);
@@ -2080,7 +2055,7 @@ export default function SearchWithCard({
                 />
               </div>
 
-              <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 backdrop-blur-md bg-transparent">
+              <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-lg border border-white/20 backdrop-blur-md bg-transparent">
                 <span className="text-primary font-semibold text-sm">
                   Reecomm Inspected
                 </span>
