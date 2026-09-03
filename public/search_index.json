@@ -10208,6 +10208,26 @@
     }
   },
   {
+    "id": "consultant_1e976ed7-e997-4e26-9cfb-e2d43976e5a5",
+    "title": "Car bazar",
+    "keywords": [
+      "car_bazar",
+      "car",
+      "bazar",
+      "kanodar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "car_bazar",
+      "consultationId": "1e976ed7-e997-4e26-9cfb-e2d43976e5a5"
+    }
+  },
+  {
     "id": "consultant_894c2b52-7142-4f8d-ae89-7819fef7f1d7",
     "title": "M S Auto Consultant",
     "keywords": [
