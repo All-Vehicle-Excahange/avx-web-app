@@ -5,8 +5,6 @@ const VEHICLES_PER_PAGE = 100;
 
 /**
  * Generate SEO-friendly slug from vehicle data.
- * Mirrors the generateVehicleSlug() from @/lib/helper.js — but runs server-side
- * without any client-side imports.
  */
 function generateSlug(vehicle) {
   const brand = (vehicle.makerName || "")
@@ -31,17 +29,35 @@ function generateSlug(vehicle) {
     .replace(/^-/, "");
 }
 
+function collectImages(vehicle) {
+  const images = [];
+  if (vehicle.thumbnailUrl) images.push(vehicle.thumbnailUrl);
+  if (Array.isArray(vehicle.imageUrls)) {
+    vehicle.imageUrls.forEach((img) => {
+      if (img && typeof img === "string" && !images.includes(img)) images.push(img);
+    });
+  }
+  if (Array.isArray(vehicle.vehiclePhotos)) {
+    vehicle.vehiclePhotos.forEach((img) => {
+      const url = typeof img === "string" ? img : img?.url || img?.photoUrl;
+      if (url && !images.includes(url)) images.push(url);
+    });
+  }
+  if (Array.isArray(vehicle.vehicleImages)) {
+    vehicle.vehicleImages.forEach((img) => {
+      const url = typeof img === "string" ? img : img?.imageUrl || img?.url;
+      if (url && !images.includes(url)) images.push(url);
+    });
+  }
+  return images;
+}
+
 /**
- * Dynamic vehicle sitemap PAGE.
- *
- * URL: /api/sitemap/vehicles/[page].xml
- *
- * Returns a <urlset> with up to 100 vehicle URLs for the given page number.
- * Each URL matches the existing detail page route: /vehicle/details/{slug}/{id}
+ * Dynamic vehicle sitemap PAGE (live .xml route).
+ * Emits all photos with title + caption for Google Images.
  */
 export default async function handler(req, res) {
   try {
-    // Extract page number from URL: "1.xml" → 1
     const rawPage = req.query.page;
     const page = parseInt(String(rawPage).replace(".xml", ""), 10);
 
@@ -62,7 +78,19 @@ export default async function handler(req, res) {
 
       const slug = generateSlug(vehicle);
       const loc = `${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`;
-      const lastmod = vehicle.updatedAt || vehicle.createdAt || new Date().toISOString();
+      const lastmod =
+        vehicle.updatedAt || vehicle.createdAt || new Date().toISOString();
+      const city = (vehicle.cityName || vehicle.address?.city || "")
+        .split(",")[0]
+        .trim();
+      const fuel = String(vehicle.fuelType || "").replace(/_/g, " ");
+      const title =
+        `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
+      const caption = [title, fuel, city ? `in ${city}` : "", "| Reecomm"]
+        .filter(Boolean)
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
 
       xml += `  <url>\n`;
       xml += `    <loc>${loc}</loc>\n`;
@@ -70,12 +98,11 @@ export default async function handler(req, res) {
       xml += `    <changefreq>daily</changefreq>\n`;
       xml += `    <priority>0.8</priority>\n`;
 
-      // Add image tag if thumbnailUrl exists (helps Google Images indexing)
-      if (vehicle.thumbnailUrl) {
-        const title = `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
+      for (const imgUrl of collectImages(vehicle)) {
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(vehicle.thumbnailUrl)}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
         xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
+        xml += `      <image:caption>${escapeXml(caption)}</image:caption>\n`;
         xml += `    </image:image>\n`;
       }
 
@@ -96,12 +123,9 @@ export default async function handler(req, res) {
   }
 }
 
-/**
- * Escape special XML characters to prevent malformed XML.
- */
 function escapeXml(str) {
   if (!str) return "";
-  return str
+  return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

@@ -121,7 +121,7 @@ export default async function handler(req, res) {
     let deletedCount = 0;
     let categoryCount = 0;
     let sitemapCount = 0;
-    let sampleVehicles = [];
+    let inventoryVehicles = [];
 
     // ── 1. Vehicles (paginate all pages, soft-capped) ─────────────────────
     try {
@@ -130,7 +130,9 @@ export default async function handler(req, res) {
       let notified = 0;
       for (let page = 1; page <= totalPages && notified < MAX_VEHICLE_NOTIFY; page++) {
         const { data: vehicles } = await getSeoVehicles(page, PAGE_SIZE);
-        if (page === 1) sampleVehicles = vehicles || [];
+        if (vehicles?.length) {
+          inventoryVehicles = inventoryVehicles.concat(vehicles);
+        }
         if (!vehicles?.length) continue;
         for (let i = 0; i < vehicles.length && notified < MAX_VEHICLE_NOTIFY; i += BATCH) {
           const chunk = vehicles.slice(i, i + BATCH);
@@ -196,7 +198,7 @@ export default async function handler(req, res) {
       );
     }
 
-    // ── 3. Search category / slug pages ───────────────────────────────────
+    // ── 3. Search category / slug pages (full inventory landing matrix) ───
     try {
       const dynamicSlugs = new Set([
         "buy-used-cars",
@@ -206,33 +208,51 @@ export default async function handler(req, res) {
         "buy-used-cars-under-10-lakhs",
       ]);
 
-      (sampleVehicles || []).forEach((vehicle) => {
-        const brandSlug = (vehicle.makerName || "")
+      const slugify = (value) =>
+        String(value || "")
           .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^\w-]/g, "");
-        const modelSlug = (vehicle.modelName || "")
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^\w-]/g, "");
-        const citySlug = (vehicle.cityName || vehicle.address?.city || "")
-          .split(",")[0]
           .trim()
-          .toLowerCase()
           .replace(/\s+/g, "-")
-          .replace(/[^\w-]/g, "");
-        const kindSlug = (vehicle.vehicleType || "")
+          .replace(/[^\w-]/g, "")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+
+      (inventoryVehicles || []).forEach((vehicle) => {
+        const brandSlug = slugify(vehicle.makerName);
+        const modelSlug = slugify(vehicle.modelName);
+        const citySlug = slugify(
+          String(vehicle.cityName || vehicle.address?.city || "").split(",")[0]
+        );
+        const stateSlug = slugify(
+          vehicle.stateName || vehicle.address?.state || ""
+        );
+        const kindSlug = String(vehicle.vehicleType || "")
           .toUpperCase()
           .includes("TWO")
           ? "two-wheelers"
           : "cars";
 
         if (brandSlug) dynamicSlugs.add(`buy-used-${brandSlug}-${kindSlug}`);
-        if (brandSlug && modelSlug)
+        if (brandSlug && modelSlug) {
           dynamicSlugs.add(`buy-used-${brandSlug}-${modelSlug}-${kindSlug}`);
+        }
         if (citySlug) dynamicSlugs.add(`buy-used-cars-${citySlug}`);
-        if (brandSlug && citySlug)
+        if (brandSlug && citySlug) {
           dynamicSlugs.add(`buy-used-${brandSlug}-${kindSlug}-${citySlug}`);
+        }
+        if (brandSlug && stateSlug) {
+          dynamicSlugs.add(`buy-used-${brandSlug}-${kindSlug}-${stateSlug}`);
+        }
+        if (brandSlug && modelSlug && citySlug) {
+          dynamicSlugs.add(
+            `buy-used-${brandSlug}-${modelSlug}-${kindSlug}-${citySlug}`
+          );
+        }
+        if (brandSlug && modelSlug && stateSlug) {
+          dynamicSlugs.add(
+            `buy-used-${brandSlug}-${modelSlug}-${kindSlug}-${stateSlug}`
+          );
+        }
       });
 
       // Also take a slice from search_index-driven search-pages

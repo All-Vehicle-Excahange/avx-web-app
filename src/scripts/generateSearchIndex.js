@@ -239,92 +239,367 @@ function parseUrlPath(urlStr) {
   return null;
 }
 
+function slugifySegment(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function titleCaseFromSlug(slug) {
+  return String(slug || '')
+    .split('-')
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+function shortModelKeywords(modelName) {
+  const full = String(modelName || '').toLowerCase().trim();
+  if (!full) return [];
+  const words = full.split(/\s+/).filter(Boolean);
+  const out = new Set([full, words[0]].filter(Boolean));
+  if (full.includes('santro')) {
+    out.add('santro');
+    out.add('used santro');
+  }
+  if (full.includes('creta')) {
+    out.add('creta');
+    out.add('creata');
+    out.add('create');
+    out.add('used creta');
+  }
+  return Array.from(out);
+}
+
+function pushFilterItem(items, seen, { slug, title, keywords, params }) {
+  if (!slug || seen.has(slug)) return;
+  seen.add(slug);
+  items.push({
+    id: `filter_${slug.replace(/-/g, '_')}`,
+    title,
+    keywords: Array.from(new Set((keywords || []).map((k) => String(k).toLowerCase()).filter(Boolean))),
+    type: 'vehicle_filter',
+    params: { ...params, slug },
+  });
+}
+
+const FOCUS_CITIES = [
+  'Ahmedabad', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata',
+  'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore',
+  'Chandigarh', 'Gandhinagar', 'Visnagar', 'Kanodar', 'Siddhpur', 'Mehsana',
+  'Chhota Udepur', 'Nashik', 'Bhopal', 'Patna', 'Ludhiana', 'Nagpur', 'Coimbatore',
+  'Latur', 'Hansi', 'Agra',
+];
+
+const FOCUS_STATES = [
+  'Maharashtra', 'Karnataka', 'Telangana', 'Gujarat', 'Tamil Nadu', 'West Bengal',
+  'Punjab', 'Rajasthan', 'Uttar Pradesh', 'Haryana', 'Madhya Pradesh',
+  'Andhra Pradesh', 'Kerala', 'Bihar',
+];
+
+const ALL_CAR_BRANDS = [
+  'Ashok Leyland', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Chevrolet',
+  'Datsun', 'Ferrari', 'Fiat', 'Force Motors', 'Ford', 'Hindustan Motors', 'Honda',
+  'Hyundai', 'ICML', 'Jaguar', 'Lamborghini', 'Land Rover', 'Mahindra', 'Maruti Suzuki',
+  'Maserati', 'Maybach', 'Mercedes Benz', 'Mitsubishi', 'Nissan', 'Porsche', 'Premier',
+  'Renault', 'Rolls Royce', 'Skoda', 'Ssangyong', 'Tata', 'Toyota', 'Volkswagen',
+  'Volvo', 'Opel', 'Jeep', 'ISUZU', 'MG', 'Kia', 'Citroen', 'BYD',
+];
+
+const TWO_WHEELER_BRANDS = [
+  'Hero', 'TVS', 'Bajaj', 'Royal Enfield', 'Yamaha', 'Ola', 'Honda', 'Suzuki', 'KTM', 'Ather',
+];
+
+const POPULAR_CAR_MODELS = [
+  { brand: 'Hyundai', model: 'Grand i10', brandSlug: 'hyundai', modelSlug: 'grand-i10' },
+  { brand: 'Hyundai', model: 'Creta', brandSlug: 'hyundai', modelSlug: 'creta' },
+  { brand: 'Hyundai', model: 'i20', brandSlug: 'hyundai', modelSlug: 'i20' },
+  { brand: 'Hyundai', model: 'Verna', brandSlug: 'hyundai', modelSlug: 'verna' },
+  { brand: 'Hyundai', model: 'Santro Xing', brandSlug: 'hyundai', modelSlug: 'santro-xing' },
+  { brand: 'Maruti Suzuki', model: 'Swift', brandSlug: 'maruti-suzuki', modelSlug: 'swift' },
+  { brand: 'Maruti Suzuki', model: 'Baleno', brandSlug: 'maruti-suzuki', modelSlug: 'baleno' },
+  { brand: 'Maruti Suzuki', model: 'Wagon R', brandSlug: 'maruti-suzuki', modelSlug: 'wagon-r' },
+  { brand: 'Maruti Suzuki', model: 'Brezza', brandSlug: 'maruti-suzuki', modelSlug: 'brezza' },
+  { brand: 'Mahindra', model: 'Thar', brandSlug: 'mahindra', modelSlug: 'thar' },
+  { brand: 'Mahindra', model: 'Scorpio', brandSlug: 'mahindra', modelSlug: 'scorpio' },
+  { brand: 'Tata', model: 'Nexon', brandSlug: 'tata', modelSlug: 'nexon' },
+  { brand: 'Tata', model: 'Punch', brandSlug: 'tata', modelSlug: 'punch' },
+  { brand: 'Toyota', model: 'Fortuner', brandSlug: 'toyota', modelSlug: 'fortuner' },
+  { brand: 'Toyota', model: 'Innova', brandSlug: 'toyota', modelSlug: 'innova' },
+  { brand: 'Ford', model: 'Ecosport', brandSlug: 'ford', modelSlug: 'ecosport' },
+  { brand: 'Honda', model: 'City', brandSlug: 'honda', modelSlug: 'city' },
+  { brand: 'Honda', model: 'Amaze', brandSlug: 'honda', modelSlug: 'amaze' },
+  { brand: 'Kia', model: 'Seltos', brandSlug: 'kia', modelSlug: 'seltos' },
+  { brand: 'Kia', model: 'Sonet', brandSlug: 'kia', modelSlug: 'sonet' },
+];
+
 /**
- * Generate synthetic Brand + Location & Brand + Model + Location combinations
+ * Generate Brand + Location & Brand + Model + Location combinations (cars + bikes separate).
  */
 function generateBrandLocationCombinations() {
   const items = [];
-  const popularCities = [
-    'Ahmedabad', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata',
-    'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore', 'Chandigarh'
-  ];
+  const seen = new Set();
 
-  const topBrands = ['Kia', 'Hyundai', 'Maruti Suzuki', 'Honda', 'Tata', 'Toyota', 'Mahindra', 'BMW', 'Audi', 'Mercedes Benz', 'MG', 'Skoda', 'Volkswagen', 'Ford'];
+  for (const brand of ALL_CAR_BRANDS) {
+    const brandSlug = slugifySegment(brand);
+    const brandLower = brand.toLowerCase();
 
-  for (const brand of topBrands) {
-    for (const city of popularCities) {
-      const brandSlug = brand.toLowerCase().replace(/\s+/g, '-');
-      const citySlug = city.toLowerCase().replace(/\s+/g, '-');
-      const slug = `buy-used-${brandSlug}-cars-${citySlug}`;
+    pushFilterItem(items, seen, {
+      slug: `buy-used-${brandSlug}-cars`,
+      title: `Used ${brand} Cars`,
+      keywords: [
+        brandLower, 'used car', `used ${brandLower}`, `used ${brandLower} cars`,
+      ],
+      params: { makerName: brand, vehicleType: 'FOUR_WHEELER' },
+    });
 
-      items.push({
-        id: `filter_${slug.replace(/-/g, '_')}`,
+    for (const city of FOCUS_CITIES) {
+      const citySlug = slugifySegment(city);
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-cars-${citySlug}`,
         title: `Used ${brand} Cars in ${city}`,
-        keywords: [brand.toLowerCase(), city.toLowerCase(), 'used car', `${brand.toLowerCase()} cars in ${city.toLowerCase()}`, `used ${brand.toLowerCase()} cars in ${city.toLowerCase()}`],
-        type: 'vehicle_filter',
-        params: {
-          makerName: brand,
-          city: city,
-          vehicleType: 'FOUR_WHEELER',
-          slug
-        }
+        keywords: [
+          brandLower, city.toLowerCase(), 'used car',
+          `used ${brandLower} cars`,
+          `used ${brandLower} in ${city.toLowerCase()}`,
+          `used ${brandLower} cars in ${city.toLowerCase()}`,
+        ],
+        params: { makerName: brand, city, vehicleType: 'FOUR_WHEELER' },
+      });
+    }
+
+    for (const state of FOCUS_STATES) {
+      const stateSlug = slugifySegment(state);
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-cars-${stateSlug}`,
+        title: `Used ${brand} Cars in ${state}`,
+        keywords: [
+          brandLower, state.toLowerCase(), 'used car',
+          `used ${brandLower} in ${state.toLowerCase()}`,
+          `used ${brandLower} cars in ${state.toLowerCase()}`,
+        ],
+        params: { makerName: brand, state, vehicleType: 'FOUR_WHEELER' },
       });
     }
   }
 
-  // Brand + Model + City combinations
-  const popularCarModels = [
-    { brand: "Hyundai", model: "Grand i10", brandSlug: "hyundai", modelSlug: "grand-i10" },
-    { brand: "Hyundai", model: "Creta", brandSlug: "hyundai", modelSlug: "creta" },
-    { brand: "Hyundai", model: "i20", brandSlug: "hyundai", modelSlug: "i20" },
-    { brand: "Hyundai", model: "Verna", brandSlug: "hyundai", modelSlug: "verna" },
-    { brand: "Maruti Suzuki", model: "Swift", brandSlug: "maruti-suzuki", modelSlug: "swift" },
-    { brand: "Maruti Suzuki", model: "Baleno", brandSlug: "maruti-suzuki", modelSlug: "baleno" },
-    { brand: "Maruti Suzuki", model: "Wagon R", brandSlug: "maruti-suzuki", modelSlug: "wagon-r" },
-    { brand: "Maruti Suzuki", model: "Brezza", brandSlug: "maruti-suzuki", modelSlug: "brezza" },
-    { brand: "Mahindra", model: "Thar", brandSlug: "mahindra", modelSlug: "thar" },
-    { brand: "Mahindra", model: "Scorpio", brandSlug: "mahindra", modelSlug: "scorpio" },
-    { brand: "Tata", model: "Nexon", brandSlug: "tata", modelSlug: "nexon" },
-    { brand: "Tata", model: "Punch", brandSlug: "tata", modelSlug: "punch" },
-    { brand: "Toyota", model: "Fortuner", brandSlug: "toyota", modelSlug: "fortuner" },
-    { brand: "Toyota", model: "Innova", brandSlug: "toyota", modelSlug: "innova" },
-    { brand: "Ford", model: "Ecosport", brandSlug: "ford", modelSlug: "ecosport" },
-    { brand: "Honda", model: "City", brandSlug: "honda", modelSlug: "city" },
-    { brand: "Honda", model: "Amaze", brandSlug: "honda", modelSlug: "amaze" },
-    { brand: "Kia", model: "Seltos", brandSlug: "kia", modelSlug: "seltos" },
-    { brand: "Kia", model: "Sonet", brandSlug: "kia", modelSlug: "sonet" },
-  ];
+  for (const brand of TWO_WHEELER_BRANDS) {
+    const brandSlug = slugifySegment(brand);
+    const brandLower = brand.toLowerCase();
+    pushFilterItem(items, seen, {
+      slug: `buy-used-${brandSlug}-two-wheelers`,
+      title: `Used ${brand} Bikes`,
+      keywords: [brandLower, 'used bike', `used ${brandLower} bikes`],
+      params: { makerName: brand, vehicleType: 'TWO_WHEELER' },
+    });
+    for (const city of FOCUS_CITIES) {
+      const citySlug = slugifySegment(city);
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-two-wheelers-${citySlug}`,
+        title: `Used ${brand} Bikes in ${city}`,
+        keywords: [
+          brandLower, city.toLowerCase(), 'used bike',
+          `used ${brandLower} in ${city.toLowerCase()}`,
+        ],
+        params: { makerName: brand, city, vehicleType: 'TWO_WHEELER' },
+      });
+    }
+    for (const state of FOCUS_STATES) {
+      const stateSlug = slugifySegment(state);
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-two-wheelers-${stateSlug}`,
+        title: `Used ${brand} Bikes in ${state}`,
+        keywords: [
+          brandLower, state.toLowerCase(), 'used bike',
+          `used ${brandLower} in ${state.toLowerCase()}`,
+        ],
+        params: { makerName: brand, state, vehicleType: 'TWO_WHEELER' },
+      });
+    }
+  }
 
-  for (const { brand, model, brandSlug, modelSlug } of popularCarModels) {
-    for (const city of popularCities) {
-      const citySlug = city.toLowerCase().replace(/\s+/g, '-');
-      const slug = `buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`;
+  for (const { brand, model, brandSlug, modelSlug } of POPULAR_CAR_MODELS) {
+    pushFilterItem(items, seen, {
+      slug: `buy-used-${brandSlug}-${modelSlug}-cars`,
+      title: `Used ${brand} ${model} Cars`,
+      keywords: [
+        brand.toLowerCase(), model.toLowerCase(), 'used car',
+        `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
+        ...shortModelKeywords(model),
+      ],
+      params: { makerName: brand, modelName: model, vehicleType: 'FOUR_WHEELER' },
+    });
 
-      items.push({
-        id: `filter_${slug.replace(/-/g, '_')}`,
+    for (const city of FOCUS_CITIES) {
+      const citySlug = slugifySegment(city);
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`,
         title: `Used ${brand} ${model} Cars in ${city}`,
         keywords: [
           brand.toLowerCase(),
           model.toLowerCase(),
           city.toLowerCase(),
           `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
+          `used ${model.toLowerCase()} in ${city.toLowerCase()}`,
           `used ${brand.toLowerCase()} ${model.toLowerCase()} in ${city.toLowerCase()}`,
-          `used ${brand.toLowerCase()} ${model.toLowerCase()} cars in ${city.toLowerCase()}`,
-          // common misspellings for discovery
-          ...(modelSlug === 'creta' ? ['creata', 'used creata', 'used creta'] : []),
+          ...shortModelKeywords(model),
         ],
-        type: 'vehicle_filter',
         params: {
           makerName: brand,
           modelName: model,
-          city: city,
+          city,
           vehicleType: 'FOUR_WHEELER',
-          slug
-        }
+        },
       });
     }
   }
 
+  return items;
+}
+
+/**
+ * Inventory-driven landings from live SEO vehicles (exact listing GEO).
+ */
+async function fetchInventoryLandingItems() {
+  const items = [];
+  const seen = new Set();
+  try {
+    const cleanApiUrl = normalizeApiBase(API_BASE_URL).replace(/\/$/, '');
+    const endpoint = `${cleanApiUrl}/homefeed/vehicles/seo`;
+    console.log(`[Cron] Fetching inventory landings from ${endpoint}...`);
+
+    let pageNo = 1;
+    let totalPages = 1;
+    while (pageNo <= totalPages && pageNo <= 50) {
+      const res = await fetch(`${endpoint}?pageNo=${pageNo}&size=100`);
+      if (!res.ok) break;
+      const data = await res.json();
+      const list = data?.data || [];
+      totalPages = data?.pageResponse?.totalPages || 1;
+
+      for (const vehicle of list) {
+        const brand = (vehicle.makerName || '').trim();
+        const model = (vehicle.modelName || '').trim();
+        const city = String(vehicle.cityName || vehicle.address?.city || '')
+          .split(',')[0]
+          .trim();
+        const state = String(vehicle.stateName || vehicle.address?.state || '').trim();
+        const brandSlug = slugifySegment(brand);
+        const modelSlug = slugifySegment(model);
+        const citySlug = slugifySegment(city);
+        const stateSlug = slugifySegment(state);
+        const isTwoWheeler = String(vehicle.vehicleType || '')
+          .toUpperCase()
+          .includes('TWO');
+        const kind = isTwoWheeler ? 'two-wheelers' : 'cars';
+        const unit = isTwoWheeler ? 'Bikes' : 'Cars';
+        const unitLower = isTwoWheeler ? 'bike' : 'car';
+        const vehicleType = isTwoWheeler ? 'TWO_WHEELER' : 'FOUR_WHEELER';
+        if (!brandSlug) continue;
+
+        const brandLower = brand.toLowerCase();
+        const modelLower = model.toLowerCase();
+        const cityLower = city.toLowerCase();
+        const stateLower = state.toLowerCase();
+
+        pushFilterItem(items, seen, {
+          slug: `buy-used-${brandSlug}-${kind}`,
+          title: `Used ${brand} ${unit}`,
+          keywords: [
+            brandLower, `used ${unitLower}`, `used ${brandLower}`,
+            `used ${brandLower} ${unitLower}s`,
+          ],
+          params: { makerName: brand, vehicleType },
+        });
+
+        if (modelSlug) {
+          pushFilterItem(items, seen, {
+            slug: `buy-used-${brandSlug}-${modelSlug}-${kind}`,
+            title: `Used ${brand} ${model} ${unit}`,
+            keywords: [
+              brandLower, modelLower, `used ${modelLower}`,
+              `used ${brandLower} ${modelLower}`,
+              ...shortModelKeywords(model),
+            ],
+            params: { makerName: brand, modelName: model, vehicleType },
+          });
+        }
+
+        if (citySlug) {
+          pushFilterItem(items, seen, {
+            slug: `buy-used-${brandSlug}-${kind}-${citySlug}`,
+            title: `Used ${brand} ${unit} in ${city}`,
+            keywords: [
+              brandLower, cityLower,
+              `used ${brandLower} in ${cityLower}`,
+              `used ${brandLower} ${unitLower}s in ${cityLower}`,
+            ],
+            params: { makerName: brand, city, vehicleType },
+          });
+
+          if (modelSlug) {
+            pushFilterItem(items, seen, {
+              slug: `buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
+              title: `Used ${brand} ${model} in ${city}`,
+              keywords: [
+                brandLower, modelLower, cityLower,
+                `used ${modelLower} in ${cityLower}`,
+                `used ${brandLower} ${modelLower} in ${cityLower}`,
+                ...shortModelKeywords(model).map((k) => `${k} in ${cityLower}`),
+              ],
+              params: {
+                makerName: brand,
+                modelName: model,
+                city,
+                vehicleType,
+              },
+            });
+          }
+        }
+
+        if (stateSlug) {
+          pushFilterItem(items, seen, {
+            slug: `buy-used-${brandSlug}-${kind}-${stateSlug}`,
+            title: `Used ${brand} ${unit} in ${state}`,
+            keywords: [
+              brandLower, stateLower,
+              `used ${brandLower} in ${stateLower}`,
+            ],
+            params: { makerName: brand, state, vehicleType },
+          });
+
+          if (modelSlug) {
+            pushFilterItem(items, seen, {
+              slug: `buy-used-${brandSlug}-${modelSlug}-${kind}-${stateSlug}`,
+              title: `Used ${brand} ${model} in ${state}`,
+              keywords: [
+                brandLower, modelLower, stateLower,
+                `used ${modelLower} in ${stateLower}`,
+                `used ${brandLower} ${modelLower} in ${stateLower}`,
+                ...shortModelKeywords(model),
+              ],
+              params: {
+                makerName: brand,
+                modelName: model,
+                state,
+                vehicleType,
+              },
+            });
+          }
+        }
+      }
+
+      pageNo += 1;
+    }
+
+    console.log(`[Cron] Inventory landings loaded: ${items.length} unique entries.`);
+  } catch (err) {
+    console.warn('[Cron] Warning fetching inventory landings:', err.message);
+  }
   return items;
 }
 
@@ -500,6 +775,12 @@ async function generateSearchIndex() {
   // 2. Add Brand + Location (e.g. Used Kia Cars in Ahmedabad)
   const brandGeoItems = generateBrandLocationCombinations();
   for (const item of brandGeoItems) {
+    itemsMap.set(item.id, item);
+  }
+
+  // 2b. Inventory-driven brand/model/city/state landings from live SEO vehicles
+  const inventoryItems = await fetchInventoryLandingItems();
+  for (const item of inventoryItems) {
     itemsMap.set(item.id, item);
   }
 

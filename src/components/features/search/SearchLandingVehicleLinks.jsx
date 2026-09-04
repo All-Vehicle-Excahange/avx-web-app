@@ -1,15 +1,6 @@
 import React from "react";
 import Link from "next/link";
-
-function formatPrice(price) {
-  if (price == null || price === "") return "";
-  const num = Number(price);
-  if (Number.isNaN(num)) return String(price);
-  if (num >= 100000) {
-    return `₹${(num / 100000).toFixed(2).replace(/\.00$/, "")}L`;
-  }
-  return `₹${num.toLocaleString("en-IN")}`;
-}
+import { formatVehicleListingLine } from "@/lib/searchLandingSeo";
 
 /**
  * Server-rendered crawlable links to individual vehicle detail pages.
@@ -18,7 +9,7 @@ function formatPrice(price) {
 export default function SearchLandingVehicleLinks({
   vehicles = [],
   cityName = "",
-  heading = "Browse listings",
+  heading = "Cars available",
 }) {
   if (!vehicles.length) return null;
 
@@ -30,37 +21,36 @@ export default function SearchLandingVehicleLinks({
           {heading}
           {cityName ? ` in ${cityName}` : ""}
         </h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
           {vehicles.map((v) => {
-            const name =
-              `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
-              "Used Vehicle";
+            const label = formatVehicleListingLine(v);
             const href =
               v.slug && v.id
                 ? `/vehicle/details/${v.slug}/${v.id}`
                 : `/vehicle/details/${v.id}`;
-            const priceLabel = formatPrice(v.price);
 
             return (
               <li key={v.id || href}>
                 <Link
                   href={href}
-                  className="group flex items-center gap-2 py-1.5 text-primary hover:text-fourth transition-colors"
+                  className="group flex items-start gap-2 py-1.5 text-primary hover:text-fourth transition-colors"
                 >
                   <svg
-                    className="w-4 h-4 text-third/70 flex-shrink-0 group-hover:text-fourth group-hover:translate-x-1 transition-all duration-300"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    className="w-4 h-4 mt-0.5 text-third/70 flex-shrink-0 group-hover:text-fourth group-hover:translate-x-1 transition-all duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
-                  <span className="text-sm font-semibold truncate">
-                    {name}
+                  <span className="text-sm font-semibold leading-snug">
+                    {label}
                   </span>
-                  {priceLabel && (
-                    <span className="text-sm font-medium text-third/80 whitespace-nowrap ml-1">
-                      — {priceLabel}
-                    </span>
-                  )}
                 </Link>
               </li>
             );

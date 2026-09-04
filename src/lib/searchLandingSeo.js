@@ -21,12 +21,21 @@ export const SEARCH_SLUG_REDIRECTS = {
   "buy-used-cars-sidhpur": "buy-used-cars-siddhpur",
   "buy-used-two-wheelers-sidhpur": "buy-used-two-wheelers-siddhpur",
   "buy-used-bikes-sidhpur": "buy-used-two-wheelers-siddhpur",
+  // Model-only shortcuts → brand+model
+  "buy-used-santro-cars": "buy-used-hyundai-santro-xing-cars",
+  "buy-used-santro-cars-siddhpur": "buy-used-hyundai-santro-xing-cars-siddhpur",
+  "buy-used-santro-xing-cars": "buy-used-hyundai-santro-xing-cars",
+  "buy-used-santro-xing-cars-siddhpur":
+    "buy-used-hyundai-santro-xing-cars-siddhpur",
+  "buy-used-create-cars": "buy-used-hyundai-creta-cars",
 };
 
 /** Common misspellings → canonical slug segment. */
 export const MODEL_SLUG_SYNONYMS = {
   creata: "creta",
   creatta: "creta",
+  create: "creta",
+  santro: "santro-xing",
 };
 
 /** City spelling aliases → canonical city slug segment. */
@@ -57,6 +66,16 @@ export function resolveSearchSlugRedirect(slug) {
 
   if (SEARCH_SLUG_REDIRECTS[slug]) {
     return SEARCH_SLUG_REDIRECTS[slug];
+  }
+
+  const cretaCity = slug.match(/^buy-used-creta-cars-(.+)$/);
+  if (cretaCity) {
+    return `buy-used-hyundai-creta-cars-${cretaCity[1]}`;
+  }
+
+  const santroCity = slug.match(/^buy-used-santro(?:-xing)?-cars-(.+)$/);
+  if (santroCity) {
+    return `buy-used-hyundai-santro-xing-cars-${santroCity[1]}`;
   }
 
   const bikeCity = slug.match(/^buy-used-bikes?-(.+)$/);
@@ -138,6 +157,7 @@ export function buildSearchLandingSeo({
   totalCount = 0,
   isHub = false,
   topModels = [],
+  sampleVehicles = [],
 } = {}) {
   const count =
     typeof totalCount === "number" && totalCount > 0 ? totalCount : 0;
@@ -150,9 +170,9 @@ export function buildSearchLandingSeo({
   const isTwoWheeler = vehicleWord === "Two Wheelers";
   const vw = displayVehicleLabel(vehicleWord, isTwoWheeler);
   const vwLower = isTwoWheeler ? "bikes" : (vehicleWord || "Cars").toLowerCase();
+  const secondHand = isTwoWheeler ? "Second Hand Bikes" : "Second Hand Cars";
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
-    // Keep cars and bikes as separate hubs — never combine in one title.
     const hubTitle = isTwoWheeler
       ? "Used Bikes - Buy & Sell Second Hand Bikes on Reecomm"
       : "Used Cars - Buy & Sell Second Hand Cars on Reecomm";
@@ -169,53 +189,78 @@ export function buildSearchLandingSeo({
     };
   }
 
-  const core = cleanJoin([
-    "Used",
-    typeT,
-    brandT,
-    modelT,
-    vw,
-    budgetT,
-    cityT ? `in ${cityT}` : "",
-  ]);
-
-  let title = `${countPrefix}${core}`.trim();
-  let h1 = title;
-
-  // OLX-style title for city landing pages: "21+ Used Cars in Palanpur - Buy Second Hand Cars"
-  if (cityT && !brandT && !modelT && !budgetT) {
-    const unit = isTwoWheeler ? "Bikes" : "Cars";
-    const secondHand = isTwoWheeler ? "Second Hand Bikes" : "Second Hand Cars";
-    title = `${countPrefix}Used ${unit} in ${cityT} - Buy ${secondHand}`;
-    h1 = `${countPrefix}Used ${unit} in ${cityT}`;
-  } else if (cityT && (brandT || modelT)) {
-    title = `${countPrefix}${core} - Buy Second Hand ${isTwoWheeler ? "Bikes" : "Cars"}`;
-    h1 = `${countPrefix}${core}`.trim();
-  } else if (title.length <= 50) {
-    title = `${title} | Reecomm`;
+  // Brand-only (no city): Used Toyota Cars - Buy & Sell Second Hand Cars on Reecomm
+  if (brandT && !modelT && !cityT && !typeT && !budgetT) {
+    const title = `Used ${brandT} ${vw} - Buy & Sell ${secondHand} on Reecomm`;
+    return {
+      title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
+      h1: `Used ${brandT} ${vw}`,
+      description: `Browse verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`,
+      totalCount: count,
+    };
   }
 
-  const browseWhat = cleanJoin([
-    count > 0 ? `${count}+` : "",
-    "verified used",
-    typeT.toLowerCase(),
-    brandT,
-    modelT,
+  let title = "";
+  let h1 = "";
+
+  // Brand + model + city: Used Hyundai Santro Xing in Siddhpur - Buy Second Hand Cars
+  if (cityT && brandT && modelT) {
+    title = `${countPrefix}Used ${brandT} ${modelT} in ${cityT} - Buy ${secondHand}`;
+    h1 = `${countPrefix}Used ${brandT} ${modelT} in ${cityT}`;
+  } else if (cityT && brandT && !modelT) {
+    title = `${countPrefix}Used ${brandT} ${vw} in ${cityT} - Buy ${secondHand}`;
+    h1 = `${countPrefix}Used ${brandT} ${vw} in ${cityT}`;
+  } else if (cityT && !brandT && !modelT && !budgetT) {
+    title = `${countPrefix}Used ${vw} in ${cityT} - Buy ${secondHand}`;
+    h1 = `${countPrefix}Used ${vw} in ${cityT}`;
+  } else if (brandT && modelT && !cityT) {
+    title = `${countPrefix}Used ${brandT} ${modelT} ${vw} - Buy ${secondHand}`;
+    h1 = `${countPrefix}Used ${brandT} ${modelT} ${vw}`;
+  } else {
+    const core = cleanJoin([
+      "Used",
+      typeT,
+      brandT,
+      modelT,
+      vw,
+      budgetT,
+      cityT ? `in ${cityT}` : "",
+    ]);
+    title = `${countPrefix}${core}`.trim();
+    h1 = title;
+    if (title.length <= 50) title = `${title} | Reecomm`;
+  }
+
+  let description = `Browse verified used ${cleanJoin([
+    brandT.toLowerCase(),
+    modelT.toLowerCase(),
     vwLower,
-    budgetT,
     cityT ? `in ${cityT}` : "",
-  ]);
+  ])} on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
 
-  let description = `Browse ${browseWhat} on Reecomm. Compare prices, photos, and inspection reports before you buy.`.replace(
-    /\s+/g,
-    " "
-  );
-
-  const modelSnippet = formatModelList(topModels);
-  if (cityT && modelSnippet) {
-    description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos, and inspection reports.`;
-  } else if (cityT) {
-    description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+  const samples = (sampleVehicles || []).slice(0, 3);
+  if (samples.length) {
+    const bits = samples.map((v) => {
+      const year = v.yearOfMfg || v.year || "";
+      const modelName = v.modelName || "";
+      const fuel = formatFuelLabel(v.fuelType);
+      const owner = formatOwnerLabel(v.ownership);
+      const price = formatShortPrice(v.price);
+      return [year, modelName, fuel, owner, price].filter(Boolean).join(", ");
+    });
+    const head = cleanJoin([
+      brandT || modelT ? `Used ${brandT} ${modelT}`.trim() : `Used ${vwLower}`,
+      cityT ? `in ${cityT}` : "",
+      "on Reecomm",
+    ]);
+    description = `${head} — ${bits[0]}${bits[1] ? `; ${bits[1]}` : ""}. Compare photos, fuel, ownership & inspection.`;
+  } else {
+    const modelSnippet = formatModelList(topModels);
+    if (cityT && modelSnippet) {
+      description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos, fuel, ownership & inspection reports.`;
+    } else if (cityT) {
+      description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, fuel, ownership & inspection reports before you buy.`;
+    }
   }
 
   return {
@@ -227,6 +272,55 @@ export function buildSearchLandingSeo({
         : description,
     totalCount: count,
   };
+}
+
+function formatFuelLabel(fuel) {
+  if (!fuel) return "";
+  return String(fuel)
+    .replace(/_PLUS_/gi, "+")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/\s*\+\s*/g, "+");
+}
+
+function formatOwnerLabel(ownership) {
+  if (ownership == null || ownership === "") return "";
+  const n = Number(ownership);
+  if (Number.isNaN(n)) return String(ownership);
+  const suffix = n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
+  return `${n}${suffix} Owner`;
+}
+
+function formatShortPrice(price) {
+  if (price == null || price === "") return "";
+  const num = Number(price);
+  if (Number.isNaN(num)) return String(price);
+  if (num >= 100000) {
+    return `from ₹${(num / 100000).toFixed(2).replace(/\.00$/, "")}L`;
+  }
+  return `from ₹${num.toLocaleString("en-IN")}`;
+}
+
+/**
+ * Human-readable line for one listing (links + crawlable lists).
+ */
+export function formatVehicleListingLine(v = {}) {
+  const name =
+    `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
+    "Used Vehicle";
+  const owner = formatOwnerLabel(v.ownership);
+  const fuel = formatFuelLabel(v.fuelType);
+  const price = (() => {
+    if (v.price == null || v.price === "") return "";
+    const num = Number(v.price);
+    if (Number.isNaN(num)) return String(v.price);
+    if (num >= 100000) {
+      return `₹${(num / 100000).toFixed(2).replace(/\.00$/, "")}L`;
+    }
+    return `₹${num.toLocaleString("en-IN")}`;
+  })();
+  const specs = [owner, fuel, price].filter(Boolean).join(" · ");
+  return specs ? `${name} — ${specs}` : name;
 }
 
 /**
@@ -396,6 +490,13 @@ export function buildSearchItemListSchema({
       name,
       url,
       ...(image ? { image } : {}),
+      ...(v.yearOfMfg || v.year
+        ? { vehicleModelDate: String(v.yearOfMfg || v.year) }
+        : {}),
+      ...(v.fuelType ? { fuelType: String(v.fuelType).replace(/_/g, " ") } : {}),
+      ...(v.ownership != null && v.ownership !== ""
+        ? { numberOfPreviousOwners: Number(v.ownership) || v.ownership }
+        : {}),
       ...(price && !Number.isNaN(price)
         ? {
             offers: {

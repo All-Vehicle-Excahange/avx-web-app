@@ -87,9 +87,19 @@ export default async function handler(req, res) {
 
       for (const imgUrl of images) {
         const title = `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim();
+        const city = (vehicle.cityName || vehicle.address?.city || "")
+          .split(",")[0]
+          .trim();
+        const fuel = String(vehicle.fuelType || "").replace(/_/g, " ");
+        const caption = [title, fuel, city ? `in ${city}` : "", "| Reecomm"]
+          .filter(Boolean)
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
         xml += `    <image:image>\n`;
         xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
         xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
+        xml += `      <image:caption>${escapeXml(caption)}</image:caption>\n`;
         xml += `    </image:image>\n`;
       }
 

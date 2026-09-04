@@ -236,9 +236,19 @@ function SearchContent({
       <SearchLandingVehicleLinks
         vehicles={seo?.initialVehicles}
         cityName={initialFilters?.cityName}
+        heading={
+          initialFilters?.vehicleType === "two-wheelers"
+            ? "Bikes available"
+            : "Cars available"
+        }
       />
 
-      <SearchLandingSeoContent intro={seo?.intro} faqItems={seo?.faqItems} />
+      <SearchLandingSeoContent
+        intro={seo?.intro}
+        faqItems={seo?.faqItems}
+        vehicles={seo?.initialVehicles}
+        cityName={initialFilters?.cityName}
+      />
 
       <DownloadAppSection />
 
@@ -621,8 +631,12 @@ export async function getServerSideProps(context) {
             yearOfMfg: v.yearOfMfg || v.year || null,
             makerName: v.makerName || v.makeName || null,
             modelName: v.modelName || null,
+            variantName: v.variantName || null,
             slug: v.slug || null,
             price: v.price || null,
+            fuelType: v.fuelType || null,
+            ownership: v.ownership ?? v.ownerCount ?? v.numberOfOwners ?? null,
+            transmissionType: v.transmissionType || null,
             thumbnailUrl:
               v.thumbnailUrl ||
               v.imageUrl ||
@@ -632,6 +646,16 @@ export async function getServerSideProps(context) {
               v.consultantUsername ||
               v.vehicleOwner?.username ||
               v.username ||
+              null,
+            consultantName:
+              v.consultantName ||
+              v.consultationName ||
+              [
+                v.vehicleOwner?.firstname || "",
+                v.vehicleOwner?.lastname || "",
+              ]
+                .join(" ")
+                .trim() ||
               null,
             vehicleType: v.vehicleType || null,
             cityName: v.cityName || v.address?.city || null,
@@ -673,6 +697,7 @@ export async function getServerSideProps(context) {
     totalCount,
     isHub,
     topModels,
+    sampleVehicles: initialVehicles,
   });
 
   const intro = buildSearchLandingIntro({

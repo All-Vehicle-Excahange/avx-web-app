@@ -346,30 +346,31 @@ export async function getStaticProps(context) {
 
           if (thumbnail) finalImageUrl = thumbnail;
 
-          // If slug parse failed earlier, build richer title from API data
-          const year = v.yearOfMfg || "";
-          const make = v.makerName || "";
-          const model = v.modelName || "";
-          const variant = v.variantName || "";
-          const city = v.vehicleAddress?.city || v.address?.city || "India";
-          const priceRaw = v.price;
-          const price = priceRaw
-            ? priceRaw >= 100000
-              ? `₹${(priceRaw / 100000).toFixed(2).replace(/\.00$/, "")}L`
-              : `₹${Number(priceRaw).toLocaleString("en-IN")}`
-            : "";
+          // Normalize fields expected by SEO helpers
+          const vehicleForSeo = {
+            ...v,
+            cityName:
+              v.cityName ||
+              v.vehicleAddress?.city ||
+              v.address?.city ||
+              "",
+            ownership: v.ownership ?? v.ownerCount ?? v.numberOfOwners,
+            consultantName:
+              v.consultantName ||
+              v.consultationName ||
+              [
+                v.vehicleOwner?.firstname || "",
+                v.vehicleOwner?.lastname || "",
+              ]
+                .join(" ")
+                .trim(),
+          };
 
-          const apiTitle =
-            `Used ${year} ${make} ${model}${variant ? ` ${variant}` : ""} for Sale in ${city.split(",")[0].trim()}${price ? ` | ${price}` : ""} | Reecomm`
-              .replace(/\s+/g, " ")
-              .trim();
-          const apiDescription =
-            `Buy used ${year} ${make} ${model} in ${city}${price ? ` for ${price}` : ""}. View detailed specs, inspection report, photos, and price details.`
-              .replace(/\s+/g, " ")
-              .trim();
+          const apiTitle = generateDynamicPageTitle(vehicleForSeo);
+          const apiDescription = generateDynamicMetaDescription(vehicleForSeo);
 
           // Only override slug-derived text if we got real data
-          if (make && model) {
+          if (v.makerName && v.modelName) {
             finalTitle = apiTitle;
             finalDescription = apiDescription;
           }

@@ -42,6 +42,26 @@ export default function VehicleImageGallery({ vehicle }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
 
+  const imageAltBase = useMemo(() => {
+    const year = vehicle?.yearOfMfg || vehicle?.year || "";
+    const make = vehicle?.makerName || vehicle?.makeName || "";
+    const model = vehicle?.modelName || "";
+    const variant = vehicle?.variantName || "";
+    const fuel = (vehicle?.fuelType || "").replace(/_/g, " ");
+    const city = String(
+      vehicle?.cityName ||
+        vehicle?.city ||
+        vehicle?.address?.city ||
+        vehicle?.vehicleAddress?.city ||
+        ""
+    )
+      .split(",")[0]
+      .trim();
+    const core = [year, make, model, variant, fuel].filter(Boolean).join(" ");
+    const loc = city ? ` in ${city}` : "";
+    return `${core || "Used vehicle"}${loc} | Reecomm`;
+  }, [vehicle]);
+
   const debouncedSyncWishlist = useDebouncedCallback(async (nextState) => {
     try {
       if (!nextState) {
@@ -248,7 +268,7 @@ export default function VehicleImageGallery({ vehicle }) {
               {currentItem.type === "image" ? (
                 <Image
                   src={currentItem.src}
-                  alt="Vehicle"
+                  alt={`${imageAltBase} — photo ${activeIndex + 1}`}
                   fill
                   className="object-contain pointer-events-none select-none"
                   priority
@@ -314,7 +334,7 @@ export default function VehicleImageGallery({ vehicle }) {
                       src={item.thumbnail}
                       width={100}
                       height={100}
-                      alt={`thumb-${idx}`}
+                      alt={`${imageAltBase} — photo ${idx + 1}`}
                       className="w-full h-full object-cover pointer-events-none select-none"
                     />
                   ) : (
