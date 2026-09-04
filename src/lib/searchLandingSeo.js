@@ -35,7 +35,9 @@ export const MODEL_SLUG_SYNONYMS = {
   creata: "creta",
   creatta: "creta",
   create: "creta",
-  santro: "santro-xing",
+  // NOTE: do NOT map santro → santro-xing here.
+  // That expansion loops on already-canonical slugs (…-santro-xing-… keeps matching "santro").
+  // Use SEARCH_SLUG_REDIRECTS / santroCity patterns instead.
 };
 
 /** City spelling aliases → canonical city slug segment. */
@@ -64,6 +66,12 @@ export const MIN_INDEXABLE_LISTINGS = 1;
 export function resolveSearchSlugRedirect(slug) {
   if (!slug || typeof slug !== "string") return null;
 
+  // Collapse accidental synonym expansion loops (e.g. santro-xing-xing-xing…)
+  const collapsed = collapseRepeatedSlugSegments(slug);
+  if (collapsed && collapsed !== slug) {
+    return collapsed;
+  }
+
   if (SEARCH_SLUG_REDIRECTS[slug]) {
     return SEARCH_SLUG_REDIRECTS[slug];
   }
@@ -73,9 +81,13 @@ export function resolveSearchSlugRedirect(slug) {
     return `buy-used-hyundai-creta-cars-${cretaCity[1]}`;
   }
 
-  const santroCity = slug.match(/^buy-used-santro(?:-xing)?-cars-(.+)$/);
-  if (santroCity) {
-    return `buy-used-hyundai-santro-xing-cars-${santroCity[1]}`;
+  // Only bare "santro" / "santro-xing" (no brand prefix) → hyundai-santro-xing
+  const santroOnly = slug.match(
+    /^buy-used-santro(?:-xing)?-cars(?:-(.+))?$/
+  );
+  if (santroOnly) {
+    const cityPart = santroOnly[1] ? `-${santroOnly[1]}` : "";
+    return `buy-used-hyundai-santro-xing-cars${cityPart}`;
   }
 
   const bikeCity = slug.match(/^buy-used-bikes?-(.+)$/);
@@ -92,6 +104,20 @@ export function resolveSearchSlugRedirect(slug) {
 }
 
 /**
+ * Collapse duplicated hyphen segments: santro-xing-xing-xing → santro-xing
+ */
+function collapseRepeatedSlugSegments(slug) {
+  if (!slug || typeof slug !== "string") return null;
+  let next = slug;
+  let prev = "";
+  while (next !== prev) {
+    prev = next;
+    next = next.replace(/(-[a-z0-9]+)\1+/gi, "$1");
+  }
+  return next !== slug ? next : null;
+}
+
+/**
  * If slug contains a known misspelling, return canonical slug; else null.
  */
 export function canonicalizeSearchSlug(slug) {
@@ -103,7 +129,21 @@ export function canonicalizeSearchSlug(slug) {
     ...CITY_SLUG_SYNONYMS,
   })) {
     if (from.toLowerCase() === to.toLowerCase()) continue;
-    const re = new RegExp(`(^|-)${from}(-|$)`, "i");
+
+    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedTo = to.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // If "to" already contains "from" (santro → santro-xing), skip when
+    // the expanded form is already present to avoid infinite redirects.
+    if (to.toLowerCase().includes(from.toLowerCase())) {
+      const alreadyExpanded = new RegExp(
+        `(^|-)${escapedTo}(-|$)`,
+        "i"
+      );
+      if (alreadyExpanded.test(next)) continue;
+    }
+
+    const re = new RegExp(`(^|-)${escapedFrom}(-|$)`, "i");
     if (re.test(next)) {
       next = next.replace(re, `$1${to}$2`);
       changed = true;
