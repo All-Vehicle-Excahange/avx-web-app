@@ -10,23 +10,24 @@ import {
 } from "react-icons/fa6";
 import Image from "next/image";
 
+const DEFAULT_BUY_LINKS = [
+  { label: "Browse all vehicles", href: "/search/buy-used-cars" },
+  { label: "Browse Cars", href: "/search/buy-used-cars" },
+  { label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" },
+  {
+    label: "Reecomm Inspected Vehicles",
+    href: "/search?reccomInspected=true",
+  },
+  { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
+  { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
+  {
+    label: "Used car buying guide",
+    href: "/blog/how-to-buy-used-car-safely-india",
+  },
+];
+
 const footerLinks = {
-  buy: [
-    { label: "Browse all vehicles", href: "/search/buy-used-cars" },
-    { label: "Browse Cars", href: "/search/buy-used-cars" },
-    { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
-    { label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" },
-    {
-      label: "Reecomm Inspected Vehicles",
-      href: "/search?reccomInspected=true",
-    },
-    { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
-    { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
-    {
-      label: "Used car buying guide",
-      href: "/blog/how-to-buy-used-car-safely-india",
-    },
-  ],
+  buy: DEFAULT_BUY_LINKS,
   sell: [
     { label: "List your car", href: "/become-consultant" },
     { label: "List your two-wheeler", href: "/become-consultant" },
@@ -67,6 +68,7 @@ const footerLinks = {
 const Footer = () => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
+  const [buyLinks, setBuyLinks] = useState(DEFAULT_BUY_LINKS);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -76,6 +78,38 @@ const Footer = () => {
     window.addEventListener("resize", checkScreenSize);
     return () => {
       window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/seo_popular_links.json")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !Array.isArray(data) || data.length < 3) return;
+        const geo = data
+          .filter((item) => item?.href && item?.label)
+          .slice(0, 6);
+        if (!geo.length) return;
+        const merged = [];
+        const seen = new Set();
+        const push = (item) => {
+          if (!item?.href || seen.has(item.href)) return;
+          seen.add(item.href);
+          merged.push(item);
+        };
+        push({ label: "Browse all vehicles", href: "/search/buy-used-cars" });
+        push({ label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" });
+        geo.forEach(push);
+        push({
+          label: "Used car buying guide",
+          href: "/blog/how-to-buy-used-car-safely-india",
+        });
+        setBuyLinks(merged.slice(0, 10));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
     };
   }, []);
 
@@ -200,9 +234,9 @@ const Footer = () => {
                 Buy
               </h2>
               <div className="flex flex-col gap-2">
-                {footerLinks.buy.map((item) => (
+                {buyLinks.map((item) => (
                   <Link
-                    key={item.label}
+                    key={item.href + item.label}
                     href={item.href}
                     className="text-[12px] text-white/60 hover:text-white transition-all"
                   >

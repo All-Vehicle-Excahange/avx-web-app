@@ -364,7 +364,40 @@ export function formatVehicleListingLine(v = {}) {
 }
 
 /**
- * Unique intro copy for landing pages (SEO body content).
+ * Derive listing stats from sample vehicles for quotable SEO copy.
+ */
+export function deriveListingStats(vehicles = [], totalCount = 0) {
+  const prices = vehicles
+    .map((v) => Number(v.price))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  const years = vehicles
+    .map((v) => Number(v.yearOfMfg || v.year))
+    .filter((n) => Number.isFinite(n) && n > 1990);
+  const fuels = [
+    ...new Set(
+      vehicles
+        .map((v) => String(v.fuelType || "").replace(/_/g, " ").trim())
+        .filter(Boolean),
+    ),
+  ].slice(0, 3);
+
+  return {
+    totalCount: totalCount > 0 ? totalCount : vehicles.length || 0,
+    minPrice: prices.length ? Math.min(...prices) : null,
+    maxPrice: prices.length ? Math.max(...prices) : null,
+    minYear: years.length ? Math.min(...years) : null,
+    maxYear: years.length ? Math.max(...years) : null,
+    fuels,
+  };
+}
+
+function formatInr(n) {
+  if (n == null || Number.isNaN(Number(n))) return null;
+  return `₹${Number(n).toLocaleString("en-IN")}`;
+}
+
+/**
+ * Unique intro copy for landing pages (SEO body content) — stats-driven for all brands/cities.
  */
 export function buildSearchLandingIntro({
   brand = "",
@@ -374,16 +407,15 @@ export function buildSearchLandingIntro({
   budgetPart = "",
   totalCount = 0,
   isHub = false,
+  sampleVehicles = [],
 } = {}) {
   const isTwoWheeler = vehicleWord === "Two Wheelers";
   const vw = displayVehicleLabel(vehicleWord, isTwoWheeler).toLowerCase();
   const brandT = (brand || "").trim();
   const modelT = (model || "").trim();
   const cityT = (city || "").trim();
-  const count = totalCount > 0 ? totalCount : null;
-  const isTier1 = TIER1_CITIES.some(
-    (c) => c.toLowerCase() === cityT.toLowerCase()
-  );
+  const stats = deriveListingStats(sampleVehicles, totalCount);
+  const count = stats.totalCount > 0 ? stats.totalCount : null;
 
   if (isHub && !brandT && !modelT && !cityT) {
     return isTwoWheeler
@@ -391,33 +423,48 @@ export function buildSearchLandingIntro({
       : "Find verified used cars listed by trusted automotive consultants across India. Reecomm helps you compare second-hand cars with real photos, fair prices, and optional inspection reports — a safer way to buy than unverified classifieds.";
   }
 
-  const subject = cleanJoin([brandT, modelT, vw, budgetPart, cityT ? `in ${cityT}` : ""]);
+  const subject = cleanJoin([
+    brandT,
+    modelT,
+    vw,
+    budgetPart,
+    cityT ? `in ${cityT}` : "",
+  ]);
   const countLine = count
-    ? `There are currently ${count}+ ${subject} available on Reecomm.`
-    : `Browse ${subject} on Reecomm.`;
+    ? `Browse ${count}+ used ${subject} on Reecomm.`
+    : `Browse used ${subject} on Reecomm.`;
 
-  const localLine = isTier1
-    ? ` ${cityT} is a key market for verified pre-owned vehicles on Reecomm, with local consultants offering inspection support and faster inquiry response.`
-    : cityT
-      ? ` Explore listings in ${cityT} from verified sellers and automotive consultants.`
+  const priceBand =
+    stats.minPrice != null && stats.maxPrice != null
+      ? stats.minPrice === stats.maxPrice
+        ? ` Listed prices around ${formatInr(stats.minPrice)}.`
+        : ` Current listings range from about ${formatInr(stats.minPrice)} to ${formatInr(stats.maxPrice)}.`
       : "";
 
+  const yearBand =
+    stats.minYear != null && stats.maxYear != null
+      ? stats.minYear === stats.maxYear
+        ? ` Available model years include ${stats.minYear}.`
+        : ` Available model years span ${stats.minYear}–${stats.maxYear}.`
+      : "";
+
+  const fuelLine =
+    stats.fuels.length > 0
+      ? ` Common fuel options on this page: ${stats.fuels.join(", ")}.`
+      : "";
+
+  const localLine = cityT
+    ? ` Compare verified pre-owned ${vw} in ${cityT} from automotive consultants and sellers — with photos, transparent pricing, and optional inspection reports.`
+    : ` Compare verified listings with photos, transparent pricing, and optional inspection reports.`;
+
   const trustLine =
-    " Each vehicle can include inspection details, RC verification guidance, and direct inquiry — helping you avoid common risks when buying used vehicles online.";
+    " Send an inquiry directly from the listing and verify RC, insurance, and condition before you decide.";
 
-  if (brandT.toLowerCase() === "toyota" && !modelT) {
-    return `${countLine} Popular Toyota models include Innova, Fortuner, Corolla, and Etios. Reecomm lists verified used Toyota cars with transparent pricing and consultant support.${localLine}${trustLine}`;
-  }
-
-  if (modelT.toLowerCase().includes("creta")) {
-    return `${countLine} The Hyundai Creta is one of India's most searched used SUVs. Check variant, diesel/petrol option, service history, and inspection report before you shortlist.${localLine}${trustLine}`;
-  }
-
-  return `${countLine}${localLine}${trustLine}`;
+  return `${countLine}${priceBand}${yearBand}${fuelLine}${localLine}${trustLine}`;
 }
 
 /**
- * Contextual FAQ items + FAQPage schema payload.
+ * Contextual FAQ items + FAQPage schema — parameterized for every brand/model/city.
  */
 export function buildSearchLandingFaq({
   brand = "",
@@ -425,12 +472,17 @@ export function buildSearchLandingFaq({
   city = "",
   vehicleWord = "Cars",
   isHub = false,
+  sampleVehicles = [],
+  totalCount = 0,
 } = {}) {
   const isTwoWheeler = vehicleWord === "Two Wheelers";
   const vw = displayVehicleLabel(vehicleWord, isTwoWheeler).toLowerCase();
   const brandT = (brand || "").trim();
   const modelT = (model || "").trim();
   const cityT = (city || "").trim();
+  const stats = deriveListingStats(sampleVehicles, totalCount);
+  const subject = cleanJoin([brandT, modelT]) || vw;
+  const whereLabel = cityT ? `${subject} in ${cityT}` : subject;
 
   const items = [];
 
@@ -446,11 +498,27 @@ export function buildSearchLandingFaq({
   } else {
     items.push({
       question: cityT
-        ? `How do I buy used ${brandT || modelT || vw} in ${cityT}?`
-        : `How do I buy used ${cleanJoin([brandT, modelT, vw])} on Reecomm?`,
-      answer: `Search listings on Reecomm, review photos and price details, request an inspection if available, and send an inquiry to the verified seller. You can compare multiple ${vw} before deciding.`,
+        ? `Where can I buy used ${whereLabel}?`
+        : `Where can I buy used ${subject} on Reecomm?`,
+      answer: cityT
+        ? `On Reecomm you can browse used ${whereLabel} from verified consultants and sellers. Open a listing to review photos and price, request inspection if available, and send an inquiry — a structured alternative to unverified classified ads.`
+        : `Search used ${subject} on Reecomm, review photos and price details, request an inspection if available, and send an inquiry to the verified seller.`,
     });
   }
+
+  const priceAnswer =
+    stats.minPrice != null && stats.maxPrice != null
+      ? cityT
+        ? `On Reecomm, recent used ${subject} listings${cityT ? ` in ${cityT}` : ""} typically range from about ${formatInr(stats.minPrice)} to ${formatInr(stats.maxPrice)}, depending on year, variant, kilometres, and condition. Always compare similar listings and inspection findings before negotiating.`
+        : `Recent used ${subject} listings on Reecomm typically range from about ${formatInr(stats.minPrice)} to ${formatInr(stats.maxPrice)}. Year, variant, kilometres, and condition drive the final price.`
+      : `Used ${subject} prices depend on year, variant, kilometres driven, and city. Compare similar Reecomm listings and factor in inspection findings when negotiating.`;
+
+  items.push({
+    question: cityT
+      ? `What is the used ${subject} price range in ${cityT}?`
+      : `What affects the price of a used ${subject}?`,
+    answer: priceAnswer,
+  });
 
   items.push({
     question: "Are vehicles on Reecomm inspected?",
@@ -467,20 +535,16 @@ export function buildSearchLandingFaq({
       : "Verify the RC, insurance, PUC, service records, and that the seller name matches the RC. Check challan and loan status on the Vahan portal before making payment.",
   });
 
-  if (brandT.toLowerCase() === "toyota" || modelT.toLowerCase().includes("creta")) {
+  if (cityT) {
     items.push({
-      question: modelT.toLowerCase().includes("creta")
-        ? "What is a fair price for a used Hyundai Creta?"
-        : "Which used Toyota cars hold value best?",
-      answer: modelT.toLowerCase().includes("creta")
-        ? "Used Creta prices depend on year, variant (SX, SX+, diesel/petrol), km driven, and city. Compare similar listings on Reecomm and factor in inspection findings when negotiating."
-        : "Toyota Innova, Fortuner, and Corolla Altis typically hold resale value well. Compare year, km driven, and service history across listings on Reecomm before shortlisting.",
+      question: `Is Reecomm a safer way to buy used ${vw} near ${cityT}?`,
+      answer: `Reecomm focuses on verified consultants and structured listings with optional inspection reports — helping reduce the risk of misleading ads. For buyers near ${cityT}, you can shortlist ${subject} online, inquire securely, and verify documents before payment.`,
     });
   } else {
     items.push({
-      question: "Is Reecomm safer than classifieds like OLX?",
+      question: `Why buy used ${vw} on Reecomm instead of open classifieds?`,
       answer:
-        "Reecomm focuses on verified consultants and structured listings with optional inspection reports — reducing the risk of misleading ads common on open classifieds. Always verify documents and inspect before payment.",
+        "Reecomm focuses on verified consultants and structured listings with optional inspection reports — reducing the risk of misleading ads. Always verify documents and inspect before payment.",
     });
   }
 
@@ -498,6 +562,59 @@ export function buildSearchLandingFaq({
   };
 
   return { items, schema };
+}
+
+/**
+ * Marketplace Organization / areaServed JSON-LD for search landings.
+ */
+export function buildSearchLandingOrgSchema({
+  city = "",
+  brand = "",
+  model = "",
+  canonical = "",
+} = {}) {
+  const cityT = (city || "").trim();
+  const nameParts = ["Reecomm"];
+  if (brand || model || cityT) {
+    nameParts.push("Used");
+    if (brand) nameParts.push(brand);
+    if (model) nameParts.push(model);
+    nameParts.push("Marketplace");
+    if (cityT) nameParts.push(`— ${cityT}`);
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Reecomm",
+    url: "https://www.reecomm.com",
+    logo: "https://www.reecomm.com/logo/logo1.webp",
+    description:
+      "Verified used cars and bikes marketplace with consultant storefronts and optional inspection reports.",
+    telephone: "+91-84601-60697",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Chhapi",
+      addressLocality: "Palanpur",
+      addressRegion: "Gujarat",
+      postalCode: "385210",
+      addressCountry: "IN",
+    },
+    ...(cityT
+      ? {
+          areaServed: {
+            "@type": "City",
+            name: cityT,
+          },
+        }
+      : {
+          areaServed: [
+            { "@type": "Country", name: "India" },
+            { "@type": "State", name: "Gujarat" },
+          ],
+        }),
+    ...(canonical ? { mainEntityOfPage: canonical } : {}),
+  };
 }
 
 /**

@@ -17,6 +17,7 @@ import {
   buildSearchLandingSeo,
   buildSearchLandingIntro,
   buildSearchLandingFaq,
+  buildSearchLandingOrgSchema,
   buildSearchItemListSchema,
   resolveSearchSlugRedirect,
   extractTopModels,
@@ -155,6 +156,15 @@ function SlugSearchPage({ seo, initialFilters }) {
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify(seo.faqSchema),
+            }}
+          />
+        )}
+
+        {seo?.orgSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(seo.orgSchema),
             }}
           />
         )}
@@ -708,6 +718,7 @@ export async function getServerSideProps(context) {
     budgetPart,
     totalCount,
     isHub,
+    sampleVehicles: initialVehicles,
   });
 
   const { items: faqItems, schema: faqSchema } = buildSearchLandingFaq({
@@ -716,6 +727,15 @@ export async function getServerSideProps(context) {
     city: resolvedCity,
     vehicleWord,
     isHub,
+    sampleVehicles: initialVehicles,
+    totalCount,
+  });
+
+  const orgSchema = buildSearchLandingOrgSchema({
+    city: resolvedCity,
+    brand: brandName,
+    model: resolvedModel,
+    canonical: `https://www.reecomm.com/search/${slug}`,
   });
 
   const noindex = !isHub && totalCount < MIN_INDEXABLE_LISTINGS;
@@ -732,6 +752,7 @@ export async function getServerSideProps(context) {
         intro,
         faqItems,
         faqSchema,
+        orgSchema,
         initialVehicles,
         totalCount,
         ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",

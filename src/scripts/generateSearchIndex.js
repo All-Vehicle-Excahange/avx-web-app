@@ -359,14 +359,18 @@ function generateBrandLocationCombinations() {
 
     for (const city of FOCUS_CITIES) {
       const citySlug = slugifySegment(city);
+      const cityLower = city.toLowerCase();
       pushFilterItem(items, seen, {
         slug: `buy-used-${brandSlug}-cars-${citySlug}`,
         title: `Used ${brand} Cars in ${city}`,
         keywords: [
-          brandLower, city.toLowerCase(), 'used car',
+          brandLower, cityLower, 'used car',
           `used ${brandLower} cars`,
-          `used ${brandLower} in ${city.toLowerCase()}`,
-          `used ${brandLower} cars in ${city.toLowerCase()}`,
+          `used ${brandLower} in ${cityLower}`,
+          `used ${brandLower} cars in ${cityLower}`,
+          `used ${brandLower} near me`,
+          `used ${brandLower} near ${cityLower}`,
+          `second hand ${brandLower} ${cityLower}`,
         ],
         params: { makerName: brand, city, vehicleType: 'FOUR_WHEELER' },
       });
@@ -436,17 +440,25 @@ function generateBrandLocationCombinations() {
 
     for (const city of FOCUS_CITIES) {
       const citySlug = slugifySegment(city);
+      const cityLower = city.toLowerCase();
+      const brandLower = brand.toLowerCase();
+      const modelLower = model.toLowerCase();
       pushFilterItem(items, seen, {
         slug: `buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`,
         title: `Used ${brand} ${model} Cars in ${city}`,
         keywords: [
-          brand.toLowerCase(),
-          model.toLowerCase(),
-          city.toLowerCase(),
-          `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
-          `used ${model.toLowerCase()} in ${city.toLowerCase()}`,
-          `used ${brand.toLowerCase()} ${model.toLowerCase()} in ${city.toLowerCase()}`,
+          brandLower,
+          modelLower,
+          cityLower,
+          `used ${brandLower} ${modelLower}`,
+          `used ${modelLower} in ${cityLower}`,
+          `used ${brandLower} ${modelLower} in ${cityLower}`,
+          `used ${modelLower} near me`,
+          `used ${brandLower} near ${cityLower}`,
+          `used ${brandLower} ${modelLower} near me`,
+          `second hand ${modelLower} ${cityLower}`,
           ...shortModelKeywords(model),
+          ...shortModelKeywords(model).map((k) => `${k} near me`),
         ],
         params: {
           makerName: brand,
@@ -467,6 +479,12 @@ function generateBrandLocationCombinations() {
 async function fetchInventoryLandingItems() {
   const items = [];
   const seen = new Set();
+  /** @type {Map<string, number>} slug → listing hits for popular-link ranking */
+  const comboHits = new Map();
+  const bump = (slug) => {
+    if (!slug) return;
+    comboHits.set(slug, (comboHits.get(slug) || 0) + 1);
+  };
   try {
     const cleanApiUrl = normalizeApiBase(API_BASE_URL).replace(/\/$/, '');
     const endpoint = `${cleanApiUrl}/homefeed/vehicles/seo`;
@@ -474,7 +492,9 @@ async function fetchInventoryLandingItems() {
 
     let pageNo = 1;
     let totalPages = 1;
-    while (pageNo <= totalPages && pageNo <= 50) {
+    // Paginate until API exhausted; safety ceiling avoids runaway jobs
+    const MAX_INVENTORY_PAGES = 500;
+    while (pageNo <= totalPages && pageNo <= MAX_INVENTORY_PAGES) {
       const res = await fetch(`${endpoint}?pageNo=${pageNo}&size=100`);
       if (!res.ok) break;
       const data = await res.json();
@@ -530,6 +550,7 @@ async function fetchInventoryLandingItems() {
         }
 
         if (citySlug) {
+          bump(`buy-used-cars-${citySlug}`);
           pushFilterItem(items, seen, {
             slug: `buy-used-${brandSlug}-${kind}-${citySlug}`,
             title: `Used ${brand} ${unit} in ${city}`,
@@ -537,19 +558,29 @@ async function fetchInventoryLandingItems() {
               brandLower, cityLower,
               `used ${brandLower} in ${cityLower}`,
               `used ${brandLower} ${unitLower}s in ${cityLower}`,
+              `used ${brandLower} near me`,
+              `used ${brandLower} near ${cityLower}`,
+              `second hand ${brandLower} ${cityLower}`,
             ],
             params: { makerName: brand, city, vehicleType },
           });
 
           if (modelSlug) {
+            const modelCitySlug = `buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`;
+            bump(modelCitySlug);
             pushFilterItem(items, seen, {
-              slug: `buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
+              slug: modelCitySlug,
               title: `Used ${brand} ${model} in ${city}`,
               keywords: [
                 brandLower, modelLower, cityLower,
                 `used ${modelLower} in ${cityLower}`,
                 `used ${brandLower} ${modelLower} in ${cityLower}`,
+                `used ${modelLower} near me`,
+                `used ${modelLower} near ${cityLower}`,
+                `used ${brandLower} ${modelLower} near me`,
+                `second hand ${modelLower} ${cityLower}`,
                 ...shortModelKeywords(model).map((k) => `${k} in ${cityLower}`),
+                ...shortModelKeywords(model).map((k) => `${k} near me`),
               ],
               params: {
                 makerName: brand,
@@ -600,7 +631,7 @@ async function fetchInventoryLandingItems() {
   } catch (err) {
     console.warn('[Cron] Warning fetching inventory landings:', err.message);
   }
-  return items;
+  return { items, comboHits };
 }
 
 /**
@@ -644,12 +675,21 @@ async function fetchAutoConsultants() {
 
         // Search keywords: clean slug + name words only — never raw digit usernames
         const cleanSlug = stripTrailingDigits(store.username).toLowerCase();
+        const cityLower = store.cityName ? String(store.cityName).toLowerCase() : "";
         const keywords = new Set([
           ...(cleanSlug ? [cleanSlug] : []),
           ...(title.toLowerCase().split(/\s+/).filter((w) => w && !/^\d+$/.test(w))),
-          ...(store.cityName ? [store.cityName.toLowerCase()] : []),
-          ...(store.stateName ? [store.stateName.toLowerCase()] : []),
-          'consultant', 'auto consultant', 'dealer', 'storefront'
+          ...(cityLower ? [cityLower] : []),
+          ...(store.stateName ? [String(store.stateName).toLowerCase()] : []),
+          'consultant', 'auto consultant', 'dealer', 'storefront',
+          ...(cityLower
+            ? [
+                `auto consultant ${cityLower}`,
+                `used cars ${cityLower}`,
+                `${title.toLowerCase()} used cars`,
+                `${title.toLowerCase()} ${cityLower}`,
+              ]
+            : [`${title.toLowerCase()} used cars`]),
         ]);
 
         const uniqueId = store.id ? `consultant_${store.id}` : `consultant_${store.username}`;
@@ -779,7 +819,7 @@ async function generateSearchIndex() {
   }
 
   // 2b. Inventory-driven brand/model/city/state landings from live SEO vehicles
-  const inventoryItems = await fetchInventoryLandingItems();
+  const { items: inventoryItems, comboHits } = await fetchInventoryLandingItems();
   for (const item of inventoryItems) {
     itemsMap.set(item.id, item);
   }
@@ -894,6 +934,82 @@ async function generateSearchIndex() {
   }
 
   const finalIndexItems = Array.from(itemsMap.values());
+
+  // Build inventory-driven popular links for home / hubs (ranked by live listing hits)
+  try {
+    const popularLinks = [];
+    const seenHref = new Set();
+    const pushLink = (label, href) => {
+      if (!href || seenHref.has(href) || popularLinks.length >= 16) return;
+      seenHref.add(href);
+      popularLinks.push({ label, href });
+    };
+
+    pushLink("Used Cars in India", "/search/buy-used-cars");
+    pushLink("Used Bikes for Sale", "/search/buy-used-two-wheelers");
+
+    const rankedSlugs = [...comboHits.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([slug]) => slug);
+
+    const modelCitySlugs = rankedSlugs.filter(
+      (slug) =>
+        /-cars-[a-z0-9-]+$/.test(slug) &&
+        !slug.startsWith("buy-used-cars-") &&
+        slug.includes("-cars-"),
+    );
+    for (const slug of modelCitySlugs.slice(0, 8)) {
+      const item = finalIndexItems.find((i) => i.params?.slug === slug);
+      const brand = item?.params?.makerName || "";
+      const model = item?.params?.modelName || "";
+      const city = item?.params?.city || "";
+      pushLink(
+        item?.title ||
+          (brand && model && city
+            ? `Used ${brand} ${model} in ${city}`
+            : slug.replace(/^buy-used-/, "Used ").replace(/-/g, " ")),
+        `/search/${slug}`,
+      );
+    }
+
+    const cityHubSlugs = rankedSlugs.filter((slug) =>
+      /^buy-used-cars-[a-z0-9-]+$/.test(slug),
+    );
+    for (const slug of cityHubSlugs.slice(0, 4)) {
+      const item = finalIndexItems.find((i) => i.params?.slug === slug);
+      const city = item?.params?.city || slug.replace("buy-used-cars-", "");
+      pushLink(
+        item?.title || `Used Cars in ${String(city).replace(/-/g, " ")}`,
+        `/search/${slug}`,
+      );
+    }
+
+    // Fallback: curated model×city if inventory was empty
+    if (popularLinks.length < 6) {
+      for (const item of finalIndexItems) {
+        if (popularLinks.length >= 16) break;
+        const slug = item.params?.slug;
+        if (
+          !slug ||
+          !item.params?.makerName ||
+          !item.params?.modelName ||
+          !item.params?.city
+        ) {
+          continue;
+        }
+        pushLink(item.title || slug, `/search/${slug}`);
+      }
+    }
+
+    const popularPath = path.join(PUBLIC_DIR, "seo_popular_links.json");
+    if (!fs.existsSync(PUBLIC_DIR)) {
+      fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+    }
+    fs.writeFileSync(popularPath, JSON.stringify(popularLinks, null, 2), "utf8");
+    console.log(`[Cron] Wrote ${popularLinks.length} popular SEO links to ${popularPath}`);
+  } catch (popErr) {
+    console.warn("[Cron] popular links write skipped:", popErr.message);
+  }
 
   try {
     if (!fs.existsSync(PUBLIC_DIR)) {

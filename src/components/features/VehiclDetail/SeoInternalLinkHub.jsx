@@ -12,6 +12,17 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
   const body = vehicleOverview.bodyType || "";
   const price = vehicleOverview.price || 0;
 
+  const consultantUsername =
+    vehicleOverview.consultantUsername ||
+    vehicleOverview.vehicleOwner?.username ||
+    vehicleOverview.username ||
+    "";
+  const consultantName =
+    vehicleOverview.consultantName ||
+    vehicleOverview.consultationName ||
+    vehicleOverview.vehicleOwner?.consultationName ||
+    "";
+
   const city = (
     vehicleSummary?.address?.city ||
     vehicleOverview?.vehicleAddress?.city ||
@@ -127,18 +138,20 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
     });
   }
 
-  // 9. High Authority Master Pillar Links
+  // 9. Consultant storefront ↔ city GEO cross-link
+  if (consultantUsername) {
+    links.push({
+      label: consultantName
+        ? `${consultantName} storefront`
+        : "Seller auto consultant",
+      href: `/auto-consultant/${consultantUsername}`,
+    });
+  }
+
+  // 10. Master hubs + buy guide (GEO pillars come from vehicle context above)
   links.push(
     { label: "Browse All Used Cars", href: "/search/buy-used-cars" },
     { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
-    { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
-    { label: "Used Hyundai Creta Cars", href: "/search/buy-used-hyundai-creta-cars" },
-    { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
-    { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
-    { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
-    { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
-    { label: "Used Hyundai Creta in Palanpur", href: "/search/buy-used-hyundai-creta-cars-palanpur" },
-    { label: "Used Ford Ecosport in Palanpur", href: "/search/buy-used-ford-ecosport-cars-palanpur" },
     {
       label: "How to Buy a Used Car Safely",
       href: "/blog/how-to-buy-used-car-safely-india",

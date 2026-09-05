@@ -69,6 +69,19 @@ function Home() {
               logo: "https://www.reecomm.com/logo/logo1.webp",
               description:
                 "Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports — buy and sell second-hand cars online across India.",
+              telephone: "+91-84601-60697",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Chhapi",
+                addressLocality: "Palanpur",
+                addressRegion: "Gujarat",
+                postalCode: "385210",
+                addressCountry: "IN",
+              },
+              areaServed: [
+                { "@type": "Country", name: "India" },
+                { "@type": "State", name: "Gujarat" },
+              ],
               sameAs: [
                 "https://www.facebook.com/reecomm",
                 "https://twitter.com/reecomm",

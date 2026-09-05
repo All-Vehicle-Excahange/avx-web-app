@@ -220,7 +220,8 @@ export default async function handler(req, res) {
       const total = await getSeoVehicleCount();
       const pageSize = 100;
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
-      for (let page = 1; page <= totalPages && page <= 20; page++) {
+      const MAX_INVENTORY_PAGES = 200;
+      for (let page = 1; page <= totalPages && page <= MAX_INVENTORY_PAGES; page++) {
         const { data: vehicles } = await getSeoVehicles(page, pageSize);
         for (const vehicle of vehicles || []) {
           const brandSlug = slugify(vehicle.makerName);
