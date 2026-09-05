@@ -11,6 +11,7 @@ import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
+import { trackWishlistLoginRequired } from "@/lib/amplitude";
 
 const optimizeVideoUrl = (src) => {
   if (!src) return "";
@@ -100,6 +101,10 @@ export default function VehicleImageGallery({ vehicle }) {
   const handleWishlistToggle = () => {
     if (!isLoggedIn) {
       pendingAction.current = "wishlist";
+      trackWishlistLoginRequired({
+        vehicle_id: vehicleId || vehicle?.id,
+        source: "vdp",
+      });
       setIsLoginOpen(true);
       return;
     }

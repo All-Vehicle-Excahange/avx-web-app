@@ -10,6 +10,11 @@ import Button from "@/components/ui/button";
 import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/stores/useAuthStore";
+import {
+  trackLoginCompleted,
+  trackLoginStarted,
+  trackSignupCompleted,
+} from "@/lib/amplitude";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { FcGoogle } from "react-icons/fc";
@@ -78,6 +83,7 @@ function LoginPopup({
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
+      trackLoginStarted({ source: "login_popup" });
       reset();
       setOtp(Array(6).fill(""));
       setOtpSent(false);
@@ -227,6 +233,11 @@ function LoginPopup({
           setAccountType("personal");
           setAcceptedTerms(false);
           onClose();
+          const loggedInUser = useAuthStore.getState().user;
+          trackLoginCompleted({
+            method: "google",
+            user_role: loggedInUser?.userRole || loggedInUser?.role,
+          });
           onSuccess();
         }
       } else if (res?.error) {
@@ -352,6 +363,16 @@ function LoginPopup({
         setAccountType("personal");
         setAcceptedTerms(false);
         onClose();
+
+        const method = isGoogleSignupFlow ? "google_otp" : "otp";
+        if (isGoogleSignupFlow) {
+          trackSignupCompleted({ method });
+        } else {
+          trackLoginCompleted({
+            method,
+            user_role: currentUser?.userRole || currentUser?.role,
+          });
+        }
 
         const isConsultant =
           selectedAccountType === "consultant" ||

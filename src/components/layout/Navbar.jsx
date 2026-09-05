@@ -40,6 +40,7 @@ import { getUserProfileStrengthQuery } from "@/queries/user.queries";
 import { getAndSearchMakers } from "@/services/filter";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
+import { trackSearchSubmitted } from "@/lib/amplitude";
 
 const trackMetaProductSearch = (searchString) => {
   const query = String(searchString || "").trim() || "vehicle_search";
@@ -47,6 +48,10 @@ const trackMetaProductSearch = (searchString) => {
   trackSearchResults({
     search_string: query,
     search_type: "navbar",
+  });
+  trackSearchSubmitted({
+    search_string: query,
+    source: "navbar",
   });
 };
 

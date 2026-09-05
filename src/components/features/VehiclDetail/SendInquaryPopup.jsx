@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Select from "react-select";
@@ -11,6 +11,12 @@ import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { event } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
+import {
+  trackInquiryFormAbandoned,
+  trackInquiryFormOpened,
+  trackInquirySubmitted,
+  trackInquiryTypeSelected,
+} from "@/lib/amplitude";
 
 function SendInquaryPopup({
   onClose,
@@ -28,14 +34,35 @@ function SendInquaryPopup({
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const openedAtRef = useRef(Date.now());
+  const submittedRef = useRef(false);
+  const abandonedTrackedRef = useRef(false);
+  const titleRef = useRef("");
+
+  const sellerType =
+    vehicle?.sellerType || vehicle?.vehicleOwner?.userRole || "";
+
+  const trackAbandonIfNeeded = useCallback(() => {
+    if (submittedRef.current || abandonedTrackedRef.current) return;
+    abandonedTrackedRef.current = true;
+    trackInquiryFormAbandoned({
+      vehicle_id: vehicleId,
+      inquiry_type: titleRef.current || undefined,
+      had_type: Boolean(titleRef.current),
+      duration_ms: Date.now() - openedAtRef.current,
+      seller_type: sellerType,
+      source: "vdp",
+    });
+  }, [vehicleId, sellerType]);
 
   const handleClose = useCallback(() => {
+    trackAbandonIfNeeded();
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
       onClose();
     }, 250);
-  }, [onClose]);
+  }, [onClose, trackAbandonIfNeeded]);
 
   const inquiryOptions = [
     { value: "Need call back", label: "Need call back" },
@@ -46,10 +73,17 @@ function SendInquaryPopup({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    openedAtRef.current = Date.now();
+    trackInquiryFormOpened({
+      vehicle_id: vehicleId,
+      seller_type: sellerType,
+      source: "vdp",
+    });
     return () => {
       document.body.style.overflow = "auto";
+      trackAbandonIfNeeded();
     };
-  }, []);
+  }, [vehicleId, sellerType, trackAbandonIfNeeded]);
 
   const handleSubmit = async () => {
     if (!vehicleId || isLoading) return;
@@ -59,6 +93,7 @@ function SendInquaryPopup({
       if (title.trim()) payload.inquiryTitle = title.trim();
       if (description.trim()) payload.inquiryDescription = description.trim();
       await sendInquary(vehicleId, payload);
+      submittedRef.current = true;
       setIsSuccess(true);
 
       // Invalidate query caches to trigger automatic UI updates
@@ -86,7 +121,14 @@ function SendInquaryPopup({
         vehicle_id: vehicleId,
         vehicle_name: vehicleName || "Vehicle Inquiry",
         inquiry_type: title || "General Inquiry",
-        seller_type: vehicle?.sellerType || vehicle?.vehicleOwner?.userRole || "",
+        seller_type: sellerType,
+      });
+
+      trackInquirySubmitted({
+        vehicle_id: vehicleId,
+        vehicle_name: vehicleName || "Vehicle Inquiry",
+        inquiry_type: title || "General Inquiry",
+        seller_type: sellerType,
       });
 
       // Track CPI Inquiry if sponsored & billingType is CPI
@@ -304,7 +346,13 @@ function SendInquaryPopup({
                     }
                     onChange={(option) => {
                       setTitle(option.value);
+                      titleRef.current = option.value;
                       if (option.value !== "Other") setDescription("");
+                      trackInquiryTypeSelected({
+                        vehicle_id: vehicleId,
+                        inquiry_type: option.value,
+                        seller_type: sellerType,
+                      });
                     }}
                     placeholder="Select an option..."
                     isSearchable={false}

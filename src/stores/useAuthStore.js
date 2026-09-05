@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { queryClient } from "@/lib/queryClient";
 import { sendDeviceInfo } from "@/lib/device.util";
+import { identifyUser, resetUser } from "@/lib/amplitude";
 
 export const useAuthStore = create((set) => ({
   //  AUTH DATA
@@ -95,6 +96,8 @@ export const useAuthStore = create((set) => ({
       localStorage.setItem("user", JSON.stringify(userMaster));
     }
 
+    identifyUser(userMaster);
+
     // Force sending device info on login
     sendDeviceInfo(true);
   },
@@ -123,6 +126,8 @@ export const useAuthStore = create((set) => ({
       localStorage.removeItem("sellerTierData");
       localStorage.removeItem("sellerTier");
     }
+
+    resetUser();
   },
 
   //  INITIALIZE AUTH ON APP LOAD
@@ -168,6 +173,7 @@ export const useAuthStore = create((set) => ({
           });
           if (userMaster) {
             localStorage.setItem("user", JSON.stringify(userMaster));
+            identifyUser(userMaster);
           }
         } else {
           throw new Error("No access token in response");

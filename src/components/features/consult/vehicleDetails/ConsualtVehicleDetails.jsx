@@ -30,6 +30,7 @@ import VehicleSpecsConsualt from "./VehicleSpecsConsualt";
 import InspectionTrackingModal from "../../user/InspectionTrackingModal";
 import { useEffect } from "react";
 import { event } from "@/lib/fpixel";
+import { trackVehicleDetailViewed } from "@/lib/amplitude";
 
 export default function ConsualtVehicleDetails({
   initialOverview = null,
@@ -181,6 +182,16 @@ export default function ConsualtVehicleDetails({
         content_name: vehicleName || "Vehicle Details",
         value: Number(vehicleOverview.price) || 0,
         currency: "INR",
+      });
+      trackVehicleDetailViewed({
+        vehicle_id: vehicleOverview.id,
+        vehicle_name: vehicleName || "Vehicle Details",
+        vehicle_type: vehicleOverview.vehicleType || "",
+        price: vehicleOverview.price || 0,
+        seller_type:
+          vehicleOverview.sellerType ||
+          vehicleOverview.vehicleOwner?.userRole ||
+          "CONSULTATION",
       });
     }
   }, [vehicleOverview?.id]);

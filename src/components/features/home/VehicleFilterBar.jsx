@@ -33,6 +33,7 @@ import {
 } from "@/services/user.service";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
+import { setPreferredLocation, trackSearchSubmitted } from "@/lib/amplitude";
 import { generateSeoSlug } from "@/lib/seo";
 
 const trackProductSearch = (searchString, searchType = "filter_bar") => {
@@ -41,6 +42,10 @@ const trackProductSearch = (searchString, searchType = "filter_bar") => {
   trackSearchResults({
     search_string: query,
     search_type: searchType,
+  });
+  trackSearchSubmitted({
+    search_string: query,
+    source: searchType,
   });
 };
 
@@ -644,6 +649,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         setLocation(item.stateName);
         setCityId(null);
         setStateId(item.stateId);
+        setPreferredLocation({ state: item.stateName });
       }
     } else if (val.startsWith("city-")) {
       const parts = val.split("-");
@@ -653,6 +659,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         setLocation(`${item.cityName}, ${item.stateName}`);
         setCityId(item.cityId);
         setStateId(item.stateId);
+        setPreferredLocation({
+          city: item.cityName,
+          state: item.stateName,
+        });
       }
     }
   };

@@ -35,6 +35,7 @@ import InspectionTrackingModal from "@/components/features/user/InspectionTracki
 import toast from "react-hot-toast";
 import { event } from "@/lib/fpixel";
 import { trackViewVehicle } from "@/lib/gtag";
+import { trackVehicleDetailViewed } from "@/lib/amplitude";
 
 export default function VehicleDetails({
   initialOverview = null,
@@ -179,6 +180,14 @@ export default function VehicleDetails({
 
       // GA4 Event
       trackViewVehicle({
+        vehicle_id: vehicleOverview.id,
+        vehicle_name: vehicleName || "Vehicle Details",
+        vehicle_type: vehicleOverview.vehicleType || "",
+        price: vehicleOverview.price || 0,
+        seller_type: vehicleOverview.sellerType || vehicleOverview.vehicleOwner?.userRole || "USER",
+      });
+
+      trackVehicleDetailViewed({
         vehicle_id: vehicleOverview.id,
         vehicle_name: vehicleName || "Vehicle Details",
         vehicle_type: vehicleOverview.vehicleType || "",

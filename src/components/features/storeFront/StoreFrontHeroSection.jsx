@@ -26,6 +26,7 @@ import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkele
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
+import { trackStorefrontViewed } from "@/lib/amplitude";
 
 export default function StoreFrontHeroSection() {
   const router = useRouter();
@@ -129,6 +130,21 @@ export default function StoreFrontHeroSection() {
       return () => clearTimeout(timeoutId);
     }
   }, [isLoggedIn, handleFollowToggle]);
+
+  const trackedStorefrontIdRef = useRef(null);
+  useEffect(() => {
+    if (!storeDetails?.id || trackedStorefrontIdRef.current === storeDetails.id) {
+      return;
+    }
+    trackedStorefrontIdRef.current = storeDetails.id;
+    trackStorefrontViewed({
+      consultant_id: storeDetails.id,
+      consultation_name: storeDetails.consultationName,
+      username: router.query?.id,
+      available_vehicles: storeDetails.availableVehicles,
+      average_rating: storeDetails.averageRating,
+    });
+  }, [storeDetails, router.query?.id]);
 
   if (isLoading || !storeDetails) return <StoreFrontHeroSkeleton />;
 

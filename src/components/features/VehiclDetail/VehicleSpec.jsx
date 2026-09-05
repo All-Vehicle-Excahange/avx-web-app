@@ -28,6 +28,7 @@ import {
 } from "@/services/inspection.service";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { trackInspectionPaymentSuccess } from "@/lib/amplitude";
 import {
   getInspectionByVehicleIdQuery,
   getActiveInspectionQuery,
@@ -396,6 +397,11 @@ export default function VehicleSpec({
             setStep(3);
             queryClient.invalidateQueries({
               queryKey: ["inspection-by-vehicle", vehicle.id],
+            });
+            trackInspectionPaymentSuccess({
+              vehicle_id: vehicle?.id,
+              amount: orderData?.amount,
+              currency: orderData?.currency || "INR",
             });
             toast.success("Payment completed successfully!");
             setTimeout(() => {

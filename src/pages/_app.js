@@ -18,6 +18,14 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
 
 import * as gtag from "@/lib/gtag";
+import {
+  initAmplitude,
+  markPageEntered,
+  trackHomepageViewed,
+  trackLandingPageViewed,
+  trackPageLeft,
+  trackSessionStarted,
+} from "@/lib/amplitude";
 import { sendDeviceInfo } from "@/lib/device.util";
 
 import {
@@ -70,22 +78,76 @@ export default function App({ Component, pageProps }) {
     sendDeviceInfo();
   }, [initializeAuth]);
 
-  // ROUTE LOADER + GOOGLE ANALYTICS TRACKING
+  // AMPLITUDE: init once + session start (client only)
   useEffect(() => {
-    const handleStart = () => setLoading(true);
+    if (!initAmplitude()) return;
+    trackSessionStarted({
+      path: router.asPath,
+      pathname: router.pathname,
+    });
+    trackLandingPageViewed({
+      path: router.asPath,
+      pathname: router.pathname,
+    });
+    markPageEntered({
+      path: router.asPath,
+      pathname: router.pathname,
+    });
+    if (router.pathname === "/") {
+      trackHomepageViewed();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount for first paint
+  }, []);
+
+  // ROUTE LOADER + GOOGLE ANALYTICS + AMPLITUDE PAGE VIEWS / TIME
+  useEffect(() => {
+    const handleStart = () => {
+      trackPageLeft({ reason: "route_change" });
+      setLoading(true);
+    };
     const handleStop = (url) => {
       setLoading(false);
       gtag.pageview(url);
+      trackLandingPageViewed({ path: url });
+      const pathOnly = typeof url === "string" ? url.split("?")[0] : "";
+      markPageEntered({
+        path: url,
+        pathname:
+          pathOnly ||
+          (typeof window !== "undefined" ? window.location.pathname : ""),
+      });
+      if (pathOnly === "/") {
+        trackHomepageViewed();
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        trackPageLeft({ reason: "visibility_hidden" });
+      } else if (document.visibilityState === "visible" && typeof window !== "undefined") {
+        markPageEntered({
+          path: window.location.pathname + window.location.search,
+          pathname: window.location.pathname,
+        });
+      }
+    };
+
+    const handleUnload = () => {
+      trackPageLeft({ reason: "beforeunload" });
     };
 
     Router.events.on("routeChangeStart", handleStart);
     Router.events.on("routeChangeComplete", handleStop);
     Router.events.on("routeChangeError", handleStop);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("beforeunload", handleUnload);
 
     return () => {
       Router.events.off("routeChangeStart", handleStart);
       Router.events.off("routeChangeComplete", handleStop);
       Router.events.off("routeChangeError", handleStop);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("beforeunload", handleUnload);
     };
   }, []);
 

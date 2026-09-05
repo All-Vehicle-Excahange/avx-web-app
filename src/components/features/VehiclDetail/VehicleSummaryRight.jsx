@@ -16,6 +16,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
 import { customEvent } from "@/lib/fpixel";
+import {
+  trackInquiryInitiated,
+  trackInquiryLoginRequired,
+} from "@/lib/amplitude";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -147,6 +151,31 @@ export default function VehicleSummaryRight({
     } finally {
       setLoading(false);
     }
+  };
+
+  const onSendInquiryClick = (source = "vdp") => {
+    const vehicleName =
+      `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
+    trackInquiryInitiated({
+      vehicle_id: vehicleId || vehicle?.id,
+      vehicle_name: vehicleName || "Vehicle Details",
+      seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
+      source,
+      is_logged_in: Boolean(isLoggedIn),
+    });
+
+    if (!isLoggedIn) {
+      pendingAction.current = "request";
+      trackInquiryLoginRequired({
+        vehicle_id: vehicle?.id,
+        seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
+        source,
+      });
+      setIsLoginOpen(true);
+      return;
+    }
+
+    handleRequestInquiry();
   };
 
   const handleAuthSuccess = () => {
@@ -396,14 +425,7 @@ export default function VehicleSummaryRight({
                     className="rounded-full"
                     loading={loading || isCheckingInquiry}
                     disabled={vehicle?.isVehicleSold}
-                    onClick={() => {
-                      if (!isLoggedIn) {
-                        pendingAction.current = "request";
-                        setIsLoginOpen(true);
-                      } else {
-                        handleRequestInquiry();
-                      }
-                    }}
+                    onClick={() => onSendInquiryClick("vdp")}
                   >
                     {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
                   </Button>
@@ -468,14 +490,7 @@ export default function VehicleSummaryRight({
                   className="rounded-full"
                   loading={loading || isCheckingInquiry}
                   disabled={vehicle?.isVehicleSold}
-                  onClick={() => {
-                    if (!isLoggedIn) {
-                      pendingAction.current = "request";
-                      setIsLoginOpen(true);
-                    } else {
-                      handleRequestInquiry();
-                    }
-                  }}
+                  onClick={() => onSendInquiryClick("vdp_mobile")}
                 >
                   {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
                 </Button>

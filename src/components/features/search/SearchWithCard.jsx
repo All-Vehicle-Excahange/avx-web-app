@@ -37,6 +37,11 @@ import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service"
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
 import { generateSeoSlug } from "@/lib/seo";
 import { trackSearchResults } from "@/lib/gtag";
+import {
+  setPreferredLocation,
+  trackFilterApplied,
+  trackSearchResultsViewed,
+} from "@/lib/amplitude";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -513,12 +518,40 @@ export default function SearchWithCard({
   const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() =>
     buildConsultPayload(),
   );
+  const skipFirstFilterTrackRef = useRef(true);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedPayload(buildPayload());
+      const nextPayload = buildPayload();
+      setDebouncedPayload(nextPayload);
       setDebouncedConsultPayload(buildConsultPayload());
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (skipFirstFilterTrackRef.current) {
+        skipFirstFilterTrackRef.current = false;
+      } else {
+        trackFilterApplied({
+          brands: nextPayload.makerIds || nextPayload.makerNames || undefined,
+          models: nextPayload.modelIds || nextPayload.modelNames || undefined,
+          fuel_types: nextPayload.fuelTypes || undefined,
+          transmission_types: nextPayload.transmissionTypes || undefined,
+          body_types: nextPayload.bodyTypes || undefined,
+          year: nextPayload.year || undefined,
+          city_id: nextPayload.cityId || undefined,
+          state_id: nextPayload.stateId || undefined,
+          min_price: nextPayload.minPrice ?? undefined,
+          max_price: nextPayload.maxPrice ?? undefined,
+          km_distance: nextPayload.kmDrivenMax || nextPayload.kmDistance || undefined,
+          seller_type: nextPayload.sellerType || undefined,
+          avx_assured: nextPayload.avxAssured ?? nextPayload.avxAssumed ?? undefined,
+        });
+        if (selectedCityName || selectedStateName) {
+          setPreferredLocation({
+            city: selectedCityName || undefined,
+            state: selectedStateName || undefined,
+          });
+        }
+      }
     }, 300);
 
     return () => {
@@ -758,6 +791,11 @@ export default function SearchWithCard({
         .filter(Boolean)
         .join(" ") || pathname?.split("/").pop()?.replace(/-/g, " ") || "vehicle_search";
     trackSearchResults({
+      search_string: searchLabel,
+      results_count: topPicksPR.totalElements || combinedTotal,
+      search_type: "search_results_page",
+    });
+    trackSearchResultsViewed({
       search_string: searchLabel,
       results_count: topPicksPR.totalElements || combinedTotal,
       search_type: "search_results_page",

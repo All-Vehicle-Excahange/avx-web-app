@@ -13,18 +13,27 @@ import { useQuery } from "@tanstack/react-query";
 import getIsAccountSuspendedQuery from "@/queries/consualt.queries";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { trackSellerPanelAccessed } from "@/lib/amplitude";
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
 
   const router = useRouter();
-  const { isLoggedIn, token } = useAuthStore();
+  const { isLoggedIn, token, user } = useAuthStore();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsComeFromPhone(sessionStorage.getItem("isComeFromPhone") === "true");
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    trackSellerPanelAccessed({
+      path: router.pathname,
+      user_role: user?.userRole || user?.role,
+    });
+  }, [isLoggedIn, router.pathname, user?.userRole, user?.role]);
 
   const isStorefrontPage = router.pathname?.startsWith("/consult/dashboard/storefront");
   const hideHeaders = isComeFromPhone && isStorefrontPage;

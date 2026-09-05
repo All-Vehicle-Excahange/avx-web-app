@@ -12,10 +12,11 @@ import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import Navbar from "@/components/layout/Navbar";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import ConsultBanner from "@/components/features/home/ConsultBanner";
 import MetaPixelTracker from "@/components/analytics/MetaPixelTracker";
+import { trackBecomeConsultantPageViewed } from "@/lib/amplitude";
 
 const CONSULT_PAGE_VIEW_PARAMS = {
   content_name: "Become a Consultant",
@@ -23,6 +24,11 @@ const CONSULT_PAGE_VIEW_PARAMS = {
 };
 
 function index() {
+  useEffect(() => {
+    trackBecomeConsultantPageViewed({
+      content_name: "Become a Consultant",
+    });
+  }, []);
   return (
     <>
       <Head>

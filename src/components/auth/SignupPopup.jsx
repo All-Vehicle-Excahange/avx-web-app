@@ -18,6 +18,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { useAuthStore } from "@/stores/useAuthStore";
+import { trackSignupCompleted } from "@/lib/amplitude";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const prefilledPhoneNumber = useAuthStore((state) => state.prefilledPhoneNumber);
@@ -235,6 +236,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               push("/become-consultant");
             }
           }
+          trackSignupCompleted({ method: "google" });
           handleClosePopup();
         }
       } else if (res?.error) {
@@ -390,6 +392,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       if (!res?.error && (res?.success || res?.status)) {
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
+
+        trackSignupCompleted({
+          method: isGoogleSignupFlow ? "google_otp" : "otp",
+        });
 
         // Close popup immediately before calling onSuccess to prevent reopening
         useAuthStore.setState({ isSignupPopupOpen: false, prefilledPhoneNumber: "" });

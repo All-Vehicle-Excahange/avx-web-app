@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { addClickEvent } from "@/services/ppc.service";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { trackWishlistLoginRequired } from "@/lib/amplitude";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { createSlug, generateVehicleUrl } from "@/lib/helper";
 import SignupPopup from "@/components/auth/SignupPopup";
@@ -88,6 +89,10 @@ export default function VehicleCard({
   const handleWishlist = () => {
     if (!isLoggedIn) {
       pendingAction.current = "wishlist";
+      trackWishlistLoginRequired({
+        vehicle_id: data?.id,
+        source: "search",
+      });
       setIsLoginOpen(true);
       return;
     }

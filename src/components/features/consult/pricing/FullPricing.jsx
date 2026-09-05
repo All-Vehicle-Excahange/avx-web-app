@@ -26,6 +26,10 @@ import {
 import DowngradeModal from "./DowngradeModal";
 import BillingSummaryModal from "./BillingSummaryModal";
 import { event } from "@/lib/fpixel";
+import {
+  trackPlanSelected,
+  trackSubscriptionPaymentSuccess,
+} from "@/lib/amplitude";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -337,6 +341,14 @@ export default function FullPricing() {
             billing_cycle: yearly ? "YEARLY" : "MONTHLY",
           });
 
+          trackSubscriptionPaymentSuccess({
+            plan_id: tier.id,
+            plan_name: tier.title,
+            billing_cycle: yearly ? "YEARLY" : "MONTHLY",
+            value: planValue,
+            currency: "INR",
+          });
+
           // Fetch fresh tier data and persist it so UI shows "Active" correctly
           try {
             const tierRes = await getSellerTier();
@@ -401,6 +413,12 @@ export default function FullPricing() {
     }
 
     if (!tier?.id) return;
+
+    trackPlanSelected({
+      plan_id: tier.id,
+      plan_name: tier.title,
+      billing_cycle: yearly ? "YEARLY" : "MONTHLY",
+    });
 
     try {
       setPaymentLoading(true);

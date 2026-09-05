@@ -18,6 +18,7 @@ import { getWalletBalanceQuery } from "@/queries/waller.queries";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
 import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { trackInspectionPaymentSuccess } from "@/lib/amplitude";
 
 export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   const router = useRouter();
@@ -287,6 +288,12 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
             queryKey: ["inspection-by-vehicle", vehicle.id],
           });
           queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+          trackInspectionPaymentSuccess({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            amount: discountPrice,
+            currency: "INR",
+          });
           toast.success("Payment completed successfully from wallet!");
           setTimeout(() => {
             handleClose();
@@ -384,6 +391,11 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 setStep(3);
                 queryClient.invalidateQueries({
                   queryKey: ["inspection-by-vehicle", vehicle.id],
+                });
+                trackInspectionPaymentSuccess({
+                  vehicle_id: vehicle?.id,
+                  amount: orderData?.amount,
+                  currency: orderData?.currency || "INR",
                 });
                 toast.success("Payment completed successfully!");
                 setTimeout(() => {

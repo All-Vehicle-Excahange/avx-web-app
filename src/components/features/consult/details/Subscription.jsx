@@ -14,6 +14,10 @@ import {
 } from "@/services/subscription.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { event, customEvent } from "@/lib/fpixel";
+import {
+  trackPlanSelected,
+  trackSubscriptionPaymentSuccess,
+} from "@/lib/amplitude";
 
 export default function Subscription() {
   const { push, query } = useRouter();
@@ -90,6 +94,13 @@ export default function Subscription() {
     const activeTierId = tierId || selectedTierId;
     if (!activeTierId) return;
 
+    const selectedTier = tiers.find((t) => t.id === activeTierId);
+    trackPlanSelected({
+      plan_id: activeTierId,
+      plan_name: selectedTier?.title,
+      billing_cycle: billingCycle,
+    });
+
     try {
       setPaymentLoading(true);
 
@@ -99,8 +110,6 @@ export default function Subscription() {
         setPaymentLoading(false);
         return;
       }
-
-      const selectedTier = tiers.find((t) => t.id === activeTierId);
 
       const planValue =
         billingCycle === "YEARLY"
@@ -226,6 +235,13 @@ export default function Subscription() {
             content_name: selectedTier?.title || "Consultant Plan",
             content_ids: selectedTier?.id ? [selectedTier.id] : [],
             billing_cycle: billingCycle,
+          });
+          trackSubscriptionPaymentSuccess({
+            plan_id: selectedTier?.id,
+            plan_name: selectedTier?.title,
+            billing_cycle: billingCycle,
+            value: planValue,
+            currency: "INR",
           });
           if (query?.redirect) {
             push(
