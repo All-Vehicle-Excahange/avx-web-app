@@ -6,7 +6,9 @@ import {
 
 /**
  * Dynamic search-pages sitemap PAGE.
- * URL: /api/sitemap/search-pages/[page].xml
+ *
+ * URL: /api/sitemap/search-pages/[page]
+ * Also handles /api/sitemap/search-pages/[page].xml (same pattern as vehicles/storefronts).
  */
 export default async function handler(req, res) {
   try {
