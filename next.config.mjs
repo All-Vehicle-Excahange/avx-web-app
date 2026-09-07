@@ -60,6 +60,21 @@ const nextConfig = {
         destination: "/search/buy-used-hyundai-creta-cars-:city",
         permanent: true,
       },
+      {
+        source: "/how-it-works",
+        destination: "/reecomm-works",
+        permanent: true,
+      },
+      {
+        source: "/refund-policy",
+        destination: "/terms-and-conditions",
+        permanent: true,
+      },
+      {
+        source: "/compare",
+        destination: "/search/buy-used-cars",
+        permanent: true,
+      },
     ];
   },
   images: {

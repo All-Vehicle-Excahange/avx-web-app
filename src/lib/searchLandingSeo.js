@@ -57,7 +57,10 @@ export const TIER1_CITIES = [
   "Chhota Udepur",
 ];
 
-/** Minimum listings required to index non-hub landing pages. */
+/**
+ * Minimum listings required to index non-hub landing pages.
+ * Empty non-hubs get noindex,follow — intentional (do not remove for GSC noise).
+ */
 export const MIN_INDEXABLE_LISTINGS = 1;
 
 /**

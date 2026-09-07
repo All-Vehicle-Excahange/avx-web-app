@@ -93,10 +93,32 @@ Near-me AI answers lean on:
 
 ---
 
-## 7. What ops will not do
+## 7. Weekly ops cadence (90-day DA program)
 
-- Promise overnight displacement of CarWale / OLX / CarDekho / Spinny on every Gemini card  
+Default intensity: **medium** (no paid PR until local Top-20 wins appear).
+
+| Day | Task |
+|-----|------|
+| Mon | GBP: 1 post linking to hottest inventory GEO from `seo_popular_links.json` |
+| Tue | Ask 2–3 recent buyers/sellers for honest Google reviews |
+| Wed | Outreach: 3 consultants — add storefront + city hub link on website / WhatsApp bio / Instagram |
+| Thu | Directory / citation: claim or update 1 listing (JustDial, Sulekha, IndiaMART, etc.) with exact NAP |
+| Fri | YouTube or short video: 1 inventory clip → landing URL in description |
+| Monthly | Log referring-domain count (Semrush/Ahrefs); target **58 → 80+** in 90 days |
+
+### Outreach message (consultants)
+
+> Please add these links on your website / Google Business / WhatsApp catalog:  
+> Storefront: `https://www.reecomm.com/auto-consultant/{username}`  
+> City cars: `https://www.reecomm.com/search/buy-used-cars-{city}`
+
+---
+
+## 8. What ops will not do
+
+- Promise overnight displacement of CarWale / OLX / CarDekho / Spinny / Cars24 on every Gemini card  
 - Create empty doorway pages for cities with zero inventory  
 - Fake LocalBusiness addresses or review spam  
+- PBN or spam directory blasts (hurts Authority Score)
 
 Off-site + inventory density decide **how often** you win; on-site makes every live car and consultant **able** to compete.

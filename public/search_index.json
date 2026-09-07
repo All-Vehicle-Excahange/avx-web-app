@@ -10915,8 +10915,6 @@
     "keywords": [
       "ford",
       "kanodar",
-      "used car",
-      "used ford cars",
       "used ford in kanodar",
       "used ford cars in kanodar",
       "used ford near me",
@@ -11255,9 +11253,7 @@
     "keywords": [
       "ford",
       "gujarat",
-      "used car",
-      "used ford in gujarat",
-      "used ford cars in gujarat"
+      "used ford in gujarat"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -19441,8 +19437,6 @@
     "keywords": [
       "maruti suzuki",
       "kanodar",
-      "used car",
-      "used maruti suzuki cars",
       "used maruti suzuki in kanodar",
       "used maruti suzuki cars in kanodar",
       "used maruti suzuki near me",
@@ -38013,7 +38007,7 @@
   },
   {
     "id": "filter_buy_used_kia_cars",
-    "title": "Used Kia Cars",
+    "title": "Used KIA Cars",
     "keywords": [
       "kia",
       "used car",
@@ -38022,7 +38016,7 @@
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
+      "makerName": "KIA",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars"
     }
@@ -38425,12 +38419,10 @@
   },
   {
     "id": "filter_buy_used_kia_cars_kanodar",
-    "title": "Used Kia Cars in Kanodar",
+    "title": "Used KIA Cars in Kanodar",
     "keywords": [
       "kia",
       "kanodar",
-      "used car",
-      "used kia cars",
       "used kia in kanodar",
       "used kia cars in kanodar",
       "used kia near me",
@@ -38439,7 +38431,7 @@
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
+      "makerName": "KIA",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars-kanodar"
@@ -38765,17 +38757,15 @@
   },
   {
     "id": "filter_buy_used_kia_cars_gujarat",
-    "title": "Used Kia Cars in Gujarat",
+    "title": "Used KIA Cars in Gujarat",
     "keywords": [
       "kia",
       "gujarat",
-      "used car",
-      "used kia in gujarat",
-      "used kia cars in gujarat"
+      "used kia in gujarat"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
+      "makerName": "KIA",
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars-gujarat"
@@ -49167,19 +49157,19 @@
   },
   {
     "id": "filter_buy_used_hyundai_grand_i10_cars_kanodar",
-    "title": "Used Hyundai Grand i10 Cars in Kanodar",
+    "title": "Used Hyundai Grand i10 in Kanodar",
     "keywords": [
       "hyundai",
       "grand i10",
       "kanodar",
-      "used hyundai grand i10",
       "used grand i10 in kanodar",
       "used hyundai grand i10 in kanodar",
       "used grand i10 near me",
-      "used hyundai near kanodar",
+      "used grand i10 near kanodar",
       "used hyundai grand i10 near me",
       "second hand grand i10 kanodar",
-      "grand",
+      "grand i10 in kanodar",
+      "grand in kanodar",
       "grand i10 near me",
       "grand near me"
     ],
@@ -51261,7 +51251,7 @@
     "keywords": [
       "hyundai",
       "verna",
-      "used car",
+      "used verna",
       "used hyundai verna"
     ],
     "type": "vehicle_filter",
@@ -51574,18 +51564,18 @@
   },
   {
     "id": "filter_buy_used_hyundai_verna_cars_palanpur",
-    "title": "Used Hyundai Verna Cars in Palanpur",
+    "title": "Used Hyundai Verna in Palanpur",
     "keywords": [
       "hyundai",
       "verna",
       "palanpur",
-      "used hyundai verna",
       "used verna in palanpur",
       "used hyundai verna in palanpur",
       "used verna near me",
-      "used hyundai near palanpur",
+      "used verna near palanpur",
       "used hyundai verna near me",
       "second hand verna palanpur",
+      "verna in palanpur",
       "verna near me"
     ],
     "type": "vehicle_filter",
@@ -63326,17 +63316,17 @@
   },
   {
     "id": "filter_buy_used_kia_seltos_cars",
-    "title": "Used Kia Seltos Cars",
+    "title": "Used KIA SELTOS Cars",
     "keywords": [
       "kia",
       "seltos",
-      "used car",
+      "used seltos",
       "used kia seltos"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
-      "modelName": "Seltos",
+      "makerName": "KIA",
+      "modelName": "SELTOS",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars"
     }
@@ -63793,24 +63783,24 @@
   },
   {
     "id": "filter_buy_used_kia_seltos_cars_kanodar",
-    "title": "Used Kia Seltos Cars in Kanodar",
+    "title": "Used KIA SELTOS in Kanodar",
     "keywords": [
       "kia",
       "seltos",
       "kanodar",
-      "used kia seltos",
       "used seltos in kanodar",
       "used kia seltos in kanodar",
       "used seltos near me",
-      "used kia near kanodar",
+      "used seltos near kanodar",
       "used kia seltos near me",
       "second hand seltos kanodar",
+      "seltos in kanodar",
       "seltos near me"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
-      "modelName": "Seltos",
+      "makerName": "KIA",
+      "modelName": "SELTOS",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars-kanodar"
@@ -64909,6 +64899,147 @@
     }
   },
   {
+    "id": "filter_buy_used_kia_seltos_cars_gujarat",
+    "title": "Used KIA SELTOS in Gujarat",
+    "keywords": [
+      "kia",
+      "seltos",
+      "gujarat",
+      "used seltos in gujarat",
+      "used kia seltos in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "KIA",
+      "modelName": "SELTOS",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_gujarat",
+    "title": "Used Hyundai Creta in Gujarat",
+    "keywords": [
+      "hyundai",
+      "creta",
+      "gujarat",
+      "used creta in gujarat",
+      "used hyundai creta in gujarat",
+      "creata",
+      "create",
+      "used creta"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-creta-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_cars_gujarat",
+    "title": "Used Hyundai Grand i10 in Gujarat",
+    "keywords": [
+      "hyundai",
+      "grand i10",
+      "gujarat",
+      "used grand i10 in gujarat",
+      "used hyundai grand i10 in gujarat",
+      "grand"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Grand i10",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_figo_cars",
+    "title": "Used Ford Figo Cars",
+    "keywords": [
+      "ford",
+      "figo",
+      "used figo",
+      "used ford figo"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Figo",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-figo-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_figo_cars_kanodar",
+    "title": "Used Ford Figo in Kanodar",
+    "keywords": [
+      "ford",
+      "figo",
+      "kanodar",
+      "used figo in kanodar",
+      "used ford figo in kanodar",
+      "used figo near me",
+      "used figo near kanodar",
+      "used ford figo near me",
+      "second hand figo kanodar",
+      "figo in kanodar",
+      "figo near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Figo",
+      "city": "Kanodar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-figo-cars-kanodar"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_figo_cars_gujarat",
+    "title": "Used Ford Figo in Gujarat",
+    "keywords": [
+      "ford",
+      "figo",
+      "gujarat",
+      "used figo in gujarat",
+      "used ford figo in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Figo",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-figo-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_gujarat",
+    "title": "Used Hyundai Verna in Gujarat",
+    "keywords": [
+      "hyundai",
+      "verna",
+      "gujarat",
+      "used verna in gujarat",
+      "used hyundai verna in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-verna-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_maruti_suzuki_celerio_cars",
     "title": "Used Maruti Suzuki Celerio Cars",
     "keywords": [
@@ -64923,6 +65054,115 @@
       "modelName": "Celerio",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-celerio-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_celerio_cars_kanodar",
+    "title": "Used Maruti Suzuki Celerio in Kanodar",
+    "keywords": [
+      "maruti suzuki",
+      "celerio",
+      "kanodar",
+      "used celerio in kanodar",
+      "used maruti suzuki celerio in kanodar",
+      "used celerio near me",
+      "used celerio near kanodar",
+      "used maruti suzuki celerio near me",
+      "second hand celerio kanodar",
+      "celerio in kanodar",
+      "celerio near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Celerio",
+      "city": "Kanodar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-celerio-cars-kanodar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_celerio_cars_gujarat",
+    "title": "Used Maruti Suzuki Celerio in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "celerio",
+      "gujarat",
+      "used celerio in gujarat",
+      "used maruti suzuki celerio in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Celerio",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-celerio-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_vitara_brezza_cars",
+    "title": "Used Maruti Suzuki Vitara Brezza Cars",
+    "keywords": [
+      "maruti suzuki",
+      "vitara brezza",
+      "used vitara brezza",
+      "used maruti suzuki vitara brezza",
+      "vitara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Vitara Brezza",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-vitara-brezza-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_vitara_brezza_cars_kanodar",
+    "title": "Used Maruti Suzuki Vitara Brezza in Kanodar",
+    "keywords": [
+      "maruti suzuki",
+      "vitara brezza",
+      "kanodar",
+      "used vitara brezza in kanodar",
+      "used maruti suzuki vitara brezza in kanodar",
+      "used vitara brezza near me",
+      "used vitara brezza near kanodar",
+      "used maruti suzuki vitara brezza near me",
+      "second hand vitara brezza kanodar",
+      "vitara brezza in kanodar",
+      "vitara in kanodar",
+      "vitara brezza near me",
+      "vitara near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Vitara Brezza",
+      "city": "Kanodar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-vitara-brezza-cars-kanodar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_vitara_brezza_cars_gujarat",
+    "title": "Used Maruti Suzuki Vitara Brezza in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "vitara brezza",
+      "gujarat",
+      "used vitara brezza in gujarat",
+      "used maruti suzuki vitara brezza in gujarat",
+      "vitara"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Vitara Brezza",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-vitara-brezza-cars-gujarat"
     }
   },
   {
@@ -64948,25 +65188,6 @@
       "city": "Siddhpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-celerio-cars-siddhpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_celerio_cars_gujarat",
-    "title": "Used Maruti Suzuki Celerio in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "celerio",
-      "gujarat",
-      "used celerio in gujarat",
-      "used maruti suzuki celerio in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Celerio",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-celerio-cars-gujarat"
     }
   },
   {
@@ -65118,28 +65339,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-santro-xing-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_creta_cars_gujarat",
-    "title": "Used Hyundai Creta in Gujarat",
-    "keywords": [
-      "hyundai",
-      "creta",
-      "gujarat",
-      "used creta in gujarat",
-      "used hyundai creta in gujarat",
-      "creata",
-      "create",
-      "used creta"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Creta",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-creta-cars-gujarat"
     }
   },
   {
@@ -65438,26 +65637,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-corolla-altis-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_grand_i10_cars_gujarat",
-    "title": "Used Hyundai Grand i10 in Gujarat",
-    "keywords": [
-      "hyundai",
-      "grand i10",
-      "gujarat",
-      "used grand i10 in gujarat",
-      "used hyundai grand i10 in gujarat",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Grand i10",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-cars-gujarat"
     }
   },
   {
@@ -66073,6 +66252,28 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-honda-city-cars-gujarat"
+    }
+  },
+  {
+    "id": "consultant_80e45fde-7e95-4d17-baa5-f850a84f32ac",
+    "title": "yesAuto",
+    "keywords": [
+      "yesauto",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "yesauto used cars",
+      "yesauto palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "yesauto",
+      "consultationId": "80e45fde-7e95-4d17-baa5-f850a84f32ac"
     }
   },
   {
@@ -92991,27 +93192,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_vitara_brezza_cars",
-    "title": "Maruti Suzuki Vitara Brezza",
-    "keywords": [
-      "used car",
-      "car",
-      "maruti suzuki",
-      "vitara brezza",
-      "maruti",
-      "suzuki",
-      "vitara",
-      "brezza"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Maruti Suzuki",
-      "modelName": "Vitara Brezza",
-      "slug": "buy-used-maruti-suzuki-vitara-brezza-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_sx4_hatchback_cars",
     "title": "Maruti Suzuki Sx4 Hatchback",
     "keywords": [
@@ -96412,23 +96592,6 @@
       "makerName": "Ford",
       "modelName": "Ikon",
       "slug": "buy-used-ford-ikon-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_figo_cars",
-    "title": "Ford Figo",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "figo"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "Figo",
-      "slug": "buy-used-ford-figo-cars"
     }
   },
   {
@@ -111623,25 +111786,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_verna_cars_gujarat",
-    "title": "Used Hyundai Verna Cars in Gujarat",
-    "keywords": [
-      "used car",
-      "car",
-      "hyundai",
-      "verna",
-      "gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Hyundai",
-      "modelName": "Verna",
-      "city": "Gujarat",
-      "slug": "buy-used-hyundai-verna-cars-gujarat"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_verna_cars_tamil_nadu",
     "title": "Used Hyundai Verna Cars in Tamil Nadu",
     "keywords": [
@@ -117073,25 +117217,6 @@
       "modelName": "Seltos",
       "city": "Telangana",
       "slug": "buy-used-kia-seltos-cars-telangana"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_gujarat",
-    "title": "Used Kia Seltos Cars in Gujarat",
-    "keywords": [
-      "used car",
-      "car",
-      "kia",
-      "seltos",
-      "gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Kia",
-      "modelName": "Seltos",
-      "city": "Gujarat",
-      "slug": "buy-used-kia-seltos-cars-gujarat"
     }
   },
   {

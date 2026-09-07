@@ -44,46 +44,69 @@ function Index({ seo }) {
   const vehicleSchemaType = isTwoWheeler ? "Motorcycle" : "Car";
 
   // ─── JSON-LD: Car / Motorcycle Schema ──
+  const images = Array.from(
+    new Set(
+      [
+        vehicle.thumbnailUrl,
+        ...(Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls : []),
+        ...(Array.isArray(vehicle.vehiclePhotos)
+          ? vehicle.vehiclePhotos.map((p) =>
+              typeof p === "string" ? p : p?.url || p?.photoUrl
+            )
+          : []),
+      ].filter(Boolean)
+    )
+  );
+  const priceNum = Number(vehicle.price);
+  const kmNum = Number(vehicle.kmDriven);
   const vehicleSchema = vehicle.id
     ? {
         "@context": "https://schema.org",
         "@type": vehicleSchemaType,
         name: `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}`.trim(),
-        brand: { "@type": "Brand", name: vehicle.makerName },
-        model: vehicle.modelName,
-        vehicleModelDate: String(vehicle.yearOfMfg || ""),
-        fuelType: formatTextCap(vehicle.fuelType),
-        vehicleTransmission: formatTextCap(vehicle.transmissionType),
-        mileageFromOdometer: {
-          "@type": "QuantitativeValue",
-          value: vehicle.kmDriven,
-          unitCode: "KMT",
-        },
-        numberOfPreviousOwners: vehicle.ownership,
-        image: Array.from(
-          new Set(
-            [
-              vehicle.thumbnailUrl,
-              ...(Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls : []),
-              ...(Array.isArray(vehicle.vehiclePhotos)
-                ? vehicle.vehiclePhotos.map((p) =>
-                    typeof p === "string" ? p : p?.url || p?.photoUrl
-                  )
-                : []),
-            ].filter(Boolean)
-          )
-        ),
-        description: seo?.description,
-        url: seo?.url,
-        vehicleConfiguration: vehicle.variantName,
-        offers: {
-          "@type": "Offer",
-          price: vehicle.price,
-          priceCurrency: "INR",
-          availability: "https://schema.org/InStock",
-          itemCondition: "https://schema.org/UsedCondition",
-          seller: sellerSchema,
-        },
+        ...(vehicle.makerName
+          ? { brand: { "@type": "Brand", name: vehicle.makerName } }
+          : {}),
+        ...(vehicle.modelName ? { model: vehicle.modelName } : {}),
+        ...(vehicle.yearOfMfg
+          ? { vehicleModelDate: String(vehicle.yearOfMfg) }
+          : {}),
+        ...(vehicle.fuelType
+          ? { fuelType: formatTextCap(vehicle.fuelType) }
+          : {}),
+        ...(vehicle.transmissionType
+          ? { vehicleTransmission: formatTextCap(vehicle.transmissionType) }
+          : {}),
+        ...(Number.isFinite(kmNum) && kmNum >= 0
+          ? {
+              mileageFromOdometer: {
+                "@type": "QuantitativeValue",
+                value: kmNum,
+                unitCode: "KMT",
+              },
+            }
+          : {}),
+        ...(vehicle.ownership != null && vehicle.ownership !== ""
+          ? { numberOfPreviousOwners: Number(vehicle.ownership) || vehicle.ownership }
+          : {}),
+        ...(images.length ? { image: images } : {}),
+        ...(seo?.description ? { description: seo.description } : {}),
+        ...(seo?.url ? { url: seo.url } : {}),
+        ...(vehicle.variantName
+          ? { vehicleConfiguration: vehicle.variantName }
+          : {}),
+        ...(Number.isFinite(priceNum) && priceNum > 0
+          ? {
+              offers: {
+                "@type": "Offer",
+                price: String(priceNum),
+                priceCurrency: "INR",
+                availability: "https://schema.org/InStock",
+                itemCondition: "https://schema.org/UsedCondition",
+                seller: sellerSchema,
+              },
+            }
+          : {}),
       }
     : null;
 

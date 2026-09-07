@@ -275,7 +275,7 @@ function shortModelKeywords(modelName) {
   return Array.from(out);
 }
 
-function pushFilterItem(items, seen, { slug, title, keywords, params }) {
+function pushFilterItem(items, seen, { slug, title, keywords, params, inventoryBacked = false }) {
   if (!slug || seen.has(slug)) return;
   seen.add(slug);
   items.push({
@@ -283,7 +283,11 @@ function pushFilterItem(items, seen, { slug, title, keywords, params }) {
     title,
     keywords: Array.from(new Set((keywords || []).map((k) => String(k).toLowerCase()).filter(Boolean))),
     type: 'vehicle_filter',
-    params: { ...params, slug },
+    params: {
+      ...params,
+      slug,
+      ...(inventoryBacked ? { inventoryBacked: true } : {}),
+    },
   });
 }
 
@@ -1007,6 +1011,79 @@ async function generateSearchIndex() {
     }
     fs.writeFileSync(popularPath, JSON.stringify(popularLinks, null, 2), "utf8");
     console.log(`[Cron] Wrote ${popularLinks.length} popular SEO links to ${popularPath}`);
+
+    // Sitemap allowlist: hubs + inventory + focus GEO (excludes empty exotic brand×state grids)
+    const sitemapSlugs = new Set();
+    const addSlug = (s) => {
+      if (s) sitemapSlugs.add(s);
+    };
+    addSlug("buy-used-cars");
+    addSlug("buy-used-two-wheelers");
+    addSlug("buy-used-inspected-cars");
+    [
+      "buy-used-cars-under-3-lakhs",
+      "buy-used-cars-under-5-lakhs",
+      "buy-used-cars-under-10-lakhs",
+      "buy-used-cars-under-15-lakhs",
+      "buy-used-petrol-cars",
+      "buy-used-diesel-cars",
+      "buy-used-cng-cars",
+      "buy-used-electric-cars",
+      "buy-used-suv-cars",
+      "buy-used-sedan-cars",
+      "buy-used-hatchback-cars",
+    ].forEach(addSlug);
+    for (const slug of comboHits.keys()) addSlug(slug);
+    for (const city of FOCUS_CITIES) {
+      const c = slugifySegment(city);
+      addSlug(`buy-used-cars-${c}`);
+      addSlug(`buy-used-two-wheelers-${c}`);
+    }
+    for (const { brandSlug, modelSlug } of POPULAR_CAR_MODELS) {
+      addSlug(`buy-used-${brandSlug}-${modelSlug}-cars`);
+      for (const city of FOCUS_CITIES) {
+        addSlug(`buy-used-${brandSlug}-${modelSlug}-cars-${slugifySegment(city)}`);
+      }
+    }
+    for (const brand of ALL_CAR_BRANDS) {
+      addSlug(`buy-used-${slugifySegment(brand)}-cars`);
+    }
+    for (const brand of TWO_WHEELER_BRANDS) {
+      const b = slugifySegment(brand);
+      addSlug(`buy-used-${b}-two-wheelers`);
+      for (const city of FOCUS_CITIES) {
+        addSlug(`buy-used-${b}-two-wheelers-${slugifySegment(city)}`);
+      }
+    }
+    const volumeBrands = [
+      "Hyundai",
+      "Maruti Suzuki",
+      "Tata",
+      "Mahindra",
+      "Honda",
+      "Toyota",
+      "Kia",
+      "Ford",
+      "Renault",
+      "Volkswagen",
+      "Skoda",
+      "MG",
+      "Nissan",
+    ];
+    for (const brand of volumeBrands) {
+      const b = slugifySegment(brand);
+      for (const city of FOCUS_CITIES) {
+        addSlug(`buy-used-${b}-cars-${slugifySegment(city)}`);
+      }
+      addSlug(`buy-used-${b}-cars-gujarat`);
+    }
+    const allowPath = path.join(PUBLIC_DIR, "seo_sitemap_slugs.json");
+    fs.writeFileSync(
+      allowPath,
+      JSON.stringify({ generatedAt: new Date().toISOString(), slugs: Array.from(sitemapSlugs) }, null, 2),
+      "utf8",
+    );
+    console.log(`[Cron] Wrote ${sitemapSlugs.size} sitemap allowlist slugs to ${allowPath}`);
   } catch (popErr) {
     console.warn("[Cron] popular links write skipped:", popErr.message);
   }

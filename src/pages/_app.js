@@ -42,6 +42,23 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { checkIsMetaExist } from "@/services/user.service";
 import { queryClient } from "@/lib/queryClient";
 
+/** Paths that set their own <link rel="canonical"> — skip _app default. */
+function pathHasPageCanonical(asPath = "") {
+  const path = String(asPath).split("?")[0] || "/";
+  if (path === "/") return true;
+  return (
+    path.startsWith("/search") ||
+    path.startsWith("/vehicle/") ||
+    path.startsWith("/auto-consultant/") ||
+    path.startsWith("/blog") ||
+    path.startsWith("/help") ||
+    path.startsWith("/download") ||
+    path.startsWith("/reecomm-works") ||
+    path.startsWith("/careers") ||
+    path.startsWith("/seo-dashboard")
+  );
+}
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const hasFullWidth = Component.fullWidth;
@@ -179,12 +196,18 @@ export default function App({ Component, pageProps }) {
           className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-secondary`}
         >
           <Head>
-            {/* Global canonical — strips query params so Google picks the right URL */}
-            <link
-              key="canonical"
-              rel="canonical"
-              href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
-            />
+            {/*
+              Canonical: page-level Head wins for SEO routes.
+              Global fallback only for paths without their own canonical
+              (avoids dual tags / “alternate with proper canonical” noise).
+            */}
+            {!pathHasPageCanonical(router.asPath) && (
+              <link
+                key="canonical"
+                rel="canonical"
+                href={`https://www.reecomm.com${router.asPath.split("?")[0]}`}
+              />
+            )}
 
             {/* Global Open Graph Defaults */}
             <meta key="og:type" property="og:type" content="website" />

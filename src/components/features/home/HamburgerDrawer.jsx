@@ -136,14 +136,6 @@ export default function HamburgerDrawer({ open, onClose }) {
                 </span>
                 <div className="space-y-2 flex flex-col">
                   <TabItem
-                    id="compare"
-                    label="Compare Vehicles"
-                    hoveredTab={hoveredTab}
-                    setHoveredTab={setHoveredTab}
-                    href="/compare"
-                    onClose={onClose}
-                  />
-                  <TabItem
                     id="wishlist"
                     label="Wishlist (Login Required)"
                     hoveredTab={hoveredTab}

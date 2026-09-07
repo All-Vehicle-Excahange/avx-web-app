@@ -25,7 +25,7 @@ function index() {
           name="description"
           content="Reecomm connects buyers with verified used vehicle consultants through independent inspections, transparent storefronts, and platform-backed accountability. Buy with confidence. Grow your business."
         />
-        <link key="canonical" rel="canonical" href="https://www.reecomm.com/how-it-works" />
+        <link key="canonical" rel="canonical" href="https://www.reecomm.com/reecomm-works" />
 
         {/* Open Graph / Social Meta Tags */}
         <meta property="og:title" content="How Reecomm Works | Verified Used Vehicle Platform India" />
@@ -33,7 +33,7 @@ function index() {
         <meta property="og:image" content="https://www.reecomm.com/assets/og-how-it-works.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:url" content="https://www.reecomm.com/how-it-works" />
+        <meta property="og:url" content="https://www.reecomm.com/reecomm-works" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Reecomm" />
 
@@ -50,7 +50,7 @@ function index() {
               "@context": "https://schema.org",
               "@type": "WebPage",
               "name": "How Reecomm Works",
-              "url": "https://www.reecomm.com/how-it-works",
+              "url": "https://www.reecomm.com/reecomm-works",
               "description": "Reecomm connects buyers with verified used vehicle consultants through independent inspections, transparent storefronts, and platform-backed accountability.",
               "inLanguage": "en-IN",
               "publisher": {
@@ -59,7 +59,7 @@ function index() {
                 "url": "https://www.reecomm.com",
                 "logo": {
                   "@type": "ImageObject",
-                  "url": "https://www.reecomm.com/assets/logo.png"
+                  "url": "https://www.reecomm.com/logo/logo1.webp"
                 }
               }
             })

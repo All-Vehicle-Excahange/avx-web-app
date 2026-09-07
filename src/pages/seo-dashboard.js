@@ -59,6 +59,16 @@ export default function SeoDashboardPage() {
                     <td className="py-2 pr-4">{SEO_KPI_TARGETS.baseline.page404Views}</td>
                     <td className="py-2">&lt; {SEO_KPI_TARGETS.goals.page404Views}</td>
                   </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">Referring domains</td>
+                    <td className="py-2 pr-4">{SEO_KPI_TARGETS.baseline.referringDomains}</td>
+                    <td className="py-2">{SEO_KPI_TARGETS.goals.referringDomains}+</td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">Mid-tail page-1/2 wins</td>
+                    <td className="py-2 pr-4">~0</td>
+                    <td className="py-2">{SEO_KPI_TARGETS.goals.midTailPage1Or2Wins}+</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

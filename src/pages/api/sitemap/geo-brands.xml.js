@@ -33,6 +33,26 @@ export default async function handler(req, res) {
       slug: slugify(b),
     }));
 
+    // Volume brands for city/state grids (excludes exotic luxury → less empty noindex crawl)
+    const volumeBrandSlugs = new Set([
+      "hyundai",
+      "maruti-suzuki",
+      "tata",
+      "mahindra",
+      "honda",
+      "toyota",
+      "kia",
+      "ford",
+      "renault",
+      "volkswagen",
+      "skoda",
+      "mg",
+      "nissan",
+      "jeep",
+      "mg-motor",
+    ]);
+    const volumeCarBrands = carBrands.filter((b) => volumeBrandSlugs.has(b.slug));
+
     // Focus + live inventory cities for brand×city landings (cars and bikes stay separate).
     const cities = [
       "mumbai",
@@ -102,20 +122,20 @@ export default async function handler(req, res) {
       }
     }
 
-    // 1. Brand-only URLs
+    // 1. Brand-only URLs (hubs — stay indexable even if thin)
     carBrands.forEach((b) => {
       addUrl(`/search/buy-used-${b.slug}-cars`, 0.8, "daily");
     });
 
-    // 2. Brand + City
-    carBrands.forEach((b) => {
+    // 2. Brand + City — volume brands × focus cities only
+    volumeCarBrands.forEach((b) => {
       cities.forEach((city) => {
         addUrl(`/search/buy-used-${b.slug}-cars-${city}`, 0.7, "weekly");
       });
     });
 
-    // 3. Brand + State
-    carBrands.forEach((b) => {
+    // 3. Brand + State — volume brands × major states only (not exotic × every state)
+    volumeCarBrands.forEach((b) => {
       states.forEach((state) => {
         addUrl(`/search/buy-used-${b.slug}-cars-${state}`, 0.6, "weekly");
       });

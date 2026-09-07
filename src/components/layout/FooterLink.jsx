@@ -417,12 +417,6 @@ const FooterLink = () => {
               >
                 Privacy Choices
               </Link>
-              <Link
-                href="/refund-policy"
-                className="text-[12px] text-white/60 hover:text-white transition-all"
-              >
-                Refund Policy
-              </Link>
             </div>
           </div>
         </div>

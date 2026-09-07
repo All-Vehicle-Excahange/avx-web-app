@@ -31,6 +31,24 @@ export function searchPathFromIndexItem(item) {
   return null;
 }
 
+function loadSitemapAllowlist() {
+  try {
+    const allowPath = path.join(process.cwd(), "public", "seo_sitemap_slugs.json");
+    if (!fs.existsSync(allowPath)) return null;
+    const data = JSON.parse(fs.readFileSync(allowPath, "utf8"));
+    const slugs = Array.isArray(data) ? data : data?.slugs;
+    if (!Array.isArray(slugs) || slugs.length < 50) return null;
+    return new Set(slugs);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Search landing URLs for sitemap shards.
+ * When seo_sitemap_slugs.json exists, only allowlisted slugs are emitted
+ * (hubs + inventory + focus GEO) — skips empty exotic brand×state doorway URLs.
+ */
 export function loadSearchPageUrls() {
   try {
     const indexPath = path.join(process.cwd(), "public", "search_index.json");
@@ -38,11 +56,16 @@ export function loadSearchPageUrls() {
     const items = JSON.parse(fs.readFileSync(indexPath, "utf8"));
     if (!Array.isArray(items)) return [];
 
+    const allow = loadSitemapAllowlist();
     const urls = [];
     const seen = new Set();
     for (const item of items) {
       const locPath = searchPathFromIndexItem(item);
       if (!locPath || seen.has(locPath)) continue;
+      if (allow) {
+        const slug = locPath.replace(/^\/search\//, "");
+        if (!allow.has(slug)) continue;
+      }
       seen.add(locPath);
       urls.push(locPath);
     }

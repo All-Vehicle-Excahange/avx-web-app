@@ -172,13 +172,14 @@ export function buildStorefrontItemListSchema({
         name,
         url,
         ...(image ? { image } : {}),
-        ...(v.price
+        ...(Number(v.price) > 0
           ? {
               offers: {
                 "@type": "Offer",
-                price: v.price,
+                price: String(Number(v.price)),
                 priceCurrency: "INR",
                 availability: "https://schema.org/InStock",
+                itemCondition: "https://schema.org/UsedCondition",
               },
             }
           : {}),
