@@ -237,7 +237,21 @@ export function trackSearchResultsViewed(properties = {}) {
 }
 
 export function trackFilterApplied(properties = {}) {
-  track("filter_applied", properties);
+  track("filter_applied", {
+    brands: properties.brands || undefined,
+    models: properties.models || undefined,
+    fuel_types: properties.fuel_types || undefined,
+    transmission_types: properties.transmission_types || undefined,
+    body_types: properties.body_types || undefined,
+    year: properties.year || undefined,
+    city: properties.city || undefined,
+    state: properties.state || undefined,
+    min_price: properties.min_price ?? undefined,
+    max_price: properties.max_price ?? undefined,
+    km_distance: properties.km_distance || undefined,
+    seller_type: properties.seller_type || undefined,
+    avx_assured: properties.avx_assured ?? undefined,
+  });
 }
 
 export function trackVehicleDetailViewed(properties = {}) {

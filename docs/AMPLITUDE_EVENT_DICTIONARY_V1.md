@@ -29,7 +29,7 @@ Stored on `useAuthStore.authFunnelContext` when a login gate opens; attached to 
 | `homepage_viewed` | Home `/` (also fires wizard `Viewed Home Page` with `prompt_version`) | — | `_app.js` |
 | `search_submitted` | Navbar / home filter search | `search_string`, `source` | `Navbar.jsx`, `VehicleFilterBar.jsx` |
 | `search_results_viewed` | Search results data loaded | `search_string`, `results_count`, `search_type` | `SearchWithCard.jsx` |
-| `filter_applied` | Filters change (after first hydration) | brands, models, fuel, price, city, etc. | `SearchWithCard.jsx` |
+| `filter_applied` | Filters change (after first hydration) | brands, models, fuel, price, `city` / `state` (names, not IDs), etc. | `SearchWithCard.jsx` |
 | `vehicle_detail_viewed` | VDP / consult VDP load (once per vehicle id) | `vehicle_id`, `vehicle_name`, `vehicle_type`, `price`, `seller_type` | `VehiclDetail.jsx`, `ConsualtVehicleDetails.jsx` |
 | `storefront_viewed` | Consultant storefront hero data ready | `consultant_id`, `consultation_name`, `username`, `available_vehicles`, `average_rating` | `StoreFrontHeroSection.jsx` |
 | `inquiry_login_required` | Guest taps Send Inquiry | `vehicle_id`, `seller_type`, `source` | `VehicleSummaryRight.jsx` |
