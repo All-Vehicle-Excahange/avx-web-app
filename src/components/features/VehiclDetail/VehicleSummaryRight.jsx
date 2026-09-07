@@ -12,6 +12,7 @@ import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
+import MakeOfferPopup from "./MakeOfferPopup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
@@ -38,6 +39,8 @@ export default function VehicleSummaryRight({
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [isMakeOfferOpen, setIsMakeOfferOpen] = useState(false);
+  const [isOfferSuccess, setIsOfferSuccess] = useState(false);
   const [isAlreadySentOpen, setIsAlreadySentOpen] = useState(false);
   const [inquiryStatus, setInquiryStatus] = useState(null);
   const [localInquiryCount, setLocalInquiryCount] = useState(
@@ -107,6 +110,17 @@ export default function VehicleSummaryRight({
 
     // Refresh eligibility state so it knows we have an active inquiry
     refetchEligibility();
+  };
+
+  const handleRequestInspectionClick = () => {
+    const el = document.getElementById("inspect-before-you-buy");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (onRequestInspection) {
+      onRequestInspection();
+    } else {
+      setIsDownloadOpen(true);
+    }
   };
 
   const handleRequestInquiry = async () => {
@@ -396,8 +410,8 @@ export default function VehicleSummaryRight({
 
           <div className="border-t border-third/40" />
 
-          {/* ACTION BUTTONS (DESKTOP) */}
-          <div className={`hidden lg:${isOwner ? "grid grid-cols-2" : "flex justify-end"} gap-2 pt-2`}>
+          {/* ACTION BUTTONS */}
+          <div className={`${isOwner ? "hidden lg:grid grid-cols-2" : "flex flex-col"} gap-2 pt-2`}>
             {isOwner ? (
               <>
                 <Button
@@ -405,7 +419,7 @@ export default function VehicleSummaryRight({
                   size="sm"
                   showIcon={false}
                   className="rounded-full"
-                  onClick={onRequestInspection || (() => setIsDownloadOpen(true))}
+                  onClick={handleRequestInspectionClick}
                   loading={isCheckingInspection}
                 >
                   Request Inspection
@@ -422,12 +436,34 @@ export default function VehicleSummaryRight({
               </>
             ) : (
               <>
+                <div className="hidden lg:grid grid-cols-2 gap-2 ">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    showIcon={false}
+                    className="rounded-full text-xs whitespace-nowrap px-1"
+                    onClick={() => setIsMakeOfferOpen(true)}
+                    disabled={hasActiveInquiry || vehicle?.isVehicleSold}
+                  >
+                    {hasActiveInquiry ? "Offer Already Sent" : "Make An Offer"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    showIcon={false}
+                    className="rounded-full text-xs whitespace-nowrap px-1"
+                    onClick={handleRequestInspectionClick}
+                    loading={isCheckingInspection}
+                  >
+                    Request Inspection
+                  </Button>
+                </div>
                 {!hasActiveInquiry && (
                   <Button
                     variant="ghost"
                     size="sm"
                     showIcon={false}
-                    className="rounded-full"
+                    className="rounded-full w-full"
                     loading={loading || isCheckingInquiry}
                     disabled={vehicle?.isVehicleSold}
                     onClick={() => onSendInquiryClick("vdp")}
@@ -441,6 +477,7 @@ export default function VehicleSummaryRight({
                     variant="outline"
                     size="sm"
                     showIcon={false}
+                    className="rounded-full w-full"
                     onClick={() => setIsDownloadOpen(true)}
                   >
                     {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
@@ -470,7 +507,7 @@ export default function VehicleSummaryRight({
                 variant="ghost"
                 size="sm"
                 showIcon={false}
-                onClick={onRequestInspection || (() => setIsDownloadOpen(true))}
+                onClick={handleRequestInspectionClick}
                 loading={isCheckingInspection}
               >
                 Request Inspection
@@ -487,30 +524,29 @@ export default function VehicleSummaryRight({
             </>
           ) : (
             <>
-              {!hasActiveInquiry && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  showIcon={false}
-                  className="rounded-full"
-                  loading={loading || isCheckingInquiry}
-                  disabled={vehicle?.isVehicleSold}
-                  onClick={() => onSendInquiryClick("vdp_mobile")}
-                >
-                  {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
-                </Button>
-              )}
-
-              {hasActiveInquiry && (
+              <div className="flex items-center gap-1.5">
                 <Button
                   variant="outline"
                   size="sm"
                   showIcon={false}
-                  onClick={() => setIsDownloadOpen(true)}
+                  className="rounded-full text-[11px] whitespace-nowrap px-2.5"
+                  onClick={() => setIsMakeOfferOpen(true)}
+                  disabled={hasActiveInquiry || vehicle?.isVehicleSold}
                 >
-                  {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
+                  {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
                 </Button>
-              )}
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  showIcon={false}
+                  className="rounded-full text-[11px] whitespace-nowrap px-2.5"
+                  onClick={handleRequestInspectionClick}
+                  loading={isCheckingInspection}
+                >
+                  Request Inspection
+                </Button>
+              </div>
             </>
           )}
         </div>
@@ -536,7 +572,10 @@ export default function VehicleSummaryRight({
       />
       {isPopupOpen && (
         <SendInquaryPopup
-          onClose={() => setIsPopupOpen(false)}
+          onClose={() => {
+            setIsPopupOpen(false);
+            setIsOfferSuccess(false);
+          }}
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
           vehicle={vehicle}
@@ -544,6 +583,8 @@ export default function VehicleSummaryRight({
           adId={adId}
           sponsored={sponsored}
           billingType={billingType}
+          initialSuccessState={isOfferSuccess}
+          isOfferSuccess={isOfferSuccess}
         />
       )}
       {isAlreadySentOpen && (
@@ -555,6 +596,16 @@ export default function VehicleSummaryRight({
       <DownloadAppPopup
         isOpen={isDownloadOpen}
         onClose={() => setIsDownloadOpen(false)}
+      />
+      <MakeOfferPopup
+        isOpen={isMakeOfferOpen}
+        onClose={() => setIsMakeOfferOpen(false)}
+        vehicle={vehicle}
+        onSuccess={() => {
+          setIsOfferSuccess(true);
+          setIsPopupOpen(true);
+          handleInquirySuccess();
+        }}
       />
     </>
   );

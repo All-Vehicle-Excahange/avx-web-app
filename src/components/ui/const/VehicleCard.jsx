@@ -320,6 +320,7 @@ export default function VehicleCard({
               {!isSold && (
                 <button
                   onClick={(e) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     handleCompare();
                   }}
@@ -338,6 +339,7 @@ export default function VehicleCard({
               {!isSold && (
                 <button
                   onClick={(e) => {
+                    e.preventDefault();
                     e.stopPropagation(); // prevent card click
                     handleWishlist();
                   }}

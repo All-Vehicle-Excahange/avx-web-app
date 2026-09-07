@@ -27,11 +27,13 @@ function SendInquaryPopup({
   adId,
   sponsored,
   billingType,
+  initialSuccessState = false,
+  isOfferSuccess = false,
 }) {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(initialSuccessState);
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const openedAtRef = useRef(Date.now());
@@ -219,7 +221,7 @@ function SendInquaryPopup({
                 <CheckCircle2 size={32} />
               </div>
               <h3 className="text-3xl font-extrabold text-white tracking-tight mb-3">
-                Inquiry Sent.
+                {isOfferSuccess ? "Offer Sent." : "Inquiry Sent."}
               </h3>
               <div className="space-y-3 text-zinc-300 text-sm leading-relaxed mb-8 max-w-md mx-auto">
                 <p>
@@ -365,6 +367,7 @@ function SendInquaryPopup({
                         borderRadius: "12px",
                         padding: "6px 8px",
                         boxShadow: "none",
+                        cursor: "pointer",
                         "&:hover": {
                           borderColor: "#555",
                         },
@@ -459,6 +462,7 @@ function SendInquaryPopup({
                   variant="outlineSecondary"
                   onClick={handleClose}
                   disabled={isLoading}
+                  size="sm"
                 >
                   Cancel
                 </Button>
@@ -468,6 +472,7 @@ function SendInquaryPopup({
                   onClick={handleSubmit}
                   loading={isLoading}
                   locked={!title || (title === "Other" && !description.trim())}
+                  size="sm"
                 >
                   Send Inquiry
                 </Button>
