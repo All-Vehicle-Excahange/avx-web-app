@@ -293,6 +293,7 @@ export function trackStorefrontViewed(properties = {}) {
 export function trackInquiryLoginRequired(properties = {}) {
   track("inquiry_login_required", {
     vehicle_id: properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     seller_type: properties.seller_type || undefined,
     source: properties.source || "vdp",
   });
@@ -433,6 +434,7 @@ export function trackInquiryFormOpened(properties = {}) {
   track("inquiry_form_opened", {
     vehicle_id:
       properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     seller_type: properties.seller_type || undefined,
     source: properties.source || "vdp",
   });
@@ -442,6 +444,7 @@ export function trackInquiryTypeSelected(properties = {}) {
   track("inquiry_type_selected", {
     vehicle_id:
       properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     inquiry_type: properties.inquiry_type || undefined,
     seller_type: properties.seller_type || undefined,
   });
@@ -451,6 +454,7 @@ export function trackInquiryFormAbandoned(properties = {}) {
   track("inquiry_form_abandoned", {
     vehicle_id:
       properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     inquiry_type: properties.inquiry_type || undefined,
     had_type: Boolean(properties.had_type),
     duration_ms:
@@ -475,6 +479,7 @@ function inspectionProps(properties = {}) {
   return {
     vehicle_id:
       properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     inspection_id:
       properties.inspection_id != null
         ? String(properties.inspection_id)

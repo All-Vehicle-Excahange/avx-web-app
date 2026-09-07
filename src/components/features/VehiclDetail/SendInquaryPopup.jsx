@@ -44,18 +44,23 @@ function SendInquaryPopup({
   const sellerType =
     vehicle?.sellerType || vehicle?.vehicleOwner?.userRole || "";
 
+  const vehicleName =
+    `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+    undefined;
+
   const trackAbandonIfNeeded = useCallback(() => {
     if (submittedRef.current || abandonedTrackedRef.current) return;
     abandonedTrackedRef.current = true;
     trackInquiryFormAbandoned({
       vehicle_id: vehicleId,
+      vehicle_name: vehicleName,
       inquiry_type: titleRef.current || undefined,
       had_type: Boolean(titleRef.current),
       duration_ms: Date.now() - openedAtRef.current,
       seller_type: sellerType,
       source: "vdp",
     });
-  }, [vehicleId, sellerType]);
+  }, [vehicleId, vehicleName, sellerType]);
 
   const handleClose = useCallback(() => {
     trackAbandonIfNeeded();
@@ -78,6 +83,7 @@ function SendInquaryPopup({
     openedAtRef.current = Date.now();
     trackInquiryFormOpened({
       vehicle_id: vehicleId,
+      vehicle_name: vehicleName,
       seller_type: sellerType,
       source: "vdp",
     });
@@ -85,7 +91,7 @@ function SendInquaryPopup({
       document.body.style.overflow = "auto";
       trackAbandonIfNeeded();
     };
-  }, [vehicleId, sellerType, trackAbandonIfNeeded]);
+  }, [vehicleId, vehicleName, sellerType, trackAbandonIfNeeded]);
 
   const handleSubmit = async () => {
     if (!vehicleId || isLoading) return;
@@ -352,6 +358,7 @@ function SendInquaryPopup({
                       if (option.value !== "Other") setDescription("");
                       trackInquiryTypeSelected({
                         vehicle_id: vehicleId,
+                        vehicle_name: vehicleName,
                         inquiry_type: option.value,
                         seller_type: sellerType,
                       });

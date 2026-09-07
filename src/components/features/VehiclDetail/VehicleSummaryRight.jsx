@@ -182,6 +182,7 @@ export default function VehicleSummaryRight({
       pendingAction.current = "request";
       trackInquiryLoginRequired({
         vehicle_id: vehicle?.id,
+        vehicle_name: vehicleName || "Vehicle Details",
         seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
         source,
       });

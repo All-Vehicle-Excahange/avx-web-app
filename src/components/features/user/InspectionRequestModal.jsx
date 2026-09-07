@@ -66,11 +66,16 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   const isFree = freeInspectionCount > 0;
   const displayPrice = isFree ? 0 : discountPrice;
 
+  const ampVehicleName =
+    `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+    undefined;
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
       trackInspectionStarted({
         vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
         source: "inspection_modal",
         inspection_type: "REPORT_ONLY",
       });
@@ -267,6 +272,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
     setIsSubmitting(true);
     trackInspectionPaymentStarted({
       vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
       inspection_id: targetId,
       amount: isFree ? 0 : discountPrice,
       currency: "INR",
@@ -283,6 +289,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           });
           trackInspectionPaymentSuccess({
             vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
             inspection_id: targetId,
             amount: 0,
             currency: "INR",
@@ -296,6 +303,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
         } else {
           trackInspectionPaymentFailed({
             vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
             inspection_id: targetId,
             source: "inspection_modal",
             error_type: "order_failed",
@@ -321,6 +329,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
           trackInspectionPaymentSuccess({
             vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
             inspection_id: targetId,
             amount: discountPrice,
             currency: "INR",
@@ -333,6 +342,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
         } else {
           trackInspectionPaymentFailed({
             vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
             inspection_id: targetId,
             source: "inspection_modal",
             error_type: "wallet_failed",
@@ -347,6 +357,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           if (!isScriptLoaded) {
             trackInspectionPaymentFailed({
               vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
               inspection_id: targetId,
               source: "inspection_modal",
               error_type: "sdk_load_failed",
@@ -438,6 +449,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 });
                 trackInspectionPaymentSuccess({
                   vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
                   inspection_id: targetId,
                   amount: orderData?.amount,
                   currency: orderData?.currency || "INR",
@@ -455,6 +467,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 ondismiss: function () {
                   trackInspectionPaymentFailed({
                     vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
                     inspection_id: targetId,
                     source: "inspection_modal",
                     error_type: "cancelled",
@@ -468,6 +481,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
             rzp.on("payment.failed", function (failResponse) {
               trackInspectionPaymentFailed({
                 vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
                 inspection_id: targetId,
                 source: "inspection_modal",
                 error_type: "razorpay_failed",
@@ -478,6 +492,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           } else {
             trackInspectionPaymentFailed({
               vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
               inspection_id: targetId,
               source: "inspection_modal",
               error_type: "order_failed",
@@ -487,6 +502,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
         } else {
           trackInspectionPaymentFailed({
             vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
             inspection_id: targetId,
             source: "inspection_modal",
             error_type: "order_failed",
@@ -497,6 +513,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
     } catch (err) {
       trackInspectionPaymentFailed({
         vehicle_id: vehicle?.id,
+        vehicle_name: ampVehicleName,
         inspection_id: targetId,
         source: "inspection_modal",
         error_type: "order_failed",

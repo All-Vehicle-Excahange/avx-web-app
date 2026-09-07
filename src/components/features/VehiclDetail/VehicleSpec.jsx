@@ -70,6 +70,10 @@ export default function VehicleSpec({
   const datePickerRef = useRef(null);
   const timeSelectRef = useRef(null);
 
+  const ampVehicleName =
+    `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+    undefined;
+
   const minAllowedDate = new Date();
   minAllowedDate.setDate(minAllowedDate.getDate() + 2);
   minAllowedDate.setHours(0, 0, 0, 0);
@@ -165,6 +169,7 @@ export default function VehicleSpec({
   const openInspectionFlow = (stepToOpen = 1) => {
     trackInspectionStarted({
       vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
       source: "vdp",
       inspection_type: inspectionType === "video" ? "VIDEO_CALL_WITH_REPORT" : "REPORT_ONLY",
     });
@@ -229,6 +234,7 @@ export default function VehicleSpec({
     reportedAvailableRef.current = true;
     trackInspectionReportAvailable({
       vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
       inspection_id: existingInspection?.id || inspectionDetails?.id,
       source: "vdp",
     });
@@ -239,6 +245,7 @@ export default function VehicleSpec({
     if (type === "video") {
       trackInspectionScheduleOpened({
         vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
         source: "vdp",
         inspection_type: "VIDEO_CALL_WITH_REPORT",
       });
@@ -250,6 +257,7 @@ export default function VehicleSpec({
     if (option) {
       trackInspectionSlotSelected({
         vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
         source: "vdp",
         inspection_type: "VIDEO_CALL_WITH_REPORT",
         slot_label: option.label || option.value,
@@ -364,6 +372,7 @@ export default function VehicleSpec({
     setIsSubmitting(true);
     trackInspectionPaymentStarted({
       vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
       inspection_id: targetId,
       source: "vdp",
       inspection_type:
@@ -374,6 +383,7 @@ export default function VehicleSpec({
       if (!isScriptLoaded) {
         trackInspectionPaymentFailed({
           vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
           inspection_id: targetId,
           source: "vdp",
           error_type: "sdk_load_failed",
@@ -465,6 +475,7 @@ export default function VehicleSpec({
             });
             trackInspectionPaymentSuccess({
               vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
               inspection_id: targetId,
               amount: orderData?.amount,
               currency: orderData?.currency || "INR",
@@ -482,6 +493,7 @@ export default function VehicleSpec({
             ondismiss: function () {
               trackInspectionPaymentFailed({
                 vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
                 inspection_id: targetId,
                 source: "vdp",
                 error_type: "cancelled",
@@ -495,6 +507,7 @@ export default function VehicleSpec({
         rzp.on("payment.failed", function (failResponse) {
           trackInspectionPaymentFailed({
             vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
             inspection_id: targetId,
             source: "vdp",
             error_type: "razorpay_failed",
@@ -505,6 +518,7 @@ export default function VehicleSpec({
       } else {
         trackInspectionPaymentFailed({
           vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
           inspection_id: targetId,
           source: "vdp",
           error_type: "order_failed",
@@ -514,6 +528,7 @@ export default function VehicleSpec({
     } catch (err) {
       trackInspectionPaymentFailed({
         vehicle_id: vehicle?.id,
+      vehicle_name: ampVehicleName,
         inspection_id: targetId,
         source: "vdp",
         error_type: "order_failed",
