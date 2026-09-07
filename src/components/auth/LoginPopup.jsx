@@ -14,6 +14,13 @@ import {
   trackLoginCompleted,
   trackLoginStarted,
   trackSignupCompleted,
+  trackOtpRequested,
+  trackOtpSubmitted,
+  trackOtpVerified,
+  trackOtpFailed,
+  trackMobileVerificationStarted,
+  trackMobileVerificationCompleted,
+  trackMobileVerificationFailed,
 } from "@/lib/amplitude";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
@@ -80,10 +87,19 @@ function LoginPopup({
   const [accountType, setAccountType] = useState("personal");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const getFunnelProps = () => {
+    const ctx = useAuthStore.getState().authFunnelContext || {};
+    return {
+      entry_context: ctx.entry_context,
+      trigger_action: ctx.trigger_action,
+      user_role_intent: ctx.user_role_intent,
+    };
+  };
+
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
-      trackLoginStarted({ source: "login_popup" });
+      trackLoginStarted({ source: "login_popup", ...getFunnelProps() });
       reset();
       setOtp(Array(6).fill(""));
       setOtpSent(false);
@@ -220,6 +236,7 @@ function LoginPopup({
         if (res.data?.requiresPhoneVerification) {
           setGoogleToken(idToken);
           setIsGoogleSignupFlow(true);
+          trackMobileVerificationStarted(getFunnelProps());
         } else {
           localStorage.removeItem("otpBlockUntil");
           setCountdown(0);
@@ -237,7 +254,9 @@ function LoginPopup({
           trackLoginCompleted({
             method: "google",
             user_role: loggedInUser?.userRole || loggedInUser?.role,
+            ...getFunnelProps(),
           });
+          useAuthStore.getState().clearAuthFunnelContext();
           onSuccess();
         }
       } else if (res?.error) {
@@ -267,6 +286,10 @@ function LoginPopup({
 
       if (res?.success || res?.status) {
         setOtpSent(true);
+        trackOtpRequested({
+          flow: isGoogleSignupFlow ? "mobile_verification" : "login",
+          ...getFunnelProps(),
+        });
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(30);
@@ -277,6 +300,19 @@ function LoginPopup({
       const status = err?.response?.status;
       const api = err?.response?.data;
       let msg = api?.message || "Failed to send OTP";
+
+      trackOtpFailed({
+        flow: isGoogleSignupFlow ? "mobile_verification" : "login",
+        stage: "request",
+        error_type: status === 404 ? "not_registered" : "send_failed",
+        ...getFunnelProps(),
+      });
+      if (isGoogleSignupFlow) {
+        trackMobileVerificationFailed({
+          error_type: status === 404 ? "not_registered" : "send_failed",
+          ...getFunnelProps(),
+        });
+      }
 
       if (status === 404) {
         msg = "This number isn't registered. Create your account.";
@@ -320,12 +356,17 @@ function LoginPopup({
     // Once OTP is confirmed, stop any pending WebOTP request
     abortWebOTP();
 
+    const funnel = getFunnelProps();
+    const wasGoogleSignup = isGoogleSignupFlow;
+    const otpFlow = wasGoogleSignup ? "mobile_verification" : "login";
+    trackOtpSubmitted({ flow: otpFlow, ...funnel });
+
     try {
       setIsLoading(true);
       const phone = getValues("phoneNumber");
 
       let res;
-      if (isGoogleSignupFlow) {
+      if (wasGoogleSignup) {
         res = await googleSignupVerify({
           googleIdToken: googleToken,
           phoneNumber: phone,
@@ -350,6 +391,9 @@ function LoginPopup({
         const selectedAccountType = accountType;
         const currentUser = useAuthStore.getState().user;
         const currentAccountType = currentUser?.accountType;
+        const userRole = currentUser?.userRole || currentUser?.role;
+
+        trackOtpVerified({ flow: otpFlow, ...funnel });
 
         // Close popup immediately (sync) to prevent race conditions
         // where onSuccess API calls could trigger a re-open via interceptors
@@ -364,22 +408,26 @@ function LoginPopup({
         setAcceptedTerms(false);
         onClose();
 
-        const method = isGoogleSignupFlow ? "google_otp" : "otp";
-        if (isGoogleSignupFlow) {
-          trackSignupCompleted({ method });
+        if (wasGoogleSignup) {
+          trackMobileVerificationCompleted(funnel);
+          trackSignupCompleted({
+            method: "google",
+            user_role: userRole,
+            ...funnel,
+          });
         } else {
           trackLoginCompleted({
-            method,
-            user_role: currentUser?.userRole || currentUser?.role,
+            method: "mobile_otp",
+            user_role: userRole,
+            ...funnel,
           });
         }
+        useAuthStore.getState().clearAuthFunnelContext();
 
         const isConsultant =
           selectedAccountType === "consultant" ||
           currentAccountType === "consultant" ||
-          ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
-            currentUser?.userRole || currentUser?.role
-          );
+          ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(userRole);
         if (!isConsultant) {
           await onSuccess();
         }
@@ -387,6 +435,19 @@ function LoginPopup({
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message || "Invalid or expired OTP";
+
+      trackOtpFailed({
+        flow: otpFlow,
+        stage: "verify",
+        error_type: "verify_failed",
+        ...funnel,
+      });
+      if (wasGoogleSignup) {
+        trackMobileVerificationFailed({
+          error_type: "verify_failed",
+          ...funnel,
+        });
+      }
 
       if (
         msg.toLowerCase().includes("blocked") ||

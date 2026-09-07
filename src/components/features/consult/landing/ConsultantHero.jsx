@@ -178,7 +178,12 @@ export default function ConsultantHeroSection() {
                 size="md"
                 onClick={() => {
                   if (!user) {
-                    openLoginPopup("consultant");
+                    openLoginPopup({
+                      defaultTab: "consultant",
+                      entry_context: "become_consultant",
+                      trigger_action: "consultant_signup",
+                      user_role_intent: "consultant",
+                    });
                   } else {
                     router.push("/consult/subscription");
                   }

@@ -52,7 +52,11 @@ const forceLogout = () => {
   }
 
   if (!hasToken) {
-    useAuthStore.getState().openLoginPopup();
+    useAuthStore.getState().openLoginPopup({
+      entry_context: "direct",
+      trigger_action: "login_click",
+      user_role_intent: "buyer",
+    });
   }
   // Do NOT redirect — let the user stay on the current page with the login popup.
 };

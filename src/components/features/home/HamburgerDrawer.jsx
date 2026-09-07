@@ -53,7 +53,11 @@ export default function HamburgerDrawer({ open, onClose }) {
 
   const handleSignInClick = () => {
     onClose();
-    openLoginPopup();
+    openLoginPopup({
+      entry_context: "home",
+      trigger_action: "login_click",
+      user_role_intent: "buyer",
+    });
   };
 
   const handleRegisterClick = () => {

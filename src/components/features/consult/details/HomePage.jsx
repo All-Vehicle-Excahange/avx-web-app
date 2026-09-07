@@ -143,7 +143,11 @@ export default function ConsultantProgramPage() {
                   size="md"
                   onClick={() => {
                     if (!isLoggedIn) {
-                      openLoginPopup();
+                      openLoginPopup({
+                        entry_context: "become_consultant",
+                        trigger_action: "consultant_signup",
+                        user_role_intent: "consultant",
+                      });
                     } else {
                       push("/consult/subscription");
                     }

@@ -23,6 +23,16 @@ export default function AccountPopup({ open, onClosePopup }) {
   const [isLogoutClosing, setIsLogoutClosing] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const openLocalLogin = (ctx = {}) => {
+    useAuthStore.getState().setAuthFunnelContext({
+      entry_context: ctx.entry_context || "home",
+      trigger_action: ctx.trigger_action || "login_click",
+      user_role_intent: ctx.user_role_intent || "buyer",
+    });
+    setIsLoginOpen(true);
+    onClosePopup();
+  };
+
   const pathname = usePathname();
 
   const user = useAuthStore((state) => state.user);
@@ -196,8 +206,11 @@ export default function AccountPopup({ open, onClosePopup }) {
                 full
                 size="sm"
                 onClick={() => {
-                  setIsLoginOpen(true);
-                  onClosePopup();
+                  openLocalLogin({
+                    entry_context: "home",
+                    trigger_action: "login_click",
+                    user_role_intent: "buyer",
+                  });
                 }}
               >
                 Sign in
@@ -207,6 +220,11 @@ export default function AccountPopup({ open, onClosePopup }) {
                 New customer?{" "}
                 <span
                   onClick={() => {
+                    useAuthStore.getState().setAuthFunnelContext({
+                      entry_context: "home",
+                      trigger_action: "login_click",
+                      user_role_intent: "buyer",
+                    });
                     setIsSignupOpen(true);
                     setIsLoginOpen(false);
                     onClosePopup();
@@ -342,16 +360,22 @@ export default function AccountPopup({ open, onClosePopup }) {
               <Section title="Buyer Tools">
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "home",
+                      trigger_action: "wishlist",
+                      user_role_intent: "buyer",
+                    });
                   }}
                 >
                   Saved Vehicles
                 </Item>
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "home",
+                      trigger_action: "compare",
+                      user_role_intent: "buyer",
+                    });
                   }}
                 >
                   Compare Vehicles
@@ -361,8 +385,11 @@ export default function AccountPopup({ open, onClosePopup }) {
                 </Item>
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "home",
+                      trigger_action: "inquiry",
+                      user_role_intent: "buyer",
+                    });
                   }}
                 >
                   My Inquiries
@@ -372,24 +399,33 @@ export default function AccountPopup({ open, onClosePopup }) {
               <Section title="Sell & Earn">
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "become_seller",
+                      trigger_action: "seller_signup",
+                      user_role_intent: "seller",
+                    });
                   }}
                 >
                   Sell Your Vehicle
                 </Item>
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "become_seller",
+                      trigger_action: "seller_signup",
+                      user_role_intent: "seller",
+                    });
                   }}
                 >
                   Track Your Listing
                 </Item>
                 <Item
                   onClick={() => {
-                    setIsLoginOpen(true);
-                    onClosePopup();
+                    openLocalLogin({
+                      entry_context: "home",
+                      trigger_action: "inspection",
+                      user_role_intent: "buyer",
+                    });
                   }}
                 >
                   Request Reecomm Inspection

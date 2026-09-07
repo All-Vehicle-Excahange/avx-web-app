@@ -28,7 +28,15 @@ import {
 } from "@/services/inspection.service";
 import toast from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { trackInspectionPaymentSuccess } from "@/lib/amplitude";
+import {
+  trackInspectionPaymentSuccess,
+  trackInspectionStarted,
+  trackInspectionScheduleOpened,
+  trackInspectionSlotSelected,
+  trackInspectionPaymentStarted,
+  trackInspectionPaymentFailed,
+  trackInspectionReportAvailable,
+} from "@/lib/amplitude";
 import {
   getInspectionByVehicleIdQuery,
   getActiveInspectionQuery,
@@ -154,6 +162,17 @@ export default function VehicleSpec({
     }, 300);
   };
 
+  const openInspectionFlow = (stepToOpen = 1) => {
+    trackInspectionStarted({
+      vehicle_id: vehicle?.id,
+      source: "vdp",
+      inspection_type: inspectionType === "video" ? "VIDEO_CALL_WITH_REPORT" : "REPORT_ONLY",
+    });
+    setStep(stepToOpen);
+    setShowModal(true);
+    setTimeout(() => setAnimateModal(true), 10);
+  };
+
   const handleOpenModal = async () => {
     if (!vehicle?.id) {
       toast.error("Vehicle information is not available.");
@@ -161,7 +180,11 @@ export default function VehicleSpec({
     }
     if (!isLoggedIn) {
       pendingAction.current = "requestInspection";
-      openLoginPopup();
+      openLoginPopup({
+        entry_context: "vehicle_detail",
+        trigger_action: "inspection",
+        user_role_intent: "buyer",
+      });
       return;
     }
     setIsCheckingActiveInspection(true);
@@ -171,22 +194,16 @@ export default function VehicleSpec({
       );
       if (data) {
         if (data.inspectionRequestStatus === "PAYMENT_PENDING") {
-          setStep(1);
-          setShowModal(true);
-          setTimeout(() => setAnimateModal(true), 10);
+          openInspectionFlow(1);
         } else {
           handleOpenTracking(data);
         }
       } else {
-        setStep(1);
-        setShowModal(true);
-        setTimeout(() => setAnimateModal(true), 10);
+        openInspectionFlow(1);
       }
     } catch (error) {
       if (error?.response?.status === 404 || error?.status === 404) {
-        setStep(1);
-        setShowModal(true);
-        setTimeout(() => setAnimateModal(true), 10);
+        openInspectionFlow(1);
       } else {
         toast.error(
           error?.response?.data?.message ||
@@ -204,6 +221,41 @@ export default function VehicleSpec({
       handleOpenModal();
     }
   }, [isLoggedIn]);
+
+  const reportedAvailableRef = useRef(false);
+  useEffect(() => {
+    const url = inspectionDetails?.reportUrl || existingInspection?.reportUrl;
+    if (!url || reportedAvailableRef.current) return;
+    reportedAvailableRef.current = true;
+    trackInspectionReportAvailable({
+      vehicle_id: vehicle?.id,
+      inspection_id: existingInspection?.id || inspectionDetails?.id,
+      source: "vdp",
+    });
+  }, [inspectionDetails, existingInspection, vehicle?.id]);
+
+  const selectInspectionType = (type) => {
+    setInspectionType(type);
+    if (type === "video") {
+      trackInspectionScheduleOpened({
+        vehicle_id: vehicle?.id,
+        source: "vdp",
+        inspection_type: "VIDEO_CALL_WITH_REPORT",
+      });
+    }
+  };
+
+  const selectInspectionSlot = (option) => {
+    setInspectionTime(option);
+    if (option) {
+      trackInspectionSlotSelected({
+        vehicle_id: vehicle?.id,
+        source: "vdp",
+        inspection_type: "VIDEO_CALL_WITH_REPORT",
+        slot_label: option.label || option.value,
+      });
+    }
+  };
 
   const parseTime = (timeStr) => {
     if (!timeStr) return { hours: 0, minutes: 0 };
@@ -310,9 +362,22 @@ export default function VehicleSpec({
       return;
     }
     setIsSubmitting(true);
+    trackInspectionPaymentStarted({
+      vehicle_id: vehicle?.id,
+      inspection_id: targetId,
+      source: "vdp",
+      inspection_type:
+        inspectionType === "video" ? "VIDEO_CALL_WITH_REPORT" : "REPORT_ONLY",
+    });
     try {
       const isScriptLoaded = await loadRazorpayScript();
       if (!isScriptLoaded) {
+        trackInspectionPaymentFailed({
+          vehicle_id: vehicle?.id,
+          inspection_id: targetId,
+          source: "vdp",
+          error_type: "sdk_load_failed",
+        });
         toast.error(
           "Razorpay SDK failed to load. Please check your connection.",
         );
@@ -400,8 +465,10 @@ export default function VehicleSpec({
             });
             trackInspectionPaymentSuccess({
               vehicle_id: vehicle?.id,
+              inspection_id: targetId,
               amount: orderData?.amount,
               currency: orderData?.currency || "INR",
+              source: "vdp",
             });
             toast.success("Payment completed successfully!");
             setTimeout(() => {
@@ -413,6 +480,12 @@ export default function VehicleSpec({
           },
           modal: {
             ondismiss: function () {
+              trackInspectionPaymentFailed({
+                vehicle_id: vehicle?.id,
+                inspection_id: targetId,
+                source: "vdp",
+                error_type: "cancelled",
+              });
               toast.error("Payment cancelled.");
             },
           },
@@ -420,13 +493,31 @@ export default function VehicleSpec({
 
         const rzp = new window.Razorpay(options);
         rzp.on("payment.failed", function (failResponse) {
+          trackInspectionPaymentFailed({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            source: "vdp",
+            error_type: "razorpay_failed",
+          });
           toast.error("Payment failed: " + failResponse.error.description);
         });
         rzp.open();
       } else {
+        trackInspectionPaymentFailed({
+          vehicle_id: vehicle?.id,
+          inspection_id: targetId,
+          source: "vdp",
+          error_type: "order_failed",
+        });
         toast.error(response?.message || "Payment completion failed.");
       }
     } catch (err) {
+      trackInspectionPaymentFailed({
+        vehicle_id: vehicle?.id,
+        inspection_id: targetId,
+        source: "vdp",
+        error_type: "order_failed",
+      });
       toast.error(err?.response?.data?.message || "Payment completion failed.");
     } finally {
       setIsSubmitting(false);
@@ -540,7 +631,7 @@ export default function VehicleSpec({
                             name="inspection"
                             value="report"
                             checked={inspectionType === "report"}
-                            onChange={() => setInspectionType("report")}
+                            onChange={() => selectInspectionType("report")}
                             className="mt-1 accent-primary"
                           />
 
@@ -576,7 +667,7 @@ export default function VehicleSpec({
                             name="inspection"
                             value="video"
                             checked={inspectionType === "video"}
-                            onChange={() => setInspectionType("video")}
+                            onChange={() => selectInspectionType("video")}
                             className="mt-1 accent-primary"
                           />
 
@@ -849,7 +940,7 @@ export default function VehicleSpec({
                           name="inspection"
                           value="report"
                           checked={inspectionType === "report"}
-                          onChange={() => setInspectionType("report")}
+                          onChange={() => selectInspectionType("report")}
                           className="mt-1 accent-primary"
                         />
                         <div className="flex-1">
@@ -875,7 +966,7 @@ export default function VehicleSpec({
                           name="inspection"
                           value="video"
                           checked={inspectionType === "video"}
-                          onChange={() => setInspectionType("video")}
+                          onChange={() => selectInspectionType("video")}
                           className="mt-1 accent-primary"
                         />
                         <div className="flex-1">
@@ -981,7 +1072,7 @@ export default function VehicleSpec({
                                 openMenuOnFocus={true}
                                 options={timeOptions}
                                 value={inspectionTime}
-                                onChange={(option) => setInspectionTime(option)}
+                                onChange={(option) => selectInspectionSlot(option)}
                                 placeholder="Select Time"
                                 className="w-full text-sm"
                                 styles={{

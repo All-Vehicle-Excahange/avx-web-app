@@ -18,11 +18,29 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { useAuthStore } from "@/stores/useAuthStore";
-import { trackSignupCompleted } from "@/lib/amplitude";
+import {
+  trackSignupCompleted,
+  trackOtpRequested,
+  trackOtpSubmitted,
+  trackOtpVerified,
+  trackOtpFailed,
+  trackMobileVerificationStarted,
+  trackMobileVerificationCompleted,
+  trackMobileVerificationFailed,
+} from "@/lib/amplitude";
 
 export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSuccess = () => { } }) {
   const prefilledPhoneNumber = useAuthStore((state) => state.prefilledPhoneNumber);
   const defaultTab = useAuthStore((state) => state.authPopupDefaultTab);
+
+  const getFunnelProps = () => {
+    const ctx = useAuthStore.getState().authFunnelContext || {};
+    return {
+      entry_context: ctx.entry_context,
+      trigger_action: ctx.trigger_action,
+      user_role_intent: ctx.user_role_intent,
+    };
+  };
 
   const {
     register,
@@ -216,6 +234,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         if (res.data?.requiresPhoneVerification) {
           setGoogleToken(idToken);
           setIsGoogleSignupFlow(true);
+          trackMobileVerificationStarted(getFunnelProps());
         } else {
           localStorage.removeItem("otpBlockUntil");
           setCountdown(0);
@@ -236,7 +255,12 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
               push("/become-consultant");
             }
           }
-          trackSignupCompleted({ method: "google" });
+          trackSignupCompleted({
+            method: "google",
+            user_role: currentUser?.userRole || currentUser?.role,
+            ...getFunnelProps(),
+          });
+          useAuthStore.getState().clearAuthFunnelContext();
           handleClosePopup();
         }
       } else if (res?.error) {
@@ -269,6 +293,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       // Check error flag first, then success
       if (!res?.error && (res?.success || res?.status)) {
         setOtpSent(true);
+        trackOtpRequested({
+          flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+          ...getFunnelProps(),
+        });
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(30);
@@ -277,6 +305,19 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       } else if (res?.error) {
         // Handle API errors returned in response
         const msg = res?.message?.toLowerCase();
+
+        trackOtpFailed({
+          flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+          stage: "request",
+          error_type: "send_failed",
+          ...getFunnelProps(),
+        });
+        if (isGoogleSignupFlow) {
+          trackMobileVerificationFailed({
+            error_type: "send_failed",
+            ...getFunnelProps(),
+          });
+        }
 
         if (msg?.includes("otp already sent")) {
           setOtpSent(true);
@@ -314,6 +355,19 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
+
+      trackOtpFailed({
+        flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+        stage: "request",
+        error_type: "send_failed",
+        ...getFunnelProps(),
+      });
+      if (isGoogleSignupFlow) {
+        trackMobileVerificationFailed({
+          error_type: "send_failed",
+          ...getFunnelProps(),
+        });
+      }
 
       if (msg?.includes("otp already sent")) {
         setOtpSent(true);
@@ -364,12 +418,17 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     // Stop any pending WebOTP request once user confirms
     abortWebOTP();
 
+    const funnel = getFunnelProps();
+    const wasGoogleSignup = isGoogleSignupFlow;
+    const otpFlow = wasGoogleSignup ? "mobile_verification" : "signup";
+    trackOtpSubmitted({ flow: otpFlow, ...funnel });
+
     try {
       setIsLoading(true);
       const values = getValues();
 
       let res;
-      if (isGoogleSignupFlow) {
+      if (wasGoogleSignup) {
         res = await googleSignupVerify({
           googleIdToken: googleToken,
           phoneNumber: values.phone,
@@ -393,9 +452,18 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         localStorage.removeItem("otpBlockUntil");
         setCountdown(0);
 
+        trackOtpVerified({ flow: otpFlow, ...funnel });
+        if (wasGoogleSignup) {
+          trackMobileVerificationCompleted(funnel);
+        }
+
+        const currentUser = useAuthStore.getState().user;
         trackSignupCompleted({
-          method: isGoogleSignupFlow ? "google_otp" : "otp",
+          method: wasGoogleSignup ? "google" : "mobile_otp",
+          user_role: currentUser?.userRole || currentUser?.role,
+          ...funnel,
         });
+        useAuthStore.getState().clearAuthFunnelContext();
 
         // Close popup immediately before calling onSuccess to prevent reopening
         useAuthStore.setState({ isSignupPopupOpen: false, prefilledPhoneNumber: "" });
@@ -405,7 +473,6 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         setOtpSent(false);
         setIsLoading(false);
 
-        const currentUser = useAuthStore.getState().user;
         const isConsultantUser =
           accountType === "consultant" ||
           currentUser?.accountType === "consultant" ||
@@ -428,6 +495,19 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
         }
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
+
+        trackOtpFailed({
+          flow: otpFlow,
+          stage: "verify",
+          error_type: "verify_failed",
+          ...funnel,
+        });
+        if (wasGoogleSignup) {
+          trackMobileVerificationFailed({
+            error_type: "verify_failed",
+            ...funnel,
+          });
+        }
 
         if (res?.data?.validationErrors) {
           setOtpSent(false);
@@ -469,6 +549,19 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
+
+      trackOtpFailed({
+        flow: otpFlow,
+        stage: "verify",
+        error_type: "verify_failed",
+        ...funnel,
+      });
+      if (wasGoogleSignup) {
+        trackMobileVerificationFailed({
+          error_type: "verify_failed",
+          ...funnel,
+        });
+      }
 
       if (api?.data?.validationErrors) {
         setOtpSent(false);

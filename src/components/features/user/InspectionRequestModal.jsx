@@ -18,7 +18,12 @@ import { getWalletBalanceQuery } from "@/queries/waller.queries";
 import { getSellerTierQuery } from "@/queries/Seller.queries";
 import AddMoneyPopup from "@/components/features/consult/details/components/AddMoneyPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { trackInspectionPaymentSuccess } from "@/lib/amplitude";
+import {
+  trackInspectionPaymentSuccess,
+  trackInspectionStarted,
+  trackInspectionPaymentStarted,
+  trackInspectionPaymentFailed,
+} from "@/lib/amplitude";
 
 export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   const router = useRouter();
@@ -64,6 +69,11 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      trackInspectionStarted({
+        vehicle_id: vehicle?.id,
+        source: "inspection_modal",
+        inspection_type: "REPORT_ONLY",
+      });
       const timer = setTimeout(() => setAnimate(true), 10);
       return () => {
         clearTimeout(timer);
@@ -72,7 +82,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
     } else {
       setAnimate(false);
     }
-  }, [isOpen]);
+  }, [isOpen, vehicle?.id]);
 
   if (!isOpen) return null;
 
@@ -255,6 +265,14 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
       return;
     }
     setIsSubmitting(true);
+    trackInspectionPaymentStarted({
+      vehicle_id: vehicle?.id,
+      inspection_id: targetId,
+      amount: isFree ? 0 : discountPrice,
+      currency: "INR",
+      source: "inspection_modal",
+      inspection_type: "REPORT_ONLY",
+    });
     try {
       if (isFree) {
         const response = await complateInspectionPayment(targetId);
@@ -263,12 +281,25 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           queryClient.invalidateQueries({
             queryKey: ["inspection-by-vehicle", vehicle.id],
           });
+          trackInspectionPaymentSuccess({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            amount: 0,
+            currency: "INR",
+            source: "inspection_modal",
+          });
           toast.success("Inspection request registered successfully!");
           setTimeout(() => {
             handleClose();
           }, 3000);
           return;
         } else {
+          trackInspectionPaymentFailed({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            source: "inspection_modal",
+            error_type: "order_failed",
+          });
           toast.error(response?.message || "Payment completion failed.");
         }
         return;
@@ -293,12 +324,19 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
             inspection_id: targetId,
             amount: discountPrice,
             currency: "INR",
+            source: "inspection_modal",
           });
           toast.success("Payment completed successfully from wallet!");
           setTimeout(() => {
             handleClose();
           }, 3000);
         } else {
+          trackInspectionPaymentFailed({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            source: "inspection_modal",
+            error_type: "wallet_failed",
+          });
           toast.error(response?.message || "Wallet payment failed.");
         }
       } else {
@@ -307,6 +345,12 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           // For paid inspections, launch Razorpay payment workflow:
           const isScriptLoaded = await loadRazorpayScript();
           if (!isScriptLoaded) {
+            trackInspectionPaymentFailed({
+              vehicle_id: vehicle?.id,
+              inspection_id: targetId,
+              source: "inspection_modal",
+              error_type: "sdk_load_failed",
+            });
             toast.error(
               "Razorpay SDK failed to load. Please check your connection.",
             );
@@ -394,8 +438,10 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
                 });
                 trackInspectionPaymentSuccess({
                   vehicle_id: vehicle?.id,
+                  inspection_id: targetId,
                   amount: orderData?.amount,
                   currency: orderData?.currency || "INR",
+                  source: "inspection_modal",
                 });
                 toast.success("Payment completed successfully!");
                 setTimeout(() => {
@@ -407,6 +453,12 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
               },
               modal: {
                 ondismiss: function () {
+                  trackInspectionPaymentFailed({
+                    vehicle_id: vehicle?.id,
+                    inspection_id: targetId,
+                    source: "inspection_modal",
+                    error_type: "cancelled",
+                  });
                   toast.error("Payment cancelled.");
                 },
               },
@@ -414,17 +466,41 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
 
             const rzp = new window.Razorpay(options);
             rzp.on("payment.failed", function (failResponse) {
+              trackInspectionPaymentFailed({
+                vehicle_id: vehicle?.id,
+                inspection_id: targetId,
+                source: "inspection_modal",
+                error_type: "razorpay_failed",
+              });
               toast.error("Payment failed: " + failResponse.error.description);
             });
             rzp.open();
           } else {
+            trackInspectionPaymentFailed({
+              vehicle_id: vehicle?.id,
+              inspection_id: targetId,
+              source: "inspection_modal",
+              error_type: "order_failed",
+            });
             toast.error(response?.message || "Payment completion failed.");
           }
         } else {
+          trackInspectionPaymentFailed({
+            vehicle_id: vehicle?.id,
+            inspection_id: targetId,
+            source: "inspection_modal",
+            error_type: "order_failed",
+          });
           toast.error(response?.message || "Payment completion failed.");
         }
       }
     } catch (err) {
+      trackInspectionPaymentFailed({
+        vehicle_id: vehicle?.id,
+        inspection_id: targetId,
+        source: "inspection_modal",
+        error_type: "order_failed",
+      });
       toast.error(err?.response?.data?.message || "Payment completion failed.");
     } finally {
       setIsSubmitting(false);

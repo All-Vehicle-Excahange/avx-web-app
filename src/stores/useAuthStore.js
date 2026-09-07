@@ -18,8 +18,28 @@ export const useAuthStore = create((set) => ({
   isCompleteProfilePopupOpen: false,
   prefilledPhoneNumber: "",
   authPopupDefaultTab: "personal",
+  /** Funnel props for Amplitude auth events until login/signup completes */
+  authFunnelContext: null,
 
-  openLoginPopup: (defaultTab = "personal") => {
+  setAuthFunnelContext: (ctx) =>
+    set({
+      authFunnelContext: ctx
+        ? {
+            entry_context: ctx.entry_context || "direct",
+            trigger_action: ctx.trigger_action || "login_click",
+            user_role_intent: ctx.user_role_intent || "buyer",
+          }
+        : null,
+    }),
+
+  clearAuthFunnelContext: () => set({ authFunnelContext: null }),
+
+  /**
+   * Open login popup. Backward compatible:
+   * - openLoginPopup() / openLoginPopup("personal"|"consultant")
+   * - openLoginPopup({ defaultTab, entry_context, trigger_action, user_role_intent })
+   */
+  openLoginPopup: (arg) => {
     const isLinkExpiredPage =
       typeof window !== "undefined" &&
       window.location.pathname === "/link-expired";
@@ -36,11 +56,39 @@ export const useAuthStore = create((set) => ({
       return;
     }
 
+    let defaultTab = "personal";
+    let funnel = {
+      entry_context: "direct",
+      trigger_action: "login_click",
+      user_role_intent: "buyer",
+    };
+
+    if (typeof arg === "string") {
+      defaultTab = arg || "personal";
+      if (defaultTab === "consultant") {
+        funnel = {
+          entry_context: "become_consultant",
+          trigger_action: "consultant_signup",
+          user_role_intent: "consultant",
+        };
+      }
+    } else if (arg && typeof arg === "object") {
+      defaultTab = arg.defaultTab || "personal";
+      funnel = {
+        entry_context: arg.entry_context || "direct",
+        trigger_action: arg.trigger_action || "login_click",
+        user_role_intent:
+          arg.user_role_intent ||
+          (defaultTab === "consultant" ? "consultant" : "buyer"),
+      };
+    }
+
     set({
       isLoginPopupOpen: true,
       isSignupPopupOpen: false,
       isCompleteProfilePopupOpen: false,
       authPopupDefaultTab: defaultTab,
+      authFunnelContext: funnel,
     });
   },
 
@@ -119,6 +167,11 @@ export const useAuthStore = create((set) => ({
       //  Open popup after logout (optional)
       isLoginPopupOpen: true,
       isSignupPopupOpen: false,
+      authFunnelContext: {
+        entry_context: "direct",
+        trigger_action: "login_click",
+        user_role_intent: "buyer",
+      },
     });
 
     if (typeof window !== "undefined") {

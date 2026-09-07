@@ -25,7 +25,11 @@ export default function useGuestSetup() {
         const existingId = await getGuestId();
         
         timeoutId = setTimeout(() => {
-          openLoginPopup();
+          openLoginPopup({
+            entry_context: "home",
+            trigger_action: "login_click",
+            user_role_intent: "buyer",
+          });
         }, 25000);
 
         setupGuestUser();

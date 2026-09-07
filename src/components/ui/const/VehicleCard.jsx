@@ -93,6 +93,11 @@ export default function VehicleCard({
         vehicle_id: data?.id,
         source: "search",
       });
+      useAuthStore.getState().setAuthFunnelContext({
+        entry_context: "search",
+        trigger_action: "wishlist",
+        user_role_intent: "buyer",
+      });
       setIsLoginOpen(true);
       return;
     }

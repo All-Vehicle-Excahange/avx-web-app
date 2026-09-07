@@ -408,7 +408,11 @@ export default function FullPricing() {
     if (!isLoggedIn) {
       // Store which tier the user wanted, then show login popup
       pendingTier.current = tier;
-      openLoginPopup();
+      openLoginPopup({
+        entry_context: "become_consultant",
+        trigger_action: "consultant_signup",
+        user_role_intent: "consultant",
+      });
       return;
     }
 

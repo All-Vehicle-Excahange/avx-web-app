@@ -11,6 +11,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStatesQuery, getCitiesQuery } from "@/queries/user.queries";
 import { createUserMeta, getAllTown } from "@/services/user.service";
 import { showBackendError } from "@/lib/axiosInstance";
+import { useAuthStore } from "@/stores/useAuthStore";
+import {
+  trackProfileSetupStarted,
+  trackProfileSetupCompleted,
+} from "@/lib/amplitude";
 
 export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () => { } }) {
   const {
@@ -57,6 +62,12 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      const ctx = useAuthStore.getState().authFunnelContext || {};
+      trackProfileSetupStarted({
+        entry_context: ctx.entry_context,
+        trigger_action: ctx.trigger_action,
+        user_role_intent: ctx.user_role_intent,
+      });
     } else {
       document.body.style.overflow = "unset";
     }
@@ -125,6 +136,13 @@ export default function CompleteProfilePopup({ isOpen, onClose, onSuccess = () =
         queryClient.invalidateQueries({ queryKey: ["user-meta-exists"] });
         queryClient.invalidateQueries({ queryKey: ["user-profile-meta"] });
         queryClient.invalidateQueries({ queryKey: ["user-profile-strength"] });
+
+        const ctx = useAuthStore.getState().authFunnelContext || {};
+        trackProfileSetupCompleted({
+          entry_context: ctx.entry_context,
+          trigger_action: ctx.trigger_action,
+          user_role_intent: ctx.user_role_intent,
+        });
 
         onSuccess();
         handleClosePopup();

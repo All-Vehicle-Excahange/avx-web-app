@@ -8,9 +8,30 @@ import { useForm } from "react-hook-form";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { FcGoogle } from "react-icons/fc";
+import { useAuthStore } from "@/stores/useAuthStore";
+import {
+  trackSignupCompleted,
+  trackOtpRequested,
+  trackOtpSubmitted,
+  trackOtpVerified,
+  trackOtpFailed,
+  trackMobileVerificationStarted,
+  trackMobileVerificationCompleted,
+  trackMobileVerificationFailed,
+} from "@/lib/amplitude";
+
+const CONSULTANT_FUNNEL = {
+  entry_context: "become_consultant",
+  trigger_action: "consultant_signup",
+  user_role_intent: "consultant",
+};
 
 function Register() {
   const { push } = useRouter();
+
+  useEffect(() => {
+    useAuthStore.getState().setAuthFunnelContext(CONSULTANT_FUNNEL);
+  }, []);
 
   const {
     register,
@@ -84,7 +105,13 @@ function Register() {
         if (res.data?.requiresPhoneVerification) {
           setGoogleToken(idToken);
           setIsGoogleSignupFlow(true);
+          trackMobileVerificationStarted(CONSULTANT_FUNNEL);
         } else {
+          trackSignupCompleted({
+            method: "google",
+            user_role: "CONSULTATION",
+            ...CONSULTANT_FUNNEL,
+          });
           push("/consult/subscription");
         }
       } else if (res?.error) {
@@ -116,12 +143,22 @@ function Register() {
 
       if (!res?.error && (res?.success || res?.status)) {
         setOtpSent(true);
+        trackOtpRequested({
+          flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+          ...CONSULTANT_FUNNEL,
+        });
         const blockTime = Date.now() + 60 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
         setCountdown(60);
         setTimeout(() => otpRefs.current[0]?.focus(), 200);
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
+        trackOtpFailed({
+          flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+          stage: "request",
+          error_type: "send_failed",
+          ...CONSULTANT_FUNNEL,
+        });
         if (
           msg?.includes("blocked") ||
           msg?.includes("too many attempts") ||
@@ -146,6 +183,13 @@ function Register() {
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
+
+      trackOtpFailed({
+        flow: isGoogleSignupFlow ? "mobile_verification" : "signup",
+        stage: "request",
+        error_type: "send_failed",
+        ...CONSULTANT_FUNNEL,
+      });
 
       if (
         msg?.includes("blocked") ||
@@ -180,12 +224,16 @@ function Register() {
       return;
     }
 
+    const wasGoogleSignup = isGoogleSignupFlow;
+    const otpFlow = wasGoogleSignup ? "mobile_verification" : "signup";
+    trackOtpSubmitted({ flow: otpFlow, ...CONSULTANT_FUNNEL });
+
     try {
       setLoading(true);
       const values = getValues();
 
       let res;
-      if (isGoogleSignupFlow) {
+      if (wasGoogleSignup) {
         res = await googleSignupVerify({
           googleIdToken: googleToken,
           phoneNumber: values.phone,
@@ -206,9 +254,30 @@ function Register() {
       }
 
       if (!res?.error && (res?.success || res?.status)) {
+        trackOtpVerified({ flow: otpFlow, ...CONSULTANT_FUNNEL });
+        if (wasGoogleSignup) {
+          trackMobileVerificationCompleted(CONSULTANT_FUNNEL);
+        }
+        trackSignupCompleted({
+          method: wasGoogleSignup ? "google" : "mobile_otp",
+          user_role: "CONSULTATION",
+          ...CONSULTANT_FUNNEL,
+        });
         push("/consult/subscription");
       } else if (res?.error) {
         const msg = res?.message?.toLowerCase();
+        trackOtpFailed({
+          flow: otpFlow,
+          stage: "verify",
+          error_type: "verify_failed",
+          ...CONSULTANT_FUNNEL,
+        });
+        if (wasGoogleSignup) {
+          trackMobileVerificationFailed({
+            error_type: "verify_failed",
+            ...CONSULTANT_FUNNEL,
+          });
+        }
         if (
           msg?.includes("blocked") ||
           msg?.includes("too many attempts") ||
@@ -233,6 +302,19 @@ function Register() {
     } catch (err) {
       const api = err?.response?.data;
       const msg = api?.message?.toLowerCase();
+
+      trackOtpFailed({
+        flow: otpFlow,
+        stage: "verify",
+        error_type: "verify_failed",
+        ...CONSULTANT_FUNNEL,
+      });
+      if (wasGoogleSignup) {
+        trackMobileVerificationFailed({
+          error_type: "verify_failed",
+          ...CONSULTANT_FUNNEL,
+        });
+      }
 
       if (
         msg?.includes("blocked") ||

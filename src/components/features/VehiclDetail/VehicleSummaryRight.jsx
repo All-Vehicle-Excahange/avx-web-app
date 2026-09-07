@@ -171,6 +171,11 @@ export default function VehicleSummaryRight({
         seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
         source,
       });
+      useAuthStore.getState().setAuthFunnelContext({
+        entry_context: "vehicle_detail",
+        trigger_action: "inquiry",
+        user_role_intent: "buyer",
+      });
       setIsLoginOpen(true);
       return;
     }

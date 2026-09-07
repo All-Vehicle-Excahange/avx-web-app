@@ -295,22 +295,116 @@ export function trackWishlistLoginRequired(properties = {}) {
   });
 }
 
+function authFunnelProps(properties = {}) {
+  return {
+    entry_context: properties.entry_context || undefined,
+    trigger_action: properties.trigger_action || undefined,
+    user_role_intent: properties.user_role_intent || undefined,
+    user_role: properties.user_role || undefined,
+  };
+}
+
+function normalizeAuthMethod(method) {
+  if (!method) return undefined;
+  if (method === "otp" || method === "mobile_otp") return "mobile_otp";
+  if (method === "google" || method === "google_otp") return "google";
+  return method;
+}
+
 export function trackLoginStarted(properties = {}) {
   track("login_started", {
     source: properties.source || undefined,
+    ...authFunnelProps(properties),
   });
 }
 
 export function trackLoginCompleted(properties = {}) {
   track("login_completed", {
-    method: properties.method || undefined,
-    user_role: properties.user_role || undefined,
+    method: normalizeAuthMethod(properties.method),
+    ...authFunnelProps(properties),
   });
 }
 
 export function trackSignupCompleted(properties = {}) {
   track("signup_completed", {
-    method: properties.method || undefined,
+    method: normalizeAuthMethod(properties.method),
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackOtpRequested(properties = {}) {
+  track("otp_requested", {
+    flow: properties.flow || undefined,
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackOtpSubmitted(properties = {}) {
+  track("otp_submitted", {
+    flow: properties.flow || undefined,
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackOtpVerified(properties = {}) {
+  track("otp_verified", {
+    flow: properties.flow || undefined,
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackOtpFailed(properties = {}) {
+  track("otp_failed", {
+    flow: properties.flow || undefined,
+    error_type: properties.error_type || undefined,
+    stage: properties.stage || undefined,
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackMobileVerificationStarted(properties = {}) {
+  track("mobile_verification_started", {
+    method: "google",
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackMobileVerificationCompleted(properties = {}) {
+  track("mobile_verification_completed", {
+    method: "google",
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackMobileVerificationFailed(properties = {}) {
+  track("mobile_verification_failed", {
+    method: "google",
+    error_type: properties.error_type || undefined,
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackProfileSetupStarted(properties = {}) {
+  track("profile_setup_started", {
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackProfileSetupCompleted(properties = {}) {
+  track("profile_setup_completed", {
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackPreferencesStarted(properties = {}) {
+  track("preferences_started", {
+    ...authFunnelProps(properties),
+  });
+}
+
+export function trackPreferencesCompleted(properties = {}) {
+  track("preferences_completed", {
+    ...authFunnelProps(properties),
   });
 }
 
@@ -356,16 +450,53 @@ export function trackInquirySubmitted(properties = {}) {
   });
 }
 
-export function trackInspectionPaymentSuccess(properties = {}) {
-  track("inspection_payment_success", {
-    vehicle_id: properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+function inspectionProps(properties = {}) {
+  return {
+    vehicle_id:
+      properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
     inspection_id:
       properties.inspection_id != null
         ? String(properties.inspection_id)
         : undefined,
     amount: properties.amount != null ? Number(properties.amount) : undefined,
     currency: properties.currency || "INR",
+    source: properties.source || undefined,
+    inspection_type: properties.inspection_type || undefined,
+  };
+}
+
+export function trackInspectionStarted(properties = {}) {
+  track("inspection_started", inspectionProps(properties));
+}
+
+export function trackInspectionScheduleOpened(properties = {}) {
+  track("inspection_schedule_opened", inspectionProps(properties));
+}
+
+export function trackInspectionSlotSelected(properties = {}) {
+  track("inspection_slot_selected", {
+    ...inspectionProps(properties),
+    slot_label: properties.slot_label || undefined,
   });
+}
+
+export function trackInspectionPaymentStarted(properties = {}) {
+  track("inspection_payment_started", inspectionProps(properties));
+}
+
+export function trackInspectionPaymentSuccess(properties = {}) {
+  track("inspection_payment_success", inspectionProps(properties));
+}
+
+export function trackInspectionPaymentFailed(properties = {}) {
+  track("inspection_payment_failed", {
+    ...inspectionProps(properties),
+    error_type: properties.error_type || undefined,
+  });
+}
+
+export function trackInspectionReportAvailable(properties = {}) {
+  track("inspection_report_available", inspectionProps(properties));
 }
 
 export function trackBecomeConsultantPageViewed(properties = {}) {

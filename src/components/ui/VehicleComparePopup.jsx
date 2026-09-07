@@ -58,7 +58,11 @@ export default function VehicleComparePopup({
         if (isOpen) {
             if (!isLoggedIn) {
                 onClose();
-                openLoginPopup();
+                openLoginPopup({
+                    entry_context: isVehicleDetails ? "vehicle_detail" : "search",
+                    trigger_action: "compare",
+                    user_role_intent: "buyer",
+                });
                 return;
             }
 

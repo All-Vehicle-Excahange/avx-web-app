@@ -27,6 +27,11 @@ import {
   getState,
   getAllTown,
 } from "@/services/user.service";
+import {
+  trackPreferencesStarted,
+  trackPreferencesCompleted,
+} from "@/lib/amplitude";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 /* ─── step config ─── */
 const STEPS = [
@@ -105,6 +110,16 @@ function PreferencesPopup({
       if (onClose) onClose();
     }, 250);
   }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const ctx = useAuthStore.getState().authFunnelContext || {};
+    trackPreferencesStarted({
+      entry_context: ctx.entry_context,
+      trigger_action: ctx.trigger_action,
+      user_role_intent: ctx.user_role_intent,
+    });
+  }, [isOpen]);
 
   /* ─── sync initialData ─── */
   useEffect(() => {
@@ -558,6 +573,12 @@ function PreferencesPopup({
       } else {
         await addUserPefrence(payload);
       }
+      const ctx = useAuthStore.getState().authFunnelContext || {};
+      trackPreferencesCompleted({
+        entry_context: ctx.entry_context,
+        trigger_action: ctx.trigger_action,
+        user_role_intent: ctx.user_role_intent,
+      });
       handleClose();
     } catch (error) {
       console.error("Failed to save preferences", error);

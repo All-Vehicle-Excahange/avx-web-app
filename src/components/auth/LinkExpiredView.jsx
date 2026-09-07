@@ -36,7 +36,13 @@ export default function LinkExpiredView() {
           </p>
 
           <button
-            onClick={() => openLoginPopup()}
+            onClick={() =>
+              openLoginPopup({
+                entry_context: "direct",
+                trigger_action: "login_click",
+                user_role_intent: "buyer",
+              })
+            }
             className="text-base sm:text-lg text-primary/80 hover:text-primary font-medium underline underline-offset-4 transition-colors cursor-pointer"
           >
             Please log in to continue.

@@ -105,6 +105,11 @@ export default function VehicleImageGallery({ vehicle }) {
         vehicle_id: vehicleId || vehicle?.id,
         source: "vdp",
       });
+      useAuthStore.getState().setAuthFunnelContext({
+        entry_context: "vehicle_detail",
+        trigger_action: "wishlist",
+        user_role_intent: "buyer",
+      });
       setIsLoginOpen(true);
       return;
     }

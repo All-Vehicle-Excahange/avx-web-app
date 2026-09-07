@@ -182,7 +182,11 @@ export default function App({ Component, pageProps }) {
         sessionStorage.removeItem("triggerLoginPopup");
         if (!hasTokenInUrl) {
           setTimeout(() => {
-             openLoginPopup();
+             openLoginPopup({
+               entry_context: "direct",
+               trigger_action: "login_click",
+               user_role_intent: "buyer",
+             });
           }, 150);
         }
       }
