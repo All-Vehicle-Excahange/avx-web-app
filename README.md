@@ -64,3 +64,4 @@ curl --location 'localhost:8103/api/v1/website/ppc/ad/AD_ID/analytics' \
 curl --location 'localhost:8103/api/v1/website/ppc/boost/CAMPAIGN_ID/billing-transactions?pageNo=1&size=10' \
 --header 'Authorization: Bearer YOUR_TOKEN'
 ```
+
