@@ -193,6 +193,14 @@ export default function VehicleDetails({
         vehicle_type: vehicleOverview.vehicleType || "",
         price: vehicleOverview.price || 0,
         seller_type: vehicleOverview.sellerType || vehicleOverview.vehicleOwner?.userRole || "USER",
+        city:
+          vehicleOverview.cityName ||
+          vehicleOverview.vehicleAddress?.city ||
+          undefined,
+        state:
+          vehicleOverview.stateName ||
+          vehicleOverview.vehicleAddress?.state ||
+          undefined,
       });
     }
   }, [vehicleOverview]);

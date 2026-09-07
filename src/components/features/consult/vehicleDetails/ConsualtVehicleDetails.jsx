@@ -173,28 +173,41 @@ export default function ConsualtVehicleDetails({
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
 
   useEffect(() => {
-    if (vehicleOverview?.id && trackedVehicleIdRef.current !== vehicleOverview.id) {
-      trackedVehicleIdRef.current = vehicleOverview.id;
-      const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
-      event("ViewContent", {
-        content_type: "vehicle",
-        content_ids: [String(vehicleOverview.id)],
-        content_name: vehicleName || "Vehicle Details",
-        value: Number(vehicleOverview.price) || 0,
-        currency: "INR",
-      });
-      trackVehicleDetailViewed({
-        vehicle_id: vehicleOverview.id,
-        vehicle_name: vehicleName || "Vehicle Details",
-        vehicle_type: vehicleOverview.vehicleType || "",
-        price: vehicleOverview.price || 0,
-        seller_type:
-          vehicleOverview.sellerType ||
-          vehicleOverview.vehicleOwner?.userRole ||
-          "CONSULTATION",
-      });
-    }
-  }, [vehicleOverview?.id]);
+    if (!vehicleOverview?.id) return;
+    // Wait for summary when consultation so address names are available
+    if (isConsultation && !vehicleSummaryData) return;
+    if (trackedVehicleIdRef.current === vehicleOverview.id) return;
+
+    trackedVehicleIdRef.current = vehicleOverview.id;
+    const vehicleName = `${vehicleOverview.yearOfMfg || ""} ${vehicleOverview.makerName || ""} ${vehicleOverview.modelName || ""} ${vehicleOverview.variantName || ""}`.trim();
+    event("ViewContent", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleOverview.id)],
+      content_name: vehicleName || "Vehicle Details",
+      value: Number(vehicleOverview.price) || 0,
+      currency: "INR",
+    });
+    trackVehicleDetailViewed({
+      vehicle_id: vehicleOverview.id,
+      vehicle_name: vehicleName || "Vehicle Details",
+      vehicle_type: vehicleOverview.vehicleType || "",
+      price: vehicleOverview.price || 0,
+      seller_type:
+        vehicleOverview.sellerType ||
+        vehicleOverview.vehicleOwner?.userRole ||
+        "CONSULTATION",
+      city:
+        vehicleSummary?.address?.city ||
+        vehicleOverview.cityName ||
+        vehicleOverview.vehicleAddress?.city ||
+        undefined,
+      state:
+        vehicleSummary?.address?.state ||
+        vehicleOverview.stateName ||
+        vehicleOverview.vehicleAddress?.state ||
+        undefined,
+    });
+  }, [vehicleOverview, vehicleSummaryData, vehicleSummary, isConsultation]);
 
   //  Stricter loading check to prevent "Labels without values" UI flash
   if (loading || !vehicleOverview?.id) {

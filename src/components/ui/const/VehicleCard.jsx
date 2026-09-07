@@ -91,6 +91,10 @@ export default function VehicleCard({
       pendingAction.current = "wishlist";
       trackWishlistLoginRequired({
         vehicle_id: data?.id,
+        vehicle_name:
+          `${data?.yearOfMfg || data?.year || ""} ${data?.makerName || ""} ${data?.modelName || ""} ${data?.variantName || ""}`.trim() ||
+          data?.title ||
+          undefined,
         source: "search",
       });
       useAuthStore.getState().setAuthFunnelContext({

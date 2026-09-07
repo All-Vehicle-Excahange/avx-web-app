@@ -801,8 +801,10 @@ export default function SearchWithCard({
       search_string: searchLabel,
       results_count: topPicksPR.totalElements || combinedTotal,
       search_type: "search_results_page",
+      city: selectedCityName || undefined,
+      state: selectedStateName || undefined,
     });
-  }, [searchData]);
+  }, [searchData, selectedCityName, selectedStateName, brandParam, modelParam, pathname]);
 
   // Emit consultants callback
   useEffect(() => {

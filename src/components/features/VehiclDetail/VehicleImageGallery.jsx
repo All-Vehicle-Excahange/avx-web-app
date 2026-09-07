@@ -103,6 +103,9 @@ export default function VehicleImageGallery({ vehicle }) {
       pendingAction.current = "wishlist";
       trackWishlistLoginRequired({
         vehicle_id: vehicleId || vehicle?.id,
+        vehicle_name:
+          `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+          undefined,
         source: "vdp",
       });
       useAuthStore.getState().setAuthFunnelContext({

@@ -27,14 +27,14 @@ Stored on `useAuthStore.authFunnelContext` when a login gate opens; attached to 
 | `session_started` | First client paint of a browser tab session | `path`, `pathname` | `_app.js` |
 | `landing_page_viewed` | Initial load + every `routeChangeComplete` | `path`, `pathname` | `_app.js` |
 | `homepage_viewed` | Home `/` (also fires wizard `Viewed Home Page` with `prompt_version`) | — | `_app.js` |
-| `search_submitted` | Navbar / home filter search | `search_string`, `source` | `Navbar.jsx`, `VehicleFilterBar.jsx` |
-| `search_results_viewed` | Search results data loaded | `search_string`, `results_count`, `search_type` | `SearchWithCard.jsx` |
+| `search_submitted` | Navbar / home filter search | `search_string`, `source`, `city` / `state` (names when known) | `Navbar.jsx`, `VehicleFilterBar.jsx` |
+| `search_results_viewed` | Search results data loaded | `search_string`, `results_count`, `search_type`, `city` / `state` (names) | `SearchWithCard.jsx` |
 | `filter_applied` | Filters change (after first hydration) | brands, models, fuel, price, `city` / `state` (names, not IDs), etc. | `SearchWithCard.jsx` |
-| `vehicle_detail_viewed` | VDP / consult VDP load (once per vehicle id) | `vehicle_id`, `vehicle_name`, `vehicle_type`, `price`, `seller_type` | `VehiclDetail.jsx`, `ConsualtVehicleDetails.jsx` |
+| `vehicle_detail_viewed` | VDP / consult VDP load (once per vehicle id) | `vehicle_id`, `vehicle_name`, `vehicle_type`, `price`, `seller_type`, `city` / `state` (names) | `VehiclDetail.jsx`, `ConsualtVehicleDetails.jsx` |
 | `storefront_viewed` | Consultant storefront hero data ready | `consultant_id`, `consultation_name`, `username`, `available_vehicles`, `average_rating` | `StoreFrontHeroSection.jsx` |
 | `inquiry_login_required` | Guest taps Send Inquiry | `vehicle_id`, `seller_type`, `source` | `VehicleSummaryRight.jsx` |
 | `inquiry_initiated` | User clicks **Send Inquiry** on VDP (guest or logged-in) | `vehicle_id`, `vehicle_name`, `seller_type`, `source`, `is_logged_in` | `VehicleSummaryRight.jsx` |
-| `wishlist_login_required` | Guest taps wishlist | `vehicle_id`, `source` | `VehicleCard.jsx`, `VehicleImageGallery.jsx` |
+| `wishlist_login_required` | Guest taps wishlist | `vehicle_id`, `vehicle_name`, `source` | `VehicleCard.jsx`, `VehicleImageGallery.jsx` |
 | `login_started` | Login popup opens | `source` + auth funnel props | `LoginPopup.jsx` |
 | `login_completed` | Login success (OTP / Google) | `method`, `user_role` + auth funnel props | `LoginPopup.jsx` |
 | `signup_completed` | Final successful signup (keep this name) | `method`, `user_role` + auth funnel props + UTMs/referrer via SDK | `SignupPopup.jsx`, `LoginPopup.jsx` (Google phone link), `Register.jsx` |

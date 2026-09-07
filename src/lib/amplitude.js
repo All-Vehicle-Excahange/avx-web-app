@@ -225,6 +225,8 @@ export function trackSearchSubmitted(properties = {}) {
     vehicle_type: properties.vehicle_type || undefined,
     brand: properties.brand || undefined,
     location: properties.location || undefined,
+    city: properties.city || undefined,
+    state: properties.state || undefined,
   });
 }
 
@@ -233,6 +235,8 @@ export function trackSearchResultsViewed(properties = {}) {
     search_string: String(properties.search_string || "").trim() || undefined,
     results_count: Number(properties.results_count) || 0,
     search_type: properties.search_type || "search_results_page",
+    city: properties.city || undefined,
+    state: properties.state || undefined,
   });
 }
 
@@ -261,6 +265,8 @@ export function trackVehicleDetailViewed(properties = {}) {
     vehicle_type: properties.vehicle_type || undefined,
     price: properties.price != null ? Number(properties.price) : undefined,
     seller_type: properties.seller_type || undefined,
+    city: properties.city || undefined,
+    state: properties.state || undefined,
     currency: "INR",
   });
 }
@@ -305,6 +311,7 @@ export function trackInquiryInitiated(properties = {}) {
 export function trackWishlistLoginRequired(properties = {}) {
   track("wishlist_login_required", {
     vehicle_id: properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
     source: properties.source || "search",
   });
 }

@@ -36,7 +36,7 @@ import { trackSearchResults } from "@/lib/gtag";
 import { setPreferredLocation, trackSearchSubmitted } from "@/lib/amplitude";
 import { generateSeoSlug } from "@/lib/seo";
 
-const trackProductSearch = (searchString, searchType = "filter_bar") => {
+const trackProductSearch = (searchString, searchType = "filter_bar", locationProps = {}) => {
   const query = String(searchString || "").trim() || "vehicle_search";
   metaEvent("Search", { search_string: query });
   trackSearchResults({
@@ -46,6 +46,9 @@ const trackProductSearch = (searchString, searchType = "filter_bar") => {
   trackSearchSubmitted({
     search_string: query,
     source: searchType,
+    city: locationProps.city || undefined,
+    state: locationProps.state || undefined,
+    location: locationProps.location || undefined,
   });
 };
 
@@ -954,7 +957,37 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
     setIsSearching(true);
     try {
-      const isConsult = internalActiveType === "consult";
+      // Resolve human-readable city/state for Amplitude (never send IDs)
+      let ampCity;
+      let ampState;
+      if (location) {
+        const parts = location.split(",").map((p) => p.trim()).filter(Boolean);
+        if (parts.length >= 2) {
+          ampCity = parts[0];
+          ampState = parts[1];
+        } else if (cityId) {
+          ampCity = parts[0];
+        } else if (stateId) {
+          ampState = parts[0];
+        }
+      }
+      const matchedSuggestion = locationSuggestions?.find(
+        (l) =>
+          (cityId && Number(l.cityId) === Number(cityId)) ||
+          (!cityId &&
+            stateId &&
+            Number(l.stateId) === Number(stateId) &&
+            l.isStateOnly),
+      );
+      if (matchedSuggestion) {
+        ampCity = matchedSuggestion.cityName || ampCity;
+        ampState = matchedSuggestion.stateName || ampState;
+      }
+      const locationProps = {
+        city: ampCity || undefined,
+        state: ampState || undefined,
+        location: location || undefined,
+      };
 
       // Save/overwrite selected location to localStorage removed
       if (stateId && cityId && location) {
@@ -978,6 +1011,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           ...(service && { service }),
           ...(availability && { availability }),
         }).toString();
+        trackProductSearch(
+          [location, vehicleType, service].filter(Boolean).join(" | ") ||
+            "consultant_search",
+          "filter_bar_consult",
+          locationProps,
+        );
         await push(`/consult/discovery${query ? `?${query}` : ""}`);
         setActiveTab(null);
         setMobileOpen(false);
@@ -990,7 +1029,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           vehicleSearchQuery?.trim() ||
           [brand, vehicleType, location, budget].filter(Boolean).join(" | ") ||
           "vehicle_search";
-        trackProductSearch(searchString, "filter_bar_filters");
+        trackProductSearch(searchString, "filter_bar_filters", locationProps);
 
         let budgetParam = null;
         if (budget) {
