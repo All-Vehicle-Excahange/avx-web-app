@@ -318,6 +318,17 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
             ...getFunnelProps(),
           });
         }
+        if (res?.data?.validationErrors) {
+          const errors = res.data.validationErrors;
+          const fieldMap = { firstname: "firstName", lastname: "lastName", phonenumber: "phone", mobile: "phone" };
+          Object.entries(errors).forEach(([field, message]) => {
+            const formField = fieldMap[field.toLowerCase()] || field;
+            setError(formField, { type: "server", message });
+          });
+          if (Object.keys(errors).length > 0) {
+            return;
+          }
+        }
 
         if (msg?.includes("otp already sent")) {
           setOtpSent(true);
@@ -367,6 +378,17 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
           error_type: "send_failed",
           ...getFunnelProps(),
         });
+      }
+      if (api?.data?.validationErrors) {
+        const errors = api.data.validationErrors;
+        const fieldMap = { firstname: "firstName", lastname: "lastName", phonenumber: "phone", mobile: "phone" };
+        Object.entries(errors).forEach(([field, message]) => {
+          const formField = fieldMap[field.toLowerCase()] || field;
+          setError(formField, { type: "server", message });
+        });
+        if (Object.keys(errors).length > 0) {
+          return;
+        }
       }
 
       if (msg?.includes("otp already sent")) {

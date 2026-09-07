@@ -524,7 +524,7 @@ export default function VehicleSpec({
     }
   };
   return (
-    <section className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
+    <section id="inspect-before-you-buy" className="relative rounded-2xl overflow-hidden  text-primary border border-third/60">
       {/* <div className="absolute inset-0 bg-[url('/bg_blur.jpg')] bg-cover bg-center opacity-40 blur-lg z-0" /> */}
 
       <div className="relative z-10">

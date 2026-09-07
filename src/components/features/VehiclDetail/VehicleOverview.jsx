@@ -140,6 +140,7 @@ export default function VehicleOverview({ vehicle, open, setOpen }) {
                       type="button"
                       showIcon={true}
                       variant="outline"
+                      size="sm"
                     >
                       View Full Specification
                     </Button>

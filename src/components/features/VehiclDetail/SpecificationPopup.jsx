@@ -106,7 +106,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         }}
       >
         {/* LEFT SIDEBAR - CATEGORIES */}
-        <div className="w-full md:w-[220px] shrink-0 border-b md:border-b-0 md:border-r border-white/5 overflow-x-auto md:overflow-y-auto flex flex-row md:flex-col py-2 px-3 md:px-0 gap-1.5 md:gap-0 no-scrollbar whitespace-nowrap">
+        <div className="w-full md:w-[280px] shrink-0 border-b md:border-b-0 md:border-r border-white/5 overflow-x-auto md:overflow-y-auto flex flex-row md:flex-col py-2 px-3 md:px-0 gap-1.5 md:gap-0 no-scrollbar whitespace-nowrap md:whitespace-normal">
           {isLoading ? (
             <div className="p-4 text-xs md:text-sm text-primary/60">Loading...</div>
           ) : categories.length === 0 ? (
@@ -116,7 +116,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
               <button
                 key={category}
                 onClick={() => setActiveTab(category)}
-                className={`px-4 md:px-5 py-2 md:py-3 text-xs md:text-sm font-semibold md:font-medium rounded-full md:rounded-none shrink-0 md:text-left transition-all ${
+                className={`cursor-pointer px-4 md:px-5 py-2 md:py-3 text-xs md:text-sm font-semibold md:font-medium rounded-full md:rounded-none shrink-0 md:text-left transition-all ${
                   activeTab === category
                     ? "bg-white/10 text-primary"
                     : "text-primary/60 hover:bg-white/5 hover:text-primary"
