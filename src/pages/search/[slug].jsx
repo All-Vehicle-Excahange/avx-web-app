@@ -40,6 +40,7 @@ function SlugSearchPage({ seo, initialFilters }) {
   const trackedSearchRef = useRef(null);
   const ogImage =
     seo?.ogImage || "https://www.reecomm.com/logo/logo1.webp";
+  const ogImageAlt = seo?.title || "Used vehicles on Reecomm";
 
   useEffect(() => {
     const query =
@@ -61,7 +62,10 @@ function SlugSearchPage({ seo, initialFilters }) {
         <title>{seo?.title || "Used Cars | Reecomm"}</title>
         <meta
           name="description"
-          content={seo?.description || "Browse verified used vehicles for sale."}
+          content={
+            seo?.description ||
+            "Browse verified used vehicles for sale on Reecomm."
+          }
         />
         {seo?.canonical && (
           <link key="canonical" rel="canonical" href={seo.canonical} />
@@ -70,7 +74,7 @@ function SlugSearchPage({ seo, initialFilters }) {
           <meta name="robots" content="noindex, follow" />
         )}
 
-        <meta property="og:type" content="website" />
+        <meta key="og:type" property="og:type" content="website" />
         <meta property="og:site_name" content="Reecomm" />
         {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
         <meta property="og:title" content={seo?.title || "Used Cars | Reecomm"} />
@@ -81,10 +85,10 @@ function SlugSearchPage({ seo, initialFilters }) {
             "Browse verified used vehicles for sale on Reecomm."
           }
         />
-        <meta
-          property="og:image"
-          content={ogImage}
-        />
+        <meta key="og:image" property="og:image" content={ogImage} />
+        <meta key="og:image:width" property="og:image:width" content="1200" />
+        <meta key="og:image:height" property="og:image:height" content="630" />
+        <meta key="og:image:alt" property="og:image:alt" content={ogImageAlt} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@reecomm" />
@@ -99,10 +103,7 @@ function SlugSearchPage({ seo, initialFilters }) {
             "Browse verified used vehicles for sale on Reecomm."
           }
         />
-        <meta
-          name="twitter:image"
-          content={ogImage}
-        />
+        <meta key="twitter:image" name="twitter:image" content={ogImage} />
 
         <script
           type="application/ld+json"
@@ -739,7 +740,11 @@ export async function getServerSideProps(context) {
   });
 
   const noindex = !isHub && totalCount < MIN_INDEXABLE_LISTINGS;
-  const firstVehicleImage = initialVehicles[0]?.thumbnailUrl || null;
+  const firstWithImage = initialVehicles.find(
+    (v) => v?.thumbnailUrl || v?.imageUrl
+  );
+  const firstVehicleImage =
+    firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || null;
 
   return {
     props: {

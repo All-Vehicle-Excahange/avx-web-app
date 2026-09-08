@@ -144,7 +144,9 @@ export const generateDynamicPageTitle = (vehicle) => {
 };
 
 export const generateDynamicMetaDescription = (vehicle, summary = {}) => {
-  if (!vehicle) return "Buy verified used vehicles on Reecomm. View detailed specs, photos, price, and contact information.";
+  if (!vehicle) {
+    return "Reecomm | Buy verified used vehicles. View detailed specs, photos, price, and contact information.";
+  }
 
   const year = vehicle.yearOfMfg || "";
   const make = vehicle.makerName || vehicle.makeName || "";
@@ -181,16 +183,27 @@ export const generateDynamicMetaDescription = (vehicle, summary = {}) => {
 
   const fuel = vehicle.fuelType || "";
   const transmission = vehicle.transmissionType || "";
-  const rating = vehicle.avxInspectionRating ? `AVX Inspected (Rating: ${vehicle.avxInspectionRating}/10)` : "Reecomm Inspected";
+  const rating = vehicle.avxInspectionRating
+    ? `AVX Inspected (Rating: ${vehicle.avxInspectionRating}/10)`
+    : "Reecomm Inspected";
 
-  const sellerName = summary?.consultationName || vehicle.consultantName || (vehicle.vehicleOwner ? `${vehicle.vehicleOwner.firstname || ""} ${vehicle.vehicleOwner.lastname || ""}`.trim() : null);
+  const sellerName =
+    summary?.consultationName ||
+    vehicle.consultantName ||
+    (vehicle.vehicleOwner
+      ? `${vehicle.vehicleOwner.firstname || ""} ${vehicle.vehicleOwner.lastname || ""}`.trim()
+      : null);
 
   const specsList = [km, ownership, fuel, transmission].filter(Boolean).join(", ");
   const locationText = city ? ` in ${city}` : "";
   const priceText = formattedPrice ? ` for ${formattedPrice}` : "";
   const sellerText = sellerName ? `. Listed by ${sellerName}` : "";
 
-  return `Buy certified used ${baseName}${locationText}${priceText}. ${specsList ? `${specsList}. ` : ""}${rating} with verified report${sellerText}. View HD photos, specs & book test drive on Reecomm.`;
+  let description = `Reecomm | Buy certified used ${baseName}${locationText}${priceText}. ${specsList ? `${specsList}. ` : ""}${rating} with verified report${sellerText}.`;
+  if (description.length > 160) {
+    description = `${description.slice(0, 157).trim()}...`;
+  }
+  return description;
 };
 
 export const normalizeWhyBuyData = (raw = {}, defaults = {}) => {

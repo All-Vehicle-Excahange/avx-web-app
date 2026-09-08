@@ -196,13 +196,24 @@ function Index({ seo }) {
 
   // 2. If client-side query loads vehicle data, update SEO values dynamically!
   if (vehicleOverview) {
-    vehicleImageUrl =
-      vehicleOverview.thumbnailUrl || vehicleOverview.imageUrls?.[0] || "";
+    const clientImage =
+      vehicleOverview.thumbnailUrl ||
+      vehicleOverview.imageUrls?.[0] ||
+      vehicleOverview.vehicleImages?.[0]?.imageUrl ||
+      vehicleOverview.vehiclePhotos?.[0]?.url ||
+      vehicleOverview.vehiclePhotos?.[0]?.photoUrl ||
+      "";
+    vehicleImageUrl = clientImage || seo?.image || vehicleImageUrl;
 
     displayTitle = generateDynamicPageTitle(vehicleOverview);
     displayDescription = generateDynamicMetaDescription(vehicleOverview);
     ogTitle = displayTitle;
     ogDescription = displayDescription;
+  }
+
+  // Never leave SERP without an image; prefer vehicle photo over logo
+  if (!vehicleImageUrl) {
+    vehicleImageUrl = "https://www.reecomm.com/logo/logo1.webp";
   }
 
   return (
@@ -234,15 +245,17 @@ function Index({ seo }) {
         {/* OpenGraph Tags for WhatsApp, Facebook, LinkedIn sharing */}
         <meta property="og:title" content={ogTitle} />
         <meta property="og:description" content={ogDescription} />
-        <meta property="og:type" content="product" />
+        <meta key="og:type" property="og:type" content="product" />
         <meta property="og:site_name" content="Reecomm" />
         {seo?.url && <meta property="og:url" content={seo.url} />}
-        {vehicleImageUrl && (
-          <meta property="og:image" content={vehicleImageUrl} />
-        )}
-        {vehicleImageUrl && (
-          <meta property="og:image:alt" content={displayTitle} />
-        )}
+        <meta key="og:image" property="og:image" content={vehicleImageUrl} />
+        <meta key="og:image:width" property="og:image:width" content="1200" />
+        <meta key="og:image:height" property="og:image:height" content="630" />
+        <meta
+          key="og:image:alt"
+          property="og:image:alt"
+          content={displayTitle}
+        />
         {vehicle.price && (
           <meta property="product:price:amount" content={String(vehicle.price)} />
         )}
@@ -252,9 +265,7 @@ function Index({ seo }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={ogTitle} />
         <meta name="twitter:description" content={ogDescription} />
-        {vehicleImageUrl && (
-          <meta name="twitter:image" content={vehicleImageUrl} />
-        )}
+        <meta key="twitter:image" name="twitter:image" content={vehicleImageUrl} />
       </Head>
       <Layout>
         <VehiclDetail initialOverview={null} initialSummary={null} />
@@ -313,7 +324,7 @@ export async function getStaticProps(context) {
   // ── Fallback SEO from slug ──────────────────────────────────────────────
   let finalTitle = "Vehicle Details | Reecomm";
   let finalDescription =
-    "Buy used vehicles at Reecomm. View detailed specs, photos, price, and contact information.";
+    "Reecomm | Buy used vehicles. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo1.webp`;
 
   if (title) {
@@ -331,14 +342,14 @@ export async function getStaticProps(context) {
         .replace(/-/g, " ")
         .replace(/\b\w/g, (c) => c.toUpperCase());
 
-      finalTitle = `${year} ${brandModel} for Sale in ${city} | Reecomm`;
-      finalDescription = `Buy used ${year} ${brandModel} in ${city} at Reecomm. View detailed specs, inspection report, photos, and price details.`;
+      finalTitle = `Used ${year} ${brandModel} for Sale in ${city} | Reecomm`;
+      finalDescription = `Reecomm | Buy used ${year} ${brandModel} in ${city}. View detailed specs, inspection report, photos, and price details.`;
     } else {
       const cleanTitle = title
         .replace(/-/g, " ")
         .replace(/\b\w/g, (c) => c.toUpperCase());
       finalTitle = `${cleanTitle} | Reecomm`;
-      finalDescription = `Buy ${cleanTitle} at Reecomm. View specs, photos, price, and contact details.`;
+      finalDescription = `Reecomm | Buy ${cleanTitle}. View specs, photos, price, and contact details.`;
     }
   }
 
@@ -365,7 +376,11 @@ export async function getStaticProps(context) {
         if (v) {
           // Real thumbnail from the vehicle record
           const thumbnail =
-            v.thumbnailUrl || v.vehicleImages?.[0]?.imageUrl || "";
+            v.thumbnailUrl ||
+            v.imageUrls?.[0] ||
+            v.vehicleImages?.[0]?.imageUrl ||
+            v.imageUrl ||
+            "";
 
           if (thumbnail) finalImageUrl = thumbnail;
 

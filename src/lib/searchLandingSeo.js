@@ -220,14 +220,14 @@ export function buildSearchLandingSeo({
       ? "Used Bikes - Buy & Sell Second Hand Bikes on Reecomm"
       : "Used Cars - Buy & Sell Second Hand Cars on Reecomm";
     const hubDescription = isTwoWheeler
-      ? "Browse verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy."
-      : "Browse verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.";
+      ? `Browse ${count > 0 ? `${count}+ ` : ""}verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy.`
+      : `Browse ${count > 0 ? `${count}+ ` : ""}verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
       h1: isTwoWheeler
         ? "Used Bikes - Buy & Sell Second Hand Bikes"
         : "Used Cars - Buy & Sell Second Hand Cars",
-      description: hubDescription,
+      description: truncateMeta(hubDescription),
       totalCount: count,
     };
   }
@@ -238,7 +238,9 @@ export function buildSearchLandingSeo({
     return {
       title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
       h1: `Used ${brandT} ${vw}`,
-      description: `Browse verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`,
+      description: truncateMeta(
+        `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`
+      ),
       totalCount: count,
     };
   }
@@ -271,15 +273,22 @@ export function buildSearchLandingSeo({
     ]);
     title = `${countPrefix}${core}`.trim();
     h1 = title;
-    if (title.length <= 50) title = `${title} | Reecomm`;
   }
 
-  let description = `Browse verified used ${cleanJoin([
+  // Append | Reecomm when title does not already mention Reecomm and length allows
+  if (!/reecomm/i.test(title) && title.length <= 55) {
+    title = `${title} | Reecomm`;
+  }
+
+  const subject = cleanJoin([
     brandT.toLowerCase(),
     modelT.toLowerCase(),
     vwLower,
     cityT ? `in ${cityT}` : "",
-  ])} on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+  ]);
+  const countBit = count > 0 ? `${count}+ ` : "";
+
+  let description = `Browse ${countBit}verified used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
 
   const samples = (sampleVehicles || []).slice(0, 3);
   if (samples.length) {
@@ -291,30 +300,27 @@ export function buildSearchLandingSeo({
       const price = formatShortPrice(v.price);
       return [year, modelName, fuel, owner, price].filter(Boolean).join(", ");
     });
-    const head = cleanJoin([
-      brandT || modelT ? `Used ${brandT} ${modelT}`.trim() : `Used ${vwLower}`,
-      cityT ? `in ${cityT}` : "",
-      "on Reecomm",
-    ]);
-    description = `${head} — ${bits[0]}${bits[1] ? `; ${bits[1]}` : ""}. Compare photos, fuel, ownership & inspection.`;
+    description = `Browse ${countBit}used ${subject} on Reecomm — ${bits[0]}${bits[1] ? `; ${bits[1]}` : ""}. Compare photos, fuel, ownership & inspection.`;
   } else {
     const modelSnippet = formatModelList(topModels);
     if (cityT && modelSnippet) {
-      description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos, fuel, ownership & inspection reports.`;
+      description = `Browse ${countBit}verified used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos, fuel, ownership & inspection reports.`;
     } else if (cityT) {
-      description = `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, fuel, ownership & inspection reports before you buy.`;
+      description = `Browse ${countBit}verified used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, fuel, ownership & inspection reports before you buy.`;
     }
   }
 
   return {
     title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
     h1,
-    description:
-      description.length > 165
-        ? `${description.slice(0, 162).trim()}...`
-        : description,
+    description: truncateMeta(description),
     totalCount: count,
   };
+}
+
+function truncateMeta(text) {
+  if (!text) return "";
+  return text.length > 160 ? `${text.slice(0, 157).trim()}...` : text;
 }
 
 function formatFuelLabel(fuel) {
