@@ -63,6 +63,9 @@ Stored on `useAuthStore.authFunnelContext` when a login gate opens; cleared afte
 | `inquiry_type_selected` | VDP inquiry popup | User picks inquiry type |
 | `inquiry_form_abandoned` | VDP inquiry popup | Closed without successful submit |
 | `inquiry_submitted` | VDP inquiry popup | Inquiry API success |
+| `make_offer_initiated` | VDP | Make An Offer clicked |
+| `make_offer_option_selected` | VDP make-offer popup | Preset price chip tapped |
+| `make_offer_submitted` | VDP make-offer popup | Offer API success |
 | `login_started` | Login popup (global / local) | Login UI opens |
 | `login_completed` | Login popup | Login success |
 | `signup_completed` | Signup / Login (Google phone) / Register | Final successful signup |
@@ -373,6 +376,71 @@ Also updates Identify `preferred_city` / `preferred_state` when city/state names
 | `inquiry_type` | string | e.g. `General Inquiry` | |
 | `seller_type` | string | | |
 
+#### `make_offer_initiated`
+
+| | |
+|--|--|
+| **Description** | User clicked Make An Offer (desktop or mobile CTA). |
+| **Where / page** | VDP |
+| **When triggered** | Make An Offer button click (before popup opens) |
+| **Wired in** | `VehicleSummaryRight.jsx` |
+
+| Property | Type | Values / examples | Notes |
+|----------|------|-------------------|-------|
+| `vehicle_id` | string | | |
+| `vehicle_name` | string | `2020 Maruti Swift …` | |
+| `seller_type` | string | | |
+| `source` | string | `vdp` | |
+| `listed_price` | number | INR | Seller list price |
+| `city` | string | `Palanpur` | Name, not ID |
+| `state` | string | `Gujarat` | Name, not ID |
+| `is_logged_in` | boolean | `true` / `false` | |
+
+#### `make_offer_option_selected`
+
+| | |
+|--|--|
+| **Description** | User tapped a preset offer price chip (90% / 93% / 96% of list). |
+| **Where / page** | VDP make-offer modal |
+| **When triggered** | Preset chip click (not free-typed amounts) |
+| **Wired in** | `MakeOfferPopup.jsx` |
+
+| Property | Type | Values / examples | Notes |
+|----------|------|-------------------|-------|
+| `vehicle_id` | string | | |
+| `vehicle_name` | string | | |
+| `seller_type` | string | | |
+| `source` | string | `vdp` | |
+| `listed_price` | number | INR | |
+| `city` | string | | Name, not ID |
+| `state` | string | | Name, not ID |
+| `offer_price` | number | INR | Selected preset amount |
+| `offer_option` | string | `90_pct` \| `93_pct` \| `96_pct` | |
+
+#### `make_offer_submitted`
+
+| | |
+|--|--|
+| **Description** | Offer successfully submitted via inquiry API. |
+| **Where / page** | VDP make-offer modal |
+| **When triggered** | `sendInquary` success |
+| **Wired in** | `MakeOfferPopup.jsx` |
+
+| Property | Type | Values / examples | Notes |
+|----------|------|-------------------|-------|
+| `vehicle_id` | string | | |
+| `vehicle_name` | string | | |
+| `seller_type` | string | | |
+| `source` | string | `vdp` | |
+| `listed_price` | number | INR | |
+| `city` | string | | Name, not ID |
+| `state` | string | | Name, not ID |
+| `offer_price` | number | INR | Final offer amount |
+| `offer_option` | string | `90_pct` \| `93_pct` \| `96_pct` \| `custom` | Preset match or custom |
+| `has_message` | boolean | | Optional message filled |
+
+**Also on this path (not Amplitude):** Meta custom `Inquiry` + GA4 `inquire_initiated` fire on Make An Offer CTA; Meta standard `Lead` + GA4 `inquiry_submit` fire on offer send success (same shared funnels as Send Inquiry).
+
 ---
 
 ### Auth & signup
@@ -641,12 +709,13 @@ Uses shared inspection props (`source: vdp`).
 ## Funnels to build in Amplitude UI
 
 1. **Buyer discovery:** `homepage_viewed` → `search_submitted` → `search_results_viewed` → `vehicle_detail_viewed` → `inquiry_initiated` → `inquiry_form_opened` → `inquiry_type_selected` → `inquiry_submitted`
-2. **Inquiry drop-off:** `inquiry_form_opened` → `inquiry_form_abandoned`
-3. **Auth gate:** `inquiry_login_required` / `wishlist_login_required` → `login_started` → `login_completed` / `signup_completed`
-4. **Buyer signup (OTP):** `login_started` → `otp_requested` → `otp_submitted` → `otp_verified` → `profile_setup_started` → `profile_setup_completed` → `preferences_started` → `preferences_completed` → `signup_completed`
-5. **Buyer signup (Google):** `login_started` → `mobile_verification_started` → `otp_requested` → `otp_submitted` → `otp_verified` / `mobile_verification_completed` → `profile_setup_*` → `preferences_*` → `signup_completed`
-6. **Inspection P0:** `vehicle_detail_viewed` → `inspection_started` → `inspection_schedule_opened` (video only) → `inspection_slot_selected` (video only) → `inspection_payment_started` → `inspection_payment_success` / `inspection_payment_failed` → `inspection_report_available`
-7. **Consultant acquisition:** `become_consultant_page_viewed` → `plan_selected` → `subscription_payment_success` → `seller_panel_accessed`
+2. **Make offer:** `vehicle_detail_viewed` → `make_offer_initiated` → `make_offer_option_selected` → `make_offer_submitted`
+3. **Inquiry drop-off:** `inquiry_form_opened` → `inquiry_form_abandoned`
+4. **Auth gate:** `inquiry_login_required` / `wishlist_login_required` → `login_started` → `login_completed` / `signup_completed`
+5. **Buyer signup (OTP):** `login_started` → `otp_requested` → `otp_submitted` → `otp_verified` → `profile_setup_started` → `profile_setup_completed` → `preferences_started` → `preferences_completed` → `signup_completed`
+6. **Buyer signup (Google):** `login_started` → `mobile_verification_started` → `otp_requested` → `otp_submitted` → `otp_verified` / `mobile_verification_completed` → `profile_setup_*` → `preferences_*` → `signup_completed`
+7. **Inspection P0:** `vehicle_detail_viewed` → `inspection_started` → `inspection_schedule_opened` (video only) → `inspection_slot_selected` (video only) → `inspection_payment_started` → `inspection_payment_success` / `inspection_payment_failed` → `inspection_report_available`
+8. **Consultant acquisition:** `become_consultant_page_viewed` → `plan_selected` → `subscription_payment_success` → `seller_panel_accessed`
 
 ---
 

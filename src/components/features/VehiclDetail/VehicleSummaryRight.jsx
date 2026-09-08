@@ -20,6 +20,7 @@ import { customEvent } from "@/lib/fpixel";
 import {
   trackInquiryInitiated,
   trackInquiryLoginRequired,
+  trackMakeOfferInitiated,
 } from "@/lib/amplitude";
 
 export default function VehicleSummaryRight({
@@ -204,6 +205,50 @@ export default function VehicleSummaryRight({
       pendingAction.current = null;
       handleRequestInquiry();
     }
+  };
+
+  const openMakeOffer = () => {
+    if (hasActiveInquiry || vehicle?.isVehicleSold) return;
+
+    const vehicleName =
+      `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
+    const city =
+      summary?.address?.city ||
+      vehicle?.vehicleAddress?.city ||
+      vehicle?.cityName ||
+      "";
+    const state =
+      summary?.address?.state ||
+      vehicle?.vehicleAddress?.state ||
+      vehicle?.stateName ||
+      "";
+    const sellerType = vehicle?.sellerType || vehicleOwnerRole || "";
+
+    trackMakeOfferInitiated({
+      vehicle_id: vehicleId || vehicle?.id,
+      vehicle_name: vehicleName || "Vehicle Details",
+      seller_type: sellerType,
+      source: "vdp",
+      listed_price: vehicle?.price,
+      city: city || undefined,
+      state: state || undefined,
+      is_logged_in: Boolean(isLoggedIn),
+    });
+
+    trackInquiryClick({
+      vehicle_id: vehicleId || vehicle?.id,
+      vehicle_name: vehicleName || "Vehicle Details",
+      seller_type: sellerType,
+    });
+
+    customEvent("Inquiry", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleId || vehicle?.id)],
+      content_name: vehicleName || "Vehicle Details",
+      seller_type: sellerType,
+    });
+
+    setIsMakeOfferOpen(true);
   };
 
   useEffect(() => {
@@ -442,7 +487,7 @@ export default function VehicleSummaryRight({
                     size="sm"
                     showIcon={false}
                     className="rounded-full text-xs whitespace-nowrap px-1"
-                    onClick={() => setIsMakeOfferOpen(true)}
+                    onClick={openMakeOffer}
                     disabled={hasActiveInquiry || vehicle?.isVehicleSold}
                   >
                     {hasActiveInquiry ? "Offer Already Sent" : "Make An Offer"}
@@ -530,7 +575,7 @@ export default function VehicleSummaryRight({
                   size="sm"
                   showIcon={false}
                   className="rounded-full text-[11px] whitespace-nowrap px-2.5"
-                  onClick={() => setIsMakeOfferOpen(true)}
+                  onClick={openMakeOffer}
                   disabled={hasActiveInquiry || vehicle?.isVehicleSold}
                 >
                   {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
@@ -601,6 +646,7 @@ export default function VehicleSummaryRight({
         isOpen={isMakeOfferOpen}
         onClose={() => setIsMakeOfferOpen(false)}
         vehicle={vehicle}
+        summary={summary}
         onSuccess={() => {
           setIsOfferSuccess(true);
           setIsPopupOpen(true);

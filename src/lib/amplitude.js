@@ -475,6 +475,52 @@ export function trackInquirySubmitted(properties = {}) {
   });
 }
 
+function makeOfferProps(properties = {}) {
+  return {
+    vehicle_id:
+      properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
+    seller_type: properties.seller_type || undefined,
+    source: properties.source || "vdp",
+    listed_price:
+      properties.listed_price != null
+        ? Number(properties.listed_price)
+        : undefined,
+    city: properties.city || undefined,
+    state: properties.state || undefined,
+  };
+}
+
+export function trackMakeOfferInitiated(properties = {}) {
+  track("make_offer_initiated", {
+    ...makeOfferProps(properties),
+    is_logged_in: properties.is_logged_in ?? undefined,
+  });
+}
+
+export function trackMakeOfferOptionSelected(properties = {}) {
+  track("make_offer_option_selected", {
+    ...makeOfferProps(properties),
+    offer_price:
+      properties.offer_price != null
+        ? Number(properties.offer_price)
+        : undefined,
+    offer_option: properties.offer_option || undefined,
+  });
+}
+
+export function trackMakeOfferSubmitted(properties = {}) {
+  track("make_offer_submitted", {
+    ...makeOfferProps(properties),
+    offer_price:
+      properties.offer_price != null
+        ? Number(properties.offer_price)
+        : undefined,
+    offer_option: properties.offer_option || undefined,
+    has_message: Boolean(properties.has_message),
+  });
+}
+
 function inspectionProps(properties = {}) {
   return {
     vehicle_id:

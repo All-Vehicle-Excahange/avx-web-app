@@ -10,8 +10,20 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SignupPopup from "@/components/auth/SignupPopup";
+import {
+  trackMakeOfferOptionSelected,
+  trackMakeOfferSubmitted,
+} from "@/lib/amplitude";
+import { event } from "@/lib/fpixel";
+import { trackInquirySubmit } from "@/lib/gtag";
 
-export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) {
+export default function MakeOfferPopup({
+  isOpen,
+  onClose,
+  vehicle,
+  summary,
+  onSuccess,
+}) {
   const queryClient = useQueryClient();
   const [offerPrice, setOfferPrice] = useState("");
   const [message, setMessage] = useState("");
@@ -22,6 +34,33 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const pendingAction = useRef(null);
+
+  const vehicleId = vehicle?._id || vehicle?.id;
+  const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
+  const vehicleName =
+    `${vehicle?.yearOfMfg || vehicle?.year || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
+  const city =
+    summary?.address?.city ||
+    vehicle?.vehicleAddress?.city ||
+    vehicle?.cityName ||
+    "";
+  const state =
+    summary?.address?.state ||
+    vehicle?.vehicleAddress?.state ||
+    vehicle?.stateName ||
+    "";
+  const sellerType = vehicle?.sellerType || vehicleOwnerRole || "";
+  const listedPrice = vehicle?.price || 0;
+
+  const offerBaseProps = () => ({
+    vehicle_id: vehicleId,
+    vehicle_name: vehicleName || "Vehicle Details",
+    seller_type: sellerType,
+    source: "vdp",
+    listed_price: listedPrice || undefined,
+    city: city || undefined,
+    state: state || undefined,
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -50,18 +89,31 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
     }, 250);
   }, [onClose]);
 
-
-  const listedPrice = vehicle?.price || 0;
-
   // Format to Lakhs (e.g. 3.40L)
   const toLakhs = (num) => {
     if (!num) return "₹0";
     return "₹" + (num / 100000).toFixed(2) + "L";
   };
 
-  const option1 = Math.round((listedPrice * 0.90) / 5000) * 5000;
+  const option1 = Math.round((listedPrice * 0.9) / 5000) * 5000;
   const option2 = Math.round((listedPrice * 0.93) / 5000) * 5000;
   const option3 = Math.round((listedPrice * 0.96) / 5000) * 5000;
+
+  const offerOptionForPrice = (price) => {
+    if (price === option1) return "90_pct";
+    if (price === option2) return "93_pct";
+    if (price === option3) return "96_pct";
+    return "custom";
+  };
+
+  const handlePresetOption = (opt, offerOption) => {
+    setOfferPrice(opt.toString());
+    trackMakeOfferOptionSelected({
+      ...offerBaseProps(),
+      offer_price: opt,
+      offer_option: offerOption,
+    });
+  };
 
   const currentOffer = Number(offerPrice) || 0;
   const isOfferTooHigh = currentOffer > listedPrice;
@@ -73,7 +125,7 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
     const target = e.target;
     const cursor = target.selectionStart;
     const oldVal = target.value;
-    
+
     // Count how many digits were before the cursor
     let digitsBeforeCursor = 0;
     for (let i = 0; i < cursor; i++) {
@@ -101,10 +153,6 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
     });
   };
 
-  // Calculate progress bar percentage
-  const minSlider = option1;
-  const maxSlider = listedPrice;
-
   const handleAuthSuccess = () => {
     setIsLoginOpen(false);
     setIsSignupOpen(false);
@@ -128,15 +176,38 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
       return;
     }
 
-    const vehicleId = vehicle?._id || vehicle?.id;
     if (!currentOffer || currentOffer <= 0 || !vehicleId) return;
     try {
       setIsLoading(true);
       const payload = {
         inquiryTitle: `Offer: ₹${currentOffer.toLocaleString("en-IN")}`,
-        inquiryDescription: message.trim() || `I would like to make an offer of ₹${currentOffer.toLocaleString("en-IN")} for this vehicle.`,
+        inquiryDescription:
+          message.trim() ||
+          `I would like to make an offer of ₹${currentOffer.toLocaleString("en-IN")} for this vehicle.`,
       };
       await sendInquary(vehicleId, payload);
+
+      trackMakeOfferSubmitted({
+        ...offerBaseProps(),
+        offer_price: currentOffer,
+        offer_option: offerOptionForPrice(currentOffer),
+        has_message: Boolean(message.trim()),
+      });
+
+      // Meta Pixel: same Lead as inquiry submit
+      event("Lead", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name: vehicleName || "Vehicle Inquiry",
+      });
+
+      // GA4: same inquiry_submit funnel as Send Inquiry
+      trackInquirySubmit({
+        vehicle_id: vehicleId,
+        vehicle_name: vehicleName || "Vehicle Inquiry",
+        inquiry_type: `Make Offer: ₹${currentOffer.toLocaleString("en-IN")}`,
+        seller_type: sellerType,
+      });
 
       // Invalidate queries to reflect the new inquiry
       queryClient.invalidateQueries({
@@ -161,12 +232,20 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={handleClose}
-      style={{ animation: isClosing ? "modalBackdropOut 0.25s ease-in forwards" : "modalBackdropIn 0.25s ease-out" }}
+      style={{
+        animation: isClosing
+          ? "modalBackdropOut 0.25s ease-in forwards"
+          : "modalBackdropIn 0.25s ease-out",
+      }}
     >
       <div
         className="relative w-full max-w-md max-h-[90vh] bg-secondary border border-third/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
-        style={{ animation: isClosing ? "modalCardOut 0.25s ease-in forwards" : "modalCardIn 0.3s ease-out" }}
+        style={{
+          animation: isClosing
+            ? "modalCardOut 0.25s ease-in forwards"
+            : "modalCardIn 0.3s ease-out",
+        }}
       >
         <button
           onClick={handleClose}
@@ -192,7 +271,8 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
             </div>
             <div className="pr-12">
               <h3 className="font-bold text-[15px] leading-tight text-primary">
-                {vehicle?.makerName} {vehicle?.modelName} {vehicle?.variantName} {vehicle?.yearOfMfg || vehicle?.year}
+                {vehicle?.makerName} {vehicle?.modelName} {vehicle?.variantName}{" "}
+                {vehicle?.yearOfMfg || vehicle?.year}
               </h3>
               <p className="text-primary/60 text-xs mt-1">
                 {vehicle?.location || "India"} · Used vehicle
@@ -201,22 +281,26 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
           </div>
 
           <div className="mb-4">
-            <p className="text-primary/60 text-xs mb-1">Seller's listed price</p>
-            <p className="text-2xl font-bold text-primary">₹{listedPrice.toLocaleString("en-IN")}</p>
+            <p className="text-primary/60 text-xs mb-1">Seller&apos;s listed price</p>
+            <p className="text-2xl font-bold text-primary">
+              ₹{listedPrice.toLocaleString("en-IN")}
+            </p>
           </div>
 
           <div className="mb-4">
             <p className="text-primary/60 text-xs mb-2">Your offer price</p>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 font-medium">₹</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 font-medium">
+                ₹
+              </span>
               <input
                 ref={inputRef}
                 type="text"
                 value={displayValue}
                 onChange={handlePriceChange}
                 className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none transition-colors ${
-                  isOfferTooHigh 
-                    ? "border-red-500 focus:border-red-500 bg-red-500/5" 
+                  isOfferTooHigh
+                    ? "border-red-500 focus:border-red-500 bg-red-500/5"
                     : "border-third/20 focus:border-fourth"
                 }`}
                 placeholder="Enter offer amount"
@@ -230,11 +314,19 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
 
             {/* QUICK OPTIONS */}
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {[option1, option2, option3].map((opt) => (
+              {[
+                { opt: option1, key: "90_pct" },
+                { opt: option2, key: "93_pct" },
+                { opt: option3, key: "96_pct" },
+              ].map(({ opt, key }) => (
                 <button
-                  key={opt}
-                  onClick={() => setOfferPrice(opt.toString())}
-                  className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${Number(offerPrice) === opt ? "bg-third/10 border-third/50 text-primary" : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"}`}
+                  key={key}
+                  onClick={() => handlePresetOption(opt, key)}
+                  className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${
+                    Number(offerPrice) === opt
+                      ? "bg-third/10 border-third/50 text-primary"
+                      : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"
+                  }`}
                 >
                   {toLakhs(opt)}
                 </button>
@@ -242,11 +334,11 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
             </div>
           </div>
 
-
-
           {/* MESSAGE FIELD */}
           <div className="mb-4">
-            <p className="text-primary/60 text-xs mb-2">Message <span className="opacity-70">(Optional)</span></p>
+            <p className="text-primary/60 text-xs mb-2">
+              Message <span className="opacity-70">(Optional)</span>
+            </p>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -300,15 +392,20 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
         }}
       />
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes modalBackdropIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes modalBackdropOut { from { opacity: 1; } to { opacity: 0; } }
         @keyframes modalCardIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes modalCardOut { from { opacity: 1; transform: scale(1) translateY(0); } to { opacity: 0; transform: scale(0.95) translateY(10px); } }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 
-  return typeof document !== "undefined" ? createPortal(modalContent, document.body) : null;
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 }
