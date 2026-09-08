@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, CarFront, CheckCircle2, Loader2 } from "lucide-react";
+import { X, CarFront } from "lucide-react";
 import Button from "@/components/ui/button";
 import { sendInquary } from "@/services/vehicle.service";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "@/stores/useAuthStore";
+import LoginPopup from "@/components/auth/LoginPopup";
+import SignupPopup from "@/components/auth/SignupPopup";
 
 export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) {
   const queryClient = useQueryClient();
@@ -15,12 +18,17 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const pendingAction = useRef(null);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
       setIsLoading(false);
       setMessage("");
-      
+
       // Initialize with middle offer option
       if (vehicle?.price) {
         const midOffer = Math.round((vehicle.price * 0.93) / 5000) * 5000;
@@ -42,10 +50,9 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
     }, 250);
   }, [onClose]);
 
-  if (!isOpen && !isClosing) return null;
 
   const listedPrice = vehicle?.price || 0;
-  
+
   // Format to Lakhs (e.g. 3.40L)
   const toLakhs = (num) => {
     if (!num) return "₹0";
@@ -57,12 +64,70 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
   const option3 = Math.round((listedPrice * 0.96) / 5000) * 5000;
 
   const currentOffer = Number(offerPrice) || 0;
+  const isOfferTooHigh = currentOffer > listedPrice;
+  const displayValue = offerPrice ? currentOffer.toLocaleString("en-IN") : "";
+
+  const inputRef = useRef(null);
+
+  const handlePriceChange = (e) => {
+    const target = e.target;
+    const cursor = target.selectionStart;
+    const oldVal = target.value;
+    
+    // Count how many digits were before the cursor
+    let digitsBeforeCursor = 0;
+    for (let i = 0; i < cursor; i++) {
+      if (/\d/.test(oldVal[i])) digitsBeforeCursor++;
+    }
+
+    const rawVal = oldVal.replace(/\D/g, "");
+    setOfferPrice(rawVal);
+
+    // Restore cursor position after the component re-renders with the formatted value
+    window.requestAnimationFrame(() => {
+      if (inputRef.current) {
+        const newVal = inputRef.current.value;
+        let newCursor = 0;
+        let digitsCounted = 0;
+        for (let i = 0; i < newVal.length; i++) {
+          if (digitsCounted === digitsBeforeCursor) break;
+          if (/\d/.test(newVal[i])) {
+            digitsCounted++;
+          }
+          newCursor = i + 1;
+        }
+        inputRef.current.setSelectionRange(newCursor, newCursor);
+      }
+    });
+  };
 
   // Calculate progress bar percentage
   const minSlider = option1;
   const maxSlider = listedPrice;
 
+  const handleAuthSuccess = () => {
+    setIsLoginOpen(false);
+    setIsSignupOpen(false);
+    if (pendingAction.current === "send_offer") {
+      pendingAction.current = null;
+      handleSendOffer();
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn && pendingAction.current === "send_offer") {
+      pendingAction.current = null;
+      handleSendOffer();
+    }
+  }, [isLoggedIn]);
+
   const handleSendOffer = async () => {
+    if (!isLoggedIn) {
+      pendingAction.current = "send_offer";
+      setIsLoginOpen(true);
+      return;
+    }
+
     const vehicleId = vehicle?._id || vehicle?.id;
     if (!currentOffer || currentOffer <= 0 || !vehicleId) return;
     try {
@@ -72,7 +137,7 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
         inquiryDescription: message.trim() || `I would like to make an offer of ₹${currentOffer.toLocaleString("en-IN")} for this vehicle.`,
       };
       await sendInquary(vehicleId, payload);
-      
+
       // Invalidate queries to reflect the new inquiry
       queryClient.invalidateQueries({
         queryKey: ["inquiry-eligibility", vehicleId],
@@ -80,7 +145,7 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
       queryClient.invalidateQueries({
         queryKey: ["vehicle-overview", vehicleId],
       });
-      
+
       if (onSuccess) onSuccess();
       handleClose();
     } catch (error) {
@@ -89,6 +154,8 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
       setIsLoading(false);
     }
   };
+
+  if (!isOpen && !isClosing) return null;
 
   const modalContent = (
     <div
@@ -103,7 +170,7 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-20 p-1.5 rounded-full hover:bg-third/10 text-primary transition-colors cursor-pointer"
+          className="absolute top-4 right-4 z-20 p-1 rounded-full bg-primary text-secondary hover:bg-primary/90 transition-colors cursor-pointer"
         >
           <X size={18} />
         </button>
@@ -123,7 +190,7 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
                 <CarFront className="w-6 h-6 text-third" />
               )}
             </div>
-            <div>
+            <div className="pr-12">
               <h3 className="font-bold text-[15px] leading-tight text-primary">
                 {vehicle?.makerName} {vehicle?.modelName} {vehicle?.variantName} {vehicle?.yearOfMfg || vehicle?.year}
               </h3>
@@ -133,100 +200,108 @@ export default function MakeOfferPopup({ isOpen, onClose, vehicle, onSuccess }) 
             </div>
           </div>
 
-              <div className="mb-4">
-                <p className="text-primary/60 text-xs mb-1">Seller's listed price</p>
-                <p className="text-2xl font-bold text-primary">₹{listedPrice.toLocaleString("en-IN")}</p>
-              </div>
+          <div className="mb-4">
+            <p className="text-primary/60 text-xs mb-1">Seller's listed price</p>
+            <p className="text-2xl font-bold text-primary">₹{listedPrice.toLocaleString("en-IN")}</p>
+          </div>
 
-              <div className="mb-4">
-                <p className="text-primary/60 text-xs mb-2">Your offer price</p>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 font-medium">₹</span>
-                  <input
-                    type="number"
-                    value={offerPrice}
-                    onChange={(e) => setOfferPrice(e.target.value)}
-                    onWheel={(e) => e.target.blur()}
-                    className="w-full bg-transparent border border-third/20 rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none focus:border-fourth transition-colors [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
-                    placeholder="Enter offer amount"
-                  />
-                </div>
-                
-                {/* QUICK OPTIONS */}
-                <div className="grid grid-cols-3 gap-2 mt-3">
-                  {[option1, option2, option3].map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setOfferPrice(opt.toString())}
-                      className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${Number(offerPrice) === opt ? "bg-third/10 border-third/50 text-primary" : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"}`}
-                    >
-                      {toLakhs(opt)}
-                    </button>
-                  ))}
-                </div>
-              </div>
+          <div className="mb-4">
+            <p className="text-primary/60 text-xs mb-2">Your offer price</p>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 font-medium">₹</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={displayValue}
+                onChange={handlePriceChange}
+                className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none transition-colors ${
+                  isOfferTooHigh 
+                    ? "border-red-500 focus:border-red-500 bg-red-500/5" 
+                    : "border-third/20 focus:border-fourth"
+                }`}
+                placeholder="Enter offer amount"
+              />
+            </div>
+            {isOfferTooHigh && (
+              <p className="text-red-500 text-xs mt-2 font-medium ml-1">
+                Offer price cannot exceed the listed price.
+              </p>
+            )}
 
-              {/* SUGGESTION BOX & SLIDER */}
-              <div className="bg-third/10 border border-third/20 rounded-xl p-4 mb-4">
-                <div className="relative pt-1 mb-2">
-                  <input
-                    type="range"
-                    min={minSlider}
-                    max={maxSlider}
-                    step={1000}
-                    value={Math.max(minSlider, Math.min(maxSlider, currentOffer))}
-                    onChange={(e) => setOfferPrice(e.target.value)}
-                    className="w-full h-1.5 bg-third/20 rounded-full appearance-none cursor-pointer accent-blue-500 outline-none"
-                  />
-                  <div className="flex justify-between items-center mt-1.5 text-[11px] text-primary/50">
-                    <span>{toLakhs(minSlider)}</span>
-                    <span>Listed {toLakhs(maxSlider)}</span>
-                  </div>
-                </div>
-                
-                <p className="text-xs text-primary/60 leading-relaxed pt-2 border-t border-third/10">
-                  A reasonable starting point based on the listed price. The seller can accept, decline, or counter your offer.
-                </p>
-              </div>
-
-              {/* MESSAGE FIELD */}
-              <div className="mb-4">
-                <p className="text-primary/60 text-xs mb-2">Message <span className="opacity-70">(Optional)</span></p>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full bg-transparent border border-third/20 rounded-xl py-3 px-4 text-primary text-sm outline-none focus:border-fourth transition-colors resize-none custom-scrollbar"
-                  placeholder="I'm interested in this vehicle..."
-                  rows={2}
-                />
-              </div>
-
-              {/* ACTIONS */}
-              <div className="flex justify-end gap-3 pt-2 mt-auto">
-                <Button
-                  showIcon={false}
-                  variant="outlineSecondary"
-                  onClick={handleClose}
-                  disabled={isLoading}
-                  size="sm"
+            {/* QUICK OPTIONS */}
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              {[option1, option2, option3].map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setOfferPrice(opt.toString())}
+                  className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${Number(offerPrice) === opt ? "bg-third/10 border-third/50 text-primary" : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"}`}
                 >
-                  Cancel
-                </Button>
-                <Button
-                  showIcon={false}
-                  variant="ghost"
-                  onClick={handleSendOffer}
-                  loading={isLoading}
-                  locked={!currentOffer || currentOffer <= 0}
-                  size="sm"
-                >
-                  Send Offer
-                </Button>
-              </div>
+                  {toLakhs(opt)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+
+
+          {/* MESSAGE FIELD */}
+          <div className="mb-4">
+            <p className="text-primary/60 text-xs mb-2">Message <span className="opacity-70">(Optional)</span></p>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full bg-transparent border border-third/20 rounded-xl py-3 px-4 text-primary text-sm outline-none focus:border-fourth transition-colors resize-none custom-scrollbar"
+              placeholder="I'm interested in this vehicle..."
+              rows={2}
+            />
+          </div>
+
+          {/* ACTIONS */}
+          <div className="flex justify-end gap-3 pt-2 mt-auto">
+            <Button
+              showIcon={false}
+              variant="outlineSecondary"
+              onClick={handleClose}
+              disabled={isLoading}
+              size="sm"
+            >
+              Cancel
+            </Button>
+            <Button
+              showIcon={false}
+              variant="ghost"
+              onClick={handleSendOffer}
+              loading={isLoading}
+              locked={!currentOffer || currentOffer <= 0 || isOfferTooHigh}
+              size="sm"
+            >
+              Send Offer
+            </Button>
+          </div>
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
+
+      <LoginPopup
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSuccess={handleAuthSuccess}
+        onSignup={() => {
+          setIsLoginOpen(false);
+          setIsSignupOpen(true);
+        }}
+      />
+      <SignupPopup
+        isOpen={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+        onSuccess={handleAuthSuccess}
+        onLogin={() => {
+          setIsSignupOpen(false);
+          setIsLoginOpen(true);
+        }}
+      />
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes modalBackdropIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes modalBackdropOut { from { opacity: 1; } to { opacity: 0; } }
         @keyframes modalCardIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }

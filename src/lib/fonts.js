@@ -1,8 +1,14 @@
-import { Exo, Inter, Lexend_Deca, Montserrat, Poppins, Raleway, Roboto } from "next/font/google";
+import { Exo, Inter, Lexend_Deca, Montserrat, Poppins, Raleway, Roboto, Manrope, Geist } from "next/font/google";
 
 export const exo = Exo({
   subsets: ["latin"],
   variable: "--font-exo",
+  display: "swap",
+});
+
+export const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -41,5 +47,11 @@ export const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
   variable: "--font-roboto",
+  display: "swap",
+});
+
+export const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
   display: "swap",
 });

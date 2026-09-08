@@ -6,7 +6,7 @@
   --color-secondary: #121212;
   --color-third: #bebebe;
   --color-fourth: #007bff;
-  --font-primary: var(--font-exo), sans-serif;
+  --font-primary: var(--font-geist), sans-serif;
   --font-secondary: var(--font-poppins), sans-serif;
 }
 
@@ -16,7 +16,7 @@
   --color-third: #bebebe;
   --breakpoint-3xl: 120rem;
   --color-fourth: #007bff;
-  --font-primary: var(--font-exo), sans-serif;
+  --font-primary: var(--font-geist), sans-serif;
   --font-secondary: var(--font-poppins), sans-serif;
 
   --animate-spin-slow: spin 3s linear infinite;

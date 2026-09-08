@@ -208,10 +208,21 @@ export default function VehicleCard({
       return data.location || "-";
     })(),
 
+    rawPrice: Number(data.price) || 0,
     price: data.price ? Number(data.price).toLocaleString("en-IN") : data.price,
+    rawDisplayPrice: data.displayPrice ? Number(data.displayPrice) : null,
 
     sponsored: data.sponsored || false,
   };
+
+  const discountPercent = (() => {
+    if (!mapped.rawPrice || !mapped.rawDisplayPrice) return null;
+    const max = Math.max(mapped.rawPrice, mapped.rawDisplayPrice);
+    const min = Math.min(mapped.rawPrice, mapped.rawDisplayPrice);
+    if (max === min) return null;
+    return Math.round(((max - min) / max) * 100);
+  })();
+
   const brandPart = data.makerName
     ? data.makerName.toLowerCase().replace(/\s+/g, "-")
     : "";
@@ -311,14 +322,20 @@ export default function VehicleCard({
                 </div>
               )}
 
-              {/* Sold Badge */}
-              {isSold && (
+              {/* Sold / Discount Badge */}
+              {isSold ? (
                 <div className="absolute top-2 right-2 z-30">
                   <span className="inline-block bg-black/50 backdrop-blur-md border border-white/20 text-white font-semibold tracking-wider text-xs uppercase px-3 py-1 rounded-md shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
                     Sold Out
                   </span>
                 </div>
-              )}
+              ) : mapped.rawDisplayPrice && discountPercent !== null && discountPercent !== 0 ? (
+                <div className="absolute top-2 right-2 z-30">
+                  <span className="inline-block bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-bold tracking-wide text-[9px] md:text-[10px] px-1.5 py-0.5 rounded shadow-md border border-yellow-400/20">
+                    {discountPercent}% off
+                  </span>
+                </div>
+              ) : null}
 
               {/* ✅ Compare Button */}
               {!isSold && (
@@ -452,11 +469,18 @@ export default function VehicleCard({
 
             {/* PRICE + BUTTON */}
             <div className="flex items-center justify-between gap-2 mt-auto">
-              <h3 className="text-sm md:text-xl font-bold text-primary">
-                ₹ {mapped.price}
-              </h3>
+              <div className="flex flex-col justify-center min-w-0">
+                <h3 className="text-[15px] md:text-xl font-bold text-primary leading-none mb-1 truncate">
+                  ₹ {mapped.price}
+                </h3>
+                {mapped.rawDisplayPrice && (
+                  <span className="text-[11px] md:text-xs text-third line-through leading-none truncate">
+                    ₹ {mapped.rawDisplayPrice.toLocaleString("en-IN")}
+                  </span>
+                )}
+              </div>
 
-              <div className="hidden md:block">
+              <div className="hidden md:block shrink-0">
                 <Button
                   href={`/vehicle/details/${slug}/${data.id}?source=${source}${data?.sponsored
                     ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
@@ -469,6 +493,7 @@ export default function VehicleCard({
                   scroll={true}
                   variant="outline"
                   size="sm"
+                  className="whitespace-nowrap"
                 >
                   View Details
                 </Button>

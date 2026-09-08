@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import Select from "react-select";
 import Button from "@/components/ui/button";
 import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
@@ -341,83 +340,50 @@ function SendInquaryPopup({
 
               {/* Form Fields */}
               <div className="space-y-4">
-                {/* Selector Field */}
-                <div className="space-y-2">
-                  <label className="text-sm text-third font-medium">
+                {/* Radio Options Field */}
+                <div className="space-y-3">
+                  <label className="text-sm text-third font-medium block">
                     Select Inquiry Type
                   </label>
-                  <Select
-                    instanceId="inquiry-type-select"
-                    options={inquiryOptions}
-                    value={
-                      inquiryOptions.find((opt) => opt.value === title) || null
-                    }
-                    onChange={(option) => {
-                      setTitle(option.value);
-                      titleRef.current = option.value;
-                      if (option.value !== "Other") setDescription("");
-                      trackInquiryTypeSelected({
-                        vehicle_id: vehicleId,
-                        vehicle_name: vehicleName,
-                        inquiry_type: option.value,
-                        seller_type: sellerType,
-                      });
-                    }}
-                    placeholder="Select an option..."
-                    isSearchable={false}
-                    className="text-sm"
-                    styles={{
-                      control: (base, state) => ({
-                        ...base,
-                        backgroundColor: "#111111",
-                        borderColor: state.isFocused ? "#444" : "#2f2e2e",
-                        borderRadius: "12px",
-                        padding: "6px 8px",
-                        boxShadow: "none",
-                        cursor: "pointer",
-                        "&:hover": {
-                          borderColor: "#555",
-                        },
-                      }),
-                      singleValue: (base) => ({
-                        ...base,
-                        color: "#ffffff",
-                      }),
-                      placeholder: (base) => ({
-                        ...base,
-                        color: "#aaaaaa",
-                      }),
-                      menu: (base) => ({
-                        ...base,
-                        backgroundColor: "#111111",
-                        borderRadius: "12px",
-                        overflow: "hidden",
-                        marginTop: "6px",
-                        zIndex: 9999,
-                      }),
-                      option: (base, state) => ({
-                        ...base,
-                        backgroundColor: state.isFocused
-                          ? "#1f1f1f"
-                          : state.isSelected
-                            ? "#2a2a2a"
-                            : "#111111",
-                        color: "#ffffff",
-                        cursor: "pointer",
-                        padding: "10px 14px",
-                      }),
-                      dropdownIndicator: (base) => ({
-                        ...base,
-                        color: "#ffffff",
-                        "&:hover": {
-                          color: "#cccccc",
-                        },
-                      }),
-                      indicatorSeparator: () => ({
-                        display: "none",
-                      }),
-                    }}
-                  />
+                  <div className="flex flex-col gap-2.5">
+                    {inquiryOptions.map((opt) => {
+                      const isSelected = title === opt.value;
+                      return (
+                        <label
+                          key={opt.value}
+                          className="flex items-center gap-3 cursor-pointer group w-fit"
+                        >
+                          <input
+                            type="radio"
+                            name="inquiryType"
+                            value={opt.value}
+                            checked={isSelected}
+                            onChange={() => {
+                              setTitle(opt.value);
+                              titleRef.current = opt.value;
+                              if (opt.value !== "Other") setDescription("");
+                              trackInquiryTypeSelected({
+                                vehicle_id: vehicleId,
+                                vehicle_name: vehicleName,
+                                inquiry_type: opt.value,
+                                seller_type: sellerType,
+                              });
+                            }}
+                            className="w-4 h-4 accent-primary cursor-pointer shrink-0"
+                          />
+                          <span
+                            className={`text-sm select-none transition-colors ${
+                              isSelected
+                                ? "text-primary font-semibold"
+                                : "text-third group-hover:text-primary"
+                            }`}
+                          >
+                            {opt.label}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Description Field - Always Visible But Disabled if no Title */}

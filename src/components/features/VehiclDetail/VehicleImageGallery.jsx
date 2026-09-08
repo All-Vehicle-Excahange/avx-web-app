@@ -12,6 +12,7 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackWishlistLoginRequired } from "@/lib/amplitude";
+import VehicleGalleryModal from "./VehicleGalleryModal";
 
 const optimizeVideoUrl = (src) => {
   if (!src) return "";
@@ -39,6 +40,7 @@ export default function VehicleImageGallery({ vehicle }) {
   const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
@@ -51,10 +53,10 @@ export default function VehicleImageGallery({ vehicle }) {
     const fuel = (vehicle?.fuelType || "").replace(/_/g, " ");
     const city = String(
       vehicle?.cityName ||
-        vehicle?.city ||
-        vehicle?.address?.city ||
-        vehicle?.vehicleAddress?.city ||
-        ""
+      vehicle?.city ||
+      vehicle?.address?.city ||
+      vehicle?.vehicleAddress?.city ||
+      ""
     )
       .split(",")[0]
       .trim();
@@ -191,15 +193,16 @@ export default function VehicleImageGallery({ vehicle }) {
     }
   }, [media.length, page]);
 
-  // Center active thumbnail into view
+  // Center active thumbnail into view without scrolling the page
   useEffect(() => {
     if (thumbsContainerRef.current) {
       const activeEl = thumbsContainerRef.current.children[activeIndex];
       if (activeEl) {
-        activeEl.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
+        const container = thumbsContainerRef.current;
+        const scrollLeft = activeEl.offsetLeft - container.offsetWidth / 2 + activeEl.offsetWidth / 2;
+        container.scrollTo({
+          left: scrollLeft,
+          behavior: "smooth"
         });
       }
     }
@@ -245,9 +248,8 @@ export default function VehicleImageGallery({ vehicle }) {
             className="bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20 shadow-md"
           >
             <Heart
-              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-white"
-              }`}
+              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"
+                }`}
             />
           </button>
         </div>
@@ -276,7 +278,8 @@ export default function VehicleImageGallery({ vehicle }) {
                   paginate(-1);
                 }
               }}
-              className="absolute inset-0 w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+              onClick={() => setIsModalOpen(true)}
+              className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer active:cursor-grabbing"
             >
               {currentItem.type === "image" ? (
                 <Image
@@ -336,11 +339,10 @@ export default function VehicleImageGallery({ vehicle }) {
                 className="w-20 sm:w-24 shrink-0 rounded-md overflow-hidden cursor-pointer transition-all"
               >
                 <div
-                  className={`w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center relative border transition rounded-md overflow-hidden ${
-                    isActive
+                  className={`w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center relative border transition rounded-md overflow-hidden ${isActive
                       ? "border-primary border-2 shadow-sm"
                       : "border-primary/40 hover:border-primary/70"
-                  }`}
+                    }`}
                 >
                   {item.type === "image" ? (
                     <Image
@@ -385,6 +387,13 @@ export default function VehicleImageGallery({ vehicle }) {
           setIsSignupOpen(false);
           setIsLoginOpen(true);
         }}
+      />
+      <VehicleGalleryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        media={media}
+        initialSlide={activeIndex}
+        imageAltBase={imageAltBase}
       />
     </section>
   );
