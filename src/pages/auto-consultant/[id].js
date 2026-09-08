@@ -79,15 +79,24 @@ function StoreFrontPage({ seo }) {
   let displayDescription =
     seo?.description || "View storefront, inventory, and reviews.";
   let displayImage = seo?.image || "";
+  let displayNameForAlt = seo?.displayName || "Auto Consultant";
 
   if (storeDetails) {
     const fetchedStoreName = storeDetails.consultationName || "";
     const city =
       storeDetails?.address?.city || storeDetails?.cityName || seo?.city || "";
+    const state =
+      storeDetails?.address?.state ||
+      storeDetails?.stateName ||
+      storeDetails?.state ||
+      seo?.state ||
+      "";
     if (fetchedStoreName) {
+      displayNameForAlt = fetchedStoreName;
       const built = buildStorefrontSeo({
         displayName: fetchedStoreName,
         city,
+        state,
         availableVehicles:
           storeDetails.availableVehicles ?? seo?.availableVehicles ?? 0,
       });
@@ -98,6 +107,8 @@ function StoreFrontPage({ seo }) {
       displayImage = storeDetails.logoUrl;
     }
   }
+
+  const ogImageAlt = `${displayNameForAlt} on Reecomm`;
 
   return (
     <>
@@ -111,14 +122,23 @@ function StoreFrontPage({ seo }) {
 
         <meta property="og:title" content={displayTitle} />
         <meta property="og:description" content={displayDescription} />
-        {displayImage && <meta property="og:image" content={displayImage} />}
+        {displayImage && (
+          <>
+            <meta key="og:image" property="og:image" content={displayImage} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content={ogImageAlt} />
+          </>
+        )}
         {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
         <meta property="og:type" content="profile" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={displayTitle} />
         <meta name="twitter:description" content={displayDescription} />
-        {displayImage && <meta name="twitter:image" content={displayImage} />}
+        {displayImage && (
+          <meta key="twitter:image" name="twitter:image" content={displayImage} />
+        )}
 
         {seo?.dealerSchema && (
           <script
@@ -225,8 +245,7 @@ export async function getStaticProps(context) {
 
   const currentUsername = store.username || id;
   const currentUrl = `${canonicalBase}/${currentUsername}`;
-  const storefrontImageUrl =
-    store.logoUrl || `https://${host}/logo/logo.webp`;
+  const ogFallback = `https://${host}/logo/logo1.webp`;
 
   const city =
     store?.address?.city || store?.cityName || store?.city || "";
@@ -244,6 +263,13 @@ export async function getStaticProps(context) {
 
   const vehicles = await fetchStorefrontInventoryServer(currentUsername);
 
+  const firstWithImage = vehicles.find((v) => v?.thumbnailUrl || v?.imageUrl);
+  const firstInventoryImage =
+    firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || "";
+
+  const storefrontImageUrl =
+    store.logoUrl || firstInventoryImage || ogFallback;
+
   const seoBuilt = buildStorefrontSeo({
     displayName,
     city,
@@ -255,13 +281,14 @@ export async function getStaticProps(context) {
   const { schema: faqSchema } = buildStorefrontFaq({
     displayName,
     city,
+    state,
     availableVehicles,
   });
 
   const dealerSchema = buildStorefrontDealerSchema({
     displayName,
     canonical: currentUrl,
-    logoUrl: storefrontImageUrl,
+    logoUrl: store.logoUrl || firstInventoryImage || null,
     city,
     state,
     streetAddress,
@@ -290,9 +317,11 @@ export async function getStaticProps(context) {
         title: seoBuilt.title,
         description: seoBuilt.description,
         image: storefrontImageUrl,
+        displayName,
         url: currentUrl,
         canonical: currentUrl,
         city,
+        state,
         availableVehicles,
         cityHubHref: citySlug ? `/search/buy-used-cars-${citySlug}` : null,
         dealerSchema,

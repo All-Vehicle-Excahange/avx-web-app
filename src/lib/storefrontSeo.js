@@ -8,6 +8,14 @@ function cleanJoin(parts) {
   return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 }
 
+/** City, state when both exist; else city; else state; else "". */
+export function formatStorefrontLocation(city = "", state = "") {
+  const cityT = (city || "").trim();
+  const stateT = (state || "").trim();
+  if (cityT && stateT) return `${cityT}, ${stateT}`;
+  return cityT || stateT || "";
+}
+
 export function buildStorefrontSeo({
   displayName = "Auto Consultant",
   city = "",
@@ -17,20 +25,21 @@ export function buildStorefrontSeo({
 } = {}) {
   const cityT = (city || "").trim();
   const stateT = (state || "").trim();
-  const loc = cityT || stateT || "India";
+  const location = formatStorefrontLocation(cityT, stateT);
+  const loc = location || "India";
   const countBit =
     availableVehicles > 0 ? ` Browse ${availableVehicles}+ listed vehicles.` : "";
 
-  const title = cityT
-    ? `${displayName} — Used cars in ${cityT} | Reecomm Auto Consultant`
+  const title = location
+    ? `${displayName} — Used cars in ${location} | Reecomm Auto Consultant`
     : `${displayName} — Used cars | Reecomm Auto Consultant`;
 
-  const description = cityT
-    ? `View ${displayName}'s verified used car inventory in ${cityT} on Reecomm.${countBit} Compare prices, photos, and reviews — inquire securely.`
+  const description = location
+    ? `View ${displayName}'s verified used car inventory in ${location} on Reecomm.${countBit} Compare prices, photos, and reviews — inquire securely.`
     : `View ${displayName}'s verified used car inventory on Reecomm.${countBit} Compare prices, photos, and reviews — inquire securely.`;
 
-  const h1 = cityT
-    ? `${displayName} — Used cars in ${cityT}`
+  const h1 = location
+    ? `${displayName} — Used cars in ${location}`
     : `${displayName} — Used cars on Reecomm`;
 
   return { title, description, h1, loc };
@@ -39,10 +48,11 @@ export function buildStorefrontSeo({
 export function buildStorefrontFaq({
   displayName = "Auto Consultant",
   city = "",
+  state = "",
   availableVehicles = 0,
 } = {}) {
-  const cityT = (city || "").trim();
-  const locBit = cityT ? ` in ${cityT}` : "";
+  const location = formatStorefrontLocation(city, state);
+  const locBit = location ? ` in ${location}` : "";
   const countBit =
     availableVehicles > 0
       ? ` They currently list about ${availableVehicles}+ vehicles on Reecomm.`
@@ -54,8 +64,8 @@ export function buildStorefrontFaq({
       answer: `${displayName} is an automotive consultant on Reecomm with a digital storefront for verified used cars and bikes${locBit}.${countBit}`,
     },
     {
-      question: cityT
-        ? `Where can I buy used cars from ${displayName} near ${cityT}?`
+      question: location
+        ? `Where can I buy used cars from ${displayName} near ${location}?`
         : `Where can I buy used cars from ${displayName}?`,
       answer: `Browse ${displayName}'s inventory on their Reecomm storefront, open a listing for photos and price, then send an inquiry. Always verify RC, insurance, and condition before payment.`,
     },
@@ -101,6 +111,7 @@ export function buildStorefrontDealerSchema({
 } = {}) {
   const cityT = (city || "").trim();
   const stateT = (state || "").trim();
+  const location = formatStorefrontLocation(cityT, stateT);
 
   const address =
     cityT || streetAddress
@@ -122,7 +133,7 @@ export function buildStorefrontDealerSchema({
     ...(logoUrl ? { image: logoUrl, logo: logoUrl } : {}),
     description: cleanJoin([
       `${displayName} sells verified used cars`,
-      cityT ? `in ${cityT}` : "",
+      location ? `in ${location}` : "",
       "on Reecomm.",
       availableVehicles > 0 ? `${availableVehicles}+ vehicles listed.` : "",
     ]),

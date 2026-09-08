@@ -81,6 +81,15 @@ Request indexing if “URL is not on Google”. Resubmit `sitemap.xml`.
 
 **Do not** mass-request indexing for “Crawled – currently not indexed” exotic/empty URLs — those are pruned from sitemaps via `seo_sitemap_slugs.json`.
 
+## Storefront ranking checklist
+
+On-page meta/images make every `/auto-consultant/{username}` **eligible** for a correct SERP snippet. Page position still needs inventory + off-site trust.
+
+1. **GSC weekly** — Pages filter `/auto-consultant/*`; queries with consultant brand name + city; watch impressions before position.
+2. **After storefront SEO deploy** — URL Inspection → Request indexing for priority storefronts (Aabad, Ekta, Yes Car Bazaar, Fortune Auto, etc.). Optionally run `node src/scripts/notifyStorefrontIndexing.js`.
+3. **Off-site (required for page 1 / near-me)** — Per consultant, follow [`GEO_OFFSITE_GBP_CHECKLIST.md`](./GEO_OFFSITE_GBP_CHECKLIST.md): claim GBP, set website to `https://www.reecomm.com/auto-consultant/{username}`, match NAP, collect real reviews, cite the same URL on JustDial/social.
+4. **Product ops** — Ask consultants without logos to upload one; keep live listings with photos/prices in focus cities.
+
 ## Notes
 
 - Empty cities stay `noindex` by design (`MIN_INDEXABLE_LISTINGS`).

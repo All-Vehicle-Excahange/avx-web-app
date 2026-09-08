@@ -44,6 +44,13 @@ export default async function handler(req, res) {
           xml += `      <image:title>${escapeXml(store.consultationName)}</image:title>\n`;
         }
         xml += `    </image:image>\n`;
+      } else {
+        xml += `    <image:image>\n`;
+        xml += `      <image:loc>${BASE_URL}/logo/logo1.webp</image:loc>\n`;
+        if (store.consultationName) {
+          xml += `      <image:title>${escapeXml(store.consultationName)}</image:title>\n`;
+        }
+        xml += `    </image:image>\n`;
       }
 
       xml += `  </url>\n`;
