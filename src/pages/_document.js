@@ -7,13 +7,15 @@ import {
   poppins,
   raleway,
   roboto,
+  manrope,
+  geist,
 } from "@/lib/fonts";
 
 export default function Document() {
   return (
     <Html
       lang="en"
-      className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable}`}
+      className={`${exo.variable} ${manrope.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} ${geist.variable}`}
     >
       <Head>
         <script

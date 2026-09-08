@@ -90,9 +90,9 @@ export default function ConsultantCard(props) {
   }, [data?.services]);
 
   return (
-    <div className="w-full max-w-[380px] rounded-2xl overflow-hidden border border-third/40 shadow-lg mx-auto flex flex-col h-full">
+    <div className="w-full rounded-2xl overflow-hidden border border-third/40 shadow-lg mx-auto flex flex-col h-full">
       {/* COVER IMAGE */}
-      <div className="relative h-[168px] w-full p-2">
+      <div className="relative w-full aspect-[2/1] p-2">
         <div className="relative w-full h-full rounded-xl overflow-hidden">
           <Image
             src={
@@ -100,19 +100,26 @@ export default function ConsultantCard(props) {
               data?.bannerUrl ||
               "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1"
             }
-            alt="cover"
+            alt={`${data?.name || "Consultant"} banner`}
             fill
             className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
           />
         </div>
+
         {String(data?.tierTitle).toUpperCase() === "PREMIUM" && (
           <div className="absolute top-[2px] right-5 z-10">
-            {/* Curved 3D Fold on the back side */}
-            <div className="absolute top-0 -right-[4px] w-[4px] h-[6px] bg-[#05468E] rounded-tr-[4px]"></div>
+            <div className="absolute top-0 -right-[4px] w-[4px] h-[6px] bg-[#05468E] rounded-tr-[4px]" />
 
-            {/* Main Ribbon */}
             <div className="bg-[#0D87FF] w-[52px] pt-1 pb-1.5 rounded-b-[10px] flex flex-col items-center justify-center shadow-md relative rounded-tl-[4px]">
-              <Image src="/icons/trusted-icon.svg" alt="Trusted" width={15} height={15} className="mb-[2px]" />
+              <Image
+                src="/icons/trusted-icon.svg"
+                alt="Trusted"
+                width={15}
+                height={15}
+                className="mb-[2px]"
+              />
+
               <span className="text-white text-[7px] font-black leading-[1.1] text-center font-semibold tracking-wider">
                 TRUSTED
               </span>
@@ -120,7 +127,6 @@ export default function ConsultantCard(props) {
           </div>
         )}
       </div>
-
       <div className="px-5 pb-5 pt-0 relative flex flex-col flex-1">
         {" "}
         {/* PROFILE LOGO */}

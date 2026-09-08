@@ -25,6 +25,10 @@ export default function ConsultantSliderSection({
     });
   };
 
+  if (!loading && (!data || data.length === 0)) {
+    return null;
+  }
+
   return (
     <section className="w-full mb-8 overflow-hidden">
       {/* HEADER */}

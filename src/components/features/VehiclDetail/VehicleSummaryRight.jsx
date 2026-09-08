@@ -85,7 +85,6 @@ export default function VehicleSummaryRight({
   const {
     data: eligibilityData,
     refetch: refetchEligibility,
-    isFetching: isCheckingInquiry,
   } = useQuery({
     ...getInquiryEligibilityQuery(vehicleId),
     enabled: !!vehicleId && isLoggedIn,
@@ -297,7 +296,7 @@ export default function VehicleSummaryRight({
                     </Button>
                   )}
                 </div>
-                <p className="text-xl font-bold text-primary leading-tight -mt-1">
+                <p className="text-xl font-bold text-primary leading-tight -mt-1 capitalize">
                   {[
                     vehicle?.vehicleOwner?.firstname,
                     vehicle?.vehicleOwner?.lastname,
@@ -306,7 +305,7 @@ export default function VehicleSummaryRight({
                     .join(" ") || "Individual Seller"}
                 </p>
                 {(vehicle?.vehicleAddress?.city || vehicle?.vehicleAddress?.state) && (
-                  <p className="flex items-start gap-2 text-sm text-third">
+                  <p className="flex capitalize items-start gap-2 text-sm text-third">
                     <MapPin size={14} className="mt-0.5 shrink-0" />
                     <span className="line-clamp-2">
                       {[
@@ -465,7 +464,7 @@ export default function VehicleSummaryRight({
                     size="sm"
                     showIcon={false}
                     className="rounded-full w-full"
-                    loading={loading || isCheckingInquiry}
+                    loading={loading}
                     disabled={vehicle?.isVehicleSold}
                     onClick={() => onSendInquiryClick("vdp")}
                   >

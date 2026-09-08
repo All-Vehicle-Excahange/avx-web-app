@@ -9,7 +9,7 @@ import { FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 
-const CommonSwiper = ({ data, CardComponent, prevRef, nextRef }) => {
+const CommonSwiper = ({ data, CardComponent, prevRef, nextRef, extraCardProps = {} }) => {
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const CommonSwiper = ({ data, CardComponent, prevRef, nextRef }) => {
     >
       {data.map((item) => (
         <SwiperSlide key={item.id} className="w-[340px]!">
-          <CardComponent data={item} />
+          <CardComponent data={item} {...extraCardProps} />
         </SwiperSlide>
       ))}
     </Swiper>

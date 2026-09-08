@@ -36,6 +36,8 @@ import {
   poppins,
   raleway,
   roboto,
+  manrope,
+  geist,
 } from "@/lib/fonts";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -197,7 +199,7 @@ export default function App({ Component, pageProps }) {
     <>
       <QueryClientProvider client={queryClient}>
         <div
-          className={`${exo.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} font-secondary`}
+          className={`${exo.variable} ${manrope.variable} ${inter.variable} ${lexendDeca.variable} ${montserrat.variable} ${poppins.variable} ${raleway.variable} ${roboto.variable} ${geist.variable} font-secondary`}
         >
           <Head>
             {/*
