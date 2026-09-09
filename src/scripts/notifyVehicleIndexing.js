@@ -1,12 +1,13 @@
 /**
- * Push Google Indexing for storefronts only (respects ~200/day quota).
+ * Push Google Indexing for vehicle listing URLs + vehicle sitemaps.
  *
  * Usage:
- *   node src/scripts/notifyStorefrontIndexing.js
- *   node src/scripts/notifyStorefrontIndexing.js --page=1
- *   node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps
+ *   node src/scripts/notifyVehicleIndexing.js
+ *   node src/scripts/notifyVehicleIndexing.js --page=1
+ *   node src/scripts/notifyVehicleIndexing.js --page=1 --also-sitemaps
  *
- * Priority: known digit→clean pairs first, then storefronts/{page}.xml locs.
+ * Respects Google Indexing API quotas (~200/day). Prefer --also-sitemaps
+ * plus page 1 when inventory is small; paginate carefully for larger catalogs.
  */
 const fs = require("fs");
 const path = require("path");
@@ -60,8 +61,8 @@ async function notify(url, type, indexing) {
   }
 }
 
-async function fetchStorefrontLocs(page) {
-  const sitemapUrl = `${BASE_URL}/api/sitemap/storefronts/${page}.xml`;
+async function fetchVehicleLocs(page) {
+  const sitemapUrl = `${BASE_URL}/api/sitemap/vehicles/${page}.xml`;
   const res = await fetch(sitemapUrl);
   if (!res.ok) throw new Error(`Failed to fetch ${sitemapUrl}: ${res.status}`);
   const xml = await res.text();
@@ -69,7 +70,7 @@ async function fetchStorefrontLocs(page) {
   const matches = xml.match(/<loc>(.*?)<\/loc>/g) || [];
   for (const m of matches) {
     const u = m.replace(/<\/?loc>/g, "").trim();
-    if (u.includes("/auto-consultant/")) locs.push(u);
+    if (u.includes("/vehicle/details/")) locs.push(u);
   }
   return { sitemapUrl, locs };
 }
@@ -100,28 +101,15 @@ async function main() {
   const indexing = google.indexing({ version: "v3", auth: jwtClient });
 
   let updated = 0;
-  let deleted = 0;
   let failed = 0;
 
-  // Priority: Aabad Motors digit drop + clean update (known SERP issue)
-  const priority = [
-    ["URL_DELETED", `${BASE_URL}/auto-consultant/aabadmotors487206`],
-    ["URL_UPDATED", `${BASE_URL}/auto-consultant/aabadmotors`],
-  ];
-  for (const [type, url] of priority) {
-    const ok = await notify(url, type, indexing);
-    if (!ok) failed++;
-    else if (type === "URL_DELETED") deleted++;
-    else updated++;
-  }
-
-  const { sitemapUrl, locs } = await fetchStorefrontLocs(page);
-  console.log(`Loaded ${locs.length} storefronts from ${sitemapUrl}`);
+  const { sitemapUrl, locs } = await fetchVehicleLocs(page);
+  console.log(`Loaded ${locs.length} vehicles from ${sitemapUrl}`);
 
   if (alsoSitemaps) {
     for (const url of [
       `${BASE_URL}/sitemap.xml`,
-      `${BASE_URL}/api/sitemap/storefronts.xml`,
+      `${BASE_URL}/api/sitemap/vehicles.xml`,
       sitemapUrl,
     ]) {
       const ok = await notify(url, "URL_UPDATED", indexing);
@@ -131,15 +119,13 @@ async function main() {
   }
 
   for (const loc of locs) {
-    // Skip duplicate of priority clean URL
-    if (loc.endsWith("/aabadmotors")) continue;
     const ok = await notify(loc, "URL_UPDATED", indexing);
     if (ok) updated++;
     else failed++;
   }
 
   console.log(
-    JSON.stringify({ success: failed === 0, updated, deleted, failed, page }, null, 2)
+    JSON.stringify({ success: failed === 0, updated, failed, page }, null, 2)
   );
 }
 

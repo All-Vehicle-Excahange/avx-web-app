@@ -7,7 +7,7 @@ const VEHICLES_PER_PAGE = 100;
  * Generate SEO-friendly slug from vehicle data.
  */
 function generateSlug(vehicle) {
-  const brand = (vehicle.makerName || "")
+  const brand = (vehicle.makerName || vehicle.makeName || "")
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^\w-]/g, "");
@@ -15,15 +15,18 @@ function generateSlug(vehicle) {
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^\w-]/g, "");
-  const year = vehicle.yearOfMfg || "";
+  const year = vehicle.yearOfMfg || vehicle.year || "";
   const city = (vehicle.cityName || vehicle.address?.city || "")
     .split(",")[0]
     .trim()
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^\w-]/g, "");
+  const type = String(vehicle.vehicleType || vehicle.bodyType || "").toUpperCase();
+  const kind =
+    type.includes("TWO") || type === "BIKE" ? "two-wheelers" : "cars";
 
-  return `buy-used-${brand}-${model}-${year}-cars-${city}`
+  return `buy-used-${brand}-${model}-${year}-${kind}-${city}`
     .replace(/-+/g, "-")
     .replace(/-$/, "")
     .replace(/^-/, "");
