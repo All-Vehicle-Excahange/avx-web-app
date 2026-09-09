@@ -82,7 +82,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
       const timer = setTimeout(() => setAnimate(true), 10);
       return () => {
         clearTimeout(timer);
-        document.body.style.overflow = "";
+        document.body.style.overflow = "unset";
       };
     } else {
       setAnimate(false);
@@ -98,7 +98,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
       setStep(1);
       setCreatedInspectionId("");
       setIsSubmitting(false);
-    }, 300);
+    }, 150);
   };
 
   const handleConfirm = async () => {
@@ -530,7 +530,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
       <div
         className={`
           absolute inset-0 bg-black/60 backdrop-blur-sm
-          transition-opacity duration-300
+          transition-opacity duration-150
           ${animate ? "opacity-100" : "opacity-0"}
         `}
         onClick={handleClose}
@@ -547,7 +547,7 @@ export default function InspectionRequestModal({ isOpen, onClose, vehicle }) {
           rounded-2xl md:rounded-2xl
           bg-secondary overflow-hidden text-primary
           border border-third/50 shadow-2xl
-          transition-all duration-300 ease-out
+          transition-all duration-150 ease-out
           ${
             animate
               ? "opacity-100 scale-100 translate-y-0"

@@ -193,7 +193,7 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
       localStorage.removeItem("otpBlockUntil");
       useAuthStore.setState({ prefilledPhoneNumber: "", isSignupPopupOpen: false });
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose, reset]);
 
   if (!isOpen && !isClosing) return null;
@@ -630,8 +630,8 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
   autoVerifyRef.current = onValidateOtp;
 
   const modalContent = (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.25s ease-in forwards' : 'modalBackdropIn 0.25s ease-out' }}>
-      <div className="relative flex w-full max-w-[900px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.25s ease-in forwards' : 'modalCardIn 0.3s ease-out' }}>
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={handleClosePopup} style={{ animation: isClosing ? 'modalBackdropOut 0.15s ease-in forwards' : 'modalBackdropIn 0.15s ease-out' }}>
+      <div className="relative flex w-full max-w-[900px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl bg-primary-white" onClick={(e) => e.stopPropagation()} style={{ animation: isClosing ? 'modalCardOut 0.15s ease-in forwards' : 'modalCardIn 0.15s ease-out' }}>
 
         <button
           onClick={handleClosePopup}

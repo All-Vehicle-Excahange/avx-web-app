@@ -30,7 +30,7 @@ function SendInquaryPopup({
   isOfferSuccess = false,
 }) {
   const queryClient = useQueryClient();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("Test Drive available");
   const [description, setDescription] = useState("");
   const [isSuccess, setIsSuccess] = useState(initialSuccessState);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,7 @@ function SendInquaryPopup({
   const openedAtRef = useRef(Date.now());
   const submittedRef = useRef(false);
   const abandonedTrackedRef = useRef(false);
-  const titleRef = useRef("");
+  const titleRef = useRef("Test Drive available");
 
   const sellerType =
     vehicle?.sellerType || vehicle?.vehicleOwner?.userRole || "";
@@ -67,13 +67,13 @@ function SendInquaryPopup({
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose, trackAbandonIfNeeded]);
 
   const inquiryOptions = [
+    { value: "Test Drive available", label: "Test Drive available" },
     { value: "Need call back", label: "Need call back" },
     { value: "Vehicle available", label: "Vehicle available" },
-    { value: "Test Drive available", label: "Test Drive available" },
     { value: "Other", label: "Other" },
   ];
 
@@ -165,8 +165,8 @@ function SendInquaryPopup({
       onClick={handleClose}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       {/* Popup Box */}
@@ -178,8 +178,8 @@ function SendInquaryPopup({
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s ease-out",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s ease-out",
           ...(isSuccess ? { backgroundImage: "url('/sendPopupBg.png')" } : {}),
         }}
       >
@@ -331,10 +331,18 @@ function SendInquaryPopup({
                   You are requesting this vehicle from
                 </h3>
                 <p className="text-sm text-third">
-                  <span className="font-semibold text-primary">
-                    {consultName}
-                  </span>{" "}
-                  consultant will contact you shortly.
+                  {sellerType === "USER_SELLER" ? (
+                    <>
+                      The <span className="font-semibold text-primary">Private Seller</span> will contact you shortly.
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-semibold text-primary">
+                        {consultName}
+                      </span>{" "}
+                      consultant will contact you shortly.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -372,11 +380,10 @@ function SendInquaryPopup({
                             className="w-4 h-4 accent-primary cursor-pointer shrink-0"
                           />
                           <span
-                            className={`text-sm select-none transition-colors ${
-                              isSelected
-                                ? "text-primary font-semibold"
-                                : "text-third group-hover:text-primary"
-                            }`}
+                            className={`text-sm select-none transition-colors ${isSelected
+                              ? "text-primary font-semibold"
+                              : "text-third group-hover:text-primary"
+                              }`}
                           >
                             {opt.label}
                           </span>

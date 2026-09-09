@@ -45,6 +45,16 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
   const stateId =
     vehicleSummary?.address?.stateId || vehicle?.vehicleAddress?.stateId;
 
+  const rawPrice = Number(vehicle?.price) || 0;
+  const rawDisplayPrice = vehicle?.displayPrice ? Number(vehicle?.displayPrice) : null;
+  const discountPercent = (() => {
+    if (!rawPrice || !rawDisplayPrice) return null;
+    const max = Math.max(rawPrice, rawDisplayPrice);
+    const min = Math.min(rawPrice, rawDisplayPrice);
+    if (max === min) return null;
+    return Math.round(((max - min) / max) * 100);
+  })();
+
   // Build the query string for search links
   const searchQueryParams = new URLSearchParams();
   if (vehicle?.makerId || vehicle?.makeId)
@@ -57,12 +67,12 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
   const searchUrl = `/search?${searchQueryParams.toString()}`;
 
   return (
-    <header className="w-full space-y-3 pt-9 md:pt-6 mb-4 sm:mb-0 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)]">
+    <header className="-mx-4 sm:mx-0 mt-4 sm:mt-0 pt-5 pb-3 sm:pt-4 sm:pb-4 mb-4 sm:mb-0 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)] flex flex-col gap-1.5 shadow-sm">
       {/* Breadcrumb */}
-      <nav className="text-xs sm:text-sm text-third flex items-center gap-1 flex-wrap">
+      <nav className="text-[10px] sm:text-xs text-third flex items-center gap-1 flex-wrap px-4 sm:px-0">
         <Link
           href="/"
-          className="hover:text-primary transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+          className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
         >
           Home
         </Link>
@@ -72,7 +82,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
             <ChevronRight size={14} className="shrink-0" />
             <Link
               href={searchUrl}
-              className="hover:text-primary transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
             >
               Search
             </Link>
@@ -84,7 +94,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
             <ChevronRight size={14} className="shrink-0" />
             <Link
               href={searchUrl}
-              className="hover:text-primary transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
             >
               {vehicle.makerName}
             </Link>
@@ -92,14 +102,14 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
         )}
 
         <ChevronRight size={14} className="shrink-0" />
-        <span className="text-primary font-medium uppercase tracking-wide truncate max-w-[200px] sm:max-w-none flex items-center gap-1">
+        <span className="text-white font-medium uppercase tracking-wide truncate max-w-[200px] sm:max-w-none flex items-center gap-1">
           {vehicleNameBase}
           {cityName && (
             <>
-              <span className="lowercase">in</span>
+              <span className="lowercase text-third font-normal mx-0.5">in</span>
               <Link
                 href={searchUrl}
-                className="hover:text-primary transition-colors duration-200 cursor-pointer underline decoration-primary/50 underline-offset-2"
+                className="hover:text-white transition-colors duration-200 cursor-pointer underline decoration-white/30 hover:decoration-white/80 underline-offset-2"
               >
                 {cityName}
               </Link>
@@ -108,86 +118,102 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
         </span>
       </nav>
 
-      {/* Rating */}
-      <div className="flex items-center gap-2">
-        {vehicle?.inspectionStatus === "AVX_INSPECTED" ? (
-          <>
-            <span className="text-sm text-primary font-medium">
-              Reecomm Inspection Rating:
-            </span>
-            <div className="relative w-16 h-6 shrink-0">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16">
-                <Image
-                  src="/inspection_vector.svg"
-                  alt="Reecomm Inspected"
-                  fill
-                  className="object-contain drop-shadow-lg z-20"
-                />
-                <span className="absolute left-[33px] top-[24px] z-30 text-white font-semibold text-xs">
-                  {vehicle?.avxInspectionRating || "-"}
-                </span>
-              </div>
-            </div>
-          </>
-        ) : vehicle?.avxInspectionRating ? (
-          <>
-            <Star className="text-yellow-400" size={16} />
-            <span className="text-sm text-primary font-medium">
-              {vehicle?.inspectionStatus === "SELF_INSPECTED"
-                ? "Self Inspection Rating:"
-                : "Inspection Rating:"}{" "}
-              <span className="font-bold ">{vehicle?.avxInspectionRating}</span>
-            </span>
-          </>
-        ) : null}
-      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-1 px-4 sm:px-0">
+        {/* LEFT SIDE: Title & Rating */}
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+          <div className="block w-full">
+            {/* Mobile Share */}
+            <button
+              onClick={() => setIsShareOpen(true)}
+              className="sm:hidden float-right ml-3 mb-1.5 mt-1 bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full p-0 text-primary hover:bg-primary/30 hover:scale-105 transition-all shrink-0 cursor-pointer border border-primary/20 shadow-sm"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+            <h1 className="text-xl sm:text-2xl 3xl:text-3xl font-bold leading-tight text-white tracking-wide uppercase inline">
+              {[
+                vehicle?.makerName,
+                vehicle?.modelName,
+                vehicle?.variantName,
+                vehicle?.yearOfMfg,
+              ]
+                .filter(Boolean)
+                .join(" ") || "-"}
+            </h1>
+          </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* LEFT SIDE */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-row items-end justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl text-primary sm:text-3xl 3xl:text-4xl font-bold leading-tight">
-                {[
-                  vehicle?.makerName,
-                  vehicle?.modelName,
-                  vehicle?.variantName,
-                  vehicle?.yearOfMfg,
-                ]
-                  .filter(Boolean)
-                  .join(" ") || "-"}
-              </h1>
+          {/* Badges (Rating + Sold) */}
+          {(vehicle?.inspectionStatus === "AVX_INSPECTED" || vehicle?.avxInspectionRating || vehicle?.isVehicleSold) && (
+            <div className="flex flex-wrap items-center gap-2.5 mt-0.5">
+              {/* 1. Rating */}
+              {vehicle?.inspectionStatus === "AVX_INSPECTED" ? (
+                <div className="flex items-center gap-2 bg-white/5 px-2 py-1 rounded border border-white/10 w-fit">
+                  <span className="text-xs text-third font-medium">
+                    Reecomm Inspection Rating:
+                  </span>
+                  <div className="relative w-12 h-5 shrink-0">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12">
+                      <Image
+                        src="/inspection_vector.svg"
+                        alt="Reecomm Inspected"
+                        fill
+                        className="object-contain drop-shadow-md z-20"
+                      />
+                      <span className="absolute left-[25px] top-[17px] z-30 text-white font-bold text-[9px]">
+                        {vehicle?.avxInspectionRating || "-"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : vehicle?.avxInspectionRating ? (
+                <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded border border-white/10 w-fit">
+                  <Star className="text-yellow-400 fill-yellow-400" size={14} />
+                  <span className="text-xs text-third font-medium">
+                    {vehicle?.inspectionStatus === "SELF_INSPECTED"
+                      ? "Self Inspection Rating:"
+                      : "Inspection Rating:"}{" "}
+                    <span className="font-bold text-white ml-0.5">{vehicle?.avxInspectionRating}</span>
+                  </span>
+                </div>
+              ) : null}
+
+              {/* 2. Sold Badge */}
               {vehicle?.isVehicleSold && (
-                <span className="bg-fourth text-white text-xs sm:text-sm font-semibold px-2 py-1 rounded uppercase tracking-wider">
+                <span className="flex items-center justify-center bg-fourth text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded border border-transparent uppercase tracking-wider shrink-0 w-fit">
                   Sold
                 </span>
               )}
             </div>
-            <button
-              onClick={() => setIsShareOpen(true)}
-              className="sm:hidden bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary shrink-0 cursor-pointer mb-1"
-            >
-              <Share2 className="h-4.5 w-4.5" />
-            </button>
-          </div>
+          )}
         </div>
 
-        {/* RIGHT SIDE */}
-        <div className="hidden sm:flex items-center gap-2 ml-auto sm:ml-0">
-          {/* SHARE */}
+        {/* RIGHT SIDE: Price & Share (Hidden on Mobile) */}
+        <div className="hidden sm:flex items-center justify-end gap-5">
+          {/* PRICE */}
+          <div className="hidden lg:flex flex-col items-end justify-center text-right pl-4">
+            <div className="flex items-center gap-2.5">
+              <p className="text-2xl sm:text-3xl font-bold leading-none text-white tracking-tight">
+                ₹{rawPrice.toLocaleString("en-IN")}
+              </p>
+              {rawDisplayPrice && discountPercent !== null && discountPercent !== 0 && (
+                <span className="inline-block bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-bold tracking-wide text-[10px] px-1.5 py-0.5 rounded shadow border border-yellow-400/20 leading-none">
+                  {discountPercent}% off
+                </span>
+              )}
+            </div>
+            {rawDisplayPrice && (
+              <p className="text-sm text-third line-through mt-1.5 leading-none font-medium">
+                ₹{rawDisplayPrice.toLocaleString("en-IN")}
+              </p>
+            )}
+          </div>
+
+          {/* Desktop SHARE */}
           <button
             onClick={() => setIsShareOpen(true)}
-            className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary cursor-pointer shrink-0"
+            className="flex bg-primary/20 h-10 w-10 items-center justify-center rounded-full p-0 text-primary hover:bg-primary/30 hover:scale-105 transition-all cursor-pointer shrink-0 border border-primary/20 shadow-sm"
           >
-            <Share2 className="h-6 w-6" />
+            <Share2 className="h-4 w-4" />
           </button>
-
-          {/* PRICE */}
-          <div className="hidden lg:block bg-primary text-secondary px-4 py-2 rounded-lg text-right">
-            <p className="text-lg font-semibold">
-              ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
-            </p>
-          </div>
         </div>
       </div>
 

@@ -204,6 +204,9 @@ export default function VehicleSummaryRight({
     if (pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
+    } else if (pendingAction.current === "make_offer") {
+      pendingAction.current = null;
+      openMakeOffer();
     }
   };
 
@@ -223,6 +226,17 @@ export default function VehicleSummaryRight({
       vehicle?.stateName ||
       "";
     const sellerType = vehicle?.sellerType || vehicleOwnerRole || "";
+
+    if (!isLoggedIn) {
+      pendingAction.current = "make_offer";
+      useAuthStore.getState().setAuthFunnelContext({
+        entry_context: "vehicle_detail",
+        trigger_action: "make_offer",
+        user_role_intent: "buyer",
+      });
+      setIsLoginOpen(true);
+      return;
+    }
 
     trackMakeOfferInitiated({
       vehicle_id: vehicleId || vehicle?.id,
@@ -255,6 +269,9 @@ export default function VehicleSummaryRight({
     if (isLoggedIn && pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
+    } else if (isLoggedIn && pendingAction.current === "make_offer") {
+      pendingAction.current = null;
+      openMakeOffer();
     }
   }, [isLoggedIn]);
 

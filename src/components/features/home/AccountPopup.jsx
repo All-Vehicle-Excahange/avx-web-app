@@ -55,7 +55,7 @@ export default function AccountPopup({ open, onClosePopup }) {
     setTimeout(() => {
       setIsLogoutClosing(false);
       setShowLogoutConfirm(false);
-    }, 250);
+    }, 150);
   };
 
   const handleCancelLogout = () => {
@@ -64,7 +64,7 @@ export default function AccountPopup({ open, onClosePopup }) {
       setIsLogoutClosing(false);
       setShowLogoutConfirm(false);
       onClosePopup(); // Close the main AccountPopup as requested
-    }, 250);
+    }, 150);
   };
 
   const isConsultant = ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(
@@ -189,10 +189,10 @@ export default function AccountPopup({ open, onClosePopup }) {
         bg-secondary text-primary
         rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
         border border-white/10
-        transition-all duration-150 ease-out z-50
+        transition-all duration-150 ease-out z-50 origin-top-right
         ${open && !isLoginOpen && !isSignupOpen
-            ? "opacity-100 visible translate-y-0"
-            : "opacity-0 invisible translate-y-1"
+            ? "opacity-100 visible translate-y-0 scale-100"
+            : "opacity-0 invisible -translate-y-3 scale-95"
           }`}
       >
         <div className="hidden sm:block absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
@@ -662,8 +662,8 @@ export default function AccountPopup({ open, onClosePopup }) {
             onClick={handleCancelLogout}
             style={{
               animation: isLogoutClosing
-                ? "modalBackdropOut 0.25s ease-in forwards"
-                : "modalBackdropIn 0.25s ease-out",
+                ? "modalBackdropOut 0.15s ease-in forwards"
+                : "modalBackdropIn 0.15s ease-out",
             }}
           >
             <div
@@ -671,8 +671,8 @@ export default function AccountPopup({ open, onClosePopup }) {
               onClick={(e) => e.stopPropagation()}
               style={{
                 animation: isLogoutClosing
-                  ? "modalCardOut 0.25s ease-in forwards"
-                  : "modalCardIn 0.3s ease-out",
+                  ? "modalCardOut 0.15s ease-in forwards"
+                  : "modalCardIn 0.15s ease-out",
               }}
             >
               <h2 className="text-lg font-bold text-primary mb-2">

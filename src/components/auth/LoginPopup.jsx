@@ -173,7 +173,7 @@ function LoginPopup({
       setAcceptedTerms(false);
       localStorage.removeItem("otpBlockUntil");
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose, reset]);
 
   // Auto-lock body scroll when popup is open
@@ -474,8 +474,8 @@ function LoginPopup({
       onClick={handleClose}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       <div
@@ -483,8 +483,8 @@ function LoginPopup({
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s ease-out",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s ease-out",
         }}
       >
         {/* CLOSE */}

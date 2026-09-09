@@ -8,8 +8,6 @@ import Button from "@/components/ui/button";
 import { sendInquary } from "@/services/vehicle.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/useAuthStore";
-import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
 import {
   trackMakeOfferOptionSelected,
   trackMakeOfferSubmitted,
@@ -31,9 +29,6 @@ export default function MakeOfferPopup({
   const [isClosing, setIsClosing] = useState(false);
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
-  const pendingAction = useRef(null);
 
   const vehicleId = vehicle?._id || vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
@@ -74,10 +69,10 @@ export default function MakeOfferPopup({
         setOfferPrice(midOffer.toString());
       }
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, vehicle]);
 
@@ -86,13 +81,13 @@ export default function MakeOfferPopup({
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose]);
 
-  // Format to Lakhs (e.g. 3.40L)
-  const toLakhs = (num) => {
+  // Format price exactly like listed price with commas
+  const formatPrice = (num) => {
     if (!num) return "₹0";
-    return "₹" + (num / 100000).toFixed(2) + "L";
+    return "₹" + num.toLocaleString("en-IN");
   };
 
   const option1 = Math.round((listedPrice * 0.9) / 5000) * 5000;
@@ -153,28 +148,8 @@ export default function MakeOfferPopup({
     });
   };
 
-  const handleAuthSuccess = () => {
-    setIsLoginOpen(false);
-    setIsSignupOpen(false);
-    if (pendingAction.current === "send_offer") {
-      pendingAction.current = null;
-      handleSendOffer();
-    }
-  };
-
-  useEffect(() => {
-    if (isLoggedIn && pendingAction.current === "send_offer") {
-      pendingAction.current = null;
-      handleSendOffer();
-    }
-  }, [isLoggedIn]);
-
   const handleSendOffer = async () => {
-    if (!isLoggedIn) {
-      pendingAction.current = "send_offer";
-      setIsLoginOpen(true);
-      return;
-    }
+    if (!isLoggedIn) return; // Should not happen, checked before opening
 
     if (!currentOffer || currentOffer <= 0 || !vehicleId) return;
     try {
@@ -234,8 +209,8 @@ export default function MakeOfferPopup({
       onClick={handleClose}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       <div
@@ -243,8 +218,8 @@ export default function MakeOfferPopup({
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s ease-out",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s ease-out",
         }}
       >
         <button
@@ -328,7 +303,7 @@ export default function MakeOfferPopup({
                       : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"
                   }`}
                 >
-                  {toLakhs(opt)}
+                  {formatPrice(opt)}
                 </button>
               ))}
             </div>
@@ -373,24 +348,7 @@ export default function MakeOfferPopup({
         </div>
       </div>
 
-      <LoginPopup
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
-        }}
-      />
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
-        }}
-      />
+
 
       <style
         dangerouslySetInnerHTML={{

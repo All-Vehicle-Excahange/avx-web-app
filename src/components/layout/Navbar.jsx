@@ -932,7 +932,16 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
                           {/* Popular Brands Grid */}
                           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
-                            {apiBrandsList.slice(0, 6).map((brand, idx) => (
+                            {(() => {
+                              const popularNames = ["maruti", "hyundai", "tata", "mahindra", "toyota", "honda"];
+                              const popularBrands = apiBrandsList.filter(b => {
+                                const makeName = b.makeName?.toLowerCase() || "";
+                                if (makeName === "mahindra renault") return false;
+                                return popularNames.some(name => makeName.includes(name));
+                              });
+                              const displayBrands = popularBrands.length > 0 ? popularBrands.slice(0, 6) : apiBrandsList.slice(0, 6);
+                              
+                              return displayBrands.map((brand, idx) => (
                               <div
                                 key={`popular-${idx}`}
                                 onClick={() => {
@@ -945,16 +954,17 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               >
                                 {brand.logo ? (
                                   <div className="h-9 w-12 flex items-center justify-center">
-                                    <img src={brand.logo} alt={brand.makeDisplay} className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform" />
+                                    <img src={brand.logo} alt={brand.makeDisplay} className="max-h-full max-w-full object-contain" />
                                   </div>
                                 ) : (
                                   <div className="h-9 w-12 flex items-center justify-center bg-gray-50 rounded text-gray-400">
-                                    <CarFront className="w-4 h-4" />
+                                    <CarFront className="w-5 h-5" />
                                   </div>
                                 )}
                                 <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors">{brand.makeDisplay}</span>
                               </div>
-                            ))}
+                            ))
+                            })()}
                           </div>
 
                           {/* All Brands Header */}
