@@ -104,7 +104,7 @@ export default function VehicleDetails({
     const handleScroll = () => {
       const isMobile = window.innerWidth < 1024;
       const dynamicOffset = isMobile ? 130 : 220;
-      
+
       const sections = [
         { id: "inspection", ref: inspectionRef },
         { id: "condition", ref: conditionRef },
@@ -115,7 +115,7 @@ export default function VehicleDetails({
       for (const section of sections) {
         if (section.ref.current) {
           const top = section.ref.current.getBoundingClientRect().top;
-          if (top <= dynamicOffset + 100) { 
+          if (top <= dynamicOffset + 100) {
             if (activeTab !== section.id) {
               setActiveTab(section.id);
               if (section.id === "specification") setIsSpecOpen(true);
@@ -337,9 +337,9 @@ export default function VehicleDetails({
                           {tab.label}
 
                           {activeTab === tab.id && (
-                            <motion.span 
+                            <motion.span
                               layoutId="activeTabIndicator"
-                              className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full" 
+                              className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full"
                             />
                           )}
                         </button>

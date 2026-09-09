@@ -23,7 +23,7 @@ export default function SharePopup({
     setTimeout(() => {
       setIsClosing(false);
       onClose?.();
-    }, 250);
+    }, 150);
   }, [onClose]);
 
   useEffect(() => {
@@ -115,18 +115,18 @@ export default function SharePopup({
       onClick={triggerClose}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       <div
         ref={popupRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[360px] overflow-hidden rounded-t-[1.5rem] sm:rounded-[2rem] border border-white/10 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] p-5 sm:p-6"
+        className="w-full max-w-[360px] overflow-hidden rounded-t-xl sm:rounded-xl border border-white/10 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] p-5 sm:p-6"
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
         <div className="flex items-center justify-between mb-4">

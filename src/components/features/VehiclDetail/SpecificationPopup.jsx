@@ -15,14 +15,14 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose]);
 
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = "unset";
     }
 
     return () => {
@@ -90,8 +90,8 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
       onClick={handleClose}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       {/* MODAL */}
@@ -101,8 +101,8 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s ease-out",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s ease-out",
         }}
       >
         {/* LEFT SIDEBAR - CATEGORIES */}
