@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Vehicle Listings (dynamic, paginated INDEX — all pages) -->
+  <!-- Vehicle Listings (cron-synced static INDEX — all SEO-active pages) -->
   <sitemap>
-    <loc>https://www.reecomm.com/api/sitemap/vehicles.xml</loc>
-    <lastmod>2026-09-09T07:33:57Z</lastmod>
+    <loc>https://www.reecomm.com/sitemaps/vehicles.xml</loc>
+    <lastmod>2026-09-09T11:28:34.987Z</lastmod>
   </sitemap>
   <!-- Storefront Listings (dynamic, paginated INDEX — all consultants) -->
   <sitemap>

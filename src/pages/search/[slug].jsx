@@ -121,8 +121,14 @@ function SlugSearchPage({ seo, initialFilters }) {
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Used Cars",
-                  item: "https://www.reecomm.com/search/buy-used-cars",
+                  name:
+                    initialFilters?.vehicleType === "two-wheelers"
+                      ? "Used Bikes"
+                      : "Used Cars",
+                  item:
+                    initialFilters?.vehicleType === "two-wheelers"
+                      ? "https://www.reecomm.com/search/buy-used-two-wheelers"
+                      : "https://www.reecomm.com/search/buy-used-cars",
                 },
                 {
                   "@type": "ListItem",
@@ -130,7 +136,9 @@ function SlugSearchPage({ seo, initialFilters }) {
                   name: seo?.h1 || seo?.title || "Search Results",
                   item:
                     seo?.canonical ||
-                    "https://www.reecomm.com/search/buy-used-cars",
+                    (initialFilters?.vehicleType === "two-wheelers"
+                      ? "https://www.reecomm.com/search/buy-used-two-wheelers"
+                      : "https://www.reecomm.com/search/buy-used-cars"),
                 },
               ],
             }),

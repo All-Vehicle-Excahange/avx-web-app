@@ -97,18 +97,6 @@ export const generateVehicleUrl = (vehicle) => {
   if (!vehicle || !vehicle.id) return "/search";
 
   const slug = generateVehicleSlug(vehicle);
-  const consultantUsername =
-    vehicle.consultantUsername ||
-    vehicle.consultantSlug ||
-    vehicle.vehicleOwner?.username ||
-    vehicle.username ||
-    (vehicle.consultantName
-      ? vehicle.consultantName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
-      : null);
-
-  if (consultantUsername) {
-    return `/vehicle/details/${consultantUsername}/${slug}/${vehicle.id}`;
-  }
   return `/vehicle/details/${slug}/${vehicle.id}`;
 };
 
@@ -118,8 +106,8 @@ export const generateDynamicPageTitle = (vehicle) => {
   const year = vehicle.yearOfMfg || "";
   const make = vehicle.makerName || vehicle.makeName || "";
   const model = vehicle.modelName || "";
-  const variant = vehicle.variantName || "";
-  const baseName = [year, make, model, variant].filter(Boolean).join(" ");
+  // Keep title short for SERP: year + make + model (variant/price stay in description)
+  const baseName = [year, make, model].filter(Boolean).join(" ");
 
   const city = (
     vehicle.cityName ||
@@ -127,20 +115,12 @@ export const generateDynamicPageTitle = (vehicle) => {
     vehicle.address?.city ||
     vehicle.vehicleAddress?.city ||
     ""
-  ).split(",")[0].trim();
+  )
+    .split(",")[0]
+    .trim();
 
-  const formattedPrice = vehicle.price
-    ? typeof vehicle.price === "number"
-      ? vehicle.price >= 100000
-        ? `${(vehicle.price / 100000).toFixed(2).replace(/\.00$/, "")}L`
-        : vehicle.price.toLocaleString("en-IN")
-      : vehicle.price
-    : "";
-
-  const locationPart = city ? ` for Sale in ${city}` : "";
-  const pricePart = formattedPrice ? ` | ₹${formattedPrice}` : "";
-
-  return `Used ${baseName}${locationPart}${pricePart} | Reecomm`;
+  const locationPart = city ? ` in ${city}` : "";
+  return `Used ${baseName}${locationPart} | Reecomm`;
 };
 
 export const generateDynamicMetaDescription = (vehicle, summary = {}) => {

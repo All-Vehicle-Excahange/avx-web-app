@@ -64,7 +64,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
             <div className="absolute  bg-secondary/10 backdrop-blur-2xl right-0 mt-2 w-44 rounded-xl border border-third/20 shadow-lg z-50 overflow-hidden">
               {/* Always visible */}
               <Link
-                href={`/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}`}
+                href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`}
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
               >
                 View Listing
@@ -98,7 +98,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
               )}
               <Link
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
-                href={`/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}?tab=inspection`}
+                href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}?tab=inspection`}
                 onClick={() => setOpen(false)}
               >
                 Inspection Details
@@ -115,7 +115,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
             fill
             onClick={() =>
               push(
-                `/vehicle/details/consualt/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
+                `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
               )
             }
             className="object-cover cursor-pointer"

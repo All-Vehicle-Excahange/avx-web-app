@@ -204,7 +204,6 @@ export function buildSearchLandingSeo({
 } = {}) {
   const count =
     typeof totalCount === "number" && totalCount > 0 ? totalCount : 0;
-  const countPrefix = count > 0 ? `${count}+ ` : "";
   const brandT = (brand || "").trim();
   const modelT = (model || "").trim();
   const cityT = (city || "").trim();
@@ -213,56 +212,66 @@ export function buildSearchLandingSeo({
   const isTwoWheeler = vehicleWord === "Two Wheelers";
   const vw = displayVehicleLabel(vehicleWord, isTwoWheeler);
   const vwLower = isTwoWheeler ? "bikes" : (vehicleWord || "Cars").toLowerCase();
-  const secondHand = isTwoWheeler ? "Second Hand Bikes" : "Second Hand Cars";
+  const countBit = count > 0 ? `${count}+ ` : "";
+
+  const withBrand = (core) => {
+    let title = `${core} | Reecomm`;
+    if (title.length <= 60) return title;
+    // Prefer keeping city + brand; drop vehicle word next
+    const shortCore = core
+      .replace(` ${vw}`, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    title = `${shortCore} | Reecomm`;
+    // Keep brand suffix even if slightly over 60 — no ellipsis truncation
+    return title;
+  };
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
     const hubTitle = isTwoWheeler
-      ? "Used Bikes - Buy & Sell Second Hand Bikes on Reecomm"
-      : "Used Cars - Buy & Sell Second Hand Cars on Reecomm";
+      ? "Used Bikes for Sale | Reecomm"
+      : "Used Cars for Sale | Reecomm";
+    const hubH1 = isTwoWheeler ? "Used Bikes for Sale" : "Used Cars for Sale";
     const hubDescription = isTwoWheeler
-      ? `Browse ${count > 0 ? `${count}+ ` : ""}verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy.`
-      : `Browse ${count > 0 ? `${count}+ ` : ""}verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+      ? `Browse ${countBit}verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy.`
+      : `Browse ${countBit}verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
-      h1: isTwoWheeler
-        ? "Used Bikes - Buy & Sell Second Hand Bikes"
-        : "Used Cars - Buy & Sell Second Hand Cars",
+      h1: hubH1,
       description: truncateMeta(hubDescription),
       totalCount: count,
     };
   }
 
-  // Brand-only (no city): Used Toyota Cars - Buy & Sell Second Hand Cars on Reecomm
+  // Brand-only (no city)
   if (brandT && !modelT && !cityT && !typeT && !budgetT) {
-    const title = `Used ${brandT} ${vw} - Buy & Sell ${secondHand} on Reecomm`;
     return {
-      title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
+      title: withBrand(`Used ${brandT} ${vw}`),
       h1: `Used ${brandT} ${vw}`,
       description: truncateMeta(
-        `Browse ${count > 0 ? `${count}+ ` : ""}verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`
+        `Browse ${countBit}verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`
       ),
       totalCount: count,
     };
   }
 
-  let title = "";
   let h1 = "";
+  let core = "";
 
-  // Brand + model + city: Used Hyundai Santro Xing in Siddhpur - Buy Second Hand Cars
   if (cityT && brandT && modelT) {
-    title = `${countPrefix}Used ${brandT} ${modelT} in ${cityT} - Buy ${secondHand}`;
-    h1 = `${countPrefix}Used ${brandT} ${modelT} in ${cityT}`;
+    core = `Used ${brandT} ${modelT} in ${cityT}`;
+    h1 = core;
   } else if (cityT && brandT && !modelT) {
-    title = `${countPrefix}Used ${brandT} ${vw} in ${cityT} - Buy ${secondHand}`;
-    h1 = `${countPrefix}Used ${brandT} ${vw} in ${cityT}`;
+    core = `Used ${brandT} ${vw} in ${cityT}`;
+    h1 = core;
   } else if (cityT && !brandT && !modelT && !budgetT) {
-    title = `${countPrefix}Used ${vw} in ${cityT} - Buy ${secondHand}`;
-    h1 = `${countPrefix}Used ${vw} in ${cityT}`;
+    core = `Used ${vw} in ${cityT}`;
+    h1 = core;
   } else if (brandT && modelT && !cityT) {
-    title = `${countPrefix}Used ${brandT} ${modelT} ${vw} - Buy ${secondHand}`;
-    h1 = `${countPrefix}Used ${brandT} ${modelT} ${vw}`;
+    core = `Used ${brandT} ${modelT} ${vw}`;
+    h1 = `Used ${brandT} ${modelT}`;
   } else {
-    const core = cleanJoin([
+    core = cleanJoin([
       "Used",
       typeT,
       brandT,
@@ -271,14 +280,10 @@ export function buildSearchLandingSeo({
       budgetT,
       cityT ? `in ${cityT}` : "",
     ]);
-    title = `${countPrefix}${core}`.trim();
-    h1 = title;
+    h1 = core;
   }
 
-  // Append | Reecomm when title does not already mention Reecomm and length allows
-  if (!/reecomm/i.test(title) && title.length <= 55) {
-    title = `${title} | Reecomm`;
-  }
+  const title = withBrand(core);
 
   const subject = cleanJoin([
     brandT.toLowerCase(),
@@ -286,7 +291,6 @@ export function buildSearchLandingSeo({
     vwLower,
     cityT ? `in ${cityT}` : "",
   ]);
-  const countBit = count > 0 ? `${count}+ ` : "";
 
   let description = `Browse ${countBit}verified used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
 
@@ -311,7 +315,7 @@ export function buildSearchLandingSeo({
   }
 
   return {
-    title: title.length > 70 ? `${title.slice(0, 67).trim()}...` : title,
+    title,
     h1,
     description: truncateMeta(description),
     totalCount: count,

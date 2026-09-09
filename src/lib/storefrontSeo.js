@@ -22,25 +22,35 @@ export function buildStorefrontSeo({
   state = "",
   availableVehicles = 0,
   username = "",
+  vehicleWord = "cars",
 } = {}) {
   const cityT = (city || "").trim();
   const stateT = (state || "").trim();
   const location = formatStorefrontLocation(cityT, stateT);
   const loc = location || "India";
+  const vw = (vehicleWord || "cars").toLowerCase().includes("bike")
+    ? "bikes"
+    : "cars";
   const countBit =
-    availableVehicles > 0 ? ` Browse ${availableVehicles}+ listed vehicles.` : "";
+    availableVehicles > 0
+      ? ` Browse ${availableVehicles}+ listed vehicles.`
+      : "";
 
-  const title = location
-    ? `${displayName} — Used cars in ${location} | Reecomm Auto Consultant`
-    : `${displayName} — Used cars | Reecomm Auto Consultant`;
+  const brandOnReecomm = `${displayName} on Reecomm`;
+  let title = location
+    ? `${brandOnReecomm} — Used ${vw} in ${location}`
+    : `${brandOnReecomm} — Used ${vw}`;
+
+  // Keep SERP titles readable (~60 chars); location moves to description if needed
+  if (title.length > 60) {
+    title = brandOnReecomm;
+  }
 
   const description = location
-    ? `View ${displayName}'s verified used car inventory in ${location} on Reecomm.${countBit} Compare prices, photos, and reviews — inquire securely.`
-    : `View ${displayName}'s verified used car inventory on Reecomm.${countBit} Compare prices, photos, and reviews — inquire securely.`;
+    ? `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw} in ${location}. Compare prices, photos, and reviews — inquire securely.`
+    : `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw}.${countBit} Compare prices, photos, and reviews — inquire securely.`;
 
-  const h1 = location
-    ? `${displayName} — Used cars in ${location}`
-    : `${displayName} — Used cars on Reecomm`;
+  const h1 = brandOnReecomm;
 
   return { title, description, h1, loc };
 }
@@ -57,17 +67,18 @@ export function buildStorefrontFaq({
     availableVehicles > 0
       ? ` They currently list about ${availableVehicles}+ vehicles on Reecomm.`
       : "";
+  const brandOnReecomm = `${displayName} on Reecomm`;
 
   const items = [
     {
       question: `Who is ${displayName}?`,
-      answer: `${displayName} is an automotive consultant on Reecomm with a digital storefront for verified used cars and bikes${locBit}.${countBit}`,
+      answer: `${brandOnReecomm} is an automotive consultant with a digital storefront for verified used cars and bikes${locBit}.${countBit}`,
     },
     {
       question: location
         ? `Where can I buy used cars from ${displayName} near ${location}?`
         : `Where can I buy used cars from ${displayName}?`,
-      answer: `Browse ${displayName}'s inventory on their Reecomm storefront, open a listing for photos and price, then send an inquiry. Always verify RC, insurance, and condition before payment.`,
+      answer: `Browse ${brandOnReecomm} inventory, open a listing for photos and price, then send an inquiry. Always verify RC, insurance, and condition before payment.`,
     },
     {
       question: "Are vehicles on Reecomm consultant storefronts inspected?",
@@ -76,7 +87,7 @@ export function buildStorefrontFaq({
     },
     {
       question: "How do I contact this auto consultant?",
-      answer: `Open any listing on ${displayName}'s storefront and send an inquiry through Reecomm — you can ask about price, documents, and inspection before visiting.`,
+      answer: `Open any listing on ${brandOnReecomm} and send an inquiry — you can ask about price, documents, and inspection before visiting.`,
     },
   ];
 
@@ -132,9 +143,9 @@ export function buildStorefrontDealerSchema({
     url: canonical,
     ...(logoUrl ? { image: logoUrl, logo: logoUrl } : {}),
     description: cleanJoin([
-      `${displayName} sells verified used cars`,
+      `${displayName} on Reecomm sells verified used cars`,
       location ? `in ${location}` : "",
-      "on Reecomm.",
+      ".",
       availableVehicles > 0 ? `${availableVehicles}+ vehicles listed.` : "",
     ]),
     ...(telephone ? { telephone } : {}),
@@ -203,7 +214,7 @@ export function buildStorefrontItemListSchema({
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `${displayName} — Used vehicles on Reecomm`,
+    name: `${displayName} on Reecomm — Used vehicles`,
     url: canonical,
     numberOfItems: itemListElement.length,
     itemListElement,

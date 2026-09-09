@@ -11,6 +11,7 @@
     "lint": "eslint",
     "generate:search-index": "node src/scripts/generateSearchIndex.js",
     "generate:sitemaps": "node src/scripts/generateSitemaps.js",
+    "sync:vehicle-sitemap": "node src/scripts/syncVehicleSitemap.js",
     "notify:storefronts": "node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps",
     "notify:vehicles": "node src/scripts/notifyVehicleIndexing.js --page=1 --also-sitemaps",
     "notify:search-landings": "node src/scripts/notifyTopSearchLandings.js",

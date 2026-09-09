@@ -263,6 +263,18 @@ export async function getStaticProps(context) {
 
   const vehicles = await fetchStorefrontInventoryServer(currentUsername);
 
+  const bikeCount = vehicles.filter((v) => {
+    const t = String(v?.vehicleType || v?.category || v?.type || "").toUpperCase();
+    return (
+      t.includes("TWO") ||
+      t.includes("BIKE") ||
+      t.includes("SCOOTER") ||
+      t.includes("MOTORCYCLE")
+    );
+  }).length;
+  const vehicleWord =
+    vehicles.length > 0 && bikeCount > vehicles.length / 2 ? "bikes" : "cars";
+
   const firstWithImage = vehicles.find((v) => v?.thumbnailUrl || v?.imageUrl);
   const firstInventoryImage =
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || "";
@@ -276,6 +288,7 @@ export async function getStaticProps(context) {
     state,
     availableVehicles,
     username: currentUsername,
+    vehicleWord,
   });
 
   const { schema: faqSchema } = buildStorefrontFaq({
@@ -316,6 +329,7 @@ export async function getStaticProps(context) {
       seo: {
         title: seoBuilt.title,
         description: seoBuilt.description,
+        h1: seoBuilt.h1,
         image: storefrontImageUrl,
         displayName,
         url: currentUrl,
@@ -323,7 +337,9 @@ export async function getStaticProps(context) {
         city,
         state,
         availableVehicles,
-        cityHubHref: citySlug ? `/search/buy-used-cars-${citySlug}` : null,
+        cityHubHref: citySlug
+          ? `/search/buy-used-${vehicleWord === "bikes" ? "two-wheelers" : "cars"}-${citySlug}`
+          : null,
         dealerSchema,
         faqSchema,
         itemListSchema: itemListSchema || null,
