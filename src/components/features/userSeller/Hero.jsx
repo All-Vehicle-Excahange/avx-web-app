@@ -6,7 +6,7 @@ import Button from "@/components/ui/button";
 import DetailsFromPopup from "@/components/features/userSeller/DetailsFromPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import { getBecameSeller } from "@/services/user.service";
 
 const TRUST_BADGES = [
@@ -30,7 +30,7 @@ function Hero() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
-  const [signupPopup, setSignupPopup] = useState(false);
+  
   const [mounted, setMounted] = useState(false);
   const [role, setRole] = useState(null);
   const [checkingStatus, setCheckingStatus] = useState(false);
@@ -223,16 +223,7 @@ function Hero() {
         onClose={() => setLoginPopup(false)}
         onSignup={() => {
           setLoginPopup(false);
-          setSignupPopup(true);
-        }}
-        onSuccess={handleLoginSuccess}
-      />
-      <SignupPopup
-        isOpen={signupPopup}
-        onClose={() => setSignupPopup(false)}
-        onLogin={() => {
-          setSignupPopup(false);
-          setLoginPopup(true);
+          useAuthStore.getState().openLoginPopup("consultant");
         }}
         onSuccess={handleLoginSuccess}
       />

@@ -9,7 +9,7 @@ import Navbar from "@/components/layout/Navbar";
 import { logoutUser } from "@/services/auth.service";
 
 export default function HamburgerDrawer({ open, onClose }) {
-  const { isLoggedIn, user, openLoginPopup, openSignupPopup, logout } =
+  const { isLoggedIn, user, openLoginPopup, logout } =
     useAuthStore();
 
   const [hoveredTab, setHoveredTab] = useState(null);
@@ -62,7 +62,7 @@ export default function HamburgerDrawer({ open, onClose }) {
 
   const handleRegisterClick = () => {
     onClose();
-    openSignupPopup();
+    openLoginPopup();
   };
 
   const handleLogoutClick = async () => {

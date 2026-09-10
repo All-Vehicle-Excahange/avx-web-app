@@ -454,8 +454,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       setAccountOpen(false);
       setPersisAccountOpen(false);
     };
-    document.addEventListener("signuppopup:open", handler);
-    return () => document.removeEventListener("signuppopup:open", handler);
+
   }, []);
 
   /* ================= PREFERENCES POPUP LISTENER ================= */

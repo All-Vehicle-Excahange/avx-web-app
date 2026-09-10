@@ -21,7 +21,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { trackWishlistLoginRequired } from "@/lib/amplitude";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { createSlug, generateVehicleUrl } from "@/lib/helper";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -41,7 +41,6 @@ export default function VehicleCard({
     () => data?.isWishlisted || false,
   );
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const { addToCompare, compareVehicles } = useCompareStore();
   const isComparing = compareVehicles.some((v) => v.id === data.id);
 
@@ -505,18 +504,6 @@ export default function VehicleCard({
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
-        }}
-      />
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
-        }}
       />
     </>
   );

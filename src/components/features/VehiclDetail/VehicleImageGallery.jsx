@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
@@ -39,7 +38,6 @@ export default function VehicleImageGallery({ vehicle }) {
   const vehicleId = vehicle?.id;
   const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -133,7 +131,6 @@ export default function VehicleImageGallery({ vehicle }) {
 
   const handleAuthSuccess = () => {
     setIsLoginOpen(false);
-    setIsSignupOpen(false);
     if (pendingAction.current === "wishlist") {
       pendingAction.current = null;
       handleWishlistToggle();
@@ -374,23 +371,10 @@ export default function VehicleImageGallery({ vehicle }) {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onSuccess={handleAuthSuccess}
-        onSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
-        }}
-      />
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
-        }}
       />
       <VehicleGalleryModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => setIsModalOpen(false) }
         media={media}
         initialSlide={activeIndex}
         imageAltBase={imageAltBase}

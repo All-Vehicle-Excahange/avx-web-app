@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 import { followConsultant, unFollowConsultant } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import SharePopup from "@/components/ui/SharePopup";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
@@ -44,7 +44,6 @@ export default function StoreFrontHeroSection() {
 
   const [optimisticFollowState, setOptimisticFollowState] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadAppOpen, setIsDownloadAppOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState(null);
@@ -196,7 +195,7 @@ export default function StoreFrontHeroSection() {
     <>
       <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-xl md:rounded-2xl overflow-hidden shadow-none sm:shadow-sm">
         {/* ================= BANNER ================= */}
-        <div 
+        <div
           className="relative w-full h-[200px] sm:h-[290px] md:h-[350px] cursor-pointer group"
           onClick={() => storeDetails?.bannerUrl && setZoomImage(storeDetails.bannerUrl)}
         >
@@ -215,7 +214,7 @@ export default function StoreFrontHeroSection() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* LEFT COLUMN */}
             <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
-              <div 
+              <div
                 className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl cursor-pointer group"
                 onClick={() => storeDetails?.logoUrl && setZoomImage(storeDetails.logoUrl)}
               >
@@ -388,18 +387,6 @@ export default function StoreFrontHeroSection() {
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
-        }}
-      />
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
-        }}
       />
       <DownloadAppPopup
         isOpen={isDownloadAppOpen}
@@ -414,13 +401,13 @@ export default function StoreFrontHeroSection() {
 
       {/* Image Zoom Modal */}
       {zoomImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col select-none"
           onClick={() => setZoomImage(null)}
         >
           {/* Top Bar - Close Button */}
           <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50">
-            <button 
+            <button
               className="bg-white/10 text-white p-2.5 rounded-full shadow-md hover:bg-white/20 transition cursor-pointer backdrop-blur-sm"
               onClick={(e) => {
                 e.stopPropagation();
@@ -432,7 +419,7 @@ export default function StoreFrontHeroSection() {
           </div>
 
           {/* Main Image Area */}
-          <div 
+          <div
             className="relative flex-1 w-full flex flex-col items-center justify-center pt-12 sm:pt-4 pb-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
