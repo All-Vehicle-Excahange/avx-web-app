@@ -276,8 +276,12 @@ export default function App({ Component, pageProps }) {
             isOpen={isLoginPopupOpen && !showSplash}
             onClose={closeLoginPopup}
             onSignup={openSignupPopup}
-            onSuccess={async () => {
+            onSuccess={async (params = {}) => {
               try {
+                if (params?.isSignup) {
+                  openCompleteProfilePopup();
+                  return;
+                }
                 const res = await checkIsMetaExist();
                 const exists = res?.data?.exists === true || res?.data === true;
                 if (!exists) {

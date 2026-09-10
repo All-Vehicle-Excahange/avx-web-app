@@ -10,6 +10,7 @@ import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { event } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
+import { useAuthStore } from "@/stores/useAuthStore";
 import {
   trackInquiryFormAbandoned,
   trackInquiryFormOpened,
@@ -28,11 +29,22 @@ function SendInquaryPopup({
   billingType,
   initialSuccessState = false,
   isOfferSuccess = false,
+  onRequireAuth,
 }) {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("Test Drive available");
   const [description, setDescription] = useState("");
   const [isSuccess, setIsSuccess] = useState(initialSuccessState);
+  const [pendingSubmit, setPendingSubmit] = useState(false);
+
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn && pendingSubmit) {
+      setPendingSubmit(false);
+      handleSubmit();
+    }
+  }, [isLoggedIn, pendingSubmit]);
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const openedAtRef = useRef(Date.now());
@@ -93,6 +105,12 @@ function SendInquaryPopup({
   }, [vehicleId, vehicleName, sellerType, trackAbandonIfNeeded]);
 
   const handleSubmit = async () => {
+    if (!isLoggedIn) {
+      setPendingSubmit(true);
+      if (onRequireAuth) onRequireAuth();
+      return;
+    }
+
     if (!vehicleId || isLoading) return;
     try {
       setIsLoading(true);

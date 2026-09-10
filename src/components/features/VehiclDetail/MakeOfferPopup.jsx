@@ -21,14 +21,23 @@ export default function MakeOfferPopup({
   vehicle,
   summary,
   onSuccess,
+  onRequireAuth,
 }) {
   const queryClient = useQueryClient();
   const [offerPrice, setOfferPrice] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState(false);
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn && pendingSubmit) {
+      setPendingSubmit(false);
+      handleSendOffer();
+    }
+  }, [isLoggedIn, pendingSubmit]);
 
   const vehicleId = vehicle?._id || vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
@@ -149,7 +158,11 @@ export default function MakeOfferPopup({
   };
 
   const handleSendOffer = async () => {
-    if (!isLoggedIn) return; // Should not happen, checked before opening
+    if (!isLoggedIn) {
+      setPendingSubmit(true);
+      if (onRequireAuth) onRequireAuth();
+      return;
+    }
 
     if (!currentOffer || currentOffer <= 0 || !vehicleId) return;
     try {
@@ -273,11 +286,10 @@ export default function MakeOfferPopup({
                 type="text"
                 value={displayValue}
                 onChange={handlePriceChange}
-                className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none transition-colors ${
-                  isOfferTooHigh
+                className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none transition-colors ${isOfferTooHigh
                     ? "border-red-500 focus:border-red-500 bg-red-500/5"
                     : "border-third/20 focus:border-fourth"
-                }`}
+                  }`}
                 placeholder="Enter offer amount"
               />
             </div>
@@ -297,11 +309,10 @@ export default function MakeOfferPopup({
                 <button
                   key={key}
                   onClick={() => handlePresetOption(opt, key)}
-                  className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${
-                    Number(offerPrice) === opt
+                  className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${Number(offerPrice) === opt
                       ? "bg-third/10 border-third/50 text-primary"
                       : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"
-                  }`}
+                    }`}
                 >
                   {formatPrice(opt)}
                 </button>
