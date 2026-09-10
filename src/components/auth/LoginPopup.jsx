@@ -7,7 +7,7 @@ import { X, Loader2, User, UserCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/button";
-import { getOtp, login, googleVerify, googleSignupVerify } from "@/services/auth.service";
+import { getOtp, login, signup, googleVerify, googleSignupVerify } from "@/services/auth.service";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
@@ -35,6 +35,7 @@ function LoginPopup({
   onClose,
   onSignup = () => { },
   onSuccess = () => { },
+  hideTabs = false,
 }) {
   const {
     register,
@@ -65,8 +66,8 @@ function LoginPopup({
     },
   });
   */
-  const startWebOTP = () => {};
-  const abortWebOTP = () => {};
+  const startWebOTP = () => { };
+  const abortWebOTP = () => { };
 
   // ── Auto-verify when all 6 digits are present ─────────────────────────────
   // Covers BOTH manual typing and WebOTP autofill. Before early return = no hooks violation.
@@ -86,6 +87,8 @@ function LoginPopup({
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
   const [accountType, setAccountType] = useState("personal");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isLoginFlow, setIsLoginFlow] = useState(false);
+  const savedValuesRef = useRef({});
 
   const getFunnelProps = () => {
     const ctx = useAuthStore.getState().authFunnelContext || {};
@@ -99,6 +102,7 @@ function LoginPopup({
   // Check for active block on mount or when popup opens
   useEffect(() => {
     if (isOpen) {
+      useAuthStore.getState().markLoginPopupSeen();
       trackLoginStarted({ source: "login_popup", ...getFunnelProps() });
       reset();
       setOtp(Array(6).fill(""));
@@ -108,6 +112,7 @@ function LoginPopup({
       setIsGoogleLoading(false);
       setAccountType("personal");
       setAcceptedTerms(false);
+      setIsLoginFlow(false);
 
       const blockUntil = localStorage.getItem("otpBlockUntil");
       if (blockUntil) {
@@ -276,18 +281,40 @@ function LoginPopup({
   const onSendOtp = async () => {
     try {
       setIsLoading(true);
+      savedValuesRef.current = getValues();
       const phone = getValues("phoneNumber");
 
-      const res = await getOtp({
-        phoneNumber: phone,
-        countryCode: "+91",
-        requestType: isGoogleSignupFlow ? "SIGNUP" : "LOGIN",
-      });
+      let isSignup = false;
+      let res;
+
+      try {
+        res = await getOtp({
+          phoneNumber: phone,
+          countryCode: "+91",
+          requestType: isGoogleSignupFlow ? "SIGNUP" : "LOGIN",
+        });
+      } catch (err) {
+        if (
+          !isGoogleSignupFlow &&
+          (err?.response?.status === 404 ||
+            err?.response?.data?.message?.toLowerCase().includes("register"))
+        ) {
+          res = await getOtp({
+            phoneNumber: phone,
+            countryCode: "+91",
+            requestType: "SIGNUP",
+          });
+          isSignup = true;
+        } else {
+          throw err;
+        }
+      }
 
       if (res?.success || res?.status) {
         setOtpSent(true);
+        setIsLoginFlow(!isSignup);
         trackOtpRequested({
-          flow: isGoogleSignupFlow ? "mobile_verification" : "login",
+          flow: isGoogleSignupFlow ? "mobile_verification" : (isSignup ? "signup" : "login"),
           ...getFunnelProps(),
         });
         const blockTime = Date.now() + 30 * 1000;
@@ -314,14 +341,11 @@ function LoginPopup({
         });
       }
 
-      if (status === 404) {
-        msg = "This number isn't registered. Create your account.";
-      }
-
       if (msg.toLowerCase().includes("otp already sent")) {
         setOtpSent(true);
         const blockTime = Date.now() + 30 * 1000;
         localStorage.setItem("otpBlockUntil", String(blockTime));
+        setCountdown(30);
         setCountdown(30);
         return;
       }
@@ -363,7 +387,7 @@ function LoginPopup({
 
     try {
       setIsLoading(true);
-      const phone = getValues("phoneNumber");
+      const phone = savedValuesRef.current.phoneNumber || getValues("phoneNumber");
 
       let res;
       if (wasGoogleSignup) {
@@ -375,11 +399,22 @@ function LoginPopup({
           isApplyForConsultation: accountType === "consultant",
         });
       } else {
-        res = await login({
-          phoneNumber: phone,
-          countryCode: "+91",
-          otp: finalOtp,
-        });
+        if (isLoginFlow) {
+          res = await login({
+            phoneNumber: phone,
+            countryCode: "+91",
+            otp: finalOtp,
+          });
+        } else {
+          res = await signup({
+            firstname: phone,
+            lastname: "",
+            phoneNumber: phone,
+            countryCode: "+91",
+            otp: finalOtp,
+            isApplyForConsultation: accountType === "consultant",
+          });
+        }
       }
 
       if (res?.success || res?.status) {
@@ -406,6 +441,7 @@ function LoginPopup({
         setIsGoogleLoading(false);
         setAccountType("personal");
         setAcceptedTerms(false);
+        setIsLoginFlow(false);
         onClose();
 
         if (wasGoogleSignup) {
@@ -429,7 +465,7 @@ function LoginPopup({
           currentAccountType === "consultant" ||
           ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(userRole);
         if (!isConsultant) {
-          await onSuccess();
+          await onSuccess({ isSignup: !isLoginFlow });
         }
       }
     } catch (err) {
@@ -618,41 +654,35 @@ function LoginPopup({
 
           {/* Google Sign In moved below */}
 
-          {isGoogleSignupFlow && !otpSent && (
-            <>
-              <div className="flex justify-center gap-10 mb-8 ">
-                <button
-                  type="button"
-                  onClick={() => setAccountType("personal")}
-                  className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "personal"
-                    ? "text-primary font-bold"
-                    : "text-primary/40 hover:text-primary/70"
-                    }`}
-                >
-                  <span className="text-sm uppercase tracking-wide">Personal</span>
-                  {accountType === "personal" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAccountType("consultant")}
-                  className={`flex cursor-pointer items-center gap-2 pb-3 transition-all relative ${accountType === "consultant"
-                    ? "text-primary font-bold"
-                    : "text-primary/40 hover:text-primary/70"
-                    }`}
-                >
-                  <span className="text-sm uppercase tracking-wide">
-                    Consultant
-                  </span>
-                  {accountType === "consultant" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
-                  )}
-                </button>
-              </div>
-
-
-            </>
+          {!otpSent && !hideTabs && (
+            <div className="flex justify-center gap-8 mb-8 border-b border-primary/10">
+              <button
+                type="button"
+                onClick={() => setAccountType("personal")}
+                className={`relative pb-2 px-2 cursor-pointer text-sm font-semibold uppercase tracking-wide transition-all ${accountType === "personal"
+                  ? "text-primary"
+                  : "text-primary/40 hover:text-primary/70"
+                  }`}
+              >
+                Buyer
+                {accountType === "personal" && (
+                  <div className="absolute -bottom-[1px] left-0 w-full h-0.5 bg-primary rounded-full" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setAccountType("consultant")}
+                className={`relative pb-2 px-2 cursor-pointer text-sm font-semibold uppercase tracking-wide transition-all ${accountType === "consultant"
+                  ? "text-primary"
+                  : "text-primary/40 hover:text-primary/70"
+                  }`}
+              >
+                Become a Consultant
+                {accountType === "consultant" && (
+                  <div className="absolute -bottom-[1px] left-0 w-full h-0.5 bg-primary rounded-full" />
+                )}
+              </button>
+            </div>
           )}
 
           {/* ✅ MOBILE INPUT */}
@@ -840,7 +870,7 @@ function LoginPopup({
           {!isGoogleSignupFlow && (
             <>
               {/* REGISTER LINK */}
-              <div className="mt-4 text-primary/60 text-center text-sm">
+              {/* <div className="mt-4 text-primary/60 text-center text-sm">
                 Don’t have an account?{" "}
                 <button
                   type="button"
@@ -856,7 +886,7 @@ function LoginPopup({
                 >
                   Create
                 </button>
-              </div>
+              </div> */}
 
               {/* TERMS */}
               <div className="text-[10px] text-primary/50 mt-6 text-center">

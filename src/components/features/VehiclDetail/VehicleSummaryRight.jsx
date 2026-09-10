@@ -9,7 +9,6 @@ import LoginPopup from "@/components/auth/LoginPopup";
 import SendInquaryPopup from "./SendInquaryPopup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
-import SignupPopup from "@/components/auth/SignupPopup";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import MakeOfferPopup from "./MakeOfferPopup";
@@ -38,7 +37,6 @@ export default function VehicleSummaryRight({
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isMakeOfferOpen, setIsMakeOfferOpen] = useState(false);
   const [isOfferSuccess, setIsOfferSuccess] = useState(false);
@@ -141,6 +139,11 @@ export default function VehicleSummaryRight({
       seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
     });
 
+    if (!isLoggedIn) {
+      setIsPopupOpen(true);
+      return;
+    }
+
     setLoading(true);
     try {
       let data = eligibilityData;
@@ -178,29 +181,11 @@ export default function VehicleSummaryRight({
       is_logged_in: Boolean(isLoggedIn),
     });
 
-    if (!isLoggedIn) {
-      pendingAction.current = "request";
-      trackInquiryLoginRequired({
-        vehicle_id: vehicle?.id,
-        vehicle_name: vehicleName || "Vehicle Details",
-        seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
-        source,
-      });
-      useAuthStore.getState().setAuthFunnelContext({
-        entry_context: "vehicle_detail",
-        trigger_action: "inquiry",
-        user_role_intent: "buyer",
-      });
-      setIsLoginOpen(true);
-      return;
-    }
-
     handleRequestInquiry();
   };
 
   const handleAuthSuccess = () => {
     setIsLoginOpen(false);
-    setIsSignupOpen(false);
     if (pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
@@ -226,17 +211,6 @@ export default function VehicleSummaryRight({
       vehicle?.stateName ||
       "";
     const sellerType = vehicle?.sellerType || vehicleOwnerRole || "";
-
-    if (!isLoggedIn) {
-      pendingAction.current = "make_offer";
-      useAuthStore.getState().setAuthFunnelContext({
-        entry_context: "vehicle_detail",
-        trigger_action: "make_offer",
-        user_role_intent: "buyer",
-      });
-      setIsLoginOpen(true);
-      return;
-    }
 
     trackMakeOfferInitiated({
       vehicle_id: vehicleId || vehicle?.id,
@@ -618,19 +592,7 @@ export default function VehicleSummaryRight({
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onSuccess={handleAuthSuccess}
-        onSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
-        }}
-      />
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-        onSuccess={handleAuthSuccess}
-        onLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
-        }}
+        hideTabs={true}
       />
       {isPopupOpen && (
         <SendInquaryPopup
@@ -638,6 +600,7 @@ export default function VehicleSummaryRight({
             setIsPopupOpen(false);
             setIsOfferSuccess(false);
           }}
+          onRequireAuth={() => setIsLoginOpen(true)}
           consultName={summary?.consultationName}
           vehicleId={vehicleId}
           vehicle={vehicle}
@@ -662,6 +625,7 @@ export default function VehicleSummaryRight({
       <MakeOfferPopup
         isOpen={isMakeOfferOpen}
         onClose={() => setIsMakeOfferOpen(false)}
+        onRequireAuth={() => setIsLoginOpen(true)}
         vehicle={vehicle}
         summary={summary}
         onSuccess={() => {

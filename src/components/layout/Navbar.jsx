@@ -1404,12 +1404,18 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         <img
                           src={user.logoUrl}
                           alt="Profile"
-                          className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover shrink-0 bg-white"
+                          className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover shrink-0 bg-white"e
                         />
                       ) : (
                         <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-fourth text-white flex items-center justify-center text-[10px] md:text-xs font-semibold shrink-0">
-                          {user?.firstname?.charAt(0)?.toUpperCase() || ""}
-                          {user?.lastname?.charAt(0)?.toUpperCase() || ""}
+                          {user?.firstname && /^\d/.test(user.firstname.charAt(0)) ? (
+                            <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                          ) : (
+                            <>
+                              {user?.firstname?.charAt(0)?.toUpperCase() || ""}
+                              {user?.lastname?.charAt(0)?.toUpperCase() || ""}
+                            </>
+                          )}
                         </div>
                       )}
 
@@ -1419,7 +1425,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                             <span className="font-bold">Sign in</span>
                           ) : (
                             <span className="font-bold block truncate max-w-[115px] sm:max-w-[130px] lg:max-w-[95px] capitalize">
-                              Hello, {user?.consultationName || user?.firstname}
+                              Hello, {user?.consultationName || (user?.firstname && /^\d/.test(user.firstname.charAt(0)) ? "User" : user?.firstname)}
                             </span>
                           )}
                         </span>

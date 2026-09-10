@@ -14,6 +14,7 @@ export const useAuthStore = create((set) => ({
 
   //  LOGIN & SIGNUP & PROFILE POPUP CONTROL
   isLoginPopupOpen: false,
+  hasSeenLoginPopup: false,
   isSignupPopupOpen: false,
   isCompleteProfilePopupOpen: false,
   prefilledPhoneNumber: "",
@@ -33,6 +34,8 @@ export const useAuthStore = create((set) => ({
     }),
 
   clearAuthFunnelContext: () => set({ authFunnelContext: null }),
+
+  markLoginPopupSeen: () => set({ hasSeenLoginPopup: true }),
 
   /**
    * Open login popup. Backward compatible:
