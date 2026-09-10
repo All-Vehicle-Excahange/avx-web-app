@@ -519,183 +519,183 @@ export default function HamburgerDrawer({ open, onClose }) {
               {/* Default view when nothing specific is hovered */}
               {(!hoveredTab ||
                 !["cars", "bikes", "browse", "consult", "sell"].includes(hoveredTab)) && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast py-2">
-                  {/* BUY USED CARS QUICK HUB */}
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase font-bold tracking-wider text-primary">
-                        Buy Used Cars
-                      </span>
-                      <Link
-                        href="/search/buy-used-cars"
-                        onClick={onClose}
-                        className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
-                      >
-                        View All <ChevronRight size={12} />
-                      </Link>
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
-                      <MenuLink href="/search/buy-used-maruti-suzuki-cars" onClick={onClose} compact>
-                        Maruti Suzuki
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-hyundai-cars" onClick={onClose} compact>
-                        Hyundai
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-tata-cars" onClick={onClose} compact>
-                        Tata
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-mahindra-cars" onClick={onClose} compact>
-                        Mahindra
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-toyota-cars" onClick={onClose} compact>
-                        Toyota
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-honda-cars" onClick={onClose} compact>
-                        Honda
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-suv-cars" onClick={onClose} compact>
-                        Used SUVs
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-luxury-cars" onClick={onClose} compact>
-                        Luxury Cars
-                      </MenuLink>
-                    </div>
-                  </div>
-
-                  {/* BUY USED BIKES QUICK HUB */}
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase font-bold tracking-wider text-primary">
-                        Buy Used Bikes
-                      </span>
-                      <Link
-                        href="/search/buy-used-two-wheelers"
-                        onClick={onClose}
-                        className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
-                      >
-                        View All <ChevronRight size={12} />
-                      </Link>
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
-                      <MenuLink href="/search/buy-used-royal-enfield-two-wheelers" onClick={onClose} compact>
-                        Royal Enfield
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-hero-two-wheelers" onClick={onClose} compact>
-                        Hero Bikes
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-tvs-two-wheelers" onClick={onClose} compact>
-                        TVS Bikes
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-bajaj-two-wheelers" onClick={onClose} compact>
-                        Bajaj Bikes
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-yamaha-two-wheelers" onClick={onClose} compact>
-                        Yamaha Bikes
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-ola-two-wheelers" onClick={onClose} compact>
-                        OLA Electric
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-electric-two-wheelers" onClick={onClose} compact>
-                        Electric 2W
-                      </MenuLink>
-                      <MenuLink href="/search/buy-used-scooter-two-wheelers" onClick={onClose} compact>
-                        Scooters
-                      </MenuLink>
-                    </div>
-                  </div>
-
-                  {/* TRENDING LOCATION SEARCHES (HIGH-INTENT SEO KEYWORDS) */}
-                  <div className="sm:col-span-2 pt-4 border-t border-white/10 space-y-4">
-                    <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
-                        Trending City Searches
-                      </span>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
-                        <MenuLink href="/search/buy-used-cars-delhi" onClick={onClose} compact>
-                          Used Cars in Delhi
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 fade-in-fast py-2">
+                    {/* BUY USED CARS QUICK HUB */}
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase font-bold tracking-wider text-primary">
+                          Buy Used Cars
+                        </span>
+                        <Link
+                          href="/search/buy-used-cars"
+                          onClick={onClose}
+                          className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
+                        >
+                          View All <ChevronRight size={12} />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
+                        <MenuLink href="/search/buy-used-maruti-suzuki-cars" onClick={onClose} compact>
+                          Maruti Suzuki
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-mumbai" onClick={onClose} compact>
-                          Used Cars in Mumbai
+                        <MenuLink href="/search/buy-used-hyundai-cars" onClick={onClose} compact>
+                          Hyundai
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-ahmedabad" onClick={onClose} compact>
-                          Used Cars in Ahmedabad
+                        <MenuLink href="/search/buy-used-tata-cars" onClick={onClose} compact>
+                          Tata
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-bangalore" onClick={onClose} compact>
-                          Used Cars in Bangalore
+                        <MenuLink href="/search/buy-used-mahindra-cars" onClick={onClose} compact>
+                          Mahindra
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-pune" onClick={onClose} compact>
-                          Used Cars in Pune
+                        <MenuLink href="/search/buy-used-toyota-cars" onClick={onClose} compact>
+                          Toyota
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-surat" onClick={onClose} compact>
-                          Used Cars in Surat
+                        <MenuLink href="/search/buy-used-honda-cars" onClick={onClose} compact>
+                          Honda
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-hyderabad" onClick={onClose} compact>
-                          Used Cars in Hyderabad
+                        <MenuLink href="/search/buy-used-suv-cars" onClick={onClose} compact>
+                          Used SUVs
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-jaipur" onClick={onClose} compact>
-                          Used Cars in Jaipur
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-vadodara" onClick={onClose} compact>
-                          Used Cars in Vadodara
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-chennai" onClick={onClose} compact>
-                          Used Cars in Chennai
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-kolkata" onClick={onClose} compact>
-                          Used Cars in Kolkata
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-rajkot" onClick={onClose} compact>
-                          Used Cars in Rajkot
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-ludhiana" onClick={onClose} compact>
-                          Used Cars in Ludhiana
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-nashik" onClick={onClose} compact>
-                          Used Cars in Nashik
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-chandigarh" onClick={onClose} compact>
-                          Used Cars in Chandigarh
-                        </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-lucknow" onClick={onClose} compact>
-                          Used Cars in Lucknow
+                        <MenuLink href="/search/buy-used-luxury-cars" onClick={onClose} compact>
+                          Luxury Cars
                         </MenuLink>
                       </div>
                     </div>
 
-                    <div>
-                      <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
-                        Trending State Searches
-                      </span>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
-                        <MenuLink href="/search/buy-used-cars-gujarat" onClick={onClose} compact>
-                          Used Cars in Gujarat
+                    {/* BUY USED BIKES QUICK HUB */}
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase font-bold tracking-wider text-primary">
+                          Buy Used Bikes
+                        </span>
+                        <Link
+                          href="/search/buy-used-two-wheelers"
+                          onClick={onClose}
+                          className="text-[11px] text-third hover:text-primary transition-colors flex items-center gap-1 font-medium"
+                        >
+                          View All <ChevronRight size={12} />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
+                        <MenuLink href="/search/buy-used-royal-enfield-two-wheelers" onClick={onClose} compact>
+                          Royal Enfield
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-maharashtra" onClick={onClose} compact>
-                          Used Cars in Maharashtra
+                        <MenuLink href="/search/buy-used-hero-two-wheelers" onClick={onClose} compact>
+                          Hero Bikes
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-punjab" onClick={onClose} compact>
-                          Used Cars in Punjab
+                        <MenuLink href="/search/buy-used-tvs-two-wheelers" onClick={onClose} compact>
+                          TVS Bikes
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-rajasthan" onClick={onClose} compact>
-                          Used Cars in Rajasthan
+                        <MenuLink href="/search/buy-used-bajaj-two-wheelers" onClick={onClose} compact>
+                          Bajaj Bikes
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-haryana" onClick={onClose} compact>
-                          Used Cars in Haryana
+                        <MenuLink href="/search/buy-used-yamaha-two-wheelers" onClick={onClose} compact>
+                          Yamaha Bikes
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-karnataka" onClick={onClose} compact>
-                          Used Cars in Karnataka
+                        <MenuLink href="/search/buy-used-ola-two-wheelers" onClick={onClose} compact>
+                          OLA Electric
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-cars-tamil-nadu" onClick={onClose} compact>
-                          Used Cars in Tamil Nadu
+                        <MenuLink href="/search/buy-used-electric-two-wheelers" onClick={onClose} compact>
+                          Electric 2W
                         </MenuLink>
-                        <MenuLink href="/search/buy-used-two-wheelers-delhi" onClick={onClose} compact>
-                          Used Bikes in Delhi
+                        <MenuLink href="/search/buy-used-scooter-two-wheelers" onClick={onClose} compact>
+                          Scooters
                         </MenuLink>
                       </div>
                     </div>
+
+                    {/* TRENDING LOCATION SEARCHES (HIGH-INTENT SEO KEYWORDS) */}
+                    <div className="sm:col-span-2 pt-4 border-t border-white/10 space-y-4">
+                      <div>
+                        <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
+                          Trending City Searches
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
+                          <MenuLink href="/search/buy-used-cars-delhi" onClick={onClose} compact>
+                            Used Cars in Delhi
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-mumbai" onClick={onClose} compact>
+                            Used Cars in Mumbai
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-ahmedabad" onClick={onClose} compact>
+                            Used Cars in Ahmedabad
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-bangalore" onClick={onClose} compact>
+                            Used Cars in Bangalore
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-pune" onClick={onClose} compact>
+                            Used Cars in Pune
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-surat" onClick={onClose} compact>
+                            Used Cars in Surat
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-hyderabad" onClick={onClose} compact>
+                            Used Cars in Hyderabad
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-jaipur" onClick={onClose} compact>
+                            Used Cars in Jaipur
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-vadodara" onClick={onClose} compact>
+                            Used Cars in Vadodara
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-chennai" onClick={onClose} compact>
+                            Used Cars in Chennai
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-kolkata" onClick={onClose} compact>
+                            Used Cars in Kolkata
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-rajkot" onClick={onClose} compact>
+                            Used Cars in Rajkot
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-ludhiana" onClick={onClose} compact>
+                            Used Cars in Ludhiana
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-nashik" onClick={onClose} compact>
+                            Used Cars in Nashik
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-chandigarh" onClick={onClose} compact>
+                            Used Cars in Chandigarh
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-lucknow" onClick={onClose} compact>
+                            Used Cars in Lucknow
+                          </MenuLink>
+                        </div>
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] uppercase font-black tracking-widest text-primary/80 mb-2.5 block">
+                          Trending State Searches
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-xs">
+                          <MenuLink href="/search/buy-used-cars-gujarat" onClick={onClose} compact>
+                            Used Cars in Gujarat
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-maharashtra" onClick={onClose} compact>
+                            Used Cars in Maharashtra
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-punjab" onClick={onClose} compact>
+                            Used Cars in Punjab
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-rajasthan" onClick={onClose} compact>
+                            Used Cars in Rajasthan
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-haryana" onClick={onClose} compact>
+                            Used Cars in Haryana
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-karnataka" onClick={onClose} compact>
+                            Used Cars in Karnataka
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-cars-tamil-nadu" onClick={onClose} compact>
+                            Used Cars in Tamil Nadu
+                          </MenuLink>
+                          <MenuLink href="/search/buy-used-two-wheelers-delhi" onClick={onClose} compact>
+                            Used Bikes in Delhi
+                          </MenuLink>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
 
             {/* 3. RIGHT FIXED COLUMNS (4 cols) */}
@@ -753,7 +753,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                       >
                         Register
                       </button>
-                       <MenuLink href="/become-seller" onClick={onClose}>
+                      <MenuLink href="/become-seller" onClick={onClose}>
                         Sell Vehicle
                       </MenuLink>
                       <MenuLink href="/become-consultant" onClick={onClose}>
@@ -973,7 +973,7 @@ export default function HamburgerDrawer({ open, onClose }) {
           </div>
 
           {/* EXPLORE VEHICLES BY CITY (MOST IMPORTANT SEO BLOCK) */}
-          <div className="mt-8 space-y-4">
+          <div className="mt-8 mb-4 pb-5 space-y-4">
             <span className="text-[10px] uppercase font-bold tracking-widest text-primary block">
               Explore Vehicles by City
             </span>
@@ -1008,9 +1008,8 @@ const MenuLink = ({ href, children, onClick, compact }) => {
     <Link
       href={href}
       onClick={onClick}
-      className={`block text-left text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 ${
-        compact ? "text-xs py-0.5" : "text-sm py-1"
-      }`}
+      className={`block text-left text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 ${compact ? "text-xs py-0.5" : "text-sm py-1"
+        }`}
     >
       {children}
     </Link>
@@ -1023,11 +1022,10 @@ const TabItem = ({ id, label, hoveredTab, setHoveredTab, href, onClose }) => {
       href={href}
       onClick={onClose}
       onMouseEnter={() => setHoveredTab(id)}
-      className={`block text-left transition-all duration-200 transform py-1 text-sm ${
-        hoveredTab === id
-          ? "text-primary translate-x-1 font-medium"
-          : "text-third hover:text-primary hover:translate-x-1"
-      }`}
+      className={`block text-left transition-all duration-200 transform py-1 text-sm ${hoveredTab === id
+        ? "text-primary translate-x-1 font-medium"
+        : "text-third hover:text-primary hover:translate-x-1"
+        }`}
     >
       {label}
     </Link>

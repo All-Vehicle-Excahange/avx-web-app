@@ -110,6 +110,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   /* ================= SHARED STATE ================= */
   const [activeTab, setActiveTab] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [isSearchingCities, setIsSearchingCities] = useState(false);
   const [location, setLocation] = useState("");
   const [cityId, setCityId] = useState(null);
   const [stateId, setStateId] = useState(null);
@@ -566,6 +567,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       fetchPopularCities();
       return;
     }
+    setIsSearchingCities(true);
     try {
       const res = await SearchCityAndState({ searchTerm: term.trim() });
       if (res?.data && Array.isArray(res.data)) {
@@ -596,6 +598,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       }
     } catch (err) {
       console.error("Error searching cities:", err);
+    } finally {
+      setIsSearchingCities(false);
     }
   };
 
@@ -2149,12 +2153,14 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               onSearch={(val) => {
                 if (searchTimerRef.current)
                   clearTimeout(searchTimerRef.current);
+                setIsSearchingCities(true);
                 searchTimerRef.current = setTimeout(
                   () => searchCities(val),
                   350,
                 );
               }}
               onChange={handleLocationSelect}
+              isLoading={isSearchingCities}
             />
           </div>
 
