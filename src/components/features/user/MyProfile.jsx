@@ -234,7 +234,11 @@ function MyProfile() {
   };
 
   const handleEditProfile = () => {
-    setProfileForm(profile);
+    setProfileForm({
+      ...profile,
+      firstName: profile.firstName && /^\d+$/.test(profile.firstName) ? "" : profile.firstName,
+      lastName: profile.lastName && /^\d+$/.test(profile.lastName) ? "" : profile.lastName,
+    });
     setProfileErrors({});
     setIsEditingProfile(true);
     setIsEditingMeta(false);
@@ -279,8 +283,7 @@ function MyProfile() {
 
   const isProfileFormValid =
     profileForm.firstName?.trim() &&
-    profileForm.lastName?.trim() &&
-    profileForm.email?.trim();
+    profileForm.lastName?.trim();
 
   const isMetaFormValid = !!(
     metaForm.age ||
@@ -857,8 +860,16 @@ function MyProfile() {
 
           {!isEditingProfile && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              <ProfileItem label="First Name" value={profile.firstName} icon={User} />
-              <ProfileItem label="Last Name" value={profile.lastName} icon={User} />
+              <ProfileItem 
+                label="First Name" 
+                value={profile.firstName && /^\d+$/.test(profile.firstName) ? null : profile.firstName} 
+                icon={User} 
+              />
+              <ProfileItem 
+                label="Last Name" 
+                value={profile.lastName && /^\d+$/.test(profile.lastName) ? null : profile.lastName} 
+                icon={User} 
+              />
               <ProfileItem label="Email" value={profile.email} icon={Mail} />
               <ProfileItem
                 label="Phone"

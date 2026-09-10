@@ -11,7 +11,7 @@ import useGuestSetup from "@/hooks/useGuestSetup";
 import useMagicTokenVerification from "@/hooks/useMagicTokenVerification";
 import useSplash from "@/hooks/useSplash";
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import CompleteProfilePopup from "@/components/auth/CompleteProfilePopup";
 import GlobalLoader from "@/components/ui/GlobalLoader";
 import SplashScreen from "@/components/ui/SplashScreen";
@@ -70,9 +70,9 @@ export default function App({ Component, pageProps }) {
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
   const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
-  const isSignupPopupOpen = useAuthStore((state) => state.isSignupPopupOpen);
-  const openSignupPopup = useAuthStore((state) => state.openSignupPopup);
-  const closeSignupPopup = useAuthStore((state) => state.closeSignupPopup);
+  
+  
+  
   const isCompleteProfilePopupOpen = useAuthStore(
     (state) => state.isCompleteProfilePopupOpen,
   );
@@ -275,9 +275,17 @@ export default function App({ Component, pageProps }) {
           <LoginPopup
             isOpen={isLoginPopupOpen && !showSplash}
             onClose={closeLoginPopup}
-            onSignup={openSignupPopup}
+            
             onSuccess={async (params = {}) => {
               try {
+                // Strictly only show for basic buyers.
+                const role = params.userRole || useAuthStore.getState().user?.role || "USER";
+                const accType = params.accountType || "personal";
+                
+                if (accType === "consultant" || role.includes("CONSULTANT") || role.includes("SELLER")) {
+                  return; // Never show profile popup for them
+                }
+
                 if (params?.isSignup) {
                   openCompleteProfilePopup();
                   return;
@@ -296,15 +304,6 @@ export default function App({ Component, pageProps }) {
             }}
           />
 
-          {/* SIGNUP POPUP */}
-          <SignupPopup
-            isOpen={isSignupPopupOpen && !showSplash}
-            onClose={closeSignupPopup}
-            onLogin={openLoginPopup}
-            onSuccess={() => {
-              openCompleteProfilePopup();
-            }}
-          />
 
           {/* COMPLETE PROFILE POPUP */}
           <CompleteProfilePopup

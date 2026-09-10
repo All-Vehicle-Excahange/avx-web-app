@@ -2084,7 +2084,16 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               </span>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-              {apiBrandsList.slice(0, 6).map((brand, idx) => (
+              {(() => {
+                const popularNames = ["maruti", "hyundai", "tata", "mahindra", "toyota", "honda"];
+                const popularBrands = apiBrandsList.filter(b => {
+                  const makeName = b.makeName?.toLowerCase() || "";
+                  if (makeName === "mahindra renault") return false;
+                  return popularNames.some(name => makeName.includes(name));
+                });
+                const displayBrands = popularBrands.length > 0 ? popularBrands.slice(0, 6) : apiBrandsList.slice(0, 6);
+                
+                return displayBrands.map((brand, idx) => (
                 <button
                   key={`popular-${idx}`}
                   onClick={() => {
@@ -2122,7 +2131,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     {brand.makeDisplay || brand.makeName}
                   </span>
                 </button>
-              ))}
+              ));
+              })()}
             </div>
           </div>
 

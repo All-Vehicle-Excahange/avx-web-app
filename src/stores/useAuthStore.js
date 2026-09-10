@@ -15,7 +15,6 @@ export const useAuthStore = create((set) => ({
   //  LOGIN & SIGNUP & PROFILE POPUP CONTROL
   isLoginPopupOpen: false,
   hasSeenLoginPopup: false,
-  isSignupPopupOpen: false,
   isCompleteProfilePopupOpen: false,
   prefilledPhoneNumber: "",
   authPopupDefaultTab: "personal",
@@ -88,7 +87,6 @@ export const useAuthStore = create((set) => ({
 
     set({
       isLoginPopupOpen: true,
-      isSignupPopupOpen: false,
       isCompleteProfilePopupOpen: false,
       authPopupDefaultTab: defaultTab,
       authFunnelContext: funnel,
@@ -100,25 +98,12 @@ export const useAuthStore = create((set) => ({
       isLoginPopupOpen: false,
     }),
 
-  openSignupPopup: (phoneNumber = "") =>
-    set({
-      isSignupPopupOpen: true,
-      isLoginPopupOpen: false,
-      isCompleteProfilePopupOpen: false,
-      prefilledPhoneNumber: phoneNumber,
-    }),
 
-  closeSignupPopup: () =>
-    set({
-      isSignupPopupOpen: false,
-      prefilledPhoneNumber: "",
-    }),
 
   openCompleteProfilePopup: () =>
     set({
       isCompleteProfilePopupOpen: true,
       isLoginPopupOpen: false,
-      isSignupPopupOpen: false,
     }),
 
   closeCompleteProfilePopup: () =>
@@ -139,7 +124,6 @@ export const useAuthStore = create((set) => ({
 
       //  Close popup automatically after login
       isLoginPopupOpen: false,
-      isSignupPopupOpen: false,
     });
 
     //  Persist in LocalStorage
@@ -169,7 +153,6 @@ export const useAuthStore = create((set) => ({
 
       //  Open popup after logout (optional)
       isLoginPopupOpen: true,
-      isSignupPopupOpen: false,
       authFunnelContext: {
         entry_context: "direct",
         trigger_action: "login_click",

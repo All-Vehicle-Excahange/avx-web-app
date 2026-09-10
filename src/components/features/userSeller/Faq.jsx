@@ -4,7 +4,7 @@ import Button from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
 import DetailsFromPopup from "./DetailsFromPopup";
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getBecameSeller } from "@/services/user.service";
@@ -40,7 +40,7 @@ export default function FAQSection() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
-  const [signupPopup, setSignupPopup] = useState(false);
+  
   const [role, setRole] = useState(null);
   const [checkingStatus, setCheckingStatus] = useState(false);
   const [sellerData, setSellerData] = useState(null);
@@ -246,16 +246,7 @@ export default function FAQSection() {
         onClose={() => setLoginPopup(false)}
         onSignup={() => {
           setLoginPopup(false);
-          setSignupPopup(true);
-        }}
-        onSuccess={handleLoginSuccess}
-      />
-      <SignupPopup
-        isOpen={signupPopup}
-        onClose={() => setSignupPopup(false)}
-        onLogin={() => {
-          setSignupPopup(false);
-          setLoginPopup(true);
+          useAuthStore.getState().openLoginPopup("consultant");
         }}
         onSuccess={handleLoginSuccess}
       />

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useAuthStore } from "@/stores/useAuthStore";
 import DetailsFromPopup from "@/components/features/userSeller/DetailsFromPopup";
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 
 const sellers = [
   {
@@ -40,7 +40,7 @@ function WhoCanSell() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
   const [loginPopup, setLoginPopup] = useState(false);
-  const [signupPopup, setSignupPopup] = useState(false);
+  
 
   const handleStartSelling = () => {
     if (!isLoggedIn) {
@@ -193,16 +193,7 @@ function WhoCanSell() {
         onClose={() => setLoginPopup(false)}
         onSignup={() => {
           setLoginPopup(false);
-          setSignupPopup(true);
-        }}
-        onSuccess={handleLoginSuccess}
-      />
-      <SignupPopup
-        isOpen={signupPopup}
-        onClose={() => setSignupPopup(false)}
-        onLogin={() => {
-          setSignupPopup(false);
-          setLoginPopup(true);
+          useAuthStore.getState().openLoginPopup("consultant");
         }}
         onSuccess={handleLoginSuccess}
       />

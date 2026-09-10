@@ -328,6 +328,16 @@ function LoginPopup({
       const api = err?.response?.data;
       let msg = api?.message || "Failed to send OTP";
 
+      if (api?.data?.validationErrors) {
+        const firstValidationError = Object.values(api.data.validationErrors)[0];
+        if (firstValidationError) {
+          msg = firstValidationError;
+        }
+      }
+
+      if (Array.isArray(msg)) msg = msg[0];
+      if (typeof msg !== "string") msg = "Failed to send OTP";
+
       trackOtpFailed({
         flow: isGoogleSignupFlow ? "mobile_verification" : "login",
         stage: "request",
@@ -465,7 +475,7 @@ function LoginPopup({
           currentAccountType === "consultant" ||
           ["CONSULTATION", "CONSULTANT_APPLICANT"].includes(userRole);
         if (!isConsultant) {
-          await onSuccess({ isSignup: !isLoginFlow });
+          await onSuccess({ isSignup: !isLoginFlow, accountType: selectedAccountType, userRole });
         }
       }
     } catch (err) {

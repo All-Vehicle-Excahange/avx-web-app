@@ -1,7 +1,7 @@
 "use client";
 
 import LoginPopup from "@/components/auth/LoginPopup";
-import SignupPopup from "@/components/auth/SignupPopup";
+
 import Button from "@/components/ui/button";
 import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
@@ -17,7 +17,6 @@ import Link from "next/link";
 
 export default function AccountPopup({ open, onClosePopup }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLogoutClosing, setIsLogoutClosing] = useState(false);
@@ -45,7 +44,6 @@ export default function AccountPopup({ open, onClosePopup }) {
     if (isLoggedIn && !prevLoggedIn.current) {
       onClosePopup();
       setIsLoginOpen(false);
-      setIsSignupOpen(false);
     }
     prevLoggedIn.current = isLoggedIn;
   }, [isLoggedIn, onClosePopup]);
@@ -190,7 +188,7 @@ export default function AccountPopup({ open, onClosePopup }) {
         rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
         border border-white/10
         transition-all duration-150 ease-out z-50 origin-top-right
-        ${open && !isLoginOpen && !isSignupOpen
+        ${open && !isLoginOpen
             ? "opacity-100 visible translate-y-0 scale-100"
             : "opacity-0 invisible -translate-y-3 scale-95"
           }`}
@@ -215,25 +213,6 @@ export default function AccountPopup({ open, onClosePopup }) {
               >
                 Sign in
               </Button>
-
-              <p className="mt-2 text-xs text-primary/60">
-                New customer?{" "}
-                <span
-                  onClick={() => {
-                    useAuthStore.getState().setAuthFunnelContext({
-                      entry_context: "home",
-                      trigger_action: "login_click",
-                      user_role_intent: "buyer",
-                    });
-                    setIsSignupOpen(true);
-                    setIsLoginOpen(false);
-                    onClosePopup();
-                  }}
-                  className="text-third hover:underline cursor-pointer"
-                >
-                  Start here.
-                </span>
-              </p>
             </>
           ) : (
             <div className="space-y-4">
@@ -723,26 +702,6 @@ export default function AccountPopup({ open, onClosePopup }) {
         onSuccess={() => {
           setIsLoginOpen(false);
           onClosePopup();
-        }}
-        onSignup={() => {
-          setIsSignupOpen(true);
-          setIsLoginOpen(false);
-        }}
-      />
-
-      <SignupPopup
-        isOpen={isSignupOpen}
-        onClose={() => {
-          setIsSignupOpen(false);
-          // onClosePopup();
-        }}
-        onSuccess={() => {
-          setIsSignupOpen(false);
-          onClosePopup();
-        }}
-        onLogin={() => {
-          setIsLoginOpen(true);
-          setIsSignupOpen(false);
         }}
       />
     </>
