@@ -10,16 +10,19 @@ function index() {
   return (
     <>
       <Head>
-        <title>Download the Reecomm App — Buy & Sell Verified Vehicles in India</title>
+        <title>Download the Reecomm App</title>
         <meta
           name="description"
-          content="Chat with sellers, track inspections, and manage your listings on the go. Download the Reecomm app for Android and iOS — India's trusted used vehicle marketplace."
+          content="Download Reecomm — buy and sell verified used cars and bikes on India's trusted marketplace."
         />
         <link rel="canonical" href="https://www.reecomm.com/download" />
 
         {/* Open Graph Tags */}
-        <meta property="og:title" content="Download the Reecomm App — Verified Vehicles in Your Pocket" />
-        <meta property="og:description" content="Chat with sellers, track your inspection report, and manage your listings — all from the Reecomm app. Free on Android and iOS." />
+        <meta property="og:title" content="Download the Reecomm App" />
+        <meta
+          property="og:description"
+          content="Download Reecomm — buy and sell verified used cars and bikes on India's trusted marketplace."
+        />
         <meta property="og:image" content="https://www.reecomm.com/assets/og-download.jpg" />
         <meta property="og:url" content="https://www.reecomm.com/download" />
         <meta property="og:type" content="website" />
@@ -27,8 +30,11 @@ function index() {
 
         {/* Twitter Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Download the Reecomm App — Buy & Sell Vehicles in India" />
-        <meta name="twitter:description" content="Chat, track inspections, and manage listings — everything happens in the Reecomm app." />
+        <meta name="twitter:title" content="Download the Reecomm App" />
+        <meta
+          name="twitter:description"
+          content="Download Reecomm — buy and sell verified used cars and bikes on India's trusted marketplace."
+        />
         <meta name="twitter:image" content="https://www.reecomm.com/assets/og-download.jpg" />
 
         {/* Schema Markup */}

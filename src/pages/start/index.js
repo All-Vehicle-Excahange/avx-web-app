@@ -6,34 +6,35 @@ function StartPage() {
   return (
     <>
       <Head>
-        <title>Reecomm — Buy Smart. Sell Fair. Move Forward.</title>
+        <title>Start with Reecomm — Buy, Sell, or Consult</title>
         <meta
           name="description"
-          content="What would you like to do today? Sell your personal vehicle, grow your automotive dealership or consultancy, or browse trusted listings on Reecomm."
+          content="Start on Reecomm: sell your vehicle, become a consultant, or browse verified used cars and bikes on India's trusted marketplace."
         />
         <meta
           name="keywords"
           content="Reecomm start, sell car online India, auto consultant showroom, buy used cars India"
         />
+        <link rel="canonical" href="https://www.reecomm.com/start" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.reecomm.com/start" />
         <meta
           property="og:title"
-          content="Reecomm — Buy Smart. Sell Fair. Move Forward."
+          content="Start with Reecomm — Buy, Sell, or Consult"
         />
         <meta
           property="og:description"
-          content="Choose your option on Reecomm: sell your personal vehicle, start a professional digital showroom, or buy inspected pre-owned vehicles."
+          content="Start on Reecomm: sell your vehicle, become a consultant, or browse verified used cars and bikes."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Reecomm — Buy Smart. Sell Fair. Move Forward."
+          content="Start with Reecomm — Buy, Sell, or Consult"
         />
         <meta
           name="twitter:description"
-          content="Explore all Reecomm options in one place. Sell vehicles, join as a consultant, or buy cars with confidence."
+          content="Start on Reecomm: sell your vehicle, become a consultant, or browse verified used cars and bikes."
         />
       </Head>
       <StartLandingPage />

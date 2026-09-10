@@ -32,23 +32,24 @@ function index() {
   return (
     <>
       <Head>
-        <title>Become a Consultant — Scale Your Automotive Business on Reecomm</title>
+        <title>Become a Consultant on Reecomm</title>
         <meta
           name="description"
-          content="Join Reecomm as a professional consultant. Scale your business, access advanced storefront tools, manage your inventory from a single dashboard, and reach verified buyers."
+          content="Grow your dealership on Reecomm — digital storefront, inquiries, and verified listings."
         />
         <meta
           name="keywords"
           content="become car consultant Reecomm, automotive consultant tools, professional vehicle storefront, digital dealership tools"
         />
+        <link rel="canonical" href="https://www.reecomm.com/become-consultant" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.reecomm.com/become-consultant" />
-        <meta property="og:title" content="Become a Reecomm Consultant — Scale Your Automotive Business" />
+        <meta property="og:title" content="Become a Consultant on Reecomm" />
         <meta
           property="og:description"
-          content="Reecomm is the platform built for professional automotive consultants. Scale your business, list and track your vehicles, build client trust, and work at any scale."
+          content="Grow your dealership on Reecomm — digital storefront, inquiries, and verified listings."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
@@ -59,10 +60,10 @@ function index() {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@reecomm" />
-        <meta name="twitter:title" content="Become a Reecomm Consultant — Scale Your Automotive Business" />
+        <meta name="twitter:title" content="Become a Consultant on Reecomm" />
         <meta
           name="twitter:description"
-          content="Access advanced storefront tools, manage your inventory from a single dashboard, and reach verified buyers."
+          content="Grow your dealership on Reecomm — digital storefront, inquiries, and verified listings."
         />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />

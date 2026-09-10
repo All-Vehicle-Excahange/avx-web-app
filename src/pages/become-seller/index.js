@@ -16,23 +16,27 @@ function index() {
   return (
     <>
       <Head>
-        <title>Sell Your Used Vehicle Online — Become a Seller on Reecomm</title>
+        <title>Sell Your Car on Reecomm — Faster, Trusted</title>
         <meta
           name="description"
-          content="List your pre-owned car or bike on Reecomm. Verify your identity, create a listing, reach thousands of verified buyers directly, and pay zero commission."
+          content="Sell your car faster on India's trusted platform Reecomm. List free, reach verified buyers, inquire securely."
         />
         <meta
           name="keywords"
           content="sell used car online India, become car seller Reecomm, zero commission car listing, verified buyer vehicle marketplace"
         />
+        <link rel="canonical" href="https://www.reecomm.com/become-seller" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://reecomm.com/become-seller" />
-        <meta property="og:title" content="Become a Reecomm Seller — Sell Your Used Vehicle with Zero Commission" />
+        <meta property="og:url" content="https://www.reecomm.com/become-seller" />
+        <meta
+          property="og:title"
+          content="Sell Your Car on Reecomm — Faster, Trusted"
+        />
         <meta
           property="og:description"
-          content="Reecomm is the marketplace built for serious vehicle owners. List your car, reach verified buyers directly, track real inquiries, and sell with absolute confidence."
+          content="Sell your car faster on India's trusted platform Reecomm. List free, reach verified buyers, inquire securely."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
@@ -43,10 +47,13 @@ function index() {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@reecomm" />
-        <meta name="twitter:title" content="Become a Reecomm Seller — Sell Your Used Vehicle with Zero Commission" />
+        <meta
+          name="twitter:title"
+          content="Sell Your Car on Reecomm — Faster, Trusted"
+        />
         <meta
           name="twitter:description"
-          content="No dealers, no middleman. Verify your ownership, create a listing, get qualified buyer inquiries, and pay zero commission."
+          content="Sell your car faster on India's trusted platform Reecomm. List free, reach verified buyers, inquire securely."
         />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta name="twitter:image:alt" content="Reecomm — India's trusted used vehicle marketplace" />

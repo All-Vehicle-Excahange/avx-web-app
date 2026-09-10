@@ -25,16 +25,14 @@ function Home() {
   return (
     <>
       <Head>
-        <title>
-          Used Cars for Sale in India | Reecomm — Buy & Sell Second Hand Cars
-        </title>
+        <title>Reecomm — Buy & Sell Used Cars and Bikes in India</title>
         <meta
           name="description"
-          content="Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports — buy and sell second-hand cars online across India."
+          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant — compare prices, photos, and inspections."
         />
         <meta
           name="keywords"
-          content="used cars, used car reecomm, buy used cars, sell used cars, second hand cars, certified pre-owned cars, car inspection, Reecomm"
+          content="Reecomm, used cars, used bikes, sell used cars, buy used cars, auto consultant, second hand cars India, car inspection"
         />
         <link rel="canonical" href="https://www.reecomm.com/" />
 
@@ -43,18 +41,26 @@ function Home() {
         <meta property="og:url" content="https://www.reecomm.com/" />
         <meta
           property="og:title"
-          content="Used Cars for Sale in India | Reecomm"
+          content="Reecomm — Buy & Sell Used Cars and Bikes in India"
         />
         <meta
           property="og:description"
-          content="Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports before you buy."
+          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Reecomm — Buy & Sell Used Cars and Bikes in India"
+        />
+        <meta
+          name="twitter:description"
+          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant."
+        />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
 
         {/* Organization Schema */}
@@ -68,7 +74,7 @@ function Home() {
               url: "https://www.reecomm.com",
               logo: "https://www.reecomm.com/logo/logo1.webp",
               description:
-                "Browse verified used cars for sale on Reecomm. Compare prices, photos, and inspection reports — buy and sell second-hand cars online across India.",
+                "Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant — compare prices, photos, and inspections.",
               telephone: "+91-84601-60697",
               address: {
                 "@type": "PostalAddress",
@@ -102,9 +108,65 @@ function Home() {
               url: "https://www.reecomm.com",
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://www.reecomm.com/search/buy-used-cars?q={search_term_string}",
+                target:
+                  "https://www.reecomm.com/search/buy-used-cars?q={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
+            }),
+          }}
+        />
+
+        {/* SiteNavigationElement — brand sitelink candidates */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              itemListElement: [
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 1,
+                  name: "Start with Reecomm",
+                  url: "https://www.reecomm.com/start",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 2,
+                  name: "Sell your car on Reecomm",
+                  url: "https://www.reecomm.com/become-seller",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 3,
+                  name: "Become a consultant",
+                  url: "https://www.reecomm.com/become-consultant",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 4,
+                  name: "Buy used cars",
+                  url: "https://www.reecomm.com/search/buy-used-cars",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 5,
+                  name: "Buy used bikes",
+                  url: "https://www.reecomm.com/search/buy-used-two-wheelers",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 6,
+                  name: "Auto consultants on Reecomm",
+                  url: "https://www.reecomm.com/consult/discovery",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 7,
+                  name: "Download the Reecomm app",
+                  url: "https://www.reecomm.com/download",
+                },
+              ],
             }),
           }}
         />

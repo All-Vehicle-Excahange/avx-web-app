@@ -54,6 +54,10 @@ function SearchContent({
           .join(" ") + " ";
     }
 
+    if (!serviceParam && !location) {
+      return "Auto Consultants on Reecomm";
+    }
+
     let title = `${serviceText}Expert Car Consultants`;
     if (location) {
       title += ` in ${location}`;
@@ -62,14 +66,19 @@ function SearchContent({
   };
 
   const dynamicTitle = getDynamicTitle();
+  const dynamicDescription =
+    !serviceParam && !location
+      ? "Browse verified auto consultants on Reecomm — digital storefronts, used cars and bikes, and secure inquiries across India."
+      : `Find the best ${serviceParam || "expert car consultants"}${location ? ` in ${location}` : ""} on Reecomm. Personalized and expert assistance with verified listings.`;
 
   return (
     <>
       <Head>
         <title>{dynamicTitle}</title>
-        <meta
-          name="description"
-          content={`Find the best ${serviceParam || "expert car consultants"}${location ? ` in ${location}` : ""}. Personalized and expert assistance with Reecomm.`}
+        <meta name="description" content={dynamicDescription} />
+        <link
+          rel="canonical"
+          href="https://www.reecomm.com/consult/discovery"
         />
       </Head>
       <SearchWithHeader

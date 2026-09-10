@@ -11,9 +11,8 @@ import {
 import Image from "next/image";
 
 const DEFAULT_BUY_LINKS = [
-  { label: "Browse all vehicles", href: "/search/buy-used-cars" },
-  { label: "Browse Cars", href: "/search/buy-used-cars" },
-  { label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" },
+  { label: "Buy used cars", href: "/search/buy-used-cars" },
+  { label: "Buy used bikes", href: "/search/buy-used-two-wheelers" },
   {
     label: "Reecomm Inspected Vehicles",
     href: "/search?reccomInspected=true",
@@ -29,18 +28,19 @@ const DEFAULT_BUY_LINKS = [
 const footerLinks = {
   buy: DEFAULT_BUY_LINKS,
   sell: [
-    { label: "List your car", href: "/become-consultant" },
-    { label: "List your two-wheeler", href: "/become-consultant" },
+    { label: "Sell your car on Reecomm", href: "/become-seller" },
+    { label: "Start with Reecomm", href: "/start" },
+    { label: "List your two-wheeler", href: "/become-seller" },
     { label: "Request an inspection", href: "/inspection-process" },
     {
       label: "RC transfer service",
       href: "/blog/rc-transfer-process-used-car-india-2026",
     },
     { label: "Doorstep inspection", href: "/inspection-process" },
-    { label: "Become Seller", href: "/become-seller" },
   ],
   consultants: [
     { label: "Become a consultant", href: "/become-consultant" },
+    { label: "Auto consultants on Reecomm", href: "/consult/discovery" },
     { label: "Consultant pricing", href: "/consult/pricing" },
     { label: "Manage my inventory", href: "/consult/subscription" },
     {
@@ -49,6 +49,8 @@ const footerLinks = {
     },
   ],
   company: [
+    { label: "Start with Reecomm", href: "/start" },
+    { label: "Download app", href: "/download" },
     { label: "About us", href: "/aboutus" },
     { label: "Introducing Reecomm", href: "/introducing-reecomm" },
     { label: "How Reecomm works", href: "/reecomm-works" },
@@ -98,8 +100,8 @@ const Footer = () => {
           seen.add(item.href);
           merged.push(item);
         };
-        push({ label: "Browse all vehicles", href: "/search/buy-used-cars" });
-        push({ label: "Browse Two-wheelers", href: "/search/buy-used-two-wheelers" });
+        push({ label: "Buy used cars", href: "/search/buy-used-cars" });
+        push({ label: "Buy used bikes", href: "/search/buy-used-two-wheelers" });
         geo.forEach(push);
         push({
           label: "Used car buying guide",
