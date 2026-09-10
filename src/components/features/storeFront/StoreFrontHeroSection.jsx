@@ -271,11 +271,8 @@ export default function StoreFrontHeroSection() {
             <div className="flex-1 space-y-4 pt-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-3xl font-semibold text-primary leading-tight">
-                    <span className="capitalize">
-                      {storeDetails.consultationName || "Auto Consultant"}
-                    </span>{" "}
-                    <span className="normal-case">on Reecomm</span>
+                  <h1 className="text-3xl font-semibold text-primary leading-tight capitalize">
+                    {storeDetails.consultationName || "Auto Consultant"}
                   </h1>
 
                   <button

@@ -37,20 +37,22 @@ export function buildStorefrontSeo({
       : "";
 
   const brandOnReecomm = `${displayName} on Reecomm`;
-  let title = location
-    ? `${brandOnReecomm} — Used ${vw} in ${location}`
-    : `${brandOnReecomm} — Used ${vw}`;
-
-  // Keep SERP titles readable (~60 chars); location moves to description if needed
-  if (title.length > 60) {
-    title = brandOnReecomm;
+  // Prefer short SERP-stable title; add location only when it still fits ~60 chars
+  let title = brandOnReecomm;
+  if (location) {
+    const withLocation = `${brandOnReecomm} — Used ${vw} in ${location}`;
+    if (withLocation.length <= 60) title = withLocation;
+  } else {
+    const withKind = `${brandOnReecomm} — Used ${vw}`;
+    if (withKind.length <= 60) title = withKind;
   }
 
   const description = location
     ? `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw} in ${location}. Compare prices, photos, and reviews — inquire securely.`
     : `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw}.${countBit} Compare prices, photos, and reviews — inquire securely.`;
 
-  const h1 = brandOnReecomm;
+  // Visible H1 is store name only; document title keeps "on Reecomm"
+  const h1 = displayName;
 
   return { title, description, h1, loc };
 }
@@ -139,7 +141,7 @@ export function buildStorefrontDealerSchema({
   const schema = {
     "@context": "https://schema.org",
     "@type": ["AutoDealer", "LocalBusiness"],
-    name: displayName,
+    name: `${displayName} on Reecomm`,
     url: canonical,
     ...(logoUrl ? { image: logoUrl, logo: logoUrl } : {}),
     description: cleanJoin([
