@@ -5,6 +5,15 @@ import Script from "next/script";
 
 import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+NProgress.configure({ 
+  showSpinner: false,
+  minimum: 0.6, 
+  trickleSpeed: 50, 
+  speed: 200 
+});
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import useGuestSetup from "@/hooks/useGuestSetup";
@@ -123,9 +132,11 @@ export default function App({ Component, pageProps }) {
     const handleStart = () => {
       trackPageLeft({ reason: "route_change" });
       setLoading(true);
+      NProgress.start();
     };
     const handleStop = (url) => {
       setLoading(false);
+      NProgress.done();
       gtag.pageview(url);
       trackLandingPageViewed({ path: url });
       const pathOnly = typeof url === "string" ? url.split("?")[0] : "";
