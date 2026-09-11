@@ -617,3 +617,13 @@ html {
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
 }
+
+/* Custom NProgress styling for thicker, branded bar */
+#nprogress .bar {
+  background: var(--color-fourth) !important;
+  height: 2px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--color-fourth), 0 0 5px var(--color-fourth) !important;
+}
