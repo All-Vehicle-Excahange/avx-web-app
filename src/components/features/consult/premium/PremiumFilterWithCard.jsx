@@ -5,7 +5,7 @@ import InputField from "@/components/ui/inputField";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
-import { FilterIcon, MapPin, X } from "lucide-react";
+import { FilterIcon, MapPin, X, RefreshCw } from "lucide-react";
 import FilterSection from "../../search/FilterSection";
 import CustomSelect from "@/components/ui/custom-select";
 import {
@@ -90,6 +90,7 @@ export default function FilterWithCard({
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const itemsPerPage = 9;
 
   // ── Result data ──
@@ -319,8 +320,13 @@ export default function FilterWithCard({
 
       const premiumRes = await getPremiumConsult(requestData, payload);
 
-      if (premiumRes?.pagination?.totalPages) {
-        setTotalPages(premiumRes.pagination.totalPages);
+      if (premiumRes?.pagination) {
+        if (premiumRes.pagination.totalPages !== undefined) {
+          setTotalPages(premiumRes.pagination.totalPages);
+        }
+        if (premiumRes.pagination.totalElements !== undefined) {
+          setTotalElements(premiumRes.pagination.totalElements);
+        }
       }
 
       const premiumData =
@@ -328,7 +334,12 @@ export default function FilterWithCard({
           ? premiumRes.data
           : [];
 
-      setPremiumConsultants(mapToCardFormat(premiumData));
+      const newConsultants = mapToCardFormat(premiumData);
+      if (page > 1) {
+        setPremiumConsultants((prev) => [...prev, ...newConsultants]);
+      } else {
+        setPremiumConsultants(newConsultants);
+      }
     } catch (err) {
       console.error("Failed to fetch consultants:", err);
       setPremiumConsultants([]);
@@ -506,7 +517,6 @@ export default function FilterWithCard({
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -1030,16 +1040,31 @@ export default function FilterWithCard({
           title="Featured Premium Consultant"
           data={premiumConsultants}
           showIsSponsored={false}
-          i={itemsPerPage}
-          loading={consultantsLoading}
+          i={premiumConsultants.length > 0 ? premiumConsultants.length : itemsPerPage}
+          loading={consultantsLoading && currentPage === 1}
         />
 
-        {/* Pagination Controls */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        {/* Load More Button & Stats */}
+        {totalElements > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
+            <div className="text-sm text-third">
+              Showing <span className="font-semibold text-primary">{premiumConsultants.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> consultants
+            </div>
+            {currentPage < totalPages && (
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 px-6 rounded-full"
+                showIcon={false}
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={consultantsLoading}
+              >
+                <RefreshCw className={`w-4 h-4 ${consultantsLoading ? 'animate-spin' : ''}`} />
+                {consultantsLoading ? "Loading..." : "Load More"}
+              </Button>
+            )}
+          </div>
+        )}
       </main>
 
       {/* ================= MOBILE FILTER DRAWER ================= */}

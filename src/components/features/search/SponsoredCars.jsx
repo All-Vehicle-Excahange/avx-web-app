@@ -4,13 +4,14 @@ import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, Info, SearchX } from "lucide-react";
 import CommonSwiper from "@/components/ui/CommonSwiper";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import EmptyState from "@/components/ui/EmptyState";
 
 const SponsoredCars = ({ loading = false, data = [] }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   const vehicles = Array.isArray(data) ? data : data?.content || [];
+
+  if (!loading && vehicles.length === 0) return null;
 
   return (
     <div className="space-y-6">
@@ -58,17 +59,12 @@ const SponsoredCars = ({ loading = false, data = [] }) => {
           prevRef={prevRef}
           nextRef={nextRef}
         />
-      ) : vehicles.length > 0 ? (
+      ) : (
         <CommonSwiper
           data={vehicles}
           CardComponent={VehicleCard}
           prevRef={prevRef}
           nextRef={nextRef}
-        />
-      ) : (
-        <EmptyState
-          title="No sponsored vehicles found"
-          description="Currently, there are no trending sponsored vehicles to display here. Please check back later or modify your search."
         />
       )}
     </div>

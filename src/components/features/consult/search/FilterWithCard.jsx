@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import Chip from "@/components/ui/chip";
-import { FilterIcon, MapPin, X } from "lucide-react";
+import { FilterIcon, MapPin, X, RefreshCw } from "lucide-react";
 import ConsultantGridSection from "./ConsultantGridSection";
 import ConsultantSliderSection from "./ConsultantSliderSection";
 import FilterSection from "../../search/FilterSection";
@@ -113,7 +113,8 @@ export default function FilterWithCard({
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 6;
+  const [totalElements, setTotalElements] = useState(0);
+  const itemsPerPage = 9;
 
   // ── Result data ──
   const [consultants, setConsultants] = useState([]); // from getFilteredConsult
@@ -333,7 +334,7 @@ export default function FilterWithCard({
   const fetchConsultants = async (page = currentPage, payload = {}) => {
     setConsultantsLoading(true);
     try {
-      // 🔥 Get sorting config from URL
+      //  Get sorting config from URL
       const { sortBy, direction } = getSortConfig(sort);
 
       const requestData = {
@@ -345,6 +346,7 @@ export default function FilterWithCard({
 
       const premiumRequestData = {
         ...requestData,
+        pageNo: 1, // Always show the first page of premium consultants
         size: 3, // Limit premium consultants to 3
       };
 
@@ -363,6 +365,7 @@ export default function FilterWithCard({
           filteredRes.pagination;
 
         setTotalPages(totalPages);
+        setTotalElements(totalElements);
         onPageResponseChange?.({
           totalElements,
           totalPages,
@@ -375,7 +378,11 @@ export default function FilterWithCard({
           ? premiumRes.data
           : [];
 
-      setConsultants(mapToCardFormat(filteredData));
+      if (page === 1) {
+        setConsultants(mapToCardFormat(filteredData));
+      } else {
+        setConsultants((prev) => [...prev, ...mapToCardFormat(filteredData)]);
+      }
       setPremiumConsultants(mapToCardFormat(premiumData));
     } catch (err) {
       console.error("Failed to fetch consultants:", err);
@@ -673,7 +680,6 @@ export default function FilterWithCard({
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -1284,17 +1290,32 @@ export default function FilterWithCard({
               <ConsultantGridSection
                 title="Auto Consultants near you "
                 data={consultants}
-                i={6}
-                loading={consultantsLoading}
+                i={consultants.length > 0 ? consultants.length : itemsPerPage}
+                loading={consultantsLoading && currentPage === 1}
                 {...getEmptyStateProps("consultants")}
               />
 
-              {/* Pagination Controls */}
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+              {/* Load More Button & Stats */}
+              {totalElements > 0 && (
+                <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
+                  <div className="text-sm text-third">
+                    Showing <span className="font-semibold text-primary">{consultants.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> consultants
+                  </div>
+                  {currentPage < totalPages && (
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 px-6 rounded-full"
+                      size="sm"
+                      showIcon={false}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={consultantsLoading}
+                    >
+                      <RefreshCw className={`w-4 h-4 ${consultantsLoading ? 'animate-spin' : ''}`} />
+                      {consultantsLoading ? "Loading..." : "Load More"}
+                    </Button>
+                  )}
+                </div>
+              )}
             </>
           );
         })()}
