@@ -12,7 +12,7 @@ import {
   trackMakeOfferOptionSelected,
   trackMakeOfferSubmitted,
 } from "@/lib/amplitude";
-import { event } from "@/lib/fpixel";
+import { event, customEvent } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
 
 export default function MakeOfferPopup({
@@ -182,7 +182,13 @@ export default function MakeOfferPopup({
         has_message: Boolean(message.trim()),
       });
 
-      // Meta Pixel: same Lead as inquiry submit
+      // Meta Pixel: Inquiry + Lead only after successful submit
+      customEvent("Inquiry", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name: vehicleName || "Vehicle Inquiry",
+        seller_type: sellerType || "",
+      });
       event("Lead", {
         content_type: "vehicle",
         content_ids: [String(vehicleId)],

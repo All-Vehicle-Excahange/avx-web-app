@@ -85,7 +85,7 @@ Also configured once on boot with `page_path: window.location.pathname`.
 | `vehicle_name` | string | yes |
 | `seller_type` | string | no |
 
-Meta custom `Inquiry` fires on the same CTAs (not GA4).
+Meta custom `Inquiry` fires on successful submit (same path as `Lead`), not on CTA click.
 
 ---
 
@@ -104,7 +104,7 @@ Meta custom `Inquiry` fires on the same CTAs (not GA4).
 | `inquiry_type` | string | no | Inquiry type label, or `Make Offer: ₹…` for offers |
 | `seller_type` | string | no | |
 
-Meta standard `Lead` fires on the same success path (not GA4).
+Meta standard `Lead` and custom `Inquiry` both fire on the same success path (not GA4).
 
 ---
 

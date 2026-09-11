@@ -8,7 +8,7 @@ import { X, CheckCircle2, Loader2 } from "lucide-react";
 import { sendInquary } from "@/services/vehicle.service";
 import { trackInquary } from "@/services/ppc.service";
 import { useQueryClient } from "@tanstack/react-query";
-import { event } from "@/lib/fpixel";
+import { event, customEvent } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
@@ -134,7 +134,13 @@ function SendInquaryPopup({
       const vehicleName =
         `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();
 
-      // Meta Pixel Event Tracking: Lead
+      // Meta Pixel: Inquiry + Lead only after successful submit
+      customEvent("Inquiry", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name: vehicleName || "Vehicle Inquiry",
+        seller_type: sellerType || "",
+      });
       event("Lead", {
         content_type: "vehicle",
         content_ids: [String(vehicleId)],

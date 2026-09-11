@@ -15,7 +15,6 @@ import MakeOfferPopup from "./MakeOfferPopup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
-import { customEvent } from "@/lib/fpixel";
 import {
   trackInquiryInitiated,
   trackInquiryLoginRequired,
@@ -132,13 +131,6 @@ export default function VehicleSummaryRight({
       seller_type: vehicle?.sellerType || vehicleOwnerRole,
     });
 
-    customEvent("Inquiry", {
-      content_type: "vehicle",
-      content_ids: [String(vehicleId)],
-      content_name: vehicleName || "Vehicle Details",
-      seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
-    });
-
     if (!isLoggedIn) {
       setIsPopupOpen(true);
       return;
@@ -226,13 +218,6 @@ export default function VehicleSummaryRight({
     trackInquiryClick({
       vehicle_id: vehicleId || vehicle?.id,
       vehicle_name: vehicleName || "Vehicle Details",
-      seller_type: sellerType,
-    });
-
-    customEvent("Inquiry", {
-      content_type: "vehicle",
-      content_ids: [String(vehicleId || vehicle?.id)],
-      content_name: vehicleName || "Vehicle Details",
       seller_type: sellerType,
     });
 

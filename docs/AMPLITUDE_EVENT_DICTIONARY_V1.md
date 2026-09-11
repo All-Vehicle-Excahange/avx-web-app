@@ -439,7 +439,7 @@ Also updates Identify `preferred_city` / `preferred_state` when city/state names
 | `offer_option` | string | `90_pct` \| `93_pct` \| `96_pct` \| `custom` | Preset match or custom |
 | `has_message` | boolean | | Optional message filled |
 
-**Also on this path (not Amplitude):** Meta custom `Inquiry` + GA4 `inquire_initiated` fire on Make An Offer CTA; Meta standard `Lead` + GA4 `inquiry_submit` fire on offer send success (same shared funnels as Send Inquiry).
+**Also on this path (not Amplitude):** GA4 `inquire_initiated` fires on Make An Offer CTA; Meta custom `Inquiry` + Meta standard `Lead` + GA4 `inquiry_submit` fire on offer send success (same shared funnels as Send Inquiry).
 
 ---
 
