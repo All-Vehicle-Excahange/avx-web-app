@@ -8,7 +8,7 @@ import PromoCardRow from "./PromoCardRow";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { FilterIcon, MapPin, X, SearchX } from "lucide-react";
+import { FilterIcon, MapPin, X, SearchX, RefreshCw } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
@@ -201,6 +201,8 @@ export default function SearchWithCard({
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [accumulatedVehicles, setAccumulatedVehicles] = useState([]);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
@@ -692,7 +694,21 @@ export default function SearchWithCard({
     }));
   }, [recommendedAdsData]);
 
-  const vehicles = searchData?.topPicksVehicles?.vehicles || [];
+  const newVehicles = searchData?.topPicksVehicles?.vehicles || [];
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      setAccumulatedVehicles(newVehicles);
+    } else if (newVehicles.length > 0) {
+      setAccumulatedVehicles((prev) => {
+        const existingIds = new Set(prev.map((v) => v.id));
+        const toAdd = newVehicles.filter((v) => !existingIds.has(v.id));
+        return [...prev, ...toAdd];
+      });
+    }
+  }, [newVehicles, currentPage]);
+
+  const vehicles = accumulatedVehicles;
   const relatedVehicles = searchData?.similarVehicles || [];
   const priceBasedVehicles = searchData?.priceMatchVehicles || [];
   const topPicksPageResponse =
@@ -773,6 +789,9 @@ export default function SearchWithCard({
     const topPicksPR = searchData.topPicksVehicles?.pageResponse || {};
 
     setTotalPages(topPicksPR.totalPages || 0);
+    if (topPicksPR.totalElements !== undefined) {
+      setTotalElements(topPicksPR.totalElements);
+    }
 
     if (onRelatedChange) onRelatedChange(similar);
 
@@ -1877,7 +1896,6 @@ export default function SearchWithCard({
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Save/overwrite selected location to localStorage on Apply
@@ -2475,9 +2493,11 @@ export default function SearchWithCard({
             </div>
           </div>
 
-          <div className="col-span-full mb-10">
-            <SponsoredCars loading={isAdsLoading} data={recommendedVehicles} />
-          </div>
+          {(isAdsLoading || (Array.isArray(recommendedVehicles) ? recommendedVehicles.length > 0 : recommendedVehicles?.content?.length > 0)) && (
+            <div className="col-span-full mb-10">
+              <SponsoredCars loading={isAdsLoading} data={recommendedVehicles} />
+            </div>
+          )}
 
           <div className="col-span-full mb-10 ">
             {(() => {
@@ -2567,7 +2587,7 @@ export default function SearchWithCard({
             })()}
           </div>
 
-          {vehiclesLoading ? (
+          {vehiclesLoading && currentPage === 1 ? (
             <>
               <div className="col-span-full">
                 <div className="flex flex-col items-start gap-2">
@@ -2604,12 +2624,25 @@ export default function SearchWithCard({
                 <VehicleCard key={vehicle.id} data={vehicle} />
               ))}
 
-              {topPicksPageResponse?.totalElements > 9 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
+              {totalElements > 0 && (
+                <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
+                  <div className="text-sm text-third">
+                    Showing <span className="font-semibold text-primary">{vehicles.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> vehicles
+                  </div>
+                  {currentPage < totalPages && (
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 px-6 rounded-full"
+                      size="sm"
+                      showIcon={false}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={vehiclesLoading}
+                    >
+                      <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
+                      {vehiclesLoading ? "Loading..." : "Load More"}
+                    </Button>
+                  )}
+                </div>
               )}
             </>
           ) : vehicles?.length === 0 && priceBasedVehicles?.length === 0 ? (
