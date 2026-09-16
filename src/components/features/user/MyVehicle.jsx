@@ -136,7 +136,7 @@ function MyVehicle() {
     consultantName: v.consultantName || null,
     location: v.address?.city
       ? `${v.address.city}, ${v.address.state}`
-      : "Location not set",
+      : "-",
     adminRemark: v.adminRemark || null,
     suspendReason: v.suspendReason || null,
     vehicleSuspenseType: v.vehicleSuspenseType || null,

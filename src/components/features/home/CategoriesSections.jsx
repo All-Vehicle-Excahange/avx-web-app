@@ -5,6 +5,7 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getVehiclesByTagQuery } from "@/queries/user.queries";
+import { useLocationStore } from "@/stores/useLocationStore";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -85,6 +86,7 @@ const categoriesByType = {
 const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
   const [active, setActive] = useState("urban-rides");
+  const { cityId, stateId } = useLocationStore();
   const checkedCategories = React.useRef(new Set());
   const hasManuallySelected = React.useRef(false);
   const checkedFourWheelerEmpty = React.useRef(false);
@@ -94,6 +96,8 @@ const CategoriesSections = () => {
     pageNo: 1,
     size: 4,
     vehicleTag: selectedTag,
+    ...(cityId ? { cityId } : {}),
+    ...(stateId ? { stateId } : {}),
   };
 
   const { data: vehicles = [], isLoading } = useQuery(

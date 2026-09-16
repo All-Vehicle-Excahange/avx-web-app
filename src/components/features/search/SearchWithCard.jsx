@@ -93,10 +93,6 @@ export default function SearchWithCard({
   onLoadingChange,
   initialFilters = {},
 }) {
-  const MIN = 0;
-  const MAX = 2000000;
-  const MAX_KM = 200000;
-
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -113,6 +109,12 @@ export default function SearchWithCard({
     }
     return "FOUR_WHEELER";
   }, [vehicleType]);
+
+  const MIN = 0;
+  const fallbackMax = apiBodyType === "TWO_WHEELER" ? 500000 : 2000000;
+  const [serverMaxPrice, setServerMaxPrice] = useState(null);
+  const userPriceInteractedRef = useRef(false);
+  const MAX_KM = 200000;
   const fuelType = searchParams.get("fuelType") || initialFilters.fuelType;
 
   const rawBrand = searchParams.get("brand") || initialFilters.brand || initialFilters.brandName;
@@ -178,12 +180,11 @@ export default function SearchWithCard({
   if (budget) {
     const [min, max] = budget.replace(/\s/g, "").split("-");
     const numMax = parseFloat(max);
+    const numMin = parseFloat(min);
 
-    mPrice = parseFloat(min) * 100000;
-    // numMax >= 20 means "5L - Above" (stored as "5-20") → set to slider MAX
-    // "above" string also maps to MAX for backward compat
-    mxPrice = (!max || max.toLowerCase() === "above" || numMax >= 20)
-      ? 2000000
+    mPrice = isNaN(numMin) ? 0 : numMin * 100000;
+    mxPrice = (!max || max.toLowerCase() === "above")
+      ? fallbackMax
       : numMax * 100000;
 
     budgetMid = (mPrice + mxPrice) / 2;
@@ -197,7 +198,10 @@ export default function SearchWithCard({
   });
 
   const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 0));
-  const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : 2000000));
+  const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
+
+  const MAX = serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
+  const PRICE_STEP = MAX > 2000000 ? 25000 : (MAX > 500000 ? 10000 : 5000);
   const [kmDistance, setKmDistance] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -400,14 +404,21 @@ export default function SearchWithCard({
     }
 
     // Budget
+    userPriceInteractedRef.current = false;
     if (initialFilters.budget) {
       const [min, max] = initialFilters.budget.replace(/\s/g, "").split("-");
       const numMax = parseFloat(max);
-      setMinPrice(parseFloat(min) * 100000);
-      setMaxPrice((!max || max.toLowerCase() === "above" || numMax >= 20) ? 2000000 : numMax * 100000);
+      const parsedMin = (parseFloat(min) || 0) * 100000;
+      const parsedMax = (!max || max.toLowerCase() === "above") ? (serverMaxPrice || fallbackMax) : numMax * 100000;
+      setMinPrice(parsedMin);
+      setMaxPrice(parsedMax);
+      setDebouncedMinPrice(parsedMin);
+      setDebouncedMaxPrice(parsedMax);
     } else {
       setMinPrice(0);
-      setMaxPrice(2000000);
+      setMaxPrice(serverMaxPrice || fallbackMax);
+      setDebouncedMinPrice(0);
+      setDebouncedMaxPrice(serverMaxPrice || fallbackMax);
     }
   }
 
@@ -466,8 +477,8 @@ export default function SearchWithCard({
         t.toUpperCase(),
       );
 
-    if (minPrice > MIN) payload.minPrice = minPrice;
-    if (maxPrice < MAX) payload.maxPrice = maxPrice;
+    if (typeof minPrice === "number") payload.minPrice = minPrice;
+    if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
 
     if (selectedYear.length > 0) payload.mfgYear = Number(selectedYear[0]);
 
@@ -508,8 +519,8 @@ export default function SearchWithCard({
         t.toUpperCase(),
       );
 
-    if (minPrice > MIN) payload.minPrice = minPrice;
-    if (maxPrice < MAX) payload.maxPrice = maxPrice;
+    if (typeof minPrice === "number") payload.minPrice = minPrice;
+    if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
     return payload;
   };
 
@@ -520,6 +531,8 @@ export default function SearchWithCard({
   const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() =>
     buildConsultPayload(),
   );
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
   const skipFirstFilterTrackRef = useRef(true);
 
   useEffect(() => {
@@ -527,6 +540,8 @@ export default function SearchWithCard({
       const nextPayload = buildPayload();
       setDebouncedPayload(nextPayload);
       setDebouncedConsultPayload(buildConsultPayload());
+      setDebouncedMinPrice(minPrice);
+      setDebouncedMaxPrice(maxPrice);
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (skipFirstFilterTrackRef.current) {
@@ -660,7 +675,7 @@ export default function SearchWithCard({
     const params = {
       placement: "SEARCH_RESULT_PAGE",
       vehicleType: mappedVehicleTypeForAds,
-      maxPrice: maxPrice,
+      maxPrice: debouncedMaxPrice,
       page: 0,
       size: 10,
     };
@@ -671,7 +686,7 @@ export default function SearchWithCard({
       params.model = resolvedModelName;
     }
     return params;
-  }, [mappedVehicleTypeForAds, resolvedBrandName, resolvedModelName, maxPrice]);
+  }, [mappedVehicleTypeForAds, resolvedBrandName, resolvedModelName, debouncedMaxPrice]);
 
   const { data: recommendedAdsData, isFetching: isAdsLoading } = useQuery({
     queryKey: ["recommended-vehicles-ads", adParams],
@@ -725,15 +740,15 @@ export default function SearchWithCard({
 
     // Budget
     let budgetParam = null;
-    const currentMinLakh = minPrice / 100000;
-    const currentMaxLakh = maxPrice / 100000;
-    const isUnder = Math.round(minPrice) === 0 && currentMaxLakh > 0 && maxPrice < MAX;
-    const isAbove = Math.round(currentMinLakh) >= 5 && maxPrice >= 2000000;
+    const currentMinLakh = debouncedMinPrice / 100000;
+    const currentMaxLakh = debouncedMaxPrice / 100000;
+    const isUnder = Math.round(debouncedMinPrice) === 0 && currentMaxLakh > 0 && debouncedMaxPrice < MAX;
+    const isAbove = Math.round(currentMinLakh) >= 5 && debouncedMaxPrice >= 2000000;
     if (isUnder) {
       budgetParam = `0-${currentMaxLakh}`;
     } else if (isAbove) {
       budgetParam = `5-20`;
-    } else if (minPrice > MIN || maxPrice < MAX) {
+    } else if (debouncedMinPrice > MIN || debouncedMaxPrice < MAX) {
       budgetParam = `${currentMinLakh}-${currentMaxLakh}`;
     }
 
@@ -768,8 +783,8 @@ export default function SearchWithCard({
     selectedModels,
     selectedCityName,
     selectedStateName,
-    minPrice,
-    maxPrice,
+    debouncedMinPrice,
+    debouncedMaxPrice,
     vehicleType,
     selectedFuelTypes,
     selectedTransmissionTypes,
@@ -780,9 +795,17 @@ export default function SearchWithCard({
     if (onLoadingChange) onLoadingChange(vehiclesLoading);
   }, [vehiclesLoading, onLoadingChange]);
 
-  // Sync callbacks & set totalPages when searchData returns
+  // Sync callbacks & set totalPages and serverMaxPrice when searchData returns
   useEffect(() => {
     if (!searchData) return;
+
+    if (typeof searchData.maxFilterPrice === "number" && searchData.maxFilterPrice > 0) {
+      setServerMaxPrice(searchData.maxFilterPrice);
+      if (!userPriceInteractedRef.current && !budget) {
+        setMaxPrice(searchData.maxFilterPrice);
+        setDebouncedMaxPrice(searchData.maxFilterPrice);
+      }
+    }
 
     const similar = searchData.similarVehicles || [];
     const priceBased = searchData.priceMatchVehicles || [];
@@ -834,7 +857,10 @@ export default function SearchWithCard({
 
   const handlePriceChangeRelease = () => {
     setCurrentPage(1);
+    setDebouncedMinPrice(minPrice);
+    setDebouncedMaxPrice(maxPrice);
     setDebouncedPayload(buildPayload());
+    setDebouncedConsultPayload(buildConsultPayload());
   };
 
   // Synchronize options lists from URL params on mount/change
@@ -916,13 +942,20 @@ export default function SearchWithCard({
     const qMinPrice = searchParams.get("minPrice");
     const qMaxPrice = searchParams.get("maxPrice");
     if (!qBudget && !qMinPrice && !qMaxPrice && !searchParams.get("price")) {
+      userPriceInteractedRef.current = false;
       setMinPrice(0);
-      setMaxPrice(MAX);
+      setMaxPrice(serverMaxPrice || fallbackMax);
+      setDebouncedMinPrice(0);
+      setDebouncedMaxPrice(serverMaxPrice || fallbackMax);
     } else if (qBudget) {
       const [min, max] = qBudget.replace(/\s/g, "").split("-");
       if (min && max) {
-        setMinPrice(parseFloat(min) * 100000);
-        setMaxPrice(max.toLowerCase() === "above" ? 2000000 : parseFloat(max) * 100000);
+        const parsedMin = (parseFloat(min) || 0) * 100000;
+        const parsedMax = max.toLowerCase() === "above" ? (serverMaxPrice || fallbackMax) : parseFloat(max) * 100000;
+        setMinPrice(parsedMin);
+        setMaxPrice(parsedMax);
+        setDebouncedMinPrice(parsedMin);
+        setDebouncedMaxPrice(parsedMax);
       }
     }
 
@@ -1036,8 +1069,8 @@ export default function SearchWithCard({
     selectedBodyType,
     brands,
     models,
-    minPrice,
-    maxPrice,
+    debouncedMinPrice,
+    debouncedMaxPrice,
     selectedCityId,
     selectedStateId,
   ]);
@@ -1594,19 +1627,20 @@ export default function SearchWithCard({
 
   const handleTrackClick = (e) => {
     if (e.target.type === "range") return;
+    userPriceInteractedRef.current = true;
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
     const rawValue = MIN + percentage * (MAX - MIN);
-    const clickedValue = Math.round(rawValue / 1000) * 1000;
+    const clickedValue = Math.round(rawValue / PRICE_STEP) * PRICE_STEP;
 
     const distToMin = Math.abs(clickedValue - minPrice);
     const distToMax = Math.abs(clickedValue - maxPrice);
 
     if (distToMin < distToMax) {
-      setMinPrice(Math.min(clickedValue, maxPrice - 5000));
+      setMinPrice(Math.min(clickedValue, maxPrice - PRICE_STEP));
     } else {
-      setMaxPrice(Math.max(clickedValue, minPrice + 5000));
+      setMaxPrice(Math.max(clickedValue, minPrice + PRICE_STEP));
     }
     handlePriceChangeRelease();
   };
@@ -1961,6 +1995,8 @@ export default function SearchWithCard({
     // Reset price & km
     setMinPrice(MIN);
     setMaxPrice(MAX);
+    setDebouncedMinPrice(MIN);
+    setDebouncedMaxPrice(MAX);
     setKmDistance(0);
 
     // Reset pagination
@@ -2147,11 +2183,12 @@ export default function SearchWithCard({
                       type="range"
                       min={MIN}
                       max={MAX}
-                      step={1000}
+                      step={PRICE_STEP}
                       value={minPrice}
-                      onChange={(e) =>
-                        setMinPrice(Math.min(+e.target.value, maxPrice - 5000))
-                      }
+                      onChange={(e) => {
+                        userPriceInteractedRef.current = true;
+                        setMinPrice(Math.min(+e.target.value, maxPrice - PRICE_STEP));
+                      }}
                       onMouseUp={handlePriceChangeRelease}
                       onTouchEnd={handlePriceChangeRelease}
                       className="dual-range z-30"
@@ -2161,11 +2198,12 @@ export default function SearchWithCard({
                       type="range"
                       min={MIN}
                       max={MAX}
-                      step={1000}
+                      step={PRICE_STEP}
                       value={maxPrice}
-                      onChange={(e) =>
-                        setMaxPrice(Math.max(+e.target.value, minPrice + 5000))
-                      }
+                      onChange={(e) => {
+                        userPriceInteractedRef.current = true;
+                        setMaxPrice(Math.max(+e.target.value, minPrice + PRICE_STEP));
+                      }}
                       onMouseUp={handlePriceChangeRelease}
                       onTouchEnd={handlePriceChangeRelease}
                       className="dual-range z-40"
@@ -2174,7 +2212,7 @@ export default function SearchWithCard({
 
                   <div className="flex justify-between text-xs text-primary/70 mb-1">
                     <span>₹{minPrice.toLocaleString("en-IN")}</span>
-                    <span>{isNaN(maxPrice) || maxPrice >= MAX ? `₹${MAX.toLocaleString("en-IN")}+` : `₹${maxPrice.toLocaleString("en-IN")}`}</span>
+                    <span>₹{(isNaN(maxPrice) ? MAX : Math.min(maxPrice, MAX)).toLocaleString("en-IN")}</span>
                   </div>
                 </div>
               </FilterSection>
@@ -2851,11 +2889,12 @@ export default function SearchWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={1000}
+                    step={PRICE_STEP}
                     value={minPrice}
-                    onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 5000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMinPrice(Math.min(+e.target.value, maxPrice - PRICE_STEP));
+                    }}
                     onTouchEnd={handlePriceChangeRelease}
                     className="dual-range z-30"
                   />
@@ -2863,18 +2902,19 @@ export default function SearchWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={1000}
+                    step={PRICE_STEP}
                     value={maxPrice}
-                    onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 5000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMaxPrice(Math.max(+e.target.value, minPrice + PRICE_STEP));
+                    }}
                     onTouchEnd={handlePriceChangeRelease}
                     className="dual-range z-40"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-secondary/70 mb-1">
                   <span>₹{minPrice.toLocaleString("en-IN")}</span>
-                  <span>₹{maxPrice.toLocaleString("en-IN")}</span>
+                  <span>₹{(isNaN(maxPrice) ? MAX : Math.min(maxPrice, MAX)).toLocaleString("en-IN")}</span>
                 </div>
               </div>
             )}

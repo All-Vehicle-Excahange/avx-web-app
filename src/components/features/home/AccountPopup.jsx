@@ -182,18 +182,18 @@ export default function AccountPopup({ open, onClosePopup }) {
   return (
     <>
       <div
-        className={`fixed top-[68px] left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 w-[95vw] sm:w-[380px]
-        max-h-[calc(100vh-80px)] flex flex-col
+        className={`absolute top-[calc(100%+12px)] -right-1 sm:right-0 w-[calc(100vw-24px)] sm:w-[380px] max-w-[380px]
+        max-h-[calc(100vh-140px)] flex flex-col
         bg-secondary text-primary
-        rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
+        rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]
         border border-white/10
-        transition-all duration-150 ease-out z-50 origin-top-right
+        transition-all duration-200 ease-out z-50 origin-top-right
         ${open && !isLoginOpen
-            ? "opacity-100 visible translate-y-0 scale-100"
-            : "opacity-0 invisible -translate-y-3 scale-95"
+            ? "opacity-100 visible translate-y-0 scale-100 pointer-events-auto"
+            : "opacity-0 invisible -translate-y-3 scale-95 pointer-events-none"
           }`}
       >
-        <div className="hidden sm:block absolute -top-2 right-10 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
+        <div className="hidden sm:block absolute -top-2 right-6 w-4 h-4 rotate-45 bg-secondary border-l border-t border-white/10" />
 
         {/* HEADER */}
         <div className="p-4 border-b border-white/10 text-center shrink-0">

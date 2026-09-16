@@ -116,3 +116,59 @@ export const getVehicleExtraDetails = async (vehicleId) => {
     throw error;
   }
 };
+
+export const getVehicleOwnerContact = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.get(
+      `/vehicles/call-lead/owner-contact/${vehicleId}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createVehicleCallLead = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.post(`/vehicles/call-lead`, { vehicleId });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getReceivedCallLeads = async (params = {}) => {
+  try {
+    const res = await axiosInstance.get(`/vehicles/call-lead/received`, {
+      params,
+    });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const markCallLeadCompletedByOwner = async (callLeadId) => {
+  try {
+    const res = await axiosInstance.patch(
+      `/vehicles/call-lead/owner/${callLeadId}/mark-completed`
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCallLeadsKpis = async () => {
+  try {
+    const res = await axiosInstance.get(
+      `/consultation/dashboard/inquiry/call-leads/kpis`
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+

@@ -589,8 +589,8 @@ function PreferencesPopup({
   const stepCounts = [
     selectedBrands.length + selectedModels.length,
     selectedFuelTypes.length +
-      selectedTransmissionTypes.length +
-      selectedVehicleTypes.length,
+    selectedTransmissionTypes.length +
+    selectedVehicleTypes.length,
     selectedStates.length + selectedCities.length + selectedTowns.length,
     (minPrice ? 1 : 0) + (maxPrice ? 1 : 0),
   ];
@@ -1073,13 +1073,12 @@ function PreferencesPopup({
               <button
                 key={s.id}
                 onClick={() => setActiveStep(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  activeStep === i
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${activeStep === i
                     ? "w-8 bg-white"
                     : stepCounts[i] > 0
                       ? "w-4 bg-white/60"
                       : "w-4 bg-white/25"
-                }`}
+                  }`}
               />
             ))}
           </div>
@@ -1121,11 +1120,10 @@ function PreferencesPopup({
                 <button
                   key={step.id}
                   onClick={() => setActiveStep(i)}
-                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${
-                    isActive
+                  className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all cursor-pointer ${isActive
                       ? "text-third"
                       : "text-primary/40 hover:text-primary/70"
-                  }`}
+                    }`}
                 >
                   <Icon size={16} />
                   <span className="hidden sm:inline">{step.label}</span>

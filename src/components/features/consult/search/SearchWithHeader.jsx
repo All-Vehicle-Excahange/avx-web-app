@@ -30,6 +30,15 @@ export default function SearchWithHeader({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const sortParam = searchParams.get("sort");
+
+  /* Sync selected sort option with URL param */
+  useEffect(() => {
+    const current =
+      sortOptions.find((o) => o.value === sortParam) || sortOptions[0];
+    setSelected(current);
+  }, [sortParam]);
+
   /* Close on outside click */
   useEffect(() => {
     const handler = (e) => {
@@ -146,9 +155,8 @@ export default function SearchWithHeader({
                   </span>
                   <ChevronDown
                     size={14}
-                    className={`transition-transform duration-200 ${
-                      showFilters ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${showFilters ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
               )}
@@ -179,9 +187,8 @@ export default function SearchWithHeader({
 
                   <ChevronDown
                     size={14}
-                    className={`transition-transform duration-200 ${
-                      open ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${open ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {/* DROPDOWN */}
@@ -216,10 +223,9 @@ export default function SearchWithHeader({
                           w-full text-left px-3 py-2
                           text-[12px] cursor-pointer
                           hover:bg-secondary/10
-                          ${
-                            selected.value === option.value
-                              ? "bg-primary/10 font-semibold"
-                              : ""
+                          ${selected.value === option.value
+                            ? "bg-primary/10 font-semibold"
+                            : ""
                           }
                         `}
                       >

@@ -3,6 +3,7 @@ import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Keyboard, Zoom } from "swiper/modules";
+import useEscapeKey from "@/hooks/useEscapeKey";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -16,6 +17,8 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
+
+  useEscapeKey(isOpen, onClose);
 
   useEffect(() => {
     if (isOpen) {
@@ -35,36 +38,27 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
     }
   }, [isOpen, initialSlide]);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
-
   if (!isOpen || !media?.length) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col select-none">
-      {/* Top Bar - Close Button */}
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50">
+    <div className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col select-none">
+      {/* Top Floating Close Button — Safely positioned on top-left away from navbar Account dropdown */}
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-6 z-50 pointer-events-auto">
         <button
+          type="button"
           onClick={onClose}
-          className="bg-white/10 text-white p-2.5 rounded-full shadow-md hover:bg-white/20 transition cursor-pointer backdrop-blur-sm"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md transition-all text-xs sm:text-sm font-medium cursor-pointer shadow-lg active:scale-95 border border-white/20"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
+          <span>Close</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/20 text-[10px] text-white/90 font-mono">
+            ESC
+          </kbd>
         </button>
       </div>
 
       {/* Main Image Area (Takes Remaining Space) */}
-      <div className="relative flex-1 w-full flex flex-col items-center justify-center pt-12 sm:pt-4 pb-4 overflow-hidden">
+      <div className="relative flex-1 w-full h-full flex items-center justify-center overflow-hidden">
         <Swiper
           ref={swiperRef}
           initialSlide={initialSlide}

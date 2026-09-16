@@ -91,10 +91,16 @@ export const getRecentlySold = async (data) => {
 
 export const getAvxIsnpectedFourWheel = async (data) => {
   try {
-    const { pageNo, size, vehicleType } = data;
+    const { pageNo, size, vehicleType, cityId, stateId } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getAvxIsnpectedFourWheel, {
-      params: { pageNo, size, vehicleType },
+      params: {
+        pageNo,
+        size,
+        vehicleType,
+        ...(cityId ? { cityId } : {}),
+        ...(stateId ? { stateId } : {}),
+      },
     });
 
     return handleResponse(res);
@@ -105,10 +111,16 @@ export const getAvxIsnpectedFourWheel = async (data) => {
 
 export const getTopPicsFour = async (data) => {
   try {
-    const { pageNo, size, vehicleType } = data;
+    const { pageNo, size, vehicleType, cityId, stateId } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getTopPicsFour, {
-      params: { pageNo, size, vehicleType },
+      params: {
+        pageNo,
+        size,
+        vehicleType,
+        ...(cityId ? { cityId } : {}),
+        ...(stateId ? { stateId } : {}),
+      },
     });
 
     return handleResponse(res);
@@ -416,10 +428,17 @@ export const getFollowedConsultant = async (data) => {
 
 export const getFourWheelWithTag = async (data) => {
   try {
-    const { pageNo, size, vehicleTag, vehicleType } = data;
+    const { pageNo, size, vehicleTag, vehicleType, cityId, stateId } = data;
 
     const res = await axiosInstance.get(ENDPOINT.getFourWheelWithTag, {
-      params: { pageNo, size, vehicleTag, vehicleType },
+      params: {
+        pageNo,
+        size,
+        vehicleTag,
+        vehicleType,
+        ...(cityId ? { cityId } : {}),
+        ...(stateId ? { stateId } : {}),
+      },
     });
 
     return handleResponse(res);

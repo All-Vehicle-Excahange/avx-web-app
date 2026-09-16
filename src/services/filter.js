@@ -15,6 +15,7 @@ const ENDPOINT = {
   getYearByModelId: "/search/model-years",
   getPopularCityAndState: "/util/address/popular-cities-states",
   SearchCityAndState: "/util/address/search-cities-states",
+  getAllCities: "/util/address/cities",
   getFilterConsualt: "/consultation/filter/based-on-vehicles-filter"
 };
 
@@ -211,6 +212,15 @@ export const SearchCityAndState = async (data) => {
         searchText: searchTerm,
       },
     });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllCities = async () => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getAllCities);
     return handleResponse(res);
   } catch (error) {
     throw error;

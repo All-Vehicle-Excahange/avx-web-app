@@ -29,6 +29,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import useEscapeKey from "@/hooks/useEscapeKey";
 
 function LoginPopup({
   isOpen,
@@ -37,6 +38,7 @@ function LoginPopup({
   onSuccess = () => { },
   hideTabs = false,
 }) {
+  useEscapeKey(isOpen, onClose);
   const {
     register,
     handleSubmit,
@@ -55,6 +57,7 @@ function LoginPopup({
   const otpRefs = useRef([]);
   const [isClosing, setIsClosing] = useState(false);
   const hiddenInputRef = useRef(null);
+  const modalRef = useRef(null);
 
   // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
@@ -181,15 +184,28 @@ function LoginPopup({
     }, 150);
   }, [onClose, reset]);
 
-  // Auto-lock body scroll when popup is open
+  // Prevent background scroll without hiding the scrollbar (prevents layout shift glitch, same as CitySelector)
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    if (!isOpen) return;
+
+    const preventBackgroundScroll = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener("wheel", preventBackgroundScroll, { passive: false, capture: true });
+    window.addEventListener("touchmove", preventBackgroundScroll, { passive: false, capture: true });
+    document.addEventListener("wheel", preventBackgroundScroll, { passive: false, capture: true });
+    document.addEventListener("touchmove", preventBackgroundScroll, { passive: false, capture: true });
+
     return () => {
-      document.body.style.overflow = "unset";
+      window.removeEventListener("wheel", preventBackgroundScroll, { capture: true });
+      window.removeEventListener("touchmove", preventBackgroundScroll, { capture: true });
+      document.removeEventListener("wheel", preventBackgroundScroll, { capture: true });
+      document.removeEventListener("touchmove", preventBackgroundScroll, { capture: true });
     };
   }, [isOpen]);
 
@@ -516,8 +532,18 @@ function LoginPopup({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overscroll-contain"
       onClick={handleClose}
+      onWheel={(e) => {
+        if (!modalRef.current || !modalRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
+      onTouchMove={(e) => {
+        if (!modalRef.current || !modalRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
       style={{
         animation: isClosing
           ? "modalBackdropOut 0.15s ease-in forwards"
@@ -525,7 +551,8 @@ function LoginPopup({
       }}
     >
       <div
-        className="relative flex w-full max-w-[900px] min-h-[400px] md:min-h-[460px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white"
+        ref={modalRef}
+        className="relative flex w-full max-w-[900px] min-h-[400px] md:min-h-[460px] overflow-hidden rounded-2xl shadow-2xl bg-primary-white overscroll-contain"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing

@@ -7,6 +7,8 @@ import {
   getVehicleInspectionDetails,
   getVehicleSpecification,
   getVehicleExtraDetails,
+  getReceivedCallLeads,
+  getCallLeadsKpis,
 } from "@/services/vehicle.service";
 import {
   getSimularVehicles,
@@ -149,6 +151,67 @@ export const getVehicleExtraDetailsQuery = (vehicleId) => {
       return res?.data ?? null;
     },
     staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getReceivedCallLeadsInfiniteQuery = (params = {}) => {
+  const {
+    callCompletedByOwner,
+    size = 10,
+    sortBy = "updatedAt",
+    direction = "desc",
+    ...rest
+  } = params;
+
+  return {
+    queryKey: [
+      "received-call-leads-infinite",
+      callCompletedByOwner !== undefined ? callCompletedByOwner : "all",
+      size,
+      sortBy,
+      direction,
+      rest,
+    ],
+    queryFn: async ({ pageParam = 1 }) => {
+      const cleanParams = {
+        size,
+        sortBy,
+        direction,
+        ...rest,
+        pageNo: pageParam,
+      };
+
+      if (typeof callCompletedByOwner === "boolean") {
+        cleanParams.callCompletedByOwner = callCompletedByOwner;
+      }
+
+      const res = await getReceivedCallLeads(cleanParams);
+      return res;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages =
+        lastPage?.pageResponse?.totalPages ??
+        lastPage?.totalPages ??
+        lastPage?.pagination?.totalPages ??
+        1;
+      const nextPage = allPages.length + 1;
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
+    staleTime: 10 * 1000,
+    retry: shouldRetry,
+  };
+};
+
+export const getCallLeadsKpisQuery = () => {
+  return queryOptions({
+    queryKey: ["call-leads-kpis"],
+    queryFn: async () => {
+      const res = await getCallLeadsKpis();
+      return res?.data ?? res ?? null;
+    },
+    staleTime: 5 * 60 * 1000,
     retry: shouldRetry,
   });
 };

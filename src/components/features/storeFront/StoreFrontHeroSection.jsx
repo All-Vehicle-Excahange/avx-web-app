@@ -28,6 +28,7 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import { trackStorefrontViewed } from "@/lib/amplitude";
+import useEscapeKey from "@/hooks/useEscapeKey";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Zoom } from "swiper/modules";
 import "swiper/css";
@@ -50,6 +51,21 @@ export default function StoreFrontHeroSection() {
   const [currentUrl, setCurrentUrl] = useState("");
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const pendingAction = useRef(null);
+
+  // Close zoom modal with Escape key
+  useEscapeKey(!!zoomImage, () => setZoomImage(null));
+
+  // Lock body scroll when zoom image is open
+  useEffect(() => {
+    if (zoomImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [zoomImage]);
 
   const [lastSyncState, setLastSyncState] = useState(false);
   const [prevIsFollower, setPrevIsFollower] = useState(null);
@@ -399,25 +415,30 @@ export default function StoreFrontHeroSection() {
       {/* Image Zoom Modal */}
       {zoomImage && (
         <div
-          className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col select-none"
+          className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col select-none"
           onClick={() => setZoomImage(null)}
         >
-          {/* Top Bar - Close Button */}
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50">
+          {/* Top Floating Close Button */}
+          <div className="absolute top-3 left-3 sm:top-4 sm:left-6 z-50 pointer-events-auto">
             <button
-              className="bg-white/10 text-white p-2.5 rounded-full shadow-md hover:bg-white/20 transition cursor-pointer backdrop-blur-sm"
+              type="button"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md transition-all text-xs sm:text-sm font-medium cursor-pointer shadow-lg active:scale-95 border border-white/20"
               onClick={(e) => {
                 e.stopPropagation();
                 setZoomImage(null);
               }}
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
+              <span>Close</span>
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/20 text-[10px] text-white/90 font-mono">
+                ESC
+              </kbd>
             </button>
           </div>
 
-          {/* Main Image Area */}
+          {/* Main Image Area — Full Width & Normal Spacing */}
           <div
-            className="relative flex-1 w-full flex flex-col items-center justify-center pt-12 sm:pt-4 pb-4 overflow-hidden"
+            className="relative flex-1 w-full h-full flex items-center justify-center overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <Swiper
@@ -426,13 +447,14 @@ export default function StoreFrontHeroSection() {
               className="w-full h-full"
             >
               <SwiperSlide className="flex items-center justify-center w-full h-full overflow-hidden">
-                <div className="swiper-zoom-container relative w-full h-full">
+                <div className="swiper-zoom-container relative w-full h-full flex items-center justify-center">
                   <Image
                     src={zoomImage}
                     alt="Zoomed image"
                     fill
                     className="object-contain select-none"
                     sizes="100vw"
+                    priority
                   />
                 </div>
               </SwiperSlide>

@@ -124,6 +124,12 @@ h3 {
 
 .container * {
   box-sizing: border-box;
+}
+
+.container img,
+.container video,
+.container canvas,
+.container svg {
   max-width: 100%;
 }
 

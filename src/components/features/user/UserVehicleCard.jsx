@@ -16,6 +16,7 @@ import {
   Ban,
   Star,
   ImageOff,
+  Share2,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -23,6 +24,7 @@ import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import { markAsSoldVehicle } from "@/services/vehicle.service";
 import { generateVehicleSlug } from "@/lib/helper";
 import MarkSoldPopup from "@/components/ui/MarkSoldPopup";
+import SharePopup from "@/components/ui/SharePopup";
 
 const formatCurrency = (val) => {
   if (val === null || val === undefined || val === "" || val === "-")
@@ -52,6 +54,7 @@ export default function UserVehicleCard({
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isSoldPopupOpen, setIsSoldPopupOpen] = useState(false);
   const [isSoldLoading, setIsSoldLoading] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   const statusBg = {
     live: "bg-green-600",
@@ -138,9 +141,9 @@ export default function UserVehicleCard({
               {data?.sponsored && <SponsoredRibbon />}
               {Boolean(
                 data?.image &&
-                  data.image !== "/big_card_car.jpg" &&
-                  data.image !== "null" &&
-                  data.image !== "undefined"
+                data.image !== "/big_card_car.jpg" &&
+                data.image !== "null" &&
+                data.image !== "undefined"
               ) ? (
                 <Image
                   src={data.image}
@@ -207,10 +210,10 @@ export default function UserVehicleCard({
                 </h3>
                 <p className="text-xs text-primary/70 mt-0.5 flex items-center gap-1">
                   <MapPinned className="w-3.5 h-3.5 shrink-0" />
-                  {data?.location || "Location not set"}
+                  {data?.location || "-"}
                 </p>
               </div>
-{/* 
+              {/* 
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all shrink-0"
@@ -288,11 +291,10 @@ export default function UserVehicleCard({
                   </p>
                   {data?.vehicleSuspenseType && (
                     <span
-                      className={`mt-1 inline-block text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                        data.vehicleSuspenseType === "PERMANENT"
-                          ? "bg-red-500/20 text-red-400"
-                          : "bg-orange-500/20 text-orange-400"
-                      }`}
+                      className={`mt-1 inline-block text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${data.vehicleSuspenseType === "PERMANENT"
+                        ? "bg-red-500/20 text-red-400"
+                        : "bg-orange-500/20 text-orange-400"
+                        }`}
                     >
                       {data.vehicleSuspenseType}
                     </span>
@@ -359,17 +361,35 @@ export default function UserVehicleCard({
                 <h3 className="text-sm md:text-lg font-bold text-third">
                   ₹ {formatCurrency(data?.price) || "-"}
                 </h3>
-                <Button
-                  href={`/vehicle/details/${generateVehicleSlug(data)}/${data.id}`}
-                  variant="roundedOutline"
-                  size="sm"
-                  className="w-8 h-8 p-0 group"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="transition-transform duration-300 group-hover:rotate-45"
-                  />
-                </Button>
+                <div className="flex items-center gap-1.5">
+                  {(status === "live" || status?.toLowerCase() === "live") && (
+                    <Button
+                      type="button"
+                      variant="roundedOutline"
+                      size="sm"
+                      className="w-8 h-8 p-0 cursor-pointer transition-all hover:scale-105"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsShareOpen(true);
+                      }}
+                      title="Share Vehicle Listing"
+                    >
+                      <Share2 size={15} />
+                    </Button>
+                  )}
+                  <Button
+                    href={`/vehicle/details/${generateVehicleSlug(data)}/${data.id}`}
+                    variant="roundedOutline"
+                    size="sm"
+                    className="w-8 h-8 p-0 group"
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="transition-transform duration-300 group-hover:rotate-45"
+                    />
+                  </Button>
+                </div>
               </div>
 
               {status === "live" && (
@@ -380,7 +400,7 @@ export default function UserVehicleCard({
                     showIcon={false}
                     onClick={() => setIsDownloadOpen(true)}
                   >
-                    <Pencil size={14}  /> Improve Listing
+                    <Pencil size={14} /> Improve Listing
                   </Button>
                   <Button
                     onClick={handleSoldClick}
@@ -388,7 +408,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <CheckCircle size={14}  /> Mark Sold
+                    <CheckCircle size={14} /> Mark Sold
                   </Button>
                 </div>
               )}
@@ -401,7 +421,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <Pencil size={14}  /> Edit Draft
+                    <Pencil size={14} /> Edit Draft
                   </Button>
                 </div>
               )}
@@ -414,7 +434,7 @@ export default function UserVehicleCard({
                     size="sm"
                     showIcon={false}
                   >
-                    <Pencil size={14}  /> Improve Listing
+                    <Pencil size={14} /> Improve Listing
                   </Button>
                 </div>
               )}
@@ -433,6 +453,16 @@ export default function UserVehicleCard({
           loading={isSoldLoading}
         />
       )}
+      <SharePopup
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        shareUrl={
+          typeof window !== "undefined" && data?.id
+            ? `${window.location.origin}/vehicle/details/${generateVehicleSlug(data)}/${data.id}`
+            : ""
+        }
+        title={data?.title ? `${data.title} on Reecomm` : "Check out this vehicle on Reecomm"}
+      />
     </>
   );
 }

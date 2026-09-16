@@ -1,14 +1,19 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Star, MapPin, Loader2, ExternalLink, Pencil } from "lucide-react";
+import { Star, MapPin, Loader2, ExternalLink, Pencil, Phone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import LoginPopup from "@/components/auth/LoginPopup";
 import SendInquaryPopup from "./SendInquaryPopup";
+import CallSellerPopup from "./CallSellerPopup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
+import {
+  createVehicleCallLead,
+  getVehicleOwnerContact,
+} from "@/services/vehicle.service";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import MakeOfferPopup from "./MakeOfferPopup";
@@ -36,6 +41,7 @@ export default function VehicleSummaryRight({
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isMakeOfferOpen, setIsMakeOfferOpen] = useState(false);
   const [isOfferSuccess, setIsOfferSuccess] = useState(false);
@@ -176,9 +182,92 @@ export default function VehicleSummaryRight({
     handleRequestInquiry();
   };
 
+  const handleCallButtonClick = async () => {
+    if (vehicle?.isVehicleSold) return;
+
+    if (!isLoggedIn) {
+      pendingAction.current = "call";
+      trackInquiryLoginRequired({
+        vehicle_id: vehicleId || vehicle?.id,
+        vehicle_name:
+          `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+          undefined,
+        source: "vdp",
+      });
+      useAuthStore.getState().setAuthFunnelContext?.({
+        entry_context: "vehicle_detail",
+        trigger_action: "call_seller",
+        user_role_intent: "buyer",
+      });
+      setIsLoginOpen(true);
+      return;
+    }
+
+    const isSmallScreen =
+      typeof window !== "undefined" &&
+      (window.innerWidth < 1024 ||
+        /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ));
+
+    setLoading(true);
+    let targetPhone =
+      summary?.phone ||
+      summary?.phoneNumber ||
+      summary?.mobileNumber ||
+      summary?.mobile ||
+      summary?.contactNumber ||
+      summary?.user?.phoneNumber ||
+      summary?.user?.phone ||
+      vehicle?.vehicleOwner?.phone ||
+      vehicle?.vehicleOwner?.phoneNumber ||
+      vehicle?.vehicleOwner?.mobile ||
+      vehicle?.phone ||
+      vehicle?.mobile ||
+      "";
+
+    try {
+      const promises = [];
+      if (vehicleId) {
+        promises.push(createVehicleCallLead(vehicleId));
+      }
+      if (!targetPhone && vehicleId) {
+        promises.push(
+          getVehicleOwnerContact(vehicleId).then((res) => {
+            const fetched =
+              res?.data?.phoneNumber ||
+              res?.data?.phone ||
+              res?.data?.mobile ||
+              "";
+            if (fetched) targetPhone = fetched;
+          })
+        );
+      }
+      if (promises.length > 0) {
+        await Promise.allSettled(promises);
+      }
+    } catch (err) {
+      console.error("Error creating vehicle call lead:", err);
+    } finally {
+      setLoading(false);
+      const cleanPhone = targetPhone
+        ? String(targetPhone).replace(/[^0-9+]/g, "")
+        : "";
+
+      if (isSmallScreen && cleanPhone) {
+        window.location.href = `tel:${cleanPhone}`;
+      } else {
+        setIsCallPopupOpen(true);
+      }
+    }
+  };
+
   const handleAuthSuccess = () => {
     setIsLoginOpen(false);
-    if (pendingAction.current === "request") {
+    if (pendingAction.current === "call") {
+      pendingAction.current = null;
+      handleCallButtonClick();
+    } else if (pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
     } else if (pendingAction.current === "make_offer") {
@@ -225,13 +314,17 @@ export default function VehicleSummaryRight({
   };
 
   useEffect(() => {
-    if (isLoggedIn && pendingAction.current === "request") {
+    if (isLoggedIn && pendingAction.current === "call") {
+      pendingAction.current = null;
+      handleCallButtonClick();
+    } else if (isLoggedIn && pendingAction.current === "request") {
       pendingAction.current = null;
       handleRequestInquiry();
     } else if (isLoggedIn && pendingAction.current === "make_offer") {
       pendingAction.current = null;
       openMakeOffer();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   return (
@@ -479,31 +572,24 @@ export default function VehicleSummaryRight({
                     Request Inspection
                   </Button>
                 </div>
-                {!hasActiveInquiry && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    showIcon={false}
-                    className="rounded-full w-full"
-                    loading={loading}
-                    disabled={vehicle?.isVehicleSold}
-                    onClick={() => onSendInquiryClick("vdp")}
-                  >
-                    {vehicle?.isVehicleSold ? "Sold Out" : "Send Inquiry"}
-                  </Button>
-                )}
 
-                {hasActiveInquiry && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    showIcon={false}
-                    className="rounded-full w-full"
-                    onClick={() => setIsDownloadOpen(true)}
-                  >
-                    {vehicleOwnerRole === "CONSULTATION" ? "Chat with Consult" : "Chat with Seller"}
-                  </Button>
-                )}
+                {/* CALL BUTTON */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  showIcon={false}
+                  className="rounded-full w-full flex items-center justify-center gap-2"
+                  loading={loading}
+                  disabled={vehicle?.isVehicleSold}
+                  onClick={handleCallButtonClick}
+                >
+                  <Phone size={15} />
+                  {vehicle?.isVehicleSold
+                    ? "Sold Out"
+                    : vehicleOwnerRole === "CONSULTATION"
+                      ? "Call Consultant"
+                      : "Call Seller"}
+                </Button>
               </>
             )}
           </div>
@@ -511,7 +597,7 @@ export default function VehicleSummaryRight({
       </aside>
 
       {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md  shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
         <div className="flex flex-col">
           <p className="text-third text-[10px] uppercase tracking-wider font-semibold">
             Price
@@ -544,31 +630,29 @@ export default function VehicleSummaryRight({
               </Button>
             </>
           ) : (
-            <>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  showIcon={false}
-                  className="rounded-full text-[11px] whitespace-nowrap px-2.5"
-                  onClick={openMakeOffer}
-                  disabled={hasActiveInquiry || vehicle?.isVehicleSold}
-                >
-                  {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
-                </Button>
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="outline"
+                size="sm"
+                showIcon={false}
+                className="rounded-full text-[11px] whitespace-nowrap px-2.5"
+                onClick={openMakeOffer}
+                disabled={hasActiveInquiry || vehicle?.isVehicleSold}
+              >
+                {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
+              </Button>
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  showIcon={false}
-                  className="rounded-full text-[11px] whitespace-nowrap px-2.5"
-                  onClick={handleRequestInspectionClick}
-                  loading={isCheckingInspection}
-                >
-                  Request Inspection
-                </Button>
-              </div>
-            </>
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                className="rounded-full text-[11px] whitespace-nowrap px-2.5"
+                onClick={handleRequestInspectionClick}
+                loading={isCheckingInspection}
+              >
+                Request Inspection
+              </Button>
+            </div>
           )}
         </div>
       </div>
@@ -617,6 +701,17 @@ export default function VehicleSummaryRight({
           setIsOfferSuccess(true);
           setIsPopupOpen(true);
           handleInquirySuccess();
+        }}
+      />
+      <CallSellerPopup
+        isOpen={isCallPopupOpen}
+        onClose={() => setIsCallPopupOpen(false)}
+        vehicle={vehicle}
+        summary={summary}
+        onRequireAuth={() => {
+          pendingAction.current = "call";
+          setIsCallPopupOpen(false);
+          setIsLoginOpen(true);
         }}
       />
     </>
