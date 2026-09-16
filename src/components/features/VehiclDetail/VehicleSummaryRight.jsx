@@ -22,9 +22,11 @@ import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
 import {
   trackInquiryInitiated,
+  trackInquirySubmitted,
   trackInquiryLoginRequired,
   trackMakeOfferInitiated,
 } from "@/lib/amplitude";
+import { event, customEvent } from "@/lib/fpixel";
 
 export default function VehicleSummaryRight({
   vehicle,
@@ -185,13 +187,24 @@ export default function VehicleSummaryRight({
   const handleCallButtonClick = async () => {
     if (vehicle?.isVehicleSold) return;
 
+    const vehicleTitle =
+      `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
+      "Vehicle Details";
+
+    // Track Amplitude inquiry_initiated on Call Button click
+    trackInquiryInitiated({
+      vehicle_id: vehicleId || vehicle?.id,
+      vehicle_name: vehicleTitle,
+      seller_type: vehicle?.sellerType || vehicleOwnerRole || "",
+      source: "call_button",
+      is_logged_in: Boolean(isLoggedIn),
+    });
+
     if (!isLoggedIn) {
       pendingAction.current = "call";
       trackInquiryLoginRequired({
         vehicle_id: vehicleId || vehicle?.id,
-        vehicle_name:
-          `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim() ||
-          undefined,
+        vehicle_name: vehicleTitle,
         source: "vdp",
       });
       useAuthStore.getState().setAuthFunnelContext?.({
@@ -255,6 +268,33 @@ export default function VehicleSummaryRight({
         : "";
 
       if (isSmallScreen && cleanPhone) {
+        const inquiryType =
+          vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller";
+
+        trackInquirySubmitted({
+          vehicle_id: vehicleId,
+          vehicle_name: vehicleTitle,
+          inquiry_type: inquiryType,
+          seller_type: vehicleOwnerRole,
+        });
+        customEvent("Inquiry", {
+          content_type: "vehicle",
+          content_ids: [String(vehicleId)],
+          content_name: vehicleTitle || "Vehicle Inquiry",
+          seller_type: vehicleOwnerRole || "",
+          inquiry_type: inquiryType,
+        });
+        event("Lead", {
+          content_type: "vehicle",
+          content_ids: [String(vehicleId)],
+          content_name: vehicleTitle || "Vehicle Inquiry",
+        });
+        event("Contact", {
+          content_type: "vehicle",
+          content_ids: [String(vehicleId)],
+          content_name: vehicleTitle || "Vehicle Inquiry",
+        });
+
         window.location.href = `tel:${cleanPhone}`;
       } else {
         setIsCallPopupOpen(true);
@@ -301,6 +341,14 @@ export default function VehicleSummaryRight({
       listed_price: vehicle?.price,
       city: city || undefined,
       state: state || undefined,
+      is_logged_in: Boolean(isLoggedIn),
+    });
+
+    trackInquiryInitiated({
+      vehicle_id: vehicleId || vehicle?.id,
+      vehicle_name: vehicleName || "Vehicle Details",
+      seller_type: sellerType,
+      source: "make_offer_popup",
       is_logged_in: Boolean(isLoggedIn),
     });
 
