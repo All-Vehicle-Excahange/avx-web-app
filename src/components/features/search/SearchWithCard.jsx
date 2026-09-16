@@ -477,8 +477,13 @@ export default function SearchWithCard({
         t.toUpperCase(),
       );
 
-    if (typeof minPrice === "number") payload.minPrice = minPrice;
-    if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
+    const effectiveMax =
+      serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
+    const hasPriceFilter = minPrice > MIN || maxPrice < effectiveMax;
+    if (hasPriceFilter) {
+      if (typeof minPrice === "number") payload.minPrice = minPrice;
+      if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
+    }
 
     if (selectedYear.length > 0) payload.mfgYear = Number(selectedYear[0]);
 
@@ -519,8 +524,13 @@ export default function SearchWithCard({
         t.toUpperCase(),
       );
 
-    if (typeof minPrice === "number") payload.minPrice = minPrice;
-    if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
+    const effectiveMax =
+      serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
+    const hasPriceFilter = minPrice > MIN || maxPrice < effectiveMax;
+    if (hasPriceFilter) {
+      if (typeof minPrice === "number") payload.minPrice = minPrice;
+      if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
+    }
     return payload;
   };
 
@@ -1784,6 +1794,7 @@ export default function SearchWithCard({
   const handleRemoveFilter = useCallback(
     (chipLabel) => {
       if (!chipLabel) return;
+      isSelfTriggered.current = true;
       const lower = chipLabel.toLowerCase();
 
       // 1. Transmission
@@ -1824,7 +1835,10 @@ export default function SearchWithCard({
         );
         return;
       }
-      if (String(resolvedBrandName).toLowerCase() === lower && selectedBrands.length > 0) {
+      if (
+        String(resolvedBrandName).toLowerCase() === lower &&
+        selectedBrands.length > 0
+      ) {
         setSelectedBrands([]);
         return;
       }
@@ -1838,7 +1852,10 @@ export default function SearchWithCard({
         );
         return;
       }
-      if (String(resolvedModelName).toLowerCase() === lower && selectedModels.length > 0) {
+      if (
+        String(resolvedModelName).toLowerCase() === lower &&
+        selectedModels.length > 0
+      ) {
         setSelectedModels([]);
         return;
       }
@@ -1856,10 +1873,18 @@ export default function SearchWithCard({
       if (
         lower.includes("₹") ||
         lower.includes("under") ||
-        lower.includes("l–")
+        lower.includes("l–") ||
+        lower.includes("–") ||
+        lower.includes("lakh") ||
+        lower.includes("price") ||
+        lower.includes("budget")
       ) {
-        setMinPrice(MIN);
-        setMaxPrice(MAX);
+        userPriceInteractedRef.current = true;
+        const effectiveMax = serverMaxPrice || fallbackMax;
+        setMinPrice(0);
+        setMaxPrice(effectiveMax);
+        setDebouncedMinPrice(0);
+        setDebouncedMaxPrice(effectiveMax);
         return;
       }
       // 9. KM Distance
@@ -1912,38 +1937,19 @@ export default function SearchWithCard({
       selectedTownName,
       resolvedBrandName,
       resolvedModelName,
+      serverMaxPrice,
+      fallbackMax,
     ],
   );
 
-  useEffect(() => {
-    if (onRemoveFilterHandlerChange) {
-      onRemoveFilterHandlerChange(() => handleRemoveFilter);
-    }
-  }, [onRemoveFilterHandlerChange, handleRemoveFilter]);
-
-  useEffect(() => {
-    if (onClearAllHandlerChange) {
-      onClearAllHandlerChange(() => handleClearFilters);
-    }
-  }, [onClearAllHandlerChange]);
-
-  const handlePageChange = (page) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
-  // Save/overwrite selected location to localStorage on Apply
-  const handleApplyFilter = async () => {
-
-    setCurrentPage(1);
-    setDebouncedPayload(buildPayload());
-    setDebouncedConsultPayload(buildConsultPayload());
-  };
-
-  const handleClearFilters = async () => {
-    isSelfTriggered.current = false;
-    // Remove query parameters from URL to clear top search bar
-    window.history.replaceState(null, "", "/search/buy-used-cars");
+  const handleClearFilters = useCallback(async () => {
+    isSelfTriggered.current = true;
+    userPriceInteractedRef.current = true;
+    const defaultUrl =
+      apiBodyType === "TWO_WHEELER"
+        ? "/search/buy-used-two-wheelers"
+        : "/search/buy-used-cars";
+    window.history.replaceState(null, "", defaultUrl);
 
     // Reset brand & model
     setSelectedBrands([]);
@@ -1965,7 +1971,6 @@ export default function SearchWithCard({
     setSelectedTownId(null);
     setSelectedTownName("");
     setTowns([]);
-
     setCities([]);
 
     // Reset fuel & transmission
@@ -1993,14 +1998,18 @@ export default function SearchWithCard({
     setVariantHasMore(false);
 
     // Reset price & km
-    setMinPrice(MIN);
-    setMaxPrice(MAX);
-    setDebouncedMinPrice(MIN);
-    setDebouncedMaxPrice(MAX);
+    const effectiveMax = serverMaxPrice || fallbackMax;
+    setMinPrice(0);
+    setMaxPrice(effectiveMax);
+    setDebouncedMinPrice(0);
+    setDebouncedMaxPrice(effectiveMax);
     setKmDistance(0);
 
     // Reset pagination
     setCurrentPage(1);
+
+    // Reset filter chips immediately
+    onFilterChange?.([]);
 
     // Reload vehicles with empty payload and scroll to top
     setDebouncedPayload({});
@@ -2009,6 +2018,30 @@ export default function SearchWithCard({
 
     // Reload brands
     loadBrands(1, "");
+  }, [apiBodyType, fallbackMax, loadBrands, onFilterChange, serverMaxPrice]);
+
+  useEffect(() => {
+    if (onRemoveFilterHandlerChange) {
+      onRemoveFilterHandlerChange(() => handleRemoveFilter);
+    }
+  }, [onRemoveFilterHandlerChange, handleRemoveFilter]);
+
+  useEffect(() => {
+    if (onClearAllHandlerChange) {
+      onClearAllHandlerChange(() => handleClearFilters);
+    }
+  }, [onClearAllHandlerChange, handleClearFilters]);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  // Save/overwrite selected location to localStorage on Apply
+  const handleApplyFilter = async () => {
+    setCurrentPage(1);
+    setDebouncedPayload(buildPayload());
+    setDebouncedConsultPayload(buildConsultPayload());
   };
 
   return (
@@ -2459,15 +2492,20 @@ export default function SearchWithCard({
                 selected={maxPrice <= 500000}
                 variant="outline"
                 onClick={() => {
-                  const nextMaxPrice = maxPrice <= 500000 ? MAX : 500000;
+                  isSelfTriggered.current = true;
+                  userPriceInteractedRef.current = true;
+                  const effectiveMax = serverMaxPrice || fallbackMax;
+                  const nextMaxPrice = maxPrice <= 500000 ? effectiveMax : 500000;
                   setMinPrice(MIN);
                   setMaxPrice(nextMaxPrice);
+                  setDebouncedMinPrice(MIN);
+                  setDebouncedMaxPrice(nextMaxPrice);
                   setCurrentPage(1);
                   setDebouncedPayload((prev) => {
                     const next = { ...prev };
                     if (MIN > MIN) next.minPrice = MIN;
                     else delete next.minPrice;
-                    if (nextMaxPrice < MAX) next.maxPrice = nextMaxPrice;
+                    if (nextMaxPrice < effectiveMax) next.maxPrice = nextMaxPrice;
                     else delete next.maxPrice;
                     return next;
                   });

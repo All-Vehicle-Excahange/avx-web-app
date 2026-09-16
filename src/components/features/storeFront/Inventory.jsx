@@ -8,7 +8,7 @@ import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getStoreFrontInventoryInfiniteQuery } from "@/queries/user.queries";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, RefreshCw } from "lucide-react";
 import Image from "next/image";
 
 export default function Inventory() {
@@ -46,13 +46,20 @@ export default function Inventory() {
             sortBy: selectedSort.value.sortBy,
             direction: selectedSort.value.direction,
             vehicleType: activeType === "all" ? null : activeType,
-            size: 4,
+            size: 12,
         })
     );
 
     const vehicles =
         inventoryInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
+    const totalElements =
+        inventoryInfiniteData?.pages?.[0]?.pagination?.totalElements ??
+        inventoryInfiniteData?.pages?.[0]?.pagination?.totalRecords ??
+        inventoryInfiniteData?.pages?.[0]?.pagination?.totalItems ??
+        inventoryInfiniteData?.pages?.[0]?.pagination?.total ??
+        inventoryInfiniteData?.pages?.[0]?.pageResponse?.totalElements ??
+        vehicles.length;
 
     return (
         <section className="w-full container mt-2! border-0  rounded-none sm:rounded-2xl pl-0! pr-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-0! space-y-6">
@@ -151,7 +158,7 @@ export default function Inventory() {
 
             <div className={`grid ${(!loading && vehicles.length === 0) ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"} gap-4`}>
                 {loading
-                    ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
+                    ? [...Array(12)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
                     : vehicles.length > 0 ? (
                         vehicles.map((car, index) => (
                             <VehicleCard key={`${car.id}-${index}`} data={car} />
@@ -164,6 +171,7 @@ export default function Inventory() {
                                     alt="Empty State"
                                     fill
                                     className="object-contain"
+                                    loading="lazy"
                                 />
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-primary">
@@ -176,15 +184,26 @@ export default function Inventory() {
                     )
                 }
             </div>
-            {hasNextPage && (
-                <div className="mt-8 flex justify-end">
-                    <Button
-                        variant="outline"
-                        onClick={() => fetchNextPage()}
-                        disabled={isFetchingNextPage}
-                    >
-                        {isFetchingNextPage ? "Loading..." : "View More"}
-                    </Button>
+
+            {/* Load More Button & Stats */}
+            {!loading && totalElements > 0 && (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 mb-4 pt-4 border-t border-third/20">
+                    <div className="text-sm text-third">
+                        Showing <span className="font-semibold text-primary">{vehicles.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> {activeType === "TWO_WHEELER" ? "bikes" : activeType === "FOUR_WHEELER" ? "cars" : "vehicles"}
+                    </div>
+                    {hasNextPage && (
+                        <Button
+                            variant="ghost"
+                            className="flex items-center gap-2 px-6 rounded-full"
+                            showIcon={false}
+                            size="sm"
+                            onClick={() => fetchNextPage()}
+                            disabled={isFetchingNextPage}
+                        >
+                            <RefreshCw className={`w-4 h-4 ${isFetchingNextPage ? 'animate-spin' : ''}`} />
+                            {isFetchingNextPage ? "Loading..." : "Load More"}
+                        </Button>
+                    )}
                 </div>
             )}
         </section>

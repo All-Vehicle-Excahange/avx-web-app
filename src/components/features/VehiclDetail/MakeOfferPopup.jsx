@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import {
   trackMakeOfferOptionSelected,
   trackMakeOfferSubmitted,
+  trackInquirySubmitted,
 } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
@@ -182,17 +183,27 @@ export default function MakeOfferPopup({
         has_message: Boolean(message.trim()),
       });
 
+      trackInquirySubmitted({
+        vehicle_id: vehicleId,
+        vehicle_name: vehicleName || "Vehicle Inquiry",
+        inquiry_type: `Make Offer: ₹${currentOffer.toLocaleString("en-IN")}`,
+        seller_type: sellerType,
+      });
+
       // Meta Pixel: Inquiry + Lead only after successful submit
       customEvent("Inquiry", {
         content_type: "vehicle",
         content_ids: [String(vehicleId)],
         content_name: vehicleName || "Vehicle Inquiry",
         seller_type: sellerType || "",
+        offer_price: currentOffer,
       });
       event("Lead", {
         content_type: "vehicle",
         content_ids: [String(vehicleId)],
         content_name: vehicleName || "Vehicle Inquiry",
+        value: currentOffer,
+        currency: "INR",
       });
 
       // GA4: same inquiry_submit funnel as Send Inquiry

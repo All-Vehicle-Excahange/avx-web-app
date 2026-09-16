@@ -22,8 +22,10 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { trackInquiryClick } from "@/lib/gtag";
-import { trackInquiryInitiated } from "@/lib/amplitude";
+import { trackInquiryClick, trackInquirySubmit } from "@/lib/gtag";
+import { trackInquiryInitiated, trackInquirySubmitted } from "@/lib/amplitude";
+import { event, customEvent } from "@/lib/fpixel";
+import useEscapeKey from "@/hooks/useEscapeKey";
 import {
   getVehicleOwnerContact,
 } from "@/services/vehicle.service";
@@ -144,6 +146,8 @@ export default function CallSellerPopup({
     }, 150);
   }, [onClose]);
 
+  useEscapeKey(isOpen, handleClose);
+
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
@@ -158,16 +162,41 @@ export default function CallSellerPopup({
 
   // Handle Direct Call
   const handleCallClick = () => {
-    trackInquiryClick({
+    const inquiryType = isConsultant ? "Call Consultant" : "Call Seller";
+
+    // GA4: inquiry_submit
+    trackInquirySubmit({
       vehicle_id: vehicleId,
       vehicle_name: vehicleTitle,
+      inquiry_type: inquiryType,
       seller_type: vehicleOwnerRole,
     });
-    trackInquiryInitiated({
+
+    // Amplitude: inquiry_submitted
+    trackInquirySubmitted({
       vehicle_id: vehicleId,
       vehicle_name: vehicleTitle,
+      inquiry_type: inquiryType,
       seller_type: vehicleOwnerRole,
-      source: "call_popup",
+    });
+
+    // Meta Pixel: Inquiry, Lead & Contact on call submit
+    customEvent("Inquiry", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleId)],
+      content_name: vehicleTitle || "Vehicle Inquiry",
+      seller_type: vehicleOwnerRole || "",
+      inquiry_type: inquiryType,
+    });
+    event("Lead", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleId)],
+      content_name: vehicleTitle || "Vehicle Inquiry",
+    });
+    event("Contact", {
+      content_type: "vehicle",
+      content_ids: [String(vehicleId)],
+      content_name: vehicleTitle || "Vehicle Inquiry",
     });
 
     if (cleanPhone) {
