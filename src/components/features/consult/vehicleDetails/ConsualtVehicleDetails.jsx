@@ -138,7 +138,7 @@ export default function ConsualtVehicleDetails({
       } else {
         toast.error(
           error?.response?.data?.message ||
-            "Failed to check inspection status.",
+          "Failed to check inspection status.",
         );
       }
     } finally {
@@ -271,11 +271,10 @@ export default function ConsualtVehicleDetails({
                           key={tab.id}
                           onClick={() => scrollToSection(tab.ref, tab.id)}
                           className={`relative cursor-pointer py-3 text-sm font-medium whitespace-nowrap transition-colors
-          ${
-            activeTab === tab.id
-              ? "text-primary"
-              : "text-third hover:text-primary"
-          }`}
+          ${activeTab === tab.id
+                              ? "text-primary"
+                              : "text-third hover:text-primary"
+                            }`}
                         >
                           {tab.label}
 

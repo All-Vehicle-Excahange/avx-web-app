@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Play, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Heart, Eye } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -318,6 +318,20 @@ export default function VehicleImageGallery({ vehicle }) {
           className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-primary/90 text-secondary p-2 rounded-full hover:scale-105 transition duration-300 cursor-pointer hidden md:block"
         >
           <ChevronRight />
+        </button>
+
+        {/* BOTTOM RIGHT VIEW GALLERY BUTTON */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsModalOpen(true);
+          }}
+          className="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md text-white text-xs font-medium border border-white/20 shadow-md transition-colors cursor-pointer"
+          title="View Gallery"
+        >
+          <Eye size={14} className="text-white" />
+          <span>View Gallery</span>
         </button>
       </div>
 

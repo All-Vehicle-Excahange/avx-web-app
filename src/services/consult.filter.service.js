@@ -36,15 +36,17 @@ export const getUserCityAndStateByLatLong = async (data) => {
 
 export const getFilteredConsult = async (data, payload) => {
   try {
-    const { pageNo, size, sortBy, direction } = data;
+    const { pageNo, size, sortBy, direction } = data || {};
+
+    const params = {
+      pageNo,
+      size,
+    };
+    if (sortBy) params.sortBy = sortBy;
+    if (direction) params.direction = direction;
 
     const res = await axiosInstance.post(ENDPOINT.getFilteredConsult, payload, {
-      params: {
-        pageNo,
-        size,
-        sortBy: sortBy || "minVehiclePrice",
-        direction: direction || "desc",
-      },
+      params,
     });
 
     return handleResponse(res);
@@ -54,15 +56,17 @@ export const getFilteredConsult = async (data, payload) => {
 };
 export const getPremiumConsult = async (data, payload) => {
   try {
-    const { pageNo, size } = data;
+    const { pageNo, size, sortBy, direction } = data || {};
+
+    const params = {
+      pageNo,
+      size,
+    };
+    if (sortBy) params.sortBy = sortBy;
+    if (direction) params.direction = direction;
 
     const res = await axiosInstance.post(ENDPOINT.getPremiumConsult, payload, {
-      params: {
-        pageNo,
-        size,
-        sortBy: "minVehiclePrice",
-        direction: "desc",
-      },
+      params,
     });
 
     return handleResponse(res);

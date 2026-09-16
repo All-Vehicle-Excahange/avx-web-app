@@ -19,8 +19,8 @@ export default function Inventory() {
 
     const vehicleTypes = [
         { id: "all", label: "All" },
+        { id: "FOUR_WHEELER", label: "Four Wheelers" },
         { id: "TWO_WHEELER", label: "Two Wheelers" },
-        { id: "FOUR_WHEELER", label: "Four Wheels" },
     ];
 
     const sortOptions = [

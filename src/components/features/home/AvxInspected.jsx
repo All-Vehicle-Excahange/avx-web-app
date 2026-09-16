@@ -8,6 +8,7 @@ import { Bike, Car } from "lucide-react";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getAvxInspectedQuery } from "@/queries/user.queries";
+import { useLocationStore } from "@/stores/useLocationStore";
 
 import "swiper/css";
 
@@ -15,10 +16,16 @@ const cn = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function AvxInspected() {
   const [activeType, setActiveType] = useState("4-Wheeler");
+  const { cityId, stateId } = useLocationStore();
   const hasManuallySelected = React.useRef(false);
   const checkedFourWheelerEmpty = React.useRef(false);
 
-  const queryPayload = { pageNo: 1, size: 4 };
+  const queryPayload = {
+    pageNo: 1,
+    size: 4,
+    ...(cityId ? { cityId } : {}),
+    ...(stateId ? { stateId } : {}),
+  };
 
   const { data: vehicles = [], isLoading } = useQuery(
     getAvxInspectedQuery(activeType, queryPayload)

@@ -191,8 +191,7 @@ export default function SearchHeader({
               <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary flex items-center gap-1.5">
                 <span>
                   {seoH1 ||
-                    `Used ${brandParam ? `${brandParam} ` : ""}${
-                      bodyType ? `${bodyType}` : vehicleType || "Vehicles"
+                    `Used ${brandParam ? `${brandParam} ` : ""}${bodyType ? `${bodyType}` : vehicleType || "Vehicles"
                     }`}
                 </span>
               </h1>
@@ -222,9 +221,8 @@ export default function SearchHeader({
                   </span>
                   <ChevronDown
                     size={14}
-                    className={`transition-transform duration-200 ${
-                      showFilters ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${showFilters ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
               )}
@@ -255,9 +253,8 @@ export default function SearchHeader({
 
                   <ChevronDown
                     size={14}
-                    className={`transition-transform duration-200 ${
-                      open ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${open ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -307,10 +304,9 @@ export default function SearchHeader({
                             block w-full text-left px-3 py-2
                             text-[12px] cursor-pointer
                             hover:bg-secondary/10 transition-colors
-                            ${
-                              selected.label === option.label
-                                ? "bg-primary/10 font-semibold"
-                                : ""
+                            ${selected.label === option.label
+                              ? "bg-primary/10 font-semibold"
+                              : ""
                             }
                           `}
                         >

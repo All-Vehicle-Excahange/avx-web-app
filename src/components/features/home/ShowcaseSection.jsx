@@ -56,7 +56,7 @@ const ShowcaseSection = () => {
           <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
             <span className="text-fourth">Continue </span> Where you Left Off
           </h2>
-          <p className="text-third w-4xl">
+          <p className="text-third max-w-4xl">
             Your saved searches, wishlisted vehicles, and recent views are all here waiting.
           </p>
         </div>

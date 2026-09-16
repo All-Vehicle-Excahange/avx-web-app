@@ -68,7 +68,7 @@ export default function InventoryComponent() {
     ownership: v.ownership,
     price: v.price,
     image: v.thumbnailUrl || "/big_card_car.jpg",
-    location: v.address?.city || v.address?.state || "Location not set",
+    location: v.address?.city || v.address?.state || "-",
     verificationStatus: v.verificationStatus,
     inspectionStatus: v.inspectionStatus,
     inspectionBadgeUrl: v.inspectionBadgeUrl,
@@ -320,9 +320,8 @@ export default function InventoryComponent() {
             </div>
             <div className="w-full h-2 bg-third/20 rounded-full overflow-hidden shadow-inner">
               <div
-                className={`h-full rounded-full transition-all duration-700 ease-out ${
-                  isNearLimit ? "bg-red-500" : "bg-primary"
-                }`}
+                className={`h-full rounded-full transition-all duration-700 ease-out ${isNearLimit ? "bg-red-500" : "bg-primary"
+                  }`}
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
@@ -455,10 +454,9 @@ export default function InventoryComponent() {
                 key={type.id}
                 onClick={() => setActiveType(type.id)}
                 className={`px-4 py-2 cursor-pointer rounded-full border text-sm transition
-                  ${
-                    activeType === type.id
-                      ? "bg-primary text-secondary border-primary"
-                      : "border-third/40 hover:bg-primary/10"
+                  ${activeType === type.id
+                    ? "bg-primary text-secondary border-primary"
+                    : "border-third/40 hover:bg-primary/10"
                   }`}
               >
                 {type.id === "SUSPENDED" && (

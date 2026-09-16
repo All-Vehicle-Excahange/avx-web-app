@@ -23,10 +23,12 @@ import {
   Smartphone,
 } from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Button from "../ui/button";
 import HamburgerDrawer from "../features/home/HamburgerDrawer";
 import AccountPopup from "../features/home/AccountPopup";
+import CitySelector from "./CitySelector";
+import useEscapeKey from "@/hooks/useEscapeKey";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -139,6 +141,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const { push } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isHomePage = pathname === "/" || pathname === "" || pathname === null;
 
   useEffect(() => {
     setIsSearching(false);
@@ -189,17 +192,31 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
     setSelectedIndex(-1);
   }, [searchQuery, showDropdown, combinedItems]);
 
-  // Lock body scroll when mega menu is open and sync global state
+  // Prevent background scroll without hiding the scrollbar (prevents layout shift glitch, same as CitySelector)
   useEffect(() => {
-    if (showDropdown) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    // Update global state for other components like Compare Button
     setIsSearchDropdownOpen(showDropdown);
+    if (!showDropdown) return;
+
+    const preventBackgroundScroll = (e) => {
+      if (searchRef.current && searchRef.current.contains(e.target)) {
+        return; // Allow scrolling inside the search mega menu
+      }
+      if (e.cancelable) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    window.addEventListener("wheel", preventBackgroundScroll, { passive: false, capture: true });
+    window.addEventListener("touchmove", preventBackgroundScroll, { passive: false, capture: true });
+    document.addEventListener("wheel", preventBackgroundScroll, { passive: false, capture: true });
+    document.addEventListener("touchmove", preventBackgroundScroll, { passive: false, capture: true });
+
     return () => {
-      document.body.style.overflow = "unset";
+      window.removeEventListener("wheel", preventBackgroundScroll, { capture: true });
+      window.removeEventListener("touchmove", preventBackgroundScroll, { capture: true });
+      document.removeEventListener("wheel", preventBackgroundScroll, { capture: true });
+      document.removeEventListener("touchmove", preventBackgroundScroll, { capture: true });
       setIsSearchDropdownOpen(false);
     };
   }, [showDropdown]);
@@ -242,19 +259,33 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   }, []);
 
   const searchRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  const closeSearchDropdown = useCallback(() => {
+    setShowDropdown(false);
+    if (searchInputRef.current) {
+      searchInputRef.current.blur();
+    }
+    if (typeof document !== "undefined" && document.activeElement && typeof document.activeElement.blur === "function") {
+      document.activeElement.blur();
+    }
+  }, []);
+
+  // Close search dropdown and remove focus cursor on Escape key press
+  useEscapeKey(showDropdown, closeSearchDropdown);
 
   // Click outside to close search dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showDropdown && searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowDropdown(false);
+        closeSearchDropdown();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showDropdown]);
+  }, [showDropdown, closeSearchDropdown]);
 
   const sellDropdownRef = useRef(null);
   useEffect(() => {
@@ -685,8 +716,16 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       {/* Background Overlay for Search */}
       {showDropdown && (
         <div
-          className="fixed inset-0 bg-black/60 z-1090 transition-opacity"
-          onClick={() => setShowDropdown(false)}
+          className="fixed inset-0 bg-black/60 z-1090 transition-opacity overscroll-contain"
+          onClick={closeSearchDropdown}
+          onWheel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         />
       )}
       <div
@@ -699,6 +738,21 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           </div>
         )}
 
+        {/* ================= TOP MINI BAR (CITY SELECTOR - HOME ONLY) ================= */}
+        {!insideDrawer && isHomePage && (
+          <div className={`pointer-events-auto w-full transition-all duration-300 ${
+            heroMode && !scrolled
+              ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border-b border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
+              : 'bg-secondary/95 backdrop-blur-md text-primary border-b border-white/10 shadow-xs'
+          }`}>
+            <div className="w-full px-2.5 sm:px-4 md:px-6 lg:px-8 mx-auto h-7 sm:h-8 flex items-center justify-between">
+              <div className="flex items-center">
+                <CitySelector heroMode={heroMode} scrolled={scrolled} />
+              </div>
+            </div>
+          </div>
+        )}
+
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
           ${heroMode
@@ -708,53 +762,55 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
               : "bg-primary text-secondary h-16"
             }`}
         >
-          <div className="relative w-full px-2.5 sm:px-4 md:px-8 mx-auto h-full flex items-center justify-between">
+          <div className="relative w-full px-2.5 sm:px-4 md:px-6 lg:px-8 mx-auto h-full flex items-center justify-between">
             {/* LEFT */}
-            <Link
-              href="/"
-              onClick={insideDrawer ? onClose : undefined}
-              className={`flex items-center px-2.5 sm:px-4 md:px-5 gap-2 sm:gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
-                ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
-                : "h-10 md:h-11 bg-secondary rounded-full text-primary"
-                }`}
-            >
-              {!insideDrawer && (
-                <>
-                  {menuOpen ? (
-                    <X
-                      className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setMenuOpen(false);
-                      }}
-                    />
-                  ) : (
-                    <Menu
-                      className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setMenuOpen(true);
-                      }}
-                    />
-                  )}
-                  <div className="w-px h-5 bg-current opacity-30" />
-                </>
-              )}
-              <div className="flex flex-col items-start justify-center">
-                <Image
-                  src="/logo/logo.webp"
-                  alt="Reecomm Logo"
-                  width={120}
-                  height={24}
-                  className="h-5 md:h-6 w-auto object-contain block"
-                />
-                <span className="text-[7px] font-medium opacity-60 uppercase tracking-wider pl-0.5 mt-0.5">
-                  Product by Quba Infotech
-                </span>
-              </div>
-            </Link>
+            <div className="flex items-center">
+              <Link
+                href="/"
+                onClick={insideDrawer ? onClose : undefined}
+                className={`flex items-center px-2.5 sm:px-4 md:px-5 gap-2 sm:gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
+                  ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
+                  : "h-10 md:h-11 bg-secondary rounded-full text-primary"
+                  }`}
+              >
+                {!insideDrawer && (
+                  <>
+                    {menuOpen ? (
+                      <X
+                        className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setMenuOpen(false);
+                        }}
+                      />
+                    ) : (
+                      <Menu
+                        className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setMenuOpen(true);
+                        }}
+                      />
+                    )}
+                    <div className="w-px h-5 bg-current opacity-30" />
+                  </>
+                )}
+                <div className="flex flex-col items-start justify-center">
+                  <Image
+                    src="/logo/logo.webp"
+                    alt="Reecomm Logo"
+                    width={120}
+                    height={24}
+                    className="h-5 md:h-6 w-auto object-contain block"
+                  />
+                  <span className="text-[7px] font-medium opacity-60 uppercase tracking-wider pl-0.5 mt-0.5">
+                    Product by Quba Infotech
+                  </span>
+                </div>
+              </Link>
+            </div>
 
             {/* ================= CENTER SEARCH ================= */}
             <div
@@ -762,26 +818,26 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
               className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
             >
               {/* Search Bar Container */}
-              <div className={`relative flex items-center h-[52px] w-[440px] xl:w-[530px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
+              <div className={`relative flex items-center h-[44px] md:h-[46px] w-[340px] lg:w-[440px] xl:w-[530px] 2xl:w-[580px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
                 ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
                 : 'bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm'
                 }`}>
 
                 {/* Search Input */}
                 <div className="flex-1 flex items-center h-full relative pl-2">
-                  <Search className={`w-4 h-4 ml-4 mr-2 shrink-0 ${heroMode && !scrolled ? 'text-white/80' : 'text-gray-400'}`} />
+                  <Search className={`w-4 h-4 ml-3 mr-2 shrink-0 ${heroMode && !scrolled ? 'text-white/80' : 'text-gray-400'}`} />
 
                   {/* Animated Vertical Slider Placeholder */}
                   {!searchQuery && (
-                    <div className="absolute inset-y-0 left-[48px] right-[40px] pointer-events-none overflow-hidden">
+                    <div className="absolute inset-y-0 left-[44px] right-[40px] pointer-events-none overflow-hidden">
                       <div
                         className={`flex flex-col ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
-                        style={{ transform: `translateY(-${placeholderIdx * 52}px)` }}
+                        style={{ transform: `translateY(-${placeholderIdx * 46}px)` }}
                       >
                         {placeholderTexts.map((text, idx) => (
                           <span
                             key={idx}
-                            className={`flex items-center h-[52px] shrink-0 text-[14px] font-medium ${heroMode && !scrolled ? 'text-white/70' : 'text-gray-400'
+                            className={`flex items-center h-[46px] shrink-0 text-[13px] font-medium ${heroMode && !scrolled ? 'text-white/70' : 'text-gray-400'
                               }`}
                           >
                             {text}
@@ -792,6 +848,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                   )}
 
                   <input
+                    ref={searchInputRef}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onMouseEnter={loadSuggestions}
@@ -827,7 +884,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           } else if (selected.username) {
                             push(`/auto-consultant/${selected.username}`);
                           }
-                          setShowDropdown(false);
+                          closeSearchDropdown();
                           setSelectedIndex(-1);
                         } else if (searchQuery.trim()) {
                           setIsSearching(true);
@@ -840,20 +897,21 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           push(
                             `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
                           );
-                          setShowDropdown(false);
+                          closeSearchDropdown();
                         } else if (selectedBrand !== "All") {
                           setIsSearching(true);
                           trackMetaProductSearch(selectedBrand);
                           push(
                             `/search?brand=${encodeURIComponent(selectedBrand)}`,
                           );
-                          setShowDropdown(false);
+                          closeSearchDropdown();
                         }
                       } else if (e.key === "Escape") {
-                        setShowDropdown(false);
+                        e.preventDefault();
+                        closeSearchDropdown();
                       }
                     }}
-                    className={`w-full h-full bg-transparent focus:outline-none text-[14px] font-medium z-10 relative ${heroMode && !scrolled
+                    className={`w-full h-full bg-transparent focus:outline-none text-[13px] font-medium z-10 relative ${heroMode && !scrolled
                       ? 'text-white'
                       : 'text-gray-800'
                       }`}
@@ -900,14 +958,14 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       setShowDropdown(false);
                     }
                   }}
-                  className="ml-auto mr-1.5 w-[40px] h-[40px] rounded-full bg-fourth text-white flex items-center justify-center cursor-pointer hover:bg-fourth/90 hover:shadow-md transition-all shrink-0"
+                  className="ml-auto mr-1.5 w-[34px] h-[34px] rounded-full bg-fourth text-white flex items-center justify-center cursor-pointer hover:bg-fourth/90 hover:shadow-md transition-all shrink-0"
                 >
-                  {isSearching ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Search size={16} />}
+                  {isSearching ? <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Search size={15} />}
                 </div>
 
                 {/* Search Mega Menu Dropdown */}
                 <div
-                  className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden
+                  className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden overscroll-contain
                     transition-all duration-300 origin-top
                     ${showDropdown ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"}
                     ${!searchQuery ? "h-[480px]" : "max-h-[400px]"}
@@ -916,10 +974,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                 >
                   {!searchQuery ? (
                     /* Mega Menu Layout for Empty State (NEW DESIGN) */
-                    <div className="flex flex-col md:flex-row w-full h-full bg-white">
+                    <div className="flex flex-col md:flex-row w-full h-full bg-white overscroll-contain">
                       {/* Left Side - Brands */}
-                      <div className="flex-[2.2] border-r border-gray-100 flex flex-col overflow-hidden shrink-0">
-                        <div className="p-5 pb-0 flex-1 overflow-y-auto scrollbar-hide relative">
+                      <div className="flex-[2.2] border-r border-gray-100 flex flex-col overflow-hidden shrink-0 overscroll-contain">
+                        <div className="p-5 pb-0 flex-1 overflow-y-auto scrollbar-hide relative overscroll-contain">
                           {/* Popular Brands Header */}
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2 text-fourth font-bold">
@@ -939,30 +997,30 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                                 return popularNames.some(name => makeName.includes(name));
                               });
                               const displayBrands = popularBrands.length > 0 ? popularBrands.slice(0, 6) : apiBrandsList.slice(0, 6);
-                              
+
                               return displayBrands.map((brand, idx) => (
-                              <div
-                                key={`popular-${idx}`}
-                                onClick={() => {
-                                  saveSearchMutation.mutate(brand.makeName);
-                                  trackMetaProductSearch(brand.makeName);
-                                  push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
-                                  setShowDropdown(false);
-                                }}
-                                className="flex flex-col items-center justify-center gap-1 p-1.5 rounded-xl border border-gray-100 cursor-pointer hover:border-fourth hover:shadow-sm transition-all group"
-                              >
-                                {brand.logo ? (
-                                  <div className="h-9 w-12 flex items-center justify-center">
-                                    <img src={brand.logo} alt={brand.makeDisplay} className="max-h-full max-w-full object-contain" />
-                                  </div>
-                                ) : (
-                                  <div className="h-9 w-12 flex items-center justify-center bg-gray-50 rounded text-gray-400">
-                                    <CarFront className="w-5 h-5" />
-                                  </div>
-                                )}
-                                <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors">{brand.makeDisplay}</span>
-                              </div>
-                            ))
+                                <div
+                                  key={`popular-${idx}`}
+                                  onClick={() => {
+                                    saveSearchMutation.mutate(brand.makeName);
+                                    trackMetaProductSearch(brand.makeName);
+                                    push(`/search?brand=${encodeURIComponent(brand.makeName)}`);
+                                    setShowDropdown(false);
+                                  }}
+                                  className="flex flex-col items-center justify-center gap-1 p-1.5 rounded-xl border border-gray-100 cursor-pointer hover:border-fourth hover:shadow-sm transition-all group"
+                                >
+                                  {brand.logo ? (
+                                    <div className="h-9 w-12 flex items-center justify-center">
+                                      <img src={brand.logo} alt={brand.makeDisplay} className="max-h-full max-w-full object-contain" />
+                                    </div>
+                                  ) : (
+                                    <div className="h-9 w-12 flex items-center justify-center bg-gray-50 rounded text-gray-400">
+                                      <CarFront className="w-5 h-5" />
+                                    </div>
+                                  )}
+                                  <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors">{brand.makeDisplay}</span>
+                                </div>
+                              ))
                             })()}
                           </div>
 
@@ -1023,7 +1081,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       </div>
 
                       {/* Right Side - Recent & Trending */}
-                      <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative border-l border-gray-100/50">
+                      <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative border-l border-gray-100/50 overscroll-contain">
                         <div className="p-5 space-y-5 flex-1">
                           {/* Recent Searches */}
                           <div>
@@ -1095,7 +1153,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                     </div>
                   ) : (
                     /* Suggestions Section for Active Search */
-                    <div className="w-full bg-white overflow-y-auto max-h-[350px] p-4 scrollbar-hide h-full">
+                    <div className="w-full bg-white overflow-y-auto max-h-[350px] p-4 scrollbar-hide h-full overscroll-contain">
                       {filteredSuggestions.length > 0 && (
                         <div className="mb-2">
                           <div className="px-3 py-2 flex items-center justify-between">
@@ -1403,7 +1461,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         <img
                           src={user.logoUrl}
                           alt="Profile"
-                          className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover shrink-0 bg-white"e
+                          className="w-6 h-6 md:w-7 md:h-7 rounded-full object-cover shrink-0 bg-white"
                         />
                       ) : (
                         <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-fourth text-white flex items-center justify-center text-[10px] md:text-xs font-semibold shrink-0">

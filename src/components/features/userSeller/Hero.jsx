@@ -178,15 +178,15 @@ function Hero() {
 
           {/* CTAs */}
           <div
-            className={`flex flex-col sm:flex-row items-center gap-4 mb-12 transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`flex flex-row items-center gap-2 sm:gap-4 mb-12 transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
           >
             {!(mounted && isLoggedIn && role === "CONSULTATION") && (
-              <Button variant="ghost" size="md" onClick={handleStartSelling} loading={checkingStatus}>
+              <Button variant="ghost" size="md" onClick={handleStartSelling} loading={checkingStatus} className="whitespace-nowrap text-sm px-4 sm:text-base sm:px-6">
                 Start Selling
               </Button>
             )}
-            <Button variant="ghost" size="md" href={"/search"}>
+            <Button variant="ghost" size="md" href={"/search"} className="whitespace-nowrap text-sm px-4 sm:text-base sm:px-6">
               Explore Market
             </Button>
           </div>

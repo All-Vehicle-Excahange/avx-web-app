@@ -276,8 +276,8 @@ export default function VehicleCard({
         className={`
         group/card relative flex flex-row md:flex-col
         rounded-2xl overflow-hidden
-         text-primary
-        md:max-w-sm w-full sm:w-[392px]
+        text-primary
+        w-full
         border-2 border-third/30
         cursor-pointer
         ${!isSold ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : "opacity-60 grayscale-[0.2]"}

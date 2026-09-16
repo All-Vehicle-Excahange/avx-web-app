@@ -69,7 +69,7 @@ export default function FilterWithCard({
 
       case "recommended":
       default:
-        return { sortBy: "minVehiclePrice", direction: "desc" };
+        return { sortBy: undefined, direction: undefined };
     }
   };
 
@@ -102,13 +102,67 @@ export default function FilterWithCard({
   const [selectedServices, setSelectedServices] = useState([]);
 
   // ── Price range slider ──
-  const [minPrice, setMinPrice] = useState(50000);
-  const [maxPrice, setMaxPrice] = useState(2000000);
-  const MIN = 50000;
-  const MAX = 2000000;
+  const MIN = 0;
+  const fallbackMax = 2000000;
+  const [serverMaxPrice, setServerMaxPrice] = useState(null);
+  const userPriceInteractedRef = useRef(false);
+
+  const parsePriceRangeValue = (val) => {
+    if (!val) return null;
+    val = val.trim().toUpperCase().replace(/\+/g, "");
+    if (val.includes("ABOVE")) {
+      const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? 2000000 : num * 100000;
+    }
+    if (val.endsWith("CR") || val.includes("CR")) {
+      const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? null : num * 10000000;
+    }
+    if (val.endsWith("L") || val.includes("L")) {
+      const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? null : num * 100000;
+    }
+    if (val.endsWith("K") || val.includes("K")) {
+      const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? null : num * 1000;
+    }
+    const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+    return isNaN(num) ? null : num;
+  };
+
+  const urlPriceRange = searchParams.get("priceRange");
+  const urlMinPrice = searchParams.get("minPrice");
+  const urlMaxPrice = searchParams.get("maxPrice");
+
+  const [minPrice, setMinPrice] = useState(() => {
+    if (urlPriceRange) {
+      const parts = urlPriceRange.split("-").map((p) => p.trim());
+      if (parts.length === 2) {
+        const pMin = parsePriceRangeValue(parts[0]);
+        if (pMin !== null) return pMin;
+      }
+    }
+    if (urlMinPrice) return Number(urlMinPrice);
+    return 0;
+  });
+
+  const [maxPrice, setMaxPrice] = useState(() => {
+    if (urlPriceRange) {
+      const parts = urlPriceRange.split("-").map((p) => p.trim());
+      if (parts.length === 2) {
+        const pMax = parsePriceRangeValue(parts[1]);
+        if (pMax !== null) return pMax;
+      }
+    }
+    if (urlMaxPrice) return Number(urlMaxPrice);
+    return fallbackMax;
+  });
+
+  const MAX = serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
+  const PRICE_STEP = MAX > 2000000 ? 25000 : (MAX > 500000 ? 10000 : 5000);
 
   // ── Price range from URL ──
-  const [priceRange, setPriceRange] = useState("");
+  const [priceRange, setPriceRange] = useState(() => urlPriceRange || "");
 
   // ── Pagination ──
   const [currentPage, setCurrentPage] = useState(1);
@@ -310,25 +364,40 @@ export default function FilterWithCard({
     const fetchServices = async () => {
       try {
         const res = await getAllConsultService({ pageNo: 1, size: 20 });
-        if (res.success && Array.isArray(res.data)) {
-          const apiServices = res.data.map((service) => ({
-            value: service,
-            label: service
-              .split("_")
-              .map(
-                (word) =>
-                  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-              )
-              .join(" "),
-          }));
-          setServices(apiServices);
+        const serviceList = Array.isArray(res?.data?.services)
+          ? res.data.services
+          : (Array.isArray(res?.data) ? res.data : []);
+
+        const apiServices = serviceList.map((service) => ({
+          value: service,
+          label: service
+            .split("_")
+            .map(
+              (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+            )
+            .join(" "),
+        }));
+        setServices(apiServices);
+
+        const apiMax = res?.data?.maxFilterPrice;
+        if (typeof apiMax === "number" && apiMax > 0) {
+          setServerMaxPrice(apiMax);
+          const hasUrlPrice = Boolean(
+            searchParams.get("priceRange") ||
+            searchParams.get("minPrice") ||
+            searchParams.get("maxPrice")
+          );
+          if (!userPriceInteractedRef.current && !hasUrlPrice) {
+            setMaxPrice(apiMax);
+          }
         }
       } catch (err) {
         console.error("Failed to load services:", err);
       }
     };
     fetchServices();
-  }, []);
+  }, [priceRange]);
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
@@ -429,25 +498,10 @@ export default function FilterWithCard({
     // Store price range from URL and parse to numeric values
     if (priceRangeParam) {
       setPriceRange(priceRangeParam);
-      // Parse "1L-2L" style price range to actual numbers
-      const parsePriceValue = (val) => {
-        if (!val) return null;
-        val = val.trim().toUpperCase();
-        if (val === "ABOVE") return 2000000;
-        if (val.endsWith("L")) {
-          return parseFloat(val.replace("L", "")) * 100000;
-        } else if (val.endsWith("CR")) {
-          return parseFloat(val.replace("CR", "")) * 10000000;
-        } else if (val.endsWith("K")) {
-          return parseFloat(val.replace("K", "")) * 1000;
-        }
-        return parseFloat(val) || null;
-      };
-
       const parts = priceRangeParam.split("-").map((p) => p.trim());
       if (parts.length === 2) {
-        const parsedMin = parsePriceValue(parts[0]);
-        const parsedMax = parsePriceValue(parts[1]);
+        const parsedMin = parsePriceRangeValue(parts[0]);
+        const parsedMax = parsePriceRangeValue(parts[1]);
         if (parsedMin !== null) setMinPrice(parsedMin);
         if (parsedMax !== null) setMaxPrice(parsedMax);
       }
@@ -509,20 +563,10 @@ export default function FilterWithCard({
 
     // Parse priceRange from URL into minVehiclePrice / maxVehiclePrice
     if (priceRangeParam) {
-      const parsePriceValue = (val) => {
-        if (!val) return null;
-        val = val.trim().toUpperCase();
-        if (val === "ABOVE") return 2000000;
-        if (val.endsWith("L")) return parseFloat(val.replace("L", "")) * 100000;
-        if (val.endsWith("CR"))
-          return parseFloat(val.replace("CR", "")) * 10000000;
-        if (val.endsWith("K")) return parseFloat(val.replace("K", "")) * 1000;
-        return parseFloat(val) || null;
-      };
       const parts = priceRangeParam.split("-").map((p) => p.trim());
       if (parts.length === 2) {
-        const parsedMin = parsePriceValue(parts[0]);
-        const parsedMax = parsePriceValue(parts[1]);
+        const parsedMin = parsePriceRangeValue(parts[0]);
+        const parsedMax = parsePriceRangeValue(parts[1]);
         if (parsedMin !== null) initialPayload.minVehiclePrice = parsedMin;
         if (parsedMax !== null) initialPayload.maxVehiclePrice = parsedMax;
       }
@@ -605,10 +649,20 @@ export default function FilterWithCard({
       payload.services = selectedServices;
     }
 
-    // Price range (vehicle price) — only include when not at full range
-    if (minPrice !== MIN || maxPrice !== MAX) {
-      payload.minVehiclePrice = minPrice;
-      payload.maxVehiclePrice = maxPrice;
+    const hasPriceFilter =
+      userPriceInteractedRef.current ||
+      Boolean(priceRange) ||
+      Boolean(searchParams.get("minPrice")) ||
+      Boolean(searchParams.get("maxPrice")) ||
+      Boolean(searchParams.get("priceRange"));
+
+    if (hasPriceFilter) {
+      if (typeof minPrice === "number") {
+        payload.minVehiclePrice = minPrice;
+      }
+      if (typeof maxPrice === "number") {
+        payload.maxVehiclePrice = maxPrice;
+      }
     }
 
     // if (priceRange) {
@@ -636,19 +690,20 @@ export default function FilterWithCard({
 
   const handleTrackClick = (e) => {
     if (e.target.type === "range") return;
+    userPriceInteractedRef.current = true;
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(1, offsetX / rect.width));
     const rawValue = MIN + percentage * (MAX - MIN);
-    const clickedValue = Math.round(rawValue / 50000) * 50000;
+    const clickedValue = Math.round(rawValue / PRICE_STEP) * PRICE_STEP;
 
     const distToMin = Math.abs(clickedValue - minPrice);
     const distToMax = Math.abs(clickedValue - maxPrice);
 
     if (distToMin < distToMax) {
-      setMinPrice(Math.min(clickedValue, maxPrice - 50000));
+      setMinPrice(Math.min(clickedValue, maxPrice - PRICE_STEP));
     } else {
-      setMaxPrice(Math.max(clickedValue, minPrice + 50000));
+      setMaxPrice(Math.max(clickedValue, minPrice + PRICE_STEP));
     }
   };
 
@@ -723,8 +778,9 @@ export default function FilterWithCard({
     setSelectedServices([]);
 
     // Reset price range to full range
-    setMinPrice(MIN);
-    setMaxPrice(MAX);
+    userPriceInteractedRef.current = false;
+    setMinPrice(0);
+    setMaxPrice(serverMaxPrice || fallbackMax);
 
     // Reset location filters
     setSelectedStateId(null);
@@ -814,7 +870,14 @@ export default function FilterWithCard({
       if (selectedTownName) locationParts.push(selectedTownName);
       tags.push(locationParts.join(", "));
     }
-    if (minPrice !== MIN || maxPrice !== MAX)
+    const hasPriceFilter =
+      userPriceInteractedRef.current ||
+      Boolean(priceRange) ||
+      Boolean(searchParams.get("minPrice")) ||
+      Boolean(searchParams.get("maxPrice")) ||
+      Boolean(searchParams.get("priceRange"));
+
+    if (hasPriceFilter)
       tags.push(
         `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
       );
@@ -838,8 +901,9 @@ export default function FilterWithCard({
 
     // 1. Price
     if (lower.includes("₹") || lower.includes("l–")) {
-      setMinPrice(MIN);
-      setMaxPrice(MAX);
+      userPriceInteractedRef.current = false;
+      setMinPrice(0);
+      setMaxPrice(serverMaxPrice || fallbackMax);
       return;
     }
     // 2. Rating
@@ -1117,11 +1181,12 @@ export default function FilterWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={PRICE_STEP}
                     value={minPrice}
-                    onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMinPrice(Math.min(+e.target.value, maxPrice - PRICE_STEP));
+                    }}
                     className="dual-range z-30"
                   />
 
@@ -1129,18 +1194,19 @@ export default function FilterWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={PRICE_STEP}
                     value={maxPrice}
-                    onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMaxPrice(Math.max(+e.target.value, minPrice + PRICE_STEP));
+                    }}
                     className="dual-range z-40"
                   />
                 </div>
 
                 <div className="flex justify-between text-xs text-primary/70 mb-1">
                   <span>₹{minPrice.toLocaleString("en-IN")}</span>
-                  <span>{isNaN(maxPrice) || maxPrice >= MAX ? `₹${MAX.toLocaleString("en-IN")}+` : `₹${maxPrice.toLocaleString("en-IN")}`}</span>
+                  <span>₹{(isNaN(maxPrice) ? MAX : Math.min(maxPrice, MAX)).toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </FilterSection>
@@ -1505,11 +1571,12 @@ export default function FilterWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={PRICE_STEP}
                     value={minPrice}
-                    onChange={(e) =>
-                      setMinPrice(Math.min(+e.target.value, maxPrice - 50000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMinPrice(Math.min(+e.target.value, maxPrice - PRICE_STEP));
+                    }}
                     onTouchEnd={() => {
                       const p = buildPayload();
                       setCurrentPage(1);
@@ -1521,11 +1588,12 @@ export default function FilterWithCard({
                     type="range"
                     min={MIN}
                     max={MAX}
-                    step={50000}
+                    step={PRICE_STEP}
                     value={maxPrice}
-                    onChange={(e) =>
-                      setMaxPrice(Math.max(+e.target.value, minPrice + 50000))
-                    }
+                    onChange={(e) => {
+                      userPriceInteractedRef.current = true;
+                      setMaxPrice(Math.max(+e.target.value, minPrice + PRICE_STEP));
+                    }}
                     onTouchEnd={() => {
                       const p = buildPayload();
                       setCurrentPage(1);
@@ -1536,7 +1604,7 @@ export default function FilterWithCard({
                 </div>
                 <div className="flex justify-between text-xs text-secondary/70 mb-1">
                   <span>₹{minPrice.toLocaleString("en-IN")}</span>
-                  <span>{isNaN(maxPrice) || maxPrice >= MAX ? `₹${MAX.toLocaleString("en-IN")}+` : `₹${maxPrice.toLocaleString("en-IN")}`}</span>
+                  <span>₹{(isNaN(maxPrice) ? MAX : Math.min(maxPrice, MAX)).toLocaleString("en-IN")}</span>
                 </div>
               </div>
             )}

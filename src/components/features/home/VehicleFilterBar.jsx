@@ -744,8 +744,11 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const fetchServices = async () => {
     try {
       const res = await getAllConsultService({ pageNo: 1, size: 20 });
-      if (res.success && Array.isArray(res.data)) {
-        const apiServices = res.data.map((svc) => ({
+      const serviceList = Array.isArray(res?.data?.services)
+        ? res.data.services
+        : (Array.isArray(res?.data) ? res.data : []);
+      if (serviceList.length > 0) {
+        const apiServices = serviceList.map((svc) => ({
           value: svc,
           label: svc
             .split("_")
