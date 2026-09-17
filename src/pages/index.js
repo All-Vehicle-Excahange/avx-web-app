@@ -20,6 +20,7 @@ import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
 import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
 import HomePopularSearches from "@/components/features/home/HomePopularSearches";
+import HomeSitelinkNav from "@/components/features/home/HomeSitelinkNav";
 
 function Home() {
   return (
@@ -127,42 +128,36 @@ function Home() {
                 {
                   "@type": "SiteNavigationElement",
                   position: 1,
-                  name: "Start with Reecomm",
-                  url: "https://www.reecomm.com/start",
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  position: 2,
-                  name: "Sell your car on Reecomm",
-                  url: "https://www.reecomm.com/become-seller",
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  position: 3,
                   name: "Become a consultant",
                   url: "https://www.reecomm.com/become-consultant",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 4,
-                  name: "Buy used cars",
+                  position: 2,
+                  name: "Become a seller",
+                  url: "https://www.reecomm.com/become-seller",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 3,
+                  name: "Buy used cars near you",
                   url: "https://www.reecomm.com/search/buy-used-cars",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 5,
-                  name: "Buy used bikes",
+                  position: 4,
+                  name: "Buy used bikes near you",
                   url: "https://www.reecomm.com/search/buy-used-two-wheelers",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 6,
-                  name: "Auto consultants on Reecomm",
-                  url: "https://www.reecomm.com/consult/discovery",
+                  position: 5,
+                  name: "Explore vehicles",
+                  url: "https://www.reecomm.com/start",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 7,
+                  position: 6,
                   name: "Download the Reecomm app",
                   url: "https://www.reecomm.com/download",
                 },
@@ -172,6 +167,7 @@ function Home() {
         />
       </Head>
       <HeroSection fullWidth />
+      <HomeSitelinkNav />
       {/* <RecentlyVisitedSection /> */}
       <Layout>
         <ShowcaseSection />

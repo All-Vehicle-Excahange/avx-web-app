@@ -229,12 +229,14 @@ export function buildSearchLandingSeo({
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
     const hubTitle = isTwoWheeler
-      ? "Used Bikes for Sale | Reecomm"
-      : "Used Cars for Sale | Reecomm";
-    const hubH1 = isTwoWheeler ? "Used Bikes for Sale" : "Used Cars for Sale";
+      ? "Buy Used Bikes Near You | Reecomm"
+      : "Buy Used Cars Near You | Reecomm";
+    const hubH1 = isTwoWheeler
+      ? "Buy used bikes near you"
+      : "Buy used cars near you";
     const hubDescription = isTwoWheeler
-      ? `Browse ${countBit}verified used bikes and two-wheelers for sale on Reecomm. Compare prices, photos, and inspection reports before you buy.`
-      : `Browse ${countBit}verified used cars for sale across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+      ? `Browse ${countBit}verified used bikes and two-wheelers near you on Reecomm. Compare prices, photos, and inspection reports before you buy.`
+      : `Browse ${countBit}verified used cars near you across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
       h1: hubH1,

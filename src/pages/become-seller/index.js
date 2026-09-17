@@ -16,10 +16,10 @@ function index() {
   return (
     <>
       <Head>
-        <title>Sell Your Car on Reecomm — Faster, Trusted</title>
+        <title>Become a Seller on Reecomm | Sell Your Car</title>
         <meta
           name="description"
-          content="Sell your car faster on India's trusted platform Reecomm. List free, reach verified buyers, inquire securely."
+          content="Become a seller on Reecomm — list your used car free, reach verified buyers, and sell faster with secure inquiries."
         />
         <meta
           name="keywords"
@@ -32,11 +32,11 @@ function index() {
         <meta property="og:url" content="https://www.reecomm.com/become-seller" />
         <meta
           property="og:title"
-          content="Sell Your Car on Reecomm — Faster, Trusted"
+          content="Become a Seller on Reecomm | Sell Your Car"
         />
         <meta
           property="og:description"
-          content="Sell your car faster on India's trusted platform Reecomm. List free, reach verified buyers, inquire securely."
+          content="Become a seller on Reecomm — list your used car free, reach verified buyers, and sell faster with secure inquiries."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta
@@ -49,7 +49,7 @@ function index() {
         <meta name="twitter:site" content="@reecomm" />
         <meta
           name="twitter:title"
-          content="Sell Your Car on Reecomm — Faster, Trusted"
+          content="Become a Seller on Reecomm | Sell Your Car"
         />
         <meta
           name="twitter:description"

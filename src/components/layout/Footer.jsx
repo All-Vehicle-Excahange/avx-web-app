@@ -11,8 +11,8 @@ import {
 import Image from "next/image";
 
 const DEFAULT_BUY_LINKS = [
-  { label: "Buy used cars", href: "/search/buy-used-cars" },
-  { label: "Buy used bikes", href: "/search/buy-used-two-wheelers" },
+  { label: "Buy used cars near you", href: "/search/buy-used-cars" },
+  { label: "Buy used bikes near you", href: "/search/buy-used-two-wheelers" },
   {
     label: "Reecomm Inspected Vehicles",
     href: "/search?reccomInspected=true",
@@ -28,8 +28,9 @@ const DEFAULT_BUY_LINKS = [
 const footerLinks = {
   buy: DEFAULT_BUY_LINKS,
   sell: [
+    { label: "Become a seller", href: "/become-seller" },
     { label: "Sell your car on Reecomm", href: "/become-seller" },
-    { label: "Start with Reecomm", href: "/start" },
+    { label: "Explore vehicles", href: "/start" },
     { label: "List your two-wheeler", href: "/become-seller" },
     { label: "Request an inspection", href: "/inspection-process" },
     {
@@ -49,8 +50,8 @@ const footerLinks = {
     },
   ],
   company: [
-    { label: "Start with Reecomm", href: "/start" },
-    { label: "Download app", href: "/download" },
+    { label: "Explore vehicles", href: "/start" },
+    { label: "Download the Reecomm app", href: "/download" },
     { label: "About us", href: "/aboutus" },
     { label: "Introducing Reecomm", href: "/introducing-reecomm" },
     { label: "How Reecomm works", href: "/reecomm-works" },
