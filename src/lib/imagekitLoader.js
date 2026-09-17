@@ -7,12 +7,22 @@ export default function imageKitLoader({ src, width, quality }) {
 
   // If it's a full S3 URL, extract the path key
   let path = src;
-  const s3UrlPattern = /https?:\/\/[^\/]+\.s3\.[^\/]+\.amazonaws\.com\//;
+  const s3UrlPattern = /^https?:\/\/[^\/]*s3[^\/]*\.amazonaws\.com\//;
   if (s3UrlPattern.test(src)) {
     path = src.replace(s3UrlPattern, '');
   } else if (src.startsWith('http://') || src.startsWith('https://')) {
     // If it's another external domain, return it as-is with a dummy parameter to satisfy Next.js's check
     return `${src}${src.includes('?') ? '&' : '?'}w=${width}`;
+  }
+  
+  try {
+    path = encodeURI(decodeURIComponent(path));
+  } catch {
+    try {
+      path = encodeURI(decodeURI(path));
+    } catch {
+      // Keep path as is if decoding fails
+    }
   }
 
   // Build the ImageKit transformation parameters
@@ -21,3 +31,4 @@ export default function imageKitLoader({ src, width, quality }) {
   const cleanEndpoint = endpoint.replace(/\/$/, '');
   return `${cleanEndpoint}/${path}?tr=${params.join(',')}`;
 }
+
