@@ -256,11 +256,15 @@ export default function ConsualtVehicleDetails({
                           label: "Specifications",
                           ref: specificationRef,
                         },
-                        {
-                          id: "condition",
-                          label: "Condition",
-                          ref: conditionRef,
-                        },
+                        ...(inspectionDetails
+                          ? [
+                              {
+                                id: "condition",
+                                label: "Condition",
+                                ref: conditionRef,
+                              },
+                            ]
+                          : []),
                         {
                           id: "inspection",
                           label: "Inspection",
@@ -298,14 +302,16 @@ export default function ConsualtVehicleDetails({
                   />
                 </div>
 
-                <div ref={conditionRef}>
-                  <VehicleCondition
-                    vehicle={vehicleOverview}
-                    open={isConditionOpen}
-                    setOpen={setIsConditionOpen}
-                    inspectionDetails={inspectionDetails}
-                  />
-                </div>
+                {inspectionDetails && (
+                  <div ref={conditionRef}>
+                    <VehicleCondition
+                      vehicle={vehicleOverview}
+                      open={isConditionOpen}
+                      setOpen={setIsConditionOpen}
+                      inspectionDetails={inspectionDetails}
+                    />
+                  </div>
+                )}
 
                 <div ref={inspectionRef}>
                   <VehicleSpecsConsualt
