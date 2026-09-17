@@ -11,7 +11,9 @@ import {
   buildStorefrontFaq,
   buildStorefrontDealerSchema,
   buildStorefrontItemListSchema,
+  formatStorefrontDisplayName,
 } from "@/lib/storefrontSeo";
+import { buildStorefrontOgImageUrl } from "@/lib/storefrontOgImage";
 
 function apiBase() {
   const envUrl =
@@ -78,7 +80,8 @@ function StoreFrontPage({ seo }) {
   let displayTitle = seo?.title || "StoreFront Details | Reecomm";
   let displayDescription =
     seo?.description || "View storefront, inventory, and reviews.";
-  let displayImage = seo?.image || "";
+  // Prefer composed 1200×630 OG card for SERP thumbnails — never swap to raw logo
+  const displayImage = seo?.ogImage || seo?.image || "";
   let displayNameForAlt = seo?.displayName || "Auto Consultant";
 
   if (storeDetails) {
@@ -91,8 +94,8 @@ function StoreFrontPage({ seo }) {
       storeDetails?.state ||
       seo?.state ||
       "";
-    if (fetchedStoreName) {
-      displayNameForAlt = fetchedStoreName;
+    if (fetchedStoreName && !seo?.title) {
+      displayNameForAlt = formatStorefrontDisplayName(fetchedStoreName);
       const built = buildStorefrontSeo({
         displayName: fetchedStoreName,
         city,
@@ -102,9 +105,8 @@ function StoreFrontPage({ seo }) {
       });
       displayTitle = built.title;
       displayDescription = built.description;
-    }
-    if (storeDetails.logoUrl) {
-      displayImage = storeDetails.logoUrl;
+    } else if (fetchedStoreName) {
+      displayNameForAlt = formatStorefrontDisplayName(fetchedStoreName);
     }
   }
 
@@ -115,6 +117,7 @@ function StoreFrontPage({ seo }) {
       <Head>
         <title>{displayTitle}</title>
         <meta name="description" content={displayDescription} />
+        <meta name="robots" content="index, follow" />
 
         {seo?.canonical && (
           <link key="canonical" rel="canonical" href={seo.canonical} />
@@ -125,6 +128,8 @@ function StoreFrontPage({ seo }) {
         {displayImage && (
           <>
             <meta key="og:image" property="og:image" content={displayImage} />
+            <meta property="og:image:secure_url" content={displayImage} />
+            <meta property="og:image:type" content="image/png" />
             <meta property="og:image:width" content="1200" />
             <meta property="og:image:height" content="630" />
             <meta property="og:image:alt" content={ogImageAlt} />
@@ -164,7 +169,17 @@ function StoreFrontPage({ seo }) {
             }}
           />
         )}
+        {seo?.webpageSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(seo.webpageSchema),
+            }}
+          />
+        )}
       </Head>
+      {/* First body copy for crawlers (Google often ignores meta when app banner wins) */}
+      <p className="sr-only">{displayDescription}</p>
       <StoreFront />
     </>
   );
@@ -236,11 +251,7 @@ export async function getStaticProps(context) {
 
   const displayName =
     consultationName && consultationName.length > 1
-      ? consultationName
-          .split(" ")
-          .filter(Boolean)
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" ")
+      ? formatStorefrontDisplayName(consultationName)
       : "StoreFront Details";
 
   const currentUsername = store.username || id;
@@ -279,8 +290,14 @@ export async function getStaticProps(context) {
   const firstInventoryImage =
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || "";
 
-  const storefrontImageUrl =
-    store.logoUrl || firstInventoryImage || ogFallback;
+  const logoUrl = store.logoUrl || firstInventoryImage || null;
+  const storefrontImageUrl = logoUrl || ogFallback;
+
+  const prices = vehicles
+    .map((v) => Number(v?.price))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  const minPrice = prices.length ? Math.min(...prices) : null;
+  const maxPrice = prices.length ? Math.max(...prices) : null;
 
   const seoBuilt = buildStorefrontSeo({
     displayName,
@@ -289,6 +306,16 @@ export async function getStaticProps(context) {
     availableVehicles,
     username: currentUsername,
     vehicleWord,
+    minPrice,
+    maxPrice,
+  });
+
+  const ogImage = buildStorefrontOgImageUrl({
+    username: currentUsername,
+    name: seoBuilt.displayName || displayName,
+    city,
+    state,
+    logo: logoUrl || "",
   });
 
   const { schema: faqSchema } = buildStorefrontFaq({
@@ -301,7 +328,7 @@ export async function getStaticProps(context) {
   const dealerSchema = buildStorefrontDealerSchema({
     displayName,
     canonical: currentUrl,
-    logoUrl: store.logoUrl || firstInventoryImage || null,
+    logoUrl: logoUrl || null,
     city,
     state,
     streetAddress,
@@ -312,11 +339,38 @@ export async function getStaticProps(context) {
     availableVehicles,
   });
 
+  // Prefer SERP thumbnail image as primary image; keep raw logo as logo
+  if (ogImage) {
+    dealerSchema.image = [ogImage, ...(logoUrl ? [logoUrl] : [])];
+  }
+
   const itemListSchema = buildStorefrontItemListSchema({
     displayName,
     canonical: currentUrl,
     vehicles,
   });
+
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: seoBuilt.title,
+    description: seoBuilt.description,
+    url: currentUrl,
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: ogImage,
+      width: 1200,
+      height: 630,
+      caption: `${seoBuilt.displayName || displayName} on Reecomm`,
+    },
+    image: ogImage,
+    mainEntity: {
+      "@type": "AutoDealer",
+      name: `${seoBuilt.displayName || displayName} on Reecomm`,
+      url: currentUrl,
+      ...(logoUrl ? { logo: logoUrl } : {}),
+    },
+  };
 
   // Cross-link city hub for crawlers via description enrichment
   const citySlug = city
@@ -331,6 +385,7 @@ export async function getStaticProps(context) {
         description: seoBuilt.description,
         h1: seoBuilt.h1,
         image: storefrontImageUrl,
+        ogImage,
         displayName,
         url: currentUrl,
         canonical: currentUrl,
@@ -343,6 +398,7 @@ export async function getStaticProps(context) {
         dealerSchema,
         faqSchema,
         itemListSchema: itemListSchema || null,
+        webpageSchema,
       },
     },
     revalidate: 60,

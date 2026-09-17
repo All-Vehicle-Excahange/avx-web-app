@@ -16,6 +16,28 @@ export function formatStorefrontLocation(city = "", state = "") {
   return cityT || stateT || "";
 }
 
+function formatInrPrice(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return `₹${Math.round(n).toLocaleString("en-IN")}`;
+}
+
+/** Title-case store names (SAFELINE AUTO → Safeline Auto). */
+export function formatStorefrontDisplayName(name = "") {
+  const raw = String(name || "").trim();
+  if (!raw) return "Auto Consultant";
+  const keepUpper = new Set(["KIA", "BMW", "MG", "BYD", "OLA", "TVS", "SUV", "EV"]);
+  return raw
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => {
+      const upper = w.toUpperCase();
+      if (keepUpper.has(upper)) return upper;
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    })
+    .join(" ");
+}
+
 export function buildStorefrontSeo({
   displayName = "Auto Consultant",
   city = "",
@@ -23,11 +45,14 @@ export function buildStorefrontSeo({
   availableVehicles = 0,
   username = "",
   vehicleWord = "cars",
+  minPrice = null,
+  maxPrice = null,
 } = {}) {
   const cityT = (city || "").trim();
   const stateT = (state || "").trim();
   const location = formatStorefrontLocation(cityT, stateT);
   const loc = location || "India";
+  const name = formatStorefrontDisplayName(displayName);
   const vw = (vehicleWord || "cars").toLowerCase().includes("bike")
     ? "bikes"
     : "cars";
@@ -36,25 +61,37 @@ export function buildStorefrontSeo({
       ? ` Browse ${availableVehicles}+ listed vehicles.`
       : "";
 
-  const brandOnReecomm = `${displayName} on Reecomm`;
+  const brandOnReecomm = `${name} on Reecomm`;
   // Prefer short SERP-stable title; add location only when it still fits ~60 chars
   let title = brandOnReecomm;
   if (location) {
     const withLocation = `${brandOnReecomm} — Used ${vw} in ${location}`;
-    if (withLocation.length <= 60) title = withLocation;
+    if (withLocation.length <= 65) title = withLocation;
   } else {
     const withKind = `${brandOnReecomm} — Used ${vw}`;
-    if (withKind.length <= 60) title = withKind;
+    if (withKind.length <= 65) title = withKind;
+  }
+
+  const minFmt = formatInrPrice(minPrice);
+  const maxFmt = formatInrPrice(maxPrice);
+  let priceBit = "";
+  if (minFmt && maxFmt) {
+    priceBit =
+      minFmt === maxFmt
+        ? ` Price Range ${minFmt}.`
+        : ` Price Range ${minFmt} - ${maxFmt}.`;
+  } else if (minFmt || maxFmt) {
+    priceBit = ` Price Range ${minFmt || maxFmt}.`;
   }
 
   const description = location
-    ? `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw} in ${location}. Compare prices, photos, and reviews — inquire securely.`
-    : `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw}.${countBit} Compare prices, photos, and reviews — inquire securely.`;
+    ? `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw} in ${location}. Compare prices, photos, and reviews — inquire securely.${priceBit}`
+    : `${brandOnReecomm} — browse${availableVehicles > 0 ? ` ${availableVehicles}+` : ""} used ${vw}.${countBit} Compare prices, photos, and reviews — inquire securely.${priceBit}`;
 
   // Visible H1 is store name only; document title keeps "on Reecomm"
-  const h1 = displayName;
+  const h1 = name;
 
-  return { title, description, h1, loc };
+  return { title, description, h1, loc, displayName: name };
 }
 
 export function buildStorefrontFaq({
@@ -69,17 +106,18 @@ export function buildStorefrontFaq({
     availableVehicles > 0
       ? ` They currently list about ${availableVehicles}+ vehicles on Reecomm.`
       : "";
-  const brandOnReecomm = `${displayName} on Reecomm`;
+  const name = formatStorefrontDisplayName(displayName);
+  const brandOnReecomm = `${name} on Reecomm`;
 
   const items = [
     {
-      question: `Who is ${displayName}?`,
+      question: `Who is ${name}?`,
       answer: `${brandOnReecomm} is an automotive consultant with a digital storefront for verified used cars and bikes${locBit}.${countBit}`,
     },
     {
       question: location
-        ? `Where can I buy used cars from ${displayName} near ${location}?`
-        : `Where can I buy used cars from ${displayName}?`,
+        ? `Where can I buy used cars from ${name} near ${location}?`
+        : `Where can I buy used cars from ${name}?`,
       answer: `Browse ${brandOnReecomm} inventory, open a listing for photos and price, then send an inquiry. Always verify RC, insurance, and condition before payment.`,
     },
     {
@@ -125,6 +163,7 @@ export function buildStorefrontDealerSchema({
   const cityT = (city || "").trim();
   const stateT = (state || "").trim();
   const location = formatStorefrontLocation(cityT, stateT);
+  const name = formatStorefrontDisplayName(displayName);
 
   const address =
     cityT || streetAddress
@@ -141,11 +180,11 @@ export function buildStorefrontDealerSchema({
   const schema = {
     "@context": "https://schema.org",
     "@type": ["AutoDealer", "LocalBusiness"],
-    name: `${displayName} on Reecomm`,
+    name: `${name} on Reecomm`,
     url: canonical,
     ...(logoUrl ? { image: logoUrl, logo: logoUrl } : {}),
     description: cleanJoin([
-      `${displayName} on Reecomm sells verified used cars`,
+      `${name} on Reecomm sells verified used cars`,
       location ? `in ${location}` : "",
       ".",
       availableVehicles > 0 ? `${availableVehicles}+ vehicles listed.` : "",
@@ -216,7 +255,7 @@ export function buildStorefrontItemListSchema({
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `${displayName} on Reecomm — Used vehicles`,
+    name: `${formatStorefrontDisplayName(displayName)} on Reecomm — Used vehicles`,
     url: canonical,
     numberOfItems: itemListElement.length,
     itemListElement,

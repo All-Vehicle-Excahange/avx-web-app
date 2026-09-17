@@ -142,6 +142,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isHomePage = pathname === "/" || pathname === "" || pathname === null;
+  const isAutoConsultantPage = pathname?.startsWith("/auto-consultant");
 
   useEffect(() => {
     setIsSearching(false);
@@ -732,7 +733,10 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
         className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
       // style={{ transform: `translateY(${transformY}px)` }}
       >
-        {isMobileBannerVisible && !isMobileBannerTempHidden && atTop && (
+        {isMobileBannerVisible &&
+          !isMobileBannerTempHidden &&
+          atTop &&
+          !isAutoConsultantPage && (
           <div className="pointer-events-auto">
             <MobileAppDownloadBanner onClose={hideMobileBanner} />
           </div>
