@@ -9,7 +9,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleOverviewQuery } from "@/queries/vehicle.queries";
-import { generateDynamicPageTitle, generateDynamicMetaDescription } from "@/lib/helper";
+import {
+  generateDynamicPageTitle,
+  generateDynamicMetaDescription,
+  generateVehicleSlug,
+} from "@/lib/helper";
 
 function Index({ seo }) {
   const router = useRouter();
@@ -319,13 +323,13 @@ export async function getStaticProps(context) {
     ? "http"
     : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
-  const canonicalUrl = `${protocol}://${host}/vehicle/details/${title}/${id}`;
 
   // ── Fallback SEO from slug ──────────────────────────────────────────────
   let finalTitle = "Vehicle Details | Reecomm";
   let finalDescription =
     "Reecomm | Buy used vehicles. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo1.webp`;
+  let canonicalSlug = title || "vehicle";
 
   if (title) {
     // Regex matches slugs like: buy-used-[brand-model]-[year]-[type]-[city]
@@ -374,6 +378,21 @@ export async function getStaticProps(context) {
         const v = json?.data;
 
         if (v) {
+          // Canonical slug from live address (town-city when town exists)
+          const generatedSlug = generateVehicleSlug(v);
+          if (generatedSlug) {
+            canonicalSlug = generatedSlug;
+            // Permanent redirect when URL slug ≠ canonical (SEO equity)
+            if (title && title !== generatedSlug) {
+              return {
+                redirect: {
+                  destination: `/vehicle/details/${generatedSlug}/${id}`,
+                  permanent: true,
+                },
+              };
+            }
+          }
+
           // Real thumbnail from the vehicle record
           const thumbnail =
             v.thumbnailUrl ||
@@ -418,6 +437,8 @@ export async function getStaticProps(context) {
       // API unavailable — slug-derived fallbacks remain active
     }
   }
+
+  const canonicalUrl = `${protocol}://${host}/vehicle/details/${canonicalSlug}/${id}`;
 
   return {
     props: {

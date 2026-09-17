@@ -1,36 +1,8 @@
 import { getSeoVehicles } from "@/services/seo.service";
+import { generateVehicleSlug } from "@/lib/helper";
 
 const BASE_URL = "https://www.reecomm.com";
 const VEHICLES_PER_PAGE = 100;
-
-/**
- * Generate SEO-friendly slug from vehicle data.
- */
-function generateSlug(vehicle) {
-  const brand = (vehicle.makerName || vehicle.makeName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const model = (vehicle.modelName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const year = vehicle.yearOfMfg || vehicle.year || "";
-  const city = (vehicle.cityName || vehicle.address?.city || "")
-    .split(",")[0]
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const type = String(vehicle.vehicleType || vehicle.bodyType || "").toUpperCase();
-  const kind =
-    type.includes("TWO") || type === "BIKE" ? "two-wheelers" : "cars";
-
-  return `buy-used-${brand}-${model}-${year}-${kind}-${city}`
-    .replace(/-+/g, "-")
-    .replace(/-$/, "")
-    .replace(/^-/, "");
-}
 
 function collectImages(vehicle) {
   const images = [];
@@ -79,7 +51,7 @@ export default async function handler(req, res) {
     for (const vehicle of vehicles) {
       if (!vehicle.id) continue;
 
-      const slug = generateSlug(vehicle);
+      const slug = generateVehicleSlug(vehicle);
       const loc = `${BASE_URL}/vehicle/details/${slug}/${vehicle.id}`;
       const lastmod =
         vehicle.updatedAt || vehicle.createdAt || new Date().toISOString();

@@ -60,44 +60,21 @@ export const createSlug = (text = "") => {
     .replace(/--+/g, "-"); // remove multiple -
 };
 
-export const generateVehicleSlug = (data) => {
-  if (!data) return "vehicle";
+import * as vehicleSlugModule from "./vehicleSlug";
 
-  const brandPart = (data.makerName || data.makeName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-");
-  const modelPart = (data.modelName || "").toLowerCase().replace(/\s+/g, "-");
-  const yearPart = data.yearOfMfg || data.year || "";
-  const cityPart = (
-    data.cityName ||
-    data.city ||
-    data.address?.city ||
-    data.location ||
-    ""
-  )
-    .split(",")[0]
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-");
+const vehicleSlug = vehicleSlugModule.default || vehicleSlugModule;
 
-  const isTwoWheeler =
-    (data.vehicleType || data.bodyType || "")
-      .toUpperCase()
-      .includes("TWO") ||
-    (data.vehicleType || "").toUpperCase() === "BIKE";
-  const kind = isTwoWheeler ? "two-wheelers" : "cars";
+/** Canonical VDP slug — town-city when town exists, else city-only. */
+export const generateVehicleSlug = (data) =>
+  vehicleSlug.generateVehicleSlug(data);
 
-  return `buy-used-${brandPart}-${modelPart}-${yearPart}-${kind}-${cityPart}`
-    .replace(/-+/g, "-")
-    .replace(/-$/, "")
-    .replace(/^-/, "");
-};
+/** Canonical path `/vehicle/details/{slug}/{id}`. */
+export const buildCanonicalVehiclePath = (vehicle) =>
+  vehicleSlug.buildCanonicalVehiclePath(vehicle);
 
 export const generateVehicleUrl = (vehicle) => {
   if (!vehicle || !vehicle.id) return "/search";
-
-  const slug = generateVehicleSlug(vehicle);
-  return `/vehicle/details/${slug}/${vehicle.id}`;
+  return vehicleSlug.buildCanonicalVehiclePath(vehicle);
 };
 
 export const generateDynamicPageTitle = (vehicle) => {

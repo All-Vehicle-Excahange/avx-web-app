@@ -1039,11 +1039,9 @@ async function generateSearchIndex() {
       addSlug(`buy-used-cars-${c}`);
       addSlug(`buy-used-two-wheelers-${c}`);
     }
+    // National brand + model hubs (always) — inventory-backed GEO comes from comboHits only
     for (const { brandSlug, modelSlug } of POPULAR_CAR_MODELS) {
       addSlug(`buy-used-${brandSlug}-${modelSlug}-cars`);
-      for (const city of FOCUS_CITIES) {
-        addSlug(`buy-used-${brandSlug}-${modelSlug}-cars-${slugifySegment(city)}`);
-      }
     }
     for (const brand of ALL_CAR_BRANDS) {
       addSlug(`buy-used-${slugifySegment(brand)}-cars`);
@@ -1051,9 +1049,6 @@ async function generateSearchIndex() {
     for (const brand of TWO_WHEELER_BRANDS) {
       const b = slugifySegment(brand);
       addSlug(`buy-used-${b}-two-wheelers`);
-      for (const city of FOCUS_CITIES) {
-        addSlug(`buy-used-${b}-two-wheelers-${slugifySegment(city)}`);
-      }
     }
     const volumeBrands = [
       "Hyundai",
@@ -1070,11 +1065,10 @@ async function generateSearchIndex() {
       "MG",
       "Nissan",
     ];
+    // Brand × city / state only when inventory-backed (comboHits) — avoid empty thin GEO pages
     for (const brand of volumeBrands) {
       const b = slugifySegment(brand);
-      for (const city of FOCUS_CITIES) {
-        addSlug(`buy-used-${b}-cars-${slugifySegment(city)}`);
-      }
+      addSlug(`buy-used-${b}-cars`);
       addSlug(`buy-used-${b}-cars-gujarat`);
     }
     const allowPath = path.join(PUBLIC_DIR, "seo_sitemap_slugs.json");

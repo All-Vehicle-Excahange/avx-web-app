@@ -12,6 +12,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+const { generateVehicleSlug } = require("../lib/vehicleSlug");
 
 const SITE_URL = "https://www.reecomm.com";
 const PAGE_SIZE = 100;
@@ -42,29 +43,7 @@ function escapeXml(str) {
 }
 
 function generateSlug(vehicle) {
-  const brand = (vehicle.makerName || vehicle.makeName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const model = (vehicle.modelName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const year = vehicle.yearOfMfg || vehicle.year || "";
-  const city = (vehicle.cityName || vehicle.address?.city || "")
-    .split(",")[0]
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const type = String(vehicle.vehicleType || vehicle.bodyType || "").toUpperCase();
-  const kind =
-    type.includes("TWO") || type === "BIKE" ? "two-wheelers" : "cars";
-
-  return `buy-used-${brand}-${model}-${year}-${kind}-${city}`
-    .replace(/-+/g, "-")
-    .replace(/-$/, "")
-    .replace(/^-/, "");
+  return generateVehicleSlug(vehicle);
 }
 
 function collectImages(vehicle) {
