@@ -170,7 +170,7 @@ function Inquiries() {
                       loading={isFetchingNextPage}
                       className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                     >
-                      Load More
+                      {isFetchingNextPage ? "Loading..." : "View More"}
                     </Button>
                   </div>
                 )}

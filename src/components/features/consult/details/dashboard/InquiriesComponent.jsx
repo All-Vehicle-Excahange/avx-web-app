@@ -165,25 +165,6 @@ export default function InquiriesComponent() {
 
         {/* RIGHT SIDE TABS */}
         <div className="flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar">
-          <button
-            onClick={() => setActiveTab("inquiry")}
-            className={`flex cursor-pointer items-center gap-2 pb-3 text-sm sm:text-base font-semibold border-b-2 transition-all whitespace-nowrap ${activeTab === "inquiry"
-              ? "border-primary text-primary"
-              : "border-transparent text-third hover:text-primary"
-              }`}
-          >
-            <span>Inquiries</span>
-            {(inquiryKpis?.totalInquiries !== undefined && inquiryKpis?.totalInquiries > 0) && (
-              <span
-                className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === "inquiry"
-                  ? "bg-primary text-secondary"
-                  : "bg-primary/10 text-primary border border-third/20"
-                  }`}
-              >
-                {inquiryKpis.totalInquiries}
-              </span>
-            )}
-          </button>
 
           <button
             onClick={() => setActiveTab("call_leads")}
@@ -204,6 +185,28 @@ export default function InquiriesComponent() {
               </span>
             )}
           </button>
+
+          <button
+            onClick={() => setActiveTab("inquiry")}
+            className={`flex cursor-pointer items-center gap-2 pb-3 text-sm sm:text-base font-semibold border-b-2 transition-all whitespace-nowrap ${activeTab === "inquiry"
+              ? "border-primary text-primary"
+              : "border-transparent text-third hover:text-primary"
+              }`}
+          >
+            <span>Inquiries</span>
+            {(inquiryKpis?.totalInquiries !== undefined && inquiryKpis?.totalInquiries > 0) && (
+              <span
+                className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === "inquiry"
+                  ? "bg-primary text-secondary"
+                  : "bg-primary/10 text-primary border border-third/20"
+                  }`}
+              >
+                {inquiryKpis.totalInquiries}
+              </span>
+            )}
+          </button>
+
+
         </div>
       </div>
 
@@ -349,7 +352,7 @@ export default function InquiriesComponent() {
                       disabled={isFetchingNextPage}
                       className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                     >
-                      {isFetchingNextPage ? "Loading..." : "Load More"}
+                      {isFetchingNextPage ? "Loading..." : "View More"}
                     </Button>
                   </div>
                 )}
@@ -514,7 +517,7 @@ export default function InquiriesComponent() {
                       disabled={isFetchingNextCallLeads}
                       className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
                     >
-                      {isFetchingNextCallLeads ? "Loading..." : "Load More"}
+                      {isFetchingNextCallLeads ? "Loading..." : "View More"}
                     </Button>
                   </div>
                 )}

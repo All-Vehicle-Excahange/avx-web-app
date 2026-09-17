@@ -957,6 +957,9 @@ export default function VehicleCondition({
   // handleResponse already unwraps api.data, so inspectionDetails IS the inspection object directly
   const d = inspectionDetails ?? null;
 
+  // If no inspection/condition data is available, do not render this section
+  if (!d) return null;
+
   // Score sections — null scores are filtered out inside ScoreCard
   const scoreGroups = [
     {

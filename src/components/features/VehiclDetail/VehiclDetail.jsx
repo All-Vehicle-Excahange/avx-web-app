@@ -155,7 +155,7 @@ export default function VehicleDetails({
 
   const { data: inspectionDetails } = useQuery({
     ...getVehicleInspectionDetailsQuery(id),
-    enabled: !!id && (isConditionOpen || isInspectionOpen),
+    enabled: !!id,
   });
 
   const [trackingInspection, setTrackingInspection] = useState(null);
@@ -314,11 +314,15 @@ export default function VehicleDetails({
                           label: "Specifications",
                           ref: specificationRef,
                         },
-                        {
-                          id: "condition",
-                          label: "Condition",
-                          ref: conditionRef,
-                        },
+                        ...(inspectionDetails
+                          ? [
+                              {
+                                id: "condition",
+                                label: "Condition",
+                                ref: conditionRef,
+                              },
+                            ]
+                          : []),
                         {
                           id: "inspection",
                           label: "Inspection",
@@ -359,14 +363,16 @@ export default function VehicleDetails({
                   />
                 </div>
 
-                <div ref={conditionRef}>
-                  <VehicleCondition
-                    vehicle={vehicleOverview}
-                    open={isConditionOpen}
-                    setOpen={setIsConditionOpen}
-                    inspectionDetails={inspectionDetails}
-                  />
-                </div>
+                {inspectionDetails && (
+                  <div ref={conditionRef}>
+                    <VehicleCondition
+                      vehicle={vehicleOverview}
+                      open={isConditionOpen}
+                      setOpen={setIsConditionOpen}
+                      inspectionDetails={inspectionDetails}
+                    />
+                  </div>
+                )}
 
                 <div ref={inspectionRef}>
                   <VehicleSpec
