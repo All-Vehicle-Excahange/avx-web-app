@@ -11,9 +11,8 @@ import {
 import Button from "@/components/ui/button";
 
 const seoInternalLinks = [
-  { label: "Vehicle Marketplace", href: "/search" },
-  { label: "Buy Used Cars India", href: "/search" },
-  { label: "Buy Used Bikes", href: "/search" },
+  { label: "Buy Used Cars", href: "/search/buy-used-cars" },
+  { label: "Buy Used Bikes", href: "/search/buy-used-two-wheelers" },
   { label: "Consultant Storefronts", href: "/become-consultant" },
   { label: "Vehicle Inspection Process", href: "/inspection-process" },
   { label: "Verified Consultants", href: "/why-chose-us" },
@@ -21,7 +20,6 @@ const seoInternalLinks = [
   { label: "Pricing & Plans", href: "/consult" },
   { label: "Trust & Safety", href: "/safety-transparency" },
   { label: "Mobile Apps Download", href: "/download" },
-  { label: "Reecomm How it Works", href: "/reecomm-works" },
   { label: "Help Centre & Support", href: "/help" },
   { label: "About Reecomm", href: "/aboutus" },
 ];

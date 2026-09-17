@@ -11,8 +11,10 @@ import {
 import Image from "next/image";
 
 const DEFAULT_BUY_LINKS = [
-  { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
-  { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
+  { label: "Buy Used Cars", href: "/search/buy-used-cars" },
+  { label: "Buy Used Bikes", href: "/search/buy-used-two-wheelers" },
+  { label: "Become a seller", href: "/become-seller" },
+  { label: "Become a consultant", href: "/become-consultant" },
   {
     label: "Reecomm Inspected Vehicles",
     href: "/search?reccomInspected=true",
@@ -54,7 +56,6 @@ const footerLinks = {
     { label: "Download the Reecomm app", href: "/download" },
     { label: "About us", href: "/aboutus" },
     { label: "Introducing Reecomm", href: "/introducing-reecomm" },
-    { label: "How Reecomm works", href: "/reecomm-works" },
     { label: "Inspection process", href: "/inspection-process" },
     { label: "Careers", href: "/careers" },
     { label: "Blog", href: "/blog" },
@@ -101,8 +102,10 @@ const Footer = () => {
           seen.add(item.href);
           merged.push(item);
         };
-        push({ label: "Used Cars for Sale", href: "/search/buy-used-cars" });
-        push({ label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" });
+        push({ label: "Buy Used Cars", href: "/search/buy-used-cars" });
+        push({ label: "Buy Used Bikes", href: "/search/buy-used-two-wheelers" });
+        push({ label: "Become a seller", href: "/become-seller" });
+        push({ label: "Become a consultant", href: "/become-consultant" });
         geo.forEach(push);
         push({
           label: "Used car buying guide",

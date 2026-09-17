@@ -116,7 +116,7 @@ function Home() {
           }}
         />
 
-        {/* SiteNavigationElement — brand sitelink candidates */}
+        {/* SiteNavigationElement — brand sitelink candidates (cars/bikes first) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -127,38 +127,38 @@ function Home() {
                 {
                   "@type": "SiteNavigationElement",
                   position: 1,
-                  name: "Become a consultant",
-                  url: "https://www.reecomm.com/become-consultant",
+                  name: "Buy Used Cars",
+                  url: "https://www.reecomm.com/search/buy-used-cars",
                 },
                 {
                   "@type": "SiteNavigationElement",
                   position: 2,
+                  name: "Buy Used Bikes",
+                  url: "https://www.reecomm.com/search/buy-used-two-wheelers",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 3,
                   name: "Become a seller",
                   url: "https://www.reecomm.com/become-seller",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 3,
-                  name: "Used Cars for Sale",
-                  url: "https://www.reecomm.com/search/buy-used-cars",
-                },
-                {
-                  "@type": "SiteNavigationElement",
                   position: 4,
-                  name: "Used Bikes for Sale",
-                  url: "https://www.reecomm.com/search/buy-used-two-wheelers",
+                  name: "Become a consultant",
+                  url: "https://www.reecomm.com/become-consultant",
                 },
                 {
                   "@type": "SiteNavigationElement",
                   position: 5,
-                  name: "Explore vehicles",
-                  url: "https://www.reecomm.com/start",
+                  name: "Download app",
+                  url: "https://www.reecomm.com/download",
                 },
                 {
                   "@type": "SiteNavigationElement",
                   position: 6,
-                  name: "Download the Reecomm app",
-                  url: "https://www.reecomm.com/download",
+                  name: "About Reecomm",
+                  url: "https://www.reecomm.com/aboutus",
                 },
               ],
             }),

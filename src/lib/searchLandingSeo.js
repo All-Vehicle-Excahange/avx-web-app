@@ -229,14 +229,14 @@ export function buildSearchLandingSeo({
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
     const hubTitle = isTwoWheeler
-      ? "Used Bikes for Sale | Reecomm"
-      : "Used Cars for Sale | Reecomm";
+      ? "Buy Used Bikes | Reecomm"
+      : "Buy Used Cars | Reecomm";
     const hubH1 = isTwoWheeler
-      ? "Used Bikes for Sale"
-      : "Used Cars for Sale";
+      ? "Buy Used Bikes"
+      : "Buy Used Cars";
     const hubDescription = isTwoWheeler
-      ? `Browse ${countBit}used bikes for sale on Reecomm. Compare verified two-wheelers with prices, photos, and inspection reports before you buy.`
-      : `Browse ${countBit}used cars for sale across India on Reecomm. Compare verified listings with prices, photos, and inspection reports before you buy.`;
+      ? `Buy used bikes on Reecomm. Browse ${countBit}verified two-wheelers with prices, photos, and inspection reports before you buy.`
+      : `Buy used cars across India on Reecomm. Browse ${countBit}verified listings with prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
       h1: hubH1,
@@ -267,7 +267,7 @@ export function buildSearchLandingSeo({
     core = `Used ${brandT} ${vw} in ${cityT}`;
     h1 = core;
   } else if (cityT && !brandT && !modelT && !budgetT) {
-    core = `Used ${vw} in ${cityT}`;
+    core = `Buy Used ${vw} in ${cityT}`;
     h1 = core;
   } else if (brandT && modelT && !cityT) {
     core = `Used ${brandT} ${modelT} ${vw}`;

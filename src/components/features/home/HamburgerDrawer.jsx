@@ -717,9 +717,6 @@ export default function HamburgerDrawer({ open, onClose }) {
                   <MenuLink href="/aboutus" onClick={onClose}>
                     About Reecomm
                   </MenuLink>
-                  <MenuLink href="/reecomm-works" onClick={onClose}>
-                    How Reecomm Works
-                  </MenuLink>
                   <MenuLink href="/why-chose-us" onClick={onClose}>
                     Why Choose Reecomm
                   </MenuLink>

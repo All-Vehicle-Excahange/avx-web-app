@@ -20,6 +20,7 @@ function index() {
   return (
     <>
       <Head>
+        <meta name="robots" content="noindex, follow" />
         <title>How Reecomm Works | Verified Used Vehicle Consultants & Buyer Protection in India</title>
         <meta
           name="description"
