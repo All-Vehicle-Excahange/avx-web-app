@@ -1,5 +1,4 @@
 import { getSeoConsultations } from "@/services/seo.service";
-import { buildStorefrontOgImageUrl } from "@/lib/storefrontOgImage";
 
 const BASE_URL = "https://www.reecomm.com";
 const CONSULTATIONS_PER_PAGE = 100;
@@ -32,16 +31,6 @@ export default async function handler(req, res) {
       const loc = `${BASE_URL}/auto-consultant/${store.username}`;
       const lastmod =
         store.updatedAt || store.createdAt || new Date().toISOString();
-      const name = store.consultationName || store.username;
-      const city = store.city || store?.address?.city || "";
-      const state = store.state || store?.address?.state || "";
-      const ogImage = buildStorefrontOgImageUrl({
-        username: store.username,
-        name,
-        city,
-        state,
-        logo: store.logoUrl || "",
-      });
 
       xml += `  <url>\n`;
       xml += `    <loc>${loc}</loc>\n`;
@@ -49,12 +38,15 @@ export default async function handler(req, res) {
       xml += `    <changefreq>weekly</changefreq>\n`;
       xml += `    <priority>0.7</priority>\n`;
 
-      xml += `    <image:image>\n`;
-      xml += `      <image:loc>${escapeXml(ogImage)}</image:loc>\n`;
-      if (name) {
-        xml += `      <image:title>${escapeXml(name)}</image:title>\n`;
+      // SERP thumbnail signal = storefront logo only
+      if (store.logoUrl) {
+        xml += `    <image:image>\n`;
+        xml += `      <image:loc>${escapeXml(store.logoUrl)}</image:loc>\n`;
+        if (store.consultationName) {
+          xml += `      <image:title>${escapeXml(store.consultationName)}</image:title>\n`;
+        }
+        xml += `    </image:image>\n`;
       }
-      xml += `    </image:image>\n`;
 
       xml += `  </url>\n`;
     }

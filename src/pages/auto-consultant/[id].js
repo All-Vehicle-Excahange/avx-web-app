@@ -13,7 +13,6 @@ import {
   buildStorefrontItemListSchema,
   formatStorefrontDisplayName,
 } from "@/lib/storefrontSeo";
-import { buildStorefrontOgImageUrl } from "@/lib/storefrontOgImage";
 
 function apiBase() {
   const envUrl =
@@ -80,8 +79,8 @@ function StoreFrontPage({ seo }) {
   let displayTitle = seo?.title || "StoreFront Details | Reecomm";
   let displayDescription =
     seo?.description || "View storefront, inventory, and reviews.";
-  // Prefer composed 1200×630 OG card for SERP thumbnails — never swap to raw logo
-  const displayImage = seo?.ogImage || seo?.image || "";
+  // SERP thumbnail = storefront logo only (same image shown on the storefront)
+  let displayImage = seo?.image || "";
   let displayNameForAlt = seo?.displayName || "Auto Consultant";
 
   if (storeDetails) {
@@ -108,6 +107,9 @@ function StoreFrontPage({ seo }) {
     } else if (fetchedStoreName) {
       displayNameForAlt = formatStorefrontDisplayName(fetchedStoreName);
     }
+    if (storeDetails.logoUrl) {
+      displayImage = storeDetails.logoUrl;
+    }
   }
 
   const ogImageAlt = `${displayNameForAlt} on Reecomm`;
@@ -129,16 +131,13 @@ function StoreFrontPage({ seo }) {
           <>
             <meta key="og:image" property="og:image" content={displayImage} />
             <meta property="og:image:secure_url" content={displayImage} />
-            <meta property="og:image:type" content="image/png" />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
             <meta property="og:image:alt" content={ogImageAlt} />
           </>
         )}
         {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
         <meta property="og:type" content="profile" />
 
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={displayTitle} />
         <meta name="twitter:description" content={displayDescription} />
         {displayImage && (
@@ -290,6 +289,7 @@ export async function getStaticProps(context) {
   const firstInventoryImage =
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || "";
 
+  // SERP thumbnail = storefront logo only (fallback: inventory photo, then site logo)
   const logoUrl = store.logoUrl || firstInventoryImage || null;
   const storefrontImageUrl = logoUrl || ogFallback;
 
@@ -308,14 +308,6 @@ export async function getStaticProps(context) {
     vehicleWord,
     minPrice,
     maxPrice,
-  });
-
-  const ogImage = buildStorefrontOgImageUrl({
-    username: currentUsername,
-    name: seoBuilt.displayName || displayName,
-    city,
-    state,
-    logo: logoUrl || "",
   });
 
   const { schema: faqSchema } = buildStorefrontFaq({
@@ -339,11 +331,6 @@ export async function getStaticProps(context) {
     availableVehicles,
   });
 
-  // Prefer SERP thumbnail image as primary image; keep raw logo as logo
-  if (ogImage) {
-    dealerSchema.image = [ogImage, ...(logoUrl ? [logoUrl] : [])];
-  }
-
   const itemListSchema = buildStorefrontItemListSchema({
     displayName,
     canonical: currentUrl,
@@ -358,17 +345,15 @@ export async function getStaticProps(context) {
     url: currentUrl,
     primaryImageOfPage: {
       "@type": "ImageObject",
-      url: ogImage,
-      width: 1200,
-      height: 630,
+      url: storefrontImageUrl,
       caption: `${seoBuilt.displayName || displayName} on Reecomm`,
     },
-    image: ogImage,
+    image: storefrontImageUrl,
     mainEntity: {
       "@type": "AutoDealer",
       name: `${seoBuilt.displayName || displayName} on Reecomm`,
       url: currentUrl,
-      ...(logoUrl ? { logo: logoUrl } : {}),
+      ...(logoUrl ? { logo: logoUrl, image: logoUrl } : {}),
     },
   };
 
@@ -385,7 +370,6 @@ export async function getStaticProps(context) {
         description: seoBuilt.description,
         h1: seoBuilt.h1,
         image: storefrontImageUrl,
-        ogImage,
         displayName,
         url: currentUrl,
         canonical: currentUrl,
