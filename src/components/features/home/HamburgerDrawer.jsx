@@ -119,7 +119,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                     label="All Vehicles"
                     hoveredTab={hoveredTab}
                     setHoveredTab={setHoveredTab}
-                    href="/search/buy-used-cars"
+                    href="/search"
                     onClose={onClose}
                   />
                   <TabItem
@@ -127,7 +127,15 @@ export default function HamburgerDrawer({ open, onClose }) {
                     label="Trending Vehicles"
                     hoveredTab={hoveredTab}
                     setHoveredTab={setHoveredTab}
-                    href="/search/buy-used-cars?sort=trending"
+                    href="/search?sort=trending"
+                    onClose={onClose}
+                  />
+                  <TabItem
+                    id="trending-bikes"
+                    label="Trending Bikes"
+                    hoveredTab={hoveredTab}
+                    setHoveredTab={setHoveredTab}
+                    href="/search/buy-used-two-wheelers?sort=trending"
                     onClose={onClose}
                   />
                 </div>

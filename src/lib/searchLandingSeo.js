@@ -229,14 +229,14 @@ export function buildSearchLandingSeo({
 
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
     const hubTitle = isTwoWheeler
-      ? "Buy Used Bikes Near You | Reecomm"
-      : "Buy Used Cars Near You | Reecomm";
+      ? "Used Bikes for Sale | Reecomm"
+      : "Used Cars for Sale | Reecomm";
     const hubH1 = isTwoWheeler
-      ? "Buy used bikes near you"
-      : "Buy used cars near you";
+      ? "Used Bikes for Sale"
+      : "Used Cars for Sale";
     const hubDescription = isTwoWheeler
-      ? `Browse ${countBit}verified used bikes and two-wheelers near you on Reecomm. Compare prices, photos, and inspection reports before you buy.`
-      : `Browse ${countBit}verified used cars near you across India on Reecomm. Compare prices, photos, and inspection reports before you buy.`;
+      ? `Browse ${countBit}used bikes for sale on Reecomm. Compare verified two-wheelers with prices, photos, and inspection reports before you buy.`
+      : `Browse ${countBit}used cars for sale across India on Reecomm. Compare verified listings with prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
       h1: hubH1,
@@ -641,7 +641,13 @@ export function buildSearchItemListSchema({
   canonical,
   vehicles = [],
   totalCount = 0,
+  isTwoWheeler = false,
 }) {
+  const vehicleSchemaType = isTwoWheeler ? "Motorcycle" : "Car";
+  const fallbackHub = isTwoWheeler
+    ? `${BASE_URL}/search/buy-used-two-wheelers`
+    : `${BASE_URL}/search/buy-used-cars`;
+
   const itemListElement = vehicles.slice(0, 10).map((v, index) => {
     const name =
       `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
@@ -657,8 +663,8 @@ export function buildSearchItemListSchema({
       null;
     const price = v.price != null ? Number(v.price) : null;
 
-    const carItem = {
-      "@type": "Car",
+    const vehicleItem = {
+      "@type": vehicleSchemaType,
       name,
       url,
       ...(image ? { image } : {}),
@@ -687,7 +693,7 @@ export function buildSearchItemListSchema({
       position: index + 1,
       url,
       name,
-      item: carItem,
+      item: vehicleItem,
     };
   });
 
@@ -701,7 +707,7 @@ export function buildSearchItemListSchema({
     "@type": "ItemList",
     name: title || "Used Vehicles on Reecomm",
     description: description || "Browse verified used vehicles for sale.",
-    url: canonical || `${BASE_URL}/search/buy-used-cars`,
+    url: canonical || fallbackHub,
     numberOfItems: count,
     itemListElement,
   };

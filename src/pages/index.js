@@ -32,7 +32,7 @@ function Home() {
         />
         <meta
           name="keywords"
-          content="Reecomm, used cars, used bikes, sell used cars, buy used cars, auto consultant, second hand cars India, car inspection"
+          content="Reecomm, used cars, used bikes, used cars for sale, used bikes for sale, sell used cars, buy used cars, buy used bikes, auto consultant, second hand cars India, car inspection"
         />
         <link rel="canonical" href="https://www.reecomm.com/" />
 
@@ -109,7 +109,7 @@ function Home() {
               potentialAction: {
                 "@type": "SearchAction",
                 target:
-                  "https://www.reecomm.com/search/buy-used-cars?q={search_term_string}",
+                  "https://www.reecomm.com/search?q={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
@@ -139,13 +139,13 @@ function Home() {
                 {
                   "@type": "SiteNavigationElement",
                   position: 3,
-                  name: "Buy used cars near you",
+                  name: "Used Cars for Sale",
                   url: "https://www.reecomm.com/search/buy-used-cars",
                 },
                 {
                   "@type": "SiteNavigationElement",
                   position: 4,
-                  name: "Buy used bikes near you",
+                  name: "Used Bikes for Sale",
                   url: "https://www.reecomm.com/search/buy-used-two-wheelers",
                 },
                 {

@@ -11,8 +11,8 @@ import {
 import Image from "next/image";
 
 const DEFAULT_BUY_LINKS = [
-  { label: "Buy used cars near you", href: "/search/buy-used-cars" },
-  { label: "Buy used bikes near you", href: "/search/buy-used-two-wheelers" },
+  { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
+  { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
   {
     label: "Reecomm Inspected Vehicles",
     href: "/search?reccomInspected=true",
@@ -101,8 +101,8 @@ const Footer = () => {
           seen.add(item.href);
           merged.push(item);
         };
-        push({ label: "Buy used cars", href: "/search/buy-used-cars" });
-        push({ label: "Buy used bikes", href: "/search/buy-used-two-wheelers" });
+        push({ label: "Used Cars for Sale", href: "/search/buy-used-cars" });
+        push({ label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" });
         geo.forEach(push);
         push({
           label: "Used car buying guide",

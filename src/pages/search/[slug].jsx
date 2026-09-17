@@ -155,6 +155,8 @@ function SlugSearchPage({ seo, initialFilters }) {
                 canonical: seo?.canonical,
                 vehicles: seo?.initialVehicles || [],
                 totalCount: seo?.totalCount || 0,
+                isTwoWheeler:
+                  initialFilters?.vehicleType === "two-wheelers",
               })
             ),
           }}

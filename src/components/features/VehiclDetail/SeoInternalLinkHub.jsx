@@ -150,7 +150,7 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
 
   // 10. Master hubs + buy guide (GEO pillars come from vehicle context above)
   links.push(
-    { label: "Browse All Used Cars", href: "/search/buy-used-cars" },
+    { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
     { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
     {
       label: "How to Buy a Used Car Safely",

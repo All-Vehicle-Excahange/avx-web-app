@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const FALLBACK_SEARCHES = [
-  { label: "Used Cars in India", href: "/search/buy-used-cars" },
+  { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
   { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
   { label: "Used Hyundai Creta", href: "/search/buy-used-hyundai-creta-cars" },
   { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },

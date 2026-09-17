@@ -949,7 +949,7 @@ async function generateSearchIndex() {
       popularLinks.push({ label, href });
     };
 
-    pushLink("Used Cars in India", "/search/buy-used-cars");
+    pushLink("Used Cars for Sale", "/search/buy-used-cars");
     pushLink("Used Bikes for Sale", "/search/buy-used-two-wheelers");
 
     const rankedSlugs = [...comboHits.entries()]
@@ -962,7 +962,7 @@ async function generateSearchIndex() {
         !slug.startsWith("buy-used-cars-") &&
         slug.includes("-cars-"),
     );
-    for (const slug of modelCitySlugs.slice(0, 8)) {
+    for (const slug of modelCitySlugs.slice(0, 6)) {
       const item = finalIndexItems.find((i) => i.params?.slug === slug);
       const brand = item?.params?.makerName || "";
       const model = item?.params?.modelName || "";
@@ -979,11 +979,24 @@ async function generateSearchIndex() {
     const cityHubSlugs = rankedSlugs.filter((slug) =>
       /^buy-used-cars-[a-z0-9-]+$/.test(slug),
     );
-    for (const slug of cityHubSlugs.slice(0, 4)) {
+    for (const slug of cityHubSlugs.slice(0, 3)) {
       const item = finalIndexItems.find((i) => i.params?.slug === slug);
       const city = item?.params?.city || slug.replace("buy-used-cars-", "");
       pushLink(
         item?.title || `Used Cars in ${String(city).replace(/-/g, " ")}`,
+        `/search/${slug}`,
+      );
+    }
+
+    const bikeCityHubSlugs = rankedSlugs.filter((slug) =>
+      /^buy-used-two-wheelers-[a-z0-9-]+$/.test(slug),
+    );
+    for (const slug of bikeCityHubSlugs.slice(0, 3)) {
+      const item = finalIndexItems.find((i) => i.params?.slug === slug);
+      const city =
+        item?.params?.city || slug.replace("buy-used-two-wheelers-", "");
+      pushLink(
+        item?.title || `Used Bikes in ${String(city).replace(/-/g, " ")}`,
         `/search/${slug}`,
       );
     }
