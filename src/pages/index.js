@@ -20,7 +20,6 @@ import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
 import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
 import HomePopularSearches from "@/components/features/home/HomePopularSearches";
-import HomeSitelinkNav from "@/components/features/home/HomeSitelinkNav";
 
 function Home() {
   return (
@@ -167,7 +166,6 @@ function Home() {
         />
       </Head>
       <HeroSection fullWidth />
-      <HomeSitelinkNav />
       {/* <RecentlyVisitedSection /> */}
       <Layout>
         <ShowcaseSection />
