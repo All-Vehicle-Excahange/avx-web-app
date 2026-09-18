@@ -60,28 +60,12 @@ function index() {
 
       <Layout>
         <HeroSection />
-      </Layout>
-
-      <Layout>
         <ProblemWeAreSolve />
-      </Layout>
-      <Layout>
         <WhyAvxDifferent />
-      </Layout>
-      <Layout>
         <HowAvxWorks />
-      </Layout>
-      <Layout>
         <ConsultantsAndBuyers />
-      </Layout>
-      <Layout>
-        {/* <TrustSignals /> */}
         <OurTeam />
-      </Layout>
-      <Layout>
         <VisionAndApproach />
-      </Layout>
-      <Layout>
         <ComplianceAndTransparency />
       </Layout>
 

@@ -1,8 +1,106 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import Button from "./button";
+
+/**
+ * Detects if the current session or page is running inside a Flutter App / WebView
+ * or was opened via Flutter app links (query params like ?isApp=true, ?source=app, ?platform=flutter, etc.).
+ */
+export function checkIsFlutterApp() {
+  if (typeof window === "undefined") return false;
+
+  // 1. Check persistence in sessionStorage or localStorage
+  try {
+    if (
+      sessionStorage.getItem("isFlutterApp") === "true" ||
+      localStorage.getItem("isFlutterApp") === "true"
+    ) {
+      return true;
+    }
+  } catch (e) {}
+
+  // 2. Check URL Query Parameters (e.g. ?isApp=true, ?app=true, ?source=app, ?platform=flutter)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const appKeys = [
+      "isApp",
+      "is_app",
+      "app",
+      "source",
+      "platform",
+      "mode",
+      "flutter",
+      "webview",
+    ];
+
+    const isParamApp = appKeys.some((key) => {
+      const val = params.get(key)?.toLowerCase();
+      return (
+        val === "true" ||
+        val === "1" ||
+        val === "app" ||
+        val === "flutter" ||
+        val === "webview" ||
+        val === "flutter_app"
+      );
+    });
+
+    if (isParamApp) {
+      try {
+        sessionStorage.setItem("isFlutterApp", "true");
+        localStorage.setItem("isFlutterApp", "true");
+      } catch (e) {}
+      return true;
+    }
+  } catch (e) {}
+
+  // 3. Check Window Objects (Flutter InAppWebView / Javascript channels)
+  try {
+    if (
+      window.Flutter ||
+      window.flutter_inappwebview ||
+      window.isFlutterApp ||
+      window.FlutterJavascriptChannel
+    ) {
+      try {
+        sessionStorage.setItem("isFlutterApp", "true");
+        localStorage.setItem("isFlutterApp", "true");
+      } catch (e) {}
+      return true;
+    }
+  } catch (e) {}
+
+  // 4. Check User Agent
+  try {
+    const ua = navigator.userAgent || "";
+    if (
+      /Flutter|ReecommApp|ReecommFlutter|FlutterWebView|;\s*wv\b|Android.*Version\/.*Chrome\/.*Mobile/i.test(
+        ua,
+      )
+    ) {
+      try {
+        sessionStorage.setItem("isFlutterApp", "true");
+        localStorage.setItem("isFlutterApp", "true");
+      } catch (e) {}
+      return true;
+    }
+  } catch (e) {}
+
+  return false;
+}
 
 export default function MobileAppDownloadBanner({ onClose }) {
+  const [inFlutterApp, setInFlutterApp] = useState(false);
+
+  useEffect(() => {
+    if (checkIsFlutterApp()) {
+      setInFlutterApp(true);
+    }
+  }, []);
+
+  // Do not render banner if running inside or opened from Flutter App
+  if (inFlutterApp) {
+    return null;
+  }
   return (
     <div className="relative flex w-full flex-col bg-[#007AFF] p-4 md:hidden shadow-lg">
       {/* Close Button */}

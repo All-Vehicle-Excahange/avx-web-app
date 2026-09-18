@@ -47,7 +47,7 @@ const ProblemWeAreSolve = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
+          <div className="group relative overflow-hidden p-6 sm:p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
             <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               01
             </span>
@@ -62,7 +62,7 @@ const ProblemWeAreSolve = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
+          <div className="group relative overflow-hidden p-6 sm:p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300 ">
             <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               02
             </span>
@@ -77,7 +77,7 @@ const ProblemWeAreSolve = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="group relative overflow-hidden p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300">
+          <div className="group relative overflow-hidden p-6 sm:p-10 rounded-xl border border-white/10 bg-white/1 transition-all duration-300">
             <span className="pointer-events-none absolute top-4 right-6 text-6xl md:text-7xl font-bold font-primary text-white/3 transition-all duration-300 select-none">
               03
             </span>

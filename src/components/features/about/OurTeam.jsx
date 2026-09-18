@@ -168,12 +168,12 @@ export default function OurTeam() {
             Every feature in Reecomm exists because of this story.
           </h3>
 
-          {/* THREE CARDS (Equal Width ~390px, Height 220px, Radius 18px, Border primary/10) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[35px] max-w-[1280px] mx-auto mb-[100px] lg:mb-[140px]">
+          {/* THREE CARDS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[35px] max-w-[1280px] mx-auto mb-[60px] sm:mb-[100px] lg:mb-[140px]">
             {pillarCards.map((card, idx) => (
               <div
                 key={idx}
-                className="w-full lg:w-[390px] h-[220px] rounded-[18px] border border-primary/10 bg-transparent p-8 flex flex-col justify-between"
+                className="w-full lg:w-[390px] min-h-[220px] h-auto rounded-[18px] border border-primary/10 bg-transparent p-6 sm:p-8 flex flex-col justify-between"
               >
                 <div>
                   <span className="text-2xl font-bold text-[#2F80FF] block mb-2 font-mono">

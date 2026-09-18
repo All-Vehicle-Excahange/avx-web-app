@@ -69,7 +69,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
             }
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [setLocation]);
 
@@ -338,7 +338,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
           {/* Modal Content */}
           <div
             ref={modalRef}
-            className="bg-white w-full max-w-2xl max-h-[85vh] rounded-3xl shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] flex flex-col border border-gray-100 overflow-hidden relative overscroll-contain"
+            className="bg-white w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] flex flex-col border border-gray-100 overflow-hidden relative overscroll-contain"
             style={{
               animation: isClosing
                 ? "modalCardOut 0.15s ease-in forwards"
@@ -346,37 +346,38 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
             }}
           >
             {/* Header */}
-            <div className="flex items-start justify-between p-4 md:p-5 pb-3">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/80">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-fourth/10 text-fourth flex items-center justify-center rounded-xl shrink-0 border border-fourth/20">
-                  <MapPin className="w-4 h-4" />
+                <div className="w-9 h-9 bg-fourth/10 text-fourth flex items-center justify-center rounded-xl shrink-0 border border-fourth/15">
+                  <MapPin className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 tracking-tight leading-tight font-primary">Select your location</h2>
-                  <p className="text-[11px] text-gray-500 mt-0.5 font-medium font-secondary">Find vehicles and consultants near you</p>
+                  <h2 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight font-primary">Select your location</h2>
+                  <p className="text-xs text-gray-500 font-medium font-secondary">Find vehicles and consultants near you</p>
                 </div>
               </div>
               <button
                 onClick={handleClose}
                 className="w-8 h-8 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Search Bar & Current Location */}
-            <div className="px-4 md:px-5 pb-4 md:pb-5 border-b border-gray-100 relative z-10 flex gap-3">
+            <div className="px-6 py-3.5 bg-gray-50/50 border-b border-gray-100 flex gap-3 items-center">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search for a city..."
+                  placeholder="Search city or state..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-50 text-gray-900 placeholder-gray-400 border border-gray-200 rounded-xl py-2.5 pl-9 pr-9 focus:outline-none focus:border-fourth focus:bg-white focus:ring-2 focus:ring-fourth/10 transition-all text-[13px] font-medium font-secondary"
+                  className="w-full bg-white text-gray-900 placeholder-gray-400 border border-gray-200 rounded-lg py-2 pl-9 pr-9 focus:outline-none focus:border-fourth focus:ring-2 focus:ring-fourth/10 transition-all text-xs sm:text-[13px] font-medium font-secondary shadow-xs"
                 />
                 {searchQuery && (
-                  <button onClick={() => setSearchQuery("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">
+                  <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -385,29 +386,29 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
               <button
                 onClick={handleCurrentLocation}
                 disabled={isLocating}
-                className="shrink-0 flex items-center justify-center gap-2 px-3.5 py-2.5 bg-fourth/10 border border-fourth/20 rounded-xl hover:bg-fourth/15 hover:border-fourth/30 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="shrink-0 flex items-center justify-center gap-1.5 px-4 py-2 bg-fourth/10 border border-fourth/20 rounded-lg hover:bg-fourth/15 hover:border-fourth/30 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
                 title="Detect current location"
               >
                 <LocateFixed className={`w-4 h-4 text-fourth ${isLocating ? 'animate-spin' : ''}`} />
-                <span className="text-fourth font-bold text-[13px] hidden sm:block whitespace-nowrap font-primary">
+                <span className="text-fourth font-bold text-xs sm:text-[13px] whitespace-nowrap font-primary">
                   {isLocating ? "Locating..." : "Detect Location"}
                 </span>
               </button>
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4 custom-scrollbar space-y-5 overscroll-contain">
+            <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar space-y-4 overscroll-contain">
               {isSearching ? (
                 /* Search Results View */
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-[13px] font-bold text-gray-900 font-primary">
-                      Search Results {filteredCities.length > 0 && <span className="text-gray-500 font-normal font-secondary">({filteredCities.length})</span>}
+                  <div className="flex items-center justify-between mb-3 px-0.5">
+                    <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider font-primary">
+                      Search Results {filteredCities.length > 0 && <span className="text-gray-400 font-normal">({filteredCities.length})</span>}
                     </h3>
                   </div>
 
                   {filteredCities.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                       {filteredCities.map((city, idx) => {
                         const cityName = city.cityName || city.name || city.city;
                         const stateName = city.stateName || city.state || "";
@@ -418,29 +419,27 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
                           <button
                             key={cityId}
                             onClick={() => handleSelect(cityName, city)}
-                            className={`flex items-center justify-between p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                              isSelected
-                                ? "bg-fourth/[0.06] border-fourth shadow-[0_0_15px_rgba(0,123,255,0.12)]"
-                                : "bg-white border-gray-100 hover:border-fourth/50 hover:bg-gray-50/60 hover:shadow-sm"
-                            }`}
+                            className={`relative flex items-center p-3 rounded-xl border text-left transition-all cursor-pointer ${isSelected
+                              ? "bg-fourth/[0.08] border-fourth shadow-xs"
+                              : "bg-white border-gray-100 hover:border-fourth/40 hover:bg-gray-50/80"
+                              }`}
                           >
-                            <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="flex items-center gap-3 min-w-0 flex-1 pr-4">
                               <div
-                                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                                  isSelected ? "bg-fourth/15 text-fourth" : "bg-gray-100 text-gray-400"
-                                }`}
+                                className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center shrink-0 ${isSelected ? "bg-fourth/20 text-fourth" : "bg-gray-100 text-gray-400"
+                                  }`}
                               >
                                 <Building2 className="w-4 h-4" />
                               </div>
-                              <div className="min-w-0">
-                                <div className={`text-[13px] font-bold font-primary truncate ${isSelected ? "text-fourth" : "text-gray-900"}`}>
+                              <div className="min-w-0 flex-1">
+                                <div className={`text-xs sm:text-[13px] font-bold font-primary whitespace-nowrap transition-colors ${isSelected ? "text-fourth" : "text-gray-900"}`}>
                                   {cityName}
                                 </div>
-                                {stateName && <div className="text-[11px] text-gray-500 font-medium font-secondary truncate">{stateName}</div>}
+                                {stateName && <div className="text-[11px] text-gray-400 font-medium font-secondary whitespace-nowrap">{stateName}</div>}
                               </div>
                             </div>
                             {isSelected && (
-                              <div className="w-4 h-4 bg-fourth rounded-full flex items-center justify-center shrink-0 ml-2 shadow-sm">
+                              <div className="absolute top-2.5 right-2.5 w-4 h-4 bg-fourth rounded-full flex items-center justify-center shrink-0 shadow-xs">
                                 <Check className="w-2.5 h-2.5 text-white" />
                               </div>
                             )}
@@ -449,57 +448,64 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
                       })}
                     </div>
                   ) : (
-                    <div className="py-12 flex flex-col items-center justify-center text-center">
-                      <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
+                    <div className="py-10 flex flex-col items-center justify-center text-center">
+                      <div className="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-2.5">
                         <Search className="w-5 h-5" />
                       </div>
-                      <p className="text-gray-900 text-sm font-semibold font-primary">No cities found</p>
-                      <p className="text-gray-500 text-xs mt-1 font-secondary">We couldn&apos;t find any city matching &ldquo;{searchQuery}&rdquo;</p>
+                      <p className="text-gray-900 text-xs sm:text-sm font-semibold font-primary">No cities found</p>
+                      <p className="text-gray-400 text-xs mt-0.5 font-secondary">No match for &ldquo;{searchQuery}&rdquo;</p>
                     </div>
                   )}
                 </div>
               ) : (
                 /* Popular Cities View */
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-[13px] font-bold text-gray-900 font-primary">Popular Cities</h3>
+                  <div className="flex items-center justify-between mb-3 px-0.5">
+                    <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider font-primary">Popular Cities</h3>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {isLoadingCities ? (
-                      Array(8).fill(0).map((_, i) => (
-                        <div key={i} className="animate-pulse bg-gray-100 border border-gray-200/60 rounded-2xl h-[84px]"></div>
+                      Array(9).fill(0).map((_, i) => (
+                        <div key={i} className="animate-pulse bg-gray-100 border border-gray-200/60 rounded-xl h-[54px]"></div>
                       ))
                     ) : (
-                      popularCities.map((city) => (
-                        <button
-                          key={city.cityId}
-                          onClick={() => handleSelect(city.cityName, city)}
-                          className={`relative flex flex-col items-center justify-center gap-2 p-2.5 rounded-2xl border transition-all cursor-pointer overflow-hidden group ${selectedCity === city.cityName
-                            ? "bg-fourth/[0.06] border-fourth shadow-[0_0_15px_rgba(0,123,255,0.12)]"
-                            : "bg-white border-gray-100 hover:border-fourth hover:bg-gray-50/50 hover:shadow-sm"
-                            }`}
-                        >
-                          {selectedCity === city.cityName && (
-                            <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-fourth rounded-full flex items-center justify-center shadow-md">
-                              <Check className="w-2.5 h-2.5 text-white" />
+                      popularCities.map((city) => {
+                        const isSelected = selectedCity === city.cityName;
+                        return (
+                          <button
+                            key={city.cityId}
+                            onClick={() => handleSelect(city.cityName, city)}
+                            className={`relative flex items-center p-3 rounded-xl border text-left transition-all cursor-pointer group ${isSelected
+                              ? "bg-fourth/[0.08] border-fourth shadow-xs"
+                              : "bg-white border-gray-100 hover:border-fourth/40 hover:bg-gray-50/80 hover:shadow-xs"
+                              }`}
+                          >
+                            <div className="flex items-center gap-3 min-w-0 flex-1 pr-4">
+                              <div
+                                className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center shrink-0 transition-colors ${isSelected ? "bg-fourth/20 text-fourth" : "bg-gray-100 text-gray-400 group-hover:text-fourth group-hover:bg-fourth/10"
+                                  }`}
+                              >
+                                <Building2 className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className={`text-xs sm:text-[13px] font-bold font-primary whitespace-nowrap transition-colors ${isSelected ? "text-fourth font-extrabold" : "text-gray-800 group-hover:text-gray-900"
+                                  }`}>
+                                  {city.cityName}
+                                </div>
+                                <div className={`text-[11px] font-medium font-secondary whitespace-nowrap transition-colors ${isSelected ? "text-fourth/80" : "text-gray-400"
+                                  }`}>
+                                  {city.stateName}
+                                </div>
+                              </div>
                             </div>
-                          )}
-
-                          <Building2
-                            className={`w-7 h-7 transition-colors ${selectedCity === city.cityName ? "text-fourth" : "text-gray-400 group-hover:text-fourth"}`}
-                            strokeWidth={1.5}
-                          />
-
-                          <div className="flex flex-col items-center gap-0.5">
-                            <span className={`text-[12px] font-bold font-primary transition-colors ${selectedCity === city.cityName ? "text-fourth font-extrabold" : "text-gray-800 group-hover:text-gray-900"}`}>
-                              {city.cityName}
-                            </span>
-                            <span className={`text-[10px] font-medium font-secondary transition-colors ${selectedCity === city.cityName ? "text-fourth/80" : "text-gray-500"}`}>
-                              {city.stateName}
-                            </span>
-                          </div>
-                        </button>
-                      ))
+                            {isSelected && (
+                              <div className="absolute top-2.5 right-2.5 w-4 h-4 bg-fourth rounded-full flex items-center justify-center shrink-0 shadow-xs">
+                                <Check className="w-2.5 h-2.5 text-white" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })
                     )}
                   </div>
                 </div>

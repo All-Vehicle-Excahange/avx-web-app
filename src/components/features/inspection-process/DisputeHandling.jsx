@@ -126,7 +126,7 @@ export default function DisputeHandling() {
                 width={800}
                 height={500}
                 unoptimized
-                className="w-full h-55 md:h-65 object-cover opacity-95"
+                className="w-full h-[220px] md:h-[260px] object-cover opacity-95"
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
             </div>

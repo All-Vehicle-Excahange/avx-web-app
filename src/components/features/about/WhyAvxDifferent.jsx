@@ -49,7 +49,7 @@ export default function WhyAvxDifferent() {
         </div>
 
         {/* Feature Strips */}
-        <div className="space-y-24">
+        <div className="space-y-16 md:space-y-24">
           {features.map((item, index) => {
             const isLeftContent = index % 2 === 0;
 
@@ -58,12 +58,12 @@ export default function WhyAvxDifferent() {
                 key={item.id}
                 className={`group relative flex flex-col ${
                   isLeftContent ? "md:flex-row" : "md:flex-row-reverse"
-                } gap-16 items-center`}
+                } gap-8 md:gap-16 items-center overflow-hidden`}
               >
                 {/* Number */}
                 <div
-                  className={`absolute top-1/2 -translate-y-1/2 text-[10rem] font-bold select-none pointer-events-none transition-colors duration-300
-          ${isLeftContent ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"}
+                  className={`absolute top-1/2 -translate-y-1/2 text-7xl sm:text-8xl md:text-[10rem] font-bold select-none pointer-events-none transition-colors duration-300
+          ${isLeftContent ? "right-0 md:right-0 md:left-auto" : "left-0 md:left-0 md:right-auto"}
           text-primary/15 group-hover:text-primary/30`}
                 >
                   {item.id}
@@ -74,7 +74,7 @@ export default function WhyAvxDifferent() {
                   <h3 className="text-2xl md:text-3xl font-semibold text-primary">
                     {item.title}
                   </h3>
-                  <p className="mt-4 text-lg w-6xl text-third leading-relaxed">
+                  <p className="mt-4 text-base sm:text-lg max-w-2xl text-third leading-relaxed">
                     {item.desc}
                   </p>
                 </div>

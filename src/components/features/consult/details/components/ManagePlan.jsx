@@ -82,7 +82,7 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
   if (!isOpen) return null;
 
   const handleUpgradeClick = () => {
-    push("/consult/pricing");
+    push("/consult/pricing?mode=upgrade");
     onClose();
   };
 
@@ -153,9 +153,13 @@ export default function ManagePlan({ isOpen, onClose, currentPlan = "BASIC" }) {
                 <span className="inline-block w-8 h-3.5 bg-white/10 animate-pulse rounded align-middle mx-1" />
               ) : (
                 <span className="text-white font-semibold">
-                  {daysRemaining !== undefined && daysRemaining !== null
-                    ? `${daysRemaining} days`
-                    : "15 days"}
+                  {daysRemaining === 1
+                    ? "1 day"
+                    : daysRemaining === 0
+                      ? "less than 1 day"
+                      : daysRemaining !== undefined && daysRemaining !== null
+                        ? `${daysRemaining} days`
+                        : "30 days"}
                 </span>
               )}{" "}
               remaining.

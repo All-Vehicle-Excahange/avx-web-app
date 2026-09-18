@@ -72,7 +72,7 @@ const HowAvxWorks = () => {
               key={index}
               onMouseEnter={() => setActiveStep(index)}
               className={`relative overflow-hidden transition-all duration-500 ease-in-out cursor-pointer rounded-2xl border border-primary/10 
-                ${activeStep === index ? "flex-3 " : "flex-1  "}`}
+                ${activeStep === index ? "flex-[3] " : "flex-1 "}`}
             >
               {/* Collapsed Title */}
               <div
@@ -80,7 +80,10 @@ const HowAvxWorks = () => {
                   activeStep === index ? "opacity-0" : "opacity-100"
                 }`}
               >
-                <span className="rotate-90 md:-rotate-90 whitespace-nowrap text-xs uppercase tracking-[0.35em] font-semibold text-third">
+                <span className="hidden md:block -rotate-90 whitespace-nowrap text-xs uppercase tracking-[0.35em] font-semibold text-third">
+                  {step.shortTitle}
+                </span>
+                <span className="block md:hidden whitespace-nowrap text-xs uppercase tracking-[0.25em] font-semibold text-third">
                   {step.shortTitle}
                 </span>
               </div>
