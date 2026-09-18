@@ -323,7 +323,7 @@ export default function VehicleComparePopup({
         const isReecomm = v.inspectionStatus === "AVX_INSPECTED" || v.inspectionStatus === "REECOMM_INSPECTED" || v.inspectionStatus === "AI_INSPECTED";
         const typeStr = isSelf ? "Self Inspected" : isReecomm ? "Reecomm Inspected" : (v.inspectionStatus ? v.inspectionStatus.replace(/_/g, " ") : "Self Inspected");
         const rating = v.avxInspectionRating || v.rating;
-        
+
         if (rating) {
             return `${rating} (${typeStr})`;
         }
@@ -331,14 +331,14 @@ export default function VehicleComparePopup({
     };
 
     const conditionFields = isComparing && fullCompareData ? [
-        { 
-            label: "Inspection Type", 
+        {
+            label: "Inspection Type",
             val1: v1?.inspectionStatus === "SELF_INSPECTED" ? "Self Inspected" : (v1?.inspectionStatus === "AVX_INSPECTED" || v1?.avxInspectionRating) ? "Reecomm Inspected" : "Self Inspected",
             val2: v2?.inspectionStatus === "SELF_INSPECTED" ? "Self Inspected" : (v2?.inspectionStatus === "AVX_INSPECTED" || v2?.avxInspectionRating) ? "Reecomm Inspected" : "Self Inspected"
         },
-        { 
-            label: "Inspection Rating", 
-            val1: formatInspectionRating(v1), 
+        {
+            label: "Inspection Rating",
+            val1: formatInspectionRating(v1),
             val2: formatInspectionRating(v2)
         },
         { label: "Spare Key", val1: v1?.spareKey ? "Available" : "No", val2: v2?.spareKey ? "Available" : "No" },

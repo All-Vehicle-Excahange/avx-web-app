@@ -26,7 +26,7 @@ export default function InspectionMatters() {
       <div className="relative mx-auto w-full">
         <div className="flex flex-col lg:flex-row gap-10 md:gap-16 items-start">
           {/* LEFT */}
-          <div className="w-full lg:w-1/2 pt-25">
+          <div className="w-full lg:w-1/2 pt-6 lg:pt-16">
             {/* sticky only on large screens */}
             <div className="lg:sticky lg:top-24">
               <div className="inline-block px-3 py-1 text-xs md:text-sm tracking-[0.35em] uppercase text-third font-semibold mb-5 md:mb-6">

@@ -29,6 +29,8 @@ import toast from "react-hot-toast";
 import { addTopUpPaymemt } from "@/services/waller.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { getActiveSubscription } from "@/services/subscription.service";
+import { useRouter } from "next/router";
+import { getSubscriptionState, formatSubscriptionDate } from "@/lib/subscriptionHelper";
 import { SkeletonBox } from "@/components/ui/skeleton";
 import Pagination from "@/components/ui/Pagination";
 
@@ -283,13 +285,16 @@ export default function BillingComponent() {
     }
   };
 
+  const router = useRouter();
   const rangeOptions = [
     { label: "Last 7 days", value: "7" },
     { label: "Last 30 days", value: "30" },
     { label: "Last 90 days", value: "90" },
   ];
 
-  const { data: sellerTierData } = useQuery(getSellerTierQuery());
+  const { data: sellerTierData, isLoading: isSellerTierLoading } = useQuery(getSellerTierQuery());
+  const subState = getSubscriptionState(sellerTierData); // "ACTIVE" | "GRACE_PERIOD" | "EXPIRED"
+
   const tier =
     sellerTierData?.tierTitle ||
     (typeof window !== "undefined"
@@ -317,45 +322,35 @@ export default function BillingComponent() {
     },
   });
 
-  const planTitle = activeSubData?.planTitle || tier;
-  const subStatus = (
-    activeSubData?.status ||
-    activeSubData?.userTierStatus ||
-    activeSubData?.subscriptionStatus ||
-    ""
-  ).toUpperCase();
-  const isSubActive =
-    sellerTierData?.userTierStatus?.toUpperCase() === "ACTIVE" ||
-    (activeSubData
-      ? subStatus === "ACTIVE" || subStatus === "AUTHENTICATED"
-      : !isBasic);
+  const planTitle = sellerTierData?.tierTitle || activeSubData?.planTitle || tier;
 
   const displayTitle = planTitle
     ? `${planTitle.charAt(0).toUpperCase() + planTitle.slice(1).toLowerCase()} Consultant`
-    : "Premium Consultant";
+    : "Consultant";
 
   const billingCycleText = activeSubData?.billingCycle
     ? `${activeSubData.billingCycle.charAt(0) + activeSubData.billingCycle.slice(1).toLowerCase()} Subscription`
     : isBasic
       ? "Free Tier"
-      : "Annual Subscription";
+      : "Monthly Subscription";
 
   const priceText =
     activeSubData?.price !== undefined
       ? `₹${activeSubData.price.toLocaleString("en-IN")} / ${activeSubData.billingCycle === "MONTHLY" ? "month" : "year"}`
       : isBasic
         ? "Free"
-        : "₹9,999 / year";
+        : "₹1,415 / month";
 
-  const nextBillingDateText = activeSubData?.nextBillingDate
-    ? new Date(activeSubData.nextBillingDate).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-    : isBasic
-      ? "Never"
-      : "12 Oct 2024";
+  const endDateText = formatSubscriptionDate(sellerTierData?.endDate || activeSubData?.nextBillingDate);
+  const graceEndDateText = formatSubscriptionDate(sellerTierData?.gracePeriodEndDate);
+
+  const handleActionBtnClick = () => {
+    if (subState === "ACTIVE") {
+      setIsManageOpen(true);
+    } else {
+      router.push("/consult/pricing?mode=renew");
+    }
+  };
 
   return (
     <section className="w-full space-y-10">
@@ -369,7 +364,7 @@ export default function BillingComponent() {
 
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
         {/* PREMIUM PLAN (Always Visible) */}
-        {isActiveSubLoading ? (
+        {isSellerTierLoading || isActiveSubLoading ? (
           <div className="relative overflow-hidden rounded-2xl border border-primary/20 backdrop-blur-xl p-8 shadow-sm flex flex-col space-y-6 animate-pulse w-full">
             {/* Top Skeleton */}
             <div className="flex justify-between items-center">
@@ -409,14 +404,21 @@ export default function BillingComponent() {
                 </div>
               </div>
 
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${isSubActive
-                  ? "bg-green-500/20 text-green-400"
-                  : "bg-red-500/20 text-red-400"
-                  }`}
-              >
-                {isSubActive ? "Active" : "Inactive"}
-              </span>
+              {subState === "ACTIVE" && (
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400">
+                  Active
+                </span>
+              )}
+              {subState === "GRACE_PERIOD" && (
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/20 text-yellow-400">
+                  Grace Period
+                </span>
+              )}
+              {subState === "EXPIRED" && (
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400">
+                  Expired
+                </span>
+              )}
             </div>
 
             {/* Middle */}
@@ -427,10 +429,21 @@ export default function BillingComponent() {
               </div>
 
               <div className="bg-white/10 rounded-xl p-3 sm:p-4">
-                <p className="text-xs opacity-70">Next Renewal</p>
-                <p className="font-semibold text-sm sm:text-base">{nextBillingDateText}</p>
+                <p className="text-xs opacity-70">End Date</p>
+                <p className="font-semibold text-sm sm:text-base">{endDateText}</p>
+                {sellerTierData?.gracePeriodEndDate && (
+                  <p className="text-[11px] text-yellow-400/90 mt-1 font-medium">
+                    Grace Period Ends: {graceEndDateText}
+                  </p>
+                )}
               </div>
             </div>
+
+            {subState === "GRACE_PERIOD" && sellerTierData?.gracePeriodEndDate && (
+              <p className="text-xs text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 p-2.5 rounded-xl mt-3 font-medium">
+                Renew your plan before {graceEndDateText} to continue your subscription.
+              </p>
+            )}
 
             {/* Bottom */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-auto pt-4 sm:pt-6">
@@ -438,9 +451,9 @@ export default function BillingComponent() {
                 variant="ghost"
                 size="sm"
                 className="flex-1 sm:flex-none text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap"
-                onClick={() => setIsManageOpen(true)}
+                onClick={handleActionBtnClick}
               >
-                Upgrade Subscription
+                {subState === "ACTIVE" ? "Upgrade Subscription" : "Renew Plan"}
               </Button>
               {activeSubData?.shortUrl && (
                 <Button

@@ -32,17 +32,11 @@ import {
 } from "@/lib/amplitude";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination } from "swiper/modules";
+import toast from "react-hot-toast";
+import { getSubscriptionState, getTierRank } from "@/lib/subscriptionHelper";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-
-const getTierRank = (tierName) => {
-  const name = (tierName || "").toUpperCase();
-  if (name === "PREMIUM") return 3;
-  if (name === "PRO") return 2;
-  if (name === "BASIC") return 1;
-  return 0;
-};
 
 const staticTierDetails = {
   BASIC: {
@@ -152,6 +146,12 @@ export default function FullPricing() {
     ).toUpperCase()
     : "";
 
+  const subState = getSubscriptionState(sellerTierData);
+  const queryMode = String(router.query?.mode || "").toLowerCase();
+  const isRenewMode =
+    queryMode === "renew" ||
+    (queryMode !== "upgrade" && (subState === "GRACE_PERIOD" || subState === "EXPIRED" || isTier404));
+
   useEffect(() => {
     // Wait until router query params are available AND the seller tier query settled
     if (!router.isReady) return;
@@ -162,19 +162,9 @@ export default function FullPricing() {
     const hasTier = !!currentTier;
     const redirect = router.query?.redirect;
 
-    // Case 1: Fully active CONSULTATION consultant landed here
-    // (e.g. via wrapConsultAuth from AccountPopup)
-    // → send them straight to the ?redirect destination or dashboard
-    // if (userRole === "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
-    //   router.replace(
-    //     redirect ? decodeURIComponent(redirect) : "/consult/dashboard/overview",
-    //   );
-    //   return;
-    // }
-
     // Case 2: CONSULTANT_APPLICANT who already has an ACTIVE subscription
     // → send them to KYC (with redirect preserved so they end up in the right place after)
-    if (userRole !== "CONSULTATION" && hasTier && tierStatus === "ACTIVE") {
+    if (userRole !== "CONSULTATION" && hasTier && tierStatus === "ACTIVE" && !isRenewMode && queryMode !== "upgrade") {
       router.replace(
         redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc",
       );
@@ -190,6 +180,8 @@ export default function FullPricing() {
     isSellerTierLoading,
     isLoggedIn,
     router,
+    isRenewMode,
+    queryMode,
   ]);
 
   const loadRazorpayScript = () => {
@@ -213,7 +205,7 @@ export default function FullPricing() {
 
       const isScriptLoaded = await loadRazorpayScript();
       if (!isScriptLoaded) {
-        alert("Razorpay SDK failed to load. Please check your connection.");
+        toast.error("Razorpay SDK failed to load. Please check your connection.");
         return;
       }
 
@@ -223,7 +215,7 @@ export default function FullPricing() {
       };
 
       let response;
-      if (is404) {
+      if (is404 || isRenewMode) {
         response = await createSubscription(payload);
       } else {
         try {
@@ -349,6 +341,8 @@ export default function FullPricing() {
             currency: "INR",
           });
 
+          toast.success("Subscription processed successfully!");
+
           // Fetch fresh tier data and persist it so UI shows "Active" correctly
           try {
             const tierRes = await getSellerTier();
@@ -367,6 +361,7 @@ export default function FullPricing() {
             console.error("Could not refresh tier after payment:", e);
           } finally {
             queryClient.invalidateQueries({ queryKey: ["seller-tier"] });
+            queryClient.invalidateQueries({ queryKey: ["active-subscription"] });
           }
 
           if (userRole !== "CONSULTATION") {
@@ -387,12 +382,12 @@ export default function FullPricing() {
 
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (failResponse) {
-        alert("Payment failed: " + failResponse.error.description);
+        toast.error("Payment failed: " + failResponse.error.description);
       });
       rzp.open();
     } catch (error) {
       console.error("Payment error:", error);
-      alert(
+      toast.error(
         "Error initiating payment: " +
         (error?.response?.data?.message ||
           error?.message ||
@@ -451,7 +446,11 @@ export default function FullPricing() {
       const currentRank = getTierRank(currentTier);
       const targetRank = getTierRank(targetKey);
 
-      if (!is404 && currentRank > targetRank) {
+      if (isRenewMode) {
+        setBillingTier(tier);
+        setBillingIs404(is404);
+        setBillingModalOpen(true);
+      } else if (!is404 && currentRank > targetRank) {
         setDowngradeData({
           fromTier: currentTier,
           toTier: targetKey,
@@ -469,6 +468,7 @@ export default function FullPricing() {
       setUpgradingTierId(null);
     } catch (error) {
       console.error("Payment setup error:", error);
+      toast.error(error?.message || "Failed to setup plan payment");
       setPaymentLoading(false);
       setUpgradingTierId(null);
     }
@@ -588,7 +588,6 @@ export default function FullPricing() {
     };
 
     const isCurrentTier = currentTier === key;
-    let isTierDisabled = false;
 
     const rawPrice =
       Number(yearly ? tier.yearlyPrice : tier.monthlyPrice) || 0;
@@ -634,6 +633,12 @@ export default function FullPricing() {
 
     if (paymentLoading && upgradingTierId === tier.id) {
       buttonText = "Processing...";
+    } else if (isRenewMode) {
+      if (isCurrentTier) {
+        buttonText = "Renew";
+      } else {
+        buttonText = "Get Started";
+      }
     } else if (isCurrentTier) {
       if (userRole !== "CONSULTATION") {
         buttonText = "Complete KYC";
@@ -657,8 +662,10 @@ export default function FullPricing() {
               {staticDetails.name}
             </h3>
             {isCurrentTier && (
-              <span className="border border-emerald-500/30 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full">
-                Active
+              <span className={`border text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full ${
+                isRenewMode ? "border-yellow-500/40 text-yellow-400 bg-yellow-500/10" : "border-emerald-500/30 text-emerald-500"
+              }`}>
+                {isRenewMode ? (subState === "GRACE_PERIOD" ? "Grace Period" : "Expired") : "Active"}
               </span>
             )}
           </div>
@@ -728,7 +735,7 @@ export default function FullPricing() {
 
           {/* Button */}
           <div className="mt-4 sm:mt-6 pt-1 sm:pt-2 flex justify-start">
-            {isCurrentTier ? (
+            {isCurrentTier && !isRenewMode ? (
               <Link href={userRole !== "CONSULTATION" ? "/consult/kyc" : "/consult/dashboard"}>
                 <Button variant="ghost" size="sm" disabled={isButtonDisabled}>
                   {buttonText}
@@ -738,6 +745,7 @@ export default function FullPricing() {
               <Button
                 variant="ghost"
                 size="sm"
+                className={isCurrentTier && isRenewMode ? "border border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 font-bold" : ""}
                 disabled={isButtonDisabled}
                 loading={paymentLoading && upgradingTierId === tier.id}
                 onClick={() => handleUpgrade(tier)}

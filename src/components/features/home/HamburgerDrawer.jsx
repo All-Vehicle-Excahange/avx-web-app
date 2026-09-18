@@ -149,7 +149,7 @@ export default function HamburgerDrawer({ open, onClose }) {
                 <div className="space-y-2 flex flex-col">
                   <TabItem
                     id="wishlist"
-                    label="Wishlist (Login Required)"
+                    label="Wishlist"
                     hoveredTab={hoveredTab}
                     setHoveredTab={setHoveredTab}
                     href="/user/details/wishlist"

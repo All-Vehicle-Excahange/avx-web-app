@@ -35,7 +35,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import PreferencesPopup from "../features/user/PreferencesPopup";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useUIStore } from "@/stores/useUIStore";
-import MobileAppDownloadBanner from "../ui/MobileAppDownloadBanner";
+import MobileAppDownloadBanner, { checkIsFlutterApp } from "../ui/MobileAppDownloadBanner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveRecentSearch, getRecentSearches, deleteAllRecentSearches } from "@/services/user.service";
 import { getUserProfileStrengthQuery } from "@/queries/user.queries";
@@ -144,8 +144,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const isHomePage = pathname === "/" || pathname === "" || pathname === null;
   const isAutoConsultantPage = pathname?.startsWith("/auto-consultant");
 
+  const [inFlutterApp, setInFlutterApp] = useState(false);
+
   useEffect(() => {
     setIsSearching(false);
+    if (checkIsFlutterApp()) {
+      setInFlutterApp(true);
+    }
   }, [pathname, searchParams]);
 
   /* ================= BANNER STATES & UI STATES ================= */
@@ -188,6 +193,51 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
     },
   });
+
+  const navigateToSearchResult = async (searchTerm) => {
+    const queryText = (searchTerm || "").trim();
+    if (!queryText) return;
+
+    setIsSearching(true);
+    saveSearchMutation.mutate(queryText);
+
+    if (!globalSuggestionsData || globalSuggestionsData.length === 0) {
+      await loadSuggestions();
+    }
+
+    const cleanTerm = queryText.toLowerCase();
+
+    const matchedConsultant = (globalSuggestionsData || []).find((s) => {
+      if (s.type !== "consultant") return false;
+      const sLabel = (s.label || "").toLowerCase().trim();
+      const sUsername = (s.username || "").toLowerCase().trim();
+      const sCleanSlug = sUsername.replace(/\d+$/, "");
+      return (
+        sLabel === cleanTerm ||
+        sUsername === cleanTerm ||
+        sCleanSlug === cleanTerm
+      );
+    });
+
+    if (matchedConsultant) {
+      const targetLink =
+        matchedConsultant.link || `/auto-consultant/${matchedConsultant.username}`;
+      push(targetLink);
+    } else {
+      trackMetaProductSearch(queryText);
+      let searchSlug = queryText
+        .toLowerCase()
+        .replace(/\bused\b/g, "")
+        .trim()
+        .replace(/\s+/g, "-");
+      let finalUrl = searchSlug
+        ? `/search/buy-used-${searchSlug}-cars`
+        : `/search/buy-used-cars`;
+      push(finalUrl.replace(/-+/g, "-"));
+    }
+
+    setShowDropdown(false);
+  };
 
   useEffect(() => {
     setSelectedIndex(-1);
@@ -733,22 +783,22 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
         className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
       // style={{ transform: `translateY(${transformY}px)` }}
       >
-        {isMobileBannerVisible &&
+        {!inFlutterApp &&
+          isMobileBannerVisible &&
           !isMobileBannerTempHidden &&
           atTop &&
           !isAutoConsultantPage && (
-          <div className="pointer-events-auto">
-            <MobileAppDownloadBanner onClose={hideMobileBanner} />
-          </div>
-        )}
+            <div className="pointer-events-auto">
+              <MobileAppDownloadBanner onClose={hideMobileBanner} />
+            </div>
+          )}
 
         {/* ================= TOP MINI BAR (CITY SELECTOR - HOME ONLY) ================= */}
         {!insideDrawer && isHomePage && (
-          <div className={`pointer-events-auto w-full transition-all duration-300 ${
-            heroMode && !scrolled
+          <div className={`pointer-events-auto w-full transition-all duration-300 ${heroMode && !scrolled
               ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border-b border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
               : 'bg-secondary/95 backdrop-blur-md text-primary border-b border-white/10 shadow-xs'
-          }`}>
+            }`}>
             <div className="w-full px-2.5 sm:px-4 md:px-6 lg:px-8 mx-auto h-7 sm:h-8 flex items-center justify-between">
               <div className="flex items-center">
                 <CitySelector heroMode={heroMode} scrolled={scrolled} />
@@ -891,17 +941,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                           closeSearchDropdown();
                           setSelectedIndex(-1);
                         } else if (searchQuery.trim()) {
-                          setIsSearching(true);
-                          saveSearchMutation.mutate(searchQuery.trim());
-                          trackMetaProductSearch(searchQuery.trim());
-                          const brandParam =
-                            selectedBrand !== "All"
-                              ? `&brand=${encodeURIComponent(selectedBrand)}`
-                              : "";
-                          push(
-                            `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
-                          );
-                          closeSearchDropdown();
+                          navigateToSearchResult(searchQuery.trim());
                         } else if (selectedBrand !== "All") {
                           setIsSearching(true);
                           trackMetaProductSearch(selectedBrand);
@@ -942,17 +982,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                 <div
                   onClick={() => {
                     if (searchQuery.trim()) {
-                      setIsSearching(true);
-                      saveSearchMutation.mutate(searchQuery.trim());
-                      trackMetaProductSearch(searchQuery.trim());
-                      const brandParam =
-                        selectedBrand !== "All"
-                          ? `&brand=${encodeURIComponent(selectedBrand)}`
-                          : "";
-                      push(
-                        `/search?q=${encodeURIComponent(searchQuery)}${brandParam}`,
-                      );
-                      setShowDropdown(false);
+                      navigateToSearchResult(searchQuery.trim());
                     } else if (selectedBrand !== "All") {
                       setIsSearching(true);
                       trackMetaProductSearch(selectedBrand);
@@ -1099,22 +1129,36 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               )}
                             </div>
                             <div className="flex flex-col gap-0.5">
-                              {recentSearches.map((item, idx) => (
-                                <div key={item.id || `recent-${idx}`} onClick={() => {
-                                  setIsSearching(true);
-                                  saveSearchMutation.mutate(item.search);
-                                  trackMetaProductSearch(item.search);
+                              {recentSearches.map((item, idx) => {
+                                const cleanTerm = (item.search || "").toLowerCase().trim();
+                                const isConsultant = (globalSuggestionsData || []).some(
+                                  (s) =>
+                                    s.type === "consultant" &&
+                                    ((s.label || "").toLowerCase().trim() === cleanTerm ||
+                                      (s.username || "").toLowerCase().trim() === cleanTerm ||
+                                      (s.username || "").toLowerCase().replace(/\d+$/, "").trim() === cleanTerm)
+                                );
 
-                                  let searchSlug = item.search.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
-                                  let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
-                                  push(finalUrl.replace(/-+/g, '-'));
-
-                                  setShowDropdown(false);
-                                }} className="flex items-center gap-2 p-1.5 hover:bg-gray-50  cursor-pointer rounded-lg transition-all text-[11px] font-semibold text-gray-700">
-                                  <Clock className="w-3.5 h-3.5 text-gray-400" />
-                                  <span className="flex-1 truncate">{item.search}</span>
-                                </div>
-                              ))}
+                                return (
+                                  <div
+                                    key={item.id || `recent-${idx}`}
+                                    onClick={() => navigateToSearchResult(item.search)}
+                                    className="flex items-center gap-2 p-1.5 hover:bg-gray-50 cursor-pointer rounded-lg transition-all text-[11px] font-semibold text-gray-700 group"
+                                  >
+                                    {isConsultant ? (
+                                      <User className="w-3.5 h-3.5 text-fourth shrink-0" />
+                                    ) : (
+                                      <Clock className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                                    )}
+                                    <span className="flex-1 truncate">{item.search}</span>
+                                    {isConsultant && (
+                                      <span className="text-[9px] font-semibold text-fourth uppercase tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
+                                        Consultant
+                                      </span>
+                                    )}
+                                  </div>
+                                );
+                              })}
                               {recentSearches.length === 0 && (
                                 <span className="text-[11px] text-gray-400 p-1.5">No recent searches</span>
                               )}

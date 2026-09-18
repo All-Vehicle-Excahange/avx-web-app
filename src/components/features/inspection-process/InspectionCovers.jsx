@@ -75,7 +75,7 @@ export default function InspectionCovers() {
             </h2>
           </div>
 
-          <p className="text-gray-400 w-2xl text-sm leading-relaxed border-l border-primary/10 pl-6">
+          <p className="text-gray-400 max-w-2xl text-sm leading-relaxed border-l border-primary/10 pl-6">
             Our inspection is not a checklist of surface observations. It is a
             structured 11-category evaluation — scored, photographed, and
             documented by trained, independent inspectors. Here is what every

@@ -155,12 +155,12 @@ export default function ConsultantsAndBuyers() {
         {/* ===================== */}
         {/* CONTENT */}
         {/* ===================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-28">
           {/* LEFT — STICKY */}
           <StickyBlock {...current} />
 
           {/* RIGHT — FEATURES */}
-          <div className="space-y-24">
+          <div className="space-y-12 sm:space-y-24">
             {current.features.map((f, i) => (
               <Capability key={i} {...f} />
             ))}
@@ -178,7 +178,7 @@ export default function ConsultantsAndBuyers() {
 function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
   return (
     <div className="lg:sticky lg:top-32 h-fit">
-      <p className="mb-8 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
+      <p className="mb-6 sm:mb-8 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
         {label}
         <span className="absolute left-0 -bottom-3 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
       </p>
@@ -197,14 +197,14 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
         <span className="text-fourth/80">{titleBottom}</span>
       </h2>
 
-      <p className="mt-12 max-w-xl text-xl leading-relaxed text-neutral-300 ">
+      <p className="mt-6 sm:mt-12 max-w-xl text-lg sm:text-xl leading-relaxed text-neutral-300 ">
         {desc}
       </p>
 
-      <div className="mt-20">
+      <div className="mt-8 sm:mt-20">
         <a
           href={cta.href}
-          className="inline-flex items-center gap-2 text-lg text-white underline underline-offset-8 decoration-neutral-600 hover:decoration-neutral-300 transition"
+          className="inline-flex items-center gap-2 text-base sm:text-lg text-white underline underline-offset-8 decoration-neutral-600 hover:decoration-neutral-300 transition"
         >
           {cta.text}
         </a>
@@ -215,14 +215,14 @@ function StickyBlock({ label, titleTop, titleBottom, desc, cta }) {
 
 function Capability({ title, desc, icon }) {
   return (
-    <div className="border-l border-neutral-700 pl-10 flex gap-6">
-      <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-primary text-primary">
+    <div className="border-l border-neutral-700 pl-4 sm:pl-10 flex gap-4 sm:gap-6">
+      <div className="mt-1 flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full border border-primary text-primary">
         {icon}
       </div>
 
       <div>
-        <h3 className="text-2xl font-medium text-white">{title}</h3>
-        <p className="mt-4 text-lg leading-relaxed text-neutral-400">{desc}</p>
+        <h3 className="text-xl sm:text-2xl font-medium text-white">{title}</h3>
+        <p className="mt-2 sm:mt-4 text-base sm:text-lg leading-relaxed text-neutral-400">{desc}</p>
       </div>
     </div>
   );

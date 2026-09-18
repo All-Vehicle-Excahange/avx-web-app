@@ -85,7 +85,7 @@ export default function InspectionReportFormat() {
                   width={800}
                   height={500}
                   unoptimized
-                  className="w-full h-60 md:h-112.5 object-cover opacity-90"
+                  className="w-full h-60 md:h-[450px] object-cover opacity-90"
                 />
 
                 {/* overlay gradient */}
