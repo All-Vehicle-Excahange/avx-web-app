@@ -6,7 +6,7 @@ function StartPage() {
   return (
     <>
       <Head>
-        <title>Explore Vehicles on Reecomm — Buy, Sell, or Consult</title>
+        <title>Buy, Sell or Consult — Start here | Reecomm</title>
         <meta
           name="description"
           content="Explore vehicles on Reecomm: sell your car, become a consultant, or browse verified used cars and bikes on India's trusted marketplace."
@@ -20,7 +20,7 @@ function StartPage() {
         <meta property="og:url" content="https://www.reecomm.com/start" />
         <meta
           property="og:title"
-          content="Explore Vehicles on Reecomm — Buy, Sell, or Consult"
+          content="Buy, Sell or Consult — Start here | Reecomm"
         />
         <meta
           property="og:description"
@@ -30,7 +30,7 @@ function StartPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Explore Vehicles on Reecomm — Buy, Sell, or Consult"
+          content="Buy, Sell or Consult — Start here | Reecomm"
         />
         <meta
           name="twitter:description"

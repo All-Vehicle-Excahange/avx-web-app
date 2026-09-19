@@ -16,7 +16,7 @@ function index() {
   return (
     <>
       <Head>
-        <title>Become a Seller on Reecomm | Sell Your Car</title>
+        <title>Sell Your Vehicle | Reecomm</title>
         <meta
           name="description"
           content="Become a seller on Reecomm — list your used car free, reach verified buyers, and sell faster with secure inquiries."
@@ -32,7 +32,7 @@ function index() {
         <meta property="og:url" content="https://www.reecomm.com/become-seller" />
         <meta
           property="og:title"
-          content="Become a Seller on Reecomm | Sell Your Car"
+          content="Sell Your Vehicle | Reecomm"
         />
         <meta
           property="og:description"
@@ -49,7 +49,7 @@ function index() {
         <meta name="twitter:site" content="@reecomm" />
         <meta
           name="twitter:title"
-          content="Become a Seller on Reecomm | Sell Your Car"
+          content="Sell Your Vehicle | Reecomm"
         />
         <meta
           name="twitter:description"
