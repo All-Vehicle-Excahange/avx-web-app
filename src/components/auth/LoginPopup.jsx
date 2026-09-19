@@ -37,6 +37,7 @@ function LoginPopup({
   onSignup = () => { },
   onSuccess = () => { },
   hideTabs = false,
+  initialAccountType,
 }) {
   useEscapeKey(isOpen, onClose);
   const {
@@ -88,7 +89,8 @@ function LoginPopup({
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [googleToken, setGoogleToken] = useState(null);
   const [isGoogleSignupFlow, setIsGoogleSignupFlow] = useState(false);
-  const [accountType, setAccountType] = useState("personal");
+  const storeDefaultTab = useAuthStore((state) => state.authPopupDefaultTab);
+  const [accountType, setAccountType] = useState(() => initialAccountType || storeDefaultTab || "personal");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isLoginFlow, setIsLoginFlow] = useState(false);
   const savedValuesRef = useRef({});
@@ -113,7 +115,8 @@ function LoginPopup({
       setOtpError("");
       setIsLoading(false);
       setIsGoogleLoading(false);
-      setAccountType("personal");
+      const defaultTab = initialAccountType || useAuthStore.getState().authPopupDefaultTab || "personal";
+      setAccountType(defaultTab);
       setAcceptedTerms(false);
       setIsLoginFlow(false);
 

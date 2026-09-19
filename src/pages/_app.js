@@ -79,6 +79,7 @@ export default function App({ Component, pageProps }) {
   const isLoginPopupOpen = useAuthStore((state) => state.isLoginPopupOpen);
   const closeLoginPopup = useAuthStore((state) => state.closeLoginPopup);
   const openLoginPopup = useAuthStore((state) => state.openLoginPopup);
+  const authPopupDefaultTab = useAuthStore((state) => state.authPopupDefaultTab);
   
   
   
@@ -299,7 +300,7 @@ export default function App({ Component, pageProps }) {
           <LoginPopup
             isOpen={isLoginPopupOpen && !showSplash}
             onClose={closeLoginPopup}
-            
+            initialAccountType={authPopupDefaultTab}
             onSuccess={async (params = {}) => {
               try {
                 // Strictly only show for basic buyers.

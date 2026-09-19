@@ -606,6 +606,9 @@ export async function getServerSideProps(context) {
     if (initialFilters.modelId) {
       body.modelIds = [Number(initialFilters.modelId)];
     }
+    if (initialFilters.category || initialFilters.vehicleTag) {
+      body.vehicleTag = String(initialFilters.category || initialFilters.vehicleTag);
+    }
     if (fuelTypeFilter) {
       body.fuelTypes = [String(fuelTypeFilter).toUpperCase()];
     }
