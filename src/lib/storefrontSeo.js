@@ -131,10 +131,11 @@ export function buildStorefrontFaq({
     },
   ];
 
+  const safeItems = Array.isArray(items) ? items : [];
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: items.map((item) => ({
+    mainEntity: safeItems.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: {
@@ -218,7 +219,8 @@ export function buildStorefrontItemListSchema({
   canonical,
   vehicles = [],
 } = {}) {
-  const itemListElement = vehicles.slice(0, 10).map((v, index) => {
+  const safeVehicles = Array.isArray(vehicles) ? vehicles : [];
+  const itemListElement = safeVehicles.slice(0, 10).map((v, index) => {
     const name =
       `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
       "Used Vehicle";

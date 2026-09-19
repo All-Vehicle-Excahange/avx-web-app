@@ -23,7 +23,7 @@ import {
 import Button from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { trackInquiryClick, trackInquirySubmit } from "@/lib/gtag";
-import { trackInquiryInitiated, trackInquirySubmitted } from "@/lib/amplitude";
+import { trackInquiryInitiated, trackInquirySubmitted, trackCallSubmitted } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import {
@@ -164,39 +164,24 @@ export default function CallSellerPopup({
   const handleCallClick = () => {
     const inquiryType = isConsultant ? "Call Consultant" : "Call Seller";
 
-    // GA4: inquiry_submit
-    trackInquirySubmit({
+    // Amplitude: call_submitted
+    trackCallSubmitted({
       vehicle_id: vehicleId,
       vehicle_name: vehicleTitle,
       inquiry_type: inquiryType,
       seller_type: vehicleOwnerRole,
     });
 
-    // Amplitude: inquiry_submitted
-    trackInquirySubmitted({
-      vehicle_id: vehicleId,
-      vehicle_name: vehicleTitle,
-      inquiry_type: inquiryType,
-      seller_type: vehicleOwnerRole,
-    });
-
-    // Meta Pixel: Inquiry, Lead & Contact on call submit
-    customEvent("Inquiry", {
-      content_type: "vehicle",
-      content_ids: [String(vehicleId)],
-      content_name: vehicleTitle || "Vehicle Inquiry",
-      seller_type: vehicleOwnerRole || "",
-      inquiry_type: inquiryType,
-    });
+    // Meta Pixel: Lead & Contact on call submit
     event("Lead", {
       content_type: "vehicle",
       content_ids: [String(vehicleId)],
-      content_name: vehicleTitle || "Vehicle Inquiry",
+      content_name: vehicleTitle || "Vehicle Call",
     });
     event("Contact", {
       content_type: "vehicle",
       content_ids: [String(vehicleId)],
-      content_name: vehicleTitle || "Vehicle Inquiry",
+      content_name: vehicleTitle || "Vehicle Call",
     });
 
     if (cleanPhone) {

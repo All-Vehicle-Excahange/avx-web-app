@@ -382,22 +382,23 @@ export function formatVehicleListingLine(v = {}) {
  * Derive listing stats from sample vehicles for quotable SEO copy.
  */
 export function deriveListingStats(vehicles = [], totalCount = 0) {
-  const prices = vehicles
-    .map((v) => Number(v.price))
+  const safeVehicles = Array.isArray(vehicles) ? vehicles : [];
+  const prices = safeVehicles
+    .map((v) => Number(v?.price))
     .filter((n) => Number.isFinite(n) && n > 0);
-  const years = vehicles
-    .map((v) => Number(v.yearOfMfg || v.year))
+  const years = safeVehicles
+    .map((v) => Number(v?.yearOfMfg || v?.year))
     .filter((n) => Number.isFinite(n) && n > 1990);
   const fuels = [
     ...new Set(
-      vehicles
-        .map((v) => String(v.fuelType || "").replace(/_/g, " ").trim())
+      safeVehicles
+        .map((v) => String(v?.fuelType || "").replace(/_/g, " ").trim())
         .filter(Boolean),
     ),
   ].slice(0, 3);
 
   return {
-    totalCount: totalCount > 0 ? totalCount : vehicles.length || 0,
+    totalCount: totalCount > 0 ? totalCount : safeVehicles.length || 0,
     minPrice: prices.length ? Math.min(...prices) : null,
     maxPrice: prices.length ? Math.max(...prices) : null,
     minYear: years.length ? Math.min(...years) : null,
@@ -563,10 +564,11 @@ export function buildSearchLandingFaq({
     });
   }
 
+  const safeItems = Array.isArray(items) ? items : [];
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: items.map((item) => ({
+    mainEntity: safeItems.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: {
@@ -648,7 +650,8 @@ export function buildSearchItemListSchema({
     ? `${BASE_URL}/search/buy-used-two-wheelers`
     : `${BASE_URL}/search/buy-used-cars`;
 
-  const itemListElement = vehicles.slice(0, 10).map((v, index) => {
+  const safeVehicles = Array.isArray(vehicles) ? vehicles : [];
+  const itemListElement = safeVehicles.slice(0, 10).map((v, index) => {
     const name =
       `${v.yearOfMfg || v.year || ""} ${v.makerName || v.makeName || ""} ${v.modelName || ""}`.trim() ||
       "Used Vehicle";

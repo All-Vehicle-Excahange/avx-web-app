@@ -8,7 +8,11 @@ import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 const PriceBased = ({ data, title, loading = false }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const cardData = data || [];
+  const cardData = Array.isArray(data) ? data : (data?.content || []);
+
+  if (!loading && cardData.length === 0) {
+    return null;
+  }
 
   return (
     <div className="">

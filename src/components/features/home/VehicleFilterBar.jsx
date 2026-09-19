@@ -413,12 +413,13 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   const handleVehicleSearchSubmit = (queryStr = vehicleSearchQuery) => {
     if (!queryStr || !queryStr.trim()) return;
     const cleanQuery = queryStr.trim();
+    const lowerClean = cleanQuery.toLowerCase();
 
     saveSearchMutation.mutate(cleanQuery);
     trackProductSearch(cleanQuery, "filter_bar_submit");
     setLocalRecentSearches((prev) => {
       const filtered = prev.filter(
-        (term) => term.toLowerCase() !== cleanQuery.toLowerCase(),
+        (term) => term.toLowerCase() !== lowerClean,
       );
       return [cleanQuery, ...filtered].slice(0, 5);
     });
@@ -426,9 +427,42 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     setMobileOpen(false);
     setActiveTab(null);
     setVehicleSearchQuery("");
-    let searchSlug = cleanQuery.toLowerCase().replace(/\bused\b/g, '').trim().replace(/\s+/g, '-');
-    let finalUrl = searchSlug ? `/search/buy-used-${searchSlug}-cars` : `/search/buy-used-cars`;
-    push(finalUrl.replace(/-+/g, '-'));
+
+    // 1. If user selected Consultant tab, navigate to consultant discovery
+    if (internalActiveType === "consult") {
+      push(`/consult/discovery?q=${encodeURIComponent(cleanQuery)}`);
+      return;
+    }
+
+    // 2. Check if query matches a known registered consultant
+    const matchedConsultant = (suggestionsData || []).find((s) => {
+      if (s.type !== "consultant") return false;
+      const sLabel = (s.label || "").toLowerCase().trim();
+      const sUsername = (s.username || "").toLowerCase().trim();
+      const sCleanSlug = sUsername.replace(/\d+$/, "");
+      return (
+        sLabel === lowerClean ||
+        sUsername === lowerClean ||
+        sCleanSlug === lowerClean
+      );
+    });
+
+    if (matchedConsultant) {
+      const targetLink =
+        matchedConsultant.link || `/auto-consultant/${matchedConsultant.username}`;
+      push(targetLink);
+      return;
+    }
+
+    // 3. Otherwise navigate to vehicle search results
+    let searchSlug = lowerClean
+      .replace(/\bused\b/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    let finalUrl = searchSlug
+      ? `/search/buy-used-${searchSlug}-cars`
+      : `/search/buy-used-cars`;
+    push(finalUrl.replace(/-+/g, "-"));
   };
 
   const [priceRange, setPriceRange] = useState("");
@@ -1880,7 +1914,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
       {/* MOBILE FULLSCREEN DRAWER -> NOW A PROPER MODAL BOX */}
       <div
-        className={`lg:hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        className={`lg:hidden fixed inset-0 z-[9999] flex items-end sm:items-center justify-center transition-opacity duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
         {/* Backdrop for click-outside to close */}
         <div
@@ -1893,7 +1927,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
         <div
           id="mobile-drawer"
-          className={`relative w-full sm:w-[90%] max-w-md bg-[#111111] rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "translate-y-full sm:scale-95"} h-[calc(100dvh-70px)] sm:h-[95vh] overflow-y-auto custom-scrollbar pb-6`}
+          className={`relative w-full sm:w-[90%] max-w-md bg-[#111111] rounded-t-3xl sm:rounded-3xl flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "translate-y-full sm:scale-95"} max-h-[88dvh] h-[88dvh] sm:h-[90vh] overflow-y-auto custom-scrollbar pb-6`}
         >
           {/* Header */}
           <div className="p-5 pb-1 flex justify-between items-start">
@@ -1928,7 +1962,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <Car size={20} strokeWidth={1.5} />
               Vehicle
               {internalActiveType === "vehicle" && (
-                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-blue-500 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-fourth rounded-t-full" />
               )}
             </button>
             <button
@@ -1941,7 +1975,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               <User size={20} strokeWidth={1.5} />
               Consultant
               {internalActiveType === "consult" && (
-                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-blue-500 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-fourth rounded-t-full" />
               )}
             </button>
           </div>
@@ -1949,8 +1983,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           {/* Search Bar with live vehicle & city suggestions */}
           <div className="px-5 mt-4">
             <div className="relative">
-              <div className="flex items-center w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-full overflow-hidden focus-within:border-blue-500/60 transition-colors h-[46px] relative">
-                <div className="pl-4 text-blue-500 shrink-0 z-10">
+              <div className="flex items-center w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-full overflow-hidden focus-within:border-fourth/60 transition-colors h-[46px] relative">
+                <div className="pl-4 text-fourth shrink-0 z-10">
                   <Search size={18} strokeWidth={2} />
                 </div>
 
@@ -2023,10 +2057,10 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           {item.type === "consultant" ? (
                             <User
                               size={16}
-                              className="text-purple-400 shrink-0"
+                              className="text-fourth shrink-0"
                             />
                           ) : item.type === "brand" ? (
-                            <Car size={16} className="text-blue-400 shrink-0" />
+                            <Car size={16} className="text-fourth shrink-0" />
                           ) : (
                             <Tag size={16} className="text-gray-400 shrink-0" />
                           )}
@@ -2056,7 +2090,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                     clearSearchesMutation.mutate();
                     setLocalRecentSearches([]);
                   }}
-                  className="text-xs text-blue-500 hover:underline font-semibold cursor-pointer"
+                  className="text-xs text-fourth hover:underline font-semibold cursor-pointer"
                 >
                   Clear All
                 </button>
@@ -2068,16 +2102,41 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   No recent searches
                 </span>
               ) : (
-                displayRecentSearches.map((term, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleVehicleSearchSubmit(term)}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] border border-neutral-800 rounded-full text-xs text-gray-300 font-medium shrink-0 cursor-pointer transition-colors"
-                  >
-                    <span className="text-gray-500">🕒</span>
-                    {term}
-                  </button>
-                ))
+                displayRecentSearches.map((term, index) => {
+                  const cleanTerm = (term || "").toLowerCase().trim();
+                  const matchedConsultant = (suggestionsData || []).find((s) => {
+                    if (s.type !== "consultant") return false;
+                    const sLabel = (s.label || "").toLowerCase().trim();
+                    const sUsername = (s.username || "").toLowerCase().trim();
+                    const sCleanSlug = sUsername.replace(/\d+$/, "");
+                    return (
+                      sLabel === cleanTerm ||
+                      sUsername === cleanTerm ||
+                      sCleanSlug === cleanTerm
+                    );
+                  });
+                  const isConsultant = Boolean(matchedConsultant);
+
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleVehicleSearchSubmit(term)}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] border border-neutral-800 rounded-full text-xs text-gray-300 font-medium shrink-0 cursor-pointer transition-colors"
+                    >
+                      {isConsultant ? (
+                        <User size={13} className="text-fourth shrink-0" />
+                      ) : (
+                        <span className="text-gray-500 text-[11px]">🕒</span>
+                      )}
+                      <span>{term}</span>
+                      {isConsultant && (
+                        <span className="text-[9px] font-bold text-fourth bg-fourth/15 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                          Consultant
+                        </span>
+                      )}
+                    </button>
+                  );
+                })
               )}
             </div>
           </div>

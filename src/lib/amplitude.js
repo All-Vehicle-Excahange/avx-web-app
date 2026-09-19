@@ -475,6 +475,27 @@ export function trackInquirySubmitted(properties = {}) {
   });
 }
 
+export function trackCallInitiated(properties = {}) {
+  track("call_initiated", {
+    vehicle_id: properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
+    inquiry_type: properties.inquiry_type || undefined,
+    seller_type: properties.seller_type || undefined,
+    source: properties.source || "vdp",
+    is_logged_in: properties.is_logged_in ?? undefined,
+  });
+}
+
+export function trackCallSubmitted(properties = {}) {
+  track("call_submitted", {
+    vehicle_id: properties.vehicle_id != null ? String(properties.vehicle_id) : undefined,
+    vehicle_name: properties.vehicle_name || undefined,
+    inquiry_type: properties.inquiry_type || undefined,
+    seller_type: properties.seller_type || undefined,
+    source: properties.source || "vdp",
+  });
+}
+
 function makeOfferProps(properties = {}) {
   return {
     vehicle_id:
