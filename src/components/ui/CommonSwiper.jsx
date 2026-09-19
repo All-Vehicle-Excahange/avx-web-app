@@ -32,6 +32,8 @@ const CommonSwiper = ({ data, CardComponent, prevRef, nextRef, extraCardProps = 
     }
   }, [swiperInstance, prevRef, nextRef]);
 
+  const list = Array.isArray(data) ? data : [];
+
   return (
     <Swiper
       modules={[FreeMode]}
@@ -41,8 +43,8 @@ const CommonSwiper = ({ data, CardComponent, prevRef, nextRef, extraCardProps = 
       slidesPerView={"auto"}
       onSwiper={setSwiperInstance}
     >
-      {data.map((item) => (
-        <SwiperSlide key={item.id} className="w-[340px]!">
+      {list.map((item, index) => (
+        <SwiperSlide key={item?.id ?? index} className="w-[340px]!">
           <CardComponent data={item} {...extraCardProps} />
         </SwiperSlide>
       ))}

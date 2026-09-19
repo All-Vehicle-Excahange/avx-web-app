@@ -13,6 +13,7 @@ import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import {
   createVehicleCallLead,
   getVehicleOwnerContact,
+  recordInquiryClick,
 } from "@/services/vehicle.service";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
@@ -25,6 +26,8 @@ import {
   trackInquirySubmitted,
   trackInquiryLoginRequired,
   trackMakeOfferInitiated,
+  trackCallInitiated,
+  trackCallSubmitted,
 } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
 
@@ -223,6 +226,17 @@ export default function VehicleSummaryRight({
           navigator.userAgent
         ));
 
+    const inquiryType =
+      vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller";
+
+    trackCallInitiated({
+      vehicle_id: vehicleId,
+      vehicle_name: vehicleTitle,
+      inquiry_type: inquiryType,
+      seller_type: vehicleOwnerRole,
+      is_logged_in: Boolean(isLoggedIn),
+    });
+
     setLoading(true);
     let targetPhone =
       summary?.phone ||
@@ -271,28 +285,21 @@ export default function VehicleSummaryRight({
         const inquiryType =
           vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller";
 
-        trackInquirySubmitted({
+        trackCallSubmitted({
           vehicle_id: vehicleId,
           vehicle_name: vehicleTitle,
           inquiry_type: inquiryType,
           seller_type: vehicleOwnerRole,
         });
-        customEvent("Inquiry", {
-          content_type: "vehicle",
-          content_ids: [String(vehicleId)],
-          content_name: vehicleTitle || "Vehicle Inquiry",
-          seller_type: vehicleOwnerRole || "",
-          inquiry_type: inquiryType,
-        });
         event("Lead", {
           content_type: "vehicle",
           content_ids: [String(vehicleId)],
-          content_name: vehicleTitle || "Vehicle Inquiry",
+          content_name: vehicleTitle || "Vehicle Call",
         });
         event("Contact", {
           content_type: "vehicle",
           content_ids: [String(vehicleId)],
-          content_name: vehicleTitle || "Vehicle Inquiry",
+          content_name: vehicleTitle || "Vehicle Call",
         });
 
         window.location.href = `tel:${cleanPhone}`;
@@ -318,6 +325,11 @@ export default function VehicleSummaryRight({
 
   const openMakeOffer = () => {
     if (hasActiveInquiry || vehicle?.isVehicleSold) return;
+
+    const targetVehicleId = vehicleId || vehicle?.id;
+    if (targetVehicleId) {
+      recordInquiryClick(targetVehicleId);
+    }
 
     const vehicleName =
       `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();

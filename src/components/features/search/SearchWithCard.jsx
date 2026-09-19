@@ -82,6 +82,25 @@ const standardizeFuelType = (fuelStr) => {
   return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
 };
 
+const VEHICLE_CATEGORIES_BY_TYPE = {
+  FOUR_WHEELER: [
+    { value: "URBAN_RIDE", label: "Urban Rides", slug: "urban-rides" },
+    { value: "CITY_COMPACT", label: "City Compact", slug: "city-compact" },
+    { value: "COMFORT_SEDAN", label: "Comfort Sedans", slug: "comfort-sedans" },
+    { value: "COMPACT_SUV", label: "Compact SUVs", slug: "compact-suvs" },
+    { value: "FULL_SIZE_SUV_MUV", label: "SUVs & MUVs", slug: "fullsize-suvs-muvs" },
+    { value: "PREMIUM_LUXURY", label: "Premium & Luxury", slug: "premium-luxury" },
+  ],
+  TWO_WHEELER: [
+    { value: "SCOOTER", label: "Scooters", slug: "scooters" },
+    { value: "COMMUTER_BIKE", label: "Commuter Bikes", slug: "commuter-bikes" },
+    { value: "SPORTS_BIKE", label: "Sports Bikes", slug: "sports-bikes" },
+    { value: "CRUISER_AND_RETRO", label: "Cruiser & Retro", slug: "cruiser-retro" },
+    { value: "ADVENTURE_AND_TOURING", label: "Adventure & Touring", slug: "adventure-touring" },
+    { value: "ELECTRIC_2WHEELER", label: "Electric 2W", slug: "electric-2w" },
+  ],
+};
+
 export default function SearchWithCard({
   onPageResponseChange,
   onFilterChange,
@@ -314,6 +333,42 @@ export default function SearchWithCard({
     { value: "automatic", label: "Automatic" },
     { value: "manual", label: "Manual" },
   ]);
+
+  // ── Category / Vehicle Tag states ──
+  const rawCategory =
+    searchParams.get("category") ||
+    searchParams.get("vehicleTag") ||
+    searchParams.get("tag") ||
+    initialFilters.category ||
+    initialFilters.vehicleTag;
+
+  const [selectedCategories, setSelectedCategories] = useState(() => {
+    if (rawCategory) {
+      const rawList = String(rawCategory)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const allCats = [
+        ...VEHICLE_CATEGORIES_BY_TYPE.FOUR_WHEELER,
+        ...VEHICLE_CATEGORIES_BY_TYPE.TWO_WHEELER,
+      ];
+      return rawList.map((item) => {
+        const lower = item.toLowerCase();
+        const match = allCats.find(
+          (c) => c.slug === lower || c.value.toLowerCase() === lower,
+        );
+        return match ? match.value : item.toUpperCase();
+      });
+    }
+    return [];
+  });
+
+  const categoryItems = useMemo(() => {
+    return (
+      VEHICLE_CATEGORIES_BY_TYPE[apiBodyType] ||
+      VEHICLE_CATEGORIES_BY_TYPE.FOUR_WHEELER
+    );
+  }, [apiBodyType]);
   const [transmissionLoading, setTransmissionLoading] = useState(false);
   const [activeTagCount, setActiveTagCount] = useState(0);
 
@@ -337,6 +392,7 @@ export default function SearchWithCard({
     selectedCityId,
     selectedStateId,
     selectedTownId,
+    selectedCategories,
     selectedRating,
     selectedSellerType,
     avxAssumed,
@@ -386,6 +442,21 @@ export default function SearchWithCard({
     setSelectedBodyType(
       initialFilters.bodyType ? [initialFilters.bodyType.toLowerCase()] : [],
     );
+
+    // Category / Vehicle Tag
+    if (initialFilters.category || initialFilters.vehicleTag) {
+      const catVal = initialFilters.category || initialFilters.vehicleTag;
+      const allCats = [
+        ...VEHICLE_CATEGORIES_BY_TYPE.FOUR_WHEELER,
+        ...VEHICLE_CATEGORIES_BY_TYPE.TWO_WHEELER,
+      ];
+      const match = allCats.find(
+        (c) => c.slug === catVal.toLowerCase() || c.value.toLowerCase() === catVal.toLowerCase(),
+      );
+      setSelectedCategories([match ? match.value : catVal.toUpperCase()]);
+    } else {
+      setSelectedCategories([]);
+    }
 
     // Location
     if (initialFilters.stateId) {
@@ -460,6 +531,11 @@ export default function SearchWithCard({
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
 
+    if (selectedCategories.length > 0) {
+      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
+    }
+
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
 
@@ -511,6 +587,10 @@ export default function SearchWithCard({
     if (selectedTownId) payload.townId = selectedTownId;
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
+    if (selectedCategories.length > 0) {
+      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
+    }
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
     if (selectedModels.length > 0)
@@ -719,7 +799,10 @@ export default function SearchWithCard({
     }));
   }, [recommendedAdsData]);
 
-  const newVehicles = searchData?.topPicksVehicles?.vehicles || [];
+  const newVehicles =
+    searchData?.priceMatchVehicles?.vehicles ||
+    searchData?.topPicksVehicles?.vehicles ||
+    [];
 
   useEffect(() => {
     if (currentPage === 1) {
@@ -734,10 +817,18 @@ export default function SearchWithCard({
   }, [newVehicles, currentPage]);
 
   const vehicles = accumulatedVehicles;
-  const relatedVehicles = searchData?.similarVehicles || [];
-  const priceBasedVehicles = searchData?.priceMatchVehicles || [];
+  const relatedVehicles = Array.isArray(searchData?.similarVehicles)
+    ? searchData.similarVehicles
+    : (searchData?.similarVehicles?.content || []);
+  const priceBasedVehicles = Array.isArray(searchData?.priceMatchVehicles?.vehicles)
+    ? searchData.priceMatchVehicles.vehicles
+    : Array.isArray(searchData?.priceMatchVehicles)
+    ? searchData.priceMatchVehicles
+    : (searchData?.priceMatchVehicles?.content || []);
   const topPicksPageResponse =
-    searchData?.topPicksVehicles?.pageResponse || null;
+    searchData?.priceMatchVehicles?.pageResponse ||
+    searchData?.topPicksVehicles?.pageResponse ||
+    null;
 
   // Sync selected filters → clean SEO slug URL (zero query params, production-style)
   // e.g. /search/buy-used-petrol-sedan-hyundai-cars-above-2-lakhs-ahmedabad
@@ -818,8 +909,13 @@ export default function SearchWithCard({
     }
 
     const similar = searchData.similarVehicles || [];
-    const priceBased = searchData.priceMatchVehicles || [];
-    const topPicksPR = searchData.topPicksVehicles?.pageResponse || {};
+    const priceBased = Array.isArray(searchData.priceMatchVehicles?.vehicles)
+      ? searchData.priceMatchVehicles.vehicles
+      : (Array.isArray(searchData.priceMatchVehicles) ? searchData.priceMatchVehicles : []);
+    const topPicksPR =
+      searchData.priceMatchVehicles?.pageResponse ||
+      searchData.topPicksVehicles?.pageResponse ||
+      {};
 
     setTotalPages(topPicksPR.totalPages || 0);
     if (topPicksPR.totalElements !== undefined) {
@@ -946,6 +1042,33 @@ export default function SearchWithCard({
       setSelectedTransmissionTypes([]);
     } else {
       setSelectedTransmissionTypes(qTransmission.toLowerCase().split(",").map(s => s.trim()));
+    }
+
+    const qCategory =
+      searchParams.get("category") ||
+      searchParams.get("vehicleTag") ||
+      searchParams.get("tag") ||
+      initialFilters.category ||
+      initialFilters.vehicleTag;
+    if (!qCategory || qCategory.toLowerCase() === "all") {
+      setSelectedCategories([]);
+    } else {
+      const rawList = String(qCategory)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const allCats = [
+        ...VEHICLE_CATEGORIES_BY_TYPE.FOUR_WHEELER,
+        ...VEHICLE_CATEGORIES_BY_TYPE.TWO_WHEELER,
+      ];
+      const mapped = rawList.map((item) => {
+        const lower = item.toLowerCase();
+        const match = allCats.find(
+          (c) => c.slug === lower || c.value.toLowerCase() === lower,
+        );
+        return match ? match.value : item.toUpperCase();
+      });
+      setSelectedCategories(mapped);
     }
 
     const qBudget = searchParams.get("budget") || initialFilters.budget;
@@ -1739,6 +1862,13 @@ export default function SearchWithCard({
     if (selectedFuelTypes.length > 0) tags.push(...selectedFuelTypes);
     if (selectedTransmissionTypes.length > 0)
       tags.push(...selectedTransmissionTypes);
+    if (selectedCategories.length > 0) {
+      const catLabels = selectedCategories.map((cVal) => {
+        const match = categoryItems.find((c) => c.value === cVal);
+        return match ? match.label : cVal;
+      });
+      tags.push(...catLabels);
+    }
     if (selectedBodyType.length > 0)
       tags.push(
         ...selectedBodyType.map(
@@ -1801,6 +1931,16 @@ export default function SearchWithCard({
       if (selectedTransmissionTypes.some((t) => t.toLowerCase() === lower)) {
         setSelectedTransmissionTypes((prev) =>
           prev.filter((t) => t.toLowerCase() !== lower),
+        );
+        return;
+      }
+      // Category
+      const catObj = categoryItems.find(
+        (c) => c.label.toLowerCase() === lower || c.value.toLowerCase() === lower,
+      );
+      if (catObj && selectedCategories.includes(catObj.value)) {
+        setSelectedCategories((prev) =>
+          prev.filter((val) => val !== catObj.value),
         );
         return;
       }
@@ -1976,6 +2116,7 @@ export default function SearchWithCard({
     // Reset fuel & transmission
     setSelectedFuelTypes([]);
     setSelectedTransmissionTypes([]);
+    setSelectedCategories([]);
     setTransmissionTypes([
       { value: "automatic", label: "Automatic" },
       { value: "manual", label: "Manual" },
@@ -2295,6 +2436,19 @@ export default function SearchWithCard({
             </FilterSection>
 
             <FilterSection
+              title="Category"
+              selectedCount={selectedCategories.length}
+            >
+              <ChipGroup
+                title=""
+                items={categoryItems}
+                selected={selectedCategories}
+                onChange={setSelectedCategories}
+                allowMultiple={true}
+              />
+            </FilterSection>
+
+            <FilterSection
               title="Fuel Type"
               selectedCount={selectedFuelTypes.length}
             >
@@ -2575,6 +2729,7 @@ export default function SearchWithCard({
             </div>
           )}
 
+          {/* PriceBased top swiper section disabled as requested
           <div className="col-span-full mb-10 ">
             {(() => {
               // --- Price range label ---
@@ -2662,6 +2817,7 @@ export default function SearchWithCard({
               );
             })()}
           </div>
+          */}
 
           {vehiclesLoading && currentPage === 1 ? (
             <>
@@ -2721,17 +2877,6 @@ export default function SearchWithCard({
                 </div>
               )}
             </>
-          ) : vehicles?.length === 0 && priceBasedVehicles?.length === 0 ? (
-            <EmptyState
-              title={
-                selectedCityName
-                  ? `No vehicles listed directly in ${selectedCityName} yet`
-                  : brandParam
-                    ? `No ${brandParam} vehicles listed directly yet`
-                    : "No vehicles listed directly yet"
-              }
-              description="We are actively verifying new consultants and pre-owned listings here. In the meantime, browse the top verified matches and recommendations near you below."
-            />
           ) : null}
         </div>
       </main>
@@ -2774,6 +2919,7 @@ export default function SearchWithCard({
               { name: "Budget", count: 0 },
               { name: "Brand", count: selectedBrands.length },
               { name: "Model", count: selectedModels.length },
+              { name: "Category", count: selectedCategories.length },
               { name: "Fuel Type", count: selectedFuelTypes.length },
               { name: "Transmission", count: selectedTransmissionTypes.length },
               { name: "Year", count: selectedYear.length },
@@ -2992,6 +3138,18 @@ export default function SearchWithCard({
                 searchValue={modelSearch}
                 onSearchChange={setModelSearch}
                 isLoading={modelLoading}
+                allowMultiple={true}
+                variant="outlineDark"
+              />
+            )}
+
+            {/* ── CATEGORY ── */}
+            {activeFilterTab === "Category" && (
+              <ChipGroup
+                title=""
+                items={categoryItems}
+                selected={selectedCategories}
+                onChange={setSelectedCategories}
                 allowMultiple={true}
                 variant="outlineDark"
               />

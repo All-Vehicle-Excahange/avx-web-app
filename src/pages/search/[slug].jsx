@@ -638,13 +638,17 @@ export async function getServerSideProps(context) {
     if (listRes.ok) {
       const listJson = await listRes.json();
       totalCount =
+        listJson?.data?.priceMatchVehicles?.pageResponse?.totalElements ||
+        listJson?.data?.topPicksVehicles?.pageResponse?.totalElements ||
         listJson?.pageResponse?.totalElements ||
         listJson?.totalElements ||
         0;
       const rawList =
-        listJson?.data ||
-        listJson?.content ||
-        listJson?.vehicles ||
+        listJson?.data?.priceMatchVehicles?.vehicles ||
+        listJson?.data?.topPicksVehicles?.vehicles ||
+        (Array.isArray(listJson?.data) ? listJson.data : null) ||
+        (Array.isArray(listJson?.content) ? listJson.content : null) ||
+        (Array.isArray(listJson?.vehicles) ? listJson.vehicles : null) ||
         [];
       initialVehicles = Array.isArray(rawList)
         ? rawList.slice(0, 20).map((v) => ({

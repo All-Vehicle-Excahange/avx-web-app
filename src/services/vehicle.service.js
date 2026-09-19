@@ -170,5 +170,15 @@ export const getCallLeadsKpis = async () => {
   }
 };
 
+export const recordInquiryClick = async (vehicleId) => {
+  try {
+    const res = await axiosInstance.post(`/vehicles/inquiry/click/${vehicleId}`);
+    return handleResponse(res);
+  } catch (error) {
+    console.error("Error recording inquiry click API:", error);
+    return null;
+  }
+};
+
 
 

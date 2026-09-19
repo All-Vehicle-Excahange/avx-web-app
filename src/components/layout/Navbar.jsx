@@ -767,7 +767,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
       {/* Background Overlay for Search */}
       {showDropdown && (
         <div
-          className="fixed inset-0 bg-black/60 z-1090 transition-opacity overscroll-contain"
+          className="fixed inset-0 bg-black/60 z-[990] transition-opacity overscroll-contain"
           onClick={closeSearchDropdown}
           onWheel={(e) => {
             e.preventDefault();
@@ -780,7 +780,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
         />
       )}
       <div
-        className="fixed top-0 inset-x-0 z-1100 transition-transform duration-300 pointer-events-none"
+        className="fixed top-0 inset-x-0 z-[1000] transition-transform duration-300 pointer-events-none"
       // style={{ transform: `translateY(${transformY}px)` }}
       >
         {!inFlutterApp &&
