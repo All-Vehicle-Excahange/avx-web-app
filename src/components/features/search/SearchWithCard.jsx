@@ -533,7 +533,6 @@ export default function SearchWithCard({
 
     if (selectedCategories.length > 0) {
       payload.vehicleTag = selectedCategories[0];
-      payload.vehicleTags = selectedCategories;
     }
 
     if (selectedBrands.length > 0)
@@ -589,7 +588,6 @@ export default function SearchWithCard({
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
     if (selectedCategories.length > 0) {
       payload.vehicleTag = selectedCategories[0];
-      payload.vehicleTags = selectedCategories;
     }
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
@@ -632,6 +630,7 @@ export default function SearchWithCard({
       setDebouncedConsultPayload(buildConsultPayload());
       setDebouncedMinPrice(minPrice);
       setDebouncedMaxPrice(maxPrice);
+      setCurrentPage(1);
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (skipFirstFilterTrackRef.current) {
@@ -677,6 +676,7 @@ export default function SearchWithCard({
     selectedCityName,
     selectedStateName,
     selectedTownId,
+    selectedCategories,
     selectedRating,
     selectedSellerType,
     avxAssumed,
