@@ -2,16 +2,13 @@
 
 import { useEffect } from "react";
 import { setupGuestUser } from "@/lib/guest.util";
-import { getGuestId } from "@/lib/indexdb/guest.db";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function useGuestSetup() {
-  const { isLoggedIn, authInitialized, openLoginPopup } = useAuthStore();
+  const { isLoggedIn, authInitialized } = useAuthStore();
 
   useEffect(() => {
     if (!authInitialized) return;
-
-    let timeoutId;
 
     const hasTokenInUrl =
       typeof window !== "undefined" &&
@@ -21,27 +18,7 @@ export default function useGuestSetup() {
         new URLSearchParams(window.location.search).has("token"));
 
     if (!isLoggedIn && !hasTokenInUrl) {
-      (async () => {
-        const existingId = await getGuestId();
-        
-        timeoutId = setTimeout(() => {
-          if (!useAuthStore.getState().hasSeenLoginPopup) {
-            openLoginPopup({
-              entry_context: "home",
-              trigger_action: "login_click",
-              user_role_intent: "buyer",
-            });
-          }
-        }, 20000);
-
-        setupGuestUser();
-      })();
+      setupGuestUser();
     }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [isLoggedIn, authInitialized, openLoginPopup]);
+  }, [isLoggedIn, authInitialized]);
 }
