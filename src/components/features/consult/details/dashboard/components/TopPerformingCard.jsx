@@ -65,6 +65,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
               {/* Always visible */}
               <Link
                 href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`}
+                prefetch={false}
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
               >
                 View Listing
@@ -99,6 +100,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
               <Link
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                 href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}?tab=inspection`}
+                prefetch={false}
                 onClick={() => setOpen(false)}
               >
                 Inspection Details

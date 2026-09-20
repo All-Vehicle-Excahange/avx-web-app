@@ -26,6 +26,10 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { event as metaEvent } from "@/lib/fpixel";
+import {
+  resolveVehicleImageSrc,
+  VEHICLE_IMAGE_FALLBACK,
+} from "@/lib/vehicleImage";
 
 export default function VehicleCard({
   data,
@@ -41,6 +45,11 @@ export default function VehicleCard({
     () => data?.isWishlisted || false,
   );
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const resolvedImage = resolveVehicleImageSrc(data);
+  const [imageSrc, setImageSrc] = useState(resolvedImage);
+  useEffect(() => {
+    setImageSrc(resolvedImage);
+  }, [resolvedImage]);
   const { addToCompare, compareVehicles } = useCompareStore();
   const isComparing = compareVehicles.some((v) => v.id === data.id);
 
@@ -168,7 +177,7 @@ export default function VehicleCard({
 
   const baseFuel = formatText(data.fuelType) || formatText(data.fuel);
   const mapped = {
-    image: data.thumbnailUrl || data.image,
+    image: resolvedImage,
 
     title: data.makerName
       ? `${data.makerName} ${data.modelName} ${data.variantName}`
@@ -288,6 +297,7 @@ export default function VehicleCard({
           {/* IMAGE */}
           <Link
             href={detailHref}
+            prefetch={false}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -308,12 +318,18 @@ export default function VehicleCard({
                 </div>
               )}
 
-              {mapped.image ? (
+              {imageSrc ? (
                 <Image
-                  src={mapped.image}
+                  src={imageSrc}
                   alt={mapped.title}
                   fill
+                  sizes="(max-width: 768px) 168px, 320px"
                   className="h-full w-full object-cover"
+                  onError={() => {
+                    if (imageSrc !== VEHICLE_IMAGE_FALLBACK) {
+                      setImageSrc(VEHICLE_IMAGE_FALLBACK);
+                    }
+                  }}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A]">
@@ -412,6 +428,7 @@ export default function VehicleCard({
                   >
                     <Link
                       href={detailHref}
+                      prefetch={false}
                       onClick={(e) => e.stopPropagation()}
                       className="hover:text-fourth transition-colors"
                     >

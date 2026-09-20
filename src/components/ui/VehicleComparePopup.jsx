@@ -10,6 +10,44 @@ import { getVehicleOverview } from "@/services/vehicle.service";
 import { useCompareStore } from "@/stores/useCompareStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import CompareSkeleton from "@/components/ui/skeleton/CompareSkeleton";
+import {
+    resolveVehicleImageSrc,
+    VEHICLE_IMAGE_FALLBACK,
+} from "@/lib/vehicleImage";
+
+function CompareVehicleImage({ vehicle, alt, sizes = "96px" }) {
+    const resolved = resolveVehicleImageSrc(vehicle);
+    const [src, setSrc] = useState(resolved || VEHICLE_IMAGE_FALLBACK);
+
+    useEffect(() => {
+        setSrc(resolved || VEHICLE_IMAGE_FALLBACK);
+    }, [resolved]);
+
+    if (!resolved && !src) {
+        return (
+            <span className="text-[8px] sm:text-[10px] text-primary/40 font-medium">
+                No Img
+            </span>
+        );
+    }
+
+    return (
+        <Image
+            src={src}
+            loading="lazy"
+            alt={alt || "car"}
+            width={800}
+            height={500}
+            sizes={sizes}
+            className="w-full h-full object-cover"
+            onError={() => {
+                if (src !== VEHICLE_IMAGE_FALLBACK) {
+                    setSrc(VEHICLE_IMAGE_FALLBACK);
+                }
+            }}
+        />
+    );
+}
 
 export default function VehicleComparePopup({
     isOpen,
@@ -192,8 +230,12 @@ export default function VehicleComparePopup({
                                     className="p-1.5 sm:p-3 bg-secondary rounded-lg border border-primary/10 cursor-pointer hover:border-primary/40 focus:bg-primary/5 transition-colors flex items-center gap-2 sm:gap-3"
                                 >
                                     <div className="w-8 h-8 sm:w-12 sm:h-12 bg-primary/5 rounded-md overflow-hidden relative shrink-0 flex items-center justify-center">
-                                        {v.thumbnailUrl ? (
-                                            <Image src={v.thumbnailUrl} loading="lazy" alt="car" width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                                        {resolveVehicleImageSrc(v) ? (
+                                            <CompareVehicleImage
+                                                vehicle={v}
+                                                alt="car"
+                                                sizes="48px"
+                                            />
                                         ) : (
                                             <span className="text-[8px] sm:text-[10px] text-primary/40 font-medium">No Img</span>
                                         )}
@@ -225,8 +267,12 @@ export default function VehicleComparePopup({
         return (
             <div className="border border-primary/20 rounded-xl p-2 sm:p-4 flex flex-col h-full bg-secondary shadow-sm relative group transition-all duration-300">
                 <div className="w-full h-20 sm:h-40 bg-primary/5 rounded-lg mb-2 sm:mb-4 relative overflow-hidden flex items-center justify-center shrink-0">
-                    {vehicle.thumbnailUrl ? (
-                        <Image src={vehicle.thumbnailUrl} loading="lazy" alt={name} width={800} height={500} unoptimized className="w-full h-full object-cover" />
+                    {resolveVehicleImageSrc(vehicle) ? (
+                        <CompareVehicleImage
+                            vehicle={vehicle}
+                            alt={name}
+                            sizes="(max-width: 640px) 50vw, 320px"
+                        />
                     ) : (
                         <span className="text-primary/30 text-[10px] sm:text-sm font-medium">No Image</span>
                     )}

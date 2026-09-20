@@ -100,6 +100,7 @@ export default function InspectionCard({
         {vehicleDetailsUrl ? (
           <Link
             href={vehicleDetailsUrl}
+            prefetch={false}
             onClick={(e) => e.stopPropagation()}
             className="block w-full sm:w-auto shrink-0 transition-transform duration-200 hover:scale-[1.01]"
           >

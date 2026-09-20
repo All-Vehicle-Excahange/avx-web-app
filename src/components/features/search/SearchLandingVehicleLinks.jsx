@@ -33,6 +33,7 @@ export default function SearchLandingVehicleLinks({
               <li key={v.id || href}>
                 <Link
                   href={href}
+                  prefetch={false}
                   className="group flex items-start gap-2 py-1.5 text-primary hover:text-fourth transition-colors"
                 >
                   <svg

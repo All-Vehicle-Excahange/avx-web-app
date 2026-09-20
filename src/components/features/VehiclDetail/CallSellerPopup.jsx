@@ -391,6 +391,7 @@ export default function CallSellerPopup({
                     {summary?.username && (
                       <Link
                         href={`/auto-consultant/${consultantUsername}`}
+                        prefetch={false}
                         target="_blank"
                         className="text-primary hover:underline flex items-center gap-0.5 ml-auto"
                       >

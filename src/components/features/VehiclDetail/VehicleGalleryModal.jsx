@@ -164,6 +164,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                       <Image
                         src={item.thumbnail}
                         fill
+                        sizes="100px"
                         alt="thumb"
                         className="object-cover pointer-events-none"
                       />
@@ -173,6 +174,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                           <Image
                             src={item.thumbnail}
                             fill
+                            sizes="100px"
                             alt="thumb"
                             className="object-cover pointer-events-none"
                           />

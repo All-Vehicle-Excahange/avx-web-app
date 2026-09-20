@@ -1,34 +1,94 @@
-export default function imageKitLoader({ src, width, quality }) {
-  // If it's a relative/local asset (e.g. /empty2.svg, /logo.png), serve it directly
-  // We append ?w=width as a dummy parameter to satisfy Next.js's check that the loader implements width.
-  if (src.startsWith('/')) {
-    return `${src}?w=${width}`;
+const WIDTH_BUCKETS = [320, 480, 640, 800, 1080, 1600];
+
+function snapWidth(width) {
+  const w = Number(width) || 640;
+  for (const bucket of WIDTH_BUCKETS) {
+    if (w <= bucket) return bucket;
+  }
+  return WIDTH_BUCKETS[WIDTH_BUCKETS.length - 1];
+}
+
+function isImageKitUrl(src) {
+  if (!src || typeof src !== "string") return false;
+  if (src.startsWith("/cdn-image/") || src.startsWith("/cdn-image?")) return true;
+  try {
+    const host = new URL(src).hostname;
+    return (
+      host === "image.reecomm.com" ||
+      host.endsWith(".imagekit.io") ||
+      host.includes("imagekit.io")
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Extract object path from S3 or ImageKit URL (strip query / tr=). */
+function extractPath(src) {
+  if (!src) return "";
+
+  if (src.startsWith("/cdn-image/")) {
+    return src.replace(/^\/cdn-image\//, "").split("?")[0];
   }
 
-  // If it's a full S3 URL, extract the path key
-  let path = src;
-  const s3UrlPattern = /^https?:\/\/[^\/]*s3[^\/]*\.amazonaws\.com\//;
+  const s3UrlPattern = /^https?:\/\/[^/]*s3[^/]*\.amazonaws\.com\//;
   if (s3UrlPattern.test(src)) {
-    path = src.replace(s3UrlPattern, '');
-  } else if (src.startsWith('http://') || src.startsWith('https://')) {
-    // If it's another external domain, return it as-is with a dummy parameter to satisfy Next.js's check
-    return `${src}${src.includes('?') ? '&' : '?'}w=${width}`;
+    return src.replace(s3UrlPattern, "").split("?")[0];
   }
-  
-  try {
-    path = encodeURI(decodeURIComponent(path));
-  } catch {
+
+  if (isImageKitUrl(src) && (src.startsWith("http://") || src.startsWith("https://"))) {
     try {
-      path = encodeURI(decodeURI(path));
+      const url = new URL(src);
+      // ik.imagekit.io/reecommKit/path → drop first path segment (id)
+      const parts = url.pathname.replace(/^\//, "").split("/");
+      if (url.hostname.endsWith("imagekit.io") && parts.length > 1) {
+        return parts.slice(1).join("/");
+      }
+      // image.reecomm.com/path
+      return parts.join("/");
     } catch {
-      // Keep path as is if decoding fails
+      return src.split("?")[0];
     }
   }
 
-  // Build the ImageKit transformation parameters
-  const params = [`w-${width}`, `q-${quality || 75}`, 'f-auto'];
-  const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '/cdn-image';
-  const cleanEndpoint = endpoint.replace(/\/$/, '');
-  return `${cleanEndpoint}/${path}?tr=${params.join(',')}`;
+  return src.split("?")[0];
 }
 
+function encodePath(path) {
+  try {
+    return encodeURI(decodeURIComponent(path));
+  } catch {
+    try {
+      return encodeURI(decodeURI(path));
+    } catch {
+      return path;
+    }
+  }
+}
+
+export default function imageKitLoader({ src, width, quality }) {
+  // Local /public assets — pass through (dummy w= for Next.js loader contract)
+  if (src.startsWith("/") && !src.startsWith("/cdn-image/")) {
+    return `${src}?w=${width}`;
+  }
+
+  const bucketedWidth = snapWidth(width);
+  const s3UrlPattern = /^https?:\/\/[^/]*s3[^/]*\.amazonaws\.com\//;
+
+  // Non-S3, non-ImageKit absolute URLs — leave alone
+  if (
+    (src.startsWith("http://") || src.startsWith("https://")) &&
+    !s3UrlPattern.test(src) &&
+    !isImageKitUrl(src)
+  ) {
+    return `${src}${src.includes("?") ? "&" : "?"}w=${width}`;
+  }
+
+  let path = extractPath(src);
+  path = encodePath(path);
+
+  const params = [`w-${bucketedWidth}`, `q-${quality || 75}`, "f-auto"];
+  const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || "/cdn-image";
+  const cleanEndpoint = endpoint.replace(/\/$/, "");
+  return `${cleanEndpoint}/${path}?tr=${params.join(",")}`;
+}

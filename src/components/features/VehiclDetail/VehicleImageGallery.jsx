@@ -11,6 +11,7 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackWishlistLoginRequired } from "@/lib/amplitude";
+import { VEHICLE_IMAGE_FALLBACK } from "@/lib/vehicleImage";
 import VehicleGalleryModal from "./VehicleGalleryModal";
 
 const optimizeVideoUrl = (src) => {
@@ -39,6 +40,7 @@ export default function VehicleImageGallery({ vehicle }) {
   const [isFavorite, setIsFavorite] = useState(vehicle?.isWishlisted || false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [failedSrcs, setFailedSrcs] = useState(() => new Set());
   const pendingAction = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const lastSyncedValue = useRef(vehicle?.isWishlisted || false);
@@ -146,29 +148,54 @@ export default function VehicleImageGallery({ vehicle }) {
 
   const media = useMemo(() => {
     const items = [];
+    const seen = new Set();
 
-    if (vehicle?.thumbnailUrl) {
+    const pushImage = (src, thumbnail) => {
+      if (!src || seen.has(src)) return;
+      seen.add(src);
       items.push({
         type: "image",
-        src: vehicle.thumbnailUrl,
-        thumbnail: vehicle.thumbnailUrl,
+        src,
+        thumbnail: thumbnail || src,
       });
+    };
+
+    if (vehicle?.thumbnailUrl) {
+      pushImage(vehicle.thumbnailUrl, vehicle.thumbnailUrl);
     }
 
     if (vehicle?.vehicleImages?.length) {
-      const sorted = [...vehicle.vehicleImages]
-        .sort((a, b) => a.displayOrder - b.displayOrder)
-        .map((item) => ({
-          type: item.isVideo ? "video" : "image",
-          src: item.imageUrl,
-          thumbnail: item.isVideo ? item.videoThumbnailUrl : item.imageUrl,
-        }));
-
-      items.push(...sorted);
+      const sorted = [...vehicle.vehicleImages].sort(
+        (a, b) => a.displayOrder - b.displayOrder,
+      );
+      for (const item of sorted) {
+        if (item.isVideo) {
+          items.push({
+            type: "video",
+            src: item.imageUrl,
+            thumbnail: item.videoThumbnailUrl || item.imageUrl,
+          });
+        } else if (item.imageUrl) {
+          pushImage(item.imageUrl, item.imageUrl);
+        }
+      }
     }
 
     return items;
   }, [vehicle]);
+
+  const safeSrc = (src) =>
+    src && failedSrcs.has(src) ? VEHICLE_IMAGE_FALLBACK : src || VEHICLE_IMAGE_FALLBACK;
+
+  const markFailed = (src) => {
+    if (!src || src === VEHICLE_IMAGE_FALLBACK) return;
+    setFailedSrcs((prev) => {
+      if (prev.has(src)) return prev;
+      const next = new Set(prev);
+      next.add(src);
+      return next;
+    });
+  };
 
   const [[page, direction], setPage] = useState([0, 0]);
   const thumbsContainerRef = useRef(null);
@@ -280,11 +307,13 @@ export default function VehicleImageGallery({ vehicle }) {
             >
               {currentItem.type === "image" ? (
                 <Image
-                  src={currentItem.src}
+                  src={safeSrc(currentItem.src)}
                   alt={`${imageAltBase} — photo ${activeIndex + 1}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, 800px"
                   className="object-contain pointer-events-none select-none"
                   priority
+                  onError={() => markFailed(currentItem.src)}
                 />
               ) : (
                 <div
@@ -357,11 +386,13 @@ export default function VehicleImageGallery({ vehicle }) {
                 >
                   {item.type === "image" ? (
                     <Image
-                      src={item.thumbnail}
+                      src={safeSrc(item.thumbnail)}
                       width={100}
                       height={100}
+                      sizes="96px"
                       alt={`${imageAltBase} — photo ${idx + 1}`}
                       className="w-full h-full object-cover pointer-events-none select-none"
+                      onError={() => markFailed(item.thumbnail)}
                     />
                   ) : (
                     <>
@@ -404,6 +435,7 @@ const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
         src={providedThumbnail}
         width={100}
         height={100}
+        sizes="96px"
         alt="video-thumbnail"
         className="w-full h-full object-cover"
       />

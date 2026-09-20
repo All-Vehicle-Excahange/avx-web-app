@@ -156,6 +156,7 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
         {/*   Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
         <Link
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
+          prefetch={false}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
           <Image

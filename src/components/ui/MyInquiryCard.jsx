@@ -91,6 +91,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
         {/* ✅ Vehicle Image */}
         <Link
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
+          prefetch={false}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
           {vehicleImage ? (
