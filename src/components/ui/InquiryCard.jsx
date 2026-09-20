@@ -1,4 +1,4 @@
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Button from "@/components/ui/button";
 import {
   approveInquiry,
@@ -154,9 +154,8 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
       {/*   LEFT IMAGE + INFO (Stacks on mobile & tablet, row on desktop) */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
         {/*   Vehicle Image (Full width on mobile/tablet, fixed on desktop) */}
-        <Link
+        <NoPrefetchLink
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
-          prefetch={false}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
           <Image
@@ -165,7 +164,7 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
             fill
             className="object-cover"
           />
-        </Link>
+        </NoPrefetchLink>
 
         {/*   Content */}
         <div className="space-y-2 w-full flex-1">

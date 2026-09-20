@@ -18,7 +18,7 @@ import {
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import MakeOfferPopup from "./MakeOfferPopup";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { useRouter } from "next/router";
 import { trackInquiryClick } from "@/lib/gtag";
 import {
@@ -413,26 +413,24 @@ export default function VehicleSummaryRight({
                       </Button>
                     )}
                     {summary?.consultationName && (
-                      <Link
+                      <NoPrefetchLink
                         href={`/auto-consultant/${summary?.username || 1}`}
-                        prefetch={false}
                         className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
                       >
                         Visit Storefront
                         <ExternalLink size={11} className="inline" />
-                      </Link>
+                      </NoPrefetchLink>
                     )}
                   </div>
                 </div>
 
                 {/* Consultant name — clickable → storefront */}
-                <Link
+                <NoPrefetchLink
                   href={`/auto-consultant/${summary?.username || 1}`}
-                  prefetch={false}
                   className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all capitalize"
                 >
                   {summary?.consultationName || "Auto Consultant"}
-                </Link>
+                </NoPrefetchLink>
 
                 {/* Stats row */}
                 <div className="space-y-1">

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import {
   X,
   PhoneCall,
@@ -389,14 +389,13 @@ export default function CallSellerPopup({
                       </span>
                     )}
                     {summary?.username && (
-                      <Link
+                      <NoPrefetchLink
                         href={`/auto-consultant/${consultantUsername}`}
-                        prefetch={false}
                         target="_blank"
                         className="text-primary hover:underline flex items-center gap-0.5 ml-auto"
                       >
                         Storefront <ExternalLink size={10} />
-                      </Link>
+                      </NoPrefetchLink>
                     )}
                   </div>
                 )}

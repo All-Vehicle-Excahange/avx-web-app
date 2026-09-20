@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { formatVehicleListingLine } from "@/lib/searchLandingSeo";
 
 /**
@@ -31,9 +31,8 @@ export default function SearchLandingVehicleLinks({
 
             return (
               <li key={v.id || href}>
-                <Link
+                <NoPrefetchLink
                   href={href}
-                  prefetch={false}
                   className="group flex items-start gap-2 py-1.5 text-primary hover:text-fourth transition-colors"
                 >
                   <svg
@@ -52,7 +51,7 @@ export default function SearchLandingVehicleLinks({
                   <span className="text-sm font-semibold leading-snug">
                     {label}
                   </span>
-                </Link>
+                </NoPrefetchLink>
               </li>
             );
           })}

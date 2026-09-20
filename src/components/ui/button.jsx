@@ -1,4 +1,4 @@
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { ArrowUpRight, Lock, Loader2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -126,18 +126,12 @@ export default function Button({
     </>
   );
 
-  // If href exists → Link
+  // If href exists → native anchor (no Pages Router hover prefetch)
   if (href && !isLocked) {
     return (
-      <Link
-        prefetch={false}
-        href={href}
-        scroll={true}
-        className={classes}
-        {...props}
-      >
+      <NoPrefetchLink href={href} scroll={true} className={classes} {...props}>
         {Content}
-      </Link>
+      </NoPrefetchLink>
     );
   }
 

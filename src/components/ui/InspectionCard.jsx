@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Button from "@/components/ui/button";
 import { Check, File, Car } from "lucide-react";
 import { generateVehicleSlug } from "@/lib/helper";
@@ -98,14 +98,13 @@ export default function InspectionCard({
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full flex-1">
         {/* THUMBNAIL IMAGE */}
         {vehicleDetailsUrl ? (
-          <Link
+          <NoPrefetchLink
             href={vehicleDetailsUrl}
-            prefetch={false}
             onClick={(e) => e.stopPropagation()}
             className="block w-full sm:w-auto shrink-0 transition-transform duration-200 hover:scale-[1.01]"
           >
             {ThumbnailInner}
-          </Link>
+          </NoPrefetchLink>
         ) : (
           <div className="shrink-0 w-full sm:w-auto">{ThumbnailInner}</div>
         )}

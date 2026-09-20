@@ -13,7 +13,7 @@ import {
 import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "../button";
 import Image from "next/image";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { useRouter } from "next/router";
 import { addWishList, removeWishList } from "@/services/user.service";
 import { addClickEvent } from "@/services/ppc.service";
@@ -295,9 +295,8 @@ export default function VehicleCard({
       >
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
-          <Link
+          <NoPrefetchLink
             href={detailHref}
-            prefetch={false}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -411,7 +410,7 @@ export default function VehicleCard({
                 )
               ) : null}
             </div>
-          </Link>
+          </NoPrefetchLink>
 
           {/* CONTENT */}
           <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-3 justify-between min-h-0 overflow-hidden relative">
@@ -426,14 +425,13 @@ export default function VehicleCard({
       line-clamp-2 overflow-hidden
     "
                   >
-                    <Link
+                    <NoPrefetchLink
                       href={detailHref}
-                      prefetch={false}
                       onClick={(e) => e.stopPropagation()}
                       className="hover:text-fourth transition-colors"
                     >
                       {mapped.title}
-                    </Link>
+                    </NoPrefetchLink>
                   </h3>
                 </div>
 

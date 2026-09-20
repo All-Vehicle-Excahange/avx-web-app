@@ -1,4 +1,4 @@
-import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import Button from "@/components/ui/button";
 import { closeInquiry } from "@/services/inquiry.service";
 import { Lock, MessageCircle, Clock, BadgeCheck, CarFront } from "lucide-react";
@@ -89,9 +89,8 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
       {/* ✅ LEFT IMAGE + INFO */}
       <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 w-full">
         {/* ✅ Vehicle Image */}
-        <Link
+        <NoPrefetchLink
           href={`/vehicle/details/${generateVehicleSlug(inquiryVehicleResponse)}/${inquiryVehicleResponse.id}`}
-          prefetch={false}
           className="w-full lg:w-48 h-48 lg:h-42 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 relative block cursor-pointer transition hover:opacity-90"
         >
           {vehicleImage ? (
@@ -106,7 +105,7 @@ export default function MyInquiryCard({ inquiry, onStatusChange }) {
               <CarFront className="w-12 h-12 text-gray-400" />
             </div>
           )}
-        </Link>
+        </NoPrefetchLink>
 
         {/* ✅ Content */}
         <div className="space-y-2 w-full flex-1">

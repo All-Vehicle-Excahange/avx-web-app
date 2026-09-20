@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { getSellerTierTitle, generateVehicleSlug } from "@/lib/helper";
 import { useRouter } from "next/router";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
@@ -63,13 +64,12 @@ export default function TopPerformingCard({ vehicle, rank }) {
           {open && (
             <div className="absolute  bg-secondary/10 backdrop-blur-2xl right-0 mt-2 w-44 rounded-xl border border-third/20 shadow-lg z-50 overflow-hidden">
               {/* Always visible */}
-              <Link
+              <NoPrefetchLink
                 href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`}
-                prefetch={false}
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
               >
                 View Listing
-              </Link>
+              </NoPrefetchLink>
               {tier !== "BASIC" && (
                 <>
                   <Link
@@ -97,14 +97,13 @@ export default function TopPerformingCard({ vehicle, rank }) {
                   Request Inspection
                 </button>
               )}
-              <Link
+              <NoPrefetchLink
                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-primary/5 text-primary"
                 href={`/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}?tab=inspection`}
-                prefetch={false}
                 onClick={() => setOpen(false)}
               >
                 Inspection Details
-              </Link>
+              </NoPrefetchLink>
             </div>
           )}
         </div>
