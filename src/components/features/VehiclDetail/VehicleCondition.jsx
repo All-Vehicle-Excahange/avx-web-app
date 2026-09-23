@@ -6,21 +6,26 @@ import Image from "next/image";
 
 // Score → status label
 function scoreStatus(score) {
-  if (score >= 90) return "Excellent";
-  if (score >= 70) return "Good";
-  if (score >= 40) return "Average";
+  const val = score <= 10 ? score * 10 : score;
+  if (val >= 90) return "Excellent";
+  if (val >= 70) return "Good";
+  if (val >= 40) return "Average";
   return "Bad";
 }
 
 // Mini score bar card
 function ScoreCard({ label, score }) {
   if (score === null || score === undefined) return null;
+  const status = scoreStatus(score);
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-2 text-sm">
         <span className="text-third">{label}</span>
-        <span className="font-semibold text-xs text-primary">
-          {scoreStatus(score)}
+        <span
+          className="font-semibold text-xs"
+          style={{ color: condColor(status) }}
+        >
+          {status}
         </span>
       </div>
     </div>
@@ -31,14 +36,16 @@ function ScoreCard({ label, score }) {
 function condColor(c) {
   if (!c || c.toUpperCase() === "NA") return "#9CA3AF"; // grey = unknown
   switch (c.toUpperCase()) {
-    case "GOOD":
-      return "#43A047";
-    case "FAIR":
-      return "#FB8C00";
-    case "POOR":
-      return "#E53935";
     case "EXCELLENT":
       return "#22c55e";
+    case "GOOD":
+      return "#43A047";
+    case "AVERAGE":
+    case "FAIR":
+      return "#FB8C00";
+    case "BAD":
+    case "POOR":
+      return "#E53935";
     default:
       return "#9CA3AF";
   }

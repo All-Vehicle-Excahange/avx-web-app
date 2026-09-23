@@ -14,6 +14,7 @@ import {
   getAllReview,
   getConsualtInventory,
   getStoreFrontByUsername,
+  getConsultationPhoneNumber,
   getAboutUsStoreFrontByUserName,
   getWhyBuyHereStoreFrontByUserName,
   getFourWheelWithTag,
@@ -266,6 +267,19 @@ export const getStoreFrontByUsernameQuery = (username) => {
     queryFn: async () => {
       if (!username) return null;
       const res = await getStoreFrontByUsername(username);
+      return res?.data || null;
+    },
+    staleTime: 15 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getConsultationPhoneNumberQuery = (username) => {
+  return queryOptions({
+    queryKey: ["consultation-phone-number", username],
+    queryFn: async () => {
+      if (!username) return null;
+      const res = await getConsultationPhoneNumber(username);
       return res?.data || null;
     },
     staleTime: 15 * 60 * 1000,

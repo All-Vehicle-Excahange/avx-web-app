@@ -735,7 +735,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             vehicleType.toLowerCase().includes("two"))
           ? "TWO_WHEELER"
           : "FOUR_WHEELER";
-          
+
       if (currentFuel) {
         const res = await getMakersByFuelOrBodyType({
           fuelType: currentFuel.toUpperCase(),
@@ -1054,7 +1054,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }).toString();
         trackProductSearch(
           [location, vehicleType, service].filter(Boolean).join(" | ") ||
-            "consultant_search",
+          "consultant_search",
           "filter_bar_consult",
           locationProps,
         );
@@ -1081,7 +1081,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             budgetParam = `${m}-${x}`;
           }
         }
-        
+
         let cityNameStr = "";
         if (location) {
           cityNameStr = location.split(",")[0].trim();
@@ -1884,8 +1884,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
       <div
         ref={mobileTriggerRef}
         className={`lg:hidden fixed z-40 transition-all duration-500 ease-in-out ${isScrolled
-            ? "bottom-4 right-4 w-14"
-            : "bottom-4 right-4 w-[calc(100%-2rem)] md:right-[calc(50%-14rem)] md:w-[28rem]"
+          ? "bottom-4 right-4 w-14"
+          : "bottom-4 right-4 w-[calc(100%-2rem)] md:right-[calc(50%-14rem)] md:w-[28rem]"
           }`}
       >
         <div className="relative">
@@ -1895,15 +1895,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
               setActiveTab("location");
             }}
             className={`w-full flex items-center justify-center transition-all duration-500 ease-in-out cursor-pointer whitespace-nowrap overflow-hidden rounded-full ${isScrolled
-                ? "h-14 bg-fourth shadow-lg"
-                : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+              ? "h-14 bg-fourth shadow-lg"
+              : "h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)]"
               }`}
           >
             <Search size={22} className="text-white shrink-0" />
             <span
               className={`font-medium text-white transition-all duration-500 ease-in-out overflow-hidden ${isScrolled
-                  ? "max-w-0 opacity-0 ml-0 pointer-events-none"
-                  : "max-w-[150px] opacity-100 ml-2"
+                ? "max-w-0 opacity-0 ml-0 pointer-events-none"
+                : "max-w-[150px] opacity-100 ml-2"
                 }`}
             >
               Start your search
@@ -1993,8 +1993,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   <div className="absolute inset-y-0 left-[46px] right-[40px] pointer-events-none overflow-hidden">
                     <div
                       className={`flex flex-col ${isTransitioning
-                          ? "transition-transform duration-500 ease-in-out"
-                          : ""
+                        ? "transition-transform duration-500 ease-in-out"
+                        : ""
                         }`}
                       style={{
                         transform: `translateY(-${placeholderIdx * 46}px)`,
@@ -2158,46 +2158,46 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   return popularNames.some(name => makeName.includes(name));
                 });
                 const displayBrands = popularBrands.length > 0 ? popularBrands.slice(0, 6) : apiBrandsList.slice(0, 6);
-                
+
                 return displayBrands.map((brand, idx) => (
-                <button
-                  key={`popular-${idx}`}
-                  onClick={() => {
-                    saveSearchMutation.mutate(brand.makeName);
-                    setLocalRecentSearches((prev) => {
-                      const filtered = prev.filter(
-                        (term) =>
-                          term.toLowerCase() !== brand.makeName.toLowerCase(),
+                  <button
+                    key={`popular-${idx}`}
+                    onClick={() => {
+                      saveSearchMutation.mutate(brand.makeName);
+                      setLocalRecentSearches((prev) => {
+                        const filtered = prev.filter(
+                          (term) =>
+                            term.toLowerCase() !== brand.makeName.toLowerCase(),
+                        );
+                        return [brand.makeName, ...filtered].slice(0, 5);
+                      });
+                      setMobileOpen(false);
+                      setActiveTab(null);
+                      setVehicleSearchQuery("");
+                      push(
+                        `/search?brand=${encodeURIComponent(brand.makeName)}`,
                       );
-                      return [brand.makeName, ...filtered].slice(0, 5);
-                    });
-                    setMobileOpen(false);
-                    setActiveTab(null);
-                    setVehicleSearchQuery("");
-                    push(
-                      `/search?brand=${encodeURIComponent(brand.makeName)}`,
-                    );
-                  }}
-                  className="flex flex-col items-center justify-center gap-1.5 p-2 bg-[#161616] hover:bg-[#202020] border border-neutral-800/80 rounded-xl cursor-pointer transition-all group text-center"
-                >
-                  {brand.logo ? (
-                    <div className="h-8 w-11 flex items-center justify-center p-0.5 bg-white rounded-lg">
-                      <img
-                        src={brand.logo}
-                        alt={brand.makeDisplay}
-                        className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform"
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-8 w-11 flex items-center justify-center bg-neutral-900 rounded-lg text-gray-400">
-                      <Car className="w-4 h-4" />
-                    </div>
-                  )}
-                  <span className="text-[10px] font-bold text-gray-300 text-center leading-tight transition-colors truncate w-full">
-                    {brand.makeDisplay || brand.makeName}
-                  </span>
-                </button>
-              ));
+                    }}
+                    className="flex flex-col items-center justify-center gap-1.5 p-2 bg-[#161616] hover:bg-[#202020] border border-neutral-800/80 rounded-xl cursor-pointer transition-all group text-center"
+                  >
+                    {brand.logo ? (
+                      <div className="h-8 w-11 flex items-center justify-center p-0.5 bg-white rounded-lg">
+                        <img
+                          src={brand.logo}
+                          alt={brand.makeDisplay}
+                          className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-8 w-11 flex items-center justify-center bg-neutral-900 rounded-lg text-gray-400">
+                        <Car className="w-4 h-4" />
+                      </div>
+                    )}
+                    <span className="text-[10px] font-bold text-gray-300 text-center leading-tight transition-colors truncate w-full">
+                      {brand.makeDisplay || brand.makeName}
+                    </span>
+                  </button>
+                ));
               })()}
             </div>
           </div>
@@ -2210,7 +2210,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
             <CustomSelect
               value={currentLocationValue}
               options={locationOptions}
-              placeholder="Search destinations"
+              placeholder="Search Location"
               variant="transparent"
               onSearch={(val) => {
                 if (searchTimerRef.current)
@@ -2242,8 +2242,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   setBodyType("");
                 }}
                 className={`relative flex flex-col items-start p-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${vehicleType === "2 Wheeler"
-                    ? "border-blue-500 bg-blue-500/10 text-white"
-                    : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                  ? "border-blue-500 bg-blue-500/10 text-white"
+                  : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
                   }`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -2254,8 +2254,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   </div>
                   <span
                     className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center transition-colors ${vehicleType === "2 Wheeler"
-                        ? "border-blue-500 bg-blue-500"
-                        : "border-neutral-700"
+                      ? "border-blue-500 bg-blue-500"
+                      : "border-neutral-700"
                       }`}
                   >
                     {vehicleType === "2 Wheeler" && (
@@ -2281,8 +2281,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   setBodyType("");
                 }}
                 className={`relative flex flex-col items-start p-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${vehicleType === "4 Wheeler"
-                    ? "border-blue-500 bg-blue-500/10 text-white"
-                    : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                  ? "border-blue-500 bg-blue-500/10 text-white"
+                  : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
                   }`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -2293,8 +2293,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                   </div>
                   <span
                     className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center transition-colors ${vehicleType === "4 Wheeler"
-                        ? "border-blue-500 bg-blue-500"
-                        : "border-neutral-700"
+                      ? "border-blue-500 bg-blue-500"
+                      : "border-neutral-700"
                       }`}
                   >
                     {vehicleType === "4 Wheeler" && (
@@ -2450,8 +2450,8 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                           setFuelType(isSelected ? "" : fuel);
                         }}
                         className={`relative flex flex-col items-center justify-center p-3 rounded-2xl border text-center aspect-square cursor-pointer transition-all duration-200 ${isSelected
-                            ? "border-blue-500 bg-blue-500/10 text-white"
-                            : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
+                          ? "border-blue-500 bg-blue-500/10 text-white"
+                          : "border-neutral-800 bg-[#161616] text-gray-400 hover:text-white"
                           }`}
                       >
                         <div

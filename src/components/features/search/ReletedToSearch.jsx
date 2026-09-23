@@ -9,7 +9,11 @@ import { MAKER_NAME_MAPPING } from "@/data/makers";
 // // --- Utility for Tailwind classes ---
 // const cn = (...classes) => classes.filter(Boolean).join(" ");
 
-export default function ReletedToSearch({ data, loading = false }) {
+export default function ReletedToSearch({
+  data,
+  loading = false,
+  gridCols = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+}) {
   const cardData = data || [];
   const searchParams = useSearchParams();
   const brandParam = searchParams?.get("brand");
@@ -44,7 +48,7 @@ export default function ReletedToSearch({ data, loading = false }) {
         </p>
       </div>
 
-      <div className="flex-1 min-h-0 mt-6 grid sm:items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-1">
+      <div className={`flex-1 min-h-0 mt-6 grid sm:items-center ${gridCols} gap-4 pb-1`}>
         {loading ? (
           [...Array(4)].map((_, i) => (
             <div

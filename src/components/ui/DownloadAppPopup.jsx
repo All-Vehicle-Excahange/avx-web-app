@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
+import useEscapeKey from "@/hooks/useEscapeKey";
 
 /* Apple Logo (Official Shape) */
 const AppleLogo = ({ className }) => (
@@ -41,23 +42,19 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
   const router = useRouter();
   const [isClosing, setIsClosing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const modalRef = useRef(null);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 250);
+    }, 150);
   }, [onClose]);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isOpen]);
+  useEscapeKey(isOpen, handleClose);
+
+
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -93,22 +90,33 @@ export default function DownloadAppPopup({ isOpen, onClose }) {
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overscroll-contain"
       onClick={handleClose}
+      onWheel={(e) => {
+        if (!modalRef.current || !modalRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
+      onTouchMove={(e) => {
+        if (!modalRef.current || !modalRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
       style={{
         animation: isClosing
-          ? "modalBackdropOut 0.25s ease-in forwards"
-          : "modalBackdropIn 0.25s ease-out",
+          ? "modalBackdropOut 0.15s ease-in forwards"
+          : "modalBackdropIn 0.15s ease-out",
       }}
     >
       {/* CONTAINER */}
       <div
-        className="relative flex flex-col lg:flex-row w-full max-w-[1050px] min-h-[450px] max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-hidden rounded-2xl shadow-2xl border border-third/20 bg-secondary bg-cover bg-center bg-no-repeat"
+        ref={modalRef}
+        className="relative flex flex-col lg:flex-row w-full max-w-[1050px] min-h-[450px] max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-hidden rounded-2xl shadow-2xl border border-third/20 bg-secondary bg-cover bg-center bg-no-repeat overscroll-contain"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
-            ? "modalCardOut 0.25s ease-in forwards"
-            : "modalCardIn 0.3s ease-out",
+            ? "modalCardOut 0.15s ease-in forwards"
+            : "modalCardIn 0.15s ease-out",
           backgroundImage: "url('/downlaodPopupbg.png')",
         }}
       >

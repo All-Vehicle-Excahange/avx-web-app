@@ -80,13 +80,13 @@ export default function HamburgerDrawer({ open, onClose }) {
     <div
       aria-hidden={!open}
       className={`
-        fixed inset-0 z-1090 bg-secondary text-primary
+        fixed inset-0 z-[1050] bg-secondary text-primary
         transform transition-all duration-500 ease-out 3xl:max-w-full 3xl:mx-auto
         ${open ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"}
       `}
     >
       {/* DRAWER SCROLL CONTAINER */}
-      <div className="h-[calc(100vh-100px)] mt-24 md:mt-28 overflow-y-auto no-scrollbar custom-scrollbar">
+      <div className="h-[calc(100vh-64px)] mt-16 md:mt-20 overflow-y-auto no-scrollbar custom-scrollbar">
         {/* 5-COLUMN MEGA MENU CONTENT */}
         <div className="w-full px-8 md:px-12 pt-4 md:pt-6 pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-white/10 min-h-[450px]">
@@ -748,13 +748,13 @@ export default function HamburgerDrawer({ open, onClose }) {
                     <>
                       <button
                         onClick={handleSignInClick}
-                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
+                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1 cursor-pointer"
                       >
                         Sign In
                       </button>
                       <button
                         onClick={handleRegisterClick}
-                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1"
+                        className="block text-left text-sm text-third hover:text-primary transition-all duration-200 transform hover:translate-x-1 py-1 cursor-pointer"
                       >
                         Register
                       </button>
