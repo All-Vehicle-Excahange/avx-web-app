@@ -69,20 +69,20 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
   return (
     <header className="-mx-4 sm:mx-0 mt-4 sm:mt-0 pt-5 pb-3 sm:pt-4 sm:pb-4 mb-4 sm:mb-0 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)] flex flex-col gap-1.5 shadow-sm">
       {/* Breadcrumb */}
-      <nav className="text-[10px] sm:text-xs text-third flex items-center gap-1 flex-wrap px-4 sm:px-0">
+      <nav className="text-[10px] sm:text-xs text-third flex items-center gap-1.5 flex-wrap px-4 sm:px-0">
         <Link
           href="/"
-          className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+          className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
         >
           Home
         </Link>
 
         {source === "search" && (
           <>
-            <ChevronRight size={14} className="shrink-0" />
+            <ChevronRight size={14} className="shrink-0 opacity-60" />
             <Link
               href={searchUrl}
-              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
             >
               Search
             </Link>
@@ -91,29 +91,29 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
 
         {source === "home" && vehicle?.makerName && (
           <>
-            <ChevronRight size={14} className="shrink-0" />
+            <ChevronRight size={14} className="shrink-0 opacity-60" />
             <Link
               href={searchUrl}
-              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide"
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
             >
               {vehicle.makerName}
             </Link>
           </>
         )}
 
-        <ChevronRight size={14} className="shrink-0" />
-        <span className="text-white font-medium uppercase tracking-wide truncate max-w-[200px] sm:max-w-none flex items-center gap-1">
-          {vehicleNameBase}
+        <ChevronRight size={14} className="shrink-0 opacity-60" />
+        <span className="text-white font-medium uppercase tracking-wide inline-flex items-center gap-1 flex-wrap min-w-0">
+          <span>{vehicleNameBase}</span>
           {cityName && (
-            <>
-              <span className="lowercase text-third font-normal mx-0.5">in</span>
+            <span className="inline-flex items-center gap-1">
+              <span className="lowercase text-third font-normal">in</span>
               <Link
                 href={searchUrl}
                 className="hover:text-white transition-colors duration-200 cursor-pointer underline decoration-white/30 hover:decoration-white/80 underline-offset-2"
               >
                 {cityName}
               </Link>
-            </>
+            </span>
           )}
         </span>
       </nav>
@@ -121,15 +121,8 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-1 px-4 sm:px-0">
         {/* LEFT SIDE: Title & Rating */}
         <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-          <div className="block w-full">
-            {/* Mobile Share */}
-            <button
-              onClick={() => setIsShareOpen(true)}
-              className="sm:hidden float-right ml-3 mb-1.5 mt-1 bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full p-0 text-primary hover:bg-primary/30 hover:scale-105 transition-all shrink-0 cursor-pointer border border-primary/20 shadow-sm"
-            >
-              <Share2 className="h-4 w-4" />
-            </button>
-            <h1 className="text-xl sm:text-2xl 3xl:text-3xl font-bold leading-tight text-white tracking-wide uppercase inline">
+          <div className="flex items-start justify-between gap-3 w-full">
+            <h1 className="text-xl sm:text-2xl 3xl:text-3xl font-bold leading-tight text-white tracking-wide uppercase flex-1 min-w-0">
               {[
                 vehicle?.makerName,
                 vehicle?.modelName,
@@ -139,6 +132,14 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
                 .filter(Boolean)
                 .join(" ") || "-"}
             </h1>
+            {/* Mobile Share */}
+            <button
+              onClick={() => setIsShareOpen(true)}
+              className="sm:hidden bg-primary/20 flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-primary/30 active:scale-95 transition-all shrink-0 cursor-pointer border border-primary/20 shadow-sm mt-0.5"
+              aria-label="Share Vehicle"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
           </div>
 
           {/* Badges (Rating + Sold) */}

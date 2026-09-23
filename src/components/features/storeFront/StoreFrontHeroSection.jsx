@@ -13,11 +13,13 @@ import {
   ExternalLink,
   Share2,
   X,
+  MessageCircle,
+  Loader2,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { followConsultant, unFollowConsultant } from "@/services/user.service";
+import { followConsultant, unFollowConsultant, getConsultationPhoneNumber } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
 
@@ -26,13 +28,14 @@ import SharePopup from "@/components/ui/SharePopup";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
+import { getStoreFrontByUsernameQuery, getConsultationPhoneNumberQuery } from "@/queries/user.queries";
 import { trackStorefrontViewed } from "@/lib/amplitude";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Zoom } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/zoom";
+import { FaWhatsapp } from "react-icons/fa6";
 
 export default function StoreFrontHeroSection() {
   const router = useRouter();
@@ -49,8 +52,59 @@ export default function StoreFrontHeroSection() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [zoomImage, setZoomImage] = useState(null);
   const [currentUrl, setCurrentUrl] = useState("");
+  const [isOpeningWhatsApp, setIsOpeningWhatsApp] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const pendingAction = useRef(null);
+
+  const { data: phoneData } = useQuery(getConsultationPhoneNumberQuery(id));
+
+  const handleWhatsAppClick = async () => {
+    try {
+      setIsOpeningWhatsApp(true);
+      let rawPhone =
+        phoneData?.phoneNumber ||
+        phoneData?.phone ||
+        phoneData?.mobile ||
+        phoneData?.contactNumber ||
+        (typeof phoneData === "string" || typeof phoneData === "number"
+          ? String(phoneData)
+          : null);
+
+      if (!rawPhone && id) {
+        const res = await getConsultationPhoneNumber(id);
+        const data = res?.data;
+        rawPhone =
+          data?.phoneNumber ||
+          data?.phone ||
+          data?.mobile ||
+          data?.contactNumber ||
+          (typeof data === "string" || typeof data === "number"
+            ? String(data)
+            : null);
+      }
+
+      if (!rawPhone) {
+        return;
+      }
+
+      const cleanDigits = String(rawPhone).replace(/\D/g, "");
+      if (!cleanDigits) {
+        return;
+      }
+
+      const formattedPhone =
+        cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
+      const consultationName = storeDetails?.consultationName || "Consultant";
+      const message = `Hello ${consultationName}, I found your storefront on Reecomm and would like to connect.`;
+      const waUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error("Failed to fetch consultation phone number:", error);
+    } finally {
+      setIsOpeningWhatsApp(false);
+    }
+  };
 
   // Close zoom modal with Escape key
   useEscapeKey(!!zoomImage, () => setZoomImage(null));
@@ -176,12 +230,22 @@ export default function StoreFrontHeroSection() {
       ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       ?.join(" ");
 
-  const formattedPrice =
-    storeDetails.minVehiclePrice && storeDetails.maxVehiclePrice
-      ? `₹${Number(storeDetails.minVehiclePrice).toLocaleString("en-IN")} - ₹${Number(
-        storeDetails.maxVehiclePrice,
-      ).toLocaleString("en-IN")}`
-      : "-";
+  const formattedPrice = (() => {
+    if (!storeDetails?.minVehiclePrice || !storeDetails?.maxVehiclePrice) return "-";
+    const min = Number(storeDetails.minVehiclePrice);
+    const max = Number(storeDetails.maxVehiclePrice);
+    if (!min && !max) return "-";
+    if (min === max) {
+      return `₹${min.toLocaleString("en-IN")}`;
+    }
+    return (
+      <span className="inline-flex flex-wrap items-center gap-x-1">
+        <span>₹{min.toLocaleString("en-IN")}</span>
+        <span>-</span>
+        <span>₹{max.toLocaleString("en-IN")}</span>
+      </span>
+    );
+  })();
 
   const formatFollowerCount = (count) => {
     if (!count) return "0";
@@ -245,7 +309,7 @@ export default function StoreFrontHeroSection() {
               </div>
 
               {/* subscribe & share buttons wrapper */}
-              <div className="mt-6 w-full flex flex-row items-center gap-3 lg:block lg:space-y-0">
+              <div className="mt-4 w-full flex flex-row items-center gap-3 lg:block lg:space-y-0">
                 {/* subscribe btn */}
                 <div className="flex-1 lg:w-full">
                   <button
@@ -283,7 +347,7 @@ export default function StoreFrontHeroSection() {
             </div>
 
             {/* CENTER COLUMN */}
-            <div className="flex-1 space-y-4 pt-2">
+            <div className="flex-1 space-y-4">
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-3xl font-semibold text-primary leading-tight capitalize">
@@ -293,9 +357,10 @@ export default function StoreFrontHeroSection() {
                   <button
                     onClick={() => setIsShareOpen(true)}
                     type="button"
-                    className="hidden lg:flex h-9 w-9 items-center justify-center rounded-full p-0 text-primary/80 hover:text-primary bg-transparent! cursor-pointer"
+                    className="hidden lg:inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all cursor-pointer shadow-sm"
+                    aria-label="Share Storefront"
                   >
-                    <Share2 className="h-5 w-5" />
+                    <Share2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
@@ -315,7 +380,7 @@ export default function StoreFrontHeroSection() {
               </div>
 
               {/* STATS GRID */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-y-5 gap-x-6 py-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3.5 gap-x-5 py-2">
                 {[
                   {
                     label: "Rating",
@@ -343,17 +408,17 @@ export default function StoreFrontHeroSection() {
                     icon: Briefcase,
                   },
                 ].map(({ label, value, icon: Icon }) => (
-                  <div key={label} className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/5 rounded-lg border border-primary/10">
-                      <Icon className="w-4 h-4 text-third" />
+                  <div key={label} className="flex items-center gap-2.5">
+                    <div className="p-2 bg-primary/5 rounded-lg border border-primary/10 shrink-0">
+                      <Icon className="w-4.5 h-4.5 text-third" />
                     </div>
-                    <div>
-                      <p className="text-[10px] uppercase text-third font-semibold leading-none mb-1">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs text-third font-medium leading-normal mb-0.5 capitalize truncate">
                         {label}
                       </p>
-                      <p className="text-sm font-semibold text-primary leading-none">
+                      <div className="text-sm sm:text-base font-semibold text-primary leading-tight flex flex-wrap items-center">
                         {value}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -361,10 +426,10 @@ export default function StoreFrontHeroSection() {
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="w-full lg:w-80 space-y-6">
+            <div className="w-full lg:w-80 space-y-4">
               {storeDetails?.services?.length > 0 && (
                 <div className="space-y-3">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-third">
+                  <p className="text-xs font-semibold capitalize text-third">
                     Services Provided
                   </p>
 
@@ -372,7 +437,7 @@ export default function StoreFrontHeroSection() {
                     {storeDetails.services.map((service) => (
                       <span
                         key={service}
-                        className="px-3 py-1.5 text-[11px] font-medium border border-third rounded-full text-primary hover:bg-primary/5 transition-colors cursor-default"
+                        className="px-3.5 py-1.5 text-xs font-medium border border-primary/20 rounded-full text-primary bg-primary/5 hover:bg-primary/10 transition-colors cursor-default capitalize"
                       >
                         {formatServiceName(service)}
                       </span>
@@ -381,7 +446,21 @@ export default function StoreFrontHeroSection() {
                 </div>
               )}
 
-              <div className="flex gap-3 justify-end">
+              <div className="flex gap-3 justify-start lg:justify-end items-center flex-wrap">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleWhatsAppClick}
+                  disabled={isOpeningWhatsApp}
+                >
+                  {isOpeningWhatsApp ? (
+                    <Loader2 className="w-[18px] h-[18px] animate-spin" />
+                  ) : (
+                    <FaWhatsapp className="w-[18px] h-[18px] shrink-0" />
+                  )}
+                  <span>WhatsApp</span>
+                </Button>
+
                 <Button
                   size="sm"
                   variant="ghost"
@@ -389,8 +468,8 @@ export default function StoreFrontHeroSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Get Directions
-                  <CornerUpRight className="ml-2 w-4 h-4" />
+                  <span>Get Directions</span>
+                  <CornerUpRight className="w-[18px] h-[18px] shrink-0" />
                 </Button>
               </div>
             </div>

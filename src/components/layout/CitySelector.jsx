@@ -338,7 +338,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
           {/* Modal Content */}
           <div
             ref={modalRef}
-            className="bg-white w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] flex flex-col border border-gray-100 overflow-hidden relative overscroll-contain"
+            className="bg-white w-full max-w-2xl h-[80vh] sm:h-auto sm:max-h-[85vh] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] flex flex-col border border-gray-100 overflow-hidden relative overscroll-contain"
             style={{
               animation: isClosing
                 ? "modalCardOut 0.15s ease-in forwards"
@@ -346,7 +346,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/80">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100/80">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-fourth/10 text-fourth flex items-center justify-center rounded-xl shrink-0 border border-fourth/15">
                   <MapPin className="w-4.5 h-4.5" />
@@ -366,8 +366,8 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
             </div>
 
             {/* Search Bar & Current Location */}
-            <div className="px-6 py-3.5 bg-gray-50/50 border-b border-gray-100 flex gap-3 items-center">
-              <div className="relative flex-1">
+            <div className="px-4 sm:px-6 py-3.5 bg-gray-50/50 border-b border-gray-100 flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center">
+              <div className="relative w-full sm:flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
@@ -386,7 +386,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
               <button
                 onClick={handleCurrentLocation}
                 disabled={isLocating}
-                className="shrink-0 flex items-center justify-center gap-1.5 px-4 py-2 bg-fourth/10 border border-fourth/20 rounded-lg hover:bg-fourth/15 hover:border-fourth/30 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
+                className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-1.5 px-4 py-2 bg-fourth/10 border border-fourth/20 rounded-lg hover:bg-fourth/15 hover:border-fourth/30 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
                 title="Detect current location"
               >
                 <LocateFixed className={`w-4 h-4 text-fourth ${isLocating ? 'animate-spin' : ''}`} />
@@ -397,7 +397,7 @@ export default function CitySelector({ heroMode = false, scrolled = false, class
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar space-y-4 overscroll-contain">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 custom-scrollbar space-y-4 overscroll-contain">
               {isSearching ? (
                 /* Search Results View */
                 <div>

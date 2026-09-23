@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { ArrowUpDown, ChevronDown, X, MapPin } from "lucide-react";
 import { useSearchParams, usePathname } from "next/navigation";
@@ -36,6 +36,34 @@ export default function SearchHeader({
   const brandParam = searchParams.get("brand");
   const budget = searchParams.get("budget");
   const location = searchParams.get("location");
+
+  const isTwoWheeler =
+    vehicleType === "TWO_WHEELER" ||
+    vehicleType === "two-wheelers" ||
+    pathname?.includes("two-wheelers");
+
+  const displayTitle = useMemo(() => {
+    // When no filters are active or cleared
+    if (activeFilters.length === 0) {
+      return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
+    }
+
+    if (seoH1 && activeFilters.length > 0) {
+      return seoH1;
+    }
+
+    const brandName = brandParam || searchParams.get("brandName") || "";
+    const modelName = searchParams.get("model") || searchParams.get("modelName") || "";
+    const catName = searchParams.get("category") || searchParams.get("vehicleTag") || "";
+    const bodyName = bodyType || searchParams.get("bodyType") || "";
+
+    const parts = [brandName, modelName, catName, bodyName].filter(Boolean).join(" ");
+    if (parts) {
+      return `Used ${parts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
+    }
+
+    return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
+  }, [seoH1, activeFilters, isTwoWheeler, brandParam, bodyType, searchParams, pathname]);
 
   /* Close sort dropdown on outside click */
   useEffect(() => {
@@ -189,11 +217,7 @@ export default function SearchHeader({
             {/* LEFT: Premium Title, Location Badge, Result Count */}
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary flex items-center gap-1.5">
-                <span>
-                  {seoH1 ||
-                    `Used ${brandParam ? `${brandParam} ` : ""}${bodyType ? `${bodyType}` : vehicleType || "Vehicles"
-                    }`}
-                </span>
+                <span>{displayTitle}</span>
               </h1>
 
               {location && (

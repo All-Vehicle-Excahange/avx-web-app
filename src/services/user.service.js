@@ -23,6 +23,7 @@ const ENDPOINT = {
   unFollowConsultant: "/consultation/follow",
   getFollowedConsultant: "/consultation/follow",
   getStoreFrontByUsername: "/consultation/detail-page/by-username",
+  getConsultationPhoneNumber: "/consultation/detail-page/phone-number",
   checkIsEligibleToCreateReview: "/consultation/review/eligible",
   getAllReview: "/consultation/review/all/by-username",
   getAllReviewById: "/consultation/review/all/by-id",
@@ -388,6 +389,17 @@ export const getStoreFrontByUsername = async (username) => {
   try {
     const res = await axiosInstance.get(
       `${ENDPOINT.getStoreFrontByUsername}/${username}`,
+    );
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getConsultationPhoneNumber = async (username) => {
+  try {
+    const res = await axiosInstance.get(
+      `${ENDPOINT.getConsultationPhoneNumber}/${username}`,
     );
     return handleResponse(res);
   } catch (error) {

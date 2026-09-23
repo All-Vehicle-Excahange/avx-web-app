@@ -780,7 +780,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
         />
       )}
       <div
-        className="fixed top-0 inset-x-0 z-[1000] transition-transform duration-300 pointer-events-none"
+        className="fixed top-0 inset-x-0 z-[1100] transition-transform duration-300 pointer-events-none"
       // style={{ transform: `translateY(${transformY}px)` }}
       >
         {!inFlutterApp &&
@@ -794,7 +794,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
           )}
 
         {/* ================= TOP MINI BAR (CITY SELECTOR - HOME ONLY) ================= */}
-        {!insideDrawer && isHomePage && (
+        {!insideDrawer && isHomePage && !menuOpen && (
           <div className={`pointer-events-auto w-full transition-all duration-300 ${heroMode && !scrolled
               ? 'bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border-b border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white'
               : 'bg-secondary/95 backdrop-blur-md text-primary border-b border-white/10 shadow-xs'
@@ -809,11 +809,13 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
         <nav
           className={`pointer-events-auto transition-all duration-300 relative w-full
-          ${heroMode
-              ? scrolled
-                ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
-                : "bg-transparent text-secondary h-20 md:h-24"
-              : "bg-primary text-secondary h-16"
+          ${menuOpen
+              ? "bg-secondary text-primary border-b border-white/10 shadow-xs h-16"
+              : heroMode
+                ? scrolled
+                  ? "bg-white text-black shadow-xl backdrop-blur-lg h-16"
+                  : "bg-transparent text-secondary h-20 md:h-24"
+                : "bg-primary text-secondary h-16"
             }`}
         >
           <div className="relative w-full px-2.5 sm:px-4 md:px-6 lg:px-8 mx-auto h-full flex items-center justify-between">
@@ -821,10 +823,12 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             <div className="flex items-center">
               <Link
                 href="/"
-                onClick={insideDrawer ? onClose : undefined}
-                className={`flex items-center px-2.5 sm:px-4 md:px-5 gap-2 sm:gap-3 transition-all duration-500 ease-in-out ${heroMode && !scrolled
-                  ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
-                  : "h-10 md:h-11 bg-secondary rounded-full text-primary"
+                onClick={insideDrawer ? onClose : (menuOpen ? () => setMenuOpen(false) : undefined)}
+                className={`flex items-center px-2.5 sm:px-4 md:px-5 gap-2 sm:gap-3 transition-all duration-500 ease-in-out ${menuOpen
+                    ? "h-10 md:h-11 bg-white/10 rounded-full text-white border border-white/20"
+                    : heroMode && !scrolled
+                      ? "h-11 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-full border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-primary"
+                      : "h-10 md:h-11 bg-secondary rounded-full text-primary"
                   }`}
               >
                 {!insideDrawer && (
@@ -869,7 +873,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             {/* ================= CENTER SEARCH ================= */}
             <div
               ref={searchRef}
-              className="absolute left-1/2 -translate-x-1/2 hidden lg:flex z-50"
+              className={`absolute left-1/2 -translate-x-1/2 z-50 ${menuOpen ? "hidden" : "hidden lg:flex"}`}
             >
               {/* Search Bar Container */}
               <div className={`relative flex items-center h-[44px] md:h-[46px] w-[340px] lg:w-[440px] xl:w-[530px] 2xl:w-[580px] rounded-full transition-all duration-300 group ${heroMode && !scrolled
@@ -1281,7 +1285,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
             </div>
 
             {/* RIGHT SIDE */}
-            <div className="flex items-center gap-2 md:gap-4">
+            <div className={`flex items-center gap-2 md:gap-4 ${menuOpen ? "hidden" : ""}`}>
               {insideDrawer ? (
                 <button
                   onClick={(e) => {

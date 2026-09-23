@@ -23,7 +23,7 @@ export default function StoreFrontHeroSkeleton() {
           </div>
 
           {/* CENTER COLUMN — Name + Location + Stats */}
-          <div className="flex-1 space-y-4 pt-2">
+          <div className="flex-1 space-y-4">
             <div>
               <SkeletonBox className="h-8 w-[60%]" rounded="rounded-md" />
               <div className="flex items-center gap-1.5 mt-3">

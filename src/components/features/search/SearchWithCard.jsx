@@ -12,6 +12,7 @@ import { FilterIcon, MapPin, X, SearchX, RefreshCw } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
+import ReletedToSearch from "./ReletedToSearch";
 import CustomSelect from "@/components/ui/custom-select";
 import EmptyState from "@/components/ui/EmptyState";
 import { useSearchParams, usePathname } from "next/navigation";
@@ -218,6 +219,8 @@ export default function SearchWithCard({
 
   const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 0));
   const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
 
   const MAX = serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
   const PRICE_STEP = MAX > 2000000 ? 25000 : (MAX > 500000 ? 10000 : 5000);
@@ -403,20 +406,24 @@ export default function SearchWithCard({
 
   // Synchronously update selected filters from initialFilters prop during render
   const [prevInitialFilters, setPrevInitialFilters] = useState(initialFilters);
-  if (
-    !isSelfTriggered.current &&
-    (initialFilters.budget !== prevInitialFilters.budget ||
-      initialFilters.makerId !== prevInitialFilters.makerId ||
-      initialFilters.modelId !== prevInitialFilters.modelId ||
-      initialFilters.cityId !== prevInitialFilters.cityId ||
-      initialFilters.stateId !== prevInitialFilters.stateId ||
-      initialFilters.stateName !== prevInitialFilters.stateName ||
-      initialFilters.cityName !== prevInitialFilters.cityName ||
-      initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
-      initialFilters.fuelType !== prevInitialFilters.fuelType ||
-      initialFilters.transmission !== prevInitialFilters.transmission ||
-      initialFilters.bodyType !== prevInitialFilters.bodyType)
-  ) {
+  const initialFiltersChanged =
+    initialFilters.budget !== prevInitialFilters.budget ||
+    initialFilters.makerId !== prevInitialFilters.makerId ||
+    initialFilters.brandName !== prevInitialFilters.brandName ||
+    initialFilters.modelId !== prevInitialFilters.modelId ||
+    initialFilters.cityId !== prevInitialFilters.cityId ||
+    initialFilters.stateId !== prevInitialFilters.stateId ||
+    initialFilters.stateName !== prevInitialFilters.stateName ||
+    initialFilters.cityName !== prevInitialFilters.cityName ||
+    initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
+    initialFilters.fuelType !== prevInitialFilters.fuelType ||
+    initialFilters.transmission !== prevInitialFilters.transmission ||
+    initialFilters.bodyType !== prevInitialFilters.bodyType ||
+    initialFilters.category !== prevInitialFilters.category ||
+    initialFilters.vehicleTag !== prevInitialFilters.vehicleTag;
+
+  if (initialFiltersChanged) {
+    isSelfTriggered.current = false;
     setPrevInitialFilters(initialFilters);
 
     // Fuel Type
@@ -532,7 +539,7 @@ export default function SearchWithCard({
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
 
     if (selectedCategories.length > 0) {
-      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
     }
 
     if (selectedBrands.length > 0)
@@ -587,7 +594,7 @@ export default function SearchWithCard({
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
     if (selectedCategories.length > 0) {
-      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
     }
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
@@ -619,8 +626,6 @@ export default function SearchWithCard({
   const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() =>
     buildConsultPayload(),
   );
-  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
   const skipFirstFilterTrackRef = useRef(true);
 
   useEffect(() => {
@@ -924,14 +929,12 @@ export default function SearchWithCard({
 
     if (onRelatedChange) onRelatedChange(similar);
 
-    const combinedTotal =
-      (priceBased.length || 0) +
-      (topPicksPR.totalElements || 0) +
-      (similar.length || 0);
+    const directTotal = topPicksPR.totalElements !== undefined ? topPicksPR.totalElements : newVehicles.length;
 
     const combinedPageResponse = {
       ...topPicksPR,
-      totalElements: combinedTotal,
+      totalElements: directTotal,
+      hasDirectVehicles: (newVehicles.length > 0) || (directTotal > 0),
     };
 
     if (onPageResponseChange) onPageResponseChange(combinedPageResponse);
@@ -942,12 +945,12 @@ export default function SearchWithCard({
         .join(" ") || pathname?.split("/").pop()?.replace(/-/g, " ") || "vehicle_search";
     trackSearchResults({
       search_string: searchLabel,
-      results_count: topPicksPR.totalElements || combinedTotal,
+      results_count: directTotal,
       search_type: "search_results_page",
     });
     trackSearchResultsViewed({
       search_string: searchLabel,
-      results_count: topPicksPR.totalElements || combinedTotal,
+      results_count: directTotal,
       search_type: "search_results_page",
       city: selectedCityName || undefined,
       state: selectedStateName || undefined,
@@ -972,6 +975,8 @@ export default function SearchWithCard({
   // Synchronize options lists from URL params on mount/change
   // Synchronize options lists and filter states from URL params on change
   useEffect(() => {
+    if (isSelfTriggered.current) return;
+
     const reccomInspectedVal = searchParams.get("reccomInspected");
     if (reccomInspectedVal === "true") {
       setAvxAssumed(true);
@@ -2186,7 +2191,7 @@ export default function SearchWithCard({
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
+    <div className="w-full flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
@@ -2877,7 +2882,37 @@ export default function SearchWithCard({
                 </div>
               )}
             </>
-          ) : null}
+          ) : (
+            <>
+              <div className="col-span-full py-8 px-4 text-center bg-white/5 border border-third/30 rounded-xl my-2">
+                <h3 className="text-base font-semibold text-primary mb-1">
+                  No Vehicles Found
+                </h3>
+                <p className="text-xs text-third max-w-sm mx-auto mb-3">
+                  We couldn't find any vehicles matching your search criteria. Try adjusting your filters.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearFilters}
+                  className="text-xs py-1 px-3 h-8"
+                  showIcon={false}
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+
+              {relatedVehicles && relatedVehicles.length > 0 && (
+                <div className="col-span-full mt-6">
+                  <ReletedToSearch
+                    data={relatedVehicles}
+                    loading={vehiclesLoading}
+                    gridCols="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  />
+                </div>
+              )}
+            </>
+          )}
         </div>
       </main>
 
