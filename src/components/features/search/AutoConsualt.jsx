@@ -26,6 +26,9 @@ const mapConsultant = (item) => ({
         item.minVehiclePrice && item.maxVehiclePrice
             ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
             : "-",
+    tierTitle: item.tierTitle,
+    tierBadgeUrl: item.tierBadgeUrl,
+    isActiveTier: item.isActiveTier || false,
     isSponsored: item.isActiveTier || false,
 });
 
@@ -65,6 +68,18 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
         fetchConsultants();
         return () => (mounted = false);
     }, [safeLimit, data]);
+
+    const seeAllHref = React.useMemo(() => {
+        const queryParams = new URLSearchParams();
+
+        if (filterPayload) {
+            if (filterPayload.cityId) queryParams.set("cityId", filterPayload.cityId);
+            if (filterPayload.stateId) queryParams.set("stateId", filterPayload.stateId);
+        }
+
+        const queryString = queryParams.toString();
+        return `/consult/discovery${queryString ? `?${queryString}` : ""}`;
+    }, [filterPayload]);
 
     return (
         <div className="w-full py-10 ">
@@ -140,22 +155,7 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
             </div>
 
             <div className="mt-8 flex justify-end">
-                <Button onClick={(e) => {
-                    e.preventDefault();
-                    const queryParams = new URLSearchParams();
-
-                    if (filterPayload) {
-                        if (filterPayload.cityId) queryParams.set("cityId", filterPayload.cityId);
-                        if (filterPayload.stateId) queryParams.set("stateId", filterPayload.stateId);
-                        if (filterPayload.makerIds?.length > 0) queryParams.set("makerIds", filterPayload.makerIds.join(","));
-                        if (filterPayload.modelIds?.length > 0) queryParams.set("modelIds", filterPayload.modelIds.join(","));
-                        if (filterPayload.vehicleSubTypes?.length > 0) queryParams.set("vehicleSubTypes", filterPayload.vehicleSubTypes.join(","));
-                        if (filterPayload.minPrice) queryParams.set("minPrice", filterPayload.minPrice);
-                        if (filterPayload.maxPrice) queryParams.set("maxPrice", filterPayload.maxPrice);
-                    }
-
-                    window.location.href = `/consult/discovery?${queryParams.toString()}`;
-                }} variant="outlineAnimated">
+                <Button href={seeAllHref} variant="outlineAnimated">
                     See All
                 </Button>
             </div>

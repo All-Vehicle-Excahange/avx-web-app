@@ -36,22 +36,22 @@ export default function SharePopup({
       }
     };
 
-    const preventBackgroundScroll = (e) => {
-      if (!popupRef.current || !popupRef.current.contains(e.target)) {
+    const preventScroll = (e) => {
+      if (e.cancelable) {
         e.preventDefault();
       }
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
-      window.addEventListener("wheel", preventBackgroundScroll, { passive: false });
-      window.addEventListener("touchmove", preventBackgroundScroll, { passive: false });
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
     }
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
-      window.removeEventListener("wheel", preventBackgroundScroll);
-      window.removeEventListener("touchmove", preventBackgroundScroll);
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
     };
   }, [isOpen, triggerClose]);
 
