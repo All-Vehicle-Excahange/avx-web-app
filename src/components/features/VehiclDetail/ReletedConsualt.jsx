@@ -66,6 +66,9 @@ export default function ReletedConsualt(props) {
         item.minVehiclePrice && item.maxVehiclePrice
           ? `${(item.minVehiclePrice / 100000).toFixed(1)}L - ${(item.maxVehiclePrice / 100000).toFixed(1)}L`
           : "-",
+      tierTitle: item.tierTitle,
+      tierBadgeUrl: item.tierBadgeUrl,
+      isActiveTier: item.isActiveTier || false,
       isSponsored: item.isActiveTier || false,
     }));
   }, [rawConsultants]);

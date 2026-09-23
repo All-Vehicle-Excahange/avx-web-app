@@ -572,11 +572,6 @@ export default function FilterWithCard({
       }
     }
 
-    if (qMakerIds) initialPayload.makerIds = qMakerIds.split(",").map(Number);
-    if (qModelIds) initialPayload.modelIds = qModelIds.split(",").map(Number);
-    if (qVehicleSubTypes)
-      initialPayload.vehicleSubTypes = qVehicleSubTypes.split(",");
-
     if (qMinPrice) initialPayload.minVehiclePrice = Number(qMinPrice);
     if (qMaxPrice) initialPayload.maxVehiclePrice = Number(qMaxPrice);
 
@@ -594,11 +589,6 @@ export default function FilterWithCard({
     if (selectedCityId) payload.cityId = selectedCityId;
     if (selectedStateId) payload.stateId = selectedStateId;
     if (selectedTownId) payload.townId = selectedTownId;
-
-    if (hiddenMakerIds.length > 0) payload.makerIds = hiddenMakerIds;
-    if (hiddenModelIds.length > 0) payload.modelIds = hiddenModelIds;
-    if (hiddenVehicleSubTypes.length > 0)
-      payload.vehicleSubTypes = hiddenVehicleSubTypes;
 
     if (latitude !== null && longitude !== null) {
       payload.latitude = latitude;
