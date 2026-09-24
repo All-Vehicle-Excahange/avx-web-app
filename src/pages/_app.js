@@ -235,6 +235,15 @@ export default function App({ Component, pageProps }) {
             <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
             <meta key="twitter:image" name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
 
+            <meta
+              key="google-adsense-account"
+              name="google-adsense-account"
+              content={
+                process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ||
+                "ca-pub-1185685643057405"
+              }
+            />
+
             {/* Google Tag (gtag.js) */}
             <script
               async
@@ -281,6 +290,17 @@ export default function App({ Component, pageProps }) {
               }}
             />
           </Head>
+
+          <Script
+            id="adsense-loader"
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
+              process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ||
+              "ca-pub-1185685643057405"
+            }`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
 
           {/* GLOBAL LOADER */}
           {(loading || verifyingMagicToken) && <GlobalLoader />}

@@ -5,6 +5,7 @@ import VehicleCard from "@/components/ui/const/VehicleCard";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
+import AdSenseAd from "@/components/common/AdSenseAd";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
@@ -2197,7 +2198,15 @@ export default function SearchWithCard({
   };
 
   return (
-    <div className="w-full flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
+      {/* Desktop-only AdSense rail — left of filter; null when no ad (no empty column) */}
+      <AdSenseAd
+        slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_RAIL_SLOT}
+        format="vertical"
+        fullWidthResponsive={false}
+        className="hidden xl:block w-[160px] shrink-0 sticky top-[84px] self-start z-0 min-h-[600px]"
+      />
+
       {/* ================= DESKTOP SIDEBAR ================= */}
       <aside
         className="
