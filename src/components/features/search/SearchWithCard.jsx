@@ -229,6 +229,7 @@ export default function SearchWithCard({
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [accumulatedVehicles, setAccumulatedVehicles] = useState([]);
+  const lastProcessedPageRef = useRef(1);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
@@ -804,6 +805,11 @@ export default function SearchWithCard({
     }));
   }, [recommendedAdsData]);
 
+  const topPicksPageResponse =
+    searchData?.priceMatchVehicles?.pageResponse ||
+    searchData?.topPicksVehicles?.pageResponse ||
+    null;
+
   const newVehicles =
     searchData?.priceMatchVehicles?.vehicles ||
     searchData?.topPicksVehicles?.vehicles ||
@@ -812,14 +818,16 @@ export default function SearchWithCard({
   useEffect(() => {
     if (currentPage === 1) {
       setAccumulatedVehicles(newVehicles);
-    } else if (newVehicles.length > 0) {
-      setAccumulatedVehicles((prev) => {
-        const existingIds = new Set(prev.map((v) => v.id));
-        const toAdd = newVehicles.filter((v) => !existingIds.has(v.id));
-        return [...prev, ...toAdd];
-      });
+      lastProcessedPageRef.current = 1;
+    } else if (newVehicles.length > 0 && lastProcessedPageRef.current !== currentPage) {
+      const responsePage = topPicksPageResponse?.currentPage;
+      if (responsePage && responsePage !== currentPage) {
+        return;
+      }
+      lastProcessedPageRef.current = currentPage;
+      setAccumulatedVehicles((prev) => [...prev, ...newVehicles]);
     }
-  }, [newVehicles, currentPage]);
+  }, [newVehicles, currentPage, topPicksPageResponse?.currentPage]);
 
   const vehicles = accumulatedVehicles;
   const relatedVehicles = Array.isArray(searchData?.similarVehicles)
@@ -830,10 +838,7 @@ export default function SearchWithCard({
     : Array.isArray(searchData?.priceMatchVehicles)
     ? searchData.priceMatchVehicles
     : (searchData?.priceMatchVehicles?.content || []);
-  const topPicksPageResponse =
-    searchData?.priceMatchVehicles?.pageResponse ||
-    searchData?.topPicksVehicles?.pageResponse ||
-    null;
+
 
   // Sync selected filters → clean SEO slug URL (zero query params, production-style)
   // e.g. /search/buy-used-petrol-sedan-hyundai-cars-above-2-lakhs-ahmedabad
@@ -2179,7 +2184,8 @@ export default function SearchWithCard({
   }, [onClearAllHandlerChange, handleClearFilters]);
 
   const handlePageChange = (page) => {
-    if (page < 1 || page > totalPages) return;
+    const maxAllowedPage = totalElements > vehicles.length ? totalPages + 1 : totalPages;
+    if (page < 1 || page > maxAllowedPage) return;
     setCurrentPage(page);
   };
 
@@ -2857,30 +2863,34 @@ export default function SearchWithCard({
                 </div>
               </div>
 
-              {vehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} data={vehicle} />
+              {vehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle?.id ? `${vehicle.id}-${index}` : index} data={vehicle} />
               ))}
 
-              {totalElements > 0 && (
-                <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
-                  <div className="text-sm text-third">
-                    Showing <span className="font-semibold text-primary">{vehicles.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> vehicles
+              {totalElements > 0 && (() => {
+                const displayTotalElements = Math.max(totalElements || 0, vehicles.length);
+                const displayedCount = Math.min(vehicles.length, displayTotalElements);
+                return (
+                  <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
+                    <div className="text-sm text-third">
+                      Showing <span className="font-semibold text-primary">{displayedCount}</span> of <span className="font-semibold text-primary">{displayTotalElements}</span> vehicles
+                    </div>
+                    {displayedCount < displayTotalElements && currentPage <= totalPages && (
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-2 px-6 rounded-full"
+                        size="sm"
+                        showIcon={false}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={vehiclesLoading}
+                      >
+                        <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
+                        {vehiclesLoading ? "Loading..." : "Load More"}
+                      </Button>
+                    )}
                   </div>
-                  {currentPage < totalPages && (
-                    <Button
-                      variant="ghost"
-                      className="flex items-center gap-2 px-6 rounded-full"
-                      size="sm"
-                      showIcon={false}
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={vehiclesLoading}
-                    >
-                      <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
-                      {vehiclesLoading ? "Loading..." : "Load More"}
-                    </Button>
-                  )}
-                </div>
-              )}
+                );
+              })()}
             </>
           ) : (
             <>
