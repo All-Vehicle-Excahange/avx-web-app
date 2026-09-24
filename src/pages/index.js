@@ -20,6 +20,7 @@ import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
 import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
 import HomePopularSearches from "@/components/features/home/HomePopularSearches";
+import AdSenseAd from "@/components/common/AdSenseAd";
 
 function Home() {
   return (
@@ -180,6 +181,10 @@ function Home() {
 
       <Layout>
         <TopPicsSection />
+        <AdSenseAd
+          slot={process.env.NEXT_PUBLIC_ADSENSE_HOME_BANNER_SLOT}
+          className="py-4 md:py-6"
+        />
       </Layout>
 
       {/* </Layout> */}

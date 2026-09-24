@@ -16,6 +16,7 @@ import VehicleCondition from "./VehicleCondition";
 import VehicleSummaryRight from "./VehicleSummaryRight";
 import Testimonials from "./Testimonials";
 import SimulerVehicle from "./SimulerVehicle";
+import AdSenseAd from "@/components/common/AdSenseAd";
 import Navbar from "@/components/layout/Navbar";
 import VehicleOverviewMain from "./VehicleOverviewMain";
 
@@ -403,6 +404,10 @@ export default function VehicleDetails({
               </aside>
             </section>
           </section>
+          <AdSenseAd
+            slot={process.env.NEXT_PUBLIC_ADSENSE_VDP_SIMILAR_SLOT}
+            className="w-full pt-6 md:pt-12"
+          />
           <section className="pt-6 md:pt-12 flex flex-col gap-6 md:gap-12">
             <SimulerVehicle vehicleOverview={vehicleOverview} />
             <ReletedConsualt

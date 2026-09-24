@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { ShieldCheck, ClipboardList, Globe, Star } from "lucide-react";
+import AdSenseAd from "@/components/common/AdSenseAd";
 
 const features = [
   {
@@ -25,7 +26,7 @@ const features = [
   },
 ];
 
-function SpecialOffer() {
+function BuyWithConfidenceBanner() {
   return (
     <div className="w-full">
       <div
@@ -42,7 +43,6 @@ function SpecialOffer() {
           border-third/60
          "
       >
-        {/* Background Image */}
         <Image
           src="/vdp-banner.webp"
           alt="Special Offer"
@@ -51,20 +51,19 @@ function SpecialOffer() {
           className="object-cover"
         />
 
-        {/* Dark overlay for readability */}
         <div className="absolute inset-0 " />
 
-        {/* Left-side content */}
         <div className="absolute inset-y-0 left-0 flex flex-col justify-center px-4 sm:px-6 py-4 sm:py-5 max-w-[60%] sm:max-w-[320px] lg:max-w-[260px] xl:max-w-[320px]">
-          {/* Title */}
           <h6 className="text-[10px] sm:text-[12px] font-primary tracking-[0.1em] sm:tracking-[0.2em] uppercase font-bold text-white mb-3 sm:mb-4 leading-snug">
             Buy With Confidence
           </h6>
 
-          {/* Features */}
           <ul className="flex flex-col gap-2.5 sm:gap-3 mb-2 sm:mb-5">
             {features.map((f, i) => (
-              <li key={i} className="flex items-start sm:items-center gap-2 sm:gap-2.5">
+              <li
+                key={i}
+                className="flex items-start sm:items-center gap-2 sm:gap-2.5"
+              >
                 <div className="mt-0.5 sm:mt-0 shrink-0">{f.icon}</div>
                 <span className="text-[11px] sm:text-[13px] text-white sm:text-white/70 leading-[1.3] sm:leading-snug">
                   {f.label}
@@ -75,6 +74,17 @@ function SpecialOffer() {
         </div>
       </div>
     </div>
+  );
+}
+
+function SpecialOffer() {
+  return (
+    <AdSenseAd
+      slot={process.env.NEXT_PUBLIC_ADSENSE_VDP_SPECIAL_SLOT}
+      mode="fallback"
+      fallback={<BuyWithConfidenceBanner />}
+      className="w-full rounded-xl overflow-hidden min-h-[260px] sm:min-h-[360px] lg:min-h-[220px] xl:min-h-[300px]"
+    />
   );
 }
 

@@ -13,6 +13,7 @@ import { MAKER_NAME_MAPPING } from "@/data/makers";
 import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
+import AdSenseAd from "@/components/common/AdSenseAd";
 import {
   buildSearchLandingSeo,
   buildSearchLandingIntro,
@@ -253,6 +254,11 @@ function SearchContent({
           loading={isLoading}
         />
       </Layout>
+
+      <AdSenseAd
+        slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_BANNER_SLOT}
+        className="container py-4 md:py-6"
+      />
 
       <SearchLandingVehicleLinks
         vehicles={seo?.initialVehicles}

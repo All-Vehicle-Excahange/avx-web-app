@@ -3,11 +3,12 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
+import AdSenseAd from "@/components/common/AdSenseAd";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function PromoBanner() {
+function PromoBanners() {
   return (
     <div className="relative w-full h-[140px] sm:h-[200px] md:h-[240px] lg:h-[280px] rounded-xl sm:rounded-2xl overflow-hidden shadow-md bg-transparent">
       <Swiper
@@ -54,5 +55,16 @@ function BannerImage({ src, mobileSrc }) {
         priority
       />
     </div>
+  );
+}
+
+export default function PromoBanner() {
+  return (
+    <AdSenseAd
+      slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_PROMO_SLOT}
+      mode="fallback"
+      fallback={<PromoBanners />}
+      className="rounded-xl sm:rounded-2xl overflow-hidden min-h-[140px] sm:min-h-[200px] md:min-h-[240px] lg:min-h-[280px]"
+    />
   );
 }

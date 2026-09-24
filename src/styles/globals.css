@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Hide unfilled AdSense units so they never leave blank bands */
+ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}
+
 :root {
   --color-primary: #fff;
   --color-secondary: #121212;
