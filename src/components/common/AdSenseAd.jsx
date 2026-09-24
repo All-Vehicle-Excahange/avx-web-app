@@ -55,10 +55,32 @@ export default function AdSenseAd({
         return;
       }
 
-      const readStatus = () => {
+      const checkFilledState = () => {
         const adStatus = ins.getAttribute("data-ad-status");
-        if (adStatus === "filled") notify("filled");
-        else if (adStatus === "unfilled") notify("unfilled");
+        if (adStatus === "filled") {
+          const hasIframe = ins.querySelector("iframe");
+          const hasHeight = ins.clientHeight > 0 || ins.offsetHeight > 0;
+          if (hasIframe || hasHeight) {
+            notify("filled");
+          } else {
+            // Re-check after 300ms in case iframe render is asynchronous
+            setTimeout(() => {
+              const retryIframe = ins.querySelector("iframe");
+              const retryHeight = ins.clientHeight > 0 || ins.offsetHeight > 0;
+              if (retryIframe || retryHeight) {
+                notify("filled");
+              } else {
+                notify("unfilled");
+              }
+            }, 300);
+          }
+        } else if (adStatus === "unfilled") {
+          notify("unfilled");
+        }
+      };
+
+      const readStatus = () => {
+        checkFilledState();
       };
 
       observer = new MutationObserver(readStatus);
@@ -78,9 +100,7 @@ export default function AdSenseAd({
       }
 
       timeoutId = window.setTimeout(() => {
-        const adStatus = ins.getAttribute("data-ad-status");
-        if (adStatus === "filled") notify("filled");
-        else notify("unfilled");
+        checkFilledState();
       }, 4000);
 
       readStatus();
