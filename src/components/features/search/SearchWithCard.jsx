@@ -2743,7 +2743,7 @@ export default function SearchWithCard({
             </div>
           </div>
 
-          {(isAdsLoading || (Array.isArray(recommendedVehicles) ? recommendedVehicles.length > 0 : recommendedVehicles?.content?.length > 0)) && (
+          {(Array.isArray(recommendedVehicles) ? recommendedVehicles.length > 0 : recommendedVehicles?.content?.length > 0) && (
             <div className="col-span-full mb-10">
               <SponsoredCars loading={isAdsLoading} data={recommendedVehicles} />
             </div>
