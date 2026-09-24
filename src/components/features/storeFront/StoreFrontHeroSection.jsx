@@ -446,19 +446,19 @@ export default function StoreFrontHeroSection() {
                 </div>
               )}
 
-              <div className="flex gap-3 justify-start lg:justify-end items-center flex-wrap">
+              <div className="flex gap-3 justify-start items-center flex-wrap pt-1">
                 <Button
                   size="sm"
-                  variant="ghost"
                   onClick={handleWhatsAppClick}
                   disabled={isOpeningWhatsApp}
+                  className="!bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200"
                 >
                   {isOpeningWhatsApp ? (
-                    <Loader2 className="w-[18px] h-[18px] animate-spin" />
+                    <Loader2 className="w-[18px] h-[18px] animate-spin text-white" />
                   ) : (
-                    <FaWhatsapp className="w-[18px] h-[18px] shrink-0" />
+                    <FaWhatsapp className="w-[18px] h-[18px] shrink-0 text-white" />
                   )}
-                  <span>WhatsApp</span>
+                  <span className="font-semibold text-white">WhatsApp</span>
                 </Button>
 
                 <Button
