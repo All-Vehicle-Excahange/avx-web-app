@@ -423,12 +423,14 @@ export default function VehicleCard({
       text-sm font-secondary md:text-xl font-bold 
       leading-tight tracking-wide 
       line-clamp-2 overflow-hidden
+      hover:text-fourth transition-colors
     "
+                    title={mapped.title}
                   >
                     <NoPrefetchLink
                       href={detailHref}
                       onClick={(e) => e.stopPropagation()}
-                      className="hover:text-fourth transition-colors"
+                      title={mapped.title}
                     >
                       {mapped.title}
                     </NoPrefetchLink>
@@ -437,7 +439,7 @@ export default function VehicleCard({
 
                 {/* USER */}
                 <div className="flex items-center gap-1.5 mt-1">
-                  <p className="text-xs md:text-sm text-primary/90 flex items-center gap-1.5 truncate">
+                  <p className="text-xs md:text-sm text-primary/90 flex items-center gap-1.5 truncate" title={mapped.userName || "john doe"}>
                     <User className="w-3.5 h-3.5 shrink-0" />{" "}
                     <span className="truncate capitalize">{mapped.userName || "john doe"}</span>
                   </p>

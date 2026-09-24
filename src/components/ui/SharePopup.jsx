@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { X, Copy, Check } from "lucide-react";
+import useEscapeKey from "@/hooks/useEscapeKey";
 
 export default function SharePopup({
   isOpen,
@@ -26,6 +27,8 @@ export default function SharePopup({
     }, 150);
   }, [onClose]);
 
+  useEscapeKey(isOpen, triggerClose);
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (popupRef.current && !popupRef.current.contains(e.target)) {
@@ -33,20 +36,22 @@ export default function SharePopup({
       }
     };
 
-    const handleEsc = (e) => {
-      if (e.key === "Escape") triggerClose();
+    const preventScroll = (e) => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
-      document.addEventListener("keydown", handleEsc);
-      document.body.style.overflow = "hidden";
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
     }
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "auto";
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
     };
   }, [isOpen, triggerClose]);
 
@@ -111,8 +116,18 @@ export default function SharePopup({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-9999 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-fd px-0 sm:px-4 pb-0 sm:pb-0"
+      className="fixed inset-0 z-9999 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-0 sm:px-4 pb-0 sm:pb-0 overscroll-contain"
       onClick={triggerClose}
+      onWheel={(e) => {
+        if (!popupRef.current || !popupRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
+      onTouchMove={(e) => {
+        if (!popupRef.current || !popupRef.current.contains(e.target)) {
+          e.preventDefault();
+        }
+      }}
       style={{
         animation: isClosing
           ? "modalBackdropOut 0.15s ease-in forwards"

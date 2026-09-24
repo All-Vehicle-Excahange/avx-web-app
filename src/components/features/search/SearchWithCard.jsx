@@ -13,6 +13,7 @@ import { FilterIcon, MapPin, X, SearchX, RefreshCw } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import PriceBased from "./PriceBased";
+import ReletedToSearch from "./ReletedToSearch";
 import CustomSelect from "@/components/ui/custom-select";
 import EmptyState from "@/components/ui/EmptyState";
 import { useSearchParams, usePathname } from "next/navigation";
@@ -219,6 +220,8 @@ export default function SearchWithCard({
 
   const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 0));
   const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
 
   const MAX = serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
   const PRICE_STEP = MAX > 2000000 ? 25000 : (MAX > 500000 ? 10000 : 5000);
@@ -227,6 +230,7 @@ export default function SearchWithCard({
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [accumulatedVehicles, setAccumulatedVehicles] = useState([]);
+  const lastProcessedPageRef = useRef(1);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
@@ -404,20 +408,24 @@ export default function SearchWithCard({
 
   // Synchronously update selected filters from initialFilters prop during render
   const [prevInitialFilters, setPrevInitialFilters] = useState(initialFilters);
-  if (
-    !isSelfTriggered.current &&
-    (initialFilters.budget !== prevInitialFilters.budget ||
-      initialFilters.makerId !== prevInitialFilters.makerId ||
-      initialFilters.modelId !== prevInitialFilters.modelId ||
-      initialFilters.cityId !== prevInitialFilters.cityId ||
-      initialFilters.stateId !== prevInitialFilters.stateId ||
-      initialFilters.stateName !== prevInitialFilters.stateName ||
-      initialFilters.cityName !== prevInitialFilters.cityName ||
-      initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
-      initialFilters.fuelType !== prevInitialFilters.fuelType ||
-      initialFilters.transmission !== prevInitialFilters.transmission ||
-      initialFilters.bodyType !== prevInitialFilters.bodyType)
-  ) {
+  const initialFiltersChanged =
+    initialFilters.budget !== prevInitialFilters.budget ||
+    initialFilters.makerId !== prevInitialFilters.makerId ||
+    initialFilters.brandName !== prevInitialFilters.brandName ||
+    initialFilters.modelId !== prevInitialFilters.modelId ||
+    initialFilters.cityId !== prevInitialFilters.cityId ||
+    initialFilters.stateId !== prevInitialFilters.stateId ||
+    initialFilters.stateName !== prevInitialFilters.stateName ||
+    initialFilters.cityName !== prevInitialFilters.cityName ||
+    initialFilters.vehicleType !== prevInitialFilters.vehicleType ||
+    initialFilters.fuelType !== prevInitialFilters.fuelType ||
+    initialFilters.transmission !== prevInitialFilters.transmission ||
+    initialFilters.bodyType !== prevInitialFilters.bodyType ||
+    initialFilters.category !== prevInitialFilters.category ||
+    initialFilters.vehicleTag !== prevInitialFilters.vehicleTag;
+
+  if (initialFiltersChanged) {
+    isSelfTriggered.current = false;
     setPrevInitialFilters(initialFilters);
 
     // Fuel Type
@@ -533,7 +541,7 @@ export default function SearchWithCard({
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
 
     if (selectedCategories.length > 0) {
-      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
     }
 
     if (selectedBrands.length > 0)
@@ -588,7 +596,7 @@ export default function SearchWithCard({
     if (selectedBodyType.length > 0)
       payload.vehicleSubTypes = selectedBodyType.map((b) => b.toUpperCase());
     if (selectedCategories.length > 0) {
-      payload.vehicleTag = selectedCategories[0];
+      payload.vehicleTags = selectedCategories;
     }
     if (selectedBrands.length > 0)
       payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
@@ -620,8 +628,6 @@ export default function SearchWithCard({
   const [debouncedConsultPayload, setDebouncedConsultPayload] = useState(() =>
     buildConsultPayload(),
   );
-  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
   const skipFirstFilterTrackRef = useRef(true);
 
   useEffect(() => {
@@ -800,6 +806,11 @@ export default function SearchWithCard({
     }));
   }, [recommendedAdsData]);
 
+  const topPicksPageResponse =
+    searchData?.priceMatchVehicles?.pageResponse ||
+    searchData?.topPicksVehicles?.pageResponse ||
+    null;
+
   const newVehicles =
     searchData?.priceMatchVehicles?.vehicles ||
     searchData?.topPicksVehicles?.vehicles ||
@@ -808,14 +819,16 @@ export default function SearchWithCard({
   useEffect(() => {
     if (currentPage === 1) {
       setAccumulatedVehicles(newVehicles);
-    } else if (newVehicles.length > 0) {
-      setAccumulatedVehicles((prev) => {
-        const existingIds = new Set(prev.map((v) => v.id));
-        const toAdd = newVehicles.filter((v) => !existingIds.has(v.id));
-        return [...prev, ...toAdd];
-      });
+      lastProcessedPageRef.current = 1;
+    } else if (newVehicles.length > 0 && lastProcessedPageRef.current !== currentPage) {
+      const responsePage = topPicksPageResponse?.currentPage;
+      if (responsePage && responsePage !== currentPage) {
+        return;
+      }
+      lastProcessedPageRef.current = currentPage;
+      setAccumulatedVehicles((prev) => [...prev, ...newVehicles]);
     }
-  }, [newVehicles, currentPage]);
+  }, [newVehicles, currentPage, topPicksPageResponse?.currentPage]);
 
   const vehicles = accumulatedVehicles;
   const relatedVehicles = Array.isArray(searchData?.similarVehicles)
@@ -826,10 +839,7 @@ export default function SearchWithCard({
     : Array.isArray(searchData?.priceMatchVehicles)
     ? searchData.priceMatchVehicles
     : (searchData?.priceMatchVehicles?.content || []);
-  const topPicksPageResponse =
-    searchData?.priceMatchVehicles?.pageResponse ||
-    searchData?.topPicksVehicles?.pageResponse ||
-    null;
+
 
   // Sync selected filters → clean SEO slug URL (zero query params, production-style)
   // e.g. /search/buy-used-petrol-sedan-hyundai-cars-above-2-lakhs-ahmedabad
@@ -925,14 +935,12 @@ export default function SearchWithCard({
 
     if (onRelatedChange) onRelatedChange(similar);
 
-    const combinedTotal =
-      (priceBased.length || 0) +
-      (topPicksPR.totalElements || 0) +
-      (similar.length || 0);
+    const directTotal = topPicksPR.totalElements !== undefined ? topPicksPR.totalElements : newVehicles.length;
 
     const combinedPageResponse = {
       ...topPicksPR,
-      totalElements: combinedTotal,
+      totalElements: directTotal,
+      hasDirectVehicles: (newVehicles.length > 0) || (directTotal > 0),
     };
 
     if (onPageResponseChange) onPageResponseChange(combinedPageResponse);
@@ -943,12 +951,12 @@ export default function SearchWithCard({
         .join(" ") || pathname?.split("/").pop()?.replace(/-/g, " ") || "vehicle_search";
     trackSearchResults({
       search_string: searchLabel,
-      results_count: topPicksPR.totalElements || combinedTotal,
+      results_count: directTotal,
       search_type: "search_results_page",
     });
     trackSearchResultsViewed({
       search_string: searchLabel,
-      results_count: topPicksPR.totalElements || combinedTotal,
+      results_count: directTotal,
       search_type: "search_results_page",
       city: selectedCityName || undefined,
       state: selectedStateName || undefined,
@@ -973,6 +981,8 @@ export default function SearchWithCard({
   // Synchronize options lists from URL params on mount/change
   // Synchronize options lists and filter states from URL params on change
   useEffect(() => {
+    if (isSelfTriggered.current) return;
+
     const reccomInspectedVal = searchParams.get("reccomInspected");
     if (reccomInspectedVal === "true") {
       setAvxAssumed(true);
@@ -2175,7 +2185,8 @@ export default function SearchWithCard({
   }, [onClearAllHandlerChange, handleClearFilters]);
 
   const handlePageChange = (page) => {
-    if (page < 1 || page > totalPages) return;
+    const maxAllowedPage = totalElements > vehicles.length ? totalPages + 1 : totalPages;
+    if (page < 1 || page > maxAllowedPage) return;
     setCurrentPage(page);
   };
 
@@ -2861,32 +2872,66 @@ export default function SearchWithCard({
                 </div>
               </div>
 
-              {vehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} data={vehicle} />
+              {vehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle?.id ? `${vehicle.id}-${index}` : index} data={vehicle} />
               ))}
 
-              {totalElements > 0 && (
-                <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
-                  <div className="text-sm text-third">
-                    Showing <span className="font-semibold text-primary">{vehicles.length}</span> of <span className="font-semibold text-primary">{totalElements}</span> vehicles
+              {totalElements > 0 && (() => {
+                const displayTotalElements = Math.max(totalElements || 0, vehicles.length);
+                const displayedCount = Math.min(vehicles.length, displayTotalElements);
+                return (
+                  <div className="col-span-full flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 mb-4 pt-4 border-t border-third/20">
+                    <div className="text-sm text-third">
+                      Showing <span className="font-semibold text-primary">{displayedCount}</span> of <span className="font-semibold text-primary">{displayTotalElements}</span> vehicles
+                    </div>
+                    {displayedCount < displayTotalElements && currentPage <= totalPages && (
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-2 px-6 rounded-full"
+                        size="sm"
+                        showIcon={false}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={vehiclesLoading}
+                      >
+                        <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
+                        {vehiclesLoading ? "Loading..." : "Load More"}
+                      </Button>
+                    )}
                   </div>
-                  {currentPage < totalPages && (
-                    <Button
-                      variant="ghost"
-                      className="flex items-center gap-2 px-6 rounded-full"
-                      size="sm"
-                      showIcon={false}
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={vehiclesLoading}
-                    >
-                      <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
-                      {vehiclesLoading ? "Loading..." : "Load More"}
-                    </Button>
-                  )}
+                );
+              })()}
+            </>
+          ) : (
+            <>
+              <div className="col-span-full py-8 px-4 text-center bg-white/5 border border-third/30 rounded-xl my-2">
+                <h3 className="text-base font-semibold text-primary mb-1">
+                  No Vehicles Found
+                </h3>
+                <p className="text-xs text-third max-w-sm mx-auto mb-3">
+                  We couldn't find any vehicles matching your search criteria. Try adjusting your filters.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearFilters}
+                  className="text-xs py-1 px-3 h-8"
+                  showIcon={false}
+                >
+                  Clear All Filters
+                </Button>
+              </div>
+
+              {relatedVehicles && relatedVehicles.length > 0 && (
+                <div className="col-span-full mt-6">
+                  <ReletedToSearch
+                    data={relatedVehicles}
+                    loading={vehiclesLoading}
+                    gridCols="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  />
                 </div>
               )}
             </>
-          ) : null}
+          )}
         </div>
       </main>
 

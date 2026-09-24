@@ -59,6 +59,7 @@ function LoginPopup({
   const [isClosing, setIsClosing] = useState(false);
   const hiddenInputRef = useRef(null);
   const modalRef = useRef(null);
+  const phoneInputRef = useRef(null);
 
   // ── WebOTP auto-fill (TEMPORARILY DISABLED) ──────────────────────────────
   const autoVerifyRef = useRef(null);
@@ -128,9 +129,19 @@ function LoginPopup({
         } else {
           localStorage.removeItem("otpBlockUntil");
         }
-      }
+      } 
     }
   }, [isOpen, reset]);
+
+  // Focus mobile number input when popup opens or account tab changes
+  useEffect(() => {
+    if (isOpen && !otpSent) {
+      const timer = setTimeout(() => {
+        phoneInputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, otpSent, accountType]);
 
   // Focus the first OTP input securely when OTP is sent
   useEffect(() => {
@@ -698,7 +709,10 @@ function LoginPopup({
             <div className="flex justify-center gap-8 mb-8 border-b border-primary/10">
               <button
                 type="button"
-                onClick={() => setAccountType("personal")}
+                onClick={() => {
+                  setAccountType("personal");
+                  setTimeout(() => phoneInputRef.current?.focus(), 50);
+                }}
                 className={`relative pb-2 px-2 cursor-pointer text-sm font-semibold uppercase tracking-wide transition-all ${accountType === "personal"
                   ? "text-primary"
                   : "text-primary/40 hover:text-primary/70"
@@ -711,7 +725,10 @@ function LoginPopup({
               </button>
               <button
                 type="button"
-                onClick={() => setAccountType("consultant")}
+                onClick={() => {
+                  setAccountType("consultant");
+                  setTimeout(() => phoneInputRef.current?.focus(), 50);
+                }}
                 className={`relative pb-2 px-2 cursor-pointer text-sm font-semibold uppercase tracking-wide transition-all ${accountType === "consultant"
                   ? "text-primary"
                   : "text-primary/40 hover:text-primary/70"
@@ -751,6 +768,11 @@ function LoginPopup({
                         message: "Mobile must be 10 digits",
                       },
                     })}
+                    ref={(e) => {
+                      const reg = register("phoneNumber");
+                      if (typeof reg?.ref === "function") reg.ref(e);
+                      phoneInputRef.current = e;
+                    }}
                     className={`w-full text-primary py-3 px-2 outline-none bg-transparent ${isGoogleSignupFlow ? "border-l border-accent-gray" : ""}`}
                   />
                 </div>
