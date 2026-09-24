@@ -147,7 +147,7 @@ export default function AdSenseAd({
       className={
         showAd
           ? `relative max-w-full overflow-hidden z-0 ${className || "w-full"}`.trim()
-          : `w-full max-w-full h-0 overflow-hidden opacity-0 pointer-events-none ${className}`.trim()
+          : "absolute w-0 h-0 min-h-0 min-w-0 max-h-0 max-w-0 overflow-hidden opacity-0 pointer-events-none border-0 p-0 m-0"
       }
       style={showAd ? style : undefined}
       aria-hidden={!showAd}

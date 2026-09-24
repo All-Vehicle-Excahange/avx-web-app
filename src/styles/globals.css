@@ -437,6 +437,15 @@ html {
 }
 
 
+.promo-swiper .swiper-wrapper {
+  height: 100% !important;
+}
+
+.promo-swiper .swiper-slide {
+  height: 100% !important;
+  position: relative !important;
+}
+
 .promo-swiper .swiper-pagination {
   bottom: 6px !important;
   z-index: 20;

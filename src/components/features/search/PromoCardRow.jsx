@@ -21,15 +21,15 @@ function PromoBanners() {
         loop={true}
         className="w-full h-full promo-swiper"
       >
-        <SwiperSlide>
+        <SwiperSlide className="w-full h-full relative">
           <BannerImage src="/banner1.webp" mobileSrc="/mobile-banner-1.png" />
         </SwiperSlide>
 
-        <SwiperSlide>
+        <SwiperSlide className="w-full h-full relative">
           <BannerImage src="/banner2.webp" mobileSrc="/mobile-banner-2.png" />
         </SwiperSlide>
 
-        <SwiperSlide>
+        <SwiperSlide className="w-full h-full relative">
           <BannerImage src="/banner3.webp" mobileSrc="/mobile-banner-3.png" />
         </SwiperSlide>
       </Swiper>
