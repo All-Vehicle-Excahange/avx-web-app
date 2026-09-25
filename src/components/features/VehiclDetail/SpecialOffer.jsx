@@ -77,14 +77,16 @@ function BuyWithConfidenceBanner() {
   );
 }
 
-function SpecialOffer() {
+function SpecialOffer({ isVehicleSold = false }) {
   return (
-    <AdSenseAd
-      slot={process.env.NEXT_PUBLIC_ADSENSE_VDP_SPECIAL_SLOT}
-      mode="fallback"
-      fallback={<BuyWithConfidenceBanner />}
-      className="w-full rounded-xl overflow-hidden min-h-[260px] sm:min-h-[360px] lg:min-h-[220px] xl:min-h-[300px]"
-    />
+    <div className={isVehicleSold ? "hidden lg:block w-full" : "w-full"}>
+      <AdSenseAd
+        slot={process.env.NEXT_PUBLIC_ADSENSE_VDP_SPECIAL_SLOT}
+        mode="fallback"
+        fallback={<BuyWithConfidenceBanner />}
+        className="w-full rounded-xl overflow-hidden min-h-[260px] sm:min-h-[360px] lg:min-h-[220px] xl:min-h-[300px]"
+      />
+    </div>
   );
 }
 

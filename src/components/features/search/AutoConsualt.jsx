@@ -39,17 +39,19 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
     const [internalLoading, setInternalLoading] = useState(true);
     const isLoading = externalLoading !== undefined ? externalLoading : internalLoading;
 
+    const hasParentData = Array.isArray(data) && data.length > 0;
+
     // Sync when parent passes filter-based consultant data
     useEffect(() => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (hasParentData) {
             setConsultants(data.map(mapConsultant));
             setInternalLoading(false);
         }
-    }, [data]);
+    }, [data, hasParentData]);
 
     // Fallback: fetch from home feed when no filter data is given
     useEffect(() => {
-        if (Array.isArray(data) && data.length > 0) return; // parent data takes priority
+        if (hasParentData) return; // parent data takes priority
 
         let mounted = true;
         const fetchConsultants = async () => {
@@ -67,7 +69,7 @@ export default function AutoConsualt({ limit, data, filterPayload, loading: exte
 
         fetchConsultants();
         return () => (mounted = false);
-    }, [safeLimit, data]);
+    }, [safeLimit, hasParentData]);
 
     const seeAllHref = React.useMemo(() => {
         const queryParams = new URLSearchParams();

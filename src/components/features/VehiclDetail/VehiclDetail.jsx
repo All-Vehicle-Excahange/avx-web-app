@@ -284,6 +284,8 @@ export default function VehicleDetails({
     );
   }
 
+  const isSold = vehicleOverview?.isVehicleSold || vehicleOverview?.status === "SOLD";
+
   return (
     <>
       <div className="fixed top-0 inset-x-0 z-1000">
@@ -305,64 +307,68 @@ export default function VehicleDetails({
               <div className="flex flex-col gap-6 min-w-0">
                 <VehicleImageGallery vehicle={vehicleOverview} />
 
-                <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
-                  <div className="overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-6 min-w-max">
-                      {[
-                        { id: "overview", label: "Overview", ref: overviewRef },
-                        {
-                          id: "specification",
-                          label: "Specifications",
-                          ref: specificationRef,
-                        },
-                        ...(inspectionDetails
-                          ? [
-                              {
-                                id: "condition",
-                                label: "Condition",
-                                ref: conditionRef,
-                              },
-                            ]
-                          : []),
-                        {
-                          id: "inspection",
-                          label: "Inspection",
-                          ref: inspectionRef,
-                        },
-                      ].map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => scrollToSection(tab.ref, tab.id)}
-                          className={`relative cursor-pointer py-3 text-sm font-medium whitespace-nowrap transition-colors
-          ${activeTab === tab.id
-                              ? "text-primary"
-                              : "text-third hover:text-primary"
-                            }`}
-                        >
-                          {tab.label}
+                {!isSold && (
+                  <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
+                    <div className="overflow-x-auto scrollbar-hide">
+                      <div className="flex gap-6 min-w-max">
+                        {[
+                          { id: "overview", label: "Overview", ref: overviewRef },
+                          {
+                            id: "specification",
+                            label: "Specifications",
+                            ref: specificationRef,
+                          },
+                          ...(inspectionDetails
+                            ? [
+                                {
+                                  id: "condition",
+                                  label: "Condition",
+                                  ref: conditionRef,
+                                },
+                              ]
+                            : []),
+                          {
+                            id: "inspection",
+                            label: "Inspection",
+                            ref: inspectionRef,
+                          },
+                        ].map((tab) => (
+                          <button
+                            key={tab.id}
+                            onClick={() => scrollToSection(tab.ref, tab.id)}
+                            className={`relative cursor-pointer py-3 text-sm font-medium whitespace-nowrap transition-colors
+            ${activeTab === tab.id
+                                ? "text-primary"
+                                : "text-third hover:text-primary"
+                              }`}
+                          >
+                            {tab.label}
 
-                          {activeTab === tab.id && (
-                            <motion.span
-                              layoutId="activeTabIndicator"
-                              className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full"
-                            />
-                          )}
-                        </button>
-                      ))}
+                            {activeTab === tab.id && (
+                              <motion.span
+                                layoutId="activeTabIndicator"
+                                className="absolute left-0 bottom-0 h-0.5 w-full bg-primary rounded-full"
+                              />
+                            )}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 <div ref={overviewRef}>
                   <VehicleOverviewMain vehicle={vehicleOverview} />
                 </div>
 
-                <div ref={specificationRef}>
-                  <VehicleOverview
-                    vehicle={vehicleOverview}
-                    open={isSpecOpen}
-                    setOpen={setIsSpecOpen}
-                  />
-                </div>
+                {!isSold && (
+                  <div ref={specificationRef}>
+                    <VehicleOverview
+                      vehicle={vehicleOverview}
+                      open={isSpecOpen}
+                      setOpen={setIsSpecOpen}
+                    />
+                  </div>
+                )}
 
                 {inspectionDetails && (
                   <div ref={conditionRef}>
@@ -375,15 +381,17 @@ export default function VehicleDetails({
                   </div>
                 )}
 
-                <div ref={inspectionRef}>
-                  <VehicleSpec
-                    ref={inspectionSpecsRef}
-                    vehicle={vehicleOverview}
-                    open={isInspectionOpen}
-                    setOpen={setIsInspectionOpen}
-                    inspectionDetails={inspectionDetails}
-                  />
-                </div>
+                {!isSold && (
+                  <div ref={inspectionRef}>
+                    <VehicleSpec
+                      ref={inspectionSpecsRef}
+                      vehicle={vehicleOverview}
+                      open={isInspectionOpen}
+                      setOpen={setIsInspectionOpen}
+                      inspectionDetails={inspectionDetails}
+                    />
+                  </div>
+                )}
               </div>
 
               <aside
@@ -400,7 +408,7 @@ export default function VehicleDetails({
                   isCheckingInspection={isCheckingInspection}
                 />
                 <Testimonials summary={vehicleSummary} />
-                <SpecialOffer />
+                <SpecialOffer isVehicleSold={vehicleOverview?.isVehicleSold} />
               </aside>
             </section>
           </section>

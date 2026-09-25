@@ -88,6 +88,9 @@ const VehicleSpecsConsualt = forwardRef(function VehicleSpecsConsualt(
     }
   };
 
+  const isSold = vehicle?.isVehicleSold || vehicle?.status === "SOLD";
+  if (isSold) return null;
+
   return (
     <section className="relative rounded-2xl overflow-hidden text-primary border border-third/60">
       <div className="relative z-10">

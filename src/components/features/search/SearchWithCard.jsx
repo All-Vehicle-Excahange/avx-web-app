@@ -1220,7 +1220,12 @@ export default function SearchWithCard({
   ]);
 
   // ── Load Brands with search ──
+  const prevBrandParamsRef = useRef("");
   const loadBrands = async (page = 1, searchTerm = brandSearch) => {
+    const key = JSON.stringify({ page, searchTerm: searchTerm.trim(), apiBodyType });
+    if (prevBrandParamsRef.current === key) return;
+    prevBrandParamsRef.current = key;
+
     if (brandLoading) return;
     setBrandLoading(true);
 
@@ -1257,6 +1262,7 @@ export default function SearchWithCard({
       setBrandPage(page);
     } catch (err) {
       console.error("Brands error:", err);
+      prevBrandParamsRef.current = "";
       setBrandHasMore(false);
     } finally {
       setBrandLoading(false);
@@ -1272,16 +1278,10 @@ export default function SearchWithCard({
       setBrandPage(1);
       setBrandHasMore(true);
       loadBrands(1, brandSearch);
-    }, 400);
+    }, 300);
 
     return () => clearTimeout(brandSearchTimeoutRef.current);
   }, [brandSearch, apiBodyType]);
-
-  useEffect(() => {
-    setBrandPage(1);
-    setBrandHasMore(true);
-    loadBrands(1, "");
-  }, [apiBodyType]);
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -1432,7 +1432,12 @@ export default function SearchWithCard({
   };
 
   // ── Load Models with search ──
+  const prevModelParamsRef = useRef("");
   const loadModels = async (page = 1, searchTerm = modelSearch) => {
+    const key = JSON.stringify({ page, searchTerm: searchTerm.trim(), selectedBrands, apiBodyType });
+    if (prevModelParamsRef.current === key) return;
+    prevModelParamsRef.current = key;
+
     if (modelLoading) return;
     setModelLoading(true);
 
@@ -1477,6 +1482,7 @@ export default function SearchWithCard({
       setModelPage(page);
     } catch (err) {
       console.error("Models error:", err);
+      prevModelParamsRef.current = "";
       setModelHasMore(false);
     } finally {
       setModelLoading(false);
@@ -1492,16 +1498,10 @@ export default function SearchWithCard({
       setModelPage(1);
       setModelHasMore(true);
       loadModels(1, modelSearch);
-    }, 400);
+    }, 300);
 
     return () => clearTimeout(modelSearchTimeoutRef.current);
-  }, [modelSearch]);
-
-  useEffect(() => {
-    setModelPage(1);
-    setModelHasMore(true);
-    loadModels(1, modelSearch);
-  }, [selectedBrands, apiBodyType]);
+  }, [modelSearch, selectedBrands, apiBodyType]);
 
   const handleLoadMoreModels = () => {
     if (modelLoading || !modelHasMore) return;

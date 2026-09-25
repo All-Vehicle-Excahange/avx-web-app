@@ -44,6 +44,16 @@ export default function VehicleSummaryRight({
   const { push } = useRouter();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
+
+  const rawPrice = Number(vehicle?.price) || 0;
+  const rawDisplayPrice = vehicle?.displayPrice ? Number(vehicle?.displayPrice) : null;
+  const discountPercent = (() => {
+    if (!rawPrice || !rawDisplayPrice) return null;
+    const max = Math.max(rawPrice, rawDisplayPrice);
+    const min = Math.min(rawPrice, rawDisplayPrice);
+    if (max === min) return null;
+    return Math.round(((max - min) / max) * 100);
+  })();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
@@ -610,35 +620,37 @@ export default function VehicleSummaryRight({
               </>
             ) : (
               <>
-                <div className="hidden lg:grid grid-cols-2 gap-2 ">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    showIcon={false}
-                    className="rounded-full text-xs whitespace-nowrap px-1"
-                    onClick={openMakeOffer}
-                    disabled={hasActiveInquiry || vehicle?.isVehicleSold}
-                  >
-                    {hasActiveInquiry ? "Offer Already Sent" : "Make An Offer"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    showIcon={false}
-                    className="rounded-full text-xs whitespace-nowrap px-1"
-                    onClick={handleRequestInspectionClick}
-                    loading={isCheckingInspection}
-                  >
-                    Request Inspection
-                  </Button>
-                </div>
+                {!vehicle?.isVehicleSold && (
+                  <div className="hidden lg:grid grid-cols-2 gap-2 ">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      showIcon={false}
+                      className="rounded-full text-xs whitespace-nowrap px-1"
+                      onClick={openMakeOffer}
+                      disabled={hasActiveInquiry || vehicle?.isVehicleSold}
+                    >
+                      {hasActiveInquiry ? "Offer Already Sent" : "Make An Offer"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      showIcon={false}
+                      className="rounded-full text-xs whitespace-nowrap px-1"
+                      onClick={handleRequestInspectionClick}
+                      loading={isCheckingInspection}
+                    >
+                      Request Inspection
+                    </Button>
+                  </div>
+                )}
 
                 {/* CALL BUTTON */}
                 <Button
                   variant="ghost"
                   size="sm"
                   showIcon={false}
-                  className="rounded-full w-full flex items-center justify-center gap-2"
+                  className={`rounded-full w-full ${vehicle?.isVehicleSold ? "hidden lg:flex" : "flex"} items-center justify-center gap-2`}
                   loading={loading}
                   disabled={vehicle?.isVehicleSold}
                   onClick={handleCallButtonClick}
@@ -658,13 +670,15 @@ export default function VehicleSummaryRight({
 
       {/* MOBILE STICKY BOTTOM BAR */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
-        <div className="flex flex-col">
-          <p className="text-third text-[10px] uppercase tracking-wider font-semibold">
-            Price
+        <div className="flex flex-col justify-center">
+          <p className="text-lg sm:text-xl font-bold text-primary leading-tight">
+            ₹{rawPrice ? rawPrice.toLocaleString("en-IN") : "0"}
           </p>
-          <p className="text-xl font-bold text-primary leading-tight">
-            ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
-          </p>
+          {rawDisplayPrice && (
+            <p className="text-[11px] text-third line-through mt-0.5 leading-none font-medium">
+              ₹{rawDisplayPrice.toLocaleString("en-IN")}
+            </p>
+          )}
         </div>
 
         <div className="flex gap-2">
@@ -689,6 +703,17 @@ export default function VehicleSummaryRight({
                 Boost
               </Button>
             </>
+          ) : vehicle?.isVehicleSold ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              showIcon={false}
+              className="rounded-full text-xs px-4 flex items-center justify-center gap-2 opacity-80"
+              disabled={true}
+            >
+              <Phone size={15} />
+              Sold Out
+            </Button>
           ) : (
             <div className="flex items-center gap-1.5">
               <Button
@@ -697,7 +722,7 @@ export default function VehicleSummaryRight({
                 showIcon={false}
                 className="rounded-full text-[11px] whitespace-nowrap px-2.5"
                 onClick={openMakeOffer}
-                disabled={hasActiveInquiry || vehicle?.isVehicleSold}
+                disabled={hasActiveInquiry}
               >
                 {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
               </Button>

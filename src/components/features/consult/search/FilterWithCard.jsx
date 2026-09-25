@@ -91,6 +91,7 @@ export default function FilterWithCard({
   const prevSortRef = useRef(sort);
   const autoFetchTimerRef = useRef(null);
   const isInitializingFilters = useRef(true);
+  const prevPayloadRef = useRef("");
 
   const isMobile = useIsMobile();
 
@@ -401,11 +402,13 @@ export default function FilterWithCard({
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
+    const { sortBy, direction } = getSortConfig(sort);
+    const requestKey = JSON.stringify({ page, sortBy, direction, payload });
+    if (prevPayloadRef.current === requestKey) return;
+    prevPayloadRef.current = requestKey;
+
     setConsultantsLoading(true);
     try {
-      //  Get sorting config from URL
-      const { sortBy, direction } = getSortConfig(sort);
-
       const requestData = {
         pageNo: page,
         size: itemsPerPage,
@@ -455,6 +458,7 @@ export default function FilterWithCard({
       setPremiumConsultants(mapToCardFormat(premiumData));
     } catch (err) {
       console.error("Failed to fetch consultants:", err);
+      prevPayloadRef.current = "";
       setConsultants([]);
       setPremiumConsultants([]);
     } finally {
@@ -786,8 +790,9 @@ export default function FilterWithCard({
     setHiddenModelIds([]);
     setHiddenVehicleSubTypes([]);
 
-    // Reset pagination
+    // Reset pagination & prev payload ref
     setCurrentPage(1);
+    prevPayloadRef.current = "";
 
     // Fetch will be handled automatically by the useEffect watching filter states
     window.scrollTo({ top: 0, behavior: "smooth" });
