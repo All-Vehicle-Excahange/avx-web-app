@@ -192,6 +192,7 @@ function LoginPopup({
       setIsGoogleSignupFlow(false);
       setIsGoogleLoading(false);
       setAccountType("personal");
+      useAuthStore.setState({ authPopupDefaultTab: "personal" });
       setAcceptedTerms(false);
       localStorage.removeItem("otpBlockUntil");
       onClose();

@@ -75,7 +75,11 @@ export const useAuthStore = create((set) => ({
         };
       }
     } else if (arg && typeof arg === "object") {
-      defaultTab = arg.defaultTab || "personal";
+      defaultTab =
+        arg.defaultTab ||
+        (arg.user_role_intent === "consultant" || arg.entry_context === "become_consultant"
+          ? "consultant"
+          : "personal");
       funnel = {
         entry_context: arg.entry_context || "direct",
         trigger_action: arg.trigger_action || "login_click",
@@ -96,6 +100,7 @@ export const useAuthStore = create((set) => ({
   closeLoginPopup: () =>
     set({
       isLoginPopupOpen: false,
+      authPopupDefaultTab: "personal",
     }),
 
 

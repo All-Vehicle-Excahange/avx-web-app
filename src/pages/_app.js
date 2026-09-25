@@ -184,6 +184,9 @@ export default function App({ Component, pageProps }) {
 
   // CROSS-PAGE LOGIN POPUP TRIGGER
   useEffect(() => {
+    // Reset login popup default tab to 'personal' (buyer) on route changes
+    useAuthStore.setState({ authPopupDefaultTab: "personal" });
+
     if (typeof window !== "undefined") {
       const hasTokenInUrl =
         window.location.search?.includes("magicToken=") ||
