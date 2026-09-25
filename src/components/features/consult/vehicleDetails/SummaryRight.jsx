@@ -36,6 +36,16 @@ export default function SummaryRight({ vehicle, summary }) {
       )
   );
 
+  const rawPrice = Number(vehicle?.price) || 0;
+  const rawDisplayPrice = vehicle?.displayPrice ? Number(vehicle?.displayPrice) : null;
+  const discountPercent = (() => {
+    if (!rawPrice || !rawDisplayPrice) return null;
+    const max = Math.max(rawPrice, rawDisplayPrice);
+    const min = Math.min(rawPrice, rawDisplayPrice);
+    if (max === min) return null;
+    return Math.round(((max - min) / max) * 100);
+  })();
+
   useEffect(() => {
     console.log("=== SummaryRight Owner Debug ===", {
       user,
@@ -308,51 +318,88 @@ export default function SummaryRight({ vehicle, summary }) {
           <div className="border-t border-third/40" />
 
           {/* ACTION BUTTONS (DESKTOP) */}
-          <div className="hidden lg:grid grid-cols-2 gap-3 pt-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              showIcon={false}
-              className="rounded-full"
-              onClick={handleRequestInspection}
-              loading={isCheckingInspection}
-            >
-              Request Inspection
-            </Button>
+          {!vehicle?.isVehicleSold ? (
+            <div className="hidden lg:grid grid-cols-2 gap-3 pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                className="rounded-full"
+                onClick={handleRequestInspection}
+                loading={isCheckingInspection}
+              >
+                Request Inspection
+              </Button>
 
-            <Button variant="outline" size="sm" showIcon={false} onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
-              Boost Listing
-            </Button>
-          </div>
+              <Button variant="outline" size="sm" showIcon={false} onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
+                Boost Listing
+              </Button>
+            </div>
+          ) : (
+            <div className="hidden lg:block pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                className="rounded-full w-full opacity-80"
+                disabled={true}
+              >
+                Sold Out
+              </Button>
+            </div>
+          )}
         </div>
       </aside>
 
       {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md  shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
-        <div className="flex flex-col">
-          <p className="text-third text-[10px] uppercase tracking-wider font-semibold">
-            Price
-          </p>
-          <p className="text-xl font-bold text-primary leading-tight">
-            ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
-          </p>
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-secondary/95 border-t border-third/20 p-3 px-4 flex items-center justify-between lg:hidden backdrop-blur-md shadow-[0_-10px_25px_rgba(0,0,0,0.15)]">
+        <div className="flex flex-col justify-center">
+          <div className="flex items-center gap-1.5">
+            <p className="text-lg sm:text-xl font-bold text-primary leading-tight">
+              ₹{rawPrice ? rawPrice.toLocaleString("en-IN") : "0"}
+            </p>
+            {rawDisplayPrice && discountPercent !== null && discountPercent !== 0 && (
+              <span className="inline-block bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-bold tracking-wide text-[9px] px-1.5 py-0.5 rounded shadow border border-yellow-400/20 leading-none">
+                {discountPercent}% off
+              </span>
+            )}
+          </div>
+          {rawDisplayPrice && (
+            <p className="text-[11px] text-third line-through mt-0.5 leading-none font-medium">
+              ₹{rawDisplayPrice.toLocaleString("en-IN")}
+            </p>
+          )}
         </div>
 
         <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            showIcon={false}
-            className=""
-            onClick={handleRequestInspection}
-            loading={isCheckingInspection}
-          >
-            Request Inspection
-          </Button>
+          {vehicle?.isVehicleSold ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              showIcon={false}
+              className="rounded-full text-xs px-4 opacity-80"
+              disabled={true}
+            >
+              Sold Out
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                showIcon={false}
+                className=""
+                onClick={handleRequestInspection}
+                loading={isCheckingInspection}
+              >
+                Request Inspection
+              </Button>
 
-          <Button variant="outline" size="sm" showIcon={false} className="" onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
-            Boost Listing
-          </Button>
+              <Button variant="outline" size="sm" showIcon={false} className="" onClick={() => push(`/consult/dashboard/ads/create?vehicleId=${vehicleId}`)}>
+                Boost Listing
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

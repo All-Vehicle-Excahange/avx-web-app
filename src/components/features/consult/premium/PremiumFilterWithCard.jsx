@@ -71,6 +71,7 @@ export default function FilterWithCard({
   const prevSortRef = useRef(sort);
   const autoFetchTimerRef = useRef(null);
   const isInitializingFilters = useRef(true);
+  const prevPayloadRef = useRef("");
 
   const isMobile = useIsMobile();
 
@@ -376,10 +377,13 @@ export default function FilterWithCard({
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
+    const { sortBy, direction } = getSortConfig(sort);
+    const requestKey = JSON.stringify({ page, sortBy, direction, payload });
+    if (prevPayloadRef.current === requestKey) return;
+    prevPayloadRef.current = requestKey;
+
     setConsultantsLoading(true);
     try {
-      const { sortBy, direction } = getSortConfig(sort);
-
       const requestData = {
         pageNo: page,
         size: itemsPerPage,
@@ -396,6 +400,28 @@ export default function FilterWithCard({
         if (premiumRes.pagination.totalElements !== undefined) {
           setTotalElements(premiumRes.pagination.totalElements);
         }
+        onPageResponseChange?.({
+          totalElements: premiumRes.pagination.totalElements ?? 0,
+          totalPages: premiumRes.pagination.totalPages ?? 0,
+          currentPage: premiumRes.pagination.currentPage ?? page,
+        });
+      } else if (premiumRes?.data && Array.isArray(premiumRes.data)) {
+        const total = premiumRes.data.length;
+        setTotalElements(total);
+        setTotalPages(1);
+        onPageResponseChange?.({
+          totalElements: total,
+          totalPages: 1,
+          currentPage: page,
+        });
+      } else {
+        setTotalElements(0);
+        setTotalPages(0);
+        onPageResponseChange?.({
+          totalElements: 0,
+          totalPages: 0,
+          currentPage: page,
+        });
       }
 
       const premiumData =
@@ -411,7 +437,15 @@ export default function FilterWithCard({
       }
     } catch (err) {
       console.error("Failed to fetch consultants:", err);
+      prevPayloadRef.current = "";
       setPremiumConsultants([]);
+      setTotalElements(0);
+      setTotalPages(0);
+      onPageResponseChange?.({
+        totalElements: 0,
+        totalPages: 0,
+        currentPage: page,
+      });
     } finally {
       setConsultantsLoading(false);
     }
@@ -581,8 +615,9 @@ export default function FilterWithCard({
     setSelectedTownName("");
     setTowns([]);
 
-    // Reset pagination
+    // Reset pagination & prev payload ref
     setCurrentPage(1);
+    prevPayloadRef.current = "";
 
     // Fetch will be handled automatically by the useEffect watching filter states
     window.scrollTo({ top: 0, behavior: "smooth" });
