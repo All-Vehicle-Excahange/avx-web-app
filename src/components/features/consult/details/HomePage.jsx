@@ -144,6 +144,7 @@ export default function ConsultantProgramPage() {
                   onClick={() => {
                     if (!isLoggedIn) {
                       openLoginPopup({
+                        defaultTab: "consultant",
                         entry_context: "become_consultant",
                         trigger_action: "consultant_signup",
                         user_role_intent: "consultant",
