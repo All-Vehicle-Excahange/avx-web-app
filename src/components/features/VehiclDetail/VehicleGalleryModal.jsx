@@ -62,8 +62,9 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
         <Swiper
           ref={swiperRef}
           initialSlide={initialSlide}
-          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           spaceBetween={0}
+          loop={true}
           navigation={{
             prevEl: prevRef.current,
             nextEl: nextRef.current,
@@ -81,7 +82,10 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
           className="w-full h-full"
         >
           {media.map((item, idx) => (
-            <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full overflow-hidden">
+            <SwiperSlide 
+              key={idx} 
+              className="flex items-center justify-center w-full h-full overflow-hidden [&:not(.swiper-slide-zoomed)_.swiper-zoom-container]:cursor-zoom-in [&.swiper-slide-zoomed_.swiper-zoom-container]:cursor-zoom-out"
+            >
               {({ isActive }) => (
                 item.type === "image" ? (
                   <div className="swiper-zoom-container relative w-full h-full">
@@ -90,7 +94,8 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                       alt={`${imageAltBase} — photo ${idx + 1}`}
                       fill
                       className="object-contain select-none"
-                      priority={idx === 0}
+                      priority={idx <= 3}
+                      unoptimized
                       sizes="100vw"
                     />
                   </div>
@@ -147,6 +152,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
             spaceBetween={8}
             slidesPerView="auto"
             freeMode={true}
+            loop={true}
             watchSlidesProgress={true}
             centerInsufficientSlides={true}
             modules={[FreeMode, Navigation, Thumbs]}
@@ -167,6 +173,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                         sizes="100px"
                         alt="thumb"
                         className="object-cover pointer-events-none"
+                        unoptimized
                       />
                     ) : (
                       <>
@@ -177,6 +184,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                             sizes="100px"
                             alt="thumb"
                             className="object-cover pointer-events-none"
+                            unoptimized
                           />
                         ) : (
                           <video src={item.src} className="w-full h-full object-cover pointer-events-none" />

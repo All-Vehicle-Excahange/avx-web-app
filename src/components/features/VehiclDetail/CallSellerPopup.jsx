@@ -149,12 +149,24 @@ export default function CallSellerPopup({
   useEscapeKey(isOpen, handleClose);
 
   useEffect(() => {
-    if (!isOpen) return;
-    document.body.style.overflow = "hidden";
-    setImgError(false);
-    setLogoError(false);
+    const preventScroll = (e) => {
+      const isScrollableContent = e.target.closest('.custom-scrollbar');
+      if (isScrollableContent) return;
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    if (isOpen) {
+      setImgError(false);
+      setLogoError(false);
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
+    }
+
     return () => {
-      document.body.style.overflow = "auto";
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
     };
   }, [isOpen]);
 
@@ -217,7 +229,7 @@ export default function CallSellerPopup({
       }}
     >
       <div
-        className="relative flex flex-col md:flex-row w-full max-w-[860px] max-h-[90vh] overflow-y-auto md:overflow-hidden bg-secondary border border-white/10 rounded-2xl shadow-2xl text-primary font-primary"
+        className="relative flex flex-col md:flex-row w-full max-w-[860px] max-h-[90vh] overflow-y-auto custom-scrollbar overscroll-contain md:overflow-hidden bg-secondary border border-white/10 rounded-2xl shadow-2xl text-primary font-primary"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing

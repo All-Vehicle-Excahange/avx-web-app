@@ -153,7 +153,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 backdrop-blur-md p-0 md:px-4 md:py-4 overscroll-contain"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 overscroll-contain"
       onClick={handleClose}
       style={{
         animation: isClosing
@@ -164,7 +164,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
       {/* MODAL CONTAINER */}
       <div
         ref={popupRef}
-        className="w-full h-full md:max-w-5xl md:h-[76vh] bg-secondary rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border-0 md:border border-white/10 overscroll-contain text-white"
+        className="w-full h-[85vh] md:h-[76vh] max-w-5xl bg-secondary rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/10 overscroll-contain text-white"
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing

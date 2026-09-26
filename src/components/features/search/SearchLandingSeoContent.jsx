@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { formatVehicleListingLine } from "@/lib/searchLandingSeo";
 
 export default function SearchLandingSeoContent({
@@ -29,7 +30,7 @@ export default function SearchLandingSeoContent({
             <span className="w-1 h-5 bg-fourth rounded-full inline-block"></span>
             Featured listings{cityName ? ` in ${cityName}` : ""}
           </h2>
-          <ul className="space-y-2 text-sm text-primary/85">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm font-semibold text-primary/90">
             {topVehicles.map((v) => {
               const href =
                 v.slug && v.id
@@ -37,8 +38,12 @@ export default function SearchLandingSeoContent({
                   : `/vehicle/details/${v.id}`;
               return (
                 <li key={`seo-${v.id || href}`}>
-                  <Link href={href} className="hover:text-fourth font-medium">
-                    {formatVehicleListingLine(v)}
+                  <Link
+                    href={href}
+                    className="flex items-center gap-2 group hover:text-fourth transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4 text-primary/60 group-hover:text-fourth shrink-0" />
+                    <span className="truncate">{formatVehicleListingLine(v)}</span>
                   </Link>
                 </li>
               );

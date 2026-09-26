@@ -987,7 +987,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, [activeTab, showTypeDropdown]);
 
   const handleSearch = async () => {
-    if (!vehicleType) {
+    if (!vehicleType && internalActiveType !== "consult") {
       setVehicleTypeError(true);
       return;
     }
