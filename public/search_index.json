@@ -38415,10 +38415,12 @@
   },
   {
     "id": "filter_buy_used_kia_cars_kanodar",
-    "title": "Used KIA Cars in Kanodar",
+    "title": "Used Kia Cars in Kanodar",
     "keywords": [
       "kia",
       "kanodar",
+      "used car",
+      "used kia cars",
       "used kia in kanodar",
       "used kia cars in kanodar",
       "used kia near me",
@@ -38427,7 +38429,7 @@
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "KIA",
+      "makerName": "Kia",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars-kanodar"
@@ -56980,7 +56982,7 @@
     "keywords": [
       "mahindra",
       "scorpio",
-      "used car",
+      "used scorpio",
       "used mahindra scorpio"
     ],
     "type": "vehicle_filter",
@@ -57418,18 +57420,18 @@
   },
   {
     "id": "filter_buy_used_mahindra_scorpio_cars_visnagar",
-    "title": "Used Mahindra Scorpio Cars in Visnagar",
+    "title": "Used Mahindra Scorpio in Visnagar",
     "keywords": [
       "mahindra",
       "scorpio",
       "visnagar",
-      "used mahindra scorpio",
       "used scorpio in visnagar",
       "used mahindra scorpio in visnagar",
       "used scorpio near me",
-      "used mahindra near visnagar",
+      "used scorpio near visnagar",
       "used mahindra scorpio near me",
       "second hand scorpio visnagar",
+      "scorpio in visnagar",
       "scorpio near me"
     ],
     "type": "vehicle_filter",
@@ -63779,24 +63781,24 @@
   },
   {
     "id": "filter_buy_used_kia_seltos_cars_kanodar",
-    "title": "Used KIA SELTOS in Kanodar",
+    "title": "Used Kia Seltos Cars in Kanodar",
     "keywords": [
       "kia",
       "seltos",
       "kanodar",
+      "used kia seltos",
       "used seltos in kanodar",
       "used kia seltos in kanodar",
       "used seltos near me",
-      "used seltos near kanodar",
+      "used kia near kanodar",
       "used kia seltos near me",
       "second hand seltos kanodar",
-      "seltos in kanodar",
       "seltos near me"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "KIA",
-      "modelName": "SELTOS",
+      "makerName": "Kia",
+      "modelName": "Seltos",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars-kanodar"
@@ -64895,6 +64897,321 @@
     }
   },
   {
+    "id": "filter_buy_used_mahindra_bolero_neo_cars",
+    "title": "Used Mahindra BOLERO NEO Cars",
+    "keywords": [
+      "mahindra",
+      "bolero neo",
+      "used bolero neo",
+      "used mahindra bolero neo",
+      "bolero"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "BOLERO NEO",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-neo-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_bolero_neo_cars_visnagar",
+    "title": "Used Mahindra BOLERO NEO in Visnagar",
+    "keywords": [
+      "mahindra",
+      "bolero neo",
+      "visnagar",
+      "used bolero neo in visnagar",
+      "used mahindra bolero neo in visnagar",
+      "used bolero neo near me",
+      "used bolero neo near visnagar",
+      "used mahindra bolero neo near me",
+      "second hand bolero neo visnagar",
+      "bolero neo in visnagar",
+      "bolero in visnagar",
+      "bolero neo near me",
+      "bolero near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "BOLERO NEO",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-neo-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_bolero_neo_cars_gujarat",
+    "title": "Used Mahindra BOLERO NEO in Gujarat",
+    "keywords": [
+      "mahindra",
+      "bolero neo",
+      "gujarat",
+      "used bolero neo in gujarat",
+      "used mahindra bolero neo in gujarat",
+      "bolero"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "BOLERO NEO",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-neo-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
+    "title": "Used Maruti Suzuki Swift Dzire Cars",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "used swift dzire",
+      "used maruti suzuki swift dzire",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
+    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "palanpur",
+      "used swift dzire in palanpur",
+      "used maruti suzuki swift dzire in palanpur",
+      "used swift dzire near me",
+      "used swift dzire near palanpur",
+      "used maruti suzuki swift dzire near me",
+      "second hand swift dzire palanpur",
+      "swift dzire in palanpur",
+      "swift in palanpur",
+      "swift dzire near me",
+      "swift near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "gujarat",
+      "used swift dzire in gujarat",
+      "used maruti suzuki swift dzire in gujarat",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_gujarat",
+    "title": "Used Mahindra Scorpio in Gujarat",
+    "keywords": [
+      "mahindra",
+      "scorpio",
+      "gujarat",
+      "used scorpio in gujarat",
+      "used mahindra scorpio in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_santro_xing_cars_gujarat",
+    "title": "Used Hyundai Santro Xing in Gujarat",
+    "keywords": [
+      "hyundai",
+      "santro xing",
+      "gujarat",
+      "used santro xing in gujarat",
+      "used hyundai santro xing in gujarat",
+      "santro",
+      "used santro"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Santro Xing",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-santro-xing-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_i20_cars_gujarat",
+    "title": "Used Hyundai i20 in Gujarat",
+    "keywords": [
+      "hyundai",
+      "i20",
+      "gujarat",
+      "used i20 in gujarat",
+      "used hyundai i20 in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "i20",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-i20-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_s_cross_cars",
+    "title": "Used Maruti Suzuki S Cross Cars",
+    "keywords": [
+      "maruti suzuki",
+      "s cross",
+      "used s cross",
+      "used maruti suzuki s cross",
+      "s"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "S Cross",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-s-cross-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_s_cross_cars_visnagar",
+    "title": "Used Maruti Suzuki S Cross in Visnagar",
+    "keywords": [
+      "maruti suzuki",
+      "s cross",
+      "visnagar",
+      "used s cross in visnagar",
+      "used maruti suzuki s cross in visnagar",
+      "used s cross near me",
+      "used s cross near visnagar",
+      "used maruti suzuki s cross near me",
+      "second hand s cross visnagar",
+      "s cross in visnagar",
+      "s in visnagar",
+      "s cross near me",
+      "s near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "S Cross",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-s-cross-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_s_cross_cars_gujarat",
+    "title": "Used Maruti Suzuki S Cross in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "s cross",
+      "gujarat",
+      "used s cross in gujarat",
+      "used maruti suzuki s cross in gujarat",
+      "s"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "S Cross",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-s-cross-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_bolero_cars",
+    "title": "Used Mahindra Bolero Cars",
+    "keywords": [
+      "mahindra",
+      "bolero",
+      "used bolero",
+      "used mahindra bolero"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Bolero",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_bolero_cars_visnagar",
+    "title": "Used Mahindra Bolero in Visnagar",
+    "keywords": [
+      "mahindra",
+      "bolero",
+      "visnagar",
+      "used bolero in visnagar",
+      "used mahindra bolero in visnagar",
+      "used bolero near me",
+      "used bolero near visnagar",
+      "used mahindra bolero near me",
+      "second hand bolero visnagar",
+      "bolero in visnagar",
+      "bolero near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Bolero",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_bolero_cars_gujarat",
+    "title": "Used Mahindra Bolero in Gujarat",
+    "keywords": [
+      "mahindra",
+      "bolero",
+      "gujarat",
+      "used bolero in gujarat",
+      "used mahindra bolero in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Bolero",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-bolero-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_hyundai_creta_cars_gujarat",
     "title": "Used Hyundai Creta in Gujarat",
     "keywords": [
@@ -65112,46 +65429,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_i20_cars_gujarat",
-    "title": "Used Hyundai i20 in Gujarat",
-    "keywords": [
-      "hyundai",
-      "i20",
-      "gujarat",
-      "used i20 in gujarat",
-      "used hyundai i20 in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "i20",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-i20-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_santro_xing_cars_gujarat",
-    "title": "Used Hyundai Santro Xing in Gujarat",
-    "keywords": [
-      "hyundai",
-      "santro xing",
-      "gujarat",
-      "used santro xing in gujarat",
-      "used hyundai santro xing in gujarat",
-      "santro",
-      "used santro"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Santro Xing",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-santro-xing-cars-gujarat"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_cars_banas_kantha",
     "title": "Used Hyundai Cars in Banas Kantha",
     "keywords": [
@@ -65201,24 +65478,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_s_cross_cars",
-    "title": "Used Maruti Suzuki S Cross Cars",
-    "keywords": [
-      "maruti suzuki",
-      "s cross",
-      "used s cross",
-      "used maruti suzuki s cross",
-      "s"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "S Cross",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-s-cross-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_cars_banas_kantha",
     "title": "Used Maruti Suzuki Cars in Banas Kantha",
     "keywords": [
@@ -65263,26 +65522,6 @@
       "city": "Banas Kantha",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-s-cross-cars-banas-kantha"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_s_cross_cars_gujarat",
-    "title": "Used Maruti Suzuki S Cross in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "s cross",
-      "gujarat",
-      "used s cross in gujarat",
-      "used maruti suzuki s cross in gujarat",
-      "s"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "S Cross",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-s-cross-cars-gujarat"
     }
   },
   {
@@ -65347,24 +65586,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
-    "title": "Used Maruti Suzuki Swift Dzire Cars",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "used swift dzire",
-      "used maruti suzuki swift dzire",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_banas_kantha",
     "title": "Used Maruti Suzuki Swift Dzire in Banas Kantha",
     "keywords": [
@@ -65389,26 +65610,6 @@
       "city": "Banas Kantha",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-swift-dzire-cars-banas-kantha"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
-    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "gujarat",
-      "used swift dzire in gujarat",
-      "used maruti suzuki swift dzire in gujarat",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
     }
   },
   {
@@ -65705,23 +65906,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_bolero_cars",
-    "title": "Used Mahindra Bolero Cars",
-    "keywords": [
-      "mahindra",
-      "bolero",
-      "used bolero",
-      "used mahindra bolero"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Bolero",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-bolero-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_mahindra_bolero_cars_siddhpur",
     "title": "Used Mahindra Bolero in Siddhpur",
     "keywords": [
@@ -65744,25 +65928,6 @@
       "city": "Siddhpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-bolero-cars-siddhpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_bolero_cars_gujarat",
-    "title": "Used Mahindra Bolero in Gujarat",
-    "keywords": [
-      "mahindra",
-      "bolero",
-      "gujarat",
-      "used bolero in gujarat",
-      "used mahindra bolero in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Bolero",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-bolero-cars-gujarat"
     }
   },
   {
@@ -65956,33 +66121,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-fortuner-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
-    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "palanpur",
-      "used swift dzire in palanpur",
-      "used maruti suzuki swift dzire in palanpur",
-      "used swift dzire near me",
-      "used swift dzire near palanpur",
-      "used maruti suzuki swift dzire near me",
-      "second hand swift dzire palanpur",
-      "swift dzire in palanpur",
-      "swift in palanpur",
-      "swift dzire near me",
-      "swift near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
     }
   },
   {
@@ -66558,6 +66696,104 @@
     }
   },
   {
+    "id": "consultant_ec9e7a9d-96d7-4105-8982-d345754cf522",
+    "title": "Sir Hind",
+    "keywords": [
+      "sirhind",
+      "sir",
+      "hind",
+      "himatnagar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant himatnagar",
+      "used cars himatnagar",
+      "sir hind used cars",
+      "sir hind himatnagar"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "sirhind",
+      "consultationId": "ec9e7a9d-96d7-4105-8982-d345754cf522"
+    }
+  },
+  {
+    "id": "consultant_c99c4716-b218-4c99-83dc-85a80c1c33f1",
+    "title": "SIGMA MOTORS",
+    "keywords": [
+      "sigmamotors",
+      "sigma",
+      "motors",
+      "himatnagar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant himatnagar",
+      "used cars himatnagar",
+      "sigma motors used cars",
+      "sigma motors himatnagar"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "sigmamotors",
+      "consultationId": "c99c4716-b218-4c99-83dc-85a80c1c33f1"
+    }
+  },
+  {
+    "id": "consultant_0cf3187f-3ef0-4f7f-86f5-105827541fca",
+    "title": "Sheth motors",
+    "keywords": [
+      "shethmotors",
+      "sheth",
+      "motors",
+      "himatnagar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant himatnagar",
+      "used cars himatnagar",
+      "sheth motors used cars",
+      "sheth motors himatnagar"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "shethmotors",
+      "consultationId": "0cf3187f-3ef0-4f7f-86f5-105827541fca"
+    }
+  },
+  {
+    "id": "consultant_2713ec46-6db5-4087-aa6e-31615eabdebc",
+    "title": "my india auto consult",
+    "keywords": [
+      "myindiaautoconsult",
+      "my",
+      "india",
+      "auto",
+      "consult",
+      "himatnagar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant himatnagar",
+      "used cars himatnagar",
+      "my india auto consult used cars",
+      "my india auto consult himatnagar"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "myindiaautoconsult",
+      "consultationId": "2713ec46-6db5-4087-aa6e-31615eabdebc"
+    }
+  },
+  {
     "id": "consultant_46952d8f-6a18-49a8-b8ca-97fd6b012d39",
     "title": "Elite motor",
     "keywords": [
@@ -66990,6 +67226,30 @@
     "params": {
       "username": "aabadmotors",
       "consultationId": "18fba8f6-2664-423c-bc73-ab5b57684c15"
+    }
+  },
+  {
+    "id": "consultant_da761342-2aaa-476b-85a2-aab80e2149fe",
+    "title": "Fortune Auto",
+    "keywords": [
+      "fortuneauto",
+      "fortune",
+      "auto",
+      "ahmedabad",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant ahmedabad",
+      "used cars ahmedabad",
+      "fortune auto used cars",
+      "fortune auto ahmedabad"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "fortuneauto683178",
+      "consultationId": "da761342-2aaa-476b-85a2-aab80e2149fe"
     }
   },
   {
@@ -99276,25 +99536,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_bolero_neo_cars",
-    "title": "Mahindra BOLERO NEO",
-    "keywords": [
-      "used car",
-      "car",
-      "mahindra",
-      "bolero neo",
-      "bolero",
-      "neo"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Mahindra",
-      "modelName": "BOLERO NEO",
-      "slug": "buy-used-mahindra-bolero-neo-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_mahindra_bolero_neo_plus_cars",
     "title": "Mahindra Bolero Neo Plus",
     "keywords": [
@@ -104050,25 +104291,6 @@
       "modelName": "Scorpio",
       "city": "Telangana",
       "slug": "buy-used-mahindra-scorpio-cars-telangana"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_scorpio_cars_gujarat",
-    "title": "Used Mahindra Scorpio Cars in Gujarat",
-    "keywords": [
-      "used car",
-      "car",
-      "mahindra",
-      "scorpio",
-      "gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Mahindra",
-      "modelName": "Scorpio",
-      "city": "Gujarat",
-      "slug": "buy-used-mahindra-scorpio-cars-gujarat"
     }
   },
   {
