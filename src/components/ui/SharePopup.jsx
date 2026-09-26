@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { createPortal } from "react-dom";
 import { X, Copy, Check } from "lucide-react";
 import useEscapeKey from "@/hooks/useEscapeKey";
+import { FaFacebookF, FaWhatsapp, FaInstagram } from "react-icons/fa6";
+import { SiGmail } from "react-icons/si";
 
 export default function SharePopup({
   isOpen,
@@ -83,7 +85,11 @@ export default function SharePopup({
   const shareItems = [
     {
       label: "Facebook",
-      imageSrc: "/social-icons/facebook.png",
+      icon: (
+        <div className="flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-[#1877F2] shadow-sm">
+          <FaFacebookF className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+        </div>
+      ),
       onClick: () =>
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
@@ -92,12 +98,23 @@ export default function SharePopup({
     },
     {
       label: "WhatsApp",
-      imageSrc: "/social-icons/whatsaap.png",
+      icon: (
+        <div className="flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-[#25D366] shadow-sm">
+          <FaWhatsapp className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+        </div>
+      ),
       onClick: () => window.open(`https://wa.me/?text=${shareText}`, "_blank"),
     },
     {
       label: "Instagram",
-      imageSrc: "/social-icons/instagram.png",
+      icon: (
+        <div
+          className="flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full shadow-sm"
+          style={{ background: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)" }}
+        >
+          <FaInstagram className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+        </div>
+      ),
       onClick: () => {
         navigator.clipboard.writeText(finalShareUrl);
         window.open("https://www.instagram.com/", "_blank");
@@ -105,7 +122,11 @@ export default function SharePopup({
     },
     {
       label: "Gmail",
-      imageSrc: "/social-icons/gmail.png",
+      icon: (
+        <div className="flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-white shadow-sm overflow-hidden">
+          <img src="/social-icons/gmail.png" alt="Gmail" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
+        </div>
+      ),
       onClick: () => {
         window.location.href = `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(
           `${title}\n\n${finalShareUrl}`
@@ -137,7 +158,7 @@ export default function SharePopup({
       <div
         ref={popupRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[360px] overflow-hidden rounded-t-xl sm:rounded-xl border border-white/10 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] p-5 sm:p-6"
+        className="w-full max-w-[360px] overflow-hidden rounded-t-xl sm:rounded-xl border border-white/10 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] p-5 sm:p-6 font-secondary"
         style={{
           animation: isClosing
             ? "modalCardOut 0.15s ease-in forwards"
@@ -148,14 +169,14 @@ export default function SharePopup({
           <h3 className="text-xl font-semibold text-white tracking-tight">Share</h3>
           <button
             onClick={triggerClose}
-            className="cursor-pointer rounded-full p-2 bg-white/5 text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white hover:rotate-90"
+            className="cursor-pointer rounded-full p-2 bg-white/5 text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white "
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Share Icons */}
-        <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-5 pt-1 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex overflow-x-auto gap-5 sm:gap-5 pb-5 pt-1 scrollbar-hide px-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; }`}</style>
           {shareItems.map((item, index) => {
             return (
@@ -164,14 +185,10 @@ export default function SharePopup({
                 onClick={item.onClick}
                 className="flex flex-col items-center gap-2 shrink-0 group cursor-pointer border-none bg-transparent"
               >
-                <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center">
-                  <img
-                    src={item.imageSrc}
-                    alt={item.label}
-                    className="h-full w-full object-contain opacity-90 transition-all duration-200 group-hover:scale-110 group-hover:opacity-100"
-                  />
+                <div className="transition-all duration-200 group-hover:scale-105 group-active:scale-95">
+                  {item.icon}
                 </div>
-                <span className="text-[11px] sm:text-xs font-medium text-white/60 transition-colors duration-200 group-hover:text-white mt-0.5">
+                <span className="text-[11px] sm:text-xs font-medium text-white/60 transition-colors duration-200 group-hover:text-white mt-1">
                   {item.label}
                 </span>
               </button>

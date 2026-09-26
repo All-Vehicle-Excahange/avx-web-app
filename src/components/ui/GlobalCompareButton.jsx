@@ -19,7 +19,8 @@ export default function GlobalCompareButton() {
   const { isSearchDropdownOpen, isAccountPopupOpen } = useUIStore();
 
   const isDetailPage = router.pathname.includes("/vehicle/details/");
-  
+  const isStartPage = router.pathname.startsWith("/start");
+
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export default function GlobalCompareButton() {
     // x = 0 is right. Negative x moves left.
     const targetX_Right = 0;
     const targetX_Left = -(W - (MARGIN_X * 2) - BTN);
-    
+
     // y = 0 is bottom. Negative y moves up.
     const targetY_Bottom = 0;
     const targetY_Top = -(H - MARGIN_TOP - MARGIN_BOTTOM - BTN);
@@ -138,7 +139,7 @@ export default function GlobalCompareButton() {
 
   return (
     <>
-      {!isSearchDropdownOpen && !isAccountPopupOpen && !isModalOpen && (
+      {!isSearchDropdownOpen && !isAccountPopupOpen && !isModalOpen && !isStartPage && (
         <motion.button
           drag
           dragMomentum={false}

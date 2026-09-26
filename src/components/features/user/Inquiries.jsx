@@ -277,13 +277,21 @@ function Inquiries() {
                 )}
               </>
             ) : (
-              <div className="rounded-xl border border-dashed border-third/30 p-10 text-center space-y-3 shadow-sm transition-colors duration-200 hover:border-third/40">
+              <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
                 {callStatusFilter === "pending" && (
                   <>
-                    <p className="text-lg font-semibold text-primary">
+                    <div className="relative w-32 h-32 mb-2 opacity-60">
+                      <Image
+                        src="/empty2.svg"
+                        alt="Empty State"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 text-primary">
                       No pending call leads
-                    </p>
-                    <p className="text-sm text-third">
+                    </h3>
+                    <p className="text-third max-w-sm px-4">
                       Great job! You have responded to all received call leads.
                     </p>
                   </>
@@ -291,29 +299,47 @@ function Inquiries() {
 
                 {callStatusFilter === "completed" && (
                   <>
-                    <p className="text-lg font-semibold text-primary">
+                    <div className="relative w-32 h-32 mb-2 opacity-60">
+                      <Image
+                        src="/empty2.svg"
+                        alt="Empty State"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 text-primary">
                       No completed call leads yet
-                    </p>
-                    <p className="text-sm text-third">
+                    </h3>
+                    <p className="text-third max-w-sm px-4">
                       Calls marked as completed will show up here.
                     </p>
                   </>
                 )}
 
                 {callStatusFilter === "all" && (
-                  <div className="flex flex-col items-center justify-center text-center space-y-3 max-w-md mx-auto py-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-1">
-                      <PhoneIncoming size={20} strokeWidth={2} />
+                  <>
+                    <div className="relative w-32 h-32 mb-2 opacity-60">
+                      <Image
+                        src="/empty2.svg"
+                        alt="Empty State"
+                        fill
+                        className="object-contain"
+                      />
                     </div>
-                    <p className="text-base font-semibold text-white">
+                    <h3 className="text-xl font-bold mb-2 text-primary">
                       No call leads yet
-                    </p>
-                    <p className="text-xs text-third leading-relaxed">
+                    </h3>
+                    <p className="text-third mb-6 max-w-sm px-4">
                       When prospective buyers click &apos;Call Seller&apos; on
                       your vehicle listings, their call details and contact info
                       will appear here for easy follow-up.
                     </p>
-                  </div>
+                    <p className="text-sm text-third/70 max-w-sm font-medium px-4">
+                      Tip:
+                      <br />
+                      Promptly responding to call leads increases your chances of closing a sale.
+                    </p>
+                  </>
                 )}
               </div>
             )}

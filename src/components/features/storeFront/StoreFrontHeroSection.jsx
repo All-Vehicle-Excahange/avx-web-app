@@ -315,7 +315,7 @@ export default function StoreFrontHeroSection() {
                   <button
                     onClick={handleFollowToggle}
                     type="button"
-                    className={`group w-full rounded-full px-4 py-1.5 lg:py-2 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${isFollower
+                    className={`group w-full rounded-full h-10 lg:h-[42px] px-4 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${isFollower
                       ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
                       : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
                       }`}
@@ -339,10 +339,37 @@ export default function StoreFrontHeroSection() {
                 <button
                   onClick={() => setIsShareOpen(true)}
                   type="button"
-                  className="lg:hidden flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-white/15 cursor-pointer hover:bg-primary/20 transition-all"
+                  className="lg:hidden flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-white/15 cursor-pointer hover:bg-primary/20 transition-all"
                 >
                   <Share2 className="h-4.5 w-4.5" />
                 </button>
+              </div>
+
+              {/* Mobile Contact Buttons */}
+              <div className="mt-3 w-full flex lg:hidden gap-3 justify-center items-center">
+                <Button
+                  onClick={handleWhatsAppClick}
+                  disabled={isOpeningWhatsApp}
+                  className="flex-1 h-10 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200 overflow-hidden px-2"
+                >
+                  {isOpeningWhatsApp ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-white shrink-0" />
+                  ) : (
+                    <FaWhatsapp className="w-4 h-4 shrink-0 text-white" />
+                  )}
+                  <span className="font-medium text-sm text-white whitespace-nowrap truncate">WhatsApp</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  href={directionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 h-10 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm overflow-hidden px-2"
+                >
+                  <span className="font-medium text-sm whitespace-nowrap truncate">Get Directions</span>
+                  <CornerUpRight className="w-4 h-4 shrink-0" />
+                </Button>
               </div>
             </div>
 
@@ -446,7 +473,7 @@ export default function StoreFrontHeroSection() {
                 </div>
               )}
 
-              <div className="flex gap-3 justify-start items-center flex-wrap pt-1">
+              <div className="hidden lg:flex gap-3 justify-start items-center flex-wrap pt-1">
                 <Button
                   size="sm"
                   onClick={handleWhatsAppClick}
@@ -517,7 +544,7 @@ export default function StoreFrontHeroSection() {
 
           {/* Main Image Area — Full Width & Normal Spacing */}
           <div
-            className="relative flex-1 w-full h-full flex items-center justify-center overflow-hidden"
+            className="relative flex-1 w-full h-full flex items-center justify-center overflow-hidden [&_.swiper-slide-zoomed_img]:!cursor-zoom-out [&_img]:!cursor-zoom-in"
             onClick={(e) => e.stopPropagation()}
           >
             <Swiper
@@ -534,6 +561,7 @@ export default function StoreFrontHeroSection() {
                     className="object-contain select-none"
                     sizes="100vw"
                     priority
+                    unoptimized
                   />
                 </div>
               </SwiperSlide>

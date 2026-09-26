@@ -269,7 +269,7 @@ export default function VehicleImageGallery({ vehicle }) {
           {/* Wishlist Button */}
           <button
             onClick={handleWishlistToggle}
-            className="bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20 shadow-md"
+            className="bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20  backdrop-blur-md shadow-md"
           >
             <Heart
               className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"
@@ -311,8 +311,9 @@ export default function VehicleImageGallery({ vehicle }) {
                   alt={`${imageAltBase} — photo ${activeIndex + 1}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 800px"
-                  className="object-contain pointer-events-none select-none"
+                  className="object-cover pointer-events-none select-none"
                   priority
+                  unoptimized
                   onError={() => markFailed(currentItem.src)}
                 />
               ) : (
@@ -326,7 +327,7 @@ export default function VehicleImageGallery({ vehicle }) {
                     controls
                     autoPlay
                     playsInline
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               )}
@@ -337,16 +338,16 @@ export default function VehicleImageGallery({ vehicle }) {
         {/* NAV BUTTONS */}
         <button
           onClick={() => paginate(-1)}
-          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-primary/90 text-secondary p-2 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer hidden md:block"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer hidden md:block border border-white/20 shadow-md backdrop-blur-md"
         >
-          <ChevronLeft />
+          <ChevronLeft className="w-6 h-6" />
         </button>
 
         <button
           onClick={() => paginate(1)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-primary/90 text-secondary p-2 rounded-full hover:scale-105 transition duration-300 cursor-pointer hidden md:block"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full hover:scale-105 transition duration-300 cursor-pointer hidden md:block border border-white/20 shadow-md backdrop-blur-md"
         >
-          <ChevronRight />
+          <ChevronRight className="w-6 h-6" />
         </button>
 
         {/* BOTTOM RIGHT VIEW GALLERY BUTTON */}
@@ -380,8 +381,8 @@ export default function VehicleImageGallery({ vehicle }) {
               >
                 <div
                   className={`w-20 h-14 sm:w-24 sm:h-16 bg-black/5 flex items-center justify-center relative border transition rounded-md overflow-hidden ${isActive
-                      ? "border-primary border-2 shadow-sm"
-                      : "border-primary/40 hover:border-primary/70"
+                    ? "border-primary border-2 shadow-sm"
+                    : "border-primary/40 hover:border-primary/70"
                     }`}
                 >
                   {item.type === "image" ? (
@@ -392,6 +393,7 @@ export default function VehicleImageGallery({ vehicle }) {
                       sizes="96px"
                       alt={`${imageAltBase} — photo ${idx + 1}`}
                       className="w-full h-full object-cover pointer-events-none select-none"
+                      unoptimized
                       onError={() => markFailed(item.thumbnail)}
                     />
                   ) : (
@@ -419,7 +421,7 @@ export default function VehicleImageGallery({ vehicle }) {
       />
       <VehicleGalleryModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false) }
+        onClose={() => setIsModalOpen(false)}
         media={media}
         initialSlide={activeIndex}
         imageAltBase={imageAltBase}
@@ -438,6 +440,7 @@ const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
         sizes="96px"
         alt="video-thumbnail"
         className="w-full h-full object-cover"
+        unoptimized
       />
     );
   }

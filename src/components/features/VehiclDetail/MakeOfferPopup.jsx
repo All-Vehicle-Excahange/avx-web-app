@@ -68,8 +68,16 @@ export default function MakeOfferPopup({
   });
 
   useEffect(() => {
+    const preventScroll = (e) => {
+      // Allow scrolling inside the modal's scrollable areas
+      const isScrollableContent = e.target.closest('.custom-scrollbar');
+      if (isScrollableContent) return;
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
     if (isOpen) {
-      document.body.style.overflow = "hidden";
       setIsLoading(false);
       setMessage("");
 
@@ -78,11 +86,14 @@ export default function MakeOfferPopup({
         const midOffer = Math.round((vehicle.price * 0.93) / 5000) * 5000;
         setOfferPrice(midOffer.toString());
       }
-    } else {
-      document.body.style.overflow = "unset";
+      
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
     }
+    
     return () => {
-      document.body.style.overflow = "unset";
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
     };
   }, [isOpen, vehicle]);
 
@@ -235,7 +246,7 @@ export default function MakeOfferPopup({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overscroll-contain"
       onClick={handleClose}
       style={{
         animation: isClosing
@@ -259,7 +270,7 @@ export default function MakeOfferPopup({
           <X size={18} />
         </button>
 
-        <div className="p-4 md:p-5 flex-1 overflow-y-auto custom-scrollbar text-primary">
+        <div className="p-4 md:p-5 flex-1 overflow-y-auto custom-scrollbar text-primary overscroll-contain">
           {/* VEHICLE INFO */}
           <div className="flex items-center gap-4 border-b border-third/10 pb-4 mb-4">
             <div className="relative w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-secondary/50 flex items-center justify-center">

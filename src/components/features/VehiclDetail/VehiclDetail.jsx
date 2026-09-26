@@ -370,7 +370,7 @@ export default function VehicleDetails({
                   </div>
                 )}
 
-                {inspectionDetails && (
+                {inspectionDetails && !isSold && (
                   <div ref={conditionRef}>
                     <VehicleCondition
                       vehicle={vehicleOverview}
