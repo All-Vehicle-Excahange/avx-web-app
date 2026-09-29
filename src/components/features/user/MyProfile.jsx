@@ -31,6 +31,7 @@ import {
   Briefcase,
   Trash2,
   X,
+  FileBadge,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
@@ -1249,72 +1250,100 @@ function MyProfile() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* PAN Card Section */}
               {sellerData.panCardNumber && (
-                <div className="space-y-4 border-r border-white/5 pr-0 md:pr-8">
-                  <h3 className="font-bold text-primary text-base flex items-center gap-2">
-                    <CreditCard size={18} className="text-third" />
-                    PAN Card Details
-                  </h3>
-                  <div className="flex flex-col gap-1 py-2 px-1">
-                    <span className="text-xs text-third font-medium capitalize tracking-wide">PAN Card Number</span>
-                    <span className="font-semibold text-primary text-[15px] break-all">{sellerData.panCardNumber}</span>
+                <div className="flex flex-col bg-secondary/30 rounded-[24px] border border-white/10 overflow-hidden group/card hover:border-white/20 transition-all duration-300 shadow-lg">
+                  <div className="px-5 py-4 bg-black/20 border-b border-white/5 flex items-center gap-3">
+                    <div className="p-2 bg-blue-500/10 text-blue-400 rounded-xl">
+                      <CreditCard size={20} />
+                    </div>
+                    <h3 className="font-bold text-primary text-[15px]">PAN Card</h3>
                   </div>
-                  {sellerData.panCardFrontUrl && (
+                  <div className="p-5 flex flex-col gap-5 flex-1">
                     <div className="flex flex-col gap-2">
-                      <span className="text-xs text-third font-medium capitalize tracking-wide">PAN Front Photo</span>
-                      <div className="relative w-full max-w-sm h-48 rounded-lg overflow-hidden bg-black/5 border border-white/5">
-                        <Image
-                          src={sellerData.panCardFrontUrl}
-                          alt="PAN Card Front"
-                          fill
-                          className="object-contain p-2"
-                          unoptimized
-                        />
+                      <span className="text-xs text-third font-medium uppercase tracking-wider">Document Number</span>
+                      <div className="px-4 py-3 bg-white/5 border border-white/5 rounded-xl font-mono text-primary text-[15px] tracking-widest break-all shadow-inner">
+                        {sellerData.panCardNumber}
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
-
-              {/* Aadhaar Card Section */}
-              {sellerData.aadharCardNumber && (
-                <div className="space-y-4">
-                  <h3 className="font-bold text-primary text-base flex items-center gap-2">
-                    <Fingerprint size={18} className="text-third" />
-                    Aadhaar Card Details
-                  </h3>
-                  <div className="flex flex-col gap-1 py-2 px-1">
-                    <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Card Number</span>
-                    <span className="font-semibold text-primary text-[15px] break-all">
-                      {sellerData.aadharCardNumber.replace(/(\d{4})(?=\d)/g, "$1-")}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {sellerData.aadharCardFrontUrl && (
-                      <div className="flex flex-col gap-2">
-                        <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Front Photo</span>
-                        <div className="relative w-full h-36 rounded-lg overflow-hidden bg-black/5 border border-white/5">
+                    {sellerData.panCardFrontUrl && (
+                      <div className="flex flex-col gap-2 mt-auto">
+                        <span className="text-xs text-third font-medium uppercase tracking-wider">Document Photo</span>
+                        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-black/40 border border-white/5 group-hover/card:border-white/10 transition-colors">
                           <Image
-                            src={sellerData.aadharCardFrontUrl}
-                            alt="Aadhaar Front"
+                            src={sellerData.panCardFrontUrl}
+                            alt="PAN Card Front"
                             fill
-                            className="object-contain p-2"
+                            className="object-cover group-hover/card:scale-105 transition-transform duration-700 ease-out"
                             unoptimized
                           />
                         </div>
                       </div>
                     )}
-                    {sellerData.aadharCardBackUrl && (
-                      <div className="flex flex-col gap-2">
-                        <span className="text-xs text-third font-medium capitalize tracking-wide">Aadhaar Back Photo</span>
-                        <div className="relative w-full h-36 rounded-lg overflow-hidden bg-black/5 border border-white/5">
+                  </div>
+                </div>
+              )}
+
+              {/* Driving License Section */}
+              {sellerData.drivingLicense && (
+                <div className="flex flex-col bg-secondary/30 rounded-[24px] border border-white/10 overflow-hidden group/card hover:border-white/20 transition-all duration-300 shadow-lg">
+                  <div className="px-5 py-4 bg-black/20 border-b border-white/5 flex items-center gap-3">
+                    <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl">
+                      <FileBadge size={20} />
+                    </div>
+                    <h3 className="font-bold text-primary text-[15px]">Driving Licence</h3>
+                  </div>
+                  <div className="p-5 flex flex-col gap-5 flex-1">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs text-third font-medium uppercase tracking-wider">Document Number</span>
+                      <div className="px-4 py-3 bg-white/5 border border-white/5 rounded-xl font-mono text-primary text-[15px] tracking-widest break-all shadow-inner">
+                        {sellerData.drivingLicense}
+                      </div>
+                    </div>
+                    {sellerData.drivingLicenseFrontUrl && (
+                      <div className="flex flex-col gap-2 mt-auto">
+                        <span className="text-xs text-third font-medium uppercase tracking-wider">Document Photo</span>
+                        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-black/40 border border-white/5 group-hover/card:border-white/10 transition-colors">
                           <Image
-                            src={sellerData.aadharCardBackUrl}
-                            alt="Aadhaar Back"
+                            src={sellerData.drivingLicenseFrontUrl}
+                            alt="Driving Licence Front"
                             fill
-                            className="object-contain p-2"
+                            className="object-cover group-hover/card:scale-105 transition-transform duration-700 ease-out"
+                            unoptimized
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Voter ID Section */}
+              {sellerData.voterIdNumber && (
+                <div className="flex flex-col bg-secondary/30 rounded-[24px] border border-white/10 overflow-hidden group/card hover:border-white/20 transition-all duration-300 shadow-lg">
+                  <div className="px-5 py-4 bg-black/20 border-b border-white/5 flex items-center gap-3">
+                    <div className="p-2 bg-purple-500/10 text-purple-400 rounded-xl">
+                      <FileBadge size={20} />
+                    </div>
+                    <h3 className="font-bold text-primary text-[15px]">Voter ID</h3>
+                  </div>
+                  <div className="p-5 flex flex-col gap-5 flex-1">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs text-third font-medium uppercase tracking-wider">Document Number</span>
+                      <div className="px-4 py-3 bg-white/5 border border-white/5 rounded-xl font-mono text-primary text-[15px] tracking-widest break-all shadow-inner">
+                        {sellerData.voterIdNumber}
+                      </div>
+                    </div>
+                    {sellerData.voterIdFrontUrl && (
+                      <div className="flex flex-col gap-2 mt-auto">
+                        <span className="text-xs text-third font-medium uppercase tracking-wider">Document Photo</span>
+                        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-black/40 border border-white/5 group-hover/card:border-white/10 transition-colors">
+                          <Image
+                            src={sellerData.voterIdFrontUrl}
+                            alt="Voter ID Front"
+                            fill
+                            className="object-cover group-hover/card:scale-105 transition-transform duration-700 ease-out"
                             unoptimized
                           />
                         </div>

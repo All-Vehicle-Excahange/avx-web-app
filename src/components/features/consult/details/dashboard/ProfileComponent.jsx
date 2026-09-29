@@ -136,12 +136,16 @@ export default function ProfileComponent() {
         gst: "PENDING",
         panCard: "PENDING",
         aadharCard: "PENDING",
+        drivingLicense: "PENDING",
+        voterId: "PENDING",
       };
     }
     return {
       gst: documentDataRaw.gst || "PENDING",
       panCard: documentDataRaw.panCard || "PENDING",
       aadharCard: documentDataRaw.aadharCard || "PENDING",
+      drivingLicense: documentDataRaw.drivingLicense || "PENDING",
+      voterId: documentDataRaw.voterId || "PENDING",
     };
   }, [documentDataRaw]);
 
@@ -591,7 +595,8 @@ export default function ProfileComponent() {
                 {[
                   documentData.gst !== "VERIFIED" && "GST",
                   documentData.panCard !== "VERIFIED" && "PAN",
-                  documentData.aadharCard !== "VERIFIED" && "Aadhaar",
+                  documentData.drivingLicense !== "VERIFIED" && "Driving Licence",
+                  documentData.voterId !== "VERIFIED" && "Voter ID",
                 ]
                   .filter(Boolean)
                   .join(" / ")}
@@ -609,11 +614,21 @@ export default function ProfileComponent() {
           state={documentData.panCard.toLowerCase()}
         />
 
-        <KycRow
-          title="Aadhaar"
-          status={getDocStatusText(documentData.aadharCard)}
-          state={documentData.aadharCard.toLowerCase()}
-        />
+        {documentDataRaw?.drivingLicense && (
+          <KycRow
+            title="Driving Licence"
+            status={getDocStatusText(documentData.drivingLicense)}
+            state={documentData.drivingLicense.toLowerCase()}
+          />
+        )}
+
+        {documentDataRaw?.voterId && (
+          <KycRow
+            title="Voter ID"
+            status={getDocStatusText(documentData.voterId)}
+            state={documentData.voterId.toLowerCase()}
+          />
+        )}
 
         <KycRow
           title="GST"

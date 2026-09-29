@@ -10,7 +10,7 @@ const baseStyles =
 const variants = {
   default: "bg-primary border border-third/40 hover:bg-third/10 text-secondary",
   transparent:
-    "bg-white/10 border border-white/20 text-primary backdrop-blur-md hover:bg-white/20",
+    "bg-white/5 border border-white/20 text-primary backdrop-blur-md hover:bg-white/5",
   colored:
     "border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/30",
 };
@@ -138,7 +138,7 @@ export default function CustomSelect({
       case "Enter":
         e.preventDefault();
         const targetIndex = focusedIndex >= 0 ? focusedIndex : 0;
-        
+
         if (filteredOptions.length > 0 && targetIndex < filteredOptions.length) {
           onChange(filteredOptions[targetIndex].value);
           setOpen(false);

@@ -68,14 +68,19 @@ export default function MiniMap({
       Math.abs(initialLatNum - 12.12) < 0.001 &&
       Math.abs(initialLngNum - 12.12) < 0.001;
 
-    const lat = (!isNaN(initialLatNum) && !isDefaultPlaceholder) ? initialLatNum : GUJARAT_LAT;
-    const lng = (!isNaN(initialLngNum) && !isDefaultPlaceholder) ? initialLngNum : GUJARAT_LNG;
+    const hasInitialCoords = !isNaN(initialLatNum) && !isNaN(initialLngNum) && !isDefaultPlaceholder;
+    // Default coordinate fallback: Chhapi, Gujarat (23.9739, 72.3845)
+    const fallbackLat = 23.9739;
+    const fallbackLng = 72.3845;
+    
+    const lat = hasInitialCoords ? initialLatNum : fallbackLat;
+    const lng = hasInitialCoords ? initialLngNum : fallbackLng;
 
     // Create Map
     const map = L.map(mapRef.current, {
       zoomControl: true,
       attributionControl: false,
-    }).setView([lat, lng], 10);
+    }).setView([lat, lng], hasInitialCoords ? 15 : 10);
     mapInstanceRef.current = map;
 
     // Load Google Maps Tile Layer dynamically (m = roadmap, s = satellite, y = hybrid, p = terrain)
@@ -104,6 +109,7 @@ export default function MiniMap({
       draggable: !readOnly,
       icon: customIcon,
     }).addTo(map);
+    
     markerInstanceRef.current = marker;
 
     // Handle marker drag / map clicks
@@ -131,6 +137,9 @@ export default function MiniMap({
 
       map.on("click", (e) => {
         const { lat, lng } = e.latlng;
+        if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+          markerInstanceRef.current.addTo(map);
+        }
         marker.setLatLng([lat, lng]);
         updateLocation(lat, lng);
       });
@@ -152,6 +161,9 @@ export default function MiniMap({
       const lng = parseFloat(initialLng);
 
       if (!isNaN(lat) && !isNaN(lng)) {
+        if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+          markerInstanceRef.current.addTo(mapInstanceRef.current);
+        }
         const currentPos = markerInstanceRef.current.getLatLng();
         if (
           Math.abs(currentPos.lat - lat) > 0.0001 ||
@@ -175,6 +187,9 @@ export default function MiniMap({
       setIsLocating(false);
 
       if (mapInstanceRef.current && markerInstanceRef.current) {
+        if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+          markerInstanceRef.current.addTo(mapInstanceRef.current);
+        }
         markerInstanceRef.current.setLatLng([latitude, longitude]);
         mapInstanceRef.current.setView([latitude, longitude], 16);
         onChangeLocation(latitude, longitude);
@@ -207,6 +222,9 @@ export default function MiniMap({
               const { latitude, longitude } = ipData;
               setIsLocating(false);
               if (mapInstanceRef.current && markerInstanceRef.current) {
+                if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+                  markerInstanceRef.current.addTo(mapInstanceRef.current);
+                }
                 markerInstanceRef.current.setLatLng([latitude, longitude]);
                 mapInstanceRef.current.setView([latitude, longitude], 12);
                 onChangeLocation(latitude, longitude);
@@ -225,6 +243,9 @@ export default function MiniMap({
               const { latitude, longitude } = ipData;
               setIsLocating(false);
               if (mapInstanceRef.current && markerInstanceRef.current) {
+                if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+                  markerInstanceRef.current.addTo(mapInstanceRef.current);
+                }
                 markerInstanceRef.current.setLatLng([latitude, longitude]);
                 mapInstanceRef.current.setView([latitude, longitude], 12);
                 onChangeLocation(latitude, longitude);
@@ -246,6 +267,9 @@ export default function MiniMap({
               if (!isNaN(latitude) && !isNaN(longitude)) {
                 setIsLocating(false);
                 if (mapInstanceRef.current && markerInstanceRef.current) {
+                  if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+                    markerInstanceRef.current.addTo(mapInstanceRef.current);
+                  }
                   markerInstanceRef.current.setLatLng([latitude, longitude]);
                   mapInstanceRef.current.setView([latitude, longitude], 12);
                   onChangeLocation(latitude, longitude);
@@ -293,6 +317,9 @@ export default function MiniMap({
           const newLng = parseFloat(result.lon);
 
           if (mapInstanceRef.current && markerInstanceRef.current) {
+            if (!mapInstanceRef.current.hasLayer(markerInstanceRef.current)) {
+              markerInstanceRef.current.addTo(mapInstanceRef.current);
+            }
             markerInstanceRef.current.setLatLng([newLat, newLng]);
             mapInstanceRef.current.setView([newLat, newLng], 15);
             onChangeLocation(newLat, newLng);

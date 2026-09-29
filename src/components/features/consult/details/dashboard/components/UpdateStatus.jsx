@@ -257,29 +257,47 @@ export default function UpdateStatus() {
         payload.append("gstNumber", k.gstNumber || "");
         hasChanges = true;
       }
-      if (k.panNumber !== (orig.panCardNumber || "")) {
-        payload.append("panCardNumber", k.panNumber || "");
-        hasChanges = true;
-      }
-      if (k.aadharNumber !== (orig.aadharCardNumber || "")) {
-        payload.append("aadharCardNumber", k.aadharNumber || "");
+      if (k.gstNumber !== (orig.gstNumber || "")) {
+        payload.append("gstNumber", k.gstNumber || "");
         hasChanges = true;
       }
       if (k.gstPhoto instanceof File) {
         payload.append("gstCertificateImage", k.gstPhoto);
         hasChanges = true;
       }
-      if (k.panPhoto instanceof File) {
-        payload.append("panCardFrontImage", k.panPhoto);
-        hasChanges = true;
-      }
-      if (k.aadharFront instanceof File) {
-        payload.append("aadharCardFrontImage", k.aadharFront);
-        hasChanges = true;
-      }
-      if (k.aadharBack instanceof File) {
-        payload.append("aadharCardBackImage", k.aadharBack);
-        hasChanges = true;
+
+      if (Array.isArray(k.documents)) {
+        k.documents.forEach((doc) => {
+          const num = doc.number?.trim();
+          if (doc.type === "PAN Card") {
+            if (num !== (orig.panCardNumber || "")) {
+              payload.append("panCardNumber", num || "");
+              hasChanges = true;
+            }
+            if (doc.photo instanceof File) {
+              payload.append("panCardFrontImage", doc.photo);
+              hasChanges = true;
+            }
+          } else if (doc.type === "Driving Licence") {
+            if (num !== (orig.drivingLicense || "")) {
+              payload.append("drivingLicense", num || "");
+              hasChanges = true;
+            }
+            if (doc.photo instanceof File) {
+              payload.append("drivingLicenseFrontImage", doc.photo);
+              hasChanges = true;
+            }
+          } else if (doc.type === "Voter ID") {
+            if (num !== (orig.voterIdNumber || "")) {
+              payload.append("voterIdNumber", num || "");
+              hasChanges = true;
+            }
+            if (doc.photo instanceof File) {
+              payload.append("voterIdFrontImage", doc.photo);
+              hasChanges = true;
+            }
+          }
+        });
       }
 
       if (!hasChanges) {
@@ -297,8 +315,9 @@ export default function UpdateStatus() {
           kyc: {
             ...p.kyc,
             gstNumber: k.gstNumber,
-            panCardNumber: k.panNumber,
-            aadharCardNumber: k.aadharNumber,
+            panCardNumber: Array.isArray(k.documents) ? k.documents.find(d => d.type === "PAN Card")?.number || p.kyc.panCardNumber : p.kyc.panCardNumber,
+            drivingLicense: Array.isArray(k.documents) ? k.documents.find(d => d.type === "Driving Licence")?.number || p.kyc.drivingLicense : p.kyc.drivingLicense,
+            voterIdNumber: Array.isArray(k.documents) ? k.documents.find(d => d.type === "Voter ID")?.number || p.kyc.voterIdNumber : p.kyc.voterIdNumber,
           },
         }));
       } else {

@@ -72,9 +72,8 @@ export default function DropzoneUpload({
 
       <div
         onClick={() => !readOnly && inputRef.current.click()}
-        className={`rounded-xl border-2 border-dashed border-third/40 bg-primary/5 p-6 text-center w-full relative transition ${
-          readOnly ? "cursor-default" : "cursor-pointer hover:border-primary"
-        }`}
+        className={`rounded-md border-2 border-dashed border-third/40 bg-primary/5 p-6 text-center w-full relative transition ${readOnly ? "cursor-default" : "cursor-pointer hover:border-primary"
+          }`}
       >
         {!currentFile ? (
           <div className="flex flex-col items-center justify-center space-y-3 py-4">

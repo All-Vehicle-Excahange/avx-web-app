@@ -31,7 +31,7 @@ const SleekInput = ({
           value={value}
           onChange={onChange}
           readOnly={readOnly}
-          className={`w-full h-11 bg-white/2 border rounded-xl outline-none transition-all duration-300 text-primary text-sm placeholder:text-third/35
+          className={`w-full h-10 bg-white/2 border rounded-md outline-none transition-all duration-300 text-primary text-sm placeholder:text-third/35
             ${Icon ? "pl-11 pr-4" : "px-4"}
             ${
               readOnly
