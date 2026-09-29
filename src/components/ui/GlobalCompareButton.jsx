@@ -20,6 +20,7 @@ export default function GlobalCompareButton() {
 
   const isDetailPage = router.pathname.includes("/vehicle/details/");
   const isStartPage = router.pathname.startsWith("/start");
+  const isProfileRoute = router.pathname.startsWith("/user/") || router.pathname.startsWith("/consult/");
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -139,7 +140,7 @@ export default function GlobalCompareButton() {
 
   return (
     <>
-      {!isSearchDropdownOpen && !isAccountPopupOpen && !isModalOpen && !isStartPage && (
+      {!isSearchDropdownOpen && !isAccountPopupOpen && !isModalOpen && !isStartPage && !isProfileRoute && (
         <motion.button
           drag
           dragMomentum={false}

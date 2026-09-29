@@ -138,8 +138,13 @@ export default function UpdateProfile() {
 
             activeAddress = parseResponse(activeARes);
             activeKyc = parseResponse(activeKRes);
+          } else {
+            setUpdateId(null);
+            sessionStorage.removeItem("consult_update_id");
           }
         } catch (err) {
+          setUpdateId(null);
+          sessionStorage.removeItem("consult_update_id");
           if (!is404Err(err))
             console.error("Error checking pending updates:", err);
         }
@@ -196,8 +201,8 @@ export default function UpdateProfile() {
 
       let currentId = updateId;
 
-      const b = form.business || {};
       const origB = data.business || {};
+      const b = form.business || origB;
       let bChanged = false;
       if (
         b.logo instanceof File ||
@@ -222,8 +227,8 @@ export default function UpdateProfile() {
       )
         bChanged = true;
 
-      const a = form.address || {};
       const origA = data.address || {};
+      const a = form.address || origA;
       let aChanged = false;
       if (
         a.address !== (origA.address || "") ||
@@ -237,19 +242,34 @@ export default function UpdateProfile() {
       )
         aChanged = true;
 
-      const k = form.kyc || {};
       const origK = data.kyc || {};
+      const k = form.kyc || origK;
       let kChanged = false;
       if (
         k.gstNumber !== (origK.gstNumber || "") ||
-        k.panNumber !== (origK.panCardNumber || "") ||
-        k.aadharNumber !== (origK.aadharCardNumber || "") ||
-        k.gstPhoto instanceof File ||
-        k.panPhoto instanceof File ||
-        k.aadharFront instanceof File ||
-        k.aadharBack instanceof File
-      )
+        k.gstPhoto instanceof File
+      ) {
         kChanged = true;
+      }
+      
+      const docs = Array.isArray(k.documents) ? k.documents : [];
+      const hasPan = docs.some(d => d.type === "PAN Card");
+      const hasDl = docs.some(d => d.type === "Driving Licence");
+      const hasVoter = docs.some(d => d.type === "Voter ID");
+
+      if ((origK.panCardNumber || "") && !hasPan) kChanged = true;
+      if ((origK.drivingLicense || "") && !hasDl) kChanged = true;
+      if ((origK.voterIdNumber || "") && !hasVoter) kChanged = true;
+
+      docs.forEach(doc => {
+        if (doc.type === "PAN Card") {
+          if (doc.number !== (origK.panCardNumber || "") || doc.photo instanceof File) kChanged = true;
+        } else if (doc.type === "Driving Licence") {
+          if (doc.number !== (origK.drivingLicense || "") || doc.photo instanceof File) kChanged = true;
+        } else if (doc.type === "Voter ID") {
+          if (doc.number !== (origK.voterIdNumber || "") || doc.photo instanceof File) kChanged = true;
+        }
+      });
 
       if (!bChanged && !aChanged && !kChanged && !currentId) {
         setErrors((p) => ({ ...p, submit: "No changes detected to update." }));
@@ -272,7 +292,8 @@ export default function UpdateProfile() {
         }
       }
 
-      if (bChanged) {
+      // Always send basic details to populate the update ticket
+      {
         const payload = new FormData();
         if (b.logo instanceof File) payload.append("logo", b.logo);
         if (b.banner instanceof File) payload.append("banner", b.banner);
@@ -281,12 +302,9 @@ export default function UpdateProfile() {
         payload.append("ownerName", b.ownerName || "");
         payload.append("companyEmail", b.companyEmail || "");
         payload.append("establishmentYear", b.establishmentYear || "");
-        (b.vehicleTypes || []).forEach((v, i) =>
-          payload.append(`vehicleTypes[${i}]`, v),
-        );
-        (b.services || []).forEach((s, i) =>
-          payload.append(`services[${i}]`, s),
-        );
+        
+        (b.vehicleTypes || []).forEach((v, i) => payload.append(`vehicleTypes[${i}]`, v));
+        (b.services || []).forEach((s, i) => payload.append(`services[${i}]`, s));
 
         const res = await updateBasicDetails(payload, currentId);
         if (!res.success) {
@@ -299,7 +317,8 @@ export default function UpdateProfile() {
         }
       }
 
-      if (aChanged) {
+      // Always send address details to populate the update ticket
+      {
         const payload = new FormData();
         payload.append("address", a.address || "");
         payload.append("stateId", a.stateId || "");
@@ -318,19 +337,36 @@ export default function UpdateProfile() {
         }
       }
 
-      if (kChanged) {
+      // Always send KYC documents to populate the update ticket
+      {
         const payload = new FormData();
         payload.append("gstNumber", k.gstNumber || "");
-        payload.append("panCardNumber", k.panNumber || "");
-        payload.append("aadharCardNumber", k.aadharNumber || "");
-        if (k.gstPhoto instanceof File)
-          payload.append("gstCertificateImage", k.gstPhoto);
-        if (k.panPhoto instanceof File)
-          payload.append("panCardFrontImage", k.panPhoto);
-        if (k.aadharFront instanceof File)
-          payload.append("aadharCardFrontImage", k.aadharFront);
-        if (k.aadharBack instanceof File)
-          payload.append("aadharCardBackImage", k.aadharBack);
+        if (k.gstPhoto instanceof File) payload.append("gstCertificateImage", k.gstPhoto);
+
+        const docs = Array.isArray(k.documents) ? k.documents : [];
+        const hasPan = docs.some(d => d.type === "PAN Card");
+        const hasDl = docs.some(d => d.type === "Driving Licence");
+        const hasVoter = docs.some(d => d.type === "Voter ID");
+
+        if ((origK.panCardNumber || "") && !hasPan) payload.append("panCardNumber", "");
+        if ((origK.drivingLicense || "") && !hasDl) payload.append("drivingLicense", "");
+        if ((origK.voterIdNumber || "") && !hasVoter) payload.append("voterIdNumber", "");
+
+        docs.forEach((doc) => {
+          const num = doc.number?.trim();
+          if (num) {
+            if (doc.type === "PAN Card") {
+              payload.append("panCardNumber", num);
+              if (doc.photo instanceof File) payload.append("panCardFrontImage", doc.photo);
+            } else if (doc.type === "Driving Licence") {
+              payload.append("drivingLicense", num);
+              if (doc.photo instanceof File) payload.append("drivingLicenseFrontImage", doc.photo);
+            } else if (doc.type === "Voter ID") {
+              payload.append("voterIdNumber", num);
+              if (doc.photo instanceof File) payload.append("voterIdFrontImage", doc.photo);
+            }
+          }
+        });
 
         const res = await updateKycDocuments(payload, currentId);
         if (!res.success) {

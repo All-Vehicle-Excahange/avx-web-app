@@ -1350,7 +1350,8 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                         const kycMsg = messages.find((m) =>
                           [
                             "ADD_GST",
-                            "UPLOAD_AADHAAR",
+                            "UPLOAD_DRIVING_LICENSE",
+                            "UPLOAD_VOTER_ID",
                             "UPLOAD_PAN_CARD",
                             "COMPLETE_REGISTRATION",
                           ].includes(m.type),

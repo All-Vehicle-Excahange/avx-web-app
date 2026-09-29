@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute({ children, redirectPath = "/" }) {
   const { replace } = useRouter();
 
   const { user, token, isLoggedIn, authInitialized, initializeAuth, openLoginPopup } =
@@ -37,7 +37,7 @@ export default function ProtectedRoute({ children }) {
       try {
         sessionStorage.setItem("triggerLoginPopup", "true");
       } catch (e) { }
-      replace("/consult");
+      replace(redirectPath);
       return;
     }
 
@@ -46,7 +46,7 @@ export default function ProtectedRoute({ children }) {
   }, [authInitialized, isLoggedIn, token, user]);
 
   if (checking) {
-    return children;
+    return null;
   }
 
   return children;

@@ -132,16 +132,25 @@ export default function PreviewAndEdite({
         const payload = new FormData();
         const k = form.kyc;
         if (k.gstNumber) payload.append("gstNumber", k.gstNumber);
-        if (k.panNumber) payload.append("panCardNumber", k.panNumber);
-        if (k.aadharNumber) payload.append("aadharCardNumber", k.aadharNumber);
-        if (k.gstPhoto instanceof File)
-          payload.append("gstCertificateImage", k.gstPhoto);
-        if (k.panPhoto instanceof File)
-          payload.append("panCardFrontImage", k.panPhoto);
-        if (k.aadharFront instanceof File)
-          payload.append("aadharCardFrontImage", k.aadharFront);
-        if (k.aadharBack instanceof File)
-          payload.append("aadharCardBackImage", k.aadharBack);
+        if (k.gstPhoto instanceof File) payload.append("gstCertificateImage", k.gstPhoto);
+
+        if (Array.isArray(k.documents)) {
+          k.documents.forEach((doc) => {
+            const num = doc.number?.trim();
+            if (num) {
+              if (doc.type === "PAN Card") {
+                payload.append("panCardNumber", num);
+                if (doc.photo instanceof File) payload.append("panCardFrontImage", doc.photo);
+              } else if (doc.type === "Driving Licence") {
+                payload.append("drivingLicense", num);
+                if (doc.photo instanceof File) payload.append("drivingLicenseFrontImage", doc.photo);
+              } else if (doc.type === "Voter ID") {
+                payload.append("voterIdNumber", num);
+                if (doc.photo instanceof File) payload.append("voterIdFrontImage", doc.photo);
+              }
+            }
+          });
+        }
         await updateKycDetials(payload);
         updateMade = true;
       }

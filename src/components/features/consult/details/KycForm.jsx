@@ -307,6 +307,11 @@ export default function KycForm() {
           setLoading(false);
           return;
         }
+        if (!a.latitude || !a.longitude) {
+          setBackendError("Please select your showroom location on the map");
+          setLoading(false);
+          return;
+        }
 
         // Build clean object - EXCLUDE cityName and stateName
         const payload = {
@@ -314,8 +319,8 @@ export default function KycForm() {
           stateId: a.stateId,
           cityId: a.cityId,
           countryId: a.countryId || 101,
-          latitude: a.latitude || 22.2587,
-          longitude: a.longitude || 71.1924,
+          latitude: a.latitude,
+          longitude: a.longitude,
         };
         if (a?.mapUrl) {
           payload.mapUrl = a.mapUrl;
@@ -354,39 +359,35 @@ export default function KycForm() {
           return;
         }
 
-        // 1. GST Cross-Validation
-        const hasGstNum = !!k.gstNumber?.trim();
-        const hasGstImg = !!(k.gstPhoto || existing.kyc?.gstCertificateUrl);
-        if ((hasGstNum && !hasGstImg) || (!hasGstNum && hasGstImg)) {
+        if (kycErrors?.general || kycErrors?.gst || (kycErrors?.documents && kycErrors.documents.some(d => d?.error))) {
           setLoading(false);
           return;
         }
 
-        // 2. PAN Cross-Validation
-        const hasPanNum = !!k.panNumber?.trim();
-        const hasPanImg = !!(k.panPhoto || existing.kyc?.panCardFrontUrl);
-        if ((hasPanNum && !hasPanImg) || (!hasPanNum && hasPanImg)) {
-          setLoading(false);
-          return;
-        }
+        const buildPayload = () => {
+          const payload = new FormData();
+          if (k.gstNumber?.trim()) payload.append("gstNumber", k.gstNumber.trim());
+          if (k.gstPhoto instanceof File) payload.append("gstCertificateImage", k.gstPhoto);
 
-        // 3. Aadhaar Cross-Validation
-        const hasAadharNum = !!k.aadharNumber?.trim();
-        const hasAadharFront = !!(
-          k.aadharFront || existing.kyc?.aadharCardFrontUrl
-        );
-        const hasAadharBack = !!(
-          k.aadharBack || existing.kyc?.aadharCardBackUrl
-        );
-        const hasAllAadharImg = hasAadharFront && hasAadharBack;
-
-        if (
-          (hasAadharNum && !hasAllAadharImg) ||
-          (!hasAadharNum && (hasAadharFront || hasAadharBack))
-        ) {
-          setLoading(false);
-          return;
-        }
+          if (k.documents && k.documents.length > 0) {
+            k.documents.forEach((doc) => {
+              const num = doc.number?.trim();
+              if (num) {
+                if (doc.type === "PAN Card") {
+                  payload.append("panCardNumber", num);
+                  if (doc.photo instanceof File) payload.append("panCardFrontImage", doc.photo);
+                } else if (doc.type === "Driving Licence") {
+                  payload.append("drivingLicense", num);
+                  if (doc.photo instanceof File) payload.append("drivingLicenseFrontImage", doc.photo);
+                } else if (doc.type === "Voter ID") {
+                  payload.append("voterIdNumber", num);
+                  if (doc.photo instanceof File) payload.append("voterIdFrontImage", doc.photo);
+                }
+              }
+            });
+          }
+          return payload;
+        };
 
         if (existing.kyc) {
           if (!changed.kyc) {
@@ -395,57 +396,17 @@ export default function KycForm() {
             return;
           }
 
-          // Build clean FormData for KYC
-          const payload = new FormData();
-          if (k.gstNumber?.trim())
-            payload.append("gstNumber", k.gstNumber.trim());
-          if (k.panNumber?.trim())
-            payload.append("panCardNumber", k.panNumber.trim());
-          if (k.aadharNumber?.trim())
-            payload.append("aadharCardNumber", k.aadharNumber.trim());
-          if (k.gstPhoto instanceof File)
-            payload.append("gstCertificateImage", k.gstPhoto);
-          if (k.panPhoto instanceof File)
-            payload.append("panCardFrontImage", k.panPhoto);
-          if (k.aadharFront instanceof File)
-            payload.append("aadharCardFrontImage", k.aadharFront);
-          if (k.aadharBack instanceof File)
-            payload.append("aadharCardBackImage", k.aadharBack);
-
-          const res = await updateKycDetials(payload);
+          const res = await updateKycDetials(buildPayload());
           if (res.data) {
             setHasMadeAnyUpdate(true);
             setExisting((p) => ({ ...p, kyc: res.data }));
             if (existing.business?.isSubmitted === false) setShowPreview(true);
             setStep(4);
           }
-
           return;
         }
 
-        // Post Flow for KYC — creation only, so enforce at-least-one identity doc
-        if (kycErrors?.atLeastOne) {
-          setLoading(false);
-          return;
-        }
-
-        const payload = new FormData();
-        if (k.gstNumber?.trim())
-          payload.append("gstNumber", k.gstNumber.trim());
-        if (k.panNumber?.trim())
-          payload.append("panCardNumber", k.panNumber.trim());
-        if (k.aadharNumber?.trim())
-          payload.append("aadharCardNumber", k.aadharNumber.trim());
-        if (k.gstPhoto instanceof File)
-          payload.append("gstCertificateImage", k.gstPhoto);
-        if (k.panPhoto instanceof File)
-          payload.append("panCardFrontImage", k.panPhoto);
-        if (k.aadharFront instanceof File)
-          payload.append("aadharCardFrontImage", k.aadharFront);
-        if (k.aadharBack instanceof File)
-          payload.append("aadharCardBackImage", k.aadharBack);
-
-        const res = await postKycDetials(payload);
+        const res = await postKycDetials(buildPayload());
         if (res.data) {
           setExisting((p) => ({ ...p, kyc: res.data }));
           setShowPreview(true);

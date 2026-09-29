@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import ProtectedRoute from "@/components/features/consult/details/dashboard/ProtectedRoute";
 
 function Index({ initialTab }) {
     const router = useRouter();
@@ -22,13 +23,13 @@ function Index({ initialTab }) {
     const title = tabTitles[id] || "User Details";
 
     return (
-        <>
+        <ProtectedRoute redirectPath="/">
             <Head>
                 <title>{title} | Reecomm</title>
             </Head>
             <Navbar heroMode scrolled />
             <UserDetails initialTab={id} />
-        </>
+        </ProtectedRoute>
     );
 }
 

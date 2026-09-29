@@ -67,6 +67,14 @@ export default function MakeOfferPopup({
     state: state || undefined,
   });
 
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 150);
+  }, [onClose]);
+
   useEffect(() => {
     const preventScroll = (e) => {
       // Allow scrolling inside the modal's scrollable areas
@@ -77,33 +85,34 @@ export default function MakeOfferPopup({
       }
     };
 
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+
     if (isOpen) {
       setIsLoading(false);
       setMessage("");
 
       // Initialize with middle offer option
       if (vehicle?.price) {
-        const midOffer = Math.round((vehicle.price * 0.93) / 5000) * 5000;
+        const step = vehicle.price < 500000 ? 1000 : 5000;
+        const midOffer = Math.round((vehicle.price * 0.93) / step) * step;
         setOfferPrice(midOffer.toString());
       }
-      
+
       window.addEventListener("wheel", preventScroll, { passive: false });
       window.addEventListener("touchmove", preventScroll, { passive: false });
+      window.addEventListener("keydown", handleKeyDown);
     }
-    
+
     return () => {
       window.removeEventListener("wheel", preventScroll);
       window.removeEventListener("touchmove", preventScroll);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, vehicle]);
-
-  const handleClose = useCallback(() => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      onClose();
-    }, 150);
-  }, [onClose]);
+  }, [isOpen, vehicle, handleClose]);
 
   // Format price exactly like listed price with commas
   const formatPrice = (num) => {
@@ -111,9 +120,14 @@ export default function MakeOfferPopup({
     return "₹" + num.toLocaleString("en-IN");
   };
 
-  const option1 = Math.round((listedPrice * 0.9) / 5000) * 5000;
-  const option2 = Math.round((listedPrice * 0.93) / 5000) * 5000;
-  const option3 = Math.round((listedPrice * 0.96) / 5000) * 5000;
+  const step = listedPrice < 500000 ? 1000 : 5000;
+  let option1 = Math.round((listedPrice * 0.9) / step) * step;
+  let option2 = Math.round((listedPrice * 0.93) / step) * step;
+  let option3 = Math.round((listedPrice * 0.96) / step) * step;
+
+  // Ensure strict uniqueness for very low prices
+  if (option1 === option2) option1 = option2 - step;
+  if (option2 === option3) option3 = option2 + step;
 
   const offerOptionForPrice = (price) => {
     if (price === option1) return "90_pct";
@@ -133,6 +147,9 @@ export default function MakeOfferPopup({
 
   const currentOffer = Number(offerPrice) || 0;
   const isOfferTooHigh = currentOffer > listedPrice;
+  const minOfferPrice = Math.round(listedPrice * 0.7);
+  const isOfferTooLow = currentOffer > 0 && currentOffer < minOfferPrice;
+  const hasError = isOfferTooHigh || isOfferTooLow;
   const displayValue = offerPrice ? currentOffer.toLocaleString("en-IN") : "";
 
   const inputRef = useRef(null);
@@ -170,6 +187,8 @@ export default function MakeOfferPopup({
   };
 
   const handleSendOffer = async () => {
+    if (hasError) return;
+
     if (!isLoggedIn) {
       setPendingSubmit(true);
       if (onRequireAuth) onRequireAuth();
@@ -298,7 +317,7 @@ export default function MakeOfferPopup({
 
           <div className="mb-4">
             <p className="text-primary/60 text-xs mb-1">Seller&apos;s listed price</p>
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-2xl font-semibold text-primary">
               ₹{listedPrice.toLocaleString("en-IN")}
             </p>
           </div>
@@ -314,9 +333,9 @@ export default function MakeOfferPopup({
                 type="text"
                 value={displayValue}
                 onChange={handlePriceChange}
-                className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-bold outline-none transition-colors ${isOfferTooHigh
-                    ? "border-red-500 focus:border-red-500 bg-red-500/5"
-                    : "border-third/20 focus:border-fourth"
+                className={`w-full bg-transparent border rounded-xl py-3 pl-8 pr-4 text-primary font-semibold outline-none transition-colors ${hasError
+                  ? "border-red-500 focus:border-red-500 bg-red-500/5"
+                  : "border-third/20 focus:border-fourth"
                   }`}
                 placeholder="Enter offer amount"
               />
@@ -324,6 +343,11 @@ export default function MakeOfferPopup({
             {isOfferTooHigh && (
               <p className="text-red-500 text-xs mt-2 font-medium ml-1">
                 Offer price cannot exceed the listed price.
+              </p>
+            )}
+            {isOfferTooLow && (
+              <p className="text-red-500 text-xs mt-2 font-medium ml-1">
+                Offer price is too low.
               </p>
             )}
 
@@ -338,8 +362,8 @@ export default function MakeOfferPopup({
                   key={key}
                   onClick={() => handlePresetOption(opt, key)}
                   className={`py-2 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${Number(offerPrice) === opt
-                      ? "bg-third/10 border-third/50 text-primary"
-                      : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"
+                    ? "bg-third/10 border-third/50 text-primary"
+                    : "bg-transparent border-third/20 text-primary/70 hover:bg-third/5"
                     }`}
                 >
                   {formatPrice(opt)}
@@ -378,7 +402,7 @@ export default function MakeOfferPopup({
               variant="ghost"
               onClick={handleSendOffer}
               loading={isLoading}
-              locked={!currentOffer || currentOffer <= 0 || isOfferTooHigh}
+              locked={!currentOffer || currentOffer <= 0 || hasError}
               size="sm"
             >
               Send Offer
