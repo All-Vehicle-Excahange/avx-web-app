@@ -445,7 +445,7 @@ export default function SearchWithCard({
     setSelectedBrands(activeMakerId ? [String(activeMakerId)] : []);
 
     // Model
-    setSelectedModels(initialFilters.modelId ? [initialFilters.modelId] : []);
+    setSelectedModels(initialFilters.modelId ? [String(initialFilters.modelId)] : []);
 
     // Body Type
     setSelectedBodyType(
@@ -837,8 +837,8 @@ export default function SearchWithCard({
   const priceBasedVehicles = Array.isArray(searchData?.priceMatchVehicles?.vehicles)
     ? searchData.priceMatchVehicles.vehicles
     : Array.isArray(searchData?.priceMatchVehicles)
-    ? searchData.priceMatchVehicles
-    : (searchData?.priceMatchVehicles?.content || []);
+      ? searchData.priceMatchVehicles
+      : (searchData?.priceMatchVehicles?.content || []);
 
 
   // Sync selected filters → clean SEO slug URL (zero query params, production-style)
