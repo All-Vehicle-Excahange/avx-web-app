@@ -480,7 +480,7 @@ function generateBrandLocationCombinations() {
 /**
  * Inventory-driven landings from live SEO vehicles (exact listing GEO).
  */
-async function fetchInventoryLandingItems() {
+async function fetchInventoryLandingItems(consultantPlaces = { cities: new Map(), states: new Map() }) {
   const items = [];
   const seen = new Set();
   /** @type {Map<string, number>} slug → listing hits for popular-link ranking */
@@ -555,6 +555,9 @@ async function fetchInventoryLandingItems() {
 
         if (citySlug) {
           bump(`buy-used-cars-${citySlug}`);
+          if (consultantPlaces.cities?.has(citySlug)) {
+            bump(`buy-used-${brandSlug}-${kind}-${citySlug}`);
+          }
           pushFilterItem(items, seen, {
             slug: `buy-used-${brandSlug}-${kind}-${citySlug}`,
             title: `Used ${brand} ${unit} in ${city}`,
@@ -597,6 +600,12 @@ async function fetchInventoryLandingItems() {
         }
 
         if (stateSlug) {
+          if (consultantPlaces.states?.has(stateSlug)) {
+            bump(`buy-used-${brandSlug}-${kind}-${stateSlug}`);
+            if (modelSlug) {
+              bump(`buy-used-${brandSlug}-${modelSlug}-${kind}-${stateSlug}`);
+            }
+          }
           pushFilterItem(items, seen, {
             slug: `buy-used-${brandSlug}-${kind}-${stateSlug}`,
             title: `Used ${brand} ${unit} in ${state}`,
@@ -644,6 +653,7 @@ async function fetchInventoryLandingItems() {
 async function fetchAutoConsultants() {
   const consultants = [];
   const processedIds = [];
+  const places = { cities: new Map(), states: new Map() };
   try {
     const cleanApiUrl = normalizeApiBase(API_BASE_URL).replace(/\/$/, '');
     let pageNo = 1;
@@ -680,6 +690,16 @@ async function fetchAutoConsultants() {
         // Search keywords: clean slug + name words only — never raw digit usernames
         const cleanSlug = stripTrailingDigits(store.username).toLowerCase();
         const cityLower = store.cityName ? String(store.cityName).toLowerCase() : "";
+        const cityName = store.cityName ? String(store.cityName).trim() : "";
+        const stateName = store.stateName ? String(store.stateName).trim() : "";
+        if (cityName) {
+          const citySlug = slugifySegment(cityName.split(",")[0]);
+          if (citySlug) places.cities.set(citySlug, cityName.split(",")[0].trim());
+        }
+        if (stateName) {
+          const stateSlug = slugifySegment(stateName);
+          if (stateSlug) places.states.set(stateSlug, stateName);
+        }
         const keywords = new Set([
           ...(cleanSlug ? [cleanSlug] : []),
           ...(title.toLowerCase().split(/\s+/).filter((w) => w && !/^\d+$/.test(w))),
@@ -719,7 +739,7 @@ async function fetchAutoConsultants() {
   } catch (err) {
     console.warn('[Cron] Warning fetching auto consultants:', err.message);
   }
-  return consultants;
+  return { consultants, places };
 }
 
 function StringUtilsHasText(s) {
@@ -822,14 +842,16 @@ async function generateSearchIndex() {
     itemsMap.set(item.id, item);
   }
 
-  // 2b. Inventory-driven brand/model/city/state landings from live SEO vehicles
-  const { items: inventoryItems, comboHits } = await fetchInventoryLandingItems();
+  // 2b. Consultant cities decide which brand/model place pages are indexable
+  const { consultants: consultantItems, places: consultantPlaces } =
+    await fetchAutoConsultants();
+  const { items: inventoryItems, comboHits } =
+    await fetchInventoryLandingItems(consultantPlaces);
   for (const item of inventoryItems) {
     itemsMap.set(item.id, item);
   }
 
-  // 3. Fetch all registered Auto Consultants / Storefronts from Backend API
-  const consultantItems = await fetchAutoConsultants();
+  // 3. Storefronts already loaded with their cities and states
   const activeConsultantUsernames = new Set();
   const activeConsultantIds = new Set();
 
@@ -1024,6 +1046,30 @@ async function generateSearchIndex() {
     }
     fs.writeFileSync(popularPath, JSON.stringify(popularLinks, null, 2), "utf8");
     console.log(`[Cron] Wrote ${popularLinks.length} popular SEO links to ${popularPath}`);
+
+    const placeLinks = {};
+    for (const slug of comboHits.keys()) {
+      const match = slug.match(/^buy-used-(.+)-(cars|two-wheelers)-([a-z0-9-]+)$/);
+      if (!match) continue;
+      const place = match[3];
+      const isConsultantPlace =
+        consultantPlaces.cities.has(place) || consultantPlaces.states.has(place);
+      if (!isConsultantPlace) continue;
+      if (!placeLinks[place]) placeLinks[place] = [];
+      const href = `/search/${slug}`;
+      if (placeLinks[place].some((item) => item.href === href)) continue;
+      if (placeLinks[place].length >= 24) continue;
+      const item = finalIndexItems.find((entry) => entry.params?.slug === slug);
+      placeLinks[place].push({
+        label: item?.title || titleCaseFromSlug(slug.replace(/^buy-used-/, "")),
+        href,
+      });
+    }
+    const placeLinksPath = path.join(PUBLIC_DIR, "seo_place_links.json");
+    fs.writeFileSync(placeLinksPath, JSON.stringify(placeLinks, null, 2), "utf8");
+    console.log(
+      `[Cron] Wrote brand links for ${Object.keys(placeLinks).length} consultant places to ${placeLinksPath}`
+    );
 
     // Sitemap allowlist: hubs + inventory + focus GEO (excludes empty exotic brand×state grids)
     const sitemapSlugs = new Set();

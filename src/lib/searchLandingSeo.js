@@ -45,6 +45,137 @@ export const CITY_SLUG_SYNONYMS = {
   sidhpur: "siddhpur",
 };
 
+/**
+ * Model-only slugs people type → brand+model segment.
+ * Longest key first so wagon-r wins over any shorter overlap.
+ */
+const MODEL_CANONICAL = {
+  "wagon-r": "maruti-suzuki-wagon-r",
+  "grand-i10": "hyundai-grand-i10",
+  brezza: "maruti-suzuki-brezza",
+  baleno: "maruti-suzuki-baleno",
+  swift: "maruti-suzuki-swift",
+  venue: "hyundai-venue",
+  nexon: "tata-nexon",
+  punch: "tata-punch",
+  thar: "mahindra-thar",
+  scorpio: "mahindra-scorpio",
+  innova: "toyota-innova",
+  fortuner: "toyota-fortuner",
+  amaze: "honda-amaze",
+  seltos: "kia-seltos",
+  creta: "hyundai-creta",
+  city: "honda-city",
+  i20: "hyundai-i20",
+};
+
+const MODEL_CANONICAL_KEYS = Object.keys(MODEL_CANONICAL).sort(
+  (a, b) => b.length - a.length,
+);
+
+function resolveModelShortcut(slug) {
+  for (const key of MODEL_CANONICAL_KEYS) {
+    const match = slug.match(
+      new RegExp(`^buy-used-${key}-cars(?:-(.+))?$`),
+    );
+    if (!match) continue;
+    const canonical = MODEL_CANONICAL[key];
+    if (slug.includes(canonical)) continue;
+    const place = match[1] ? `-${match[1]}` : "";
+    return `buy-used-${canonical}-cars${place}`;
+  }
+  return null;
+}
+
+const SHORT_BRAND_NAMES = {
+  "maruti suzuki": "Maruti",
+  "mercedes benz": "Mercedes",
+};
+
+export function searchPhraseName(brand = "", model = "") {
+  const brandT = String(brand || "").trim();
+  const modelT = String(model || "").trim();
+  const short = SHORT_BRAND_NAMES[brandT.toLowerCase()] || brandT;
+  return cleanJoin([short, modelT]);
+}
+
+/**
+ * Real inventory count for titles and descriptions.
+ * 12 → "10+ used Maruti cars in Palanpur". Never rounds up.
+ */
+export function formatInventoryLead({
+  count = 0,
+  brand = "",
+  model = "",
+  place = "",
+  isTwoWheeler = false,
+} = {}) {
+  const n = Number(count) || 0;
+  if (n < 1) return "";
+  const phrase = searchPhraseName(brand, model);
+  if (!phrase && !brand) return "";
+  const hasModel = Boolean(String(model || "").trim());
+  const unit =
+    n === 1
+      ? isTwoWheeler
+        ? "bike"
+        : "car"
+      : isTwoWheeler
+        ? "bikes"
+        : "cars";
+  const subject = hasModel ? phrase : cleanJoin([phrase, unit]);
+  const where = place ? ` in ${place}` : "";
+  if (n >= 10) {
+    const rounded = Math.floor(n / 10) * 10;
+    return `${rounded}+ used ${subject}${where}`;
+  }
+  return `${n} used ${subject}${where}`;
+}
+
+export function formatOfficialHeading({
+  count = 0,
+  brand = "",
+  model = "",
+  place = "",
+  vehicleWord = "Cars",
+  isTwoWheeler = false,
+} = {}) {
+  const n = Number(count) || 0;
+  const brandT = String(brand || "").trim();
+  const modelT = String(model || "").trim();
+  const vw = isTwoWheeler ? "Bikes" : vehicleWord || "Cars";
+  const subject = modelT
+    ? cleanJoin([brandT, modelT])
+    : cleanJoin([brandT, vw]);
+  const where = place ? ` in ${place}` : "";
+  let prefix = "Used";
+  if (n >= 10) prefix = `${Math.floor(n / 10) * 10}+ Used`;
+  else if (n > 1) prefix = `${n} Used`;
+  else if (n === 1) prefix = "1 Used";
+  return `${prefix} ${subject}${where}`.replace(/\s+/g, " ").trim();
+}
+
+function capitalizeLead(lead) {
+  if (!lead) return "";
+  return lead.charAt(0).toUpperCase() + lead.slice(1);
+}
+
+function formatSampleClause(vehicles = []) {
+  const bits = (vehicles || [])
+    .slice(0, 3)
+    .map((v) => {
+      const year = v?.yearOfMfg || v?.year || "";
+      const modelName = v?.modelName || "";
+      const fuel = formatFuelLabel(v?.fuelType).toLowerCase();
+      return cleanJoin([year, modelName, fuel]);
+    })
+    .filter(Boolean);
+  if (!bits.length) return "";
+  if (bits.length === 1) return `a ${bits[0]}`;
+  if (bits.length === 2) return `a ${bits[0]} and a ${bits[1]}`;
+  return `a ${bits[0]}, a ${bits[1]}, and a ${bits[2]}`;
+}
+
 /** Tier-1 cities for enriched local copy (GA4 + inventory focus). */
 export const TIER1_CITIES = [
   "Ahmedabad",
@@ -92,6 +223,14 @@ export function resolveSearchSlugRedirect(slug) {
     const cityPart = santroOnly[1] ? `-${santroOnly[1]}` : "";
     return `buy-used-hyundai-santro-xing-cars${cityPart}`;
   }
+
+  const marutiShortcut = slug.match(/^buy-used-maruti(?!-suzuki)(.*)$/);
+  if (marutiShortcut) {
+    return `buy-used-maruti-suzuki${marutiShortcut[1]}`;
+  }
+
+  const modelShortcut = resolveModelShortcut(slug);
+  if (modelShortcut) return modelShortcut;
 
   const bikeCity = slug.match(/^buy-used-bikes?-(.+)$/);
   if (bikeCity) {
@@ -247,12 +386,26 @@ export function buildSearchLandingSeo({
 
   // Brand-only (no city)
   if (brandT && !modelT && !cityT && !typeT && !budgetT) {
+    const lead = formatInventoryLead({
+      count,
+      brand: brandT,
+      isTwoWheeler,
+    });
+    const samples = formatSampleClause(sampleVehicles);
+    const description = lead
+      ? samples
+        ? `${capitalizeLead(lead)}. Includes ${samples}, with photos, prices, and inspection details on Reecomm.`
+        : `${capitalizeLead(lead)}. Compare photos, prices, fuel type, and inspection reports on Reecomm.`
+      : `Browse verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`;
     return {
-      title: withBrand(`Used ${brandT} ${vw}`),
-      h1: `Used ${brandT} ${vw}`,
-      description: truncateMeta(
-        `Browse ${countBit}verified used ${brandT.toLowerCase()} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`
-      ),
+      title: withBrand(lead ? capitalizeLead(lead) : `Used ${brandT} ${vw}`),
+      h1: formatOfficialHeading({
+        count,
+        brand: brandT,
+        vehicleWord: vw,
+        isTwoWheeler,
+      }),
+      description: truncateMeta(description),
       totalCount: count,
     };
   }
@@ -285,7 +438,7 @@ export function buildSearchLandingSeo({
     h1 = core;
   }
 
-  const title = withBrand(core);
+  let title = withBrand(core);
 
   const subject = cleanJoin([
     brandT.toLowerCase(),
@@ -296,8 +449,35 @@ export function buildSearchLandingSeo({
 
   let description = `Browse ${countBit}verified used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
 
+  let usedInventoryLead = false;
+  if (count > 0 && (brandT || modelT) && !typeT && !budgetT) {
+    const lead = formatInventoryLead({
+      count,
+      brand: brandT,
+      model: modelT,
+      place: cityT,
+      isTwoWheeler,
+    });
+    if (lead) {
+      title = withBrand(capitalizeLead(lead));
+      h1 = formatOfficialHeading({
+        count,
+        brand: brandT,
+        model: modelT,
+        place: cityT,
+        vehicleWord: vw,
+        isTwoWheeler,
+      });
+      const samples = formatSampleClause(sampleVehicles);
+      description = samples
+        ? `${capitalizeLead(lead)}. Includes ${samples}, with photos, prices, and inspection details on Reecomm.`
+        : `${capitalizeLead(lead)}. Compare photos, prices, fuel, and inspection reports on Reecomm.`;
+      usedInventoryLead = true;
+    }
+  }
+
   const samples = (sampleVehicles || []).slice(0, 3);
-  if (samples.length) {
+  if (!usedInventoryLead && samples.length) {
     const bits = samples.map((v) => {
       const year = v.yearOfMfg || v.year || "";
       const modelName = v.modelName || "";
@@ -446,9 +626,18 @@ export function buildSearchLandingIntro({
     budgetPart,
     cityT ? `in ${cityT}` : "",
   ]);
-  const countLine = count
-    ? `Browse ${count}+ used ${subject} on Reecomm.`
-    : `Browse used ${subject} on Reecomm.`;
+  const countLead = formatInventoryLead({
+    count: stats.totalCount,
+    brand: brandT,
+    model: modelT,
+    place: cityT,
+    isTwoWheeler,
+  });
+  const countLine = countLead
+    ? `${capitalizeLead(countLead)} on Reecomm.`
+    : count
+      ? `Browse ${count}+ used ${subject} on Reecomm.`
+      : `Browse used ${subject} on Reecomm.`;
 
   const priceBand =
     stats.minPrice != null && stats.maxPrice != null
@@ -498,7 +687,20 @@ export function buildSearchLandingFaq({
   const cityT = (city || "").trim();
   const stats = deriveListingStats(sampleVehicles, totalCount);
   const subject = cleanJoin([brandT, modelT]) || vw;
-  const whereLabel = cityT ? `${subject} in ${cityT}` : subject;
+  const phrase = searchPhraseName(brandT, modelT) || subject;
+  const whereLabel = cityT ? `${phrase} in ${cityT}` : phrase;
+  const singularLead = formatInventoryLead({
+    count: 1,
+    brand: brandT,
+    model: modelT,
+    place: cityT,
+    isTwoWheeler,
+  });
+  const buyQuestion = singularLead
+    ? `Where can I buy a used ${singularLead.replace(/^1 used /, "")}?`
+    : cityT
+      ? `Where can I buy used ${whereLabel}?`
+      : `Where can I buy used ${subject} on Reecomm?`;
 
   const items = [];
 
@@ -513,9 +715,7 @@ export function buildSearchLandingFaq({
     });
   } else {
     items.push({
-      question: cityT
-        ? `Where can I buy used ${whereLabel}?`
-        : `Where can I buy used ${subject} on Reecomm?`,
+      question: buyQuestion,
       answer: cityT
         ? `On Reecomm you can browse used ${whereLabel} from verified consultants and sellers. Open a listing to review photos and price, request inspection if available, and send an inquiry — a structured alternative to unverified classified ads.`
         : `Search used ${subject} on Reecomm, review photos and price details, request an inspection if available, and send an inquiry to the verified seller.`,

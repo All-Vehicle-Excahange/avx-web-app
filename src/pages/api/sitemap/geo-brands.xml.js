@@ -1,6 +1,6 @@
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import searchSuggestions from "@/data/searchSuggestions.json";
-import { getSeoVehicles, getSeoVehicleCount } from "@/services/seo.service";
+import { getSeoVehicles, getSeoVehicleCount, getSeoConsultations, getSeoConsultationCount } from "@/services/seo.service";
 
 const BASE_URL = "https://www.reecomm.com";
 
@@ -235,7 +235,39 @@ export default async function handler(req, res) {
     ];
     staticSeoUrls.forEach((url) => addUrl(url, 0.8, "daily"));
 
-    // 7. Inject inventory brand+model(+city/state) from live SEO vehicles
+    // 7. Brand and model URLs for consultant cities/states that have live stock
+    let consultantCities = null;
+    let consultantStates = null;
+    try {
+      const consultationCount = await getSeoConsultationCount();
+      const consultationPageSize = 100;
+      const consultationPages = Math.max(
+        1,
+        Math.ceil(consultationCount / consultationPageSize),
+      );
+      consultantCities = new Set();
+      consultantStates = new Set();
+      for (let page = 1; page <= consultationPages && page <= 20; page++) {
+        const { data: stores } = await getSeoConsultations(page, consultationPageSize);
+        for (const store of stores || []) {
+          const citySlug = slugify(String(store.cityName || "").split(",")[0]);
+          const stateSlug = slugify(store.stateName || "");
+          if (citySlug) consultantCities.add(citySlug);
+          if (stateSlug) consultantStates.add(stateSlug);
+        }
+      }
+    } catch (placeErr) {
+      console.warn("[geo-brands] consultant places failed:", placeErr.message);
+      consultantCities = null;
+      consultantStates = null;
+    }
+
+    const placeAllowed = (slug, allowed) => {
+      if (!slug) return false;
+      if (!allowed) return true;
+      return allowed.has(slug);
+    };
+
     try {
       const total = await getSeoVehicleCount();
       const pageSize = 100;
@@ -261,8 +293,9 @@ export default async function handler(req, res) {
           if (modelSlug) {
             addUrl(`/search/buy-used-${brandSlug}-${modelSlug}-${kind}`, 0.8, "daily");
           }
-          if (citySlug) {
+          if (citySlug && placeAllowed(citySlug, consultantCities)) {
             addUrl(`/search/buy-used-${brandSlug}-${kind}-${citySlug}`, 0.75, "weekly");
+            addUrl(`/search/buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`, 0.8, "daily");
             if (modelSlug) {
               addUrl(
                 `/search/buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
@@ -271,7 +304,7 @@ export default async function handler(req, res) {
               );
             }
           }
-          if (stateSlug) {
+          if (stateSlug && placeAllowed(stateSlug, consultantStates)) {
             addUrl(`/search/buy-used-${brandSlug}-${kind}-${stateSlug}`, 0.65, "weekly");
             if (modelSlug) {
               addUrl(

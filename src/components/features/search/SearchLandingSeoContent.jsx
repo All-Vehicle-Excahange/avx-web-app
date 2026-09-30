@@ -8,11 +8,15 @@ export default function SearchLandingSeoContent({
   faqItems = [],
   vehicles = [],
   cityName = "",
+  relatedLinks = [],
 }) {
   const [openIndex, setOpenIndex] = useState(null);
   const topVehicles = (vehicles || []).slice(0, 8);
+  const links = (relatedLinks || []).filter((item) => item?.href && item?.label);
 
-  if (!intro && faqItems.length === 0 && topVehicles.length === 0) return null;
+  if (!intro && faqItems.length === 0 && topVehicles.length === 0 && links.length === 0) {
+    return null;
+  }
 
   return (
     <section className="container mx-auto px-4 md:px-8 py-10 md:py-14">
@@ -48,6 +52,28 @@ export default function SearchLandingSeoContent({
                 </li>
               );
             })}
+          </ul>
+        </div>
+      )}
+
+      {links.length > 0 && (
+        <div className="mb-10">
+          <h2 className="text-base md:text-lg font-bold text-primary font-primary mb-4 flex items-center gap-2">
+            <span className="w-1 h-5 bg-fourth rounded-full inline-block"></span>
+            Used cars by brand{cityName ? ` in ${cityName}` : ""}
+          </h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold text-primary/90">
+            {links.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="flex items-center gap-2 group hover:text-fourth transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4 text-primary/60 group-hover:text-fourth shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       )}

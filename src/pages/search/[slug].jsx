@@ -14,6 +14,8 @@ import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
 import AdSenseAd from "@/components/common/AdSenseAd";
+import fs from "fs";
+import path from "path";
 import {
   buildSearchLandingSeo,
   buildSearchLandingIntro,
@@ -22,6 +24,7 @@ import {
   buildSearchItemListSchema,
   resolveSearchSlugRedirect,
   extractTopModels,
+  formatVehicleListingLine,
   MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
 import { resolveSlugQueryRedirect } from "@/lib/seo";
@@ -41,7 +44,8 @@ function SlugSearchPage({ seo, initialFilters }) {
   const trackedSearchRef = useRef(null);
   const ogImage =
     seo?.ogImage || "https://www.reecomm.com/logo/logo1.webp";
-  const ogImageAlt = seo?.title || "Used vehicles on Reecomm";
+  const ogImageAlt =
+    seo?.ogImageAlt || seo?.title || "Used vehicles on Reecomm";
 
   useEffect(() => {
     const query =
@@ -280,7 +284,8 @@ function SearchContent({
         intro={seo?.intro}
         faqItems={seo?.faqItems}
         vehicles={seo?.initialVehicles}
-        cityName={initialFilters?.cityName}
+        cityName={seo?.placeName || initialFilters?.cityName}
+        relatedLinks={seo?.relatedPlaceLinks}
       />
 
       <DownloadAppSection />
@@ -291,6 +296,84 @@ function SearchContent({
       <ScrollDownArrow />
     </>
   );
+}
+
+function loadPlaceLinks(placeSlug, currentPath) {
+  if (!placeSlug) return [];
+  try {
+    const file = path.join(process.cwd(), "public", "seo_place_links.json");
+    if (!fs.existsSync(file)) return [];
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    const list = data[String(placeSlug).toLowerCase()] || [];
+    return list
+      .filter((item) => item?.href && item.href !== currentPath)
+      .slice(0, 12);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchLandingListings(apiUrl, filterPath, body) {
+  const listRes = await fetch(
+    `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    },
+  );
+  if (!listRes.ok) return { totalCount: 0, initialVehicles: [] };
+  const listJson = await listRes.json();
+  const totalCount =
+    listJson?.data?.priceMatchVehicles?.pageResponse?.totalElements ||
+    listJson?.data?.topPicksVehicles?.pageResponse?.totalElements ||
+    listJson?.pageResponse?.totalElements ||
+    listJson?.totalElements ||
+    0;
+  const rawList =
+    listJson?.data?.priceMatchVehicles?.vehicles ||
+    listJson?.data?.topPicksVehicles?.vehicles ||
+    (Array.isArray(listJson?.data) ? listJson.data : null) ||
+    (Array.isArray(listJson?.content) ? listJson.content : null) ||
+    (Array.isArray(listJson?.vehicles) ? listJson.vehicles : null) ||
+    [];
+  const initialVehicles = Array.isArray(rawList)
+    ? rawList.slice(0, 20).map((v) => ({
+        id: v.id || null,
+        yearOfMfg: v.yearOfMfg || v.year || null,
+        makerName: v.makerName || v.makeName || null,
+        modelName: v.modelName || null,
+        variantName: v.variantName || null,
+        slug: v.slug || null,
+        price: v.price || null,
+        fuelType: v.fuelType || null,
+        ownership: v.ownership ?? v.ownerCount ?? v.numberOfOwners ?? null,
+        transmissionType: v.transmissionType || null,
+        thumbnailUrl:
+          v.thumbnailUrl ||
+          v.imageUrl ||
+          v.vehicleImages?.[0]?.imageUrl ||
+          null,
+        consultantUsername:
+          v.consultantUsername ||
+          v.vehicleOwner?.username ||
+          v.username ||
+          null,
+        consultantName:
+          v.consultantName ||
+          v.consultationName ||
+          [v.vehicleOwner?.firstname || "", v.vehicleOwner?.lastname || ""]
+            .join(" ")
+            .trim() ||
+          null,
+        vehicleType: v.vehicleType || null,
+        cityName: v.cityName || v.address?.city || null,
+      }))
+    : [];
+  return { totalCount, initialVehicles };
 }
 
 export async function getServerSideProps(context) {
@@ -485,6 +568,9 @@ export async function getServerSideProps(context) {
           initialFilters.stateId = foundCity.stateId;
           initialFilters.cityName = foundCity.cityName;
           initialFilters.location = foundCity.cityName;
+          if (foundCity.stateName) {
+            initialFilters.stateName = foundCity.stateName;
+          }
         } else {
           const foundState = cityJson?.data?.find(
             (c) => c.stateName.toLowerCase() === searchLocation.toLowerCase()
@@ -606,6 +692,7 @@ export async function getServerSideProps(context) {
 
   let totalCount = 0;
   let initialVehicles = [];
+  let seoPlaceName = initialFilters.cityName || initialFilters.location || "";
   try {
     const isTwo = vehicleTypeParam === "two-wheelers";
     const filterPath = isTwo ? "two-wheeler" : "four-wheeler";
@@ -639,68 +726,24 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const listRes = await fetch(
-      `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
+    const listed = await fetchLandingListings(apiUrl, filterPath, body);
+    totalCount = listed.totalCount;
+    initialVehicles = listed.initialVehicles;
+
+    const hasBrandOrModel = Boolean(
+      initialFilters.makerId || initialFilters.modelId || brandName || modelName,
     );
-    if (listRes.ok) {
-      const listJson = await listRes.json();
-      totalCount =
-        listJson?.data?.priceMatchVehicles?.pageResponse?.totalElements ||
-        listJson?.data?.topPicksVehicles?.pageResponse?.totalElements ||
-        listJson?.pageResponse?.totalElements ||
-        listJson?.totalElements ||
-        0;
-      const rawList =
-        listJson?.data?.priceMatchVehicles?.vehicles ||
-        listJson?.data?.topPicksVehicles?.vehicles ||
-        (Array.isArray(listJson?.data) ? listJson.data : null) ||
-        (Array.isArray(listJson?.content) ? listJson.content : null) ||
-        (Array.isArray(listJson?.vehicles) ? listJson.vehicles : null) ||
-        [];
-      initialVehicles = Array.isArray(rawList)
-        ? rawList.slice(0, 20).map((v) => ({
-            id: v.id || null,
-            yearOfMfg: v.yearOfMfg || v.year || null,
-            makerName: v.makerName || v.makeName || null,
-            modelName: v.modelName || null,
-            variantName: v.variantName || null,
-            slug: v.slug || null,
-            price: v.price || null,
-            fuelType: v.fuelType || null,
-            ownership: v.ownership ?? v.ownerCount ?? v.numberOfOwners ?? null,
-            transmissionType: v.transmissionType || null,
-            thumbnailUrl:
-              v.thumbnailUrl ||
-              v.imageUrl ||
-              v.vehicleImages?.[0]?.imageUrl ||
-              null,
-            consultantUsername:
-              v.consultantUsername ||
-              v.vehicleOwner?.username ||
-              v.username ||
-              null,
-            consultantName:
-              v.consultantName ||
-              v.consultationName ||
-              [
-                v.vehicleOwner?.firstname || "",
-                v.vehicleOwner?.lastname || "",
-              ]
-                .join(" ")
-                .trim() ||
-              null,
-            vehicleType: v.vehicleType || null,
-            cityName: v.cityName || v.address?.city || null,
-          }))
-        : [];
+    if (totalCount < 1 && body.cityId && body.stateId && hasBrandOrModel) {
+      const stateBody = { ...body };
+      delete stateBody.cityId;
+      const widened = await fetchLandingListings(apiUrl, filterPath, stateBody);
+      if (widened.totalCount > 0) {
+        totalCount = widened.totalCount;
+        initialVehicles = widened.initialVehicles;
+        seoPlaceName = initialFilters.cityName || seoPlaceName;
+        delete initialFilters.cityId;
+        initialFilters.cityName = "";
+      }
     }
   } catch (e) {
     console.error("Search count resolution failed:", e);
@@ -724,7 +767,7 @@ export async function getServerSideProps(context) {
   const resolvedModel =
     initialFilters.model ||
     (modelName ? modelName.replace(/-/g, " ") : "");
-  const resolvedCity = initialFilters.cityName || "";
+  const resolvedCity = seoPlaceName || initialFilters.cityName || "";
   const topModels = extractTopModels(initialVehicles);
 
   const seoBuilt = buildSearchLandingSeo({
@@ -789,7 +832,12 @@ export async function getServerSideProps(context) {
         orgSchema,
         initialVehicles,
         totalCount,
+        placeName: resolvedCity,
+        relatedPlaceLinks: loadPlaceLinks(city, `/search/${slug}`),
         ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",
+        ogImageAlt: firstWithImage
+          ? `${formatVehicleListingLine(firstWithImage)}${resolvedCity ? ` in ${resolvedCity}` : ""}`
+          : seoBuilt.title,
       },
       initialFilters,
     },
