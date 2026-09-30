@@ -64893,6 +64893,132 @@
     }
   },
   {
+    "id": "filter_buy_used_maruti_suzuki_800_cars",
+    "title": "Used Maruti Suzuki 800 Cars",
+    "keywords": [
+      "maruti suzuki",
+      "800",
+      "used 800",
+      "used maruti suzuki 800"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "800",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-800-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_800_cars_palanpur",
+    "title": "Used Maruti Suzuki 800 in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "800",
+      "palanpur",
+      "used 800 in palanpur",
+      "used maruti suzuki 800 in palanpur",
+      "used 800 near me",
+      "used 800 near palanpur",
+      "used maruti suzuki 800 near me",
+      "second hand 800 palanpur",
+      "800 in palanpur",
+      "800 near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "800",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-800-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_800_cars_gujarat",
+    "title": "Used Maruti Suzuki 800 in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "800",
+      "gujarat",
+      "used 800 in gujarat",
+      "used maruti suzuki 800 in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "800",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-800-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars",
+    "title": "Used Maruti Suzuki Alto K10 Cars",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "used alto k10",
+      "used maruti suzuki alto k10",
+      "alto"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_palanpur",
+    "title": "Used Maruti Suzuki Alto K10 in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "palanpur",
+      "used alto k10 in palanpur",
+      "used maruti suzuki alto k10 in palanpur",
+      "used alto k10 near me",
+      "used alto k10 near palanpur",
+      "used maruti suzuki alto k10 near me",
+      "second hand alto k10 palanpur",
+      "alto k10 in palanpur",
+      "alto in palanpur",
+      "alto k10 near me",
+      "alto near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_gujarat",
+    "title": "Used Maruti Suzuki Alto K10 in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "gujarat",
+      "used alto k10 in gujarat",
+      "used maruti suzuki alto k10 in gujarat",
+      "alto"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_maruti_suzuki_ertiga_cars",
     "title": "Used Maruti Suzuki Ertiga Cars",
     "keywords": [
@@ -93798,25 +93924,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_800_cars",
-    "title": "Maruti Suzuki 800",
-    "keywords": [
-      "used car",
-      "car",
-      "maruti suzuki",
-      "800",
-      "maruti",
-      "suzuki"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Maruti Suzuki",
-      "modelName": "800",
-      "slug": "buy-used-maruti-suzuki-800-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_esteem_cars",
     "title": "Maruti Suzuki Esteem",
     "keywords": [
@@ -93991,27 +94098,6 @@
       "makerName": "Maruti Suzuki",
       "modelName": "A Star",
       "slug": "buy-used-maruti-suzuki-a-star-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars",
-    "title": "Maruti Suzuki Alto K10",
-    "keywords": [
-      "used car",
-      "car",
-      "maruti suzuki",
-      "alto k10",
-      "maruti",
-      "suzuki",
-      "alto",
-      "k10"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Maruti Suzuki",
-      "modelName": "Alto K10",
-      "slug": "buy-used-maruti-suzuki-alto-k10-cars"
     }
   },
   {
