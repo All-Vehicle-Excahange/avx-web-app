@@ -137,7 +137,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [isComeFromPhone, setIsComeFromPhone] = useState(false);
   const [sellDropdownOpen, setSellDropdownOpen] = useState(false);
 
-  const { user, isLoggedIn } = useAuthStore();
+  const { user, isLoggedIn, openLoginPopup } = useAuthStore();
   const { push } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -1461,6 +1461,27 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                               </div>
                               <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-third transition-all shrink-0" />
                             </Link>
+
+                            <button
+                              onClick={() => {
+                                setSellDropdownOpen(false);
+                                openLoginPopup({
+                                  entry_context: "home",
+                                  trigger_action: "login_click",
+                                  user_role_intent: "buyer"
+                                });
+                              }}
+                              className="px-4 py-4 flex items-center justify-between gap-4 group hover:bg-white/5 transition-colors w-full text-left cursor-pointer"
+                            >
+                              <div className="flex items-start gap-3">
+                                <User className="w-5 h-5 text-third shrink-0 mt-0.5" />
+                                <div className="flex flex-col">
+                                  <span className="text-[14px] font-semibold text-primary group-hover:text-third transition-colors whitespace-nowrap">Continue as Buyer</span>
+                                  <span className="text-[11px] text-primary/60 font-medium whitespace-nowrap mt-0.5">Login to buy your next car</span>
+                                </div>
+                              </div>
+                              <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-third transition-all shrink-0" />
+                            </button>
 
                             <Link
                               href="/download"

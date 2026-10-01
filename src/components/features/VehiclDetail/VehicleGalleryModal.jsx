@@ -63,6 +63,11 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
           ref={swiperRef}
           initialSlide={initialSlide}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onClick={(swiper, e) => {
+            if (swiper.zoom) {
+              swiper.zoom.toggle(e);
+            }
+          }}
           spaceBetween={0}
           loop={true}
           navigation={{

@@ -650,7 +650,9 @@ export default function FilterWithCard({
       Boolean(searchParams.get("maxPrice")) ||
       Boolean(searchParams.get("priceRange"));
 
-    if (hasPriceFilter) {
+    const isFullRange = minPrice === 0 && (maxPrice === MAX || maxPrice === (serverMaxPrice || fallbackMax));
+
+    if (hasPriceFilter && !isFullRange) {
       if (typeof minPrice === "number") {
         payload.minVehiclePrice = minPrice;
       }
@@ -773,6 +775,7 @@ export default function FilterWithCard({
 
     // Reset price range to full range
     userPriceInteractedRef.current = false;
+    setPriceRange("");
     setMinPrice(0);
     setMaxPrice(serverMaxPrice || fallbackMax);
 
