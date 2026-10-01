@@ -15,6 +15,7 @@ import {
   X,
   MessageCircle,
   Loader2,
+  Maximize2,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -276,10 +277,9 @@ export default function StoreFrontHeroSection() {
       <section className="w-full max-w-[1480px] mt-0 sm:mt-10 mx-auto border-0 sm:border border-third/40 rounded-none sm:rounded-xl md:rounded-2xl overflow-hidden shadow-none sm:shadow-sm">
         {/* ================= BANNER ================= */}
         <div
-          className="relative w-full h-[200px] sm:h-[290px] md:h-[350px] cursor-pointer group"
+          className="relative w-full h-[200px] sm:h-[290px] md:h-[350px] cursor-pointer"
           onClick={() => storeDetails?.bannerUrl && setZoomImage(storeDetails.bannerUrl)}
         >
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10" />
           <Image
             src={storeDetails.bannerUrl}
             alt="Store Banner"
@@ -287,6 +287,9 @@ export default function StoreFrontHeroSection() {
             className="object-cover object-center block"
             priority
           />
+          <div className="absolute bottom-4 right-4 bg-black/40 hover:bg-black/60 transition backdrop-blur-md rounded-full p-2.5 text-white/90 shadow-lg z-10 opacity-80 hover:opacity-100 flex items-center justify-center">
+            <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
+          </div>
         </div>
 
         {/* ================= CONTENT AREA ================= */}
@@ -295,10 +298,9 @@ export default function StoreFrontHeroSection() {
             {/* LEFT COLUMN */}
             <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
               <div
-                className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl cursor-pointer group"
+                className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl cursor-pointer"
                 onClick={() => storeDetails?.logoUrl && setZoomImage(storeDetails.logoUrl)}
               >
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 rounded-full" />
                 <Image
                   src={storeDetails.logoUrl}
                   alt="Consultant Logo"
@@ -551,6 +553,11 @@ export default function StoreFrontHeroSection() {
               zoom={{ maxRatio: 3, minRatio: 1 }}
               modules={[Zoom]}
               className="w-full h-full"
+              onClick={(swiper, e) => {
+                if (swiper.zoom) {
+                  swiper.zoom.toggle(e);
+                }
+              }}
             >
               <SwiperSlide className="flex items-center justify-center w-full h-full overflow-hidden">
                 <div className="swiper-zoom-container relative w-full h-full flex items-center justify-center">

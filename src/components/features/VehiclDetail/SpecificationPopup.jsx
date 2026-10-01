@@ -173,7 +173,7 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
         }}
       >
         {/* LEFT SIDEBAR - CATEGORIES */}
-        <div className="w-full md:w-[290px] lg:w-[310px] shrink-0 bg-secondary border-b md:border-b-0 md:border-r border-white/5 flex flex-col overflow-hidden">
+        <div className="w-full md:w-[320px] lg:w-[350px] shrink-0 bg-secondary border-b md:border-b-0 md:border-r border-white/5 flex flex-col overflow-hidden">
           {/* Sidebar Header */}
           <div className="px-4 py-3 md:py-3.5 border-b border-white/5 hidden md:flex items-center justify-between shrink-0">
             <span className="text-[11px] font-semibold text-white/50 tracking-wider uppercase">
@@ -217,14 +217,14 @@ export default function SpecificationPopup({ open, onClose, variantId, vehicleId
                         : "text-white/60 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <IconComponent
                         size={15}
                         className={`shrink-0 transition-colors ${
                           isActive ? "text-primary" : "text-white/40 group-hover:text-white/70"
                         }`}
                       />
-                      <span className="whitespace-nowrap font-medium">{category}</span>
+                      <span className="whitespace-nowrap font-medium truncate">{category}</span>
                     </div>
                     {itemCount > 0 && (
                       <span

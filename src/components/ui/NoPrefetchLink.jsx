@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 /**
- * Pages Router next/link still prefetches on hover when prefetch={false}.
- * Use a real <a> + router.push so VDP/storefront cards never fire /_next/data on hover.
+ * Uses Next.js standard Link with prefetch={false}.
+ * This avoids fetching all links on viewport entry, but STILL fetches on hover.
+ * This restores the "fast navigation" feel when clicking, since it prefetches the moment the user hovers over the button.
  */
 export default function NoPrefetchLink({
   href,
@@ -13,27 +14,17 @@ export default function NoPrefetchLink({
   scroll = true,
   ...props
 }) {
-  const router = useRouter();
-
-  const handleClick = (e) => {
-    if (onClick) onClick(e);
-    if (e.defaultPrevented) return;
-    if (target === "_blank") return;
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
-      return;
-    }
-
-    e.preventDefault();
-    if (replace) {
-      router.replace(href, undefined, { scroll });
-    } else {
-      router.push(href, undefined, { scroll });
-    }
-  };
-
   return (
-    <a href={href} target={target} onClick={handleClick} {...props}>
+    <Link
+      href={href}
+      onClick={onClick}
+      target={target}
+      replace={replace}
+      scroll={scroll}
+      prefetch={false}
+      {...props}
+    >
       {children}
-    </a>
+    </Link>
   );
 }

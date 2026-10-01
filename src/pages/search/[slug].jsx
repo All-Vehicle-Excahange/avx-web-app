@@ -491,21 +491,39 @@ export async function getServerSideProps(context) {
     details = details.replace(/manual/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
   }
 
+  let bodyTypes = [];
+
+  if (detailsRaw.includes("luxury-sedan") || detailsRaw.includes("sedan-luxury")) {
+    bodyTypes.push("luxury sedan");
+    details = details.replace(/luxury-sedan|sedan-luxury/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+  } else if (detailsRaw.includes("luxury-suv") || detailsRaw.includes("suv-luxury")) {
+    bodyTypes.push("luxury suv");
+    details = details.replace(/luxury-suv|suv-luxury/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+  }
+
   if (detailsRaw.includes("hatchback")) {
-    bodyTypeFilter = "hatchback";
+    bodyTypes.push("hatchback");
     details = details.replace(/hatchback/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
-  } else if (detailsRaw.includes("sedan")) {
-    bodyTypeFilter = "sedan";
+  }
+  if (detailsRaw.includes("sedan") && !bodyTypes.includes("luxury sedan")) {
+    bodyTypes.push("sedan");
     details = details.replace(/sedan/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
-  } else if (detailsRaw.includes("suv")) {
-    bodyTypeFilter = "suv";
+  }
+  if (detailsRaw.includes("suv") && !bodyTypes.includes("luxury suv")) {
+    bodyTypes.push("suv");
     details = details.replace(/suv/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
-  } else if (detailsRaw.includes("muv")) {
-    bodyTypeFilter = "muv";
+  }
+  if (detailsRaw.includes("muv")) {
+    bodyTypes.push("muv");
     details = details.replace(/muv/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
-  } else if (detailsRaw.includes("luxury")) {
-    bodyTypeFilter = "luxury";
+  }
+  if (detailsRaw.includes("luxury") && !bodyTypes.includes("luxury suv") && !bodyTypes.includes("luxury sedan")) {
+    bodyTypes.push("luxury");
     details = details.replace(/luxury/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+  }
+  
+  if (bodyTypes.length > 0) {
+    bodyTypeFilter = bodyTypes.join(",");
   } else if (detailsRaw.includes("commuter-bikes")) {
     bodyTypeFilter = "commuter_bikes";
     details = details.replace(/commuter-bikes/g, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
