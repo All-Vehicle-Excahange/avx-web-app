@@ -1867,48 +1867,54 @@ export default function SearchWithCard({
     const variantLabels = variants
       .filter((v) => selectedVariants.includes(v.value))
       .map((v) => v.label);
-    if (brandLabels.length > 0) tags.push(...brandLabels);
-    if (modelLabels.length > 0) tags.push(...modelLabels);
-    if (variantLabels.length > 0) tags.push(...variantLabels);
-    if (selectedFuelTypes.length > 0) tags.push(...selectedFuelTypes);
-    if (selectedTransmissionTypes.length > 0)
-      tags.push(...selectedTransmissionTypes);
+
+    if (brandLabels.length > 0) brandLabels.forEach(label => tags.push({ label, type: "brand" }));
+    if (modelLabels.length > 0) modelLabels.forEach(label => tags.push({ label, type: "model" }));
+    if (variantLabels.length > 0) variantLabels.forEach(label => tags.push({ label, type: "variant" }));
+    
+    if (selectedFuelTypes.length > 0) selectedFuelTypes.forEach(label => tags.push({ label, type: "fuel" }));
+    if (selectedTransmissionTypes.length > 0) selectedTransmissionTypes.forEach(label => tags.push({ label, type: "transmission" }));
+    
     if (selectedCategories.length > 0) {
-      const catLabels = selectedCategories.map((cVal) => {
+      selectedCategories.forEach((cVal) => {
         const match = categoryItems.find((c) => c.value === cVal);
-        return match ? match.label : cVal;
+        tags.push({ label: match ? match.label : cVal, type: "category" });
       });
-      tags.push(...catLabels);
     }
-    if (selectedBodyType.length > 0)
-      tags.push(
-        ...selectedBodyType.map(
-          (b) => b.charAt(0).toUpperCase() + b.slice(1).toLowerCase(),
-        ),
-      );
-    if (selectedYear.length > 0) tags.push(...selectedYear);
+    if (selectedBodyType.length > 0) {
+      selectedBodyType.forEach(b => tags.push({ 
+        label: b.charAt(0).toUpperCase() + b.slice(1).toLowerCase(), 
+        type: "bodyType" 
+      }));
+    }
+    
+    if (selectedYear.length > 0) selectedYear.forEach(label => tags.push({ label: String(label), type: "year" }));
+    
     // Show both city and state
     const locationParts = [];
     if (selectedCityName) locationParts.push(selectedCityName);
     if (selectedStateName) locationParts.push(selectedStateName);
     if (selectedTownName) locationParts.push(selectedTownName);
-    if (locationParts.length > 0) tags.push(locationParts.join(", "));
+    if (locationParts.length > 0) tags.push({ label: locationParts.join(", "), type: "location" });
+    
     if (minPrice > MIN || maxPrice < MAX) {
       if (minPrice === MIN && maxPrice < MAX) {
         const label = maxPrice < 100000 ? `₹${Math.round(maxPrice / 1000)}k` : `₹${(maxPrice / 100000).toFixed(1)}L`;
-        tags.push(`Under ${label}`);
+        tags.push({ label: `Under ${label}`, type: "price" });
       } else {
-        tags.push(
-          `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`,
-        );
+        tags.push({ label: `₹${(minPrice / 100000).toFixed(1)}L–₹${(maxPrice / 100000).toFixed(1)}L`, type: "price" });
       }
     }
-    if (kmDistance > 0) tags.push(`≤${kmDistance.toLocaleString()} km`);
-    if (selectedRating.length > 0) tags.push(`${selectedRating[0]}+ ⭐`);
-    if (selectedSellerType.length > 0)
-      tags.push(
-        selectedSellerType[0] === "CONSULTANT" ? "Consultant" : "Individual",
-      );
+    
+    if (kmDistance > 0) tags.push({ label: `≤${kmDistance.toLocaleString()} km`, type: "km" });
+    if (selectedRating.length > 0) tags.push({ label: `${selectedRating[0]}+ ⭐`, type: "rating" });
+    if (selectedSellerType.length > 0) {
+      tags.push({ 
+        label: selectedSellerType[0] === "CONSULTANT" ? "Consultant" : "Individual", 
+        type: "sellerType" 
+      });
+    }
+    
     onFilterChange?.(tags);
     setActiveTagCount(tags.length);
   }, [

@@ -48,8 +48,40 @@ export default function SearchHeader({
       return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
     }
 
-    if (seoH1 && activeFilters.length > 0) {
+    const activeBrands = activeFilters.filter(f => f.type === "brand").map(f => typeof f === "string" ? f : f.label);
+    const activeModels = activeFilters.filter(f => f.type === "model").map(f => typeof f === "string" ? f : f.label);
+    const activeCats = activeFilters.filter(f => f.type === "category").map(f => typeof f === "string" ? f : f.label);
+    const activeBodies = activeFilters.filter(f => f.type === "bodyType").map(f => typeof f === "string" ? f : f.label);
+
+    const hasCoreFilters = activeBrands.length > 0 || activeModels.length > 0 || activeCats.length > 0 || activeBodies.length > 0;
+
+    let isStale = false;
+    if (seoH1 && hasCoreFilters) {
+      if (activeBrands.length > 0 && !seoH1.toLowerCase().includes(activeBrands[0].toLowerCase())) {
+        isStale = true;
+      }
+      if (activeModels.length > 0 && !seoH1.toLowerCase().includes(activeModels[0].toLowerCase())) {
+        isStale = true;
+      }
+    } else if (seoH1 && !hasCoreFilters) {
+       // If no core filters remain (e.g. they unchecked the brand) but the route is not a hub
+       if (searchParams.has("makerIds") || searchParams.has("brand") || searchParams.has("makerId")) {
+         isStale = true;
+       }
+    }
+
+    if (seoH1 && !isStale) {
       return seoH1;
+    }
+
+    if (hasCoreFilters) {
+      const parts = [
+        activeBrands[0] || "",
+        activeModels[0] || "",
+        activeCats[0] || "",
+        activeBodies[0] || ""
+      ].filter(Boolean).join(" ");
+      return `Used ${parts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
     }
 
     const brandName = brandParam || searchParams.get("brandName") || "";
@@ -57,9 +89,9 @@ export default function SearchHeader({
     const catName = searchParams.get("category") || searchParams.get("vehicleTag") || "";
     const bodyName = bodyType || searchParams.get("bodyType") || "";
 
-    const parts = [brandName, modelName, catName, bodyName].filter(Boolean).join(" ");
-    if (parts) {
-      return `Used ${parts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
+    const fallbackParts = [brandName, modelName, catName, bodyName].filter(Boolean).join(" ");
+    if (fallbackParts) {
+      return `Used ${fallbackParts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
     }
 
     return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
@@ -349,30 +381,32 @@ export default function SearchHeader({
             <div className="mt-3 pt-3 border-t border-primary/10 flex flex-wrap items-center gap-2 animate-fadeIn">
               {activeFilters
                 .slice(0, showAllChips ? activeFilters.length : 6)
-                .map((filter, idx) => (
+                .map((filterObj, idx) => {
+                  const filterLabel = typeof filterObj === "string" ? filterObj : filterObj.label;
+                  return (
                   <span
                     key={idx}
                     className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-primary/20 rounded-full px-3 py-1 text-xs font-medium text-primary shadow-sm transition-all"
                   >
-                    <span>{filter}</span>
+                    <span>{filterLabel}</span>
                     {onRemoveFilter ? (
                       <button
                         type="button"
-                        onClick={() => onRemoveFilter(filter)}
+                        onClick={() => onRemoveFilter(filterLabel)}
                         className="hover:opacity-70 cursor-pointer ml-0.5 inline-flex items-center"
                       >
                         <X size={12} />
                       </button>
                     ) : (
                       <Link
-                        href={getRemoveFilterHref(filter)}
+                        href={getRemoveFilterHref(filterLabel)}
                         className="hover:opacity-70 cursor-pointer ml-0.5 inline-flex items-center"
                       >
                         <X size={12} />
                       </Link>
                     )}
                   </span>
-                ))}
+                )})}
 
               {activeFilters.length > 6 && !showAllChips && (
                 <button
