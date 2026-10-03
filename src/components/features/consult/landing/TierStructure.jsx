@@ -45,7 +45,7 @@ const tiers = [
 
 export default function TierStructure() {
   return (
-    <section className="py-20 relative overflow-hidden max-w-6xl">
+    <section className="py-20 relative overflow-hidden max-w-6xl mx-auto px-4 sm:px-6">
       <div className="relative z-10  mx-auto text-center">
         {/* HEADER */}
         <motion.div
@@ -80,11 +80,10 @@ export default function TierStructure() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className={`relative rounded-2xl p-8 text-left transition-all duration-300 ${
-                tier.highlight
-                  ? "border border-primary/20 bg-primary/4 scale-[1.04]"
-                  : "border border-white/6 bg-transparent"
-              }`}
+              className={`relative rounded-2xl p-8 text-left transition-all duration-300 ${tier.highlight
+                ? "border border-primary/20 bg-primary/4 scale-[1.04]"
+                : "border border-white/6 bg-transparent"
+                }`}
             >
               {/* top edge line for highlight */}
               {tier.highlight && (
@@ -132,11 +131,10 @@ export default function TierStructure() {
                   {tier.features.map((f, idx) => (
                     <div key={idx} className="flex items-center gap-3">
                       <div
-                        className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${
-                          tier.highlight
-                            ? "bg-primary/15 border border-primary/25"
-                            : "bg-white/5 border border-white/10"
-                        }`}
+                        className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${tier.highlight
+                          ? "bg-primary/15 border border-primary/25"
+                          : "bg-white/5 border border-white/10"
+                          }`}
                       >
                         <FiCheck
                           className={`text-[9px] ${tier.highlight ? "text-primary/80" : "text-third"}`}

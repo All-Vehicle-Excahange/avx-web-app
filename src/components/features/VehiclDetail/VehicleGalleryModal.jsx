@@ -100,7 +100,6 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                       fill
                       className="object-contain select-none"
                       priority={idx <= 3}
-                      unoptimized
                       sizes="100vw"
                     />
                   </div>
@@ -178,7 +177,6 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                         sizes="100px"
                         alt="thumb"
                         className="object-cover pointer-events-none"
-                        unoptimized
                       />
                     ) : (
                       <>
@@ -189,7 +187,6 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                             sizes="100px"
                             alt="thumb"
                             className="object-cover pointer-events-none"
-                            unoptimized
                           />
                         ) : (
                           <video src={item.src} className="w-full h-full object-cover pointer-events-none" />
