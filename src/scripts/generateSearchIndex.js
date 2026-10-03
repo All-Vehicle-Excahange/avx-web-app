@@ -1155,6 +1155,7 @@ async function generateSearchIndex() {
 
 if (require.main === module) {
   generateSearchIndex()
+    .then(() => process.exit(0))
     .catch(err => {
       console.error('[Cron] Error generating search index:', err);
       process.exit(1);

@@ -2,6 +2,10 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://www.reecomm.com/sitemaps/vehicles-1.xml</loc>
-    <lastmod>2026-09-30T06:15:29.838Z</lastmod>
+    <lastmod>2026-10-02T17:02:31.878Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.reecomm.com/sitemaps/vehicles-2.xml</loc>
+    <lastmod>2026-10-02T17:02:31.878Z</lastmod>
   </sitemap>
 </sitemapindex>
