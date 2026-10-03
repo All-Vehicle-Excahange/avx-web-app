@@ -284,6 +284,7 @@ export default function StoreFrontHeroSection() {
             src={storeDetails.bannerUrl}
             alt="Store Banner"
             fill
+            sizes="100vw"
             className="object-cover object-center block"
             priority
           />
@@ -568,7 +569,6 @@ export default function StoreFrontHeroSection() {
                     className="object-contain select-none"
                     sizes="100vw"
                     priority
-                    unoptimized
                   />
                 </div>
               </SwiperSlide>

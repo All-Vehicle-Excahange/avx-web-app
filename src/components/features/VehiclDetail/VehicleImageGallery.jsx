@@ -313,7 +313,6 @@ export default function VehicleImageGallery({ vehicle }) {
                   sizes="(max-width: 768px) 100vw, 800px"
                   className="object-cover pointer-events-none select-none"
                   priority
-                  unoptimized
                   onError={() => markFailed(currentItem.src)}
                 />
               ) : (
@@ -393,7 +392,6 @@ export default function VehicleImageGallery({ vehicle }) {
                       sizes="96px"
                       alt={`${imageAltBase} — photo ${idx + 1}`}
                       className="w-full h-full object-cover pointer-events-none select-none"
-                      unoptimized
                       onError={() => markFailed(item.thumbnail)}
                     />
                   ) : (
@@ -440,7 +438,6 @@ const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
         sizes="96px"
         alt="video-thumbnail"
         className="w-full h-full object-cover"
-        unoptimized
       />
     );
   }
