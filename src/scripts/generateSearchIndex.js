@@ -1048,6 +1048,12 @@ async function generateSearchIndex() {
     console.log(`[Cron] Wrote ${popularLinks.length} popular SEO links to ${popularPath}`);
 
     const placeLinks = {};
+    const FOCUS_STOREFRONTS = {
+      palanpur: {
+        label: "Aabad Motors — Auto Consultant Palanpur",
+        href: "/auto-consultant/aabadmotors",
+      },
+    };
     for (const slug of comboHits.keys()) {
       const match = slug.match(/^buy-used-(.+)-(cars|two-wheelers)-([a-z0-9-]+)$/);
       if (!match) continue;
@@ -1064,6 +1070,24 @@ async function generateSearchIndex() {
         label: item?.title || titleCaseFromSlug(slug.replace(/^buy-used-/, "")),
         href,
       });
+    }
+    for (const place of Object.keys(placeLinks)) {
+      const priority = [
+        {
+          label: `Used cars in ${titleCaseFromSlug(place)}`,
+          href: `/search/buy-used-cars-${place}`,
+        },
+        {
+          label: `Used bikes in ${titleCaseFromSlug(place)}`,
+          href: `/search/buy-used-two-wheelers-${place}`,
+        },
+      ];
+      if (FOCUS_STOREFRONTS[place]) priority.push(FOCUS_STOREFRONTS[place]);
+      for (const item of [...priority].reverse()) {
+        if (placeLinks[place].some((x) => x.href === item.href)) continue;
+        placeLinks[place].unshift(item);
+      }
+      placeLinks[place] = placeLinks[place].slice(0, 24);
     }
     const placeLinksPath = path.join(PUBLIC_DIR, "seo_place_links.json");
     fs.writeFileSync(placeLinksPath, JSON.stringify(placeLinks, null, 2), "utf8");

@@ -12,9 +12,10 @@ Content calendar: [`SEO_CONTENT_CALENDAR_90D.md`](./SEO_CONTENT_CALENDAR_90D.md)
 1. **GSC**: property `https://www.reecomm.com` — submit `sitemap.xml`
 2. **GA4 Key Events**: `inquire_initiated`, `inquiry_submit`, `view_vehicle`, `view_search_results`
 3. **Semrush Position Tracking** (India, Google, English):
-   - Import all non-`longHorizon` keywords from `SEO_TARGET_KEYWORDS`
+   - Import keywords from [`docs/SEMRUSH_POSITION_TRACKING.md`](./SEMRUSH_POSITION_TRACKING.md) / non-`longHorizon` entries in `SEO_TARGET_KEYWORDS`
    - **Do not** measure success by Cars24 Keyword Gap national wins
-4. **Semrush Site Audit**:
+4. **Weekly GSC presence report**: `npm run report:seo-gsc` → [`SEO_GOOGLE_PRESENCE_REPORT.md`](./SEO_GOOGLE_PRESENCE_REPORT.md) matrix scorecard
+5. **Semrush Site Audit**:
    - Raise crawl limit to **≥ 5,000 pages** (100 is useless for GEO scale)
    - Enable JS rendering if available
    - Re-run after deploying 404 link fixes

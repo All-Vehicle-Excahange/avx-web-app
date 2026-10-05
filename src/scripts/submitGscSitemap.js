@@ -10,7 +10,6 @@ const fs = require("fs");
 const path = require("path");
 const { google } = require("googleapis");
 
-const SITE_URL = process.env.GSC_SITE_URL || "https://www.reecomm.com/";
 const SITEMAP_PATHS = (
   process.env.GSC_SITEMAP_PATHS || "sitemap.xml"
 ).split(",").map((s) => s.trim()).filter(Boolean);
@@ -50,6 +49,7 @@ function loadEnv(filePath) {
 
 function normalizeSiteUrl(url) {
   const trimmed = String(url || "").trim();
+  if (trimmed.startsWith("sc-domain:")) return trimmed;
   return trimmed.endsWith("/") ? trimmed : `${trimmed}/`;
 }
 
@@ -57,9 +57,29 @@ function toFeedPath(siteUrl, sitemapPath) {
   if (sitemapPath.startsWith("http://") || sitemapPath.startsWith("https://")) {
     return sitemapPath;
   }
-  const base = normalizeSiteUrl(siteUrl).replace(/\/$/, "");
+  // Domain properties still submit absolute sitemap URLs on www host
+  const hostBase = "https://www.reecomm.com";
   const pathPart = sitemapPath.startsWith("/") ? sitemapPath : `/${sitemapPath}`;
+  if (String(siteUrl).startsWith("sc-domain:")) {
+    return `${hostBase}${pathPart}`;
+  }
+  const base = normalizeSiteUrl(siteUrl).replace(/\/$/, "");
   return `${base}${pathPart}`;
+}
+
+async function resolveSiteUrl(webmasters, preferred) {
+  const listed = await webmasters.sites.list();
+  const entries = listed.data.siteEntry || [];
+  const urls = entries.map((e) => e.siteUrl).filter(Boolean);
+  if (preferred && urls.includes(preferred)) return preferred;
+  const domain = urls.find((u) => u === "sc-domain:reecomm.com");
+  if (domain) return domain;
+  if (urls.includes("https://www.reecomm.com/")) return "https://www.reecomm.com/";
+  if (urls.length === 1) return urls[0];
+  if (preferred) return preferred;
+  throw new Error(
+    `No usable GSC property. Accessible: ${urls.join(", ") || "(none)"}`
+  );
 }
 
 async function main() {
@@ -80,7 +100,9 @@ async function main() {
     process.exit(1);
   }
 
-  const siteUrl = normalizeSiteUrl(SITE_URL);
+  const preferred = normalizeSiteUrl(
+    env.GSC_SITE_URL || process.env.GSC_SITE_URL || "sc-domain:reecomm.com"
+  );
   const jwtClient = new google.auth.JWT({
     email: clientEmail,
     key: privateKey,
@@ -89,6 +111,8 @@ async function main() {
   await jwtClient.authorize();
 
   const webmasters = google.webmasters({ version: "v3", auth: jwtClient });
+  const siteUrl = await resolveSiteUrl(webmasters, preferred);
+  console.log("Using GSC property", siteUrl);
 
   let ok = 0;
   let fail = 0;

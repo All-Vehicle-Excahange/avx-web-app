@@ -3,7 +3,7 @@
   <!-- Vehicle Listings (cron-synced static INDEX — all SEO-active pages) -->
   <sitemap>
     <loc>https://www.reecomm.com/sitemaps/vehicles.xml</loc>
-    <lastmod>2026-10-02T17:02:31.878Z</lastmod>
+    <lastmod>2026-10-05T11:13:25.683Z</lastmod>
   </sitemap>
   <!-- Storefront Listings (dynamic, paginated INDEX — all consultants) -->
   <sitemap>

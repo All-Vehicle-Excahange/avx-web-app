@@ -138,6 +138,12 @@ const nextConfig = {
         destination: "/search/buy-used-cars",
         permanent: true,
       },
+      // Canonical storefront: digit slug → clean username (GSC was splitting equity)
+      {
+        source: "/auto-consultant/aabadmotors487206",
+        destination: "/auto-consultant/aabadmotors",
+        permanent: true,
+      },
     ];
   },
   images: {

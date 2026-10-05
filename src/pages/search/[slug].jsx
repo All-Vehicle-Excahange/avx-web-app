@@ -286,6 +286,7 @@ function SearchContent({
         vehicles={seo?.initialVehicles}
         cityName={seo?.placeName || initialFilters?.cityName}
         relatedLinks={seo?.relatedPlaceLinks}
+        relatedBlogLinks={seo?.relatedBlogLinks}
       />
 
       <DownloadAppSection />
@@ -302,12 +303,59 @@ function loadPlaceLinks(placeSlug, currentPath) {
   if (!placeSlug) return [];
   try {
     const file = path.join(process.cwd(), "public", "seo_place_links.json");
-    if (!fs.existsSync(file)) return [];
-    const data = JSON.parse(fs.readFileSync(file, "utf8"));
-    const list = data[String(placeSlug).toLowerCase()] || [];
+    const data = fs.existsSync(file)
+      ? JSON.parse(fs.readFileSync(file, "utf8"))
+      : {};
+    const place = String(placeSlug).toLowerCase();
+    const list = [...(data[place] || [])];
+
+    const FOCUS_STOREFRONTS = {
+      palanpur: {
+        label: "Aabad Motors — Auto Consultant Palanpur",
+        href: "/auto-consultant/aabadmotors",
+      },
+    };
+
+    const priority = [
+      {
+        label: `Used cars in ${placeSlug}`,
+        href: `/search/buy-used-cars-${place}`,
+      },
+      {
+        label: `Used bikes in ${placeSlug}`,
+        href: `/search/buy-used-two-wheelers-${place}`,
+      },
+    ];
+    if (FOCUS_STOREFRONTS[place]) priority.push(FOCUS_STOREFRONTS[place]);
+
+    for (const item of [...priority].reverse()) {
+      if (!item?.href || item.href === currentPath) continue;
+      if (list.some((x) => x.href === item.href)) continue;
+      list.unshift(item);
+    }
+
     return list
       .filter((item) => item?.href && item.href !== currentPath)
       .slice(0, 12);
+  } catch {
+    return [];
+  }
+}
+
+function loadRelatedBlogLinks(slug, placeSlug) {
+  try {
+    const {
+      relatedBlogLinksForPath,
+      relatedBlogLinksForPlace,
+    } = require("../../components/features/Blog/geoCalendarPosts");
+    const pathLinks = relatedBlogLinksForPath(`/search/${slug}`);
+    const placeLinks = relatedBlogLinksForPlace(placeSlug);
+    const seen = new Set();
+    return [...pathLinks, ...placeLinks].filter((item) => {
+      if (!item?.href || seen.has(item.href)) return false;
+      seen.add(item.href);
+      return true;
+    }).slice(0, 4);
   } catch {
     return [];
   }
@@ -852,6 +900,7 @@ export async function getServerSideProps(context) {
         totalCount,
         placeName: resolvedCity,
         relatedPlaceLinks: loadPlaceLinks(city, `/search/${slug}`),
+        relatedBlogLinks: loadRelatedBlogLinks(slug, city),
         ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",
         ogImageAlt: firstWithImage
           ? `${formatVehicleListingLine(firstWithImage)}${resolvedCity ? ` in ${resolvedCity}` : ""}`

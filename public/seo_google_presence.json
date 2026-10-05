@@ -1,0 +1,2806 @@
+{
+  "generatedAt": "2026-10-05T13:14:04.771Z",
+  "siteUrl": "sc-domain:reecomm.com",
+  "startDate": "2026-09-07",
+  "endDate": "2026-10-04",
+  "totalRows": 200,
+  "brandFocus": [
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2016-cars-kanodar-palanpur/f3ed0b08-6cd7-46d7-9528-ad972a8d6e2e",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 1,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-grand-i10-2017-cars-chhapi-palanpur/28440cc3-1d52-4006-bb32-73c5e83d71d7",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 1,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "celerio car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-wagon-r-10-2012-cars-bharkawada-palanpur/286f478b-f5f8-4583-bf6e-fa429793ffe7",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 73,
+      "serpPage": 8,
+      "bucket": "model"
+    },
+    {
+      "query": "swift car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2011-cars-palanpur/11ade5cb-af5d-40f0-9c0e-0e9c171e8cdb",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 73,
+      "serpPage": 8,
+      "bucket": "model"
+    },
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2018-cars-palanpur/6676757f-9fbe-4f61-9924-c9492291d1a7",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2019-cars-palanpur/0daded7d-f04e-41c5-ad99-ff82957cde53",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/consualt/buy-used-hyundai-creta-2015-cars-kanodar/edbfcaed-aca5-4b3f-9caa-2a26d7eefa8f",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "reecomm",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2017-cars-gola-palanpur/be3657d0-df75-4eeb-9e8f-cea2a2e7248d",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "2015 pic",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10,
+      "serpPage": 1,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "altis cars",
+      "page": "https://www.reecomm.com/search/buy-used-toyota-corolla-altis-cars-bangalore",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 12,
+      "serpPage": 2,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "ertiga car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2018-cars-palanpur/14219a0a-8d32-4e8e-962c-37edfff57dda",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 14,
+      "serpPage": 2,
+      "bucket": "model"
+    },
+    {
+      "query": "which car is this",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-wagon-r-1.0-2017-cars-majadar-kanodar/c37354b3-b250-427d-9ad9-ec0f4ad2e7f4",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 14,
+      "serpPage": 2,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "/explodedview",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2015-cars-palanpur/11dd1b9f-1c17-4e26-8eb9-95a303f9c7c7",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 15,
+      "serpPage": 2,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "ok",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 16,
+      "serpPage": 2,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "haa",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 17,
+      "serpPage": 2,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "100 price",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2018-cars-ahmedabad/96572ec6-36bd-4690-8a1f-d335f0fb3ff9",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 22,
+      "serpPage": 3,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "dzire car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2017-cars-aroma-palanpur/8061c099-7ea7-4b23-9ce2-ff6c79b688e3",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 25,
+      "serpPage": 3,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "brezza car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-vitara-brezza-2019-cars-gola-palanpur/44765aa2-9858-4930-a79a-9b8c4d642600",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 26,
+      "serpPage": 3,
+      "bucket": "model"
+    },
+    {
+      "query": "ertiga car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2016-cars-bharkawada-palanpur/1ae0d0ed-bac5-450e-a341-426bc71ec739",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 29,
+      "serpPage": 3,
+      "bucket": "model"
+    },
+    {
+      "query": "ertiga car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2018-cars-palanpur/f2f5b413-f704-4883-b549-517fdaa5289b",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 30,
+      "serpPage": 3,
+      "bucket": "model"
+    },
+    {
+      "query": "swift car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2014-cars-majadar-palanpur/2db00083-4f11-4578-940c-221cddc384fb",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 30,
+      "serpPage": 3,
+      "bucket": "model"
+    },
+    {
+      "query": "celerio car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2014-cars-palanpur/2db00083-4f11-4578-940c-221cddc384fb",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 34,
+      "serpPage": 4,
+      "bucket": "model"
+    },
+    {
+      "query": "corolla altis used",
+      "page": "https://www.reecomm.com/search/buy-used-toyota-corolla-altis-cars-bangalore",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 43,
+      "serpPage": 5,
+      "bucket": "brand_vehicle"
+    },
+    {
+      "query": "celerio car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-celerio-2014-cars-kanodar/bfbc407f-feb3-411e-ada1-95dad811b293",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 63,
+      "serpPage": 7,
+      "bucket": "model"
+    },
+    {
+      "query": "swift car test drive palanpur",
+      "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2015-cars-sujanpur-palanpur/11dd1b9f-1c17-4e26-8eb9-95a303f9c7c7",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 81,
+      "serpPage": 9,
+      "bucket": "model"
+    }
+  ],
+  "buckets": {
+    "brand_vehicle": [
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/search/buy-used-cars",
+        "clicks": 3,
+        "impressions": 96,
+        "ctr": 0.03125,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 81,
+        "ctr": 0,
+        "position": 46.91358024691358,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 69,
+        "ctr": 0,
+        "position": 40.36231884057971,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cars in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 37,
+        "ctr": 0,
+        "position": 45.513513513513516,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cars surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 33,
+        "ctr": 0,
+        "position": 45.878787878787875,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pre owned cars pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 32,
+        "ctr": 0,
+        "position": 50.0625,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "resale cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 30,
+        "ctr": 0,
+        "position": 45.333333333333336,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "preowned cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 29,
+        "ctr": 0,
+        "position": 49.13793103448276,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cars in surat under 1 lakh",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 28,
+        "ctr": 0,
+        "position": 36.107142857142854,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 28,
+        "ctr": 0,
+        "position": 40.857142857142854,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pune used cars",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 43.53846153846154,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand car in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 44.11538461538461,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "2nd hand cars surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 44.5,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "old car in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 44.53846153846154,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 50.11538461538461,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used car in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 26,
+        "ctr": 0,
+        "position": 50.42307692307692,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used car surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 25,
+        "ctr": 0,
+        "position": 40.16,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "surat second hand car",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 25,
+        "ctr": 0,
+        "position": 45.52,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used cars pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 25,
+        "ctr": 0,
+        "position": 50.44,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used car pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 24,
+        "ctr": 0,
+        "position": 52.75,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cng cars in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 11,
+        "ctr": 0,
+        "position": 24.818181818181817,
+        "serpPage": 3,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/search/buy-used-sedan-cars",
+        "clicks": 0,
+        "impressions": 9,
+        "ctr": 0,
+        "position": 1.5555555555555556,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/search/buy-used-muv-cars",
+        "clicks": 0,
+        "impressions": 6,
+        "ctr": 0,
+        "position": 1.1666666666666667,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2016-cars-kanodar-palanpur/f3ed0b08-6cd7-46d7-9528-ad972a8d6e2e",
+        "clicks": 0,
+        "impressions": 5,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 5,
+        "ctr": 0,
+        "position": 51.2,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pre owned cars delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 5,
+        "ctr": 0,
+        "position": 52.8,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars in delhi ncr",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 5,
+        "ctr": 0,
+        "position": 63.2,
+        "serpPage": 7,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-grand-i10-2017-cars-chhapi-palanpur/28440cc3-1d52-4006-bb32-73c5e83d71d7",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pre owned cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 47.25,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used cars in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 52.5,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used cars in delhi ncr",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 56.5,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 20.333333333333332,
+        "serpPage": 3,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "kia used cars",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 35.5,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 41,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia for sale",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 47,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 64.5,
+        "serpPage": 7,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "delhi used car",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 74,
+        "serpPage": 8,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/search/buy-used-suv-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2018-cars-palanpur/6676757f-9fbe-4f61-9924-c9492291d1a7",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2019-cars-palanpur/0daded7d-f04e-41c5-ad99-ff82957cde53",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/consualt/buy-used-hyundai-creta-2015-cars-kanodar/edbfcaed-aca5-4b3f-9caa-2a26d7eefa8f",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2017-cars-gola-palanpur/be3657d0-df75-4eeb-9e8f-cea2a2e7248d",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-volkswagen-taigun-2024-cars-gandhinagar/8cd5459e-88a6-4f0a-be89-ace4bcd822f2",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 8,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "2015 pic",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 10,
+        "serpPage": 1,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "altis cars",
+        "page": "https://www.reecomm.com/search/buy-used-toyota-corolla-altis-cars-bangalore",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 12,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "which car is this",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-wagon-r-1.0-2017-cars-majadar-kanodar/c37354b3-b250-427d-9ad9-ec0f4ad2e7f4",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 14,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "/explodedview",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2015-cars-palanpur/11dd1b9f-1c17-4e26-8eb9-95a303f9c7c7",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 15,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "ok",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 16,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "haa",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2015-cars-chhapi-palanpur/a7cd6593-5bb5-436f-a2d0-0de7ca576938",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 17,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "price",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-volkswagen-taigun-2024-cars-sargasan-gandhinagar/8cd5459e-88a6-4f0a-be89-ace4bcd822f2",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 20,
+        "serpPage": 2,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "100 price",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-hyundai-creta-2018-cars-ahmedabad/96572ec6-36bd-4690-8a1f-d335f0fb3ff9",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 22,
+        "serpPage": 3,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "dzire car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2017-cars-aroma-palanpur/8061c099-7ea7-4b23-9ce2-ff6c79b688e3",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 25,
+        "serpPage": 3,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "cars for sale",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 30,
+        "serpPage": 3,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pre owned cars",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 34,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cars",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 36,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy old car in surat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 38,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars for sale in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 38,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pre owned cars",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 39,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used car showroom jammu",
+        "page": "https://www.reecomm.com/search/buy-used-cars-jammu",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 39,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia hatchback for sale",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 39,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "car dealer pal hazira road",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 40,
+        "serpPage": 4,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "corolla altis used",
+        "page": "https://www.reecomm.com/search/buy-used-toyota-corolla-altis-cars-bangalore",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 43,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia sedan for sale",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 43,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used car pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 45,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "kia sedan used",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 49,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia sedan",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 49,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used kia anniston",
+        "page": "https://www.reecomm.com/search/buy-used-kia-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 50,
+        "serpPage": 5,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand cars in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 55,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "pune second hand car",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 57,
+        "serpPage": 6,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy used car in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 61,
+        "serpPage": 7,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used certified cars in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 62,
+        "serpPage": 7,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used car delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 68,
+        "serpPage": 7,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "used cars in pune direct owner",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 77,
+        "serpPage": 8,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "buy old car in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 83,
+        "serpPage": 9,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "2nd car in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 88,
+        "serpPage": 9,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "second hand car in pune",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 89,
+        "serpPage": 9,
+        "bucket": "brand_vehicle"
+      },
+      {
+        "query": "preowned cars in delhi",
+        "page": "https://www.reecomm.com/search/buy-used-cars-delhi",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 93,
+        "serpPage": 10,
+        "bucket": "brand_vehicle"
+      }
+    ],
+    "model": [
+      {
+        "query": "brezza car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/3f97b841-6c76-42e1-9cf5-dee45e7be10b",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 48,
+        "serpPage": 5,
+        "bucket": "model"
+      },
+      {
+        "query": "celerio car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-wagon-r-10-2012-cars-bharkawada-palanpur/286f478b-f5f8-4583-bf6e-fa429793ffe7",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 73,
+        "serpPage": 8,
+        "bucket": "model"
+      },
+      {
+        "query": "swift car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2011-cars-palanpur/11ade5cb-af5d-40f0-9c0e-0e9c171e8cdb",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 73,
+        "serpPage": 8,
+        "bucket": "model"
+      },
+      {
+        "query": "ertiga car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2018-cars-palanpur/14219a0a-8d32-4e8e-962c-37edfff57dda",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 14,
+        "serpPage": 2,
+        "bucket": "model"
+      },
+      {
+        "query": "brezza car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-vitara-brezza-2019-cars-gola-palanpur/44765aa2-9858-4930-a79a-9b8c4d642600",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 26,
+        "serpPage": 3,
+        "bucket": "model"
+      },
+      {
+        "query": "ertiga car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2016-cars-bharkawada-palanpur/1ae0d0ed-bac5-450e-a341-426bc71ec739",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 29,
+        "serpPage": 3,
+        "bucket": "model"
+      },
+      {
+        "query": "ertiga car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-ertiga-2018-cars-palanpur/f2f5b413-f704-4883-b549-517fdaa5289b",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 30,
+        "serpPage": 3,
+        "bucket": "model"
+      },
+      {
+        "query": "swift car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2014-cars-majadar-palanpur/2db00083-4f11-4578-940c-221cddc384fb",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 30,
+        "serpPage": 3,
+        "bucket": "model"
+      },
+      {
+        "query": "celerio car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-2014-cars-palanpur/2db00083-4f11-4578-940c-221cddc384fb",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 34,
+        "serpPage": 4,
+        "bucket": "model"
+      },
+      {
+        "query": "celerio car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-celerio-2014-cars-kanodar/bfbc407f-feb3-411e-ada1-95dad811b293",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 63,
+        "serpPage": 7,
+        "bucket": "model"
+      },
+      {
+        "query": "swift car test drive palanpur",
+        "page": "https://www.reecomm.com/vehicle/details/buy-used-maruti-suzuki-swift-dzire-2015-cars-sujanpur-palanpur/11dd1b9f-1c17-4e26-8eb9-95a303f9c7c7",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 81,
+        "serpPage": 9,
+        "bucket": "model"
+      }
+    ],
+    "consultant": [
+      {
+        "query": "aabad motors",
+        "page": "https://www.reecomm.com/auto-consultant/aabadmotors487206",
+        "clicks": 7,
+        "impressions": 69,
+        "ctr": 0.10144927536231885,
+        "position": 2.753623188405797,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "aabad motors",
+        "page": "https://www.reecomm.com/auto-consultant/aabadmotors",
+        "clicks": 1,
+        "impressions": 21,
+        "ctr": 0.047619047619047616,
+        "position": 5.142857142857143,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/yesauto",
+        "clicks": 0,
+        "impressions": 18,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "janvi motors",
+        "page": "https://www.reecomm.com/auto-consultant/janvimotors",
+        "clicks": 1,
+        "impressions": 14,
+        "ctr": 0.07142857142857142,
+        "position": 8.785714285714285,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "dream motors",
+        "page": "https://www.reecomm.com/auto-consultant/dreammotors777018",
+        "clicks": 0,
+        "impressions": 8,
+        "ctr": 0,
+        "position": 8.5,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "aabad motors",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 6,
+        "ctr": 0,
+        "position": 6,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "falak car",
+        "page": "https://www.reecomm.com/auto-consultant/falakcar",
+        "clicks": 1,
+        "impressions": 4,
+        "ctr": 0.25,
+        "position": 8,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/elitemotor",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/msautoconsultant",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "easy motors surat gujarat",
+        "page": "https://www.reecomm.com/search/buy-used-cars-surat",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 35.25,
+        "serpPage": 4,
+        "bucket": "consultant"
+      },
+      {
+        "query": "sigma motors",
+        "page": "https://www.reecomm.com/auto-consultant/sigmamotors",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 13.333333333333334,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "alen motors",
+        "page": "https://www.reecomm.com/auto-consultant/alenmotor",
+        "clicks": 1,
+        "impressions": 2,
+        "ctr": 0.5,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "elite cars",
+        "page": "https://www.reecomm.com/auto-consultant/elitemotor",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "sheth motors",
+        "page": "https://www.reecomm.com/auto-consultant/shethmotors",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 12,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "car dealer alirajpur chhotaudepur",
+        "page": "https://www.reecomm.com/auto-consultant/ektaautoconsult",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 14,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "yes automotive",
+        "page": "https://www.reecomm.com/auto-consultant/yesauto",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 51.5,
+        "serpPage": 6,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/aabadmotors",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/alenmotor",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/auto-consultant/safelineauto",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "s k motors",
+        "page": "https://www.reecomm.com/auto-consultant/skmotors",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 2,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "aman motors",
+        "page": "https://www.reecomm.com/auto-consultant/amanmotors",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 10,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "safar cars",
+        "page": "https://www.reecomm.com/auto-consultant/safarcars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 10,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "yesauto",
+        "page": "https://www.reecomm.com/auto-consultant/yesauto",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 10,
+        "serpPage": 1,
+        "bucket": "consultant"
+      },
+      {
+        "query": "ekta auto consultant",
+        "page": "https://www.reecomm.com/auto-consultant/ektaautoconsult",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 11,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "yes auto",
+        "page": "https://www.reecomm.com/auto-consultant/yesauto",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 11,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "ekta auto",
+        "page": "https://www.reecomm.com/auto-consultant/ektaautoconsult",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 12,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "car showroom alirajpur chhotaudepur",
+        "page": "https://www.reecomm.com/auto-consultant/ektaautoconsult",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 16,
+        "serpPage": 2,
+        "bucket": "consultant"
+      },
+      {
+        "query": "priyog motors",
+        "page": "https://www.reecomm.com/search/buy-used-cars-pune",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 28,
+        "serpPage": 3,
+        "bucket": "consultant"
+      },
+      {
+        "query": "yes motor",
+        "page": "https://www.reecomm.com/auto-consultant/yesauto",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 51,
+        "serpPage": 6,
+        "bucket": "consultant"
+      },
+      {
+        "query": "comet motors vyara",
+        "page": "https://www.reecomm.com/search/buy-used-sedan-cars",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 53,
+        "serpPage": 6,
+        "bucket": "consultant"
+      }
+    ],
+    "vehicle_other": [
+      {
+        "query": "how to buy a used car",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 8,
+        "ctr": 0,
+        "position": 63.625,
+        "serpPage": 7,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "how long does the rc transfer process usually take when buying a used car in india?",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 8,
+        "serpPage": 1,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "what questions should i ask when comparing quotes from different used car buying services in india?",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 54.666666666666664,
+        "serpPage": 6,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "where to sell used electronics",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car purchase in india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 50.5,
+        "serpPage": 6,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "what is the best way to buy a certified used car in india without getting scammed?",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 52,
+        "serpPage": 6,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "second hand car buying guide",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 61,
+        "serpPage": 7,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car buying guide",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 73.5,
+        "serpPage": 8,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "what are the best options for purchasing a used car through a consultant?",
+        "page": "https://www.reecomm.com/blog/consultant-success-guide",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 2,
+        "serpPage": 1,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "which company issues a policy fastest after ownership transfer of a used car?",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 2,
+        "serpPage": 1,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "how to find used cars with rc transfer?",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 17,
+        "serpPage": 2,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "email addresses of used car dealers",
+        "page": "https://www.reecomm.com/privacy-choices",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 44,
+        "serpPage": 5,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "buying used car in india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 45,
+        "serpPage": 5,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car purchase india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 47,
+        "serpPage": 5,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car buying guide india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 48,
+        "serpPage": 5,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "buying a used car",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 57,
+        "serpPage": 6,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car information package",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 62,
+        "serpPage": 7,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "second hand car buyers guide",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 64,
+        "serpPage": 7,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "used car buying advice",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 66,
+        "serpPage": 7,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "advice on buying a used car",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 72,
+        "serpPage": 8,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "how to choose a used car",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 78,
+        "serpPage": 8,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "tips for buying used cars",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 80,
+        "serpPage": 8,
+        "bucket": "vehicle_other"
+      },
+      {
+        "query": "steps to buy used car",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 99,
+        "serpPage": 10,
+        "bucket": "vehicle_other"
+      }
+    ],
+    "other": [
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/",
+        "clicks": 206,
+        "impressions": 284,
+        "ctr": 0.7253521126760564,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/reecomm-works",
+        "clicks": 3,
+        "impressions": 265,
+        "ctr": 0.011320754716981131,
+        "position": 1.0452830188679245,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/aboutus",
+        "clicks": 4,
+        "impressions": 250,
+        "ctr": 0.016,
+        "position": 1.032,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/start",
+        "clicks": 1,
+        "impressions": 124,
+        "ctr": 0.008064516129032258,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 3,
+        "impressions": 114,
+        "ctr": 0.02631578947368421,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 75,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/download",
+        "clicks": 1,
+        "impressions": 59,
+        "ctr": 0.01694915254237288,
+        "position": 1.1694915254237288,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/contactus",
+        "clicks": 0,
+        "impressions": 59,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/become-seller",
+        "clicks": 1,
+        "impressions": 52,
+        "ctr": 0.019230769230769232,
+        "position": 1.1153846153846154,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/careers",
+        "clicks": 0,
+        "impressions": 25,
+        "ctr": 0,
+        "position": 1.3599999999999999,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "buying a car in india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 5,
+        "ctr": 0,
+        "position": 48.2,
+        "serpPage": 5,
+        "bucket": "other"
+      },
+      {
+        "query": "car dealer gayatri nagar road khambat",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 30,
+        "serpPage": 3,
+        "bucket": "other"
+      },
+      {
+        "query": "car selection tool india",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 76,
+        "serpPage": 8,
+        "bucket": "other"
+      },
+      {
+        "query": "online car advisor india",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 4,
+        "ctr": 0,
+        "position": 84.25,
+        "serpPage": 9,
+        "bucket": "other"
+      },
+      {
+        "query": "car dealer alirajpur chhotaudepur",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 26.333333333333332,
+        "serpPage": 3,
+        "bucket": "other"
+      },
+      {
+        "query": "best car research platform",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 80,
+        "serpPage": 8,
+        "bucket": "other"
+      },
+      {
+        "query": "car buying decision tool",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 3,
+        "ctr": 0,
+        "position": 82.33333333333333,
+        "serpPage": 9,
+        "bucket": "other"
+      },
+      {
+        "query": "rc name transfer",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/blog",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/consult/pricing",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/introducing-reecomm",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/help",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 6,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "independent car advisor online",
+        "page": "https://www.reecomm.com/consult",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 32,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "car dealer halvad",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 33,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "online car advisor india",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 35.5,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "independent car advisor online",
+        "page": "https://www.reecomm.com/consult/pricing",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 48,
+        "serpPage": 5,
+        "bucket": "other"
+      },
+      {
+        "query": "online car buying expert",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 50,
+        "serpPage": 5,
+        "bucket": "other"
+      },
+      {
+        "query": "trusted car buying advice online",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 54.5,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "expert car buying guidance india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 60,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "rc transfer online",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 2,
+        "ctr": 0,
+        "position": 74.5,
+        "serpPage": 8,
+        "bucket": "other"
+      },
+      {
+        "query": "reccomm",
+        "page": "https://www.reecomm.com/download",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/inspection-process",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "reecomm",
+        "page": "https://www.reecomm.com/vehicle/details/f3ed0b08-6cd7-46d7-9528-ad972a8d6e2e/f3ed0b08-6cd7-46d7-9528-ad972a8d6e2e",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 1,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "buy and sell",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "rc transfer",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "transfer rc from one state to another",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 5,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "2nd hand market",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 6,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "car consultants",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 6,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "repucon",
+        "page": "https://www.reecomm.com/aboutus",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 6,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "rc transfer from one state to another",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 7,
+        "serpPage": 1,
+        "bucket": "other"
+      },
+      {
+        "query": "rameshwar auto consult",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 23,
+        "serpPage": 3,
+        "bucket": "other"
+      },
+      {
+        "query": "buy car in india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 24,
+        "serpPage": 3,
+        "bucket": "other"
+      },
+      {
+        "query": "car consultation",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 28,
+        "serpPage": 3,
+        "bucket": "other"
+      },
+      {
+        "query": "car consultant",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 31,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "re car",
+        "page": "https://www.reecomm.com/aboutus",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 35,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "online car buying help india",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 40,
+        "serpPage": 4,
+        "bucket": "other"
+      },
+      {
+        "query": "smart car advisor india",
+        "page": "https://www.reecomm.com/why-chose-us",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 43,
+        "serpPage": 5,
+        "bucket": "other"
+      },
+      {
+        "query": "do i need to be present in person to sell my car through an online platform in india?",
+        "page": "https://www.reecomm.com/become-seller",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 49,
+        "serpPage": 5,
+        "bucket": "other"
+      },
+      {
+        "query": "car dealer khambat",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 53,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "car rc transfer",
+        "page": "https://www.reecomm.com/blog/rc-transfer-process-used-car-india-2026",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 55,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "car selling websites in india",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 58,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "what documents should i verify before buying a second-hand car in india?",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 59,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "car consultation",
+        "page": "https://www.reecomm.com/consult/pricing",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 60,
+        "serpPage": 6,
+        "bucket": "other"
+      },
+      {
+        "query": "2nd hand car buying guide",
+        "page": "https://www.reecomm.com/blog/how-to-buy-used-car-safely-india",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 61,
+        "serpPage": 7,
+        "bucket": "other"
+      },
+      {
+        "query": "car buying support india",
+        "page": "https://www.reecomm.com/consult/pricing",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 61,
+        "serpPage": 7,
+        "bucket": "other"
+      },
+      {
+        "query": "carwale career",
+        "page": "https://www.reecomm.com/careers",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 61,
+        "serpPage": 7,
+        "bucket": "other"
+      },
+      {
+        "query": "independent car advisor online",
+        "page": "https://www.reecomm.com/",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 91,
+        "serpPage": 10,
+        "bucket": "other"
+      },
+      {
+        "query": "independent car advisor online",
+        "page": "https://www.reecomm.com/consult/discovery",
+        "clicks": 0,
+        "impressions": 1,
+        "ctr": 0,
+        "position": 96,
+        "serpPage": 10,
+        "bucket": "other"
+      }
+    ]
+  },
+  "targetKeywords": [
+    {
+      "keyword": "used creta in palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used creta near me",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used car in palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used cars palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used cars in siddhpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used cars in kanodar",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used cars in visnagar",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used hyundai creta palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used creta kanodar",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used ertiga visnagar",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used toyota cars",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used bikes",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "auto consultant palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "aabad motors palanpur",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    },
+    {
+      "keyword": "used cars",
+      "present": true,
+      "impressions": 3,
+      "clicks": 0,
+      "position": 20.333333333333332,
+      "serpPage": 3,
+      "pages": [
+        "https://www.reecomm.com/search/buy-used-cars-surat"
+      ]
+    },
+    {
+      "keyword": "second hand cars",
+      "present": true,
+      "impressions": 1,
+      "clicks": 0,
+      "position": 36,
+      "serpPage": 4,
+      "pages": [
+        "https://www.reecomm.com/search/buy-used-cars-surat"
+      ]
+    },
+    {
+      "keyword": "buy used car",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "pages": []
+    }
+  ],
+  "consultantChecklist": [
+    {
+      "name": "Aabad Motors",
+      "username": "aabadmotors",
+      "url": "https://www.reecomm.com/auto-consultant/aabadmotors",
+      "present": true,
+      "impressions": 97,
+      "clicks": 8,
+      "position": 2.753623188405797,
+      "serpPage": 1,
+      "sampleQuery": "aabad motors"
+    },
+    {
+      "name": "Alen Motor",
+      "username": "alenmotor",
+      "url": "https://www.reecomm.com/auto-consultant/alenmotor",
+      "present": true,
+      "impressions": 3,
+      "clicks": 1,
+      "position": 1,
+      "serpPage": 1,
+      "sampleQuery": "alen motors"
+    },
+    {
+      "name": "Aman Motors",
+      "username": "amanmotors",
+      "url": "https://www.reecomm.com/auto-consultant/amanmotors",
+      "present": true,
+      "impressions": 1,
+      "clicks": 0,
+      "position": 10,
+      "serpPage": 1,
+      "sampleQuery": "aman motors"
+    },
+    {
+      "name": "Car Bazar Auto Consultant",
+      "username": "carbazar",
+      "url": "https://www.reecomm.com/auto-consultant/carbazar",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Chehar Auto Consultant",
+      "username": "cheharauto",
+      "url": "https://www.reecomm.com/auto-consultant/cheharauto",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Dream Motors",
+      "username": "dreammotors777018",
+      "url": "https://www.reecomm.com/auto-consultant/dreammotors777018",
+      "present": true,
+      "impressions": 8,
+      "clicks": 0,
+      "position": 8.5,
+      "serpPage": 1,
+      "sampleQuery": "dream motors"
+    },
+    {
+      "name": "Elite Motor",
+      "username": "elitemotor",
+      "url": "https://www.reecomm.com/auto-consultant/elitemotor",
+      "present": true,
+      "impressions": 6,
+      "clicks": 0,
+      "position": 1,
+      "serpPage": 1,
+      "sampleQuery": "reecomm"
+    },
+    {
+      "name": "Falak Car Auto Consultant",
+      "username": "falakcar",
+      "url": "https://www.reecomm.com/auto-consultant/falakcar",
+      "present": true,
+      "impressions": 4,
+      "clicks": 1,
+      "position": 8,
+      "serpPage": 1,
+      "sampleQuery": "falak car"
+    },
+    {
+      "name": "Fortune Auto Consultant",
+      "username": "fortuneauto683178",
+      "url": "https://www.reecomm.com/auto-consultant/fortuneauto683178",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Gajanand Auto Consultant",
+      "username": "gajanandautoconsultant",
+      "url": "https://www.reecomm.com/auto-consultant/gajanandautoconsultant",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Janvi Motors",
+      "username": "janvimotors",
+      "url": "https://www.reecomm.com/auto-consultant/janvimotors",
+      "present": true,
+      "impressions": 14,
+      "clicks": 1,
+      "position": 8.785714285714285,
+      "serpPage": 1,
+      "sampleQuery": "janvi motors"
+    },
+    {
+      "name": "Jay Hanuman Auto Consultant",
+      "username": "jayhanumanautoconsultant",
+      "url": "https://www.reecomm.com/auto-consultant/jayhanumanautoconsultant",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Kz Auto Consultant",
+      "username": "kzautoconsultant",
+      "url": "https://www.reecomm.com/auto-consultant/kzautoconsultant",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Mira Auto Consultant",
+      "username": "miraautoconsult",
+      "url": "https://www.reecomm.com/auto-consultant/miraautoconsult",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Ms Auto Consultant",
+      "username": "msautoconsultant",
+      "url": "https://www.reecomm.com/auto-consultant/msautoconsultant",
+      "present": true,
+      "impressions": 4,
+      "clicks": 0,
+      "position": 1,
+      "serpPage": 1,
+      "sampleQuery": "reecomm"
+    },
+    {
+      "name": "My India Auto Consultant",
+      "username": "myindiaautoconsult",
+      "url": "https://www.reecomm.com/auto-consultant/myindiaautoconsult",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Naam Motors",
+      "username": "naammotors663505",
+      "url": "https://www.reecomm.com/auto-consultant/naammotors663505",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "New Prince Motor",
+      "username": "newprincemotor",
+      "url": "https://www.reecomm.com/auto-consultant/newprincemotor",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "New Tiranga Car Care Auto Consultant",
+      "username": "newtirangacarcare",
+      "url": "https://www.reecomm.com/auto-consultant/newtirangacarcare",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Raj Auto Consultant",
+      "username": "mahesh",
+      "url": "https://www.reecomm.com/auto-consultant/mahesh",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Royal Motors",
+      "username": "royalmotors373813",
+      "url": "https://www.reecomm.com/auto-consultant/royalmotors373813",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Safar Cars Auto Consultant",
+      "username": "safarcars",
+      "url": "https://www.reecomm.com/auto-consultant/safarcars",
+      "present": true,
+      "impressions": 1,
+      "clicks": 0,
+      "position": 10,
+      "serpPage": 1,
+      "sampleQuery": "safar cars"
+    },
+    {
+      "name": "Safeline Auto Consultant",
+      "username": "safelineauto",
+      "url": "https://www.reecomm.com/auto-consultant/safelineauto",
+      "present": true,
+      "impressions": 1,
+      "clicks": 0,
+      "position": 1,
+      "serpPage": 1,
+      "sampleQuery": "reecomm"
+    },
+    {
+      "name": "Sahara Motor",
+      "username": "saharamotor",
+      "url": "https://www.reecomm.com/auto-consultant/saharamotor",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Sairam Auto Consultant Unjha",
+      "username": "sairamautoconsultunjha",
+      "url": "https://www.reecomm.com/auto-consultant/sairamautoconsultunjha",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Sar Hind Auto Consultant",
+      "username": "sarhind",
+      "url": "https://www.reecomm.com/auto-consultant/sarhind",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Sheth Motors",
+      "username": "shethmotors",
+      "url": "https://www.reecomm.com/auto-consultant/shethmotors",
+      "present": true,
+      "impressions": 2,
+      "clicks": 0,
+      "position": 12,
+      "serpPage": 2,
+      "sampleQuery": "sheth motors"
+    },
+    {
+      "name": "Shiv Krupa Auto Consultant",
+      "username": "shivkrupaautoconsult",
+      "url": "https://www.reecomm.com/auto-consultant/shivkrupaautoconsult",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Shree Lakhapir Auto Consultant",
+      "username": "shreelakhapir",
+      "url": "https://www.reecomm.com/auto-consultant/shreelakhapir",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Shree Motors",
+      "username": "shreemotors",
+      "url": "https://www.reecomm.com/auto-consultant/shreemotors",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Sigma Motors",
+      "username": "sigmamotors",
+      "url": "https://www.reecomm.com/auto-consultant/sigmamotors",
+      "present": true,
+      "impressions": 3,
+      "clicks": 0,
+      "position": 13.333333333333334,
+      "serpPage": 2,
+      "sampleQuery": "sigma motors"
+    },
+    {
+      "name": "Sk Motors",
+      "username": "skmotors",
+      "url": "https://www.reecomm.com/auto-consultant/skmotors",
+      "present": true,
+      "impressions": 1,
+      "clicks": 0,
+      "position": 2,
+      "serpPage": 1,
+      "sampleQuery": "s k motors"
+    },
+    {
+      "name": "Super Auto Consultant",
+      "username": "superautoconsult",
+      "url": "https://www.reecomm.com/auto-consultant/superautoconsult",
+      "present": false,
+      "impressions": 0,
+      "clicks": 0,
+      "position": null,
+      "serpPage": null,
+      "sampleQuery": null
+    },
+    {
+      "name": "Yesauto Auto Consultant",
+      "username": "yesauto",
+      "url": "https://www.reecomm.com/auto-consultant/yesauto",
+      "present": true,
+      "impressions": 23,
+      "clicks": 0,
+      "position": 1,
+      "serpPage": 1,
+      "sampleQuery": "reecomm"
+    }
+  ]
+}

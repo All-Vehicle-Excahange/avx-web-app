@@ -346,12 +346,15 @@ export async function getStaticProps(context) {
     primaryImageOfPage: {
       "@type": "ImageObject",
       url: storefrontImageUrl,
-      caption: `${seoBuilt.displayName || displayName} on Reecomm`,
+      caption: `${seoBuilt.primaryName || seoBuilt.displayName || displayName} on Reecomm`,
     },
     image: storefrontImageUrl,
     mainEntity: {
       "@type": "AutoDealer",
-      name: `${seoBuilt.displayName || displayName} on Reecomm`,
+      name: seoBuilt.primaryName || seoBuilt.displayName || displayName,
+      ...(seoBuilt.alternateNames?.length
+        ? { alternateName: seoBuilt.alternateNames }
+        : {}),
       url: currentUrl,
       ...(logoUrl ? { logo: logoUrl, image: logoUrl } : {}),
     },

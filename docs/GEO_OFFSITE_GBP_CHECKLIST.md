@@ -10,11 +10,11 @@ Canonical host everywhere: **`https://www.reecomm.com`** (not apex-only, not sta
 
 | Step | Detail | Done |
 |------|--------|------|
-| Claim / verify | Reecomm Technologies Pvt. Ltd. — Chhapi / Palanpur HQ | ☐ |
+| Claim / verify | Reecomm Technologies Pvt. Ltd. — Chhapi / Palanpur HQ | ☐ Manual in Google Business |
 | Primary category | Used Car Dealer or Automobile Consultant (match reality) | ☐ |
 | Service area | All cities you actively serve (Gujarat first; expand with inventory) | ☐ |
 | Website | `https://www.reecomm.com` + deep link to strongest city hub (e.g. Palanpur cars) | ☐ |
-| NAP match | Same name, phone, address as site footer / contact / Organization schema | ☐ |
+| NAP match | Same name, phone, address as site footer / contact / Organization schema | ☑ On-site aligned — see [`GEO_OFFSITE_EXECUTION.md`](./GEO_OFFSITE_EXECUTION.md) |
 | Photos | 5+ exterior, inventory, team | ☐ |
 | Posts | Weekly inventory or tip posts linking to `/search/...` landings | ☐ |
 

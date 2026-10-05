@@ -811,7 +811,8 @@ export function buildSearchLandingOrgSchema({
     telephone: "+91-84601-60697",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Chhapi",
+      streetAddress:
+        "First Floor, Loriya Complex, Part B/D, Survey No 268/2, Chhapi, Palanpur Ahmedabad Highway",
       addressLocality: "Palanpur",
       addressRegion: "Gujarat",
       postalCode: "385210",

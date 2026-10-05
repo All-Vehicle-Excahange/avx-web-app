@@ -13,16 +13,19 @@ Refresh inventory targets monthly from `public/seo_popular_links.json`.
 
 ## Calendar
 
-| Week | Draft title | Primary money URL | Secondary links |
-|------|-------------|-------------------|-----------------|
-| 1 | Used Hyundai Creta in Palanpur — Price & Buying Checklist | `/search/buy-used-hyundai-creta-cars-palanpur` | `/search/buy-used-cars-palanpur`, Aabad Motors storefront |
-| 2 | How to Buy a Used Car Safely in North Gujarat | `/search/buy-used-cars-palanpur` | Siddhpur / Visnagar / Kanodar hubs |
-| 3 | Used Maruti Ertiga in Visnagar — What to Check | `/search/buy-used-maruti-suzuki-ertiga-cars-visnagar` | `/search/buy-used-cars-visnagar` |
-| 4 | Used Bikes in Ahmedabad — Budget Guide | `/search/buy-used-two-wheelers-ahmedabad` | `/search/buy-used-two-wheelers` |
-| 5 | Used Santro Xing in Siddhpur — Fair Price Range | `/search/buy-used-hyundai-santro-xing-cars-siddhpur` | `/search/buy-used-cars-siddhpur` |
-| 6 | Auto Consultants in Palanpur — How Reecomm Storefronts Work | `/auto-consultant/aabadmotors` | `/search/buy-used-cars-palanpur`, `/reecomm-works` |
-| 7 | Used Swift in Ahmedabad — Variants & Inspection | `/search/buy-used-maruti-suzuki-swift-cars-ahmedabad` | `/search/buy-used-cars-ahmedabad` |
-| 8 | Used Honda City in Surat — Buyer’s Shortlist | `/search/buy-used-honda-city-cars-surat` | `/search/buy-used-cars-surat` |
+| Week | Draft title | Primary money URL | Status |
+|------|-------------|-------------------|--------|
+| 1 | Used Hyundai Creta in Palanpur — Price & Buying Checklist | `/search/buy-used-hyundai-creta-cars-palanpur` | Shipped `/blog/used-hyundai-creta-palanpur-price-buying-checklist` |
+| 2 | How to Buy a Used Car Safely in North Gujarat | `/search/buy-used-cars-palanpur` | Shipped `/blog/how-to-buy-used-car-safely-north-gujarat` |
+| 3 | Used Maruti Ertiga in Visnagar — What to Check | `/search/buy-used-maruti-suzuki-ertiga-cars-visnagar` | Shipped `/blog/used-maruti-ertiga-visnagar-what-to-check` |
+| 4 | Used Bikes in Ahmedabad — Budget Guide | `/search/buy-used-two-wheelers-ahmedabad` | Shipped `/blog/used-bikes-ahmedabad-budget-guide` |
+| 5 | Used Santro Xing in Siddhpur — Fair Price Range | `/search/buy-used-hyundai-santro-xing-cars-siddhpur` | Shipped `/blog/used-santro-xing-siddhpur-fair-price` |
+| 6 | Auto Consultants in Palanpur — How Reecomm Storefronts Work | `/auto-consultant/aabadmotors` | Shipped `/blog/auto-consultants-palanpur-reecomm-storefronts` |
+| 7 | Used Swift in Ahmedabad — Variants & Inspection | `/search/buy-used-maruti-suzuki-swift-cars-ahmedabad` | Shipped `/blog/used-swift-ahmedabad-variants-inspection` |
+| 8 | Used Honda City in Surat — Buyer’s Shortlist | `/search/buy-used-honda-city-cars-surat` | Shipped `/blog/used-honda-city-surat-buyers-shortlist` |
+
+Source posts: [`src/components/features/Blog/geoCalendarPosts.js`](../src/components/features/Blog/geoCalendarPosts.js)
+
 
 ## After publish
 

@@ -9,6 +9,7 @@ const { google } = require("googleapis");
 
 const BASE_URL = "https://www.reecomm.com";
 
+/** GEO money pages from docs/GSC_INDEXING_TRIAGE.md + seoTargetKeywords matrix */
 const TOP_LANDINGS = [
   "/search/buy-used-cars",
   "/search/buy-used-two-wheelers",
@@ -22,11 +23,25 @@ const TOP_LANDINGS = [
   "/search/buy-used-cars-kanodar",
   "/search/buy-used-cars-visnagar",
   "/search/buy-used-cars-ahmedabad",
+  "/search/buy-used-cars-surat",
   "/search/buy-used-hyundai-cars-palanpur",
+  "/search/buy-used-toyota-cars",
   "/search/buy-used-honda-amaze-cars-palanpur",
+  "/search/buy-used-honda-city-cars-surat",
   "/search/buy-used-maruti-suzuki-ertiga-cars-visnagar",
+  "/search/buy-used-maruti-suzuki-swift-cars-ahmedabad",
+  "/search/buy-used-maruti-suzuki-wagon-r-10-cars-palanpur",
   "/search/buy-used-hyundai-santro-xing-cars-siddhpur",
+  "/search/buy-used-two-wheelers-ahmedabad",
   "/auto-consultant/aabadmotors",
+  "/blog/used-hyundai-creta-palanpur-price-buying-checklist",
+  "/blog/how-to-buy-used-car-safely-north-gujarat",
+  "/blog/used-maruti-ertiga-visnagar-what-to-check",
+  "/blog/used-bikes-ahmedabad-budget-guide",
+  "/blog/used-santro-xing-siddhpur-fair-price",
+  "/blog/auto-consultants-palanpur-reecomm-storefronts",
+  "/blog/used-swift-ahmedabad-variants-inspection",
+  "/blog/used-honda-city-surat-buyers-shortlist",
   "/api/sitemap/search-pages.xml",
   "/api/sitemap/geo-brands.xml",
   "/sitemap.xml",

@@ -56181,7 +56181,7 @@
     "keywords": [
       "mahindra",
       "thar",
-      "used thar",
+      "used car",
       "used mahindra thar"
     ],
     "type": "vehicle_filter",
@@ -56669,18 +56669,18 @@
   },
   {
     "id": "filter_buy_used_mahindra_thar_cars_siddhpur",
-    "title": "Used Mahindra Thar in Siddhpur",
+    "title": "Used Mahindra Thar Cars in Siddhpur",
     "keywords": [
       "mahindra",
       "thar",
       "siddhpur",
+      "used mahindra thar",
       "used thar in siddhpur",
       "used mahindra thar in siddhpur",
       "used thar near me",
-      "used thar near siddhpur",
+      "used mahindra near siddhpur",
       "used mahindra thar near me",
       "second hand thar siddhpur",
-      "thar in siddhpur",
       "thar near me"
     ],
     "type": "vehicle_filter",
@@ -64888,6 +64888,697 @@
     }
   },
   {
+    "id": "filter_buy_used_maruti_suzuki_cars_unjha",
+    "title": "Used Maruti Suzuki Cars in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "unjha",
+      "used maruti suzuki in unjha",
+      "used maruti suzuki cars in unjha",
+      "used maruti suzuki near me",
+      "used maruti suzuki near unjha",
+      "second hand maruti suzuki unjha"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_unjha",
+    "title": "Used Maruti Suzuki Swift in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "swift",
+      "unjha",
+      "used swift in unjha",
+      "used maruti suzuki swift in unjha",
+      "used swift near me",
+      "used swift near unjha",
+      "used maruti suzuki swift near me",
+      "second hand swift unjha",
+      "swift in unjha",
+      "swift near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "swift",
+      "gujarat",
+      "used swift in gujarat",
+      "used maruti suzuki swift in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_eeco_cars",
+    "title": "Used Maruti Suzuki Eeco Cars",
+    "keywords": [
+      "maruti suzuki",
+      "eeco",
+      "used eeco",
+      "used maruti suzuki eeco"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Eeco",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-eeco-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_eeco_cars_unjha",
+    "title": "Used Maruti Suzuki Eeco in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "eeco",
+      "unjha",
+      "used eeco in unjha",
+      "used maruti suzuki eeco in unjha",
+      "used eeco near me",
+      "used eeco near unjha",
+      "used maruti suzuki eeco near me",
+      "second hand eeco unjha",
+      "eeco in unjha",
+      "eeco near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Eeco",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-eeco-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_eeco_cars_gujarat",
+    "title": "Used Maruti Suzuki Eeco in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "eeco",
+      "gujarat",
+      "used eeco in gujarat",
+      "used maruti suzuki eeco in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Eeco",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-eeco-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_venue_cars",
+    "title": "Used Hyundai VENUE Cars",
+    "keywords": [
+      "hyundai",
+      "venue",
+      "used venue",
+      "used hyundai venue"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "VENUE",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-venue-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_cars_unjha",
+    "title": "Used Hyundai Cars in Unjha",
+    "keywords": [
+      "hyundai",
+      "unjha",
+      "used hyundai in unjha",
+      "used hyundai cars in unjha",
+      "used hyundai near me",
+      "used hyundai near unjha",
+      "second hand hyundai unjha"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_venue_cars_unjha",
+    "title": "Used Hyundai VENUE in Unjha",
+    "keywords": [
+      "hyundai",
+      "venue",
+      "unjha",
+      "used venue in unjha",
+      "used hyundai venue in unjha",
+      "used venue near me",
+      "used venue near unjha",
+      "used hyundai venue near me",
+      "second hand venue unjha",
+      "venue in unjha",
+      "venue near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "VENUE",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-venue-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_venue_cars_gujarat",
+    "title": "Used Hyundai VENUE in Gujarat",
+    "keywords": [
+      "hyundai",
+      "venue",
+      "gujarat",
+      "used venue in gujarat",
+      "used hyundai venue in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "VENUE",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-venue-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_unjha",
+    "title": "Used Maruti Suzuki Baleno in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "baleno",
+      "unjha",
+      "used baleno in unjha",
+      "used maruti suzuki baleno in unjha",
+      "used baleno near me",
+      "used baleno near unjha",
+      "used maruti suzuki baleno near me",
+      "second hand baleno unjha",
+      "baleno in unjha",
+      "baleno near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-baleno-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_gujarat",
+    "title": "Used Maruti Suzuki Baleno in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "baleno",
+      "gujarat",
+      "used baleno in gujarat",
+      "used maruti suzuki baleno in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-baleno-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_stingray_cars",
+    "title": "Used Maruti Suzuki Wagon R Stingray Cars",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r stingray",
+      "used wagon r stingray",
+      "used maruti suzuki wagon r stingray",
+      "wagon"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R Stingray",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-stingray-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_stingray_cars_unjha",
+    "title": "Used Maruti Suzuki Wagon R Stingray in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r stingray",
+      "unjha",
+      "used wagon r stingray in unjha",
+      "used maruti suzuki wagon r stingray in unjha",
+      "used wagon r stingray near me",
+      "used wagon r stingray near unjha",
+      "used maruti suzuki wagon r stingray near me",
+      "second hand wagon r stingray unjha",
+      "wagon r stingray in unjha",
+      "wagon in unjha",
+      "wagon r stingray near me",
+      "wagon near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R Stingray",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-stingray-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_stingray_cars_gujarat",
+    "title": "Used Maruti Suzuki Wagon R Stingray in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r stingray",
+      "gujarat",
+      "used wagon r stingray in gujarat",
+      "used maruti suzuki wagon r stingray in gujarat",
+      "wagon"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R Stingray",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-stingray-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_ertiga_cars",
+    "title": "Used Maruti Suzuki Ertiga Cars",
+    "keywords": [
+      "maruti suzuki",
+      "ertiga",
+      "used ertiga",
+      "used maruti suzuki ertiga"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Ertiga",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-ertiga-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_cars_tharad",
+    "title": "Used Maruti Suzuki Cars in Tharad",
+    "keywords": [
+      "maruti suzuki",
+      "tharad",
+      "used maruti suzuki in tharad",
+      "used maruti suzuki cars in tharad",
+      "used maruti suzuki near me",
+      "used maruti suzuki near tharad",
+      "second hand maruti suzuki tharad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "city": "Tharad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-cars-tharad"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_tharad",
+    "title": "Used Maruti Suzuki Ertiga in Tharad",
+    "keywords": [
+      "maruti suzuki",
+      "ertiga",
+      "tharad",
+      "used ertiga in tharad",
+      "used maruti suzuki ertiga in tharad",
+      "used ertiga near me",
+      "used ertiga near tharad",
+      "used maruti suzuki ertiga near me",
+      "second hand ertiga tharad",
+      "ertiga in tharad",
+      "ertiga near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Ertiga",
+      "city": "Tharad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-ertiga-cars-tharad"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_gujarat",
+    "title": "Used Maruti Suzuki Ertiga in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "ertiga",
+      "gujarat",
+      "used ertiga in gujarat",
+      "used maruti suzuki ertiga in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Ertiga",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-ertiga-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
+    "title": "Used Maruti Suzuki Swift Dzire Cars",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "used swift dzire",
+      "used maruti suzuki swift dzire",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
+    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "palanpur",
+      "used swift dzire in palanpur",
+      "used maruti suzuki swift dzire in palanpur",
+      "used swift dzire near me",
+      "used swift dzire near palanpur",
+      "used maruti suzuki swift dzire near me",
+      "second hand swift dzire palanpur",
+      "swift dzire in palanpur",
+      "swift in palanpur",
+      "swift dzire near me",
+      "swift near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "gujarat",
+      "used swift dzire in gujarat",
+      "used maruti suzuki swift dzire in gujarat",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_new_santro_cars",
+    "title": "Used Hyundai NEW SANTRO Cars",
+    "keywords": [
+      "hyundai",
+      "new santro",
+      "used new santro",
+      "used hyundai new santro",
+      "new",
+      "santro",
+      "used santro"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "NEW SANTRO",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-new-santro-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_new_santro_cars_unjha",
+    "title": "Used Hyundai NEW SANTRO in Unjha",
+    "keywords": [
+      "hyundai",
+      "new santro",
+      "unjha",
+      "used new santro in unjha",
+      "used hyundai new santro in unjha",
+      "used new santro near me",
+      "used new santro near unjha",
+      "used hyundai new santro near me",
+      "second hand new santro unjha",
+      "new santro in unjha",
+      "new in unjha",
+      "santro in unjha",
+      "used santro in unjha",
+      "new santro near me",
+      "new near me",
+      "santro near me",
+      "used santro near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "NEW SANTRO",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-new-santro-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_new_santro_cars_gujarat",
+    "title": "Used Hyundai NEW SANTRO in Gujarat",
+    "keywords": [
+      "hyundai",
+      "new santro",
+      "gujarat",
+      "used new santro in gujarat",
+      "used hyundai new santro in gujarat",
+      "new",
+      "santro",
+      "used santro"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "NEW SANTRO",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-new-santro-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_elite_i20_cars",
+    "title": "Used Hyundai Elite i20 Cars",
+    "keywords": [
+      "hyundai",
+      "elite i20",
+      "used elite i20",
+      "used hyundai elite i20",
+      "elite"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Elite i20",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-elite-i20-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_elite_i20_cars_unjha",
+    "title": "Used Hyundai Elite i20 in Unjha",
+    "keywords": [
+      "hyundai",
+      "elite i20",
+      "unjha",
+      "used elite i20 in unjha",
+      "used hyundai elite i20 in unjha",
+      "used elite i20 near me",
+      "used elite i20 near unjha",
+      "used hyundai elite i20 near me",
+      "second hand elite i20 unjha",
+      "elite i20 in unjha",
+      "elite in unjha",
+      "elite i20 near me",
+      "elite near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Elite i20",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-elite-i20-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_elite_i20_cars_gujarat",
+    "title": "Used Hyundai Elite i20 in Gujarat",
+    "keywords": [
+      "hyundai",
+      "elite i20",
+      "gujarat",
+      "used elite i20 in gujarat",
+      "used hyundai elite i20 in gujarat",
+      "elite"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Elite i20",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-elite-i20-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_unjha",
+    "title": "Used Maruti Suzuki Swift Dzire in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "unjha",
+      "used swift dzire in unjha",
+      "used maruti suzuki swift dzire in unjha",
+      "used swift dzire near me",
+      "used swift dzire near unjha",
+      "used maruti suzuki swift dzire near me",
+      "second hand swift dzire unjha",
+      "swift dzire in unjha",
+      "swift in unjha",
+      "swift dzire near me",
+      "swift near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars",
+    "title": "Used Hyundai GRAND I10 NIOS Cars",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "used grand i10 nios",
+      "used hyundai grand i10 nios",
+      "grand"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_unjha",
+    "title": "Used Hyundai GRAND I10 NIOS in Unjha",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "unjha",
+      "used grand i10 nios in unjha",
+      "used hyundai grand i10 nios in unjha",
+      "used grand i10 nios near me",
+      "used grand i10 nios near unjha",
+      "used hyundai grand i10 nios near me",
+      "second hand grand i10 nios unjha",
+      "grand i10 nios in unjha",
+      "grand in unjha",
+      "grand i10 nios near me",
+      "grand near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_gujarat",
+    "title": "Used Hyundai GRAND I10 NIOS in Gujarat",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "gujarat",
+      "used grand i10 nios in gujarat",
+      "used hyundai grand i10 nios in gujarat",
+      "grand"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars",
     "title": "Used Maruti Suzuki Wagon R 1.0 Cars",
     "keywords": [
@@ -65252,42 +65943,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_swift_cars_gujarat",
-    "title": "Used Maruti Suzuki Swift in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "swift",
-      "gujarat",
-      "used swift in gujarat",
-      "used maruti suzuki swift in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_ertiga_cars",
-    "title": "Used Maruti Suzuki Ertiga Cars",
-    "keywords": [
-      "maruti suzuki",
-      "ertiga",
-      "used ertiga",
-      "used maruti suzuki ertiga"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Ertiga",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-ertiga-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_ertiga_cars_siddhpur",
     "title": "Used Maruti Suzuki Ertiga in Siddhpur",
     "keywords": [
@@ -65310,25 +65965,6 @@
       "city": "Siddhpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-ertiga-cars-siddhpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_gujarat",
-    "title": "Used Maruti Suzuki Ertiga in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "ertiga",
-      "gujarat",
-      "used ertiga in gujarat",
-      "used maruti suzuki ertiga in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Ertiga",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-ertiga-cars-gujarat"
     }
   },
   {
@@ -66045,26 +66681,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_cars_unjha",
-    "title": "Used Maruti Suzuki Cars in Unjha",
-    "keywords": [
-      "maruti suzuki",
-      "unjha",
-      "used maruti suzuki in unjha",
-      "used maruti suzuki cars in unjha",
-      "used maruti suzuki near me",
-      "used maruti suzuki near unjha",
-      "second hand maruti suzuki unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-cars-unjha"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_new_wagon_r_cars_unjha",
     "title": "Used Maruti Suzuki New Wagon-R in Unjha",
     "keywords": [
@@ -66239,26 +66855,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-innova-crysta-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_cars_unjha",
-    "title": "Used Hyundai Cars in Unjha",
-    "keywords": [
-      "hyundai",
-      "unjha",
-      "used hyundai in unjha",
-      "used hyundai cars in unjha",
-      "used hyundai near me",
-      "used hyundai near unjha",
-      "second hand hyundai unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-cars-unjha"
     }
   },
   {
@@ -66645,24 +67241,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
-    "title": "Used Maruti Suzuki Swift Dzire Cars",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "used swift dzire",
-      "used maruti suzuki swift dzire",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_jalor",
     "title": "Used Maruti Suzuki Swift Dzire in Jalor",
     "keywords": [
@@ -66924,67 +67502,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_scorpio_cars_tharad",
-    "title": "Used Mahindra Scorpio in Tharad",
-    "keywords": [
-      "mahindra",
-      "scorpio",
-      "tharad",
-      "used scorpio in tharad",
-      "used mahindra scorpio in tharad",
-      "used scorpio near me",
-      "used scorpio near tharad",
-      "used mahindra scorpio near me",
-      "second hand scorpio tharad",
-      "scorpio in tharad",
-      "scorpio near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Scorpio",
-      "city": "Tharad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-scorpio-cars-tharad"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_scorpio_cars_gujarat",
-    "title": "Used Mahindra Scorpio in Gujarat",
-    "keywords": [
-      "mahindra",
-      "scorpio",
-      "gujarat",
-      "used scorpio in gujarat",
-      "used mahindra scorpio in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Scorpio",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-scorpio-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_eeco_cars",
-    "title": "Used Maruti Suzuki Eeco Cars",
-    "keywords": [
-      "maruti suzuki",
-      "eeco",
-      "used eeco",
-      "used maruti suzuki eeco"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Eeco",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-eeco-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_eeco_cars_palanpur",
     "title": "Used Maruti Suzuki Eeco in Palanpur",
     "keywords": [
@@ -67007,64 +67524,6 @@
       "city": "Palanpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-eeco-cars-palanpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_eeco_cars_gujarat",
-    "title": "Used Maruti Suzuki Eeco in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "eeco",
-      "gujarat",
-      "used eeco in gujarat",
-      "used maruti suzuki eeco in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Eeco",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-eeco-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_grand_i10_cars_gujarat",
-    "title": "Used Hyundai Grand i10 in Gujarat",
-    "keywords": [
-      "hyundai",
-      "grand i10",
-      "gujarat",
-      "used grand i10 in gujarat",
-      "used hyundai grand i10 in gujarat",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Grand i10",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_baleno_cars_gujarat",
-    "title": "Used Maruti Suzuki Baleno in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "baleno",
-      "gujarat",
-      "used baleno in gujarat",
-      "used maruti suzuki baleno in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Baleno",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-baleno-cars-gujarat"
     }
   },
   {
@@ -67092,53 +67551,6 @@
       "city": "Palanpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-vitara-brezza-cars-palanpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
-    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "palanpur",
-      "used swift dzire in palanpur",
-      "used maruti suzuki swift dzire in palanpur",
-      "used swift dzire near me",
-      "used swift dzire near palanpur",
-      "used maruti suzuki swift dzire near me",
-      "second hand swift dzire palanpur",
-      "swift dzire in palanpur",
-      "swift in palanpur",
-      "swift dzire near me",
-      "swift near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
-    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "gujarat",
-      "used swift dzire in gujarat",
-      "used maruti suzuki swift dzire in gujarat",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
     }
   },
   {
@@ -67361,6 +67773,25 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-bolero-neo-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_cars_gujarat",
+    "title": "Used Mahindra Scorpio in Gujarat",
+    "keywords": [
+      "mahindra",
+      "scorpio",
+      "gujarat",
+      "used scorpio in gujarat",
+      "used mahindra scorpio in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Scorpio",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-cars-gujarat"
     }
   },
   {
@@ -67662,40 +68093,23 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_thar_cars_gujarat",
-    "title": "Used Mahindra Thar in Gujarat",
-    "keywords": [
-      "mahindra",
-      "thar",
-      "gujarat",
-      "used thar in gujarat",
-      "used mahindra thar in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Thar",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-thar-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_elite_i20_cars",
-    "title": "Used Hyundai Elite i20 Cars",
+    "id": "filter_buy_used_hyundai_grand_i10_cars_gujarat",
+    "title": "Used Hyundai Grand i10 in Gujarat",
     "keywords": [
       "hyundai",
-      "elite i20",
-      "used elite i20",
-      "used hyundai elite i20",
-      "elite"
+      "grand i10",
+      "gujarat",
+      "used grand i10 in gujarat",
+      "used hyundai grand i10 in gujarat",
+      "grand"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Hyundai",
-      "modelName": "Elite i20",
+      "modelName": "Grand i10",
+      "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-elite-i20-cars"
+      "slug": "buy-used-hyundai-grand-i10-cars-gujarat"
     }
   },
   {
@@ -67723,26 +68137,6 @@
       "city": "Palanpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-elite-i20-cars-palanpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_elite_i20_cars_gujarat",
-    "title": "Used Hyundai Elite i20 in Gujarat",
-    "keywords": [
-      "hyundai",
-      "elite i20",
-      "gujarat",
-      "used elite i20 in gujarat",
-      "used hyundai elite i20 in gujarat",
-      "elite"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Elite i20",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-elite-i20-cars-gujarat"
     }
   },
   {
@@ -67855,24 +68249,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_grand_i10_nios_cars",
-    "title": "Used Hyundai GRAND I10 NIOS Cars",
-    "keywords": [
-      "hyundai",
-      "grand i10 nios",
-      "used grand i10 nios",
-      "used hyundai grand i10 nios",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "GRAND I10 NIOS",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-nios-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_grand_i10_nios_cars_kanodar",
     "title": "Used Hyundai GRAND I10 NIOS in Kanodar",
     "keywords": [
@@ -67897,26 +68273,6 @@
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-grand-i10-nios-cars-kanodar"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_gujarat",
-    "title": "Used Hyundai GRAND I10 NIOS in Gujarat",
-    "keywords": [
-      "hyundai",
-      "grand i10 nios",
-      "gujarat",
-      "used grand i10 nios in gujarat",
-      "used hyundai grand i10 nios in gujarat",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "GRAND I10 NIOS",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-nios-cars-gujarat"
     }
   },
   {
@@ -94750,42 +95106,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_new_santro_cars",
-    "title": "Hyundai New Santro",
-    "keywords": [
-      "used car",
-      "car",
-      "hyundai",
-      "new santro",
-      "new",
-      "santro"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Hyundai",
-      "modelName": "New Santro",
-      "slug": "buy-used-hyundai-new-santro-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_venue_cars",
-    "title": "Hyundai Venue",
-    "keywords": [
-      "used car",
-      "car",
-      "hyundai",
-      "venue"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Hyundai",
-      "modelName": "Venue",
-      "slug": "buy-used-hyundai-venue-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_sonata_transform_cars",
     "title": "Hyundai Sonata Transform",
     "keywords": [
@@ -95504,27 +95824,6 @@
       "makerName": "Maruti Suzuki",
       "modelName": "1000",
       "slug": "buy-used-maruti-suzuki-1000-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_wagon_r_stingray_cars",
-    "title": "Maruti Suzuki Wagon R Stingray",
-    "keywords": [
-      "used car",
-      "car",
-      "maruti suzuki",
-      "wagon r stingray",
-      "maruti",
-      "suzuki",
-      "wagon",
-      "stingray"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Maruti Suzuki",
-      "modelName": "Wagon R Stingray",
-      "slug": "buy-used-maruti-suzuki-wagon-r-stingray-cars"
     }
   },
   {
@@ -104769,6 +105068,25 @@
     }
   },
   {
+    "id": "filter_buy_used_mahindra_thar_cars_gujarat",
+    "title": "Used Mahindra Thar Cars in Gujarat",
+    "keywords": [
+      "used car",
+      "car",
+      "mahindra",
+      "thar",
+      "gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "city": "Gujarat",
+      "slug": "buy-used-mahindra-thar-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_mahindra_thar_cars_tamil_nadu",
     "title": "Used Mahindra Thar Cars in Tamil Nadu",
     "keywords": [
@@ -109266,18 +109584,18 @@
     }
   },
   {
-    "id": "filter_buy_used_cars_himatnagar",
-    "title": "Used Cars in Himatnagar",
+    "id": "filter_buy_used_cars_unjha",
+    "title": "Used Cars in Unjha",
     "keywords": [
       "used car",
       "car",
-      "himatnagar"
+      "unjha"
     ],
     "type": "vehicle_filter",
     "params": {
       "vehicleType": "FOUR_WHEELER",
-      "city": "Himatnagar",
-      "slug": "buy-used-cars-himatnagar"
+      "city": "Unjha",
+      "slug": "buy-used-cars-unjha"
     }
   },
   {
@@ -109296,6 +109614,36 @@
     }
   },
   {
+    "id": "filter_buy_used_cars_palanpur",
+    "title": "Used Cars in Palanpur",
+    "keywords": [
+      "used car",
+      "car",
+      "palanpur"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "city": "Palanpur",
+      "slug": "buy-used-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_cars_himatnagar",
+    "title": "Used Cars in Himatnagar",
+    "keywords": [
+      "used car",
+      "car",
+      "himatnagar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "city": "Himatnagar",
+      "slug": "buy-used-cars-himatnagar"
+    }
+  },
+  {
     "id": "filter_buy_used_cars_siddhpur",
     "title": "Used Cars in Siddhpur",
     "keywords": [
@@ -109308,21 +109656,6 @@
       "vehicleType": "FOUR_WHEELER",
       "city": "Siddhpur",
       "slug": "buy-used-cars-siddhpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_cars_unjha",
-    "title": "Used Cars in Unjha",
-    "keywords": [
-      "used car",
-      "car",
-      "unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "city": "Unjha",
-      "slug": "buy-used-cars-unjha"
     }
   },
   {
@@ -109353,21 +109686,6 @@
       "vehicleType": "FOUR_WHEELER",
       "city": "Kanodar",
       "slug": "buy-used-cars-kanodar"
-    }
-  },
-  {
-    "id": "filter_buy_used_cars_palanpur",
-    "title": "Used Cars in Palanpur",
-    "keywords": [
-      "used car",
-      "car",
-      "palanpur"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "city": "Palanpur",
-      "slug": "buy-used-cars-palanpur"
     }
   },
   {

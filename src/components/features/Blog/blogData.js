@@ -1,3 +1,5 @@
+import { GEO_CALENDAR_POSTS } from "./geoCalendarPosts";
+
 export const MOCK_POSTS = [
   {
     id: 1,
@@ -1715,6 +1717,8 @@ export const MOCK_POSTS = [
     date: "1 September 2026",
   },
 ];
+
+MOCK_POSTS.push(...GEO_CALENDAR_POSTS);
 
 export const CATEGORIES = [
   "All",
