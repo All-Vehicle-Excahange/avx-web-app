@@ -35,6 +35,8 @@ export default function CallSellerPopup({
   onClose,
   vehicle,
   summary,
+  isStorefrontCall = false,
+  storefrontPhone = null,
 }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -44,7 +46,7 @@ export default function CallSellerPopup({
   const vehicleId = vehicle?.id || vehicle?._id;
   const vehicleOwnerRole =
     vehicle?.vehicleOwner?.userRole || vehicle?.sellerType || "USER";
-  const isConsultant = vehicleOwnerRole === "CONSULTATION";
+  const isConsultant = isStorefrontCall || vehicleOwnerRole === "CONSULTATION";
 
   const vehicleTitle = [
     vehicle?.yearOfMfg || vehicle?.year,
@@ -81,7 +83,7 @@ export default function CallSellerPopup({
   const { data: ownerContactData, isLoading: isFetchingPhone } = useQuery({
     queryKey: ["vehicle-owner-contact", vehicleId],
     queryFn: () => getVehicleOwnerContact(vehicleId),
-    enabled: Boolean(isOpen && vehicleId),
+    enabled: Boolean(isOpen && vehicleId && !isStorefrontCall),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -93,6 +95,7 @@ export default function CallSellerPopup({
 
   // Resolve Phone Number (priority: API fetched phone -> summary phone -> vehicle phone)
   const rawPhone =
+    storefrontPhone ||
     fetchedPhone ||
     summary?.phone ||
     summary?.phoneNumber ||
@@ -174,27 +177,29 @@ export default function CallSellerPopup({
 
   // Handle Direct Call
   const handleCallClick = () => {
-    const inquiryType = isConsultant ? "Call Consultant" : "Call Seller";
+    if (!isStorefrontCall) {
+      const inquiryType = isConsultant ? "Call Consultant" : "Call Seller";
 
-    // Amplitude: call_submitted
-    trackCallSubmitted({
-      vehicle_id: vehicleId,
-      vehicle_name: vehicleTitle,
-      inquiry_type: inquiryType,
-      seller_type: vehicleOwnerRole,
-    });
+      // Amplitude: call_submitted
+      trackCallSubmitted({
+        vehicle_id: vehicleId,
+        vehicle_name: vehicleTitle,
+        inquiry_type: inquiryType,
+        seller_type: vehicleOwnerRole,
+      });
 
-    // Meta Pixel: Lead & Contact on call submit
-    event("Lead", {
-      content_type: "vehicle",
-      content_ids: [String(vehicleId)],
-      content_name: vehicleTitle || "Vehicle Call",
-    });
-    event("Contact", {
-      content_type: "vehicle",
-      content_ids: [String(vehicleId)],
-      content_name: vehicleTitle || "Vehicle Call",
-    });
+      // Meta Pixel: Lead & Contact on call submit
+      event("Lead", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name: vehicleTitle || "Vehicle Call",
+      });
+      event("Contact", {
+        content_type: "vehicle",
+        content_ids: [String(vehicleId)],
+        content_name: vehicleTitle || "Vehicle Call",
+      });
+    }
 
     if (cleanPhone) {
       window.location.href = `tel:${cleanPhone}`;
@@ -229,7 +234,9 @@ export default function CallSellerPopup({
       }}
     >
       <div
-        className="relative flex flex-col md:flex-row w-full max-w-[860px] max-h-[90vh] overflow-y-auto custom-scrollbar overscroll-contain md:overflow-hidden bg-secondary border border-white/10 rounded-2xl shadow-2xl text-primary font-primary"
+        className={`relative flex flex-col md:flex-row w-full ${
+          isStorefrontCall ? "max-w-[440px]" : "max-w-[860px]"
+        } max-h-[90vh] overflow-y-auto custom-scrollbar overscroll-contain md:overflow-hidden bg-secondary border border-white/10 rounded-2xl shadow-2xl text-primary font-primary`}
         onClick={(e) => e.stopPropagation()}
         style={{
           animation: isClosing
@@ -247,111 +254,113 @@ export default function CallSellerPopup({
         </button>
 
         {/* LEFT COLUMN: VEHICLE DETAILS */}
-        <div className="w-full md:w-1/2 p-5 sm:p-6 bg-gradient-to-b from-white/[0.04] to-transparent border-b md:border-b-0 md:border-r border-white/10 flex flex-col justify-between gap-4">
-          <div className="space-y-4">
-            {/* Header Tag */}
-            <div className="flex items-center justify-between pr-10 md:pr-0">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-third flex items-center gap-1.5">
-                <CarFront size={14} className="text-primary" /> Vehicle Details
-              </span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
-                {vehicle?.isVehicleSold ? "Sold Out" : "Available"}
-              </span>
-            </div>
+        {!isStorefrontCall && (
+          <div className="w-full md:w-1/2 p-5 sm:p-6 bg-gradient-to-b from-white/[0.04] to-transparent border-b md:border-b-0 md:border-r border-white/10 flex flex-col justify-between gap-4">
+            <div className="space-y-4">
+              {/* Header Tag */}
+              <div className="flex items-center justify-between pr-10 md:pr-0">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-third flex items-center gap-1.5">
+                  <CarFront size={14} className="text-primary" /> Vehicle Details
+                </span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
+                  {vehicle?.isVehicleSold ? "Sold Out" : "Available"}
+                </span>
+              </div>
 
-            {/* Vehicle Thumbnail */}
-            <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-zinc-900 border border-white/10 shadow-inner group">
-              <Image
-                src={imgError ? "/request.webp" : vehicleImage}
-                alt={vehicleTitle}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                onError={() => setImgError(true)}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+              {/* Vehicle Thumbnail */}
+              <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-zinc-900 border border-white/10 shadow-inner group">
+                <Image
+                  src={imgError ? "/request.webp" : vehicleImage}
+                  alt={vehicleTitle}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={() => setImgError(true)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
-              {/* Price Tag Overlay */}
-              <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-                <div>
-                  <p className="text-[10px] uppercase font-semibold text-white/70">
-                    Offered Price
-                  </p>
-                  <p className="text-xl sm:text-2xl font-semibold text-white leading-none">
-                    ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
-                  </p>
+                {/* Price Tag Overlay */}
+                <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                  <div>
+                    <p className="text-[10px] uppercase font-semibold text-white/70">
+                      Offered Price
+                    </p>
+                    <p className="text-xl sm:text-2xl font-semibold text-white leading-none">
+                      ₹{vehicle?.price?.toLocaleString("en-IN") || "0"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Vehicle Title */}
-            <div>
-              <h3 className="text-lg font-bold text-primary leading-snug line-clamp-2">
-                {vehicleTitle}
-              </h3>
-            </div>
+              {/* Vehicle Title */}
+              <div>
+                <h3 className="text-lg font-bold text-primary leading-snug line-clamp-2">
+                  {vehicleTitle}
+                </h3>
+              </div>
 
-            {/* Spec Chips Grid */}
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {vehicle?.yearOfMfg && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
-                  <Calendar size={14} className="text-primary shrink-0" />
-                  <span className="truncate">
-                    Year: <b className="text-primary">{vehicle.yearOfMfg}</b>
-                  </span>
-                </div>
-              )}
+              {/* Spec Chips Grid */}
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {vehicle?.yearOfMfg && (
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
+                    <Calendar size={14} className="text-primary shrink-0" />
+                    <span className="truncate">
+                      Year: <b className="text-primary">{vehicle.yearOfMfg}</b>
+                    </span>
+                  </div>
+                )}
 
-              {vehicle?.kmDriven !== undefined && vehicle?.kmDriven !== null && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
-                  <Gauge size={14} className="text-primary shrink-0" />
-                  <span className="truncate">
-                    <b className="text-primary">
-                      {Number(vehicle.kmDriven).toLocaleString("en-IN")}
-                    </b>{" "}
-                    km
-                  </span>
-                </div>
-              )}
+                {vehicle?.kmDriven !== undefined && vehicle?.kmDriven !== null && (
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
+                    <Gauge size={14} className="text-primary shrink-0" />
+                    <span className="truncate">
+                      <b className="text-primary">
+                        {Number(vehicle.kmDriven).toLocaleString("en-IN")}
+                      </b>{" "}
+                      km
+                    </span>
+                  </div>
+                )}
 
-              {vehicle?.fuelType && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
-                  <Fuel size={14} className="text-primary shrink-0" />
-                  <span className="truncate capitalize">
-                    <b className="text-primary">
-                      {vehicle.fuelType.replace(/_/g, " ").toLowerCase()}
-                    </b>
-                  </span>
-                </div>
-              )}
+                {vehicle?.fuelType && (
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
+                    <Fuel size={14} className="text-primary shrink-0" />
+                    <span className="truncate capitalize">
+                      <b className="text-primary">
+                        {vehicle.fuelType.replace(/_/g, " ").toLowerCase()}
+                      </b>
+                    </span>
+                  </div>
+                )}
 
-              {vehicle?.transmission && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
-                  <Cog size={14} className="text-primary shrink-0" />
-                  <span className="truncate capitalize">
-                    <b className="text-primary">
-                      {vehicle.transmission.replace(/_/g, " ").toLowerCase()}
-                    </b>
-                  </span>
-                </div>
-              )}
+                {vehicle?.transmission && (
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third">
+                    <Cog size={14} className="text-primary shrink-0" />
+                    <span className="truncate capitalize">
+                      <b className="text-primary">
+                        {vehicle.transmission.replace(/_/g, " ").toLowerCase()}
+                      </b>
+                    </span>
+                  </div>
+                )}
 
-              {(vehicle?.vehicleAddress?.city || vehicle?.cityName) && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third col-span-2">
-                  <MapPin size={14} className="text-primary shrink-0" />
-                  <span className="truncate">
-                    Location:{" "}
-                    <b className="text-primary">
-                      {vehicle?.vehicleAddress?.city || vehicle?.cityName}
-                    </b>
-                  </span>
-                </div>
-              )}
+                {(vehicle?.vehicleAddress?.city || vehicle?.cityName) && (
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.03] border border-white/5 text-third col-span-2">
+                    <MapPin size={14} className="text-primary shrink-0" />
+                    <span className="truncate">
+                      Location:{" "}
+                      <b className="text-primary">
+                        {vehicle?.vehicleAddress?.city || vehicle?.cityName}
+                      </b>
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* RIGHT COLUMN: SELLER DETAILS & CALL ACTION */}
-        <div className="w-full md:w-1/2 p-5 sm:p-6 flex flex-col justify-between gap-5">
+        <div className={`w-full ${isStorefrontCall ? 'md:w-full' : 'md:w-1/2'} p-5 sm:p-6 flex flex-col justify-between gap-5`}>
           <div className="space-y-4">
             {/* Header Badge */}
             <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
@@ -466,7 +475,7 @@ export default function CallSellerPopup({
               </div>
 
               <p className="text-[11px] text-third/80 leading-relaxed">
-                Call directly to discuss vehicle condition, pricing, schedule a test drive or request an inspection.
+                Call directly to discuss {isStorefrontCall ? 'available vehicles' : 'vehicle condition'}, pricing, schedule a test drive or request an inspection.
               </p>
             </div>
           </div>

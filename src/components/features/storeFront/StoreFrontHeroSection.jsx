@@ -16,6 +16,7 @@ import {
   MessageCircle,
   Loader2,
   Maximize2,
+  PhoneCall,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -23,6 +24,7 @@ import { useRouter } from "next/router";
 import { followConsultant, unFollowConsultant, getConsultationPhoneNumber } from "@/services/user.service";
 import LoginPopup from "@/components/auth/LoginPopup";
 import { useAuthStore } from "@/stores/useAuthStore";
+import CallSellerPopup from "@/components/features/VehiclDetail/CallSellerPopup";
 
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import SharePopup from "@/components/ui/SharePopup";
@@ -54,6 +56,7 @@ export default function StoreFrontHeroSection() {
   const [zoomImage, setZoomImage] = useState(null);
   const [currentUrl, setCurrentUrl] = useState("");
   const [isOpeningWhatsApp, setIsOpeningWhatsApp] = useState(false);
+  const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const pendingAction = useRef(null);
 
@@ -104,6 +107,45 @@ export default function StoreFrontHeroSection() {
       console.error("Failed to fetch consultation phone number:", error);
     } finally {
       setIsOpeningWhatsApp(false);
+    }
+  };
+
+  const handleCallConsultantClick = async () => {
+    try {
+      let rawPhone =
+        phoneData?.phoneNumber ||
+        phoneData?.phone ||
+        phoneData?.mobile ||
+        phoneData?.contactNumber ||
+        (typeof phoneData === "string" || typeof phoneData === "number"
+          ? String(phoneData)
+          : null);
+
+      if (!rawPhone && id) {
+        const res = await getConsultationPhoneNumber(id);
+        const data = res?.data;
+        rawPhone =
+          data?.phoneNumber ||
+          data?.phone ||
+          data?.mobile ||
+          data?.contactNumber ||
+          (typeof data === "string" || typeof data === "number"
+            ? String(data)
+            : null);
+      }
+
+      if (!rawPhone) return;
+
+      const cleanDigits = String(rawPhone).replace(/\D/g, "");
+      if (!cleanDigits) return;
+
+      if (window.innerWidth < 1024) {
+        window.location.href = `tel:${cleanDigits}`;
+      } else {
+        setIsCallPopupOpen(true);
+      }
+    } catch (error) {
+      console.error("Failed to fetch consultation phone number for call:", error);
     }
   };
 
@@ -349,18 +391,27 @@ export default function StoreFrontHeroSection() {
               </div>
 
               {/* Mobile Contact Buttons */}
-              <div className="mt-3 w-full flex lg:hidden gap-3 justify-center items-center">
+              <div className="mt-3 w-full flex lg:hidden gap-2 items-center">
+                <Button
+                  variant="ghost"
+                  onClick={handleCallConsultantClick}
+                  className="w-10 h-10 shrink-0 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-0 flex items-center justify-center"
+                  aria-label="Call Consultant"
+                >
+                  <PhoneCall className="w-[18px] h-[18px]" />
+                </Button>
+
                 <Button
                   onClick={handleWhatsAppClick}
                   disabled={isOpeningWhatsApp}
-                  className="flex-1 h-10 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200 overflow-hidden px-2"
+                  className="w-10 h-10 shrink-0 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] shadow-sm px-0 flex items-center justify-center"
+                  aria-label="WhatsApp"
                 >
                   {isOpeningWhatsApp ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-white shrink-0" />
+                    <Loader2 className="w-[18px] h-[18px] animate-spin text-white" />
                   ) : (
-                    <FaWhatsapp className="w-4 h-4 shrink-0 text-white" />
+                    <FaWhatsapp className="w-[18px] h-[18px] text-white" />
                   )}
-                  <span className="font-medium text-sm text-white whitespace-nowrap truncate">WhatsApp</span>
                 </Button>
 
                 <Button
@@ -368,10 +419,10 @@ export default function StoreFrontHeroSection() {
                   href={directionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 h-10 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm overflow-hidden px-2"
+                  className="flex-1 h-10 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-2 overflow-hidden"
                 >
                   <span className="font-medium text-sm whitespace-nowrap truncate">Get Directions</span>
-                  <CornerUpRight className="w-4 h-4 shrink-0" />
+                  <CornerUpRight className="w-[18px] h-[18px] shrink-0" />
                 </Button>
               </div>
             </div>
@@ -456,7 +507,7 @@ export default function StoreFrontHeroSection() {
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="w-full lg:w-80 space-y-4">
+            <div className="w-full lg:w-80 shrink-0 space-y-4">
               {storeDetails?.services?.length > 0 && (
                 <div className="space-y-3">
                   <p className="text-xs font-semibold capitalize text-third">
@@ -476,20 +527,32 @@ export default function StoreFrontHeroSection() {
                 </div>
               )}
 
-              <div className="hidden lg:flex gap-3 justify-start items-center flex-wrap pt-1">
-                <Button
-                  size="sm"
-                  onClick={handleWhatsAppClick}
-                  disabled={isOpeningWhatsApp}
-                  className="!bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200"
-                >
-                  {isOpeningWhatsApp ? (
-                    <Loader2 className="w-[18px] h-[18px] animate-spin text-white" />
-                  ) : (
-                    <FaWhatsapp className="w-[18px] h-[18px] shrink-0 text-white" />
-                  )}
-                  <span className="font-semibold text-white">WhatsApp</span>
-                </Button>
+              <div className="hidden lg:flex flex-col gap-3 pt-1 w-max">
+                <div className="flex gap-3 items-center">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={handleCallConsultantClick}
+                    className="h-9 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-4"
+                  >
+                    <PhoneCall className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap text-[13px] ">Call Consultant</span>
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    onClick={handleWhatsAppClick}
+                    disabled={isOpeningWhatsApp}
+                    className="h-9 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200 px-4"
+                  >
+                    {isOpeningWhatsApp ? (
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                    ) : (
+                      <FaWhatsapp className="w-4 h-4 shrink-0 text-white" />
+                    )}
+                    <span className="text-white whitespace-nowrap text-[13px]">WhatsApp</span>
+                  </Button>
+                </div>
 
                 <Button
                   size="sm"
@@ -497,15 +560,31 @@ export default function StoreFrontHeroSection() {
                   href={directionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="w-full h-9 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-4"
                 >
-                  <span>Get Directions</span>
-                  <CornerUpRight className="w-[18px] h-[18px] shrink-0" />
+                  <span className="whitespace-nowrap text-[13px] ">Get Directions</span>
+                  <CornerUpRight className="w-4 h-4 shrink-0" />
                 </Button>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <CallSellerPopup
+        isOpen={isCallPopupOpen}
+        onClose={() => setIsCallPopupOpen(false)}
+        isStorefrontCall={true}
+        summary={storeDetails}
+        storefrontPhone={
+          phoneData?.phoneNumber ||
+          phoneData?.phone ||
+          phoneData?.mobile ||
+          phoneData?.contactNumber ||
+          (typeof phoneData === "string" || typeof phoneData === "number"
+            ? String(phoneData)
+            : null)
+        }
+      />
       <LoginPopup
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}

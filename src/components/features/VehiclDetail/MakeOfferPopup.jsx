@@ -15,6 +15,7 @@ import {
 } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
 import { trackInquirySubmit } from "@/lib/gtag";
+import Link from "next/link";
 
 export default function MakeOfferPopup({
   isOpen,
@@ -95,12 +96,8 @@ export default function MakeOfferPopup({
       setIsLoading(false);
       setMessage("");
 
-      // Initialize with middle offer option
-      if (vehicle?.price) {
-        const step = vehicle.price < 500000 ? 1000 : 5000;
-        const midOffer = Math.round((vehicle.price * 0.93) / step) * step;
-        setOfferPrice(midOffer.toString());
-      }
+      // Start with empty offer
+      setOfferPrice("");
 
       window.addEventListener("wheel", preventScroll, { passive: false });
       window.addEventListener("touchmove", preventScroll, { passive: false });
@@ -352,9 +349,11 @@ export default function MakeOfferPopup({
             )}
 
             {/* QUICK OPTIONS */}
-            <div className="grid grid-cols-3 gap-2 mt-3">
-              {[
-                { opt: option1, key: "90_pct" },
+            <div className="mt-3">
+              <p className="text-primary/60 text-xs mb-2">Suggested price</p>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { opt: option1, key: "90_pct" },
                 { opt: option2, key: "93_pct" },
                 { opt: option3, key: "96_pct" },
               ].map(({ opt, key }) => (
@@ -369,6 +368,7 @@ export default function MakeOfferPopup({
                   {formatPrice(opt)}
                 </button>
               ))}
+              </div>
             </div>
           </div>
 
@@ -388,6 +388,17 @@ export default function MakeOfferPopup({
 
           {/* ACTIONS */}
           <div className="flex justify-end gap-3 pt-2 mt-auto">
+            <Link href="/download" className="mr-auto">
+              <Button
+                showIcon={false}
+                variant="ghost"
+                size="sm"
+                className="w-full"
+              >
+                <span className="hidden sm:inline">Chat with consultant</span>
+                <span className="sm:hidden">Chat</span>
+              </Button>
+            </Link>
             <Button
               showIcon={false}
               variant="outlineSecondary"
