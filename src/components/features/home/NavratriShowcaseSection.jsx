@@ -125,7 +125,7 @@ const NavratriShowcaseSection = () => {
             >
               <Sparkles className="w-4 h-4 text-[#FBBF24] animate-pulse" />
               <span className="tracking-wide">Explore Navratri Deals</span>
-              <ArrowRight className="w-4 h-4 ml-0.5 text-white transition-transform duration-300 group-hover:translate-x-0.5" />
+              <ArrowRight className="w-4 h-4 ml-0.5 text-current group-hover:text-current transition-all duration-300 group-hover:translate-x-0.5" />
             </Button>
           </div>
         </div>

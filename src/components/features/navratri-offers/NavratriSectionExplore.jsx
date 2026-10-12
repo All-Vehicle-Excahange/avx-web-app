@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NavrariVehicleCard from "@/components/ui/const/NavrariVehicleCard";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { getOfferVehicles } from "@/services/vehicle.service";
@@ -11,6 +11,9 @@ const NavratriSectionExplore = () => {
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalDeals, setTotalDeals] = useState(0);
+
+  const prevCountRef = useRef(0);
+  const cardsRef = useRef([]);
 
   const fetchVehicles = async (page) => {
     try {
@@ -56,7 +59,33 @@ const NavratriSectionExplore = () => {
     fetchVehicles(1);
   }, []);
 
-  const handleViewMore = () => {
+  // Smoothly scroll down to newly loaded vehicles once appended
+  useEffect(() => {
+    const firstNewIndex = prevCountRef.current;
+    if (firstNewIndex > 0 && vehicles.length > firstNewIndex) {
+      const timer = setTimeout(() => {
+        const el = cardsRef.current[firstNewIndex];
+        if (el) {
+          const navOffset = 90;
+          const targetY = el.getBoundingClientRect().top + window.scrollY - navOffset;
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: "smooth",
+          });
+        }
+        prevCountRef.current = 0;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [vehicles]);
+
+  const handleViewMore = (e) => {
+    e?.preventDefault();
+    e?.currentTarget?.blur();
+    if (loadingMore || !hasMore) return;
+
+    prevCountRef.current = vehicles.length;
     const nextPage = pageNo + 1;
     setPageNo(nextPage);
     fetchVehicles(nextPage);
@@ -118,9 +147,12 @@ const NavratriSectionExplore = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
             {loading
               ? [...Array(8)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
-              : vehicles.map((car) => (
+              : vehicles.map((car, index) => (
                 <div
-                  key={car.id}
+                  key={car.id || index}
+                  ref={(el) => {
+                    cardsRef.current[index] = el;
+                  }}
                   className="relative rounded-2xl border border-[#F59E0B]/35 shadow-[0_6px_16px_rgba(0,0,0,0.4),0_2px_14px_rgba(245,158,11,0.05)] hover:border-[#FBBF24] transition-all duration-300 overflow-hidden bg-[#161324] group"
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-[#9333EA]/10 to-transparent opacity-0 transition-opacity duration-300 pointer-events-none z-10" />
@@ -143,26 +175,36 @@ const NavratriSectionExplore = () => {
                 <p className="text-lg">Please check back later for exciting deals!</p>
               </div>
             )}
-
-            {hasMore && !loading && vehicles.length > 0 && (
-              <div className="col-span-full flex justify-center mt-6 mb-4">
-                <button
-                  onClick={handleViewMore}
-                  disabled={loadingMore}
-                  className="cursor-pointer bg-gradient-to-r from-[#7C3AED] via-[#5B21B6] to-[#4C1D95] hover:from-[#8B5CF6] hover:via-[#6D28D9] hover:to-[#5B21B6] border border-[#C084FC]/45 hover:border-[#C084FC]/80 text-white shadow-[0_4px_14px_rgba(124,58,237,0.4)] hover:shadow-[0_6px_20px_rgba(124,58,237,0.55)] rounded-full px-6 py-2 text-base font-semibold flex items-center gap-2 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {loadingMore ? (
-                    <span className="animate-pulse">Loading more deals...</span>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 text-[#FBBF24] animate-pulse" />
-                      <span className="tracking-wide">View More Deals</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
           </div>
+
+          {/* View More Button */}
+          {hasMore && !loading && vehicles.length > 0 && (
+            <div className="w-full flex justify-center mt-8 mb-4">
+              <button
+                type="button"
+                onClick={handleViewMore}
+                disabled={loadingMore}
+                className="cursor-pointer bg-gradient-to-r from-[#7C3AED] via-[#5B21B6] to-[#4C1D95] hover:from-[#8B5CF6] hover:via-[#6D28D9] hover:to-[#5B21B6] border border-[#C084FC]/45 hover:border-[#C084FC]/80 text-white shadow-[0_4px_14px_rgba(124,58,237,0.4)] hover:shadow-[0_6px_20px_rgba(124,58,237,0.55)] rounded-full px-6 py-2 text-base font-semibold flex items-center gap-2 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loadingMore ? (
+                  <span className="animate-pulse">Loading more deals...</span>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 text-[#FBBF24] animate-pulse" />
+                    <span className="tracking-wide">View More Deals</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* All deals loaded indicator */}
+          {!hasMore && !loading && vehicles.length > 0 && (
+            <div className="w-full flex justify-center items-center gap-2 mt-8 mb-4 text-xs sm:text-sm font-medium text-[#FBBF24]/70 tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-[#FBBF24]" />
+              <span>All festive deals loaded ({vehicles.length} offers)</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
