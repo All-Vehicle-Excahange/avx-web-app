@@ -87,7 +87,7 @@ const NavratriSectionExplore = () => {
       <div className="max-w-[1400px] w-full mx-auto px-2 relative z-10 flex flex-col items-start">
 
         {/* Page Header (Left-aligned after main image) */}
-        <div className="flex flex-col items-start text-left gap-1 mb-5 md:mb-6 relative z-10 w-full mt-16 sm:mt-20 md:mt-0 ml-0 md:ml-32 lg:ml-40">
+        <div className="flex flex-col items-start text-left gap-1 mb-5 md:mb-6 relative z-10 w-full mt-16 sm:mt-20 md:mt-0 ml-0 md:ml-36 lg:ml-44">
           <div className="flex items-center gap-1.5 sm:gap-3 mb-1 sm:mb-2">
             <svg width="12" height="12" viewBox="0 0 24 24" className="text-[#FBBF24] animate-pulse">
               <path d="M12 2L15 9H22L16 14L18 21L12 17L6 21L8 14L2 9H9L12 2Z" fill="currentColor" />
