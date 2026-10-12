@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-05T13:14:36.412Z",
-  "count": 34,
+  "generatedAt": "2026-10-12T13:30:08.692Z",
+  "count": 37,
   "consultants": [
     {
       "name": "Aabad Motors",
@@ -98,6 +98,26 @@
       "consultationId": "18cb28bc-03e9-4c71-b704-2d035e9f137c"
     },
     {
+      "name": "Dhwarkadhish Auto Consultant",
+      "primaryName": "Dhwarkadhish Auto Consultant",
+      "alternateNames": [
+        "Dhwarkadhish Auto Consult"
+      ],
+      "username": "dwarkadhishmotorsandautocunsalt",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/dwarkadhishmotorsandautocunsalt",
+      "path": "/auto-consultant/dwarkadhishmotorsandautocunsalt",
+      "keywords": [
+        "dhwarkadhish auto consultant",
+        "dhwarkadhish auto consultant palanpur",
+        "dhwarkadhish auto consult",
+        "dhwarkadhish auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "f28c96b0-729c-4e50-ba72-f27457e37c26"
+    },
+    {
       "name": "Dream Motors",
       "primaryName": "Dream Motors",
       "alternateNames": [],
@@ -130,29 +150,6 @@
         "auto consultant palanpur"
       ],
       "consultationId": "46952d8f-6a18-49a8-b8ca-97fd6b012d39"
-    },
-    {
-      "name": "Falak Car",
-      "primaryName": "Falak Car Auto Consultant",
-      "alternateNames": [
-        "Falak Car",
-        "Falak Car Auto Consult"
-      ],
-      "username": "falakcar",
-      "city": "Kanodar",
-      "state": "Gujarat",
-      "url": "https://www.reecomm.com/auto-consultant/falakcar",
-      "path": "/auto-consultant/falakcar",
-      "keywords": [
-        "falak car auto consultant",
-        "falak car auto consultant kanodar",
-        "falak car",
-        "falak car kanodar",
-        "falak car auto consult",
-        "falak car auto consult kanodar",
-        "auto consultant kanodar"
-      ],
-      "consultationId": "42bdf229-71e7-45e1-a9d7-48481cb19945"
     },
     {
       "name": "Fortune Auto",
@@ -211,6 +208,28 @@
         "auto consultant siddhpur"
       ],
       "consultationId": "e0f723dd-a324-41e9-a296-ed2b03c9c30c"
+    },
+    {
+      "name": "Jay Goga Autoconsult",
+      "primaryName": "Jay Goga Autoconsult",
+      "alternateNames": [
+        "Jay Goga AutoConsultant"
+      ],
+      "username": "jaygogaautoconsult",
+      "city": "Siddhpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/jaygogaautoconsult",
+      "path": "/auto-consultant/jaygogaautoconsult",
+      "keywords": [
+        "jay goga autoconsult",
+        "jay goga autoconsult siddhpur",
+        "jay goga autoconsult auto consultant",
+        "jay goga autoconsultant",
+        "jay goga autoconsultant siddhpur",
+        "jay goga autoconsultant auto consultant",
+        "auto consultant siddhpur"
+      ],
+      "consultationId": "76191914-24ab-4e41-bb8d-49f73e08da62"
     },
     {
       "name": "Jay Hanuman Auto Consultant",
@@ -273,26 +292,6 @@
       "consultationId": "28b7269f-366e-4d3c-89f0-c0b5256088dc"
     },
     {
-      "name": "Ms Auto Consultant",
-      "primaryName": "Ms Auto Consultant",
-      "alternateNames": [
-        "Ms Auto Consult"
-      ],
-      "username": "msautoconsultant",
-      "city": "Siddhpur",
-      "state": "Gujarat",
-      "url": "https://www.reecomm.com/auto-consultant/msautoconsultant",
-      "path": "/auto-consultant/msautoconsultant",
-      "keywords": [
-        "ms auto consultant",
-        "ms auto consultant siddhpur",
-        "ms auto consult",
-        "ms auto consult siddhpur",
-        "auto consultant siddhpur"
-      ],
-      "consultationId": "894c2b52-7142-4f8d-ae89-7819fef7f1d7"
-    },
-    {
       "name": "My India Auto Consult",
       "primaryName": "My India Auto Consultant",
       "alternateNames": [
@@ -347,27 +346,24 @@
       "consultationId": "b9b621e0-3fb0-4520-83e6-e310089eb8a6"
     },
     {
-      "name": "New Tiranga Car Care",
-      "primaryName": "New Tiranga Car Care Auto Consultant",
+      "name": "Patidar Auto Consult Visnagar",
+      "primaryName": "Patidar Auto Consultant Visnagar",
       "alternateNames": [
-        "New Tiranga Car Care",
-        "New Tiranga Car Care Auto Consult"
+        "Patidar Auto Consult Visnagar"
       ],
-      "username": "newtirangacarcare",
-      "city": "Kanodar",
+      "username": "patidarautoconsultvisnagar",
+      "city": "Visnagar",
       "state": "Gujarat",
-      "url": "https://www.reecomm.com/auto-consultant/newtirangacarcare",
-      "path": "/auto-consultant/newtirangacarcare",
+      "url": "https://www.reecomm.com/auto-consultant/patidarautoconsultvisnagar",
+      "path": "/auto-consultant/patidarautoconsultvisnagar",
       "keywords": [
-        "new tiranga car care auto consultant",
-        "new tiranga car care auto consultant kanodar",
-        "new tiranga car care",
-        "new tiranga car care kanodar",
-        "new tiranga car care auto consult",
-        "new tiranga car care auto consult kanodar",
-        "auto consultant kanodar"
+        "patidar auto consultant visnagar",
+        "patidar auto consultant visnagar visnagar",
+        "patidar auto consult visnagar",
+        "patidar auto consult visnagar visnagar",
+        "auto consultant visnagar"
       ],
-      "consultationId": "ec4d8460-ccb1-47f6-937e-108de755b14b"
+      "consultationId": "c2f5af28-18e1-41b1-9d59-7f7480f06712"
     },
     {
       "name": "Rajautoconsult",
@@ -393,6 +389,26 @@
         "auto consultant palanpur"
       ],
       "consultationId": "39194fa8-af70-4a7e-93ce-d8ea355b1994"
+    },
+    {
+      "name": "Rameshwar Auto Consult",
+      "primaryName": "Rameshwar Auto Consultant",
+      "alternateNames": [
+        "Rameshwar Auto Consult"
+      ],
+      "username": "rameshwarautoconsult",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/rameshwarautoconsult",
+      "path": "/auto-consultant/rameshwarautoconsult",
+      "keywords": [
+        "rameshwar auto consultant",
+        "rameshwar auto consultant ahmedabad",
+        "rameshwar auto consult",
+        "rameshwar auto consult ahmedabad",
+        "auto consultant ahmedabad"
+      ],
+      "consultationId": "b1240c37-1d04-4a97-a99d-d574718f44bf"
     },
     {
       "name": "Royal Motors",
@@ -533,6 +549,29 @@
       "consultationId": "0cf3187f-3ef0-4f7f-86f5-105827541fca"
     },
     {
+      "name": "Shiv Cars",
+      "primaryName": "Shiv Cars Auto Consultant",
+      "alternateNames": [
+        "Shiv Cars",
+        "Shiv Cars Auto Consult"
+      ],
+      "username": "shivcars",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/shivcars",
+      "path": "/auto-consultant/shivcars",
+      "keywords": [
+        "shiv cars auto consultant",
+        "shiv cars auto consultant palanpur",
+        "shiv cars",
+        "shiv cars palanpur",
+        "shiv cars auto consult",
+        "shiv cars auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "d9505ad2-562b-4103-9a9d-eb0e077d7be0"
+    },
+    {
       "name": "Shiv Krupa Auto Consult",
       "primaryName": "Shiv Krupa Auto Consultant",
       "alternateNames": [
@@ -608,6 +647,26 @@
         "auto consultant himatnagar"
       ],
       "consultationId": "c99c4716-b218-4c99-83dc-85a80c1c33f1"
+    },
+    {
+      "name": "Sk Auto Consultant",
+      "primaryName": "Sk Auto Consultant",
+      "alternateNames": [
+        "Sk Auto Consult"
+      ],
+      "username": "skautocansalat",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/skautocansalat",
+      "path": "/auto-consultant/skautocansalat",
+      "keywords": [
+        "sk auto consultant",
+        "sk auto consultant palanpur",
+        "sk auto consult",
+        "sk auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "8fa84f39-e262-48ac-9879-733b3561da41"
     },
     {
       "name": "Sk Motors",
