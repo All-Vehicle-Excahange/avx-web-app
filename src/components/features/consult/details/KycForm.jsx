@@ -27,6 +27,7 @@ import { showBackendError, refreshUserToken } from "@/lib/axiosInstance";
 import Step4Verification from "./components/Step4Verification";
 import Navbar from "@/components/layout/Navbar";
 import { SkeletonBox } from "@/components/ui/skeleton";
+import { getActiveSubscription } from "@/services/subscription.service";
 
 const steps = [1, 2, 3, 4];
 
@@ -87,6 +88,18 @@ export default function KycForm() {
     const check = async () => {
       setInitialLoading(true);
       try {
+        // Check for active subscription first
+        try {
+          const subRes = await getActiveSubscription();
+          if (!subRes || !subRes.success) {
+            replace("/consult/subscription");
+            return;
+          }
+        } catch (subErr) {
+          replace("/consult/subscription");
+          return;
+        }
+
         const parseResponse = (res) => {
           if (!res) return null;
           if (res.error || res.statusCode === 404 || res.status === "NOT_FOUND")
