@@ -180,5 +180,11 @@ export const recordInquiryClick = async (vehicleId) => {
   }
 };
 
-
-
+export const getOfferVehicles = async (params) => {
+  try {
+    const res = await axiosInstance.get('/offer-vehicles', { params });
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
