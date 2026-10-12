@@ -14,6 +14,7 @@ import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
 import AdSenseAd from "@/components/common/AdSenseAd";
+import { isSearchLandingAdEligible } from "@/lib/adsenseEligibility";
 import fs from "fs";
 import path from "path";
 import {
@@ -222,6 +223,11 @@ function SearchContent({
   const [isLoading, setIsLoading] = useState(true);
   const [removeFilterHandler, setRemoveFilterHandler] = useState(null);
   const [clearAllHandler, setClearAllHandler] = useState(null);
+  const adsEnabled = isSearchLandingAdEligible({
+    noindex: seo?.noindex,
+    totalCount: seo?.totalCount,
+    minListings: MIN_INDEXABLE_LISTINGS,
+  });
 
   return (
     <>
@@ -244,6 +250,7 @@ function SearchContent({
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
           onLoadingChange={setIsLoading}
+          adsEnabled={adsEnabled}
         />
       </Layout>
 
@@ -266,6 +273,7 @@ function SearchContent({
       </Layout>
 
       <AdSenseAd
+        enabled={adsEnabled}
         slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_BANNER_SLOT}
         className="container py-4 md:py-6"
       />
@@ -905,6 +913,11 @@ export async function getServerSideProps(context) {
         ogImageAlt: firstWithImage
           ? `${formatVehicleListingLine(firstWithImage)}${resolvedCity ? ` in ${resolvedCity}` : ""}`
           : seoBuilt.title,
+        adEligible: isSearchLandingAdEligible({
+          noindex,
+          totalCount,
+          minListings: MIN_INDEXABLE_LISTINGS,
+        }),
       },
       initialFilters,
     },

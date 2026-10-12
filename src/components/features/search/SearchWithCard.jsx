@@ -113,6 +113,8 @@ export default function SearchWithCard({
   onConsultPayloadChange,
   onLoadingChange,
   initialFilters = {},
+  /** When false, no AdSense rail (empty/noindex landings). Default true for /search index. */
+  adsEnabled = true,
 }) {
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
@@ -2205,8 +2207,9 @@ export default function SearchWithCard({
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row relative text-secondary mt-5 gap-4">
-      {/* Desktop-only AdSense rail — left of filter; only on extra large screens (1536px+); null when no ad (no empty column) */}
+      {/* Desktop-only AdSense rail — left of filter; only on extra large screens (1536px+); null when no ad / not eligible */}
       <AdSenseAd
+        enabled={adsEnabled}
         slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_RAIL_SLOT}
         format="vertical"
         fullWidthResponsive={false}

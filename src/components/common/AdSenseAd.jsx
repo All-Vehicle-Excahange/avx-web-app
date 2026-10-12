@@ -11,6 +11,8 @@ const ADSENSE_CLIENT =
  * mode="collapse" — nothing visible when slot missing or ad unfilled (no empty gap).
  * mode="fallback" — shows `fallback` until an ad fills, then swaps to the ad.
  *   Ad is measured over the fallback box so Google can fill.
+ *
+ * enabled=false — do not request an ad (policy gate). collapse → null; fallback → fallback UI only.
  */
 export default function AdSenseAd({
   slot,
@@ -21,12 +23,15 @@ export default function AdSenseAd({
   mode = "collapse",
   onStatusChange,
   fallback = null,
+  enabled = true,
   "aria-label": ariaLabel = "Advertisement",
 }) {
   const insRef = useRef(null);
   const pushedRef = useRef(false);
   const onStatusChangeRef = useRef(onStatusChange);
-  const [status, setStatus] = useState(() => (slot ? "pending" : "unfilled"));
+  const [status, setStatus] = useState(() =>
+    !enabled || !slot ? "unfilled" : "pending"
+  );
 
   useEffect(() => {
     onStatusChangeRef.current = onStatusChange;
@@ -38,7 +43,7 @@ export default function AdSenseAd({
       onStatusChangeRef.current?.(next);
     };
 
-    if (!slot) {
+    if (!enabled || !slot) {
       notify("unfilled");
       return undefined;
     }
@@ -112,9 +117,9 @@ export default function AdSenseAd({
       if (timeoutId) window.clearTimeout(timeoutId);
       if (observer) observer.disconnect();
     };
-  }, [slot]);
+  }, [slot, enabled]);
 
-  if (!slot) {
+  if (!enabled || !slot) {
     return mode === "fallback" ? fallback : null;
   }
 

@@ -3,10 +3,14 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
-import AdSenseAd from "@/components/common/AdSenseAd";
 
 import "swiper/css";
 import "swiper/css/pagination";
+
+/**
+ * Search promo carousel only (no AdSense).
+ * Keeps ads-to-content ratio ≤2 units on search (banner + rail when eligible).
+ */
 
 function PromoBanners() {
   return (
@@ -59,12 +63,5 @@ function BannerImage({ src, mobileSrc }) {
 }
 
 export default function PromoBanner() {
-  return (
-    <AdSenseAd
-      slot={process.env.NEXT_PUBLIC_ADSENSE_SEARCH_PROMO_SLOT}
-      mode="fallback"
-      fallback={<PromoBanners />}
-      className="rounded-xl sm:rounded-2xl overflow-hidden min-h-[140px] sm:min-h-[200px] md:min-h-[240px] lg:min-h-[280px]"
-    />
-  );
+  return <PromoBanners />;
 }

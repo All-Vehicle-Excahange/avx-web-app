@@ -27,6 +27,7 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import GlobalCompareButton from "@/components/ui/GlobalCompareButton";
 
 import * as gtag from "@/lib/gtag";
+import { isAdSenseLoaderPath } from "@/lib/adsenseEligibility";
 import {
   initAmplitude,
   markPageEntered,
@@ -294,16 +295,19 @@ export default function App({ Component, pageProps }) {
             />
           </Head>
 
-          <Script
-            id="adsense-loader"
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
-              process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ||
-              "ca-pub-1185685643057405"
-            }`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
+          {/* AdSense JS only on monetizable route prefixes (not auth/tools/thin pages) */}
+          {isAdSenseLoaderPath(router.pathname) && (
+            <Script
+              id="adsense-loader"
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
+                process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ||
+                "ca-pub-1185685643057405"
+              }`}
+              crossOrigin="anonymous"
+              strategy="afterInteractive"
+            />
+          )}
 
           {/* GLOBAL LOADER */}
           {(loading || verifyingMagicToken) && <GlobalLoader />}
