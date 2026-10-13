@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-12T13:30:08.692Z",
-  "count": 37,
+  "generatedAt": "2026-10-13T11:37:22.089Z",
+  "count": 40,
   "consultants": [
     {
       "name": "Aabad Motors",
@@ -346,6 +346,29 @@
       "consultationId": "b9b621e0-3fb0-4520-83e6-e310089eb8a6"
     },
     {
+      "name": "New Sidheshwari",
+      "primaryName": "New Sidheshwari Auto Consultant",
+      "alternateNames": [
+        "New Sidheshwari",
+        "New Sidheshwari Auto Consult"
+      ],
+      "username": "newsidheshwari",
+      "city": "Siddhpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/newsidheshwari",
+      "path": "/auto-consultant/newsidheshwari",
+      "keywords": [
+        "new sidheshwari auto consultant",
+        "new sidheshwari auto consultant siddhpur",
+        "new sidheshwari",
+        "new sidheshwari siddhpur",
+        "new sidheshwari auto consult",
+        "new sidheshwari auto consult siddhpur",
+        "auto consultant siddhpur"
+      ],
+      "consultationId": "e8a7488d-8118-4cac-9a80-957b879225c4"
+    },
+    {
       "name": "Patidar Auto Consult Visnagar",
       "primaryName": "Patidar Auto Consultant Visnagar",
       "alternateNames": [
@@ -477,7 +500,7 @@
       "alternateNames": [],
       "username": "saharamotor",
       "city": "Palanpur",
-      "state": "Gujarat",
+      "state": "",
       "url": "https://www.reecomm.com/auto-consultant/saharamotor",
       "path": "/auto-consultant/saharamotor",
       "keywords": [
@@ -507,6 +530,26 @@
         "auto consultant unjha"
       ],
       "consultationId": "c27117b4-359a-4ae9-90c3-6721be6cc655"
+    },
+    {
+      "name": "Sanur Auto Consult",
+      "primaryName": "Sanur Auto Consultant",
+      "alternateNames": [
+        "Sanur Auto Consult"
+      ],
+      "username": "sanurautoconsult",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/sanurautoconsult",
+      "path": "/auto-consultant/sanurautoconsult",
+      "keywords": [
+        "sanur auto consultant",
+        "sanur auto consultant ahmedabad",
+        "sanur auto consult",
+        "sanur auto consult ahmedabad",
+        "auto consultant ahmedabad"
+      ],
+      "consultationId": "32f658b4-17f4-4b2e-8e5c-41bdb67714e7"
     },
     {
       "name": "Sar Hind",
@@ -590,6 +633,29 @@
         "auto consultant tharad"
       ],
       "consultationId": "7b1972db-24c9-42f4-8262-75f8de502f4f"
+    },
+    {
+      "name": "Shree Jay Car Mela",
+      "primaryName": "Shree Jay Car Mela Auto Consultant",
+      "alternateNames": [
+        "Shree Jay Car Mela",
+        "Shree Jay Car Mela Auto Consult"
+      ],
+      "username": "shreejaycarmela",
+      "city": "Siddhpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/shreejaycarmela",
+      "path": "/auto-consultant/shreejaycarmela",
+      "keywords": [
+        "shree jay car mela auto consultant",
+        "shree jay car mela auto consultant siddhpur",
+        "shree jay car mela",
+        "shree jay car mela siddhpur",
+        "shree jay car mela auto consult",
+        "shree jay car mela auto consult siddhpur",
+        "auto consultant siddhpur"
+      ],
+      "consultationId": "c13a1827-2314-43fc-8fcc-4eabfe816f5f"
     },
     {
       "name": "Shree Lakhapir",
