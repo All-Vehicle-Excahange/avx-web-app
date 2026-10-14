@@ -68,6 +68,64 @@ const MODEL_CANONICAL_SLUGS = {
   sonet: "kia-sonet",
 };
 
+const KNOWN_CITIES = [
+  "Ahmedabad", "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
+  "Pune", "Jaipur", "Surat", "Rajkot", "Vadodara", "Palanpur", "Lucknow", "Indore",
+  "Chandigarh", "Gandhinagar", "Visnagar", "Kanodar", "Siddhpur", "Mehsana",
+  "Chhota Udepur", "Nashik", "Bhopal", "Patna", "Ludhiana", "Nagpur", "Coimbatore",
+  "Latur", "Hansi", "Agra",
+];
+
+
+export const formatSearchBadge = (badge, isConsultant = false) => {
+  if (!badge && !isConsultant) return null;
+  const raw = String(badge || (isConsultant ? "CONSULTANT" : "")).trim();
+  const upper = raw.toUpperCase();
+  if (!upper || upper === "NOT_INSPECTED") return null;
+  if (upper === "SELF_INSPECTED") return "Self Inspected";
+  if (upper === "AVX_INSPECTED") return "Reecomm Inspected";
+  if (upper === "CONSULTANT") return "Consultant";
+  if (upper === "PREMIUM") return "Premium";
+  if (upper === "PRO") return "Pro";
+  if (upper === "BASIC") return "Basic";
+  return raw
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+export const formatSearchSubtitle = (subtitle) => {
+  if (!subtitle) return "";
+  return String(subtitle)
+    .split("•")
+    .map((segment) => {
+      const trimmed = segment.trim();
+      const upper = trimmed.toUpperCase();
+      if (upper === "PETROL_PLUS_CNG" || upper === "PETROL_CNG") return "Petrol + CNG";
+      if (upper === "PETROL_PLUS_LPG" || upper === "PETROL_LPG") return "Petrol + LPG";
+      if (upper === "DIESEL_PLUS_CNG") return "Diesel + CNG";
+      if (upper === "CNG") return "CNG";
+      if (upper === "LPG") return "LPG";
+      if (upper === "EV" || upper === "ELECTRIC") return "Electric";
+      if (upper === "PETROL") return "Petrol";
+      if (upper === "DIESEL") return "Diesel";
+      if (upper.includes("_")) {
+        return trimmed
+          .split("_")
+          .map((w) => {
+            const wUpper = w.toUpperCase();
+            if (wUpper === "CNG" || wUpper === "LPG") return wUpper;
+            if (wUpper === "PLUS") return "+";
+            return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+          })
+          .join(" ")
+          .replace(/\s*\+\s*/g, " + ");
+      }
+      return trimmed;
+    })
+    .join(" • ");
+};
+
 const ORIGINAL_PLACEHOLDER_TEXTS = [
   "Search for brands...",
   "Search for consultants...",
@@ -283,7 +341,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       const updated = [{ ...consultant, title }, ...prev].slice(0, 100);
       try {
         localStorage.setItem("avx_known_consultants", JSON.stringify(updated));
-      } catch {}
+      } catch { }
       return updated;
     });
   }, []);
@@ -414,6 +472,72 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       ];
     }
 
+    // 3. Fallback: Location-based suggestion synthesis if user typed a city
+    const cleanNoUsed = query.replace(/\bused\b/g, "").replace(/\bsecond\s*hand\b/g, "").trim();
+    const matchedCity = KNOWN_CITIES.find((c) =>
+      new RegExp(`\\b${c.toLowerCase()}\\b`, "i").test(cleanNoUsed)
+    );
+
+    if (matchedCity) {
+      const citySlug = matchedCity.toLowerCase().replace(/\s+/g, "-");
+      const isTwoWheeler = /\b(bike|bikes|two[- ]?wheelers?|motorcycles?|scooters?)\b/i.test(query);
+      const vehicleKind = isTwoWheeler ? "two-wheelers" : "cars";
+      const vehicleLabel = isTwoWheeler ? "Bikes" : "Cars";
+
+      let matchedBrand = null;
+      let brandSlug = "";
+      for (const [id, brandName] of Object.entries(ALL_MAKERS)) {
+        const bLower = brandName.toLowerCase();
+        if (bLower === "maruti suzuki") {
+          if (/\bmaruti(?:\s+suzuki)?\b/i.test(cleanNoUsed)) {
+            matchedBrand = brandName;
+            brandSlug = "maruti-suzuki";
+            break;
+          }
+        } else if (new RegExp(`\\b${bLower}\\b`, "i").test(cleanNoUsed)) {
+          matchedBrand = brandName;
+          brandSlug = brandName.toLowerCase().replace(/\s+/g, "-");
+          break;
+        }
+      }
+
+      const synthesized = [];
+      if (matchedBrand) {
+        synthesized.push({
+          id: `loc_${brandSlug}_${vehicleKind}_${citySlug}`,
+          title: `Used ${matchedBrand} ${vehicleLabel} in ${matchedCity}`,
+          subtitle: `${matchedCity} • Verified Vehicles`,
+          type: "VEHICLE",
+          link: `/search/buy-used-${brandSlug}-${vehicleKind}-${citySlug}`,
+        });
+        if (!isTwoWheeler) {
+          synthesized.push({
+            id: `loc_${brandSlug}_bikes_${citySlug}`,
+            title: `Used ${matchedBrand} Bikes in ${matchedCity}`,
+            subtitle: `${matchedCity} • Verified Vehicles`,
+            type: "VEHICLE",
+            link: `/search/buy-used-${brandSlug}-two-wheelers-${citySlug}`,
+          });
+        }
+      }
+
+      synthesized.push({
+        id: `loc_all_${vehicleKind}_${citySlug}`,
+        title: `Used ${vehicleLabel} in ${matchedCity}`,
+        subtitle: `${matchedCity} • Verified Vehicles`,
+        type: "VEHICLE",
+        link: `/search/buy-used-${vehicleKind}-${citySlug}`,
+      });
+
+      return [
+        {
+          sectionTitle: "Popular Searches",
+          icon: "search",
+          items: synthesized,
+        },
+      ];
+    }
+
     return [];
   }, [searchQuery, apiSuggestResponse, suggestionsData]);
 
@@ -529,6 +653,93 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         setIsSearching(false);
         return;
       }
+    }
+
+    // 2. Check if an existing suggestion directly matches this search term
+    if (flatSuggestionItems.length > 0) {
+      const directSuggestion = flatSuggestionItems.find((item) => {
+        const title = (item.title || "").toLowerCase();
+        return title === cleanTerm || title.includes(cleanTerm) || cleanTerm.includes(title);
+      });
+      if (directSuggestion?.link) {
+        router.push(directSuggestion.link);
+        closeDropdown();
+        setIsSearching(false);
+        return;
+      }
+    }
+
+    // 3. Location-aware SEO Search Match (e.g. "used honda in palanpur", "cars in ahmedabad")
+    const cleanNoUsed = cleanTerm
+      .replace(/\bused\b/g, "")
+      .replace(/\bsecond\s*hand\b/g, "")
+      .trim();
+
+    const matchedCity = KNOWN_CITIES.find((c) =>
+      new RegExp(`\\b${c.toLowerCase()}\\b`, "i").test(cleanNoUsed)
+    );
+
+    if (matchedCity) {
+      const citySlug = matchedCity.toLowerCase().replace(/\s+/g, "-");
+      const isTwoWheeler = /\b(bike|bikes|two[- ]?wheelers?|motorcycles?|scooters?)\b/i.test(cleanTerm);
+      const vehicleKind = isTwoWheeler ? "two-wheelers" : "cars";
+
+      // Detect Brand
+      let detectedBrand = null;
+      let brandSlug = "";
+      for (const [id, brandName] of Object.entries(ALL_MAKERS)) {
+        const bLower = brandName.toLowerCase();
+        if (bLower === "maruti suzuki") {
+          if (/\bmaruti(?:\s+suzuki)?\b/i.test(cleanNoUsed)) {
+            detectedBrand = brandName;
+            brandSlug = "maruti-suzuki";
+            break;
+          }
+        } else if (new RegExp(`\\b${bLower}\\b`, "i").test(cleanNoUsed)) {
+          detectedBrand = brandName;
+          brandSlug = brandName.toLowerCase().replace(/\s+/g, "-");
+          break;
+        }
+      }
+
+      if (detectedBrand) {
+        // Detect Model if any
+        let detectedModelSlug = "";
+        for (const [modelKey, modelCanon] of Object.entries(MODEL_CANONICAL_SLUGS)) {
+          if (new RegExp(`\\b${modelKey}\\b`, "i").test(cleanNoUsed)) {
+            detectedModelSlug = modelCanon;
+            break;
+          }
+        }
+
+        if (detectedModelSlug) {
+          router.push(`/search/buy-used-${detectedModelSlug}-${vehicleKind}-${citySlug}`);
+          closeDropdown();
+          setIsSearching(false);
+          return;
+        }
+
+        router.push(`/search/buy-used-${brandSlug}-${vehicleKind}-${citySlug}`);
+        closeDropdown();
+        setIsSearching(false);
+        return;
+      }
+
+      // Model without brand (e.g. "creta in palanpur")
+      for (const [modelKey, modelCanon] of Object.entries(MODEL_CANONICAL_SLUGS)) {
+        if (new RegExp(`\\b${modelKey}\\b`, "i").test(cleanNoUsed)) {
+          router.push(`/search/buy-used-${modelCanon}-${vehicleKind}-${citySlug}`);
+          closeDropdown();
+          setIsSearching(false);
+          return;
+        }
+      }
+
+      // Generic cars/bikes in city (e.g. "used cars in palanpur")
+      router.push(`/search/buy-used-${vehicleKind}-${citySlug}`);
+      closeDropdown();
+      setIsSearching(false);
+      return;
     }
 
     // 2. Known Brand Match & Brand + Model Validation
@@ -706,8 +917,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     <div
       ref={searchContainerRef}
       className={`relative flex items-center h-[44px] md:h-[46px] w-[340px] lg:w-[440px] xl:w-[530px] 2xl:w-[580px] rounded-full transition-all duration-300 group pointer-events-auto ${heroMode && !scrolled
-          ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white"
-          : "bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm"
+        ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] text-white"
+        : "bg-gray-100 border border-gray-200/80 focus-within:border-gray-300 focus-within:shadow-sm"
         }`}
     >
       {/* Search Input */}
@@ -722,8 +933,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
           <div className="absolute inset-y-0 left-[44px] right-[40px] pointer-events-none overflow-hidden">
             <div
               className={`flex flex-col ${isTransitioning
-                  ? "transition-transform duration-500 ease-in-out"
-                  : ""
+                ? "transition-transform duration-500 ease-in-out"
+                : ""
                 }`}
               style={{
                 transform: `translateY(-${placeholderIdx * 46}px)`,
@@ -733,8 +944,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                 <span
                   key={idx}
                   className={`flex items-center h-[46px] shrink-0 text-[13px] font-medium ${heroMode && !scrolled
-                      ? "text-white/70"
-                      : "text-gray-400"
+                    ? "text-white/70"
+                    : "text-gray-400"
                     }`}
                 >
                   {text}
@@ -752,8 +963,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
           onFocus={openDropdown}
           onKeyDown={handleKeyDown}
           className={`w-full h-full bg-transparent focus:outline-none text-[13px] font-medium z-10 relative cursor-text ${heroMode && !scrolled
-              ? "text-white caret-white"
-              : "text-gray-800 caret-black [caret-color:#000000]"
+            ? "text-white caret-white"
+            : "text-gray-800 caret-black [caret-color:#000000]"
             }`}
           placeholder=""
         />
@@ -766,8 +977,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
               setSelectedIndex(-1);
             }}
             className={`mr-2 p-1.5 rounded-full transition-colors absolute right-0 cursor-pointer z-20 ${heroMode && !scrolled
-                ? "text-white/80 hover:text-white hover:bg-white/20"
-                : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              ? "text-white/80 hover:text-white hover:bg-white/20"
+              : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
               }`}
           >
             <X className="w-3.5 h-3.5" />
@@ -794,8 +1005,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       {/* Search Mega Menu Dropdown */}
       <div
         className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden overscroll-contain transition-all duration-300 origin-top ${showDropdown
-            ? "opacity-100 scale-y-100 translate-y-0"
-            : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+          ? "opacity-100 scale-y-100 translate-y-0"
+          : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
           } ${!searchQuery ? "h-[480px]" : "max-h-[400px]"}`}
         style={{
           width: !searchQuery ? "1000px" : "600px",
@@ -915,8 +1126,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             {/* Letter indicator */}
                             <div
                               className={`w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded ${showLetter
-                                  ? "bg-gray-100 text-gray-600"
-                                  : "opacity-0"
+                                ? "bg-gray-100 text-gray-600"
+                                : "opacity-0"
                                 }`}
                             >
                               {currentLetter}
@@ -982,11 +1193,11 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                       const isConsultant = Boolean(consultantInfo);
                       const badgeText =
                         consultantInfo?.badge &&
-                        consultantInfo.badge !== "NOT_INSPECTED"
+                          consultantInfo.badge !== "NOT_INSPECTED"
                           ? consultantInfo.badge
                           : consultantInfo?.tierTitle
-                          ? consultantInfo.tierTitle
-                          : "CONSULTANT";
+                            ? consultantInfo.tierTitle
+                            : "CONSULTANT";
 
                       return (
                         <div
@@ -1013,9 +1224,9 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                           <span className="flex-1 truncate">
                             {item.search}
                           </span>
-                          {isConsultant && (
-                            <span className="text-[9px] font-semibold text-fourth uppercase tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
-                              {badgeText}
+                          {isConsultant && formatSearchBadge(badgeText, true) && (
+                            <span className="text-[9px] font-semibold text-fourth tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
+                              {formatSearchBadge(badgeText, true)}
                             </span>
                           )}
                         </div>
@@ -1160,8 +1371,8 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                           key={item.id || itemIdx}
                           onClick={() => handleItemClick(item)}
                           className={`group flex items-center justify-between py-1.5 px-2 cursor-pointer transition-colors border-b border-gray-50 rounded-lg ${isSelected
-                              ? "bg-fourth/5 border-l-2 border-fourth"
-                              : "hover:bg-fourth/5"
+                            ? "bg-fourth/5 border-l-2 border-fourth"
+                            : "hover:bg-fourth/5"
                             }`}
                         >
                           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -1186,20 +1397,21 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                                 <span className="font-semibold text-gray-900 text-[13px] transition-colors truncate">
                                   {item.title}
                                 </span>
-                                {(item.badge && item.badge !== "NOT_INSPECTED"
-                                  ? item.badge
-                                  : item.type === "CONSULTATION"
-                                  ? "CONSULTANT"
-                                  : null) && (
-                                  <span className="text-[9px] font-semibold text-fourth uppercase tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
-                                    {item.badge && item.badge !== "NOT_INSPECTED"
-                                      ? item.badge
-                                      : "CONSULTANT"}
-                                  </span>
-                                )}
+                                {(() => {
+                                  const formattedBadge = formatSearchBadge(
+                                    item.badge,
+                                    item.type === "CONSULTATION"
+                                  );
+                                  if (!formattedBadge) return null;
+                                  return (
+                                    <span className="text-[9px] font-semibold text-fourth tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
+                                      {formattedBadge}
+                                    </span>
+                                  );
+                                })()}
                               </div>
                               <div className="flex items-center gap-1.5 text-[11px] text-gray-500 truncate">
-                                {item.subtitle && <span>{item.subtitle}</span>}
+                                {item.subtitle && <span>{formatSearchSubtitle(item.subtitle)}</span>}
                                 {item.price && (
                                   <span className="font-semibold text-gray-900">
                                     • ₹{Number(item.price).toLocaleString("en-IN")}
