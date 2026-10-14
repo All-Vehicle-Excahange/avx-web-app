@@ -233,7 +233,7 @@ export default function CustomSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full text-left px-3 py-2 text-sm cursor-pointer",
+                    "w-full text-left px-3 py-2 text-sm cursor-pointer capitalize",
                     variant === "transparent" || variant === "colored"
                       ? "text-primary hover:bg-white/20"
                       : "text-secondary hover:bg-third/20",

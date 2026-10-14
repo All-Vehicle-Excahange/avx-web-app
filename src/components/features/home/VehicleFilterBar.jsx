@@ -6,6 +6,7 @@ import {
   X,
   Loader2,
   Car,
+  CarFront,
   User,
   Bike,
   Fuel,
@@ -14,6 +15,8 @@ import {
   Sparkles,
   MapPin,
   Tag,
+  Clock,
+  ChevronRight,
 } from "lucide-react";
 import { useRouter } from "next/router";
 import {
@@ -30,7 +33,9 @@ import {
   saveRecentSearch,
   getRecentSearches,
   deleteAllRecentSearches,
+  getHomeFeedConsult,
 } from "@/services/user.service";
+import { GlobalSearchService } from "@/services/globalSearch.service";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
 import { setPreferredLocation, trackSearchSubmitted } from "@/lib/amplitude";
@@ -258,68 +263,156 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
   }, []);
 
   const [vehicleSearchQuery, setVehicleSearchQuery] = useState("");
+  const [debouncedVehicleQuery, setDebouncedVehicleQuery] = useState("");
   const [suggestionsData, setSuggestionsData] = useState([]);
-  const [filteredVehicleSuggestions, setFilteredVehicleSuggestions] = useState(
-    [],
-  );
   const [isSuggestionsLoaded, setIsSuggestionsLoaded] = useState(false);
+
+  // Debounce search query by 300ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedVehicleQuery(vehicleSearchQuery.trim());
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [vehicleSearchQuery]);
+
+  // Real-time backend suggest API query (identical to NavbarSearch)
+  const {
+    data: apiSuggestResponse,
+    isLoading: isSuggestLoading,
+    isFetching: isSuggestFetching,
+  } = useQuery({
+    queryKey: ["global-search-suggest-mobile", debouncedVehicleQuery],
+    queryFn: () => GlobalSearchService.suggest(debouncedVehicleQuery),
+    enabled: Boolean(debouncedVehicleQuery && debouncedVehicleQuery.length >= 2),
+    staleTime: 1000 * 60 * 2,
+  });
+
+  const isSearchingSuggestions =
+    isSuggestLoading ||
+    isSuggestFetching ||
+    (vehicleSearchQuery.trim().length >= 2 && debouncedVehicleQuery !== vehicleSearchQuery.trim());
+
+  // Real-time homefeed consultants for reliable badge & username detection
+  const { data: homeConsultantsData } = useQuery({
+    queryKey: ["homeFeedConsultantsFilterBar"],
+    queryFn: () => getHomeFeedConsult({ pageNo: 1, size: 100 }),
+    staleTime: 1000 * 60 * 10,
+    retry: false,
+  });
+
+  const [knownConsultants, setKnownConsultants] = useState(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("avx_known_consultants");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const saveKnownConsultant = (consultant) => {
+    if (!consultant || (!consultant.title && !consultant.name)) return;
+    const title = consultant.title || consultant.name;
+    setKnownConsultants((prev) => {
+      const exists = prev.some(
+        (c) =>
+          (c.title || "").toLowerCase().trim() === title.toLowerCase().trim() ||
+          (c.username && consultant.username && c.username.toLowerCase() === consultant.username.toLowerCase())
+      );
+      if (exists) return prev;
+      const updated = [{ ...consultant, title }, ...prev].slice(0, 100);
+      try {
+        localStorage.setItem("avx_known_consultants", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  useEffect(() => {
+    const apiSections =
+      apiSuggestResponse?.sections || apiSuggestResponse?.data?.sections;
+    if (Array.isArray(apiSections)) {
+      apiSections.forEach((sec) => {
+        const isConsultSec =
+          sec.icon === "CONSULTATION" ||
+          sec.sectionTitle?.toLowerCase().includes("consult");
+        (sec.items || []).forEach((item) => {
+          if (item.type === "CONSULTATION" || isConsultSec) {
+            saveKnownConsultant({
+              id: item.id,
+              title: item.title,
+              username:
+                item.username ||
+                item.consultantUsername ||
+                (item.title ? item.title.toLowerCase().replace(/[^a-z0-9]/g, "") : ""),
+              badge: item.badge || "CONSULTANT",
+              type: "CONSULTATION",
+            });
+          }
+        });
+      });
+    }
+  }, [apiSuggestResponse]);
+
+  const findConsultant = (searchTerm) => {
+    if (!searchTerm) return null;
+    const clean = searchTerm.toLowerCase().trim();
+    const cleanNoSpaces = clean.replace(/[^a-z0-9]/g, "");
+
+    const fromKnown = knownConsultants.find((c) => {
+      const cTitle = (c.title || c.label || "").toLowerCase().trim();
+      const cUser = (c.username || "").toLowerCase().trim();
+      const cUserClean = cUser.replace(/\d+$/, "");
+      return (
+        cTitle === clean ||
+        cUser === clean ||
+        cUserClean === clean ||
+        cTitle.replace(/[^a-z0-9]/g, "") === cleanNoSpaces
+      );
+    });
+    if (fromKnown) return fromKnown;
+
+    const homeList = Array.isArray(homeConsultantsData?.data)
+      ? homeConsultantsData.data
+      : [];
+    const fromHome = homeList.find((c) => {
+      const cName = (c.consultationName || "").toLowerCase().trim();
+      const cUser = (c.username || "").toLowerCase().trim();
+      const cUserClean = cUser.replace(/\d+$/, "");
+      return (
+        cName === clean ||
+        cUser === clean ||
+        cUserClean === clean ||
+        cName.replace(/[^a-z0-9]/g, "") === cleanNoSpaces
+      );
+    });
+    if (fromHome) {
+      return {
+        id: fromHome.id,
+        title: fromHome.consultationName?.trim(),
+        username: fromHome.username,
+        badge: fromHome.badge || fromHome.tierTitle || "CONSULTANT",
+        tierTitle: fromHome.tierTitle,
+        type: "CONSULTATION",
+      };
+    }
+
+    return null;
+  };
 
   const loadSearchSuggestions = async () => {
     if (isSuggestionsLoaded) return;
     try {
       const data = await import("@/data/searchSuggestions.json");
       const rawSuggestions = data.default || data;
-      const loadedSuggestions = rawSuggestions.map((s) => {
-        if (s.type === "brand" || s.type === "model") {
-          const prefix = s.label.toLowerCase().startsWith("used")
-            ? ""
-            : "Used ";
+      const loadedSuggestions = (Array.isArray(rawSuggestions) ? rawSuggestions : [])
+        .filter((s) => s.type === "brand" || s.type === "model")
+        .map((s) => {
+          const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
           return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
-        }
-        return s;
-      });
+        });
 
-      let consultantsList = [];
-      try {
-        const searchIndexRes = await fetch("/search_index.json");
-        if (searchIndexRes.ok) {
-          const indexData = await searchIndexRes.json();
-          if (Array.isArray(indexData)) {
-            consultantsList = indexData
-              .filter((item) => item.type === "consultant" && item.params?.username)
-              .map((item) => {
-                const username = item.params.username || "";
-                const cleanSlug = username.replace(/\d+$/, "");
-                const rawTitle = (item.title || "").trim();
-                const looksLikeDigitSlug =
-                  !rawTitle ||
-                  rawTitle.toLowerCase() === username.toLowerCase() ||
-                  /\d{4,}$/.test(rawTitle);
-                let label = looksLikeDigitSlug
-                  ? cleanSlug || username
-                  : rawTitle;
-                if (label === label.toUpperCase() && label.length > 2) {
-                  label = label.charAt(0) + label.slice(1).toLowerCase();
-                }
-                return {
-                  id: item.id,
-                  label,
-                  username,
-                  searchTokens: [label, cleanSlug, ...(item.keywords || [])]
-                    .filter(Boolean)
-                    .map((t) => String(t).toLowerCase()),
-                  type: "consultant",
-                  link: `/auto-consultant/${username}`,
-                };
-              })
-              .filter((c) => c.label && c.username);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load consultants list in filter bar", err);
-      }
-
-      setSuggestionsData([...loadedSuggestions, ...consultantsList]);
+      setSuggestionsData(loadedSuggestions);
       setIsSuggestionsLoaded(true);
     } catch (err) {
       console.error("Failed to load search suggestions in filter bar", err);
@@ -330,30 +423,55 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     loadSearchSuggestions();
   }, []);
 
-  useEffect(() => {
-    if (!vehicleSearchQuery.trim()) {
-      setFilteredVehicleSuggestions([]);
-      return;
+  const displaySections = useMemo(() => {
+    if (!vehicleSearchQuery.trim()) return [];
+
+    const apiSections =
+      apiSuggestResponse?.sections || apiSuggestResponse?.data?.sections;
+    if (Array.isArray(apiSections) && apiSections.length > 0) {
+      const validSections = apiSections.filter(
+        (sec) => Array.isArray(sec.items) && sec.items.length > 0
+      );
+      if (validSections.length > 0) {
+        return validSections;
+      }
     }
-    const q = vehicleSearchQuery.toLowerCase().trim();
-    const matches = suggestionsData
+
+    const query = vehicleSearchQuery.toLowerCase().trim();
+    if (!query) return [];
+
+    const directMatches = suggestionsData
       .filter((s) => {
-        const labelMatch = s.label.toLowerCase().includes(q);
+        if (s.type !== "brand" && s.type !== "model") return false;
+        const labelMatch = (s.label || "").toLowerCase().includes(query);
         const tokenMatch = Array.isArray(s.searchTokens)
-          ? s.searchTokens.some((t) => t.includes(q))
+          ? s.searchTokens.some((t) => t.includes(query))
           : false;
-        const cleanUser =
-          s.username && String(s.username).replace(/\d+$/, "").toLowerCase();
-        const cleanUserMatch = cleanUser && cleanUser.includes(q);
-        return labelMatch || tokenMatch || cleanUserMatch;
+        return labelMatch || tokenMatch;
       })
       .slice(0, 8);
 
-    setFilteredVehicleSuggestions(matches);
-  }, [vehicleSearchQuery, suggestionsData]);
+    if (directMatches.length > 0) {
+      return [
+        {
+          sectionTitle: "Suggestions",
+          icon: "search",
+          items: directMatches.map((s) => ({
+            id: s.id || s.slug || s.label,
+            title: s.label,
+            subtitle: null,
+            type: "VEHICLE",
+            link: s.link,
+          })),
+        },
+      ];
+    }
+
+    return [];
+  }, [vehicleSearchQuery, apiSuggestResponse, suggestionsData]);
 
   const handleSelectVehicleSuggestion = (item) => {
-    const searchLabel = item.label || item.rawLabel || vehicleSearchQuery;
+    const searchLabel = item.title || item.label || item.rawLabel || vehicleSearchQuery;
 
     if (searchLabel) {
       saveSearchMutation.mutate(searchLabel);
@@ -369,45 +487,43 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     setActiveTab(null);
     setVehicleSearchQuery("");
 
+    const isConsultant =
+      item.type === "CONSULTATION" || item.type === "consultant";
+
+    if (isConsultant) {
+      const targetUsername =
+        item.username ||
+        item.consultantUsername ||
+        (item.title ? item.title.toLowerCase().replace(/[^a-z0-9]/g, "") : "");
+
+      saveKnownConsultant({
+        id: item.id,
+        title: item.title || searchLabel,
+        username: targetUsername,
+        badge: item.badge || "CONSULTANT",
+        type: "CONSULTATION",
+      });
+
+      if (targetUsername) {
+        push(`/auto-consultant/${targetUsername}`);
+        return;
+      }
+    }
+
     if (item.link) {
-      if (
-        item.type !== "consultant" &&
-        typeof item.link === "string" &&
-        item.link.startsWith("/search")
-      ) {
+      if (typeof item.link === "string" && item.link.startsWith("/search")) {
         trackProductSearch(searchLabel || "vehicle_search", "filter_bar_suggestion");
       }
       push(item.link);
       return;
     }
-    if (item.username) {
-      push(`/auto-consultant/${item.username}`);
+
+    if (item.type === "VEHICLE" && item.id) {
+      push(`/vehicle/details/${item.id}`);
       return;
     }
-    if (item.type === "brand") {
-      const brandName = item.rawLabel || item.brand || item.label;
-      trackProductSearch(brandName || "vehicle_search", "filter_bar_brand");
-      push(`/search?brand=${encodeURIComponent(brandName)}`);
-      return;
-    }
-    if (item.type === "model") {
-      const brandParam = item.brand
-        ? `&brand=${encodeURIComponent(item.brand)}`
-        : "";
-      const modelIdParam = item.modelId
-        ? `&modelId=${item.modelId}&model=${encodeURIComponent(item.model || item.rawLabel)}`
-        : "";
-      trackProductSearch(
-        item.label || item.rawLabel || "vehicle_search",
-        "filter_bar_model"
-      );
-      push(
-        `/search?q=${encodeURIComponent(item.label || item.rawLabel)}${brandParam}${modelIdParam}`,
-      );
-      return;
-    }
-    trackProductSearch(searchLabel || "vehicle_search", "filter_bar_query");
-    push(`/search?q=${encodeURIComponent(searchLabel)}`);
+
+    handleVehicleSearchSubmit(searchLabel);
   };
 
   const handleVehicleSearchSubmit = (queryStr = vehicleSearchQuery) => {
@@ -435,26 +551,20 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     }
 
     // 2. Check if query matches a known registered consultant
-    const matchedConsultant = (suggestionsData || []).find((s) => {
-      if (s.type !== "consultant") return false;
-      const sLabel = (s.label || "").toLowerCase().trim();
-      const sUsername = (s.username || "").toLowerCase().trim();
-      const sCleanSlug = sUsername.replace(/\d+$/, "");
-      return (
-        sLabel === lowerClean ||
-        sUsername === lowerClean ||
-        sCleanSlug === lowerClean
-      );
-    });
-
+    const matchedConsultant = findConsultant(cleanQuery);
     if (matchedConsultant) {
-      const targetLink =
-        matchedConsultant.link || `/auto-consultant/${matchedConsultant.username}`;
-      push(targetLink);
-      return;
+      const targetUsername =
+        matchedConsultant.username ||
+        (matchedConsultant.title
+          ? matchedConsultant.title.toLowerCase().replace(/[^a-z0-9]/g, "")
+          : "");
+      if (targetUsername) {
+        push(`/auto-consultant/${targetUsername}`);
+        return;
+      }
     }
 
-    // 3. Otherwise navigate to vehicle search results
+    // 3. Otherwise navigate to canonical vehicle search results
     let searchSlug = lowerClean
       .replace(/\bused\b/g, "")
       .trim()
@@ -2042,39 +2152,121 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 )}
               </div>
 
-              {/* Suggestions dropdown (Vehicles, Brands, Models, Consultants) */}
-              {(vehicleSearchQuery.trim() &&
-                filteredVehicleSuggestions.length > 0) && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-[#161616] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl z-[60] max-h-64 overflow-y-auto custom-scrollbar">
-                    {/* Vehicle / Brand / Model / Consultant Suggestions */}
-                    {filteredVehicleSuggestions.map((item, idx) => (
-                      <button
-                        key={item.id || `veh-${idx}`}
-                        onClick={() => handleSelectVehicleSuggestion(item)}
-                        className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 text-left border-b border-neutral-800/40 last:border-none transition-colors"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          {item.type === "consultant" ? (
-                            <User
-                              size={16}
-                              className="text-fourth shrink-0"
-                            />
-                          ) : item.type === "brand" ? (
-                            <Car size={16} className="text-fourth shrink-0" />
-                          ) : (
-                            <Tag size={16} className="text-gray-400 shrink-0" />
-                          )}
-                          <span className="text-sm font-semibold text-white truncate">
-                            {item.label}
+              {/* Suggestions dropdown (real-time Global Search suggest with sections) */}
+              {vehicleSearchQuery.trim().length >= 2 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[#161616] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl z-[60] max-h-72 overflow-y-auto custom-scrollbar p-2">
+                  {isSearchingSuggestions && displaySections.length === 0 ? (
+                    <div className="space-y-3 p-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3.5 h-3.5 rounded-full bg-neutral-800 animate-pulse" />
+                        <div className="h-3 w-20 bg-neutral-800 rounded-full animate-pulse" />
+                      </div>
+                      {[...Array(3)].map((_, idx) => (
+                        <div
+                          key={`mobile-suggest-skeleton-${idx}`}
+                          className="flex items-center justify-between py-2 px-2 border-b border-neutral-800/40 animate-pulse"
+                        >
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="w-8 h-8 rounded-lg bg-neutral-800 shrink-0" />
+                            <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+                              <div className="h-3 w-32 bg-neutral-800 rounded-full" />
+                              <div className="h-2 w-20 bg-neutral-800/60 rounded-full" />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : displaySections.length > 0 ? (
+                    displaySections.map((sec, secIdx) => (
+                      <div key={`sec-${secIdx}`} className="mb-2 last:mb-0">
+                        <div className="px-3 py-1 flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            {sec.sectionTitle?.toLowerCase().includes("vehicle") ||
+                            sec.icon === "VEHICLE" ||
+                            sec.icon === "car" ? (
+                              <CarFront size={13} className="text-fourth" />
+                            ) : (
+                              <User size={13} className="text-fourth" />
+                            )}
+                            {sec.sectionTitle}
                           </span>
                         </div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-gray-400 shrink-0 ml-2">
-                          {item.type || "search"}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
+                        <div className="flex flex-col gap-0.5">
+                          {sec.items.map((item, itemIdx) => {
+                            const isConsult =
+                              item.type === "CONSULTATION" || item.type === "consultant";
+                            return (
+                              <button
+                                key={item.id || itemIdx}
+                                onClick={() => handleSelectVehicleSuggestion(item)}
+                                className="w-full flex items-center justify-between p-2 hover:bg-white/5 text-left rounded-xl transition-colors border-b border-neutral-800/30 last:border-none"
+                              >
+                                <div className="flex items-center gap-3 min-w-0 flex-1">
+                                  {item.thumbnailUrl ? (
+                                    <img
+                                      src={item.thumbnailUrl}
+                                      alt={item.title || item.label}
+                                      className="w-8 h-8 object-cover rounded-lg border border-neutral-800 shrink-0"
+                                    />
+                                  ) : (
+                                    <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center shrink-0">
+                                      {isConsult ? (
+                                        <User size={14} className="text-fourth" />
+                                      ) : (
+                                        <Car size={14} className="text-gray-400" />
+                                      )}
+                                    </div>
+                                  )}
+
+                                  <div className="flex flex-col min-w-0 flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-semibold text-white text-[13px] truncate">
+                                        {item.title || item.label}
+                                      </span>
+                                      {(item.badge && item.badge !== "NOT_INSPECTED"
+                                        ? item.badge
+                                        : isConsult
+                                        ? "CONSULTANT"
+                                        : null) && (
+                                        <span className="text-[9px] font-bold text-fourth bg-fourth/15 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
+                                          {item.badge && item.badge !== "NOT_INSPECTED"
+                                            ? item.badge
+                                            : "CONSULTANT"}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-[11px] text-gray-400 truncate">
+                                      {item.subtitle && <span>{item.subtitle}</span>}
+                                      {item.price && (
+                                        <span className="font-semibold text-white">
+                                          • ₹{Number(item.price).toLocaleString("en-IN")}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-1 shrink-0 text-gray-400">
+                                  <span className="text-[10px] font-medium text-gray-400">
+                                    {isConsult ? "View Store" : "Explore"}
+                                  </span>
+                                  <ChevronRight size={14} className="text-gray-500" />
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    vehicleSearchQuery.trim() && (
+                      <div className="p-4 text-center text-gray-500 text-xs">
+                        No results found for &quot;{vehicleSearchQuery}&quot;
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -2103,35 +2295,39 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                 </span>
               ) : (
                 displayRecentSearches.map((term, index) => {
-                  const cleanTerm = (term || "").toLowerCase().trim();
-                  const matchedConsultant = (suggestionsData || []).find((s) => {
-                    if (s.type !== "consultant") return false;
-                    const sLabel = (s.label || "").toLowerCase().trim();
-                    const sUsername = (s.username || "").toLowerCase().trim();
-                    const sCleanSlug = sUsername.replace(/\d+$/, "");
-                    return (
-                      sLabel === cleanTerm ||
-                      sUsername === cleanTerm ||
-                      sCleanSlug === cleanTerm
-                    );
-                  });
-                  const isConsultant = Boolean(matchedConsultant);
+                  const consultantInfo = findConsultant(term);
+                  const isConsultant = Boolean(consultantInfo);
+                  const badgeText =
+                    consultantInfo?.badge && consultantInfo.badge !== "NOT_INSPECTED"
+                      ? consultantInfo.badge
+                      : consultantInfo?.tierTitle
+                      ? consultantInfo.tierTitle
+                      : "CONSULTANT";
 
                   return (
                     <button
                       key={index}
-                      onClick={() => handleVehicleSearchSubmit(term)}
+                      onClick={() => {
+                        if (isConsultant && consultantInfo?.username) {
+                          saveSearchMutation.mutate(term);
+                          push(`/auto-consultant/${consultantInfo.username}`);
+                          setMobileOpen(false);
+                          setActiveTab(null);
+                        } else {
+                          handleVehicleSearchSubmit(term);
+                        }
+                      }}
                       className="flex items-center gap-1.5 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] border border-neutral-800 rounded-full text-xs text-gray-300 font-medium shrink-0 cursor-pointer transition-colors"
                     >
                       {isConsultant ? (
                         <User size={13} className="text-fourth shrink-0" />
                       ) : (
-                        <span className="text-gray-500 text-[11px]">🕒</span>
+                        <Clock size={13} className="text-gray-400 shrink-0" />
                       )}
                       <span>{term}</span>
                       {isConsultant && (
                         <span className="text-[9px] font-bold text-fourth bg-fourth/15 px-1.5 py-0.5 rounded uppercase tracking-wider">
-                          Consultant
+                          {badgeText}
                         </span>
                       )}
                     </button>

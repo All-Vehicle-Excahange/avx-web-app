@@ -708,18 +708,14 @@ export async function getServerSideProps(context) {
             .replace(/^-+|-+$/g, "");
         }
 
+        let hasInvalidModelSegment = false;
         if (modelName) {
           const rawModelName = modelName.replace(/-/g, " ");
-          initialFilters.model = rawModelName
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-
           try {
             const bodyTypeParam =
               initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
             const modelRes = await fetch(
-              `${nodeApiUrl}/search/models?search=${rawModelName}&makerId=${id}&bodyType=${bodyTypeParam}`
+              `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&makerId=${id}&bodyType=${bodyTypeParam}`
             );
             if (modelRes.ok) {
               const modelJson = await modelRes.json();
@@ -727,6 +723,7 @@ export async function getServerSideProps(context) {
                 const n =
                   m.modelName || m.modelDisplayName || m.model_name || "";
                 return (
+                  normalize(n) === normalize(rawModelName) ||
                   n.toLowerCase().replace(/[\s-]/g, "") ===
                   rawModelName.toLowerCase().replace(/[\s-]/g, "")
                 );
@@ -738,20 +735,90 @@ export async function getServerSideProps(context) {
                   foundModel.modelName ||
                   foundModel.modelDisplayName ||
                   foundModel.model_name;
+                modelName = initialFilters.model;
+              } else {
+                hasInvalidModelSegment = true;
+                modelName = "";
+                initialFilters.model = "";
               }
+            } else {
+              hasInvalidModelSegment = true;
+              modelName = "";
+              initialFilters.model = "";
             }
           } catch (e) {
             console.error("Model resolution failed:", e);
+            hasInvalidModelSegment = true;
+            modelName = "";
+            initialFilters.model = "";
           }
+        }
+
+        if (hasInvalidModelSegment) {
+          const canonicalBrandSlug = slugPrefix
+            ? `buy-used-${slugPrefix}-cars`
+            : "buy-used-cars";
+          return {
+            redirect: {
+              destination: `/search/${canonicalBrandSlug}`,
+              permanent: false,
+            },
+          };
         }
       }
     } else {
-      brandName = details
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-      initialFilters.brandName = brandName;
+      const rawModelName = details.replace(/-/g, " ");
+      try {
+        const bodyTypeParam =
+          initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
+        const modelRes = await fetch(
+          `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&bodyType=${bodyTypeParam}`
+        );
+        if (modelRes.ok) {
+          const modelJson = await modelRes.json();
+          const foundModel = modelJson?.data?.find((m) => {
+            const n =
+              m.modelName || m.modelDisplayName || m.model_name || "";
+            return (
+              normalize(n) === normalize(rawModelName)
+            );
+          });
+          if (foundModel) {
+            initialFilters.modelId =
+              foundModel.modelId || foundModel.model_id;
+            initialFilters.model =
+              foundModel.modelName ||
+              foundModel.modelDisplayName ||
+              foundModel.model_name;
+            modelName = initialFilters.model;
+            const mId = foundModel.makerId || foundModel.maker_id;
+            if (mId) {
+              initialFilters.makerId = mId;
+              if (allMakers[mId]) {
+                initialFilters.brandName = allMakers[mId];
+                brandName = allMakers[mId];
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Model resolution failed:", e);
+      }
     }
+  }
+
+  // Canonical SEO redirect: If details was provided but matched neither brand, model, city, body type, fuel, nor transmission,
+  // redirect to the canonical listing page to prevent indexing thin/0-result pages.
+  if (details && !brandName && !modelName && !bodyTypeFilter && !fuelTypeFilter && !transmissionFilter && !city) {
+    return {
+      redirect: {
+        destination:
+          vehicleTypeParam === "two-wheelers"
+            ? "/search/buy-used-two-wheelers"
+            : "/search/buy-used-cars",
+        permanent: false,
+      },
+    };
   }
 
   let budgetPart = "";
