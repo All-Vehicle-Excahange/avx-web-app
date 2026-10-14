@@ -110,26 +110,13 @@ export function formatInventoryLead({
   place = "",
   isTwoWheeler = false,
 } = {}) {
-  const n = Number(count) || 0;
-  if (n < 1) return "";
   const phrase = searchPhraseName(brand, model);
   if (!phrase && !brand) return "";
   const hasModel = Boolean(String(model || "").trim());
-  const unit =
-    n === 1
-      ? isTwoWheeler
-        ? "bike"
-        : "car"
-      : isTwoWheeler
-        ? "bikes"
-        : "cars";
+  const unit = isTwoWheeler ? "bikes" : "cars";
   const subject = hasModel ? phrase : cleanJoin([phrase, unit]);
   const where = place ? ` in ${place}` : "";
-  if (n >= 10) {
-    const rounded = Math.floor(n / 10) * 10;
-    return `${rounded}+ used ${subject}${where}`;
-  }
-  return `${n} used ${subject}${where}`;
+  return `used ${subject}${where}`;
 }
 
 export function formatOfficialHeading({
@@ -148,10 +135,7 @@ export function formatOfficialHeading({
     ? cleanJoin([brandT, modelT])
     : cleanJoin([brandT, vw]);
   const where = place ? ` in ${place}` : "";
-  let prefix = "Used";
-  if (n >= 10) prefix = `${Math.floor(n / 10) * 10}+ Used`;
-  else if (n > 1) prefix = `${n} Used`;
-  else if (n === 1) prefix = "1 Used";
+  const prefix = "Used";
   return `${prefix} ${subject}${where}`.replace(/\s+/g, " ").trim();
 }
 
@@ -696,8 +680,11 @@ export function buildSearchLandingFaq({
     place: cityT,
     isTwoWheeler,
   });
-  const buyQuestion = singularLead
-    ? `Where can I buy a used ${singularLead.replace(/^1 used /, "")}?`
+  const buyTarget = singularLead
+    ? singularLead.replace(/\bcars\b/gi, "car").replace(/\bbikes\b/gi, "bike")
+    : "";
+  const buyQuestion = buyTarget
+    ? `Where can I buy a ${buyTarget}?`
     : cityT
       ? `Where can I buy used ${whereLabel}?`
       : `Where can I buy used ${subject} on Reecomm?`;

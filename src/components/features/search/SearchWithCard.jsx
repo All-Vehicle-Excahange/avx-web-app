@@ -241,7 +241,7 @@ export default function SearchWithCard({
       // Support comma-separated multiple makeIds (e.g. from ?makerId=1001,1002)
       return String(makerId).split(",").map(s => s.trim()).filter(Boolean);
     }
-    return rawBrand ? [String(rawBrand)] : [];
+    return isNumeric(rawBrand) ? [String(rawBrand)] : [];
   });
   const [brandSearch, setBrandSearch] = useState("");
   const [brandPage, setBrandPage] = useState(1);
@@ -2917,7 +2917,7 @@ export default function SearchWithCard({
                   No Vehicles Found
                 </h3>
                 <p className="text-xs text-third max-w-sm mx-auto mb-3">
-                  We couldn't find any vehicles matching your search criteria. Try adjusting your filters.
+                  We couldn&apos;t find any vehicles matching your search criteria. Try adjusting your filters.
                 </p>
                 <Button
                   variant="outline"

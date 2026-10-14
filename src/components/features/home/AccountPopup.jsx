@@ -566,6 +566,12 @@ export default function AccountPopup({ open, onClosePopup }) {
                       >
                         My Activity
                       </Item>
+                      <Item
+                        href="/user/details/myprofile"
+                        onClick={onClosePopup}
+                      >
+                        My Profile
+                      </Item>
                     </Section>
                   </div>
 

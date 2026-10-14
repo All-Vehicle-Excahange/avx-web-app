@@ -64,17 +64,16 @@ async function fetchStorefrontInventoryServer(username) {
 
 function StoreFrontPage({ seo }) {
   const router = useRouter();
-
-  if (router.isFallback) {
-    return <StoreFrontHeroSkeleton />;
-  }
-
   const { id } = router.query || {};
 
   const { data: storeDetails } = useQuery({
     ...getStoreFrontByUsernameQuery(id),
-    enabled: !!id,
+    enabled: !!id && !router.isFallback,
   });
+
+  if (router.isFallback) {
+    return <StoreFrontHeroSkeleton />;
+  }
 
   let displayTitle = seo?.title || "StoreFront Details | Reecomm";
   let displayDescription =
