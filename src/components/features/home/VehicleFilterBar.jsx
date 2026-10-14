@@ -40,6 +40,7 @@ import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
 import { setPreferredLocation, trackSearchSubmitted } from "@/lib/amplitude";
 import { generateSeoSlug } from "@/lib/seo";
+import { formatSearchBadge, formatSearchSubtitle } from "@/components/layout/NavbarSearch";
 
 const trackProductSearch = (searchString, searchType = "filter_bar", locationProps = {}) => {
   const query = String(searchString || "").trim() || "vehicle_search";
@@ -2223,20 +2224,21 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                       <span className="font-semibold text-white text-[13px] truncate">
                                         {item.title || item.label}
                                       </span>
-                                      {(item.badge && item.badge !== "NOT_INSPECTED"
-                                        ? item.badge
-                                        : isConsult
-                                        ? "CONSULTANT"
-                                        : null) && (
-                                        <span className="text-[9px] font-bold text-fourth bg-fourth/15 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
-                                          {item.badge && item.badge !== "NOT_INSPECTED"
-                                            ? item.badge
-                                            : "CONSULTANT"}
-                                        </span>
-                                      )}
+                                      {(() => {
+                                        const formattedBadge = formatSearchBadge(
+                                          item.badge,
+                                          isConsult
+                                        );
+                                        if (!formattedBadge) return null;
+                                        return (
+                                          <span className="text-[9px] font-bold text-fourth bg-fourth/15 px-1.5 py-0.5 rounded tracking-wider shrink-0">
+                                            {formattedBadge}
+                                          </span>
+                                        );
+                                      })()}
                                     </div>
                                     <div className="flex items-center gap-1.5 text-[11px] text-gray-400 truncate">
-                                      {item.subtitle && <span>{item.subtitle}</span>}
+                                      {item.subtitle && <span>{formatSearchSubtitle(item.subtitle)}</span>}
                                       {item.price && (
                                         <span className="font-semibold text-white">
                                           • ₹{Number(item.price).toLocaleString("en-IN")}

@@ -368,13 +368,18 @@ function generateBrandLocationCombinations() {
         slug: `buy-used-${brandSlug}-cars-${citySlug}`,
         title: `Used ${brand} Cars in ${city}`,
         keywords: [
-          brandLower, cityLower, 'used car',
+          brandLower, cityLower, 'used car', 'used cars',
+          `used ${brandLower}`,
           `used ${brandLower} cars`,
           `used ${brandLower} in ${cityLower}`,
           `used ${brandLower} cars in ${cityLower}`,
+          `${brandLower} in ${cityLower}`,
+          `${brandLower} cars in ${cityLower}`,
+          `${brandLower} ${cityLower}`,
           `used ${brandLower} near me`,
           `used ${brandLower} near ${cityLower}`,
           `second hand ${brandLower} ${cityLower}`,
+          `second hand ${brandLower} in ${cityLower}`,
         ],
         params: { makerName: brand, city, vehicleType: 'FOUR_WHEELER' },
       });
@@ -395,23 +400,71 @@ function generateBrandLocationCombinations() {
     }
   }
 
+  // Generic City Landing Pages: Cars & Bikes in each focus city
+  for (const city of FOCUS_CITIES) {
+    const citySlug = slugifySegment(city);
+    const cityLower = city.toLowerCase();
+    pushFilterItem(items, seen, {
+      slug: `buy-used-cars-${citySlug}`,
+      title: `Used Cars in ${city}`,
+      keywords: [
+        'used car', 'used cars', 'car', 'cars', cityLower,
+        `used cars in ${cityLower}`,
+        `used car in ${cityLower}`,
+        `cars in ${cityLower}`,
+        `cars near ${cityLower}`,
+        `used cars near ${cityLower}`,
+        `second hand cars ${cityLower}`,
+        `second hand cars in ${cityLower}`,
+      ],
+      params: { city, vehicleType: 'FOUR_WHEELER' },
+    });
+
+    pushFilterItem(items, seen, {
+      slug: `buy-used-two-wheelers-${citySlug}`,
+      title: `Used Bikes in ${city}`,
+      keywords: [
+        'used bike', 'used bikes', 'bike', 'bikes', 'two wheeler', cityLower,
+        `used bikes in ${cityLower}`,
+        `used bike in ${cityLower}`,
+        `bikes in ${cityLower}`,
+        `bikes near ${cityLower}`,
+        `used bikes near ${cityLower}`,
+        `second hand bikes ${cityLower}`,
+        `second hand bikes in ${cityLower}`,
+      ],
+      params: { city, vehicleType: 'TWO_WHEELER' },
+    });
+  }
+
   for (const brand of TWO_WHEELER_BRANDS) {
     const brandSlug = slugifySegment(brand);
     const brandLower = brand.toLowerCase();
     pushFilterItem(items, seen, {
       slug: `buy-used-${brandSlug}-two-wheelers`,
       title: `Used ${brand} Bikes`,
-      keywords: [brandLower, 'used bike', `used ${brandLower} bikes`],
+      keywords: [brandLower, 'used bike', 'used bikes', `used ${brandLower}`, `used ${brandLower} bikes`],
       params: { makerName: brand, vehicleType: 'TWO_WHEELER' },
     });
     for (const city of FOCUS_CITIES) {
       const citySlug = slugifySegment(city);
+      const cityLower = city.toLowerCase();
       pushFilterItem(items, seen, {
         slug: `buy-used-${brandSlug}-two-wheelers-${citySlug}`,
         title: `Used ${brand} Bikes in ${city}`,
         keywords: [
-          brandLower, city.toLowerCase(), 'used bike',
-          `used ${brandLower} in ${city.toLowerCase()}`,
+          brandLower, cityLower, 'used bike', 'used bikes',
+          `used ${brandLower}`,
+          `used ${brandLower} bikes`,
+          `used ${brandLower} in ${cityLower}`,
+          `used ${brandLower} bikes in ${cityLower}`,
+          `${brandLower} in ${cityLower}`,
+          `${brandLower} bikes in ${cityLower}`,
+          `${brandLower} ${cityLower}`,
+          `used ${brandLower} near me`,
+          `used ${brandLower} near ${cityLower}`,
+          `second hand ${brandLower} ${cityLower}`,
+          `second hand ${brandLower} in ${cityLower}`,
         ],
         params: { makerName: brand, city, vehicleType: 'TWO_WHEELER' },
       });
@@ -455,14 +508,20 @@ function generateBrandLocationCombinations() {
           modelLower,
           cityLower,
           `used ${brandLower} ${modelLower}`,
+          `used ${modelLower}`,
           `used ${modelLower} in ${cityLower}`,
           `used ${brandLower} ${modelLower} in ${cityLower}`,
+          `${modelLower} in ${cityLower}`,
+          `${brandLower} ${modelLower} in ${cityLower}`,
+          `${modelLower} ${cityLower}`,
           `used ${modelLower} near me`,
           `used ${brandLower} near ${cityLower}`,
           `used ${brandLower} ${modelLower} near me`,
           `second hand ${modelLower} ${cityLower}`,
+          `second hand ${modelLower} in ${cityLower}`,
           ...shortModelKeywords(model),
           ...shortModelKeywords(model).map((k) => `${k} near me`),
+          ...shortModelKeywords(model).map((k) => `${k} in ${cityLower}`),
         ],
         params: {
           makerName: brand,

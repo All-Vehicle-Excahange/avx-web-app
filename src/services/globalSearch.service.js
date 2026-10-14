@@ -36,18 +36,60 @@ export const GlobalSearchService = {
       const raw = res?.data;
       const dataObj = responseData?.data || raw?.data || responseData || raw || {};
 
-      const sections = Array.isArray(dataObj?.sections)
+      let sections = Array.isArray(dataObj?.sections)
         ? dataObj.sections
         : Array.isArray(raw?.sections)
         ? raw.sections
         : [];
+
+      // Check if backend returned valid items
+      const hasBackendItems = sections.some(
+        (sec) => Array.isArray(sec.items) && sec.items.length > 0
+      );
+
+      // If backend has no matching items, fallback to the SEO search index
+      if (!hasBackendItems) {
+        try {
+          const searchRes = await fetch(
+            `/api/v1/website/search?query=${encodeURIComponent(q)}`
+          );
+          if (searchRes.ok) {
+            const searchData = await searchRes.json();
+            if (Array.isArray(searchData?.sections) && searchData.sections.length > 0) {
+              return {
+                query: searchData.query || q,
+                sections: searchData.sections,
+              };
+            }
+          }
+        } catch (searchErr) {
+          console.warn("Failed to query local search index:", searchErr?.message || searchErr);
+        }
+      }
 
       return {
         query: dataObj?.query || raw?.query || q,
         sections,
       };
     } catch (err) {
-      // Gracefully return null on network/API failure so caller can fallback to local index
+      // Gracefully attempt local search index on backend error
+      try {
+        const searchRes = await fetch(
+          `/api/v1/website/search?query=${encodeURIComponent(q)}`
+        );
+        if (searchRes.ok) {
+          const searchData = await searchRes.json();
+          if (Array.isArray(searchData?.sections) && searchData.sections.length > 0) {
+            return {
+              query: searchData.query || q,
+              sections: searchData.sections,
+            };
+          }
+        }
+      } catch (searchErr) {
+        console.warn("Local search index query fallback error:", searchErr?.message || searchErr);
+      }
+
       console.warn("Global search suggest API returned error/unreachable, using local fallback:", err?.message || err);
       return null;
     }

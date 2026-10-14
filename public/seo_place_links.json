@@ -1,4 +1,184 @@
 {
+  "siddhpur": [
+    {
+      "label": "Used cars in Siddhpur",
+      "href": "/search/buy-used-cars-siddhpur"
+    },
+    {
+      "label": "Used bikes in Siddhpur",
+      "href": "/search/buy-used-two-wheelers-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Cars in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Ertiga in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-ertiga-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Swift Dzire in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-swift-dzire-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Swift in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-swift-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Eeco in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-eeco-cars-siddhpur"
+    },
+    {
+      "label": "Used Toyota Cars in Siddhpur",
+      "href": "/search/buy-used-toyota-cars-siddhpur"
+    },
+    {
+      "label": "Used Toyota Fortuner in Siddhpur",
+      "href": "/search/buy-used-toyota-fortuner-cars-siddhpur"
+    },
+    {
+      "label": "Used Toyota Innova Crysta in Siddhpur",
+      "href": "/search/buy-used-toyota-innova-crysta-cars-siddhpur"
+    },
+    {
+      "label": "Used Mahindra Cars in Siddhpur",
+      "href": "/search/buy-used-mahindra-cars-siddhpur"
+    },
+    {
+      "label": "Used Mahindra Thar in Siddhpur",
+      "href": "/search/buy-used-mahindra-thar-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki FRONX in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-fronx-cars-siddhpur"
+    },
+    {
+      "label": "Used Mahindra SCORPIO CLASSIC in Siddhpur",
+      "href": "/search/buy-used-mahindra-scorpio-classic-cars-siddhpur"
+    },
+    {
+      "label": "Used Hyundai Cars in Siddhpur",
+      "href": "/search/buy-used-hyundai-cars-siddhpur"
+    },
+    {
+      "label": "Used Hyundai Santro Xing in Siddhpur",
+      "href": "/search/buy-used-hyundai-santro-xing-cars-siddhpur"
+    },
+    {
+      "label": "Used Hyundai Accent in Siddhpur",
+      "href": "/search/buy-used-hyundai-accent-cars-siddhpur"
+    },
+    {
+      "label": "Used Mahindra SCORPIO-N in Siddhpur",
+      "href": "/search/buy-used-mahindra-scorpio-n-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Wagon R 1.0 in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-wagon-r-10-cars-siddhpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Celerio in Siddhpur",
+      "href": "/search/buy-used-maruti-suzuki-celerio-cars-siddhpur"
+    }
+  ],
+  "gujarat": [
+    {
+      "label": "Used cars in Gujarat",
+      "href": "/search/buy-used-cars-gujarat"
+    },
+    {
+      "label": "Used bikes in Gujarat",
+      "href": "/search/buy-used-two-wheelers-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Cars in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-cars-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Ertiga in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-ertiga-cars-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Swift in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-swift-cars-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Swift Dzire in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Vitara Brezza in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-vitara-brezza-cars-gujarat"
+    },
+    {
+      "label": "Used Maruti Suzuki Eeco in Gujarat",
+      "href": "/search/buy-used-maruti-suzuki-eeco-cars-gujarat"
+    },
+    {
+      "label": "Used Hyundai Cars in Gujarat",
+      "href": "/search/buy-used-hyundai-cars-gujarat"
+    },
+    {
+      "label": "Used Hyundai Grand i10 in Gujarat",
+      "href": "/search/buy-used-hyundai-grand-i10-cars-gujarat"
+    },
+    {
+      "label": "Used Hyundai Creta in Gujarat",
+      "href": "/search/buy-used-hyundai-creta-cars-gujarat"
+    },
+    {
+      "label": "Used Hyundai Elite i20 in Gujarat",
+      "href": "/search/buy-used-hyundai-elite-i20-cars-gujarat"
+    },
+    {
+      "label": "Used Toyota Cars in Gujarat",
+      "href": "/search/buy-used-toyota-cars-gujarat"
+    },
+    {
+      "label": "Used Toyota Fortuner in Gujarat",
+      "href": "/search/buy-used-toyota-fortuner-cars-gujarat"
+    },
+    {
+      "label": "Used Honda Cars in Gujarat",
+      "href": "/search/buy-used-honda-cars-gujarat"
+    },
+    {
+      "label": "Used Honda SHINE 125 in Gujarat",
+      "href": "/search/buy-used-honda-shine-125-cars-gujarat"
+    },
+    {
+      "label": "Used Ford Cars in Gujarat",
+      "href": "/search/buy-used-ford-cars-gujarat"
+    },
+    {
+      "label": "Used Ford Ecosport in Gujarat",
+      "href": "/search/buy-used-ford-ecosport-cars-gujarat"
+    },
+    {
+      "label": "Used Renault Cars in Gujarat",
+      "href": "/search/buy-used-renault-cars-gujarat"
+    },
+    {
+      "label": "Used Renault Duster in Gujarat",
+      "href": "/search/buy-used-renault-duster-cars-gujarat"
+    },
+    {
+      "label": "Used Toyota Innova Crysta in Gujarat",
+      "href": "/search/buy-used-toyota-innova-crysta-cars-gujarat"
+    },
+    {
+      "label": "Used KIA Cars in Gujarat",
+      "href": "/search/buy-used-kia-cars-gujarat"
+    },
+    {
+      "label": "Used KIA SONET in Gujarat",
+      "href": "/search/buy-used-kia-sonet-cars-gujarat"
+    },
+    {
+      "label": "Used Mahindra Cars in Gujarat",
+      "href": "/search/buy-used-mahindra-cars-gujarat"
+    }
+  ],
   "palanpur": [
     {
       "label": "Used cars in Palanpur",
@@ -11,6 +191,18 @@
     {
       "label": "Aabad Motors — Auto Consultant Palanpur",
       "href": "/auto-consultant/aabadmotors"
+    },
+    {
+      "label": "Used Maruti Suzuki Cars in Palanpur",
+      "href": "/search/buy-used-maruti-suzuki-cars-palanpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Swift in Palanpur",
+      "href": "/search/buy-used-maruti-suzuki-swift-cars-palanpur"
+    },
+    {
+      "label": "Used Maruti Suzuki Vitara Brezza in Palanpur",
+      "href": "/search/buy-used-maruti-suzuki-vitara-brezza-cars-palanpur"
     },
     {
       "label": "Used Hyundai Cars in Palanpur",
@@ -27,14 +219,6 @@
     {
       "label": "Used Hyundai Elite i20 in Palanpur",
       "href": "/search/buy-used-hyundai-elite-i20-cars-palanpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Cars in Palanpur",
-      "href": "/search/buy-used-maruti-suzuki-cars-palanpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Vitara Brezza in Palanpur",
-      "href": "/search/buy-used-maruti-suzuki-vitara-brezza-cars-palanpur"
     },
     {
       "label": "Used Toyota Cars in Palanpur",
@@ -91,108 +275,6 @@
     {
       "label": "Used Hyundai i10 in Palanpur",
       "href": "/search/buy-used-hyundai-i10-cars-palanpur"
-    },
-    {
-      "label": "Used Maruti Suzuki 800 in Palanpur",
-      "href": "/search/buy-used-maruti-suzuki-800-cars-palanpur"
-    }
-  ],
-  "gujarat": [
-    {
-      "label": "Used cars in Gujarat",
-      "href": "/search/buy-used-cars-gujarat"
-    },
-    {
-      "label": "Used bikes in Gujarat",
-      "href": "/search/buy-used-two-wheelers-gujarat"
-    },
-    {
-      "label": "Used Hyundai Cars in Gujarat",
-      "href": "/search/buy-used-hyundai-cars-gujarat"
-    },
-    {
-      "label": "Used Hyundai Grand i10 in Gujarat",
-      "href": "/search/buy-used-hyundai-grand-i10-cars-gujarat"
-    },
-    {
-      "label": "Used Hyundai Creta in Gujarat",
-      "href": "/search/buy-used-hyundai-creta-cars-gujarat"
-    },
-    {
-      "label": "Used Hyundai Elite i20 in Gujarat",
-      "href": "/search/buy-used-hyundai-elite-i20-cars-gujarat"
-    },
-    {
-      "label": "Used Maruti Suzuki Cars in Gujarat",
-      "href": "/search/buy-used-maruti-suzuki-cars-gujarat"
-    },
-    {
-      "label": "Used Maruti Suzuki Vitara Brezza in Gujarat",
-      "href": "/search/buy-used-maruti-suzuki-vitara-brezza-cars-gujarat"
-    },
-    {
-      "label": "Used Toyota Cars in Gujarat",
-      "href": "/search/buy-used-toyota-cars-gujarat"
-    },
-    {
-      "label": "Used Toyota Fortuner in Gujarat",
-      "href": "/search/buy-used-toyota-fortuner-cars-gujarat"
-    },
-    {
-      "label": "Used Honda Cars in Gujarat",
-      "href": "/search/buy-used-honda-cars-gujarat"
-    },
-    {
-      "label": "Used Honda SHINE 125 in Gujarat",
-      "href": "/search/buy-used-honda-shine-125-cars-gujarat"
-    },
-    {
-      "label": "Used Ford Cars in Gujarat",
-      "href": "/search/buy-used-ford-cars-gujarat"
-    },
-    {
-      "label": "Used Ford Ecosport in Gujarat",
-      "href": "/search/buy-used-ford-ecosport-cars-gujarat"
-    },
-    {
-      "label": "Used Renault Cars in Gujarat",
-      "href": "/search/buy-used-renault-cars-gujarat"
-    },
-    {
-      "label": "Used Renault Duster in Gujarat",
-      "href": "/search/buy-used-renault-duster-cars-gujarat"
-    },
-    {
-      "label": "Used Toyota Innova Crysta in Gujarat",
-      "href": "/search/buy-used-toyota-innova-crysta-cars-gujarat"
-    },
-    {
-      "label": "Used KIA Cars in Gujarat",
-      "href": "/search/buy-used-kia-cars-gujarat"
-    },
-    {
-      "label": "Used KIA SONET in Gujarat",
-      "href": "/search/buy-used-kia-sonet-cars-gujarat"
-    },
-    {
-      "label": "Used Mahindra Cars in Gujarat",
-      "href": "/search/buy-used-mahindra-cars-gujarat"
-    },
-    {
-      "label": "Used Mahindra Scorpio in Gujarat",
-      "href": "/search/buy-used-mahindra-scorpio-cars-gujarat"
-    },
-    {
-      "label": "Used Maruti Suzuki Ertiga in Gujarat",
-      "href": "/search/buy-used-maruti-suzuki-ertiga-cars-gujarat"
-    },
-    {
-      "label": "Used KTM Cars in Gujarat",
-      "href": "/search/buy-used-ktm-cars-gujarat"
-    },
-    {
-      "label": "Used KTM DUKE 200 in Gujarat",
-      "href": "/search/buy-used-ktm-duke-200-cars-gujarat"
     }
   ],
   "ahmedabad": [
@@ -407,76 +489,6 @@
     {
       "label": "Used Ford Cars in Himatnagar",
       "href": "/search/buy-used-ford-cars-himatnagar"
-    }
-  ],
-  "siddhpur": [
-    {
-      "label": "Used cars in Siddhpur",
-      "href": "/search/buy-used-cars-siddhpur"
-    },
-    {
-      "label": "Used bikes in Siddhpur",
-      "href": "/search/buy-used-two-wheelers-siddhpur"
-    },
-    {
-      "label": "Used Toyota Cars in Siddhpur",
-      "href": "/search/buy-used-toyota-cars-siddhpur"
-    },
-    {
-      "label": "Used Toyota Fortuner in Siddhpur",
-      "href": "/search/buy-used-toyota-fortuner-cars-siddhpur"
-    },
-    {
-      "label": "Used Toyota Innova Crysta in Siddhpur",
-      "href": "/search/buy-used-toyota-innova-crysta-cars-siddhpur"
-    },
-    {
-      "label": "Used Mahindra Cars in Siddhpur",
-      "href": "/search/buy-used-mahindra-cars-siddhpur"
-    },
-    {
-      "label": "Used Mahindra Thar in Siddhpur",
-      "href": "/search/buy-used-mahindra-thar-cars-siddhpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Cars in Siddhpur",
-      "href": "/search/buy-used-maruti-suzuki-cars-siddhpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Ertiga in Siddhpur",
-      "href": "/search/buy-used-maruti-suzuki-ertiga-cars-siddhpur"
-    },
-    {
-      "label": "Used Maruti Suzuki FRONX in Siddhpur",
-      "href": "/search/buy-used-maruti-suzuki-fronx-cars-siddhpur"
-    },
-    {
-      "label": "Used Mahindra SCORPIO CLASSIC in Siddhpur",
-      "href": "/search/buy-used-mahindra-scorpio-classic-cars-siddhpur"
-    },
-    {
-      "label": "Used Hyundai Cars in Siddhpur",
-      "href": "/search/buy-used-hyundai-cars-siddhpur"
-    },
-    {
-      "label": "Used Hyundai Santro Xing in Siddhpur",
-      "href": "/search/buy-used-hyundai-santro-xing-cars-siddhpur"
-    },
-    {
-      "label": "Used Hyundai Accent in Siddhpur",
-      "href": "/search/buy-used-hyundai-accent-cars-siddhpur"
-    },
-    {
-      "label": "Used Mahindra SCORPIO-N in Siddhpur",
-      "href": "/search/buy-used-mahindra-scorpio-n-cars-siddhpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Wagon R 1.0 in Siddhpur",
-      "href": "/search/buy-used-maruti-suzuki-wagon-r-10-cars-siddhpur"
-    },
-    {
-      "label": "Used Maruti Suzuki Celerio in Siddhpur",
-      "href": "/search/buy-used-maruti-suzuki-celerio-cars-siddhpur"
     }
   ],
   "unjha": [
