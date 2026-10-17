@@ -22,8 +22,8 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { trackInquiryClick, trackInquirySubmit } from "@/lib/gtag";
-import { trackInquiryInitiated, trackInquirySubmitted, trackCallSubmitted } from "@/lib/amplitude";
+import { trackCallSubmitted as trackGaCallSubmitted } from "@/lib/gtag";
+import { trackCallSubmitted } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import {
@@ -180,13 +180,14 @@ export default function CallSellerPopup({
     if (!isStorefrontCall) {
       const inquiryType = isConsultant ? "Call Consultant" : "Call Seller";
 
-      // Amplitude: call_submitted
-      trackCallSubmitted({
+      const callSubmittedProps = {
         vehicle_id: vehicleId,
         vehicle_name: vehicleTitle,
         inquiry_type: inquiryType,
         seller_type: vehicleOwnerRole,
-      });
+      };
+      trackCallSubmitted(callSubmittedProps);
+      trackGaCallSubmitted(callSubmittedProps);
 
       // Meta Pixel: Lead & Contact on call submit
       event("Lead", {

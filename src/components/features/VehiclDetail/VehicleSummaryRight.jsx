@@ -20,7 +20,12 @@ import RequestAlredySentPopup from "./RequestAlredySentPopup";
 import MakeOfferPopup from "./MakeOfferPopup";
 import NoPrefetchLink from "@/components/ui/NoPrefetchLink";
 import { useRouter } from "next/router";
-import { trackInquiryClick } from "@/lib/gtag";
+import {
+  trackInquiryClick,
+  trackMakeOfferInitiated as trackGaMakeOfferInitiated,
+  trackCallInitiated as trackGaCallInitiated,
+  trackCallSubmitted as trackGaCallSubmitted,
+} from "@/lib/gtag";
 import {
   trackInquiryInitiated,
   trackInquirySubmitted,
@@ -239,13 +244,15 @@ export default function VehicleSummaryRight({
     const inquiryType =
       vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller";
 
-    trackCallInitiated({
+    const callInitiatedProps = {
       vehicle_id: vehicleId,
       vehicle_name: vehicleTitle,
       inquiry_type: inquiryType,
       seller_type: vehicleOwnerRole,
       is_logged_in: Boolean(isLoggedIn),
-    });
+    };
+    trackCallInitiated(callInitiatedProps);
+    trackGaCallInitiated(callInitiatedProps);
 
     setLoading(true);
     let targetPhone =
@@ -295,12 +302,14 @@ export default function VehicleSummaryRight({
         const inquiryType =
           vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller";
 
-        trackCallSubmitted({
+        const callSubmittedProps = {
           vehicle_id: vehicleId,
           vehicle_name: vehicleTitle,
           inquiry_type: inquiryType,
           seller_type: vehicleOwnerRole,
-        });
+        };
+        trackCallSubmitted(callSubmittedProps);
+        trackGaCallSubmitted(callSubmittedProps);
         event("Lead", {
           content_type: "vehicle",
           content_ids: [String(vehicleId)],
@@ -355,7 +364,7 @@ export default function VehicleSummaryRight({
       "";
     const sellerType = vehicle?.sellerType || vehicleOwnerRole || "";
 
-    trackMakeOfferInitiated({
+    const makeOfferInitiatedProps = {
       vehicle_id: vehicleId || vehicle?.id,
       vehicle_name: vehicleName || "Vehicle Details",
       seller_type: sellerType,
@@ -364,7 +373,9 @@ export default function VehicleSummaryRight({
       city: city || undefined,
       state: state || undefined,
       is_logged_in: Boolean(isLoggedIn),
-    });
+    };
+    trackMakeOfferInitiated(makeOfferInitiatedProps);
+    trackGaMakeOfferInitiated(makeOfferInitiatedProps);
 
     trackInquiryInitiated({
       vehicle_id: vehicleId || vehicle?.id,

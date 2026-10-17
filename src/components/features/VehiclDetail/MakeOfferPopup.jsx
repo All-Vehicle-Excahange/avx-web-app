@@ -14,7 +14,11 @@ import {
   trackInquirySubmitted,
 } from "@/lib/amplitude";
 import { event, customEvent } from "@/lib/fpixel";
-import { trackInquirySubmit } from "@/lib/gtag";
+import {
+  trackInquirySubmit,
+  trackMakeOfferOptionSelected as trackGaMakeOfferOptionSelected,
+  trackMakeOfferSubmitted as trackGaMakeOfferSubmitted,
+} from "@/lib/gtag";
 import Link from "next/link";
 
 export default function MakeOfferPopup({
@@ -135,11 +139,13 @@ export default function MakeOfferPopup({
 
   const handlePresetOption = (opt, offerOption) => {
     setOfferPrice(opt.toString());
-    trackMakeOfferOptionSelected({
+    const optionProps = {
       ...offerBaseProps(),
       offer_price: opt,
       offer_option: offerOption,
-    });
+    };
+    trackMakeOfferOptionSelected(optionProps);
+    trackGaMakeOfferOptionSelected(optionProps);
   };
 
   const currentOffer = Number(offerPrice) || 0;
@@ -203,12 +209,14 @@ export default function MakeOfferPopup({
       };
       await sendInquary(vehicleId, payload);
 
-      trackMakeOfferSubmitted({
+      const makeOfferSubmittedProps = {
         ...offerBaseProps(),
         offer_price: currentOffer,
         offer_option: offerOptionForPrice(currentOffer),
         has_message: Boolean(message.trim()),
-      });
+      };
+      trackMakeOfferSubmitted(makeOfferSubmittedProps);
+      trackGaMakeOfferSubmitted(makeOfferSubmittedProps);
 
       trackInquirySubmitted({
         vehicle_id: vehicleId,
