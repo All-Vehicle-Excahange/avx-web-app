@@ -139,16 +139,25 @@ export function buildStorefrontSeo({
     : "cars";
 
   const brandOnReecomm = `${primary} on Reecomm`;
-  const titleCandidates = [brandOnReecomm];
+  // Prefer richest city/location titles first so pickTitle keeps keyword-rich SERP form
+  const titleCandidates = [];
+  if (location && location !== cityT) {
+    titleCandidates.push(
+      `${brandOnReecomm} — Used ${vw} in ${location}, Second Hand`,
+    );
+    titleCandidates.push(`${brandOnReecomm} — Used ${vw} in ${location}`);
+  }
   if (cityT) {
+    titleCandidates.push(
+      `${brandOnReecomm} — Used ${vw} in ${cityT}, Second Hand`,
+    );
     titleCandidates.push(`${brandOnReecomm} — Used ${vw} in ${cityT}`);
     titleCandidates.push(`${primary} — Auto Consultant in ${cityT} | Reecomm`);
     titleCandidates.push(`${primary} ${cityT} | Reecomm`);
   }
-  if (location && location !== cityT) {
-    titleCandidates.push(`${brandOnReecomm} — Used ${vw} in ${location}`);
-  }
+  titleCandidates.push(`${brandOnReecomm} — Used ${vw}, Second Hand`);
   titleCandidates.push(`${brandOnReecomm} — Used ${vw}`);
+  titleCandidates.push(brandOnReecomm);
 
   const title = pickTitle(titleCandidates);
 
@@ -176,8 +185,8 @@ export function buildStorefrontSeo({
     availableVehicles > 0 ? ` Browse ${availableVehicles}+ verified listings.` : "";
 
   const description = location
-    ? `${primary} on Reecomm — used ${vw} auto consultant in ${location}.${stockBit} Compare photos, prices, and reviews, then inquire securely.${priceBit}${altBit}`
-    : `${primary} on Reecomm — used ${vw} auto consultant.${stockBit} Compare photos, prices, and reviews, then inquire securely.${priceBit}${altBit}`;
+    ? `${primary} on Reecomm — second hand used ${vw} auto consultant in ${location}.${stockBit} Compare photos, prices, and reviews, then inquire securely.${priceBit}${altBit}`
+    : `${primary} on Reecomm — second hand used ${vw} auto consultant.${stockBit} Compare photos, prices, and reviews, then inquire securely.${priceBit}${altBit}`;
 
   // Visible H1 stays store display name (unchanged layout)
   const h1 = name;

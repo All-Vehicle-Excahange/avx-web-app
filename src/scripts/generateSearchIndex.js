@@ -296,7 +296,7 @@ const FOCUS_CITIES = [
   'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore',
   'Chandigarh', 'Gandhinagar', 'Visnagar', 'Kanodar', 'Siddhpur', 'Mehsana',
   'Chhota Udepur', 'Nashik', 'Bhopal', 'Patna', 'Ludhiana', 'Nagpur', 'Coimbatore',
-  'Latur', 'Hansi', 'Agra',
+  'Latur', 'Hansi', 'Agra', 'Himatnagar', 'Unjha', 'Tharad',
 ];
 
 const FOCUS_STATES = [
@@ -339,6 +339,19 @@ const POPULAR_CAR_MODELS = [
   { brand: 'Honda', model: 'Amaze', brandSlug: 'honda', modelSlug: 'amaze' },
   { brand: 'Kia', model: 'Seltos', brandSlug: 'kia', modelSlug: 'seltos' },
   { brand: 'Kia', model: 'Sonet', brandSlug: 'kia', modelSlug: 'sonet' },
+];
+
+const POPULAR_BIKE_MODELS = [
+  { brand: 'Honda', model: 'Activa', brandSlug: 'honda', modelSlug: 'activa' },
+  { brand: 'Hero', model: 'Splendor', brandSlug: 'hero', modelSlug: 'splendor' },
+  { brand: 'Hero', model: 'HF Deluxe', brandSlug: 'hero', modelSlug: 'hf-deluxe' },
+  { brand: 'TVS', model: 'Jupiter', brandSlug: 'tvs', modelSlug: 'jupiter' },
+  { brand: 'Bajaj', model: 'Pulsar', brandSlug: 'bajaj', modelSlug: 'pulsar' },
+  { brand: 'Royal Enfield', model: 'Classic 350', brandSlug: 'royal-enfield', modelSlug: 'classic-350' },
+  { brand: 'Royal Enfield', model: 'Bullet', brandSlug: 'royal-enfield', modelSlug: 'bullet' },
+  { brand: 'Yamaha', model: 'MT 15', brandSlug: 'yamaha', modelSlug: 'mt-15' },
+  { brand: 'KTM', model: 'Duke 200', brandSlug: 'ktm', modelSlug: 'duke-200' },
+  { brand: 'Suzuki', model: 'Access', brandSlug: 'suzuki', modelSlug: 'access' },
 ];
 
 /**
@@ -533,6 +546,48 @@ function generateBrandLocationCombinations() {
     }
   }
 
+  for (const { brand, model, brandSlug, modelSlug } of POPULAR_BIKE_MODELS) {
+    pushFilterItem(items, seen, {
+      slug: `buy-used-${brandSlug}-${modelSlug}-two-wheelers`,
+      title: `Used ${brand} ${model} Bikes`,
+      keywords: [
+        brand.toLowerCase(), model.toLowerCase(), 'used bike', 'used bikes',
+        `used ${brand.toLowerCase()} ${model.toLowerCase()}`,
+        ...shortModelKeywords(model),
+      ],
+      params: { makerName: brand, modelName: model, vehicleType: 'TWO_WHEELER' },
+    });
+
+    for (const city of FOCUS_CITIES) {
+      const citySlug = slugifySegment(city);
+      const cityLower = city.toLowerCase();
+      const brandLower = brand.toLowerCase();
+      const modelLower = model.toLowerCase();
+      pushFilterItem(items, seen, {
+        slug: `buy-used-${brandSlug}-${modelSlug}-two-wheelers-${citySlug}`,
+        title: `Used ${brand} ${model} Bikes in ${city}`,
+        keywords: [
+          brandLower,
+          modelLower,
+          cityLower,
+          'used bike',
+          'used bikes',
+          `used ${modelLower}`,
+          `used ${modelLower} in ${cityLower}`,
+          `used ${brandLower} ${modelLower} in ${cityLower}`,
+          `second hand ${modelLower} ${cityLower}`,
+          ...shortModelKeywords(model),
+        ],
+        params: {
+          makerName: brand,
+          modelName: model,
+          city,
+          vehicleType: 'TWO_WHEELER',
+        },
+      });
+    }
+  }
+
   return items;
 }
 
@@ -613,7 +668,14 @@ async function fetchInventoryLandingItems(consultantPlaces = { cities: new Map()
         }
 
         if (citySlug) {
-          bump(`buy-used-cars-${citySlug}`);
+          // City hub for the correct vehicle kind (cars OR bikes)
+          bump(
+            kind === 'two-wheelers'
+              ? `buy-used-two-wheelers-${citySlug}`
+              : `buy-used-cars-${citySlug}`,
+          );
+          // Inventory-backed brand×city always (not only consultant places)
+          bump(`buy-used-${brandSlug}-${kind}-${citySlug}`);
           if (consultantPlaces.cities?.has(citySlug)) {
             bump(`buy-used-${brandSlug}-${kind}-${citySlug}`);
           }
@@ -1184,6 +1246,9 @@ async function generateSearchIndex() {
     // National brand + model hubs (always) — inventory-backed GEO comes from comboHits only
     for (const { brandSlug, modelSlug } of POPULAR_CAR_MODELS) {
       addSlug(`buy-used-${brandSlug}-${modelSlug}-cars`);
+    }
+    for (const { brandSlug, modelSlug } of POPULAR_BIKE_MODELS) {
+      addSlug(`buy-used-${brandSlug}-${modelSlug}-two-wheelers`);
     }
     for (const brand of ALL_CAR_BRANDS) {
       addSlug(`buy-used-${slugifySegment(brand)}-cars`);

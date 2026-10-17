@@ -97,7 +97,7 @@ export const generateDynamicPageTitle = (vehicle) => {
     .trim();
 
   const locationPart = city ? ` in ${city}` : "";
-  return `Used ${baseName}${locationPart} | Reecomm`;
+  return `Used ${baseName}${locationPart}, Second Hand | Reecomm`;
 };
 
 export const generateDynamicMetaDescription = (vehicle, summary = {}) => {
@@ -156,7 +156,7 @@ export const generateDynamicMetaDescription = (vehicle, summary = {}) => {
   const priceText = formattedPrice ? ` for ${formattedPrice}` : "";
   const sellerText = sellerName ? `. Listed by ${sellerName}` : "";
 
-  let description = `Reecomm | Buy certified used ${baseName}${locationText}${priceText}. ${specsList ? `${specsList}. ` : ""}${rating} with verified report${sellerText}.`;
+  let description = `Reecomm | Buy certified used ${baseName}${locationText}${priceText} — second hand. ${specsList ? `${specsList}. ` : ""}${rating} with verified report${sellerText}. Inquire on Reecomm.`;
   if (description.length > 160) {
     description = `${description.slice(0, 157).trim()}...`;
   }

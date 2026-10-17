@@ -129,20 +129,15 @@ function Index({ seo }) {
       vehicleOverview.thumbnailUrl || vehicleOverview.imageUrls?.[0] || "";
 
     displayTitle =
-      `${year} ${make} ${model} ${variant} for Sale in ${city} — ₹${formattedPrice} | Reecomm`
+      `Used ${year} ${make} ${model} ${variant} in ${city}, Second Hand — ₹${formattedPrice} | Reecomm`
         .replace(/\s+/g, " ")
         .trim();
     displayDescription =
-      `Buy this ${year} ${make} ${model} in ${city} for ₹${formattedPrice}. ${kms} km driven · ${fuel} · ${transmission}. ${inspectionText}. View full specs, photos, and contact the seller on Reecomm.`
+      `Buy this second hand ${year} ${make} ${model} in ${city} for ₹${formattedPrice}. ${kms} km driven · ${fuel} · ${transmission}. ${inspectionText}. View full specs, photos, and inquire on Reecomm.`
         .replace(/\s+/g, " ")
         .trim();
-    ogTitle = `${year} ${make} ${model} · ₹${formattedPrice} · ${city}`
-      .replace(/\s+/g, " ")
-      .trim();
-    ogDescription =
-      `${kms} km · ${fuel} · ${transmission} ${vehicleOverview.avxInspectionRating ? "· ✓ Reecomm Inspected" : ""}`
-        .replace(/\s+/g, " ")
-        .trim();
+    ogTitle = displayTitle;
+    ogDescription = displayDescription;
   }
 
   return (

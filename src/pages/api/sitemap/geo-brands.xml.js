@@ -1,8 +1,24 @@
+import fs from "fs";
+import path from "path";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import searchSuggestions from "@/data/searchSuggestions.json";
 import { getSeoVehicles, getSeoVehicleCount, getSeoConsultations, getSeoConsultationCount } from "@/services/seo.service";
 
 const BASE_URL = "https://www.reecomm.com";
+
+/** Prefer allowlisted / stocked GEO URLs — avoid empty brand×city crawl waste. */
+function loadSitemapAllowlist() {
+  try {
+    const filePath = path.join(process.cwd(), "public", "seo_sitemap_slugs.json");
+    if (!fs.existsSync(filePath)) return null;
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    const slugs = data?.slugs;
+    if (!Array.isArray(slugs) || !slugs.length) return null;
+    return new Set(slugs);
+  } catch {
+    return null;
+  }
+}
 
 function slugify(value) {
   return String(value || "")
@@ -86,7 +102,16 @@ export default async function handler(req, res) {
       "siddhpur",
       "mehsana",
       "chhota-udepur",
+      "himatnagar",
+      "unjha",
+      "tharad",
     ];
+
+    const allowlist = loadSitemapAllowlist();
+    const slugAllowed = (slug) => {
+      if (!allowlist) return true;
+      return allowlist.has(slug);
+    };
 
     const states = [
       "maharashtra",
@@ -127,21 +152,27 @@ export default async function handler(req, res) {
       addUrl(`/search/buy-used-${b.slug}-cars`, 0.8, "daily");
     });
 
-    // 2. Brand + City — volume brands × focus cities only
+    // 2. Brand + City — only when allowlisted / stocked (crawl budget)
     volumeCarBrands.forEach((b) => {
       cities.forEach((city) => {
-        addUrl(`/search/buy-used-${b.slug}-cars-${city}`, 0.7, "weekly");
+        const slug = `buy-used-${b.slug}-cars-${city}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.7, "weekly");
+        }
       });
     });
 
-    // 3. Brand + State — volume brands × major states only (not exotic × every state)
+    // 3. Brand + State — allowlisted only
     volumeCarBrands.forEach((b) => {
       states.forEach((state) => {
-        addUrl(`/search/buy-used-${b.slug}-cars-${state}`, 0.6, "weekly");
+        const slug = `buy-used-${b.slug}-cars-${state}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.6, "weekly");
+        }
       });
     });
 
-    // 4. Two-wheeler brand / city / state
+    // 4. Two-wheeler brand hubs always; GEO only when allowlisted
     const twoWheelerBrands = [
       "hero",
       "tvs",
@@ -157,15 +188,24 @@ export default async function handler(req, res) {
     twoWheelerBrands.forEach((b) => {
       addUrl(`/search/buy-used-${b}-two-wheelers`, 0.8, "daily");
       cities.forEach((city) => {
-        addUrl(`/search/buy-used-${b}-two-wheelers-${city}`, 0.7, "weekly");
+        const slug = `buy-used-${b}-two-wheelers-${city}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.7, "weekly");
+        }
       });
       states.forEach((state) => {
-        addUrl(`/search/buy-used-${b}-two-wheelers-${state}`, 0.6, "weekly");
+        const slug = `buy-used-${b}-two-wheelers-${state}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.6, "weekly");
+        }
       });
     });
 
     cities.forEach((city) => {
-      addUrl(`/search/buy-used-two-wheelers-${city}`, 0.75, "weekly");
+      const slug = `buy-used-two-wheelers-${city}`;
+      if (slugAllowed(slug)) {
+        addUrl(`/search/${slug}`, 0.75, "weekly");
+      }
     });
 
     // 5. Popular brand + model (+ city/state)
@@ -197,10 +237,16 @@ export default async function handler(req, res) {
     popularCarModels.forEach(({ brand, model }) => {
       addUrl(`/search/buy-used-${brand}-${model}-cars`, 0.8, "daily");
       cities.forEach((city) => {
-        addUrl(`/search/buy-used-${brand}-${model}-cars-${city}`, 0.7, "weekly");
+        const slug = `buy-used-${brand}-${model}-cars-${city}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.7, "weekly");
+        }
       });
       states.forEach((state) => {
-        addUrl(`/search/buy-used-${brand}-${model}-cars-${state}`, 0.6, "weekly");
+        const slug = `buy-used-${brand}-${model}-cars-${state}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.6, "weekly");
+        }
       });
     });
 
