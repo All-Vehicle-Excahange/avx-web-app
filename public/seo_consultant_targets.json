@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-13T11:37:22.089Z",
-  "count": 40,
+  "generatedAt": "2026-10-17T07:57:25.737Z",
+  "count": 48,
   "consultants": [
     {
       "name": "Aabad Motors",
@@ -75,6 +75,29 @@
         "auto consultant kanodar"
       ],
       "consultationId": "1e976ed7-e997-4e26-9cfb-e2d43976e5a5"
+    },
+    {
+      "name": "Carspot",
+      "primaryName": "Carspot Auto Consultant",
+      "alternateNames": [
+        "Carspot",
+        "Carspot Auto Consult"
+      ],
+      "username": "carspot",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/carspot",
+      "path": "/auto-consultant/carspot",
+      "keywords": [
+        "carspot auto consultant",
+        "carspot auto consultant palanpur",
+        "carspot",
+        "carspot palanpur",
+        "carspot auto consult",
+        "carspot auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "b4383eba-ca7c-4db7-a7f2-c02c44162b5b"
     },
     {
       "name": "Chehar Auto",
@@ -152,6 +175,46 @@
       "consultationId": "46952d8f-6a18-49a8-b8ca-97fd6b012d39"
     },
     {
+      "name": "Erammotors",
+      "primaryName": "Erammotors Auto Consultant",
+      "alternateNames": [
+        "Erammotors",
+        "Erammotors Auto Consult"
+      ],
+      "username": "erammotors",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/erammotors",
+      "path": "/auto-consultant/erammotors",
+      "keywords": [
+        "erammotors auto consultant",
+        "erammotors auto consultant palanpur",
+        "erammotors",
+        "erammotors palanpur",
+        "erammotors auto consult",
+        "erammotors auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "dcaabe94-ed6d-4775-9ebf-a3f7677d35e8"
+    },
+    {
+      "name": "Fiza Motors",
+      "primaryName": "Fiza Motors",
+      "alternateNames": [],
+      "username": "fizamotors",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/fizamotors",
+      "path": "/auto-consultant/fizamotors",
+      "keywords": [
+        "fiza motors",
+        "fiza motors palanpur",
+        "fiza motors auto consultant",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "03392621-ae40-4da9-957d-eb04efb11ced"
+    },
+    {
       "name": "Fortune Auto",
       "primaryName": "Fortune Auto Consultant",
       "alternateNames": [
@@ -193,21 +256,24 @@
       "consultationId": "cd86f61b-b0cb-427e-b92a-426ee39dc11a"
     },
     {
-      "name": "Janvi Motors",
-      "primaryName": "Janvi Motors",
-      "alternateNames": [],
-      "username": "janvimotors",
+      "name": "Gujrat Auto Consult",
+      "primaryName": "Gujrat Auto Consultant",
+      "alternateNames": [
+        "Gujrat Auto Consult"
+      ],
+      "username": "gujratautoconsult",
       "city": "Siddhpur",
       "state": "Gujarat",
-      "url": "https://www.reecomm.com/auto-consultant/janvimotors",
-      "path": "/auto-consultant/janvimotors",
+      "url": "https://www.reecomm.com/auto-consultant/gujratautoconsult",
+      "path": "/auto-consultant/gujratautoconsult",
       "keywords": [
-        "janvi motors",
-        "janvi motors siddhpur",
-        "janvi motors auto consultant",
+        "gujrat auto consultant",
+        "gujrat auto consultant siddhpur",
+        "gujrat auto consult",
+        "gujrat auto consult siddhpur",
         "auto consultant siddhpur"
       ],
-      "consultationId": "e0f723dd-a324-41e9-a296-ed2b03c9c30c"
+      "consultationId": "1e7f208e-9574-442f-a3bb-a5317f1a2a59"
     },
     {
       "name": "Jay Goga Autoconsult",
@@ -230,6 +296,29 @@
         "auto consultant siddhpur"
       ],
       "consultationId": "76191914-24ab-4e41-bb8d-49f73e08da62"
+    },
+    {
+      "name": "Jay Goga Cars",
+      "primaryName": "Jay Goga Cars Auto Consultant",
+      "alternateNames": [
+        "Jay Goga Cars",
+        "Jay Goga Cars Auto Consult"
+      ],
+      "username": "jaygogacars",
+      "city": "Unjha",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/jaygogacars",
+      "path": "/auto-consultant/jaygogacars",
+      "keywords": [
+        "jay goga cars auto consultant",
+        "jay goga cars auto consultant unjha",
+        "jay goga cars",
+        "jay goga cars unjha",
+        "jay goga cars auto consult",
+        "jay goga cars auto consult unjha",
+        "auto consultant unjha"
+      ],
+      "consultationId": "c335c79e-2b19-4120-85dd-4fab9497991e"
     },
     {
       "name": "Jay Hanuman Auto Consultant",
@@ -290,6 +379,29 @@
         "auto consultant palanpur"
       ],
       "consultationId": "28b7269f-366e-4d3c-89f0-c0b5256088dc"
+    },
+    {
+      "name": "Murlidhar",
+      "primaryName": "Murlidhar Auto Consultant",
+      "alternateNames": [
+        "Murlidhar",
+        "Murlidhar Auto Consult"
+      ],
+      "username": "murlidhar",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/murlidhar",
+      "path": "/auto-consultant/murlidhar",
+      "keywords": [
+        "murlidhar auto consultant",
+        "murlidhar auto consultant palanpur",
+        "murlidhar",
+        "murlidhar palanpur",
+        "murlidhar auto consult",
+        "murlidhar auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "aa23c9d3-a8a0-4715-b9ff-857b3c839a29"
     },
     {
       "name": "My India Auto Consult",
@@ -367,6 +479,27 @@
         "auto consultant siddhpur"
       ],
       "consultationId": "e8a7488d-8118-4cac-9a80-957b879225c4"
+    },
+    {
+      "name": "Patel Auto Cunsalt",
+      "primaryName": "Patel Auto Consultant Cunsalt",
+      "alternateNames": [
+        "Patel Auto Cunsalt"
+      ],
+      "username": "patelautocunsalt",
+      "city": "Unjha",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/patelautocunsalt",
+      "path": "/auto-consultant/patelautocunsalt",
+      "keywords": [
+        "patel auto consultant cunsalt",
+        "patel auto consultant cunsalt unjha",
+        "patel auto cunsalt",
+        "patel auto cunsalt unjha",
+        "patel auto cunsalt auto consultant",
+        "auto consultant unjha"
+      ],
+      "consultationId": "e9ce1f93-017d-473c-90e8-89aacece6a57"
     },
     {
       "name": "Patidar Auto Consult Visnagar",
@@ -495,23 +628,6 @@
       "consultationId": "7879a7d5-8d6c-4c3d-a3d9-ca2608787be8"
     },
     {
-      "name": "Sahara Motor",
-      "primaryName": "Sahara Motor",
-      "alternateNames": [],
-      "username": "saharamotor",
-      "city": "Palanpur",
-      "state": "",
-      "url": "https://www.reecomm.com/auto-consultant/saharamotor",
-      "path": "/auto-consultant/saharamotor",
-      "keywords": [
-        "sahara motor",
-        "sahara motor palanpur",
-        "sahara motor auto consultant",
-        "auto consultant palanpur"
-      ],
-      "consultationId": "a29033b5-5946-4d34-b114-cc5db1beb7c6"
-    },
-    {
       "name": "Sairam Auto Consult Unjha",
       "primaryName": "Sairam Auto Consultant Unjha",
       "alternateNames": [
@@ -530,6 +646,23 @@
         "auto consultant unjha"
       ],
       "consultationId": "c27117b4-359a-4ae9-90c3-6721be6cc655"
+    },
+    {
+      "name": "Samir Motors",
+      "primaryName": "Samir Motors",
+      "alternateNames": [],
+      "username": "samirmotors",
+      "city": "Visnagar",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/samirmotors",
+      "path": "/auto-consultant/samirmotors",
+      "keywords": [
+        "samir motors",
+        "samir motors visnagar",
+        "samir motors auto consultant",
+        "auto consultant visnagar"
+      ],
+      "consultationId": "fe0ef06a-10d7-4771-a702-3c164e6899ab"
     },
     {
       "name": "Sanur Auto Consult",
@@ -573,6 +706,26 @@
         "auto consultant himatnagar"
       ],
       "consultationId": "ec9e7a9d-96d7-4105-8982-d345754cf522"
+    },
+    {
+      "name": "Savera Auto Consult",
+      "primaryName": "Savera Auto Consultant",
+      "alternateNames": [
+        "Savera Auto Consult"
+      ],
+      "username": "saveraautoconsult",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/saveraautoconsult",
+      "path": "/auto-consultant/saveraautoconsult",
+      "keywords": [
+        "savera auto consultant",
+        "savera auto consultant palanpur",
+        "savera auto consult",
+        "savera auto consult palanpur",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "a8411650-78b0-4c71-908f-d5c42799f363"
     },
     {
       "name": "Sheth Motors",
@@ -735,23 +888,6 @@
       "consultationId": "8fa84f39-e262-48ac-9879-733b3561da41"
     },
     {
-      "name": "Sk Motors",
-      "primaryName": "Sk Motors",
-      "alternateNames": [],
-      "username": "skmotors",
-      "city": "Palanpur",
-      "state": "Gujarat",
-      "url": "https://www.reecomm.com/auto-consultant/skmotors",
-      "path": "/auto-consultant/skmotors",
-      "keywords": [
-        "sk motors",
-        "sk motors palanpur",
-        "sk motors auto consultant",
-        "auto consultant palanpur"
-      ],
-      "consultationId": "a73d38e2-06af-4dd2-abd9-f4b550971481"
-    },
-    {
       "name": "Super Auto Consult",
       "primaryName": "Super Auto Consultant",
       "alternateNames": [
@@ -770,6 +906,40 @@
         "auto consultant palanpur"
       ],
       "consultationId": "610fa875-9dc1-4848-8400-df95dde7c783"
+    },
+    {
+      "name": "Vidhya Motors",
+      "primaryName": "Vidhya Motors",
+      "alternateNames": [],
+      "username": "vidhyamotors",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/vidhyamotors",
+      "path": "/auto-consultant/vidhyamotors",
+      "keywords": [
+        "vidhya motors",
+        "vidhya motors palanpur",
+        "vidhya motors auto consultant",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "0ac32047-ef7a-4de1-9eaa-9d187d57a3cd"
+    },
+    {
+      "name": "Western Motors",
+      "primaryName": "Western Motors",
+      "alternateNames": [],
+      "username": "westernmotors",
+      "city": "Palanpur",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/westernmotors",
+      "path": "/auto-consultant/westernmotors",
+      "keywords": [
+        "western motors",
+        "western motors palanpur",
+        "western motors auto consultant",
+        "auto consultant palanpur"
+      ],
+      "consultationId": "64dffd32-ddb1-4fe9-ad2f-84d778cf1107"
     },
     {
       "name": "Yesauto",

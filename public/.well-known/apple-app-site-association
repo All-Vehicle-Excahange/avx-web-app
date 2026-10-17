@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "8UCFR8ZFJ5.com.reecomm.vehicle.marketplace",
+        "paths": [
+          "/vehicle/*",
+          "/car/*",
+          "/c/*"
+        ]
+      }
+    ]
+  }
+}

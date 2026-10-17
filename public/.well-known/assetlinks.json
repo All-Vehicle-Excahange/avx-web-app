@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.reecomm.vehicle.marketplace",
+        "sha256_cert_fingerprints": [
+        "DA:F1:26:4A:75:4E:3D:2D:E9:B7:B0:93:98:6D:CA:41:12:C4:27:FF:81:CB:7C:6F:C2:E4:0B:C2:34:1C:34:CE"
+      ]
+    }
+  }
+]

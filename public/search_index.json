@@ -680,34 +680,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ashok_leyland_cars_chhapi",
-    "title": "Used Ashok Leyland Cars in Chhapi",
-    "keywords": [
-      "ashok leyland",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used ashok leyland",
-      "used ashok leyland cars",
-      "used ashok leyland in chhapi",
-      "used ashok leyland cars in chhapi",
-      "ashok leyland in chhapi",
-      "ashok leyland cars in chhapi",
-      "ashok leyland chhapi",
-      "used ashok leyland near me",
-      "used ashok leyland near chhapi",
-      "second hand ashok leyland chhapi",
-      "second hand ashok leyland in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ashok Leyland",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ashok-leyland-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_ashok_leyland_cars_nashik",
     "title": "Used Ashok Leyland Cars in Nashik",
     "keywords": [
@@ -1841,34 +1813,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-aston-martin-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_aston_martin_cars_chhapi",
-    "title": "Used Aston Martin Cars in Chhapi",
-    "keywords": [
-      "aston martin",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used aston martin",
-      "used aston martin cars",
-      "used aston martin in chhapi",
-      "used aston martin cars in chhapi",
-      "aston martin in chhapi",
-      "aston martin cars in chhapi",
-      "aston martin chhapi",
-      "used aston martin near me",
-      "used aston martin near chhapi",
-      "second hand aston martin chhapi",
-      "second hand aston martin in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Aston Martin",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-aston-martin-cars-chhapi"
     }
   },
   {
@@ -3008,34 +2952,6 @@
     }
   },
   {
-    "id": "filter_buy_used_audi_cars_chhapi",
-    "title": "Used Audi Cars in Chhapi",
-    "keywords": [
-      "audi",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used audi",
-      "used audi cars",
-      "used audi in chhapi",
-      "used audi cars in chhapi",
-      "audi in chhapi",
-      "audi cars in chhapi",
-      "audi chhapi",
-      "used audi near me",
-      "used audi near chhapi",
-      "second hand audi chhapi",
-      "second hand audi in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Audi",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-audi-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_audi_cars_nashik",
     "title": "Used Audi Cars in Nashik",
     "keywords": [
@@ -4169,34 +4085,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-bentley-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_bentley_cars_chhapi",
-    "title": "Used Bentley Cars in Chhapi",
-    "keywords": [
-      "bentley",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used bentley",
-      "used bentley cars",
-      "used bentley in chhapi",
-      "used bentley cars in chhapi",
-      "bentley in chhapi",
-      "bentley cars in chhapi",
-      "bentley chhapi",
-      "used bentley near me",
-      "used bentley near chhapi",
-      "second hand bentley chhapi",
-      "second hand bentley in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Bentley",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bentley-cars-chhapi"
     }
   },
   {
@@ -5336,34 +5224,6 @@
     }
   },
   {
-    "id": "filter_buy_used_bmw_cars_chhapi",
-    "title": "Used BMW Cars in Chhapi",
-    "keywords": [
-      "bmw",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used bmw",
-      "used bmw cars",
-      "used bmw in chhapi",
-      "used bmw cars in chhapi",
-      "bmw in chhapi",
-      "bmw cars in chhapi",
-      "bmw chhapi",
-      "used bmw near me",
-      "used bmw near chhapi",
-      "second hand bmw chhapi",
-      "second hand bmw in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "BMW",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bmw-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_bmw_cars_nashik",
     "title": "Used BMW Cars in Nashik",
     "keywords": [
@@ -6497,34 +6357,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-bugatti-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_bugatti_cars_chhapi",
-    "title": "Used Bugatti Cars in Chhapi",
-    "keywords": [
-      "bugatti",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used bugatti",
-      "used bugatti cars",
-      "used bugatti in chhapi",
-      "used bugatti cars in chhapi",
-      "bugatti in chhapi",
-      "bugatti cars in chhapi",
-      "bugatti chhapi",
-      "used bugatti near me",
-      "used bugatti near chhapi",
-      "second hand bugatti chhapi",
-      "second hand bugatti in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Bugatti",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bugatti-cars-chhapi"
     }
   },
   {
@@ -7664,34 +7496,6 @@
     }
   },
   {
-    "id": "filter_buy_used_chevrolet_cars_chhapi",
-    "title": "Used Chevrolet Cars in Chhapi",
-    "keywords": [
-      "chevrolet",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used chevrolet",
-      "used chevrolet cars",
-      "used chevrolet in chhapi",
-      "used chevrolet cars in chhapi",
-      "chevrolet in chhapi",
-      "chevrolet cars in chhapi",
-      "chevrolet chhapi",
-      "used chevrolet near me",
-      "used chevrolet near chhapi",
-      "second hand chevrolet chhapi",
-      "second hand chevrolet in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Chevrolet",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-chevrolet-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_chevrolet_cars_nashik",
     "title": "Used Chevrolet Cars in Nashik",
     "keywords": [
@@ -8825,34 +8629,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-datsun-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_datsun_cars_chhapi",
-    "title": "Used Datsun Cars in Chhapi",
-    "keywords": [
-      "datsun",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used datsun",
-      "used datsun cars",
-      "used datsun in chhapi",
-      "used datsun cars in chhapi",
-      "datsun in chhapi",
-      "datsun cars in chhapi",
-      "datsun chhapi",
-      "used datsun near me",
-      "used datsun near chhapi",
-      "second hand datsun chhapi",
-      "second hand datsun in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Datsun",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-datsun-cars-chhapi"
     }
   },
   {
@@ -9992,34 +9768,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ferrari_cars_chhapi",
-    "title": "Used Ferrari Cars in Chhapi",
-    "keywords": [
-      "ferrari",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used ferrari",
-      "used ferrari cars",
-      "used ferrari in chhapi",
-      "used ferrari cars in chhapi",
-      "ferrari in chhapi",
-      "ferrari cars in chhapi",
-      "ferrari chhapi",
-      "used ferrari near me",
-      "used ferrari near chhapi",
-      "second hand ferrari chhapi",
-      "second hand ferrari in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ferrari",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ferrari-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_ferrari_cars_nashik",
     "title": "Used Ferrari Cars in Nashik",
     "keywords": [
@@ -11153,34 +10901,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-fiat-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_fiat_cars_chhapi",
-    "title": "Used Fiat Cars in Chhapi",
-    "keywords": [
-      "fiat",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used fiat",
-      "used fiat cars",
-      "used fiat in chhapi",
-      "used fiat cars in chhapi",
-      "fiat in chhapi",
-      "fiat cars in chhapi",
-      "fiat chhapi",
-      "used fiat near me",
-      "used fiat near chhapi",
-      "second hand fiat chhapi",
-      "second hand fiat in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Fiat",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-fiat-cars-chhapi"
     }
   },
   {
@@ -12320,34 +12040,6 @@
     }
   },
   {
-    "id": "filter_buy_used_force_motors_cars_chhapi",
-    "title": "Used Force Motors Cars in Chhapi",
-    "keywords": [
-      "force motors",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used force motors",
-      "used force motors cars",
-      "used force motors in chhapi",
-      "used force motors cars in chhapi",
-      "force motors in chhapi",
-      "force motors cars in chhapi",
-      "force motors chhapi",
-      "used force motors near me",
-      "used force motors near chhapi",
-      "second hand force motors chhapi",
-      "second hand force motors in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Force Motors",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-force-motors-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_force_motors_cars_nashik",
     "title": "Used Force Motors Cars in Nashik",
     "keywords": [
@@ -12873,19 +12565,11 @@
     "keywords": [
       "ford",
       "ahmedabad",
-      "used car",
-      "used cars",
-      "used ford",
-      "used ford cars",
       "used ford in ahmedabad",
       "used ford cars in ahmedabad",
-      "ford in ahmedabad",
-      "ford cars in ahmedabad",
-      "ford ahmedabad",
       "used ford near me",
       "used ford near ahmedabad",
-      "second hand ford ahmedabad",
-      "second hand ford in ahmedabad"
+      "second hand ford ahmedabad"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -13465,34 +13149,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-ford-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_cars_chhapi",
-    "title": "Used Ford Cars in Chhapi",
-    "keywords": [
-      "ford",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used ford",
-      "used ford cars",
-      "used ford in chhapi",
-      "used ford cars in chhapi",
-      "ford in chhapi",
-      "ford cars in chhapi",
-      "ford chhapi",
-      "used ford near me",
-      "used ford near chhapi",
-      "second hand ford chhapi",
-      "second hand ford in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ford",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ford-cars-chhapi"
     }
   },
   {
@@ -14630,34 +14286,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hindustan_motors_cars_chhapi",
-    "title": "Used Hindustan Motors Cars in Chhapi",
-    "keywords": [
-      "hindustan motors",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used hindustan motors",
-      "used hindustan motors cars",
-      "used hindustan motors in chhapi",
-      "used hindustan motors cars in chhapi",
-      "hindustan motors in chhapi",
-      "hindustan motors cars in chhapi",
-      "hindustan motors chhapi",
-      "used hindustan motors near me",
-      "used hindustan motors near chhapi",
-      "second hand hindustan motors chhapi",
-      "second hand hindustan motors in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hindustan Motors",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hindustan-motors-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_hindustan_motors_cars_nashik",
     "title": "Used Hindustan Motors Cars in Nashik",
     "keywords": [
@@ -15766,34 +15394,6 @@
     }
   },
   {
-    "id": "filter_buy_used_honda_cars_chhapi",
-    "title": "Used Honda Cars in Chhapi",
-    "keywords": [
-      "honda",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used honda",
-      "used honda cars",
-      "used honda in chhapi",
-      "used honda cars in chhapi",
-      "honda in chhapi",
-      "honda cars in chhapi",
-      "honda chhapi",
-      "used honda near me",
-      "used honda near chhapi",
-      "second hand honda chhapi",
-      "second hand honda in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Honda",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_honda_cars_nashik",
     "title": "Used Honda Cars in Nashik",
     "keywords": [
@@ -16315,19 +15915,11 @@
     "keywords": [
       "hyundai",
       "ahmedabad",
-      "used car",
-      "used cars",
-      "used hyundai",
-      "used hyundai cars",
       "used hyundai in ahmedabad",
       "used hyundai cars in ahmedabad",
-      "hyundai in ahmedabad",
-      "hyundai cars in ahmedabad",
-      "hyundai ahmedabad",
       "used hyundai near me",
       "used hyundai near ahmedabad",
-      "second hand hyundai ahmedabad",
-      "second hand hyundai in ahmedabad"
+      "second hand hyundai ahmedabad"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -16891,34 +16483,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_cars_chhapi",
-    "title": "Used Hyundai Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used hyundai",
-      "used hyundai cars",
-      "used hyundai in chhapi",
-      "used hyundai cars in chhapi",
-      "hyundai in chhapi",
-      "hyundai cars in chhapi",
-      "hyundai chhapi",
-      "used hyundai near me",
-      "used hyundai near chhapi",
-      "second hand hyundai chhapi",
-      "second hand hyundai in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-cars-chhapi"
     }
   },
   {
@@ -18051,34 +17615,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-icml-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_icml_cars_chhapi",
-    "title": "Used ICML Cars in Chhapi",
-    "keywords": [
-      "icml",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used icml",
-      "used icml cars",
-      "used icml in chhapi",
-      "used icml cars in chhapi",
-      "icml in chhapi",
-      "icml cars in chhapi",
-      "icml chhapi",
-      "used icml near me",
-      "used icml near chhapi",
-      "second hand icml chhapi",
-      "second hand icml in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "ICML",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-icml-cars-chhapi"
     }
   },
   {
@@ -19218,34 +18754,6 @@
     }
   },
   {
-    "id": "filter_buy_used_jaguar_cars_chhapi",
-    "title": "Used Jaguar Cars in Chhapi",
-    "keywords": [
-      "jaguar",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used jaguar",
-      "used jaguar cars",
-      "used jaguar in chhapi",
-      "used jaguar cars in chhapi",
-      "jaguar in chhapi",
-      "jaguar cars in chhapi",
-      "jaguar chhapi",
-      "used jaguar near me",
-      "used jaguar near chhapi",
-      "second hand jaguar chhapi",
-      "second hand jaguar in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Jaguar",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-jaguar-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_jaguar_cars_nashik",
     "title": "Used Jaguar Cars in Nashik",
     "keywords": [
@@ -20379,34 +19887,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-lamborghini-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_lamborghini_cars_chhapi",
-    "title": "Used Lamborghini Cars in Chhapi",
-    "keywords": [
-      "lamborghini",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used lamborghini",
-      "used lamborghini cars",
-      "used lamborghini in chhapi",
-      "used lamborghini cars in chhapi",
-      "lamborghini in chhapi",
-      "lamborghini cars in chhapi",
-      "lamborghini chhapi",
-      "used lamborghini near me",
-      "used lamborghini near chhapi",
-      "second hand lamborghini chhapi",
-      "second hand lamborghini in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Lamborghini",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-lamborghini-cars-chhapi"
     }
   },
   {
@@ -21546,34 +21026,6 @@
     }
   },
   {
-    "id": "filter_buy_used_land_rover_cars_chhapi",
-    "title": "Used Land Rover Cars in Chhapi",
-    "keywords": [
-      "land rover",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used land rover",
-      "used land rover cars",
-      "used land rover in chhapi",
-      "used land rover cars in chhapi",
-      "land rover in chhapi",
-      "land rover cars in chhapi",
-      "land rover chhapi",
-      "used land rover near me",
-      "used land rover near chhapi",
-      "second hand land rover chhapi",
-      "second hand land rover in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Land Rover",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-land-rover-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_land_rover_cars_nashik",
     "title": "Used Land Rover Cars in Nashik",
     "keywords": [
@@ -22678,34 +22130,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_cars_chhapi",
-    "title": "Used Mahindra Cars in Chhapi",
-    "keywords": [
-      "mahindra",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used mahindra",
-      "used mahindra cars",
-      "used mahindra in chhapi",
-      "used mahindra cars in chhapi",
-      "mahindra in chhapi",
-      "mahindra cars in chhapi",
-      "mahindra chhapi",
-      "used mahindra near me",
-      "used mahindra near chhapi",
-      "second hand mahindra chhapi",
-      "second hand mahindra in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_mahindra_cars_nashik",
     "title": "Used Mahindra Cars in Nashik",
     "keywords": [
@@ -23797,34 +23221,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_cars_chhapi",
-    "title": "Used Maruti Suzuki Cars in Chhapi",
-    "keywords": [
-      "maruti suzuki",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used maruti suzuki",
-      "used maruti suzuki cars",
-      "used maruti suzuki in chhapi",
-      "used maruti suzuki cars in chhapi",
-      "maruti suzuki in chhapi",
-      "maruti suzuki cars in chhapi",
-      "maruti suzuki chhapi",
-      "used maruti suzuki near me",
-      "used maruti suzuki near chhapi",
-      "second hand maruti suzuki chhapi",
-      "second hand maruti suzuki in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-cars-chhapi"
     }
   },
   {
@@ -24957,34 +24353,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maserati-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maserati_cars_chhapi",
-    "title": "Used Maserati Cars in Chhapi",
-    "keywords": [
-      "maserati",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used maserati",
-      "used maserati cars",
-      "used maserati in chhapi",
-      "used maserati cars in chhapi",
-      "maserati in chhapi",
-      "maserati cars in chhapi",
-      "maserati chhapi",
-      "used maserati near me",
-      "used maserati near chhapi",
-      "second hand maserati chhapi",
-      "second hand maserati in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maserati",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maserati-cars-chhapi"
     }
   },
   {
@@ -26124,34 +25492,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maybach_cars_chhapi",
-    "title": "Used Maybach Cars in Chhapi",
-    "keywords": [
-      "maybach",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used maybach",
-      "used maybach cars",
-      "used maybach in chhapi",
-      "used maybach cars in chhapi",
-      "maybach in chhapi",
-      "maybach cars in chhapi",
-      "maybach chhapi",
-      "used maybach near me",
-      "used maybach near chhapi",
-      "second hand maybach chhapi",
-      "second hand maybach in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maybach",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maybach-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_maybach_cars_nashik",
     "title": "Used Maybach Cars in Nashik",
     "keywords": [
@@ -27285,34 +26625,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mercedes-benz-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_mercedes_benz_cars_chhapi",
-    "title": "Used Mercedes Benz Cars in Chhapi",
-    "keywords": [
-      "mercedes benz",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used mercedes benz",
-      "used mercedes benz cars",
-      "used mercedes benz in chhapi",
-      "used mercedes benz cars in chhapi",
-      "mercedes benz in chhapi",
-      "mercedes benz cars in chhapi",
-      "mercedes benz chhapi",
-      "used mercedes benz near me",
-      "used mercedes benz near chhapi",
-      "second hand mercedes benz chhapi",
-      "second hand mercedes benz in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mercedes Benz",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mercedes-benz-cars-chhapi"
     }
   },
   {
@@ -28452,34 +27764,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mitsubishi_cars_chhapi",
-    "title": "Used Mitsubishi Cars in Chhapi",
-    "keywords": [
-      "mitsubishi",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used mitsubishi",
-      "used mitsubishi cars",
-      "used mitsubishi in chhapi",
-      "used mitsubishi cars in chhapi",
-      "mitsubishi in chhapi",
-      "mitsubishi cars in chhapi",
-      "mitsubishi chhapi",
-      "used mitsubishi near me",
-      "used mitsubishi near chhapi",
-      "second hand mitsubishi chhapi",
-      "second hand mitsubishi in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mitsubishi",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mitsubishi-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_mitsubishi_cars_nashik",
     "title": "Used Mitsubishi Cars in Nashik",
     "keywords": [
@@ -29613,34 +28897,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-nissan-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_nissan_cars_chhapi",
-    "title": "Used Nissan Cars in Chhapi",
-    "keywords": [
-      "nissan",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used nissan",
-      "used nissan cars",
-      "used nissan in chhapi",
-      "used nissan cars in chhapi",
-      "nissan in chhapi",
-      "nissan cars in chhapi",
-      "nissan chhapi",
-      "used nissan near me",
-      "used nissan near chhapi",
-      "second hand nissan chhapi",
-      "second hand nissan in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Nissan",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-nissan-cars-chhapi"
     }
   },
   {
@@ -30780,34 +30036,6 @@
     }
   },
   {
-    "id": "filter_buy_used_porsche_cars_chhapi",
-    "title": "Used Porsche Cars in Chhapi",
-    "keywords": [
-      "porsche",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used porsche",
-      "used porsche cars",
-      "used porsche in chhapi",
-      "used porsche cars in chhapi",
-      "porsche in chhapi",
-      "porsche cars in chhapi",
-      "porsche chhapi",
-      "used porsche near me",
-      "used porsche near chhapi",
-      "second hand porsche chhapi",
-      "second hand porsche in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Porsche",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-porsche-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_porsche_cars_nashik",
     "title": "Used Porsche Cars in Nashik",
     "keywords": [
@@ -31944,34 +31172,6 @@
     }
   },
   {
-    "id": "filter_buy_used_premier_cars_chhapi",
-    "title": "Used Premier Cars in Chhapi",
-    "keywords": [
-      "premier",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used premier",
-      "used premier cars",
-      "used premier in chhapi",
-      "used premier cars in chhapi",
-      "premier in chhapi",
-      "premier cars in chhapi",
-      "premier chhapi",
-      "used premier near me",
-      "used premier near chhapi",
-      "second hand premier chhapi",
-      "second hand premier in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Premier",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-premier-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_premier_cars_nashik",
     "title": "Used Premier Cars in Nashik",
     "keywords": [
@@ -33097,34 +32297,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-renault-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_renault_cars_chhapi",
-    "title": "Used Renault Cars in Chhapi",
-    "keywords": [
-      "renault",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used renault",
-      "used renault cars",
-      "used renault in chhapi",
-      "used renault cars in chhapi",
-      "renault in chhapi",
-      "renault cars in chhapi",
-      "renault chhapi",
-      "used renault near me",
-      "used renault near chhapi",
-      "second hand renault chhapi",
-      "second hand renault in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Renault",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-renault-cars-chhapi"
     }
   },
   {
@@ -34262,34 +33434,6 @@
     }
   },
   {
-    "id": "filter_buy_used_rolls_royce_cars_chhapi",
-    "title": "Used Rolls Royce Cars in Chhapi",
-    "keywords": [
-      "rolls royce",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used rolls royce",
-      "used rolls royce cars",
-      "used rolls royce in chhapi",
-      "used rolls royce cars in chhapi",
-      "rolls royce in chhapi",
-      "rolls royce cars in chhapi",
-      "rolls royce chhapi",
-      "used rolls royce near me",
-      "used rolls royce near chhapi",
-      "second hand rolls royce chhapi",
-      "second hand rolls royce in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Rolls Royce",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-rolls-royce-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_rolls_royce_cars_nashik",
     "title": "Used Rolls Royce Cars in Nashik",
     "keywords": [
@@ -34815,19 +33959,11 @@
     "keywords": [
       "skoda",
       "ahmedabad",
-      "used car",
-      "used cars",
-      "used skoda",
-      "used skoda cars",
       "used skoda in ahmedabad",
       "used skoda cars in ahmedabad",
-      "skoda in ahmedabad",
-      "skoda cars in ahmedabad",
-      "skoda ahmedabad",
       "used skoda near me",
       "used skoda near ahmedabad",
-      "second hand skoda ahmedabad",
-      "second hand skoda in ahmedabad"
+      "second hand skoda ahmedabad"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -35426,34 +34562,6 @@
     }
   },
   {
-    "id": "filter_buy_used_skoda_cars_chhapi",
-    "title": "Used Skoda Cars in Chhapi",
-    "keywords": [
-      "skoda",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used skoda",
-      "used skoda cars",
-      "used skoda in chhapi",
-      "used skoda cars in chhapi",
-      "skoda in chhapi",
-      "skoda cars in chhapi",
-      "skoda chhapi",
-      "used skoda near me",
-      "used skoda near chhapi",
-      "second hand skoda chhapi",
-      "second hand skoda in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Skoda",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-skoda-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_skoda_cars_nashik",
     "title": "Used Skoda Cars in Nashik",
     "keywords": [
@@ -35765,9 +34873,7 @@
     "keywords": [
       "skoda",
       "gujarat",
-      "used car",
-      "used skoda in gujarat",
-      "used skoda cars in gujarat"
+      "used skoda in gujarat"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -36587,34 +35693,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-ssangyong-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ssangyong_cars_chhapi",
-    "title": "Used Ssangyong Cars in Chhapi",
-    "keywords": [
-      "ssangyong",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used ssangyong",
-      "used ssangyong cars",
-      "used ssangyong in chhapi",
-      "used ssangyong cars in chhapi",
-      "ssangyong in chhapi",
-      "ssangyong cars in chhapi",
-      "ssangyong chhapi",
-      "used ssangyong near me",
-      "used ssangyong near chhapi",
-      "second hand ssangyong chhapi",
-      "second hand ssangyong in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ssangyong",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ssangyong-cars-chhapi"
     }
   },
   {
@@ -37746,34 +36824,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tata_cars_chhapi",
-    "title": "Used Tata Cars in Chhapi",
-    "keywords": [
-      "tata",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used tata",
-      "used tata cars",
-      "used tata in chhapi",
-      "used tata cars in chhapi",
-      "tata in chhapi",
-      "tata cars in chhapi",
-      "tata chhapi",
-      "used tata near me",
-      "used tata near chhapi",
-      "second hand tata chhapi",
-      "second hand tata in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_tata_cars_nashik",
     "title": "Used Tata Cars in Nashik",
     "keywords": [
@@ -38757,19 +37807,11 @@
     "keywords": [
       "toyota",
       "visnagar",
-      "used car",
-      "used cars",
-      "used toyota",
-      "used toyota cars",
       "used toyota in visnagar",
       "used toyota cars in visnagar",
-      "toyota in visnagar",
-      "toyota cars in visnagar",
-      "toyota visnagar",
       "used toyota near me",
       "used toyota near visnagar",
-      "second hand toyota visnagar",
-      "second hand toyota in visnagar"
+      "second hand toyota visnagar"
     ],
     "type": "vehicle_filter",
     "params": {
@@ -38881,34 +37923,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_cars_chhapi",
-    "title": "Used Toyota Cars in Chhapi",
-    "keywords": [
-      "toyota",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used toyota",
-      "used toyota cars",
-      "used toyota in chhapi",
-      "used toyota cars in chhapi",
-      "toyota in chhapi",
-      "toyota cars in chhapi",
-      "toyota chhapi",
-      "used toyota near me",
-      "used toyota near chhapi",
-      "second hand toyota chhapi",
-      "second hand toyota in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-cars-chhapi"
     }
   },
   {
@@ -40035,34 +39049,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-volkswagen-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_volkswagen_cars_chhapi",
-    "title": "Used Volkswagen Cars in Chhapi",
-    "keywords": [
-      "volkswagen",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used volkswagen",
-      "used volkswagen cars",
-      "used volkswagen in chhapi",
-      "used volkswagen cars in chhapi",
-      "volkswagen in chhapi",
-      "volkswagen cars in chhapi",
-      "volkswagen chhapi",
-      "used volkswagen near me",
-      "used volkswagen near chhapi",
-      "second hand volkswagen chhapi",
-      "second hand volkswagen in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Volkswagen",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-volkswagen-cars-chhapi"
     }
   },
   {
@@ -41197,34 +40183,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-volvo-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_volvo_cars_chhapi",
-    "title": "Used Volvo Cars in Chhapi",
-    "keywords": [
-      "volvo",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used volvo",
-      "used volvo cars",
-      "used volvo in chhapi",
-      "used volvo cars in chhapi",
-      "volvo in chhapi",
-      "volvo cars in chhapi",
-      "volvo chhapi",
-      "used volvo near me",
-      "used volvo near chhapi",
-      "second hand volvo chhapi",
-      "second hand volvo in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Volvo",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-volvo-cars-chhapi"
     }
   },
   {
@@ -42364,34 +41322,6 @@
     }
   },
   {
-    "id": "filter_buy_used_opel_cars_chhapi",
-    "title": "Used Opel Cars in Chhapi",
-    "keywords": [
-      "opel",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used opel",
-      "used opel cars",
-      "used opel in chhapi",
-      "used opel cars in chhapi",
-      "opel in chhapi",
-      "opel cars in chhapi",
-      "opel chhapi",
-      "used opel near me",
-      "used opel near chhapi",
-      "second hand opel chhapi",
-      "second hand opel in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Opel",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-opel-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_opel_cars_nashik",
     "title": "Used Opel Cars in Nashik",
     "keywords": [
@@ -43525,34 +42455,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-jeep-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_jeep_cars_chhapi",
-    "title": "Used Jeep Cars in Chhapi",
-    "keywords": [
-      "jeep",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used jeep",
-      "used jeep cars",
-      "used jeep in chhapi",
-      "used jeep cars in chhapi",
-      "jeep in chhapi",
-      "jeep cars in chhapi",
-      "jeep chhapi",
-      "used jeep near me",
-      "used jeep near chhapi",
-      "second hand jeep chhapi",
-      "second hand jeep in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Jeep",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-jeep-cars-chhapi"
     }
   },
   {
@@ -44692,34 +43594,6 @@
     }
   },
   {
-    "id": "filter_buy_used_isuzu_cars_chhapi",
-    "title": "Used ISUZU Cars in Chhapi",
-    "keywords": [
-      "isuzu",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used isuzu",
-      "used isuzu cars",
-      "used isuzu in chhapi",
-      "used isuzu cars in chhapi",
-      "isuzu in chhapi",
-      "isuzu cars in chhapi",
-      "isuzu chhapi",
-      "used isuzu near me",
-      "used isuzu near chhapi",
-      "second hand isuzu chhapi",
-      "second hand isuzu in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "ISUZU",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-isuzu-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_isuzu_cars_nashik",
     "title": "Used ISUZU Cars in Nashik",
     "keywords": [
@@ -45856,34 +44730,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mg_cars_chhapi",
-    "title": "Used MG Cars in Chhapi",
-    "keywords": [
-      "mg",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used mg",
-      "used mg cars",
-      "used mg in chhapi",
-      "used mg cars in chhapi",
-      "mg in chhapi",
-      "mg cars in chhapi",
-      "mg chhapi",
-      "used mg near me",
-      "used mg near chhapi",
-      "second hand mg chhapi",
-      "second hand mg in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "MG",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mg-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_mg_cars_nashik",
     "title": "Used MG Cars in Nashik",
     "keywords": [
@@ -46893,27 +45739,19 @@
   },
   {
     "id": "filter_buy_used_kia_cars_kanodar",
-    "title": "Used Kia Cars in Kanodar",
+    "title": "Used KIA Cars in Kanodar",
     "keywords": [
       "kia",
       "kanodar",
-      "used car",
-      "used cars",
-      "used kia",
-      "used kia cars",
       "used kia in kanodar",
       "used kia cars in kanodar",
-      "kia in kanodar",
-      "kia cars in kanodar",
-      "kia kanodar",
       "used kia near me",
       "used kia near kanodar",
-      "second hand kia kanodar",
-      "second hand kia in kanodar"
+      "second hand kia kanodar"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
+      "makerName": "KIA",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars-kanodar"
@@ -47001,34 +45839,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_cars_chhapi",
-    "title": "Used Kia Cars in Chhapi",
-    "keywords": [
-      "kia",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used kia",
-      "used kia cars",
-      "used kia in chhapi",
-      "used kia cars in chhapi",
-      "kia in chhapi",
-      "kia cars in chhapi",
-      "kia chhapi",
-      "used kia near me",
-      "used kia near chhapi",
-      "second hand kia chhapi",
-      "second hand kia in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Kia",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-kia-cars-chhapi"
     }
   },
   {
@@ -48166,34 +46976,6 @@
     }
   },
   {
-    "id": "filter_buy_used_citroen_cars_chhapi",
-    "title": "Used Citroen Cars in Chhapi",
-    "keywords": [
-      "citroen",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used citroen",
-      "used citroen cars",
-      "used citroen in chhapi",
-      "used citroen cars in chhapi",
-      "citroen in chhapi",
-      "citroen cars in chhapi",
-      "citroen chhapi",
-      "used citroen near me",
-      "used citroen near chhapi",
-      "second hand citroen chhapi",
-      "second hand citroen in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Citroen",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-citroen-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_citroen_cars_nashik",
     "title": "Used Citroen Cars in Nashik",
     "keywords": [
@@ -49327,34 +48109,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-byd-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_byd_cars_chhapi",
-    "title": "Used BYD Cars in Chhapi",
-    "keywords": [
-      "byd",
-      "chhapi",
-      "used car",
-      "used cars",
-      "used byd",
-      "used byd cars",
-      "used byd in chhapi",
-      "used byd cars in chhapi",
-      "byd in chhapi",
-      "byd cars in chhapi",
-      "byd chhapi",
-      "used byd near me",
-      "used byd near chhapi",
-      "second hand byd chhapi",
-      "second hand byd in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "BYD",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-byd-cars-chhapi"
     }
   },
   {
@@ -50940,55 +49694,6 @@
     }
   },
   {
-    "id": "filter_buy_used_cars_chhapi",
-    "title": "Used Cars in Chhapi",
-    "keywords": [
-      "used car",
-      "used cars",
-      "car",
-      "cars",
-      "chhapi",
-      "used cars in chhapi",
-      "used car in chhapi",
-      "cars in chhapi",
-      "cars near chhapi",
-      "used cars near chhapi",
-      "second hand cars chhapi",
-      "second hand cars in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-cars-chhapi"
-    }
-  },
-  {
-    "id": "filter_buy_used_two_wheelers_chhapi",
-    "title": "Used Bikes in Chhapi",
-    "keywords": [
-      "used bike",
-      "used bikes",
-      "bike",
-      "bikes",
-      "two wheeler",
-      "chhapi",
-      "used bikes in chhapi",
-      "used bike in chhapi",
-      "bikes in chhapi",
-      "bikes near chhapi",
-      "used bikes near chhapi",
-      "second hand bikes chhapi",
-      "second hand bikes in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_cars_nashik",
     "title": "Used Cars in Nashik",
     "keywords": [
@@ -52060,34 +50765,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "TWO_WHEELER",
       "slug": "buy-used-hero-two-wheelers-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_hero_two_wheelers_chhapi",
-    "title": "Used Hero Bikes in Chhapi",
-    "keywords": [
-      "hero",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used hero",
-      "used hero bikes",
-      "used hero in chhapi",
-      "used hero bikes in chhapi",
-      "hero in chhapi",
-      "hero bikes in chhapi",
-      "hero chhapi",
-      "used hero near me",
-      "used hero near chhapi",
-      "second hand hero chhapi",
-      "second hand hero in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hero",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-hero-two-wheelers-chhapi"
     }
   },
   {
@@ -53214,34 +51891,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tvs_two_wheelers_chhapi",
-    "title": "Used TVS Bikes in Chhapi",
-    "keywords": [
-      "tvs",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used tvs",
-      "used tvs bikes",
-      "used tvs in chhapi",
-      "used tvs bikes in chhapi",
-      "tvs in chhapi",
-      "tvs bikes in chhapi",
-      "tvs chhapi",
-      "used tvs near me",
-      "used tvs near chhapi",
-      "second hand tvs chhapi",
-      "second hand tvs in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "TVS",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-tvs-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_tvs_two_wheelers_nashik",
     "title": "Used TVS Bikes in Nashik",
     "keywords": [
@@ -54362,34 +53011,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "TWO_WHEELER",
       "slug": "buy-used-bajaj-two-wheelers-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_bajaj_two_wheelers_chhapi",
-    "title": "Used Bajaj Bikes in Chhapi",
-    "keywords": [
-      "bajaj",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used bajaj",
-      "used bajaj bikes",
-      "used bajaj in chhapi",
-      "used bajaj bikes in chhapi",
-      "bajaj in chhapi",
-      "bajaj bikes in chhapi",
-      "bajaj chhapi",
-      "used bajaj near me",
-      "used bajaj near chhapi",
-      "second hand bajaj chhapi",
-      "second hand bajaj in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Bajaj",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-bajaj-two-wheelers-chhapi"
     }
   },
   {
@@ -55516,34 +54137,6 @@
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_two_wheelers_chhapi",
-    "title": "Used Royal Enfield Bikes in Chhapi",
-    "keywords": [
-      "royal enfield",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used royal enfield",
-      "used royal enfield bikes",
-      "used royal enfield in chhapi",
-      "used royal enfield bikes in chhapi",
-      "royal enfield in chhapi",
-      "royal enfield bikes in chhapi",
-      "royal enfield chhapi",
-      "used royal enfield near me",
-      "used royal enfield near chhapi",
-      "second hand royal enfield chhapi",
-      "second hand royal enfield in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Royal Enfield",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-royal-enfield-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_royal_enfield_two_wheelers_nashik",
     "title": "Used Royal Enfield Bikes in Nashik",
     "keywords": [
@@ -56664,34 +55257,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "TWO_WHEELER",
       "slug": "buy-used-yamaha-two-wheelers-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_yamaha_two_wheelers_chhapi",
-    "title": "Used Yamaha Bikes in Chhapi",
-    "keywords": [
-      "yamaha",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used yamaha",
-      "used yamaha bikes",
-      "used yamaha in chhapi",
-      "used yamaha bikes in chhapi",
-      "yamaha in chhapi",
-      "yamaha bikes in chhapi",
-      "yamaha chhapi",
-      "used yamaha near me",
-      "used yamaha near chhapi",
-      "second hand yamaha chhapi",
-      "second hand yamaha in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Yamaha",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-yamaha-two-wheelers-chhapi"
     }
   },
   {
@@ -57818,34 +56383,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ola_two_wheelers_chhapi",
-    "title": "Used Ola Bikes in Chhapi",
-    "keywords": [
-      "ola",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used ola",
-      "used ola bikes",
-      "used ola in chhapi",
-      "used ola bikes in chhapi",
-      "ola in chhapi",
-      "ola bikes in chhapi",
-      "ola chhapi",
-      "used ola near me",
-      "used ola near chhapi",
-      "second hand ola chhapi",
-      "second hand ola in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ola",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-ola-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_ola_two_wheelers_nashik",
     "title": "Used Ola Bikes in Nashik",
     "keywords": [
@@ -58966,34 +57503,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "TWO_WHEELER",
       "slug": "buy-used-honda-two-wheelers-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_honda_two_wheelers_chhapi",
-    "title": "Used Honda Bikes in Chhapi",
-    "keywords": [
-      "honda",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used honda",
-      "used honda bikes",
-      "used honda in chhapi",
-      "used honda bikes in chhapi",
-      "honda in chhapi",
-      "honda bikes in chhapi",
-      "honda chhapi",
-      "used honda near me",
-      "used honda near chhapi",
-      "second hand honda chhapi",
-      "second hand honda in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Honda",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-honda-two-wheelers-chhapi"
     }
   },
   {
@@ -60120,34 +58629,6 @@
     }
   },
   {
-    "id": "filter_buy_used_suzuki_two_wheelers_chhapi",
-    "title": "Used Suzuki Bikes in Chhapi",
-    "keywords": [
-      "suzuki",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used suzuki",
-      "used suzuki bikes",
-      "used suzuki in chhapi",
-      "used suzuki bikes in chhapi",
-      "suzuki in chhapi",
-      "suzuki bikes in chhapi",
-      "suzuki chhapi",
-      "used suzuki near me",
-      "used suzuki near chhapi",
-      "second hand suzuki chhapi",
-      "second hand suzuki in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Suzuki",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-suzuki-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_suzuki_two_wheelers_nashik",
     "title": "Used Suzuki Bikes in Nashik",
     "keywords": [
@@ -61271,34 +59752,6 @@
     }
   },
   {
-    "id": "filter_buy_used_ktm_two_wheelers_chhapi",
-    "title": "Used KTM Bikes in Chhapi",
-    "keywords": [
-      "ktm",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used ktm",
-      "used ktm bikes",
-      "used ktm in chhapi",
-      "used ktm bikes in chhapi",
-      "ktm in chhapi",
-      "ktm bikes in chhapi",
-      "ktm chhapi",
-      "used ktm near me",
-      "used ktm near chhapi",
-      "second hand ktm chhapi",
-      "second hand ktm in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "KTM",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-ktm-two-wheelers-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_ktm_two_wheelers_nashik",
     "title": "Used KTM Bikes in Nashik",
     "keywords": [
@@ -62419,34 +60872,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "TWO_WHEELER",
       "slug": "buy-used-ather-two-wheelers-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ather_two_wheelers_chhapi",
-    "title": "Used Ather Bikes in Chhapi",
-    "keywords": [
-      "ather",
-      "chhapi",
-      "used bike",
-      "used bikes",
-      "used ather",
-      "used ather bikes",
-      "used ather in chhapi",
-      "used ather bikes in chhapi",
-      "ather in chhapi",
-      "ather bikes in chhapi",
-      "ather chhapi",
-      "used ather near me",
-      "used ather near chhapi",
-      "second hand ather chhapi",
-      "second hand ather in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ather",
-      "city": "Chhapi",
-      "vehicleType": "TWO_WHEELER",
-      "slug": "buy-used-ather-two-wheelers-chhapi"
     }
   },
   {
@@ -63678,39 +62103,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_grand_i10_cars_chhapi",
-    "title": "Used Hyundai Grand i10 Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "grand i10",
-      "chhapi",
-      "used hyundai grand i10",
-      "used grand i10",
-      "used grand i10 in chhapi",
-      "used hyundai grand i10 in chhapi",
-      "grand i10 in chhapi",
-      "hyundai grand i10 in chhapi",
-      "grand i10 chhapi",
-      "used grand i10 near me",
-      "used hyundai near chhapi",
-      "used hyundai grand i10 near me",
-      "second hand grand i10 chhapi",
-      "second hand grand i10 in chhapi",
-      "grand",
-      "grand i10 near me",
-      "grand near me",
-      "grand in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Grand i10",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_grand_i10_cars_nashik",
     "title": "Used Hyundai Grand i10 Cars in Nashik",
     "keywords": [
@@ -64798,42 +63190,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_creta_cars_chhapi",
-    "title": "Used Hyundai Creta Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "creta",
-      "chhapi",
-      "used hyundai creta",
-      "used creta",
-      "used creta in chhapi",
-      "used hyundai creta in chhapi",
-      "creta in chhapi",
-      "hyundai creta in chhapi",
-      "creta chhapi",
-      "used creta near me",
-      "used hyundai near chhapi",
-      "used hyundai creta near me",
-      "second hand creta chhapi",
-      "second hand creta in chhapi",
-      "creata",
-      "create",
-      "creta near me",
-      "creata near me",
-      "create near me",
-      "creata in chhapi",
-      "create in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Creta",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-creta-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_creta_cars_nashik",
     "title": "Used Hyundai Creta Cars in Nashik",
     "keywords": [
@@ -65830,36 +64186,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_i20_cars_chhapi",
-    "title": "Used Hyundai i20 Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "i20",
-      "chhapi",
-      "used hyundai i20",
-      "used i20",
-      "used i20 in chhapi",
-      "used hyundai i20 in chhapi",
-      "i20 in chhapi",
-      "hyundai i20 in chhapi",
-      "i20 chhapi",
-      "used i20 near me",
-      "used hyundai near chhapi",
-      "used hyundai i20 near me",
-      "second hand i20 chhapi",
-      "second hand i20 in chhapi",
-      "i20 near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "i20",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-i20-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_i20_cars_nashik",
     "title": "Used Hyundai i20 Cars in Nashik",
     "keywords": [
@@ -66148,23 +64474,18 @@
   },
   {
     "id": "filter_buy_used_hyundai_verna_cars_ahmedabad",
-    "title": "Used Hyundai Verna Cars in Ahmedabad",
+    "title": "Used Hyundai Verna in Ahmedabad",
     "keywords": [
       "hyundai",
       "verna",
       "ahmedabad",
-      "used hyundai verna",
-      "used verna",
       "used verna in ahmedabad",
       "used hyundai verna in ahmedabad",
-      "verna in ahmedabad",
-      "hyundai verna in ahmedabad",
-      "verna ahmedabad",
       "used verna near me",
-      "used hyundai near ahmedabad",
+      "used verna near ahmedabad",
       "used hyundai verna near me",
       "second hand verna ahmedabad",
-      "second hand verna in ahmedabad",
+      "verna in ahmedabad",
       "verna near me"
     ],
     "type": "vehicle_filter",
@@ -66794,36 +65115,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-verna-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_verna_cars_chhapi",
-    "title": "Used Hyundai Verna Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "verna",
-      "chhapi",
-      "used hyundai verna",
-      "used verna",
-      "used verna in chhapi",
-      "used hyundai verna in chhapi",
-      "verna in chhapi",
-      "hyundai verna in chhapi",
-      "verna chhapi",
-      "used verna near me",
-      "used hyundai near chhapi",
-      "used hyundai verna near me",
-      "second hand verna chhapi",
-      "second hand verna in chhapi",
-      "verna near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Verna",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-verna-cars-chhapi"
     }
   },
   {
@@ -67894,42 +66185,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_santro_xing_cars_chhapi",
-    "title": "Used Hyundai Santro Xing Cars in Chhapi",
-    "keywords": [
-      "hyundai",
-      "santro xing",
-      "chhapi",
-      "used hyundai santro xing",
-      "used santro xing",
-      "used santro xing in chhapi",
-      "used hyundai santro xing in chhapi",
-      "santro xing in chhapi",
-      "hyundai santro xing in chhapi",
-      "santro xing chhapi",
-      "used santro xing near me",
-      "used hyundai near chhapi",
-      "used hyundai santro xing near me",
-      "second hand santro xing chhapi",
-      "second hand santro xing in chhapi",
-      "santro",
-      "used santro",
-      "santro xing near me",
-      "santro near me",
-      "used santro near me",
-      "santro in chhapi",
-      "used santro in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Santro Xing",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-santro-xing-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_santro_xing_cars_nashik",
     "title": "Used Hyundai Santro Xing Cars in Nashik",
     "keywords": [
@@ -68777,23 +67032,18 @@
   },
   {
     "id": "filter_buy_used_maruti_suzuki_swift_cars_visnagar",
-    "title": "Used Maruti Suzuki Swift Cars in Visnagar",
+    "title": "Used Maruti Suzuki Swift in Visnagar",
     "keywords": [
       "maruti suzuki",
       "swift",
       "visnagar",
-      "used maruti suzuki swift",
-      "used swift",
       "used swift in visnagar",
       "used maruti suzuki swift in visnagar",
-      "swift in visnagar",
-      "maruti suzuki swift in visnagar",
-      "swift visnagar",
       "used swift near me",
-      "used maruti suzuki near visnagar",
+      "used swift near visnagar",
       "used maruti suzuki swift near me",
       "second hand swift visnagar",
-      "second hand swift in visnagar",
+      "swift in visnagar",
       "swift near me"
     ],
     "type": "vehicle_filter",
@@ -68913,36 +67163,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-swift-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_cars_chhapi",
-    "title": "Used Maruti Suzuki Swift Cars in Chhapi",
-    "keywords": [
-      "maruti suzuki",
-      "swift",
-      "chhapi",
-      "used maruti suzuki swift",
-      "used swift",
-      "used swift in chhapi",
-      "used maruti suzuki swift in chhapi",
-      "swift in chhapi",
-      "maruti suzuki swift in chhapi",
-      "swift chhapi",
-      "used swift near me",
-      "used maruti suzuki near chhapi",
-      "used maruti suzuki swift near me",
-      "second hand swift chhapi",
-      "second hand swift in chhapi",
-      "swift near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-cars-chhapi"
     }
   },
   {
@@ -69799,23 +68019,18 @@
   },
   {
     "id": "filter_buy_used_maruti_suzuki_baleno_cars_siddhpur",
-    "title": "Used Maruti Suzuki Baleno Cars in Siddhpur",
+    "title": "Used Maruti Suzuki Baleno in Siddhpur",
     "keywords": [
       "maruti suzuki",
       "baleno",
       "siddhpur",
-      "used maruti suzuki baleno",
-      "used baleno",
       "used baleno in siddhpur",
       "used maruti suzuki baleno in siddhpur",
-      "baleno in siddhpur",
-      "maruti suzuki baleno in siddhpur",
-      "baleno siddhpur",
       "used baleno near me",
-      "used maruti suzuki near siddhpur",
+      "used baleno near siddhpur",
       "used maruti suzuki baleno near me",
       "second hand baleno siddhpur",
-      "second hand baleno in siddhpur",
+      "baleno in siddhpur",
       "baleno near me"
     ],
     "type": "vehicle_filter",
@@ -69885,36 +68100,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-baleno-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_baleno_cars_chhapi",
-    "title": "Used Maruti Suzuki Baleno Cars in Chhapi",
-    "keywords": [
-      "maruti suzuki",
-      "baleno",
-      "chhapi",
-      "used maruti suzuki baleno",
-      "used baleno",
-      "used baleno in chhapi",
-      "used maruti suzuki baleno in chhapi",
-      "baleno in chhapi",
-      "maruti suzuki baleno in chhapi",
-      "baleno chhapi",
-      "used baleno near me",
-      "used maruti suzuki near chhapi",
-      "used maruti suzuki baleno near me",
-      "second hand baleno chhapi",
-      "second hand baleno in chhapi",
-      "baleno near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Baleno",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-baleno-cars-chhapi"
     }
   },
   {
@@ -70932,39 +69117,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_chhapi",
-    "title": "Used Maruti Suzuki Wagon R Cars in Chhapi",
-    "keywords": [
-      "maruti suzuki",
-      "wagon r",
-      "chhapi",
-      "used maruti suzuki wagon r",
-      "used wagon r",
-      "used wagon r in chhapi",
-      "used maruti suzuki wagon r in chhapi",
-      "wagon r in chhapi",
-      "maruti suzuki wagon r in chhapi",
-      "wagon r chhapi",
-      "used wagon r near me",
-      "used maruti suzuki near chhapi",
-      "used maruti suzuki wagon r near me",
-      "second hand wagon r chhapi",
-      "second hand wagon r in chhapi",
-      "wagon",
-      "wagon r near me",
-      "wagon near me",
-      "wagon in chhapi"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Wagon R",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-wagon-r-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_wagon_r_cars_nashik",
     "title": "Used Maruti Suzuki Wagon R Cars in Nashik",
     "keywords": [
@@ -71939,36 +70091,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_brezza_cars_chhapi",
-    "title": "Used Maruti Suzuki Brezza Cars in Chhapi",
-    "keywords": [
-      "maruti suzuki",
-      "brezza",
-      "chhapi",
-      "used maruti suzuki brezza",
-      "used brezza",
-      "used brezza in chhapi",
-      "used maruti suzuki brezza in chhapi",
-      "brezza in chhapi",
-      "maruti suzuki brezza in chhapi",
-      "brezza chhapi",
-      "used brezza near me",
-      "used maruti suzuki near chhapi",
-      "used maruti suzuki brezza near me",
-      "second hand brezza chhapi",
-      "second hand brezza in chhapi",
-      "brezza near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Brezza",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-brezza-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_brezza_cars_nashik",
     "title": "Used Maruti Suzuki Brezza Cars in Nashik",
     "keywords": [
@@ -72257,23 +70379,18 @@
   },
   {
     "id": "filter_buy_used_mahindra_thar_cars_ahmedabad",
-    "title": "Used Mahindra Thar Cars in Ahmedabad",
+    "title": "Used Mahindra Thar in Ahmedabad",
     "keywords": [
       "mahindra",
       "thar",
       "ahmedabad",
-      "used mahindra thar",
-      "used thar",
       "used thar in ahmedabad",
       "used mahindra thar in ahmedabad",
-      "thar in ahmedabad",
-      "mahindra thar in ahmedabad",
-      "thar ahmedabad",
       "used thar near me",
-      "used mahindra near ahmedabad",
+      "used thar near ahmedabad",
       "used mahindra thar near me",
       "second hand thar ahmedabad",
-      "second hand thar in ahmedabad",
+      "thar in ahmedabad",
       "thar near me"
     ],
     "type": "vehicle_filter",
@@ -72908,36 +71025,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-thar-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_thar_cars_chhapi",
-    "title": "Used Mahindra Thar Cars in Chhapi",
-    "keywords": [
-      "mahindra",
-      "thar",
-      "chhapi",
-      "used mahindra thar",
-      "used thar",
-      "used thar in chhapi",
-      "used mahindra thar in chhapi",
-      "thar in chhapi",
-      "mahindra thar in chhapi",
-      "thar chhapi",
-      "used thar near me",
-      "used mahindra near chhapi",
-      "used mahindra thar near me",
-      "second hand thar chhapi",
-      "second hand thar in chhapi",
-      "thar near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Thar",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-thar-cars-chhapi"
     }
   },
   {
@@ -73875,36 +71962,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-scorpio-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_scorpio_cars_chhapi",
-    "title": "Used Mahindra Scorpio Cars in Chhapi",
-    "keywords": [
-      "mahindra",
-      "scorpio",
-      "chhapi",
-      "used mahindra scorpio",
-      "used scorpio",
-      "used scorpio in chhapi",
-      "used mahindra scorpio in chhapi",
-      "scorpio in chhapi",
-      "mahindra scorpio in chhapi",
-      "scorpio chhapi",
-      "used scorpio near me",
-      "used mahindra near chhapi",
-      "used mahindra scorpio near me",
-      "second hand scorpio chhapi",
-      "second hand scorpio in chhapi",
-      "scorpio near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Scorpio",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-scorpio-cars-chhapi"
     }
   },
   {
@@ -74855,36 +72912,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tata_nexon_cars_chhapi",
-    "title": "Used Tata Nexon Cars in Chhapi",
-    "keywords": [
-      "tata",
-      "nexon",
-      "chhapi",
-      "used tata nexon",
-      "used nexon",
-      "used nexon in chhapi",
-      "used tata nexon in chhapi",
-      "nexon in chhapi",
-      "tata nexon in chhapi",
-      "nexon chhapi",
-      "used nexon near me",
-      "used tata near chhapi",
-      "used tata nexon near me",
-      "second hand nexon chhapi",
-      "second hand nexon in chhapi",
-      "nexon near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "modelName": "Nexon",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-nexon-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_tata_nexon_cars_nashik",
     "title": "Used Tata Nexon Cars in Nashik",
     "keywords": [
@@ -75832,36 +73859,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tata_punch_cars_chhapi",
-    "title": "Used Tata Punch Cars in Chhapi",
-    "keywords": [
-      "tata",
-      "punch",
-      "chhapi",
-      "used tata punch",
-      "used punch",
-      "used punch in chhapi",
-      "used tata punch in chhapi",
-      "punch in chhapi",
-      "tata punch in chhapi",
-      "punch chhapi",
-      "used punch near me",
-      "used tata near chhapi",
-      "used tata punch near me",
-      "second hand punch chhapi",
-      "second hand punch in chhapi",
-      "punch near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "modelName": "Punch",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-punch-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_tata_punch_cars_nashik",
     "title": "Used Tata Punch Cars in Nashik",
     "keywords": [
@@ -76791,36 +74788,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-toyota-fortuner-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_fortuner_cars_chhapi",
-    "title": "Used Toyota Fortuner Cars in Chhapi",
-    "keywords": [
-      "toyota",
-      "fortuner",
-      "chhapi",
-      "used toyota fortuner",
-      "used fortuner",
-      "used fortuner in chhapi",
-      "used toyota fortuner in chhapi",
-      "fortuner in chhapi",
-      "toyota fortuner in chhapi",
-      "fortuner chhapi",
-      "used fortuner near me",
-      "used toyota near chhapi",
-      "used toyota fortuner near me",
-      "second hand fortuner chhapi",
-      "second hand fortuner in chhapi",
-      "fortuner near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Fortuner",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-fortuner-cars-chhapi"
     }
   },
   {
@@ -77766,36 +75733,6 @@
     }
   },
   {
-    "id": "filter_buy_used_toyota_innova_cars_chhapi",
-    "title": "Used Toyota Innova Cars in Chhapi",
-    "keywords": [
-      "toyota",
-      "innova",
-      "chhapi",
-      "used toyota innova",
-      "used innova",
-      "used innova in chhapi",
-      "used toyota innova in chhapi",
-      "innova in chhapi",
-      "toyota innova in chhapi",
-      "innova chhapi",
-      "used innova near me",
-      "used toyota near chhapi",
-      "used toyota innova near me",
-      "second hand innova chhapi",
-      "second hand innova in chhapi",
-      "innova near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Innova",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-innova-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_toyota_innova_cars_nashik",
     "title": "Used Toyota Innova Cars in Nashik",
     "keywords": [
@@ -78735,36 +76672,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-ford-ecosport-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_ecosport_cars_chhapi",
-    "title": "Used Ford Ecosport Cars in Chhapi",
-    "keywords": [
-      "ford",
-      "ecosport",
-      "chhapi",
-      "used ford ecosport",
-      "used ecosport",
-      "used ecosport in chhapi",
-      "used ford ecosport in chhapi",
-      "ecosport in chhapi",
-      "ford ecosport in chhapi",
-      "ecosport chhapi",
-      "used ecosport near me",
-      "used ford near chhapi",
-      "used ford ecosport near me",
-      "second hand ecosport chhapi",
-      "second hand ecosport in chhapi",
-      "ecosport near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Ford",
-      "modelName": "Ecosport",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ford-ecosport-cars-chhapi"
     }
   },
   {
@@ -79715,36 +77622,6 @@
     }
   },
   {
-    "id": "filter_buy_used_honda_city_cars_chhapi",
-    "title": "Used Honda City Cars in Chhapi",
-    "keywords": [
-      "honda",
-      "city",
-      "chhapi",
-      "used honda city",
-      "used city",
-      "used city in chhapi",
-      "used honda city in chhapi",
-      "city in chhapi",
-      "honda city in chhapi",
-      "city chhapi",
-      "used city near me",
-      "used honda near chhapi",
-      "used honda city near me",
-      "second hand city chhapi",
-      "second hand city in chhapi",
-      "city near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Honda",
-      "modelName": "City",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-city-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_honda_city_cars_nashik",
     "title": "Used Honda City Cars in Nashik",
     "keywords": [
@@ -80687,36 +78564,6 @@
     }
   },
   {
-    "id": "filter_buy_used_honda_amaze_cars_chhapi",
-    "title": "Used Honda Amaze Cars in Chhapi",
-    "keywords": [
-      "honda",
-      "amaze",
-      "chhapi",
-      "used honda amaze",
-      "used amaze",
-      "used amaze in chhapi",
-      "used honda amaze in chhapi",
-      "amaze in chhapi",
-      "honda amaze in chhapi",
-      "amaze chhapi",
-      "used amaze near me",
-      "used honda near chhapi",
-      "used honda amaze near me",
-      "second hand amaze chhapi",
-      "second hand amaze in chhapi",
-      "amaze near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Honda",
-      "modelName": "Amaze",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-amaze-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_honda_amaze_cars_nashik",
     "title": "Used Honda Amaze Cars in Nashik",
     "keywords": [
@@ -81540,29 +79387,24 @@
   },
   {
     "id": "filter_buy_used_kia_seltos_cars_kanodar",
-    "title": "Used Kia Seltos Cars in Kanodar",
+    "title": "Used KIA SELTOS in Kanodar",
     "keywords": [
       "kia",
       "seltos",
       "kanodar",
-      "used kia seltos",
-      "used seltos",
       "used seltos in kanodar",
       "used kia seltos in kanodar",
-      "seltos in kanodar",
-      "kia seltos in kanodar",
-      "seltos kanodar",
       "used seltos near me",
-      "used kia near kanodar",
+      "used seltos near kanodar",
       "used kia seltos near me",
       "second hand seltos kanodar",
-      "second hand seltos in kanodar",
+      "seltos in kanodar",
       "seltos near me"
     ],
     "type": "vehicle_filter",
     "params": {
-      "makerName": "Kia",
-      "modelName": "Seltos",
+      "makerName": "KIA",
+      "modelName": "SELTOS",
       "city": "Kanodar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars-kanodar"
@@ -81656,36 +79498,6 @@
       "city": "Chhota Udepur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars-chhota-udepur"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_chhapi",
-    "title": "Used Kia Seltos Cars in Chhapi",
-    "keywords": [
-      "kia",
-      "seltos",
-      "chhapi",
-      "used kia seltos",
-      "used seltos",
-      "used seltos in chhapi",
-      "used kia seltos in chhapi",
-      "seltos in chhapi",
-      "kia seltos in chhapi",
-      "seltos chhapi",
-      "used seltos near me",
-      "used kia near chhapi",
-      "used kia seltos near me",
-      "second hand seltos chhapi",
-      "second hand seltos in chhapi",
-      "seltos near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Kia",
-      "modelName": "Seltos",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-kia-seltos-cars-chhapi"
     }
   },
   {
@@ -82631,36 +80443,6 @@
     }
   },
   {
-    "id": "filter_buy_used_kia_sonet_cars_chhapi",
-    "title": "Used Kia Sonet Cars in Chhapi",
-    "keywords": [
-      "kia",
-      "sonet",
-      "chhapi",
-      "used kia sonet",
-      "used sonet",
-      "used sonet in chhapi",
-      "used kia sonet in chhapi",
-      "sonet in chhapi",
-      "kia sonet in chhapi",
-      "sonet chhapi",
-      "used sonet near me",
-      "used kia near chhapi",
-      "used kia sonet near me",
-      "second hand sonet chhapi",
-      "second hand sonet in chhapi",
-      "sonet near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Kia",
-      "modelName": "Sonet",
-      "city": "Chhapi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-kia-sonet-cars-chhapi"
-    }
-  },
-  {
     "id": "filter_buy_used_kia_sonet_cars_nashik",
     "title": "Used Kia Sonet Cars in Nashik",
     "keywords": [
@@ -82931,6 +80713,821 @@
     }
   },
   {
+    "id": "filter_buy_used_kia_seltos_cars_gujarat",
+    "title": "Used KIA SELTOS in Gujarat",
+    "keywords": [
+      "kia",
+      "seltos",
+      "gujarat",
+      "used seltos in gujarat",
+      "used kia seltos in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "KIA",
+      "modelName": "SELTOS",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-kia-seltos-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
+    "title": "Used Maruti Suzuki Swift Dzire Cars",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "used swift dzire",
+      "used maruti suzuki swift dzire",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
+    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "palanpur",
+      "used swift dzire in palanpur",
+      "used maruti suzuki swift dzire in palanpur",
+      "used swift dzire near me",
+      "used swift dzire near palanpur",
+      "used maruti suzuki swift dzire near me",
+      "second hand swift dzire palanpur",
+      "swift dzire in palanpur",
+      "swift in palanpur",
+      "swift dzire near me",
+      "swift near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "swift dzire",
+      "gujarat",
+      "used swift dzire in gujarat",
+      "used maruti suzuki swift dzire in gujarat",
+      "swift"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift Dzire",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_crysta_cars",
+    "title": "Used Toyota Innova Crysta Cars",
+    "keywords": [
+      "toyota",
+      "innova crysta",
+      "used innova crysta",
+      "used toyota innova crysta",
+      "innova"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "modelName": "Innova Crysta",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-innova-crysta-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_crysta_cars_ahmedabad",
+    "title": "Used Toyota Innova Crysta in Ahmedabad",
+    "keywords": [
+      "toyota",
+      "innova crysta",
+      "ahmedabad",
+      "used innova crysta in ahmedabad",
+      "used toyota innova crysta in ahmedabad",
+      "used innova crysta near me",
+      "used innova crysta near ahmedabad",
+      "used toyota innova crysta near me",
+      "second hand innova crysta ahmedabad",
+      "innova crysta in ahmedabad",
+      "innova in ahmedabad",
+      "innova crysta near me",
+      "innova near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "modelName": "Innova Crysta",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-innova-crysta-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_crysta_cars_gujarat",
+    "title": "Used Toyota Innova Crysta in Gujarat",
+    "keywords": [
+      "toyota",
+      "innova crysta",
+      "gujarat",
+      "used innova crysta in gujarat",
+      "used toyota innova crysta in gujarat",
+      "innova"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "modelName": "Innova Crysta",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-innova-crysta-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_endeavour_cars",
+    "title": "Used Ford Endeavour Cars",
+    "keywords": [
+      "ford",
+      "endeavour",
+      "used endeavour",
+      "used ford endeavour"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Endeavour",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-endeavour-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_endeavour_cars_ahmedabad",
+    "title": "Used Ford Endeavour in Ahmedabad",
+    "keywords": [
+      "ford",
+      "endeavour",
+      "ahmedabad",
+      "used endeavour in ahmedabad",
+      "used ford endeavour in ahmedabad",
+      "used endeavour near me",
+      "used endeavour near ahmedabad",
+      "used ford endeavour near me",
+      "second hand endeavour ahmedabad",
+      "endeavour in ahmedabad",
+      "endeavour near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Endeavour",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-endeavour-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_ford_endeavour_cars_gujarat",
+    "title": "Used Ford Endeavour in Gujarat",
+    "keywords": [
+      "ford",
+      "endeavour",
+      "gujarat",
+      "used endeavour in gujarat",
+      "used ford endeavour in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Ford",
+      "modelName": "Endeavour",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-ford-endeavour-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_verna_cars_gujarat",
+    "title": "Used Hyundai Verna in Gujarat",
+    "keywords": [
+      "hyundai",
+      "verna",
+      "gujarat",
+      "used verna in gujarat",
+      "used hyundai verna in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Verna",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-verna-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars",
+    "title": "Used Maruti Suzuki Alto K10 Cars",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "used alto k10",
+      "used maruti suzuki alto k10",
+      "alto"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_visnagar",
+    "title": "Used Maruti Suzuki Alto K10 in Visnagar",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "visnagar",
+      "used alto k10 in visnagar",
+      "used maruti suzuki alto k10 in visnagar",
+      "used alto k10 near me",
+      "used alto k10 near visnagar",
+      "used maruti suzuki alto k10 near me",
+      "second hand alto k10 visnagar",
+      "alto k10 in visnagar",
+      "alto in visnagar",
+      "alto k10 near me",
+      "alto near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_gujarat",
+    "title": "Used Maruti Suzuki Alto K10 in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "alto k10",
+      "gujarat",
+      "used alto k10 in gujarat",
+      "used maruti suzuki alto k10 in gujarat",
+      "alto"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto K10",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-k10-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_classic_cars",
+    "title": "Used Mahindra SCORPIO CLASSIC Cars",
+    "keywords": [
+      "mahindra",
+      "scorpio classic",
+      "used scorpio classic",
+      "used mahindra scorpio classic",
+      "scorpio"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "SCORPIO CLASSIC",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-classic-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_classic_cars_ahmedabad",
+    "title": "Used Mahindra SCORPIO CLASSIC in Ahmedabad",
+    "keywords": [
+      "mahindra",
+      "scorpio classic",
+      "ahmedabad",
+      "used scorpio classic in ahmedabad",
+      "used mahindra scorpio classic in ahmedabad",
+      "used scorpio classic near me",
+      "used scorpio classic near ahmedabad",
+      "used mahindra scorpio classic near me",
+      "second hand scorpio classic ahmedabad",
+      "scorpio classic in ahmedabad",
+      "scorpio in ahmedabad",
+      "scorpio classic near me",
+      "scorpio near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "SCORPIO CLASSIC",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-classic-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_classic_cars_gujarat",
+    "title": "Used Mahindra SCORPIO CLASSIC in Gujarat",
+    "keywords": [
+      "mahindra",
+      "scorpio classic",
+      "gujarat",
+      "used scorpio classic in gujarat",
+      "used mahindra scorpio classic in gujarat",
+      "scorpio"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "SCORPIO CLASSIC",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-classic-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_thar_cars_gujarat",
+    "title": "Used Mahindra Thar in Gujarat",
+    "keywords": [
+      "mahindra",
+      "thar",
+      "gujarat",
+      "used thar in gujarat",
+      "used mahindra thar in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "Thar",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-thar-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_skoda_rapid_cars",
+    "title": "Used Skoda Rapid Cars",
+    "keywords": [
+      "skoda",
+      "rapid",
+      "used rapid",
+      "used skoda rapid"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Skoda",
+      "modelName": "Rapid",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-skoda-rapid-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_skoda_rapid_cars_ahmedabad",
+    "title": "Used Skoda Rapid in Ahmedabad",
+    "keywords": [
+      "skoda",
+      "rapid",
+      "ahmedabad",
+      "used rapid in ahmedabad",
+      "used skoda rapid in ahmedabad",
+      "used rapid near me",
+      "used rapid near ahmedabad",
+      "used skoda rapid near me",
+      "second hand rapid ahmedabad",
+      "rapid in ahmedabad",
+      "rapid near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Skoda",
+      "modelName": "Rapid",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-skoda-rapid-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_skoda_rapid_cars_gujarat",
+    "title": "Used Skoda Rapid in Gujarat",
+    "keywords": [
+      "skoda",
+      "rapid",
+      "gujarat",
+      "used rapid in gujarat",
+      "used skoda rapid in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Skoda",
+      "modelName": "Rapid",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-skoda-rapid-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars",
+    "title": "Used Tata Harrier Cars",
+    "keywords": [
+      "tata",
+      "harrier",
+      "used harrier",
+      "used tata harrier"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-harrier-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_ahmedabad",
+    "title": "Used Tata Harrier in Ahmedabad",
+    "keywords": [
+      "tata",
+      "harrier",
+      "ahmedabad",
+      "used harrier in ahmedabad",
+      "used tata harrier in ahmedabad",
+      "used harrier near me",
+      "used harrier near ahmedabad",
+      "used tata harrier near me",
+      "second hand harrier ahmedabad",
+      "harrier in ahmedabad",
+      "harrier near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-harrier-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_harrier_cars_gujarat",
+    "title": "Used Tata Harrier in Gujarat",
+    "keywords": [
+      "tata",
+      "harrier",
+      "gujarat",
+      "used harrier in gujarat",
+      "used tata harrier in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Harrier",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-harrier-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_safari_cars",
+    "title": "Used Tata Safari Cars",
+    "keywords": [
+      "tata",
+      "safari",
+      "used safari",
+      "used tata safari"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Safari",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-safari-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_safari_cars_ahmedabad",
+    "title": "Used Tata Safari in Ahmedabad",
+    "keywords": [
+      "tata",
+      "safari",
+      "ahmedabad",
+      "used safari in ahmedabad",
+      "used tata safari in ahmedabad",
+      "used safari near me",
+      "used safari near ahmedabad",
+      "used tata safari near me",
+      "second hand safari ahmedabad",
+      "safari in ahmedabad",
+      "safari near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Safari",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-safari-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_tata_safari_cars_gujarat",
+    "title": "Used Tata Safari in Gujarat",
+    "keywords": [
+      "tata",
+      "safari",
+      "gujarat",
+      "used safari in gujarat",
+      "used tata safari in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Tata",
+      "modelName": "Safari",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-tata-safari-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_crysta_cars_visnagar",
+    "title": "Used Toyota Innova Crysta in Visnagar",
+    "keywords": [
+      "toyota",
+      "innova crysta",
+      "visnagar",
+      "used innova crysta in visnagar",
+      "used toyota innova crysta in visnagar",
+      "used innova crysta near me",
+      "used innova crysta near visnagar",
+      "used toyota innova crysta near me",
+      "second hand innova crysta visnagar",
+      "innova crysta in visnagar",
+      "innova in visnagar",
+      "innova crysta near me",
+      "innova near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "modelName": "Innova Crysta",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-innova-crysta-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_cars_unjha",
+    "title": "Used Toyota Cars in Unjha",
+    "keywords": [
+      "toyota",
+      "unjha",
+      "used toyota in unjha",
+      "used toyota cars in unjha",
+      "used toyota near me",
+      "used toyota near unjha",
+      "second hand toyota unjha"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_toyota_innova_crysta_cars_unjha",
+    "title": "Used Toyota Innova Crysta in Unjha",
+    "keywords": [
+      "toyota",
+      "innova crysta",
+      "unjha",
+      "used innova crysta in unjha",
+      "used toyota innova crysta in unjha",
+      "used innova crysta near me",
+      "used innova crysta near unjha",
+      "used toyota innova crysta near me",
+      "second hand innova crysta unjha",
+      "innova crysta in unjha",
+      "innova in unjha",
+      "innova crysta near me",
+      "innova near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Toyota",
+      "modelName": "Innova Crysta",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-toyota-innova-crysta-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_gujarat",
+    "title": "Used Maruti Suzuki Swift in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "swift",
+      "gujarat",
+      "used swift in gujarat",
+      "used maruti suzuki swift in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Swift",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-swift-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_cars",
+    "title": "Used Maruti Suzuki Alto Cars",
+    "keywords": [
+      "maruti suzuki",
+      "alto",
+      "used alto",
+      "used maruti suzuki alto"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_cars_visnagar",
+    "title": "Used Maruti Suzuki Alto in Visnagar",
+    "keywords": [
+      "maruti suzuki",
+      "alto",
+      "visnagar",
+      "used alto in visnagar",
+      "used maruti suzuki alto in visnagar",
+      "used alto near me",
+      "used alto near visnagar",
+      "used maruti suzuki alto near me",
+      "second hand alto visnagar",
+      "alto in visnagar",
+      "alto near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_alto_cars_gujarat",
+    "title": "Used Maruti Suzuki Alto in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "alto",
+      "gujarat",
+      "used alto in gujarat",
+      "used maruti suzuki alto in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Alto",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-alto-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_baleno_cars_gujarat",
+    "title": "Used Maruti Suzuki Baleno in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "baleno",
+      "gujarat",
+      "used baleno in gujarat",
+      "used maruti suzuki baleno in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Baleno",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-baleno-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_dzire_cars",
+    "title": "Used Maruti Suzuki Dzire Cars",
+    "keywords": [
+      "maruti suzuki",
+      "dzire",
+      "used dzire",
+      "used maruti suzuki dzire"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Dzire",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-dzire-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_cars_unjha",
+    "title": "Used Maruti Suzuki Cars in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "unjha",
+      "used maruti suzuki in unjha",
+      "used maruti suzuki cars in unjha",
+      "used maruti suzuki near me",
+      "used maruti suzuki near unjha",
+      "second hand maruti suzuki unjha"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_dzire_cars_unjha",
+    "title": "Used Maruti Suzuki Dzire in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "dzire",
+      "unjha",
+      "used dzire in unjha",
+      "used maruti suzuki dzire in unjha",
+      "used dzire near me",
+      "used dzire near unjha",
+      "used maruti suzuki dzire near me",
+      "second hand dzire unjha",
+      "dzire in unjha",
+      "dzire near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Dzire",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-dzire-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_dzire_cars_gujarat",
+    "title": "Used Maruti Suzuki Dzire in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "dzire",
+      "gujarat",
+      "used dzire in gujarat",
+      "used maruti suzuki dzire in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Dzire",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-dzire-cars-gujarat"
+    }
+  },
+  {
     "id": "filter_buy_used_maruti_suzuki_ertiga_cars",
     "title": "Used Maruti Suzuki Ertiga Cars",
     "keywords": [
@@ -82945,6 +81542,436 @@
       "modelName": "Ertiga",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-ertiga-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_unjha",
+    "title": "Used Maruti Suzuki Ertiga in Unjha",
+    "keywords": [
+      "maruti suzuki",
+      "ertiga",
+      "unjha",
+      "used ertiga in unjha",
+      "used maruti suzuki ertiga in unjha",
+      "used ertiga near me",
+      "used ertiga near unjha",
+      "used maruti suzuki ertiga near me",
+      "second hand ertiga unjha",
+      "ertiga in unjha",
+      "ertiga near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Ertiga",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-ertiga-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_gujarat",
+    "title": "Used Maruti Suzuki Ertiga in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "ertiga",
+      "gujarat",
+      "used ertiga in gujarat",
+      "used maruti suzuki ertiga in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Ertiga",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-ertiga-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_cars",
+    "title": "Used Royal Enfield Cars",
+    "keywords": [
+      "royal enfield",
+      "used car",
+      "used royal enfield",
+      "used royal enfield cars"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_classic_350_cars",
+    "title": "Used Royal Enfield CLASSIC 350 Cars",
+    "keywords": [
+      "royal enfield",
+      "classic 350",
+      "used classic 350",
+      "used royal enfield classic 350",
+      "classic"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "CLASSIC 350",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_cars_ahmedabad",
+    "title": "Used Royal Enfield Cars in Ahmedabad",
+    "keywords": [
+      "royal enfield",
+      "ahmedabad",
+      "used royal enfield in ahmedabad",
+      "used royal enfield cars in ahmedabad",
+      "used royal enfield near me",
+      "used royal enfield near ahmedabad",
+      "second hand royal enfield ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_classic_350_cars_ahmedabad",
+    "title": "Used Royal Enfield CLASSIC 350 in Ahmedabad",
+    "keywords": [
+      "royal enfield",
+      "classic 350",
+      "ahmedabad",
+      "used classic 350 in ahmedabad",
+      "used royal enfield classic 350 in ahmedabad",
+      "used classic 350 near me",
+      "used classic 350 near ahmedabad",
+      "used royal enfield classic 350 near me",
+      "second hand classic 350 ahmedabad",
+      "classic 350 in ahmedabad",
+      "classic in ahmedabad",
+      "classic 350 near me",
+      "classic near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "CLASSIC 350",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_cars_gujarat",
+    "title": "Used Royal Enfield Cars in Gujarat",
+    "keywords": [
+      "royal enfield",
+      "gujarat",
+      "used royal enfield in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_classic_350_cars_gujarat",
+    "title": "Used Royal Enfield CLASSIC 350 in Gujarat",
+    "keywords": [
+      "royal enfield",
+      "classic 350",
+      "gujarat",
+      "used classic 350 in gujarat",
+      "used royal enfield classic 350 in gujarat",
+      "classic"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "CLASSIC 350",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_bullet_350_cars",
+    "title": "Used Royal Enfield BULLET 350 Cars",
+    "keywords": [
+      "royal enfield",
+      "bullet 350",
+      "used bullet 350",
+      "used royal enfield bullet 350",
+      "bullet"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "BULLET 350",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-bullet-350-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_bullet_350_cars_ahmedabad",
+    "title": "Used Royal Enfield BULLET 350 in Ahmedabad",
+    "keywords": [
+      "royal enfield",
+      "bullet 350",
+      "ahmedabad",
+      "used bullet 350 in ahmedabad",
+      "used royal enfield bullet 350 in ahmedabad",
+      "used bullet 350 near me",
+      "used bullet 350 near ahmedabad",
+      "used royal enfield bullet 350 near me",
+      "second hand bullet 350 ahmedabad",
+      "bullet 350 in ahmedabad",
+      "bullet in ahmedabad",
+      "bullet 350 near me",
+      "bullet near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "BULLET 350",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-bullet-350-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_royal_enfield_bullet_350_cars_gujarat",
+    "title": "Used Royal Enfield BULLET 350 in Gujarat",
+    "keywords": [
+      "royal enfield",
+      "bullet 350",
+      "gujarat",
+      "used bullet 350 in gujarat",
+      "used royal enfield bullet 350 in gujarat",
+      "bullet"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Royal Enfield",
+      "modelName": "BULLET 350",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-royal-enfield-bullet-350-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_cars",
+    "title": "Used Yamaha Cars",
+    "keywords": [
+      "yamaha",
+      "used car",
+      "used yamaha",
+      "used yamaha cars"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_r15_v3_cars",
+    "title": "Used Yamaha R15 V3 Cars",
+    "keywords": [
+      "yamaha",
+      "r15 v3",
+      "used r15 v3",
+      "used yamaha r15 v3",
+      "r15"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "modelName": "R15 V3",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_cars_ahmedabad",
+    "title": "Used Yamaha Cars in Ahmedabad",
+    "keywords": [
+      "yamaha",
+      "ahmedabad",
+      "used yamaha in ahmedabad",
+      "used yamaha cars in ahmedabad",
+      "used yamaha near me",
+      "used yamaha near ahmedabad",
+      "second hand yamaha ahmedabad"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_r15_v3_cars_ahmedabad",
+    "title": "Used Yamaha R15 V3 in Ahmedabad",
+    "keywords": [
+      "yamaha",
+      "r15 v3",
+      "ahmedabad",
+      "used r15 v3 in ahmedabad",
+      "used yamaha r15 v3 in ahmedabad",
+      "used r15 v3 near me",
+      "used r15 v3 near ahmedabad",
+      "used yamaha r15 v3 near me",
+      "second hand r15 v3 ahmedabad",
+      "r15 v3 in ahmedabad",
+      "r15 in ahmedabad",
+      "r15 v3 near me",
+      "r15 near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "modelName": "R15 V3",
+      "city": "Ahmedabad",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-cars-ahmedabad"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_cars_gujarat",
+    "title": "Used Yamaha Cars in Gujarat",
+    "keywords": [
+      "yamaha",
+      "gujarat",
+      "used yamaha in gujarat"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_yamaha_r15_v3_cars_gujarat",
+    "title": "Used Yamaha R15 V3 in Gujarat",
+    "keywords": [
+      "yamaha",
+      "r15 v3",
+      "gujarat",
+      "used r15 v3 in gujarat",
+      "used yamaha r15 v3 in gujarat",
+      "r15"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Yamaha",
+      "modelName": "R15 V3",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars",
+    "title": "Used Hyundai GRAND I10 NIOS Cars",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "used grand i10 nios",
+      "used hyundai grand i10 nios",
+      "grand"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_palanpur",
+    "title": "Used Hyundai GRAND I10 NIOS in Palanpur",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "palanpur",
+      "used grand i10 nios in palanpur",
+      "used hyundai grand i10 nios in palanpur",
+      "used grand i10 nios near me",
+      "used grand i10 nios near palanpur",
+      "used hyundai grand i10 nios near me",
+      "second hand grand i10 nios palanpur",
+      "grand i10 nios in palanpur",
+      "grand in palanpur",
+      "grand i10 nios near me",
+      "grand near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_gujarat",
+    "title": "Used Hyundai GRAND I10 NIOS in Gujarat",
+    "keywords": [
+      "hyundai",
+      "grand i10 nios",
+      "gujarat",
+      "used grand i10 nios in gujarat",
+      "used hyundai grand i10 nios in gujarat",
+      "grand"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "GRAND I10 NIOS",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-grand-i10-nios-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_hyundai_creta_cars_gujarat",
+    "title": "Used Hyundai Creta in Gujarat",
+    "keywords": [
+      "hyundai",
+      "creta",
+      "gujarat",
+      "used creta in gujarat",
+      "used hyundai creta in gujarat",
+      "creata",
+      "create",
+      "used creta"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Hyundai",
+      "modelName": "Creta",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-hyundai-creta-cars-gujarat"
     }
   },
   {
@@ -82973,59 +82000,167 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_ertiga_cars_gujarat",
-    "title": "Used Maruti Suzuki Ertiga in Gujarat",
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars",
+    "title": "Used Maruti Suzuki Wagon R 1.0 Cars",
     "keywords": [
       "maruti suzuki",
-      "ertiga",
-      "gujarat",
-      "used ertiga in gujarat",
-      "used maruti suzuki ertiga in gujarat"
+      "wagon r 1.0",
+      "used wagon r 1.0",
+      "used maruti suzuki wagon r 1.0",
+      "wagon"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Maruti Suzuki",
-      "modelName": "Ertiga",
-      "state": "Gujarat",
+      "modelName": "Wagon R 1.0",
       "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-ertiga-cars-gujarat"
+      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars"
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_swift_cars_gujarat",
-    "title": "Used Maruti Suzuki Swift in Gujarat",
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_visnagar",
+    "title": "Used Maruti Suzuki Wagon R 1.0 in Visnagar",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r 1.0",
+      "visnagar",
+      "used wagon r 1.0 in visnagar",
+      "used maruti suzuki wagon r 1.0 in visnagar",
+      "used wagon r 1.0 near me",
+      "used wagon r 1.0 near visnagar",
+      "used maruti suzuki wagon r 1.0 near me",
+      "second hand wagon r 1.0 visnagar",
+      "wagon r 1.0 in visnagar",
+      "wagon in visnagar",
+      "wagon r 1.0 near me",
+      "wagon near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R 1.0",
+      "city": "Visnagar",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-visnagar"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_gujarat",
+    "title": "Used Maruti Suzuki Wagon R 1.0 in Gujarat",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r 1.0",
+      "gujarat",
+      "used wagon r 1.0 in gujarat",
+      "used maruti suzuki wagon r 1.0 in gujarat",
+      "wagon"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R 1.0",
+      "state": "Gujarat",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-gujarat"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_palanpur",
+    "title": "Used Maruti Suzuki Wagon R 1.0 in Palanpur",
+    "keywords": [
+      "maruti suzuki",
+      "wagon r 1.0",
+      "palanpur",
+      "used wagon r 1.0 in palanpur",
+      "used maruti suzuki wagon r 1.0 in palanpur",
+      "used wagon r 1.0 near me",
+      "used wagon r 1.0 near palanpur",
+      "used maruti suzuki wagon r 1.0 near me",
+      "second hand wagon r 1.0 palanpur",
+      "wagon r 1.0 in palanpur",
+      "wagon in palanpur",
+      "wagon r 1.0 near me",
+      "wagon near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Maruti Suzuki",
+      "modelName": "Wagon R 1.0",
+      "city": "Palanpur",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-palanpur"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_cars_unjha",
+    "title": "Used Mahindra Cars in Unjha",
+    "keywords": [
+      "mahindra",
+      "unjha",
+      "used mahindra in unjha",
+      "used mahindra cars in unjha",
+      "used mahindra near me",
+      "used mahindra near unjha",
+      "second hand mahindra unjha"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_mahindra_scorpio_classic_cars_unjha",
+    "title": "Used Mahindra SCORPIO CLASSIC in Unjha",
+    "keywords": [
+      "mahindra",
+      "scorpio classic",
+      "unjha",
+      "used scorpio classic in unjha",
+      "used mahindra scorpio classic in unjha",
+      "used scorpio classic near me",
+      "used scorpio classic near unjha",
+      "used mahindra scorpio classic near me",
+      "second hand scorpio classic unjha",
+      "scorpio classic in unjha",
+      "scorpio in unjha",
+      "scorpio classic near me",
+      "scorpio near me"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "makerName": "Mahindra",
+      "modelName": "SCORPIO CLASSIC",
+      "city": "Unjha",
+      "vehicleType": "FOUR_WHEELER",
+      "slug": "buy-used-mahindra-scorpio-classic-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_maruti_suzuki_swift_cars_unjha",
+    "title": "Used Maruti Suzuki Swift in Unjha",
     "keywords": [
       "maruti suzuki",
       "swift",
-      "gujarat",
-      "used swift in gujarat",
-      "used maruti suzuki swift in gujarat"
+      "unjha",
+      "used swift in unjha",
+      "used maruti suzuki swift in unjha",
+      "used swift near me",
+      "used swift near unjha",
+      "used maruti suzuki swift near me",
+      "second hand swift unjha",
+      "swift in unjha",
+      "swift near me"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Maruti Suzuki",
       "modelName": "Swift",
-      "state": "Gujarat",
+      "city": "Unjha",
       "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars",
-    "title": "Used Maruti Suzuki Swift Dzire Cars",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "used swift dzire",
-      "used maruti suzuki swift dzire",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars"
+      "slug": "buy-used-maruti-suzuki-swift-cars-unjha"
     }
   },
   {
@@ -83053,26 +82188,6 @@
       "city": "Siddhpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-swift-dzire-cars-siddhpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_gujarat",
-    "title": "Used Maruti Suzuki Swift Dzire in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "gujarat",
-      "used swift dzire in gujarat",
-      "used maruti suzuki swift dzire in gujarat",
-      "swift"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-gujarat"
     }
   },
   {
@@ -83219,28 +82334,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-hyundai-grand-i10-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_hyundai_creta_cars_gujarat",
-    "title": "Used Hyundai Creta in Gujarat",
-    "keywords": [
-      "hyundai",
-      "creta",
-      "gujarat",
-      "used creta in gujarat",
-      "used hyundai creta in gujarat",
-      "creata",
-      "create",
-      "used creta"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Creta",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-creta-cars-gujarat"
     }
   },
   {
@@ -83470,71 +82563,6 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-renault-duster-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_innova_crysta_cars",
-    "title": "Used Toyota Innova Crysta Cars",
-    "keywords": [
-      "toyota",
-      "innova crysta",
-      "used innova crysta",
-      "used toyota innova crysta",
-      "innova"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Innova Crysta",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-innova-crysta-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_innova_crysta_cars_ahmedabad",
-    "title": "Used Toyota Innova Crysta in Ahmedabad",
-    "keywords": [
-      "toyota",
-      "innova crysta",
-      "ahmedabad",
-      "used innova crysta in ahmedabad",
-      "used toyota innova crysta in ahmedabad",
-      "used innova crysta near me",
-      "used innova crysta near ahmedabad",
-      "used toyota innova crysta near me",
-      "second hand innova crysta ahmedabad",
-      "innova crysta in ahmedabad",
-      "innova in ahmedabad",
-      "innova crysta near me",
-      "innova near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Innova Crysta",
-      "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-innova-crysta-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_innova_crysta_cars_gujarat",
-    "title": "Used Toyota Innova Crysta in Gujarat",
-    "keywords": [
-      "toyota",
-      "innova crysta",
-      "gujarat",
-      "used innova crysta in gujarat",
-      "used toyota innova crysta in gujarat",
-      "innova"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Innova Crysta",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-innova-crysta-cars-gujarat"
     }
   },
   {
@@ -83945,42 +82973,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_verna_cars_gujarat",
-    "title": "Used Hyundai Verna in Gujarat",
-    "keywords": [
-      "hyundai",
-      "verna",
-      "gujarat",
-      "used verna in gujarat",
-      "used hyundai verna in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "Verna",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-verna-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_dzire_cars",
-    "title": "Used Maruti Suzuki Dzire Cars",
-    "keywords": [
-      "maruti suzuki",
-      "dzire",
-      "used dzire",
-      "used maruti suzuki dzire"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Dzire",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-dzire-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_cars_himatnagar",
     "title": "Used Maruti Suzuki Cars in Himatnagar",
     "keywords": [
@@ -84023,113 +83015,6 @@
       "city": "Himatnagar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-dzire-cars-himatnagar"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_dzire_cars_gujarat",
-    "title": "Used Maruti Suzuki Dzire in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "dzire",
-      "gujarat",
-      "used dzire in gujarat",
-      "used maruti suzuki dzire in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Dzire",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-dzire-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_tata_safari_cars",
-    "title": "Used Tata Safari Cars",
-    "keywords": [
-      "tata",
-      "safari",
-      "used safari",
-      "used tata safari"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "modelName": "Safari",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-safari-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_tata_safari_cars_ahmedabad",
-    "title": "Used Tata Safari in Ahmedabad",
-    "keywords": [
-      "tata",
-      "safari",
-      "ahmedabad",
-      "used safari in ahmedabad",
-      "used tata safari in ahmedabad",
-      "used safari near me",
-      "used safari near ahmedabad",
-      "used tata safari near me",
-      "second hand safari ahmedabad",
-      "safari in ahmedabad",
-      "safari near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "modelName": "Safari",
-      "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-safari-cars-ahmedabad"
-    }
-  },
-  {
-    "id": "filter_buy_used_tata_safari_cars_gujarat",
-    "title": "Used Tata Safari in Gujarat",
-    "keywords": [
-      "tata",
-      "safari",
-      "gujarat",
-      "used safari in gujarat",
-      "used tata safari in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Tata",
-      "modelName": "Safari",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-tata-safari-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_dzire_cars_palanpur",
-    "title": "Used Maruti Suzuki Swift Dzire in Palanpur",
-    "keywords": [
-      "maruti suzuki",
-      "swift dzire",
-      "palanpur",
-      "used swift dzire in palanpur",
-      "used maruti suzuki swift dzire in palanpur",
-      "used swift dzire near me",
-      "used swift dzire near palanpur",
-      "used maruti suzuki swift dzire near me",
-      "second hand swift dzire palanpur",
-      "swift dzire in palanpur",
-      "swift in palanpur",
-      "swift dzire near me",
-      "swift near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift Dzire",
-      "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-dzire-cars-palanpur"
     }
   },
   {
@@ -84623,70 +83508,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_thar_cars_gujarat",
-    "title": "Used Mahindra Thar in Gujarat",
-    "keywords": [
-      "mahindra",
-      "thar",
-      "gujarat",
-      "used thar in gujarat",
-      "used mahindra thar in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "Thar",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-thar-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_cars_unjha",
-    "title": "Used Maruti Suzuki Cars in Unjha",
-    "keywords": [
-      "maruti suzuki",
-      "unjha",
-      "used maruti suzuki in unjha",
-      "used maruti suzuki cars in unjha",
-      "used maruti suzuki near me",
-      "used maruti suzuki near unjha",
-      "second hand maruti suzuki unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-cars-unjha"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_swift_cars_unjha",
-    "title": "Used Maruti Suzuki Swift in Unjha",
-    "keywords": [
-      "maruti suzuki",
-      "swift",
-      "unjha",
-      "used swift in unjha",
-      "used maruti suzuki swift in unjha",
-      "used swift near me",
-      "used swift near unjha",
-      "used maruti suzuki swift near me",
-      "second hand swift unjha",
-      "swift in unjha",
-      "swift near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Swift",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-swift-cars-unjha"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_eeco_cars_unjha",
     "title": "Used Maruti Suzuki Eeco in Unjha",
     "keywords": [
@@ -84815,25 +83636,6 @@
       "city": "Unjha",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-baleno-cars-unjha"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_baleno_cars_gujarat",
-    "title": "Used Maruti Suzuki Baleno in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "baleno",
-      "gujarat",
-      "used baleno in gujarat",
-      "used maruti suzuki baleno in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Baleno",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-baleno-cars-gujarat"
     }
   },
   {
@@ -85074,24 +83876,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_grand_i10_nios_cars",
-    "title": "Used Hyundai GRAND I10 NIOS Cars",
-    "keywords": [
-      "hyundai",
-      "grand i10 nios",
-      "used grand i10 nios",
-      "used hyundai grand i10 nios",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "GRAND I10 NIOS",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-nios-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_grand_i10_nios_cars_unjha",
     "title": "Used Hyundai GRAND I10 NIOS in Unjha",
     "keywords": [
@@ -85119,44 +83903,6 @@
     }
   },
   {
-    "id": "filter_buy_used_hyundai_grand_i10_nios_cars_gujarat",
-    "title": "Used Hyundai GRAND I10 NIOS in Gujarat",
-    "keywords": [
-      "hyundai",
-      "grand i10 nios",
-      "gujarat",
-      "used grand i10 nios in gujarat",
-      "used hyundai grand i10 nios in gujarat",
-      "grand"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Hyundai",
-      "modelName": "GRAND I10 NIOS",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hyundai-grand-i10-nios-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars",
-    "title": "Used Maruti Suzuki Wagon R 1.0 Cars",
-    "keywords": [
-      "maruti suzuki",
-      "wagon r 1.0",
-      "used wagon r 1.0",
-      "used maruti suzuki wagon r 1.0",
-      "wagon"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Wagon R 1.0",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_himatnagar",
     "title": "Used Maruti Suzuki Wagon R 1.0 in Himatnagar",
     "keywords": [
@@ -85181,44 +83927,6 @@
       "city": "Himatnagar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-himatnagar"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_gujarat",
-    "title": "Used Maruti Suzuki Wagon R 1.0 in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "wagon r 1.0",
-      "gujarat",
-      "used wagon r 1.0 in gujarat",
-      "used maruti suzuki wagon r 1.0 in gujarat",
-      "wagon"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Wagon R 1.0",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-gujarat"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_scorpio_classic_cars",
-    "title": "Used Mahindra SCORPIO CLASSIC Cars",
-    "keywords": [
-      "mahindra",
-      "scorpio classic",
-      "used scorpio classic",
-      "used mahindra scorpio classic",
-      "scorpio"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "SCORPIO CLASSIC",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-scorpio-classic-cars"
     }
   },
   {
@@ -85266,26 +83974,6 @@
       "city": "Tharad",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-scorpio-classic-cars-tharad"
-    }
-  },
-  {
-    "id": "filter_buy_used_mahindra_scorpio_classic_cars_gujarat",
-    "title": "Used Mahindra SCORPIO CLASSIC in Gujarat",
-    "keywords": [
-      "mahindra",
-      "scorpio classic",
-      "gujarat",
-      "used scorpio classic in gujarat",
-      "used mahindra scorpio classic in gujarat",
-      "scorpio"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "modelName": "SCORPIO CLASSIC",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-scorpio-classic-cars-gujarat"
     }
   },
   {
@@ -85664,25 +84352,6 @@
       "city": "Himatnagar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-kia-seltos-cars-himatnagar"
-    }
-  },
-  {
-    "id": "filter_buy_used_kia_seltos_cars_gujarat",
-    "title": "Used KIA SELTOS in Gujarat",
-    "keywords": [
-      "kia",
-      "seltos",
-      "gujarat",
-      "used seltos in gujarat",
-      "used kia seltos in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "KIA",
-      "modelName": "SELTOS",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-kia-seltos-cars-gujarat"
     }
   },
   {
@@ -86106,26 +84775,6 @@
     }
   },
   {
-    "id": "filter_buy_used_mahindra_cars_unjha",
-    "title": "Used Mahindra Cars in Unjha",
-    "keywords": [
-      "mahindra",
-      "unjha",
-      "used mahindra in unjha",
-      "used mahindra cars in unjha",
-      "used mahindra near me",
-      "used mahindra near unjha",
-      "second hand mahindra unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Mahindra",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-mahindra-cars-unjha"
-    }
-  },
-  {
     "id": "filter_buy_used_mahindra_bolero_cars_unjha",
     "title": "Used Mahindra Bolero in Unjha",
     "keywords": [
@@ -86148,53 +84797,6 @@
       "city": "Unjha",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-mahindra-bolero-cars-unjha"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_cars_unjha",
-    "title": "Used Toyota Cars in Unjha",
-    "keywords": [
-      "toyota",
-      "unjha",
-      "used toyota in unjha",
-      "used toyota cars in unjha",
-      "used toyota near me",
-      "used toyota near unjha",
-      "second hand toyota unjha"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-cars-unjha"
-    }
-  },
-  {
-    "id": "filter_buy_used_toyota_innova_crysta_cars_unjha",
-    "title": "Used Toyota Innova Crysta in Unjha",
-    "keywords": [
-      "toyota",
-      "innova crysta",
-      "unjha",
-      "used innova crysta in unjha",
-      "used toyota innova crysta in unjha",
-      "used innova crysta near me",
-      "used innova crysta near unjha",
-      "used toyota innova crysta near me",
-      "second hand innova crysta unjha",
-      "innova crysta in unjha",
-      "innova in unjha",
-      "innova crysta near me",
-      "innova near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Toyota",
-      "modelName": "Innova Crysta",
-      "city": "Unjha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-toyota-innova-crysta-cars-unjha"
     }
   },
   {
@@ -86344,24 +84946,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars",
-    "title": "Used Maruti Suzuki Alto K10 Cars",
-    "keywords": [
-      "maruti suzuki",
-      "alto k10",
-      "used alto k10",
-      "used maruti suzuki alto k10",
-      "alto"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Alto K10",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-alto-k10-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_palanpur",
     "title": "Used Maruti Suzuki Alto K10 in Palanpur",
     "keywords": [
@@ -86386,26 +84970,6 @@
       "city": "Palanpur",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-alto-k10-cars-palanpur"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_alto_k10_cars_gujarat",
-    "title": "Used Maruti Suzuki Alto K10 in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "alto k10",
-      "gujarat",
-      "used alto k10 in gujarat",
-      "used maruti suzuki alto k10 in gujarat",
-      "alto"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Alto K10",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-alto-k10-cars-gujarat"
     }
   },
   {
@@ -86628,33 +85192,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_wagon_r_10_cars_palanpur",
-    "title": "Used Maruti Suzuki Wagon R 1.0 in Palanpur",
-    "keywords": [
-      "maruti suzuki",
-      "wagon r 1.0",
-      "palanpur",
-      "used wagon r 1.0 in palanpur",
-      "used maruti suzuki wagon r 1.0 in palanpur",
-      "used wagon r 1.0 near me",
-      "used wagon r 1.0 near palanpur",
-      "used maruti suzuki wagon r 1.0 near me",
-      "second hand wagon r 1.0 palanpur",
-      "wagon r 1.0 in palanpur",
-      "wagon in palanpur",
-      "wagon r 1.0 near me",
-      "wagon near me"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Wagon R 1.0",
-      "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-wagon-r-10-cars-palanpur"
-    }
-  },
-  {
     "id": "filter_buy_used_hyundai_i20_active_cars",
     "title": "Used Hyundai i20 Active Cars",
     "keywords": [
@@ -86720,23 +85257,6 @@
     }
   },
   {
-    "id": "filter_buy_used_maruti_suzuki_alto_cars",
-    "title": "Used Maruti Suzuki Alto Cars",
-    "keywords": [
-      "maruti suzuki",
-      "alto",
-      "used alto",
-      "used maruti suzuki alto"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Alto",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-alto-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_maruti_suzuki_alto_cars_himatnagar",
     "title": "Used Maruti Suzuki Alto in Himatnagar",
     "keywords": [
@@ -86759,25 +85279,6 @@
       "city": "Himatnagar",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-maruti-suzuki-alto-cars-himatnagar"
-    }
-  },
-  {
-    "id": "filter_buy_used_maruti_suzuki_alto_cars_gujarat",
-    "title": "Used Maruti Suzuki Alto in Gujarat",
-    "keywords": [
-      "maruti suzuki",
-      "alto",
-      "gujarat",
-      "used alto in gujarat",
-      "used maruti suzuki alto in gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "makerName": "Maruti Suzuki",
-      "modelName": "Alto",
-      "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-maruti-suzuki-alto-cars-gujarat"
     }
   },
   {
@@ -87670,6 +86171,193 @@
       "state": "Gujarat",
       "vehicleType": "FOUR_WHEELER",
       "slug": "buy-used-volkswagen-taigun-cars-gujarat"
+    }
+  },
+  {
+    "id": "consultant_64dffd32-ddb1-4fe9-ad2f-84d778cf1107",
+    "title": "Western motors",
+    "keywords": [
+      "westernmotors",
+      "western",
+      "motors",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "western motors used cars",
+      "western motors palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "westernmotors",
+      "consultationId": "64dffd32-ddb1-4fe9-ad2f-84d778cf1107"
+    }
+  },
+  {
+    "id": "consultant_fe0ef06a-10d7-4771-a702-3c164e6899ab",
+    "title": "SAMIR MOTORS",
+    "keywords": [
+      "samirmotors",
+      "samir",
+      "motors",
+      "visnagar",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant visnagar",
+      "used cars visnagar",
+      "samir motors used cars",
+      "samir motors visnagar"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "samirmotors",
+      "consultationId": "fe0ef06a-10d7-4771-a702-3c164e6899ab"
+    }
+  },
+  {
+    "id": "consultant_a8411650-78b0-4c71-908f-d5c42799f363",
+    "title": "Savera auto consult",
+    "keywords": [
+      "saveraautoconsult",
+      "savera",
+      "auto",
+      "consult",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "savera auto consult used cars",
+      "savera auto consult palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "saveraautoconsult",
+      "consultationId": "a8411650-78b0-4c71-908f-d5c42799f363"
+    }
+  },
+  {
+    "id": "consultant_dcaabe94-ed6d-4775-9ebf-a3f7677d35e8",
+    "title": "Erammotors",
+    "keywords": [
+      "erammotors",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "erammotors used cars",
+      "erammotors palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "erammotors",
+      "consultationId": "dcaabe94-ed6d-4775-9ebf-a3f7677d35e8"
+    }
+  },
+  {
+    "id": "consultant_b4383eba-ca7c-4db7-a7f2-c02c44162b5b",
+    "title": "carspot",
+    "keywords": [
+      "carspot",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "carspot used cars",
+      "carspot palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "carspot",
+      "consultationId": "b4383eba-ca7c-4db7-a7f2-c02c44162b5b"
+    }
+  },
+  {
+    "id": "consultant_0ac32047-ef7a-4de1-9eaa-9d187d57a3cd",
+    "title": "Vidhya Motors",
+    "keywords": [
+      "vidhyamotors",
+      "vidhya",
+      "motors",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "vidhya motors used cars",
+      "vidhya motors palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "vidhyamotors",
+      "consultationId": "0ac32047-ef7a-4de1-9eaa-9d187d57a3cd"
+    }
+  },
+  {
+    "id": "consultant_aa23c9d3-a8a0-4715-b9ff-857b3c839a29",
+    "title": "Murlidhar",
+    "keywords": [
+      "murlidhar",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "murlidhar used cars",
+      "murlidhar palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "murlidhar",
+      "consultationId": "aa23c9d3-a8a0-4715-b9ff-857b3c839a29"
+    }
+  },
+  {
+    "id": "consultant_03392621-ae40-4da9-957d-eb04efb11ced",
+    "title": "Fiza motors",
+    "keywords": [
+      "fizamotors",
+      "fiza",
+      "motors",
+      "palanpur",
+      "gujarat",
+      "consultant",
+      "auto consultant",
+      "dealer",
+      "storefront",
+      "auto consultant palanpur",
+      "used cars palanpur",
+      "fiza motors used cars",
+      "fiza motors palanpur"
+    ],
+    "type": "consultant",
+    "params": {
+      "username": "fizamotors",
+      "consultationId": "03392621-ae40-4da9-957d-eb04efb11ced"
     }
   },
   {
@@ -95171,27 +93859,6 @@
       "modelName": "Aspire",
       "city": "Chandigarh",
       "slug": "buy-used-ford-aspire-cars-chandigarh"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_endeavour_cars_ahmedabad",
-    "title": "Used Ford Endeavour in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "endeavour",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "Endeavour",
-      "city": "Ahmedabad",
-      "slug": "buy-used-ford-endeavour-cars-ahmedabad"
     }
   },
   {
@@ -106291,27 +104958,6 @@
     }
   },
   {
-    "id": "filter_buy_used_skoda_rapid_cars_ahmedabad",
-    "title": "Used Skoda Rapid in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "skoda",
-      "rapid",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Skoda",
-      "modelName": "Rapid",
-      "city": "Ahmedabad",
-      "slug": "buy-used-skoda-rapid-cars-ahmedabad"
-    }
-  },
-  {
     "id": "filter_buy_used_skoda_rapid_cars_mumbai",
     "title": "Used Skoda Rapid in Mumbai",
     "keywords": [
@@ -106918,27 +105564,6 @@
       "modelName": "Kylaq",
       "city": "Chandigarh",
       "slug": "buy-used-skoda-kylaq-cars-chandigarh"
-    }
-  },
-  {
-    "id": "filter_buy_used_tata_harrier_cars_ahmedabad",
-    "title": "Used Tata Harrier in Ahmedabad",
-    "keywords": [
-      "used car",
-      "car",
-      "tata",
-      "harrier",
-      "ahmedabad",
-      "used",
-      "in"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Tata",
-      "modelName": "Harrier",
-      "city": "Ahmedabad",
-      "slug": "buy-used-tata-harrier-cars-ahmedabad"
     }
   },
   {
@@ -116021,23 +114646,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tata_harrier_cars",
-    "title": "Tata Harrier",
-    "keywords": [
-      "used car",
-      "car",
-      "tata",
-      "harrier"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Tata",
-      "modelName": "Harrier",
-      "slug": "buy-used-tata-harrier-cars"
-    }
-  },
-  {
     "id": "filter_buy_used_tata_nexon_ev_cars",
     "title": "Tata Nexon Ev",
     "keywords": [
@@ -116306,23 +114914,6 @@
       "makerName": "Skoda",
       "modelName": "Fabia",
       "slug": "buy-used-skoda-fabia-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_skoda_rapid_cars",
-    "title": "Skoda Rapid",
-    "keywords": [
-      "used car",
-      "car",
-      "skoda",
-      "rapid"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Skoda",
-      "modelName": "Rapid",
-      "slug": "buy-used-skoda-rapid-cars"
     }
   },
   {
@@ -117968,23 +116559,6 @@
       "makerName": "Honda",
       "modelName": "Br-v",
       "slug": "buy-used-honda-br-v-cars"
-    }
-  },
-  {
-    "id": "filter_buy_used_ford_endeavour_cars",
-    "title": "Ford Endeavour",
-    "keywords": [
-      "used car",
-      "car",
-      "ford",
-      "endeavour"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Ford",
-      "modelName": "Endeavour",
-      "slug": "buy-used-ford-endeavour-cars"
     }
   },
   {
@@ -125639,25 +124213,6 @@
     }
   },
   {
-    "id": "filter_buy_used_tata_harrier_cars_gujarat",
-    "title": "Used Tata Harrier Cars in Gujarat",
-    "keywords": [
-      "used car",
-      "car",
-      "tata",
-      "harrier",
-      "gujarat"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "makerName": "Tata",
-      "modelName": "Harrier",
-      "city": "Gujarat",
-      "slug": "buy-used-tata-harrier-cars-gujarat"
-    }
-  },
-  {
     "id": "filter_buy_used_tata_harrier_cars_tamil_nadu",
     "title": "Used Tata Harrier Cars in Tamil Nadu",
     "keywords": [
@@ -127856,21 +126411,6 @@
     }
   },
   {
-    "id": "filter_buy_used_cars_himatnagar",
-    "title": "Used Cars in Himatnagar",
-    "keywords": [
-      "used car",
-      "car",
-      "himatnagar"
-    ],
-    "type": "vehicle_filter",
-    "params": {
-      "vehicleType": "FOUR_WHEELER",
-      "city": "Himatnagar",
-      "slug": "buy-used-cars-himatnagar"
-    }
-  },
-  {
     "id": "filter_buy_used_cars_unjha",
     "title": "Used Cars in Unjha",
     "keywords": [
@@ -127883,6 +126423,21 @@
       "vehicleType": "FOUR_WHEELER",
       "city": "Unjha",
       "slug": "buy-used-cars-unjha"
+    }
+  },
+  {
+    "id": "filter_buy_used_cars_himatnagar",
+    "title": "Used Cars in Himatnagar",
+    "keywords": [
+      "used car",
+      "car",
+      "himatnagar"
+    ],
+    "type": "vehicle_filter",
+    "params": {
+      "vehicleType": "FOUR_WHEELER",
+      "city": "Himatnagar",
+      "slug": "buy-used-cars-himatnagar"
     }
   },
   {
