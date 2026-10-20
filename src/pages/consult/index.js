@@ -8,6 +8,7 @@ import PerformanceDashboard from "@/components/features/consult/landing/Performa
 import TierStructure from "@/components/features/consult/landing/TierStructure";
 import WhatYouGetSpotlight from "@/components/features/consult/landing/WhatYouGet";
 import WhoItsFor from "@/components/features/consult/landing/WhoItsFor";
+import LeaderboardPreview from "@/components/features/consult/landing/LeaderboardPreview";
 import InspectionAdvantage from "@/components/features/why-choose-us/InspectionAdvantage";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
@@ -62,6 +63,7 @@ function index() {
       <ConsultantHeroSection />
       <Layout>
         <WhoItsFor />
+        <LeaderboardPreview />
         <WhatYouGetSpotlight />
       </Layout>
       <PerformanceDashboard />

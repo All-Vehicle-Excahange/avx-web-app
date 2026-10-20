@@ -9,7 +9,7 @@ import { useCompareStore } from "@/stores/useCompareStore";
 import Button from "@/components/ui/button";
 import SharePopup from "@/components/ui/SharePopup";
 
-export default function VehicleHeader({ vehicle, vehicleSummary }) {
+export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = true }) {
   const searchParams = useSearchParams();
   const source = searchParams.get("source"); // "home" | "search" | undefined
 
@@ -134,8 +134,14 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
             </h1>
             {/* Mobile Share */}
             <button
-              onClick={() => setIsShareOpen(true)}
-              className="sm:hidden bg-primary/20 flex h-9 w-9 items-center justify-center rounded-full text-primary hover:bg-primary/30 active:scale-95 transition-all shrink-0 cursor-pointer border border-primary/20 shadow-sm mt-0.5"
+              onClick={isTierActive ? () => setIsShareOpen(true) : undefined}
+              disabled={!isTierActive}
+              title={!isTierActive ? "Unavailable" : "Share Vehicle"}
+              className={`sm:hidden flex h-9 w-9 items-center justify-center rounded-full transition-all shrink-0 border shadow-sm mt-0.5 ${
+                !isTierActive
+                  ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                  : "bg-primary/20 text-primary hover:bg-primary/30 active:scale-95 cursor-pointer border-primary/20"
+              }`}
               aria-label="Share Vehicle"
             >
               <Share2 className="h-4 w-4" />
@@ -210,8 +216,14 @@ export default function VehicleHeader({ vehicle, vehicleSummary }) {
 
           {/* Desktop SHARE */}
           <button
-            onClick={() => setIsShareOpen(true)}
-            className="flex bg-primary/20 h-10 w-10 items-center justify-center rounded-full p-0 text-primary hover:bg-primary/30 hover:scale-105 transition-all cursor-pointer shrink-0 border border-primary/20 shadow-sm"
+            onClick={isTierActive ? () => setIsShareOpen(true) : undefined}
+            disabled={!isTierActive}
+            title={!isTierActive ? "Unavailable" : "Share"}
+            className={`flex h-10 w-10 items-center justify-center rounded-full p-0 transition-all shrink-0 border shadow-sm ${
+              !isTierActive
+                ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                : "bg-primary/20 text-primary hover:bg-primary/30 hover:scale-105 cursor-pointer border-primary/20"
+            }`}
           >
             <Share2 className="h-4 w-4" />
           </button>

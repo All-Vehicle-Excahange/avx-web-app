@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Search,
   X,
@@ -18,16 +19,24 @@ import {
   Fuel,
   Zap,
   Star,
+  Sparkles,
+  Bike,
+  Users,
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   saveRecentSearch,
   getRecentSearches,
   deleteAllRecentSearches,
+  deleteRecentSearchById,
   getHomeFeedConsult,
 } from "@/services/user.service";
 import { getAndSearchMakers } from "@/services/filter";
 import { GlobalSearchService } from "@/services/globalSearch.service";
+import { getTopPicsQuery } from "@/queries/user.queries";
+import { useLocationStore } from "@/stores/useLocationStore";
+import { resolveVehicleImageSrc, VEHICLE_IMAGE_FALLBACK } from "@/lib/vehicleImage";
+import { generateVehicleUrl } from "@/lib/helper";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackSearchResults } from "@/lib/gtag";
@@ -232,10 +241,21 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         const data = await import("@/data/searchSuggestions.json");
         const rawSuggestions = data.default || data;
         const loadedSuggestions = (Array.isArray(rawSuggestions) ? rawSuggestions : [])
-          .filter((s) => s.type === "brand" || s.type === "model")
+          .filter((s) => s.type === "brand" || s.type === "model" || s.type === "popular")
           .map((s) => {
-            const prefix = s.label.toLowerCase().startsWith("used") ? "" : "Used ";
-            return { ...s, rawLabel: s.label, label: `${prefix}${s.label}` };
+            const rawLabel = s.label || "";
+            let formattedLabel = rawLabel;
+            if (!formattedLabel.toLowerCase().startsWith("used")) {
+              formattedLabel = `Used ${formattedLabel}`;
+            }
+            if (s.type === "brand" && !formattedLabel.toLowerCase().includes("car")) {
+              formattedLabel = `${formattedLabel} Cars`;
+            }
+            return {
+              ...s,
+              rawLabel,
+              label: formattedLabel,
+            };
           });
 
         globalSuggestionsData = loadedSuggestions;
@@ -286,7 +306,33 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
 
   const saveSearchMutation = useMutation({
     mutationFn: saveRecentSearch,
-    onSuccess: () => {
+    onMutate: async (searchStr) => {
+      const clean = String(searchStr || "")
+        .replace(/\//g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (!clean) return;
+
+      await queryClient.cancelQueries({ queryKey: ["recentSearches"] });
+      const previousSearches = queryClient.getQueryData(["recentSearches"]);
+
+      queryClient.setQueryData(["recentSearches"], (old) => {
+        const list = Array.isArray(old?.data) ? old.data : Array.isArray(old) ? old : [];
+        const filtered = list.filter(
+          (item) => (item.search || "").toLowerCase().trim() !== clean.toLowerCase()
+        );
+        const updated = [{ id: `temp-${Date.now()}`, search: clean }, ...filtered].slice(0, 10);
+        return Array.isArray(old?.data) ? { ...old, data: updated } : updated;
+      });
+
+      return { previousSearches };
+    },
+    onError: (err, newSearch, context) => {
+      if (context?.previousSearches) {
+        queryClient.setQueryData(["recentSearches"], context.previousSearches);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["recentSearches"] });
     },
   });
@@ -294,6 +340,29 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
   const clearSearchesMutation = useMutation({
     mutationFn: deleteAllRecentSearches,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recentSearches"] });
+    },
+  });
+
+  const deleteSingleSearchMutation = useMutation({
+    mutationFn: deleteRecentSearchById,
+    onMutate: async (idToDelete) => {
+      await queryClient.cancelQueries({ queryKey: ["recentSearches"] });
+      const previousSearches = queryClient.getQueryData(["recentSearches"]);
+      queryClient.setQueryData(["recentSearches"], (old) => {
+        if (!old) return old;
+        const list = Array.isArray(old?.data) ? old.data : Array.isArray(old) ? old : [];
+        const filtered = list.filter((item) => item.id !== idToDelete);
+        return Array.isArray(old?.data) ? { ...old, data: filtered } : filtered;
+      });
+      return { previousSearches };
+    },
+    onError: (err, idToDelete, context) => {
+      if (context?.previousSearches) {
+        queryClient.setQueryData(["recentSearches"], context.previousSearches);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["recentSearches"] });
     },
   });
@@ -311,12 +380,49 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
   });
 
   // ── HomeFeed Consultants Query (Dynamically recognize real active consultants from API) ──
-  const { data: homeConsultantsData } = useQuery({
+  const { data: homeConsultantsData, isLoading: isHomeConsultantsLoading } = useQuery({
     queryKey: ["homeFeedConsultantsNavbar"],
     queryFn: () => getHomeFeedConsult({ pageNo: 1, size: 100 }),
     staleTime: 1000 * 60 * 10,
     retry: false,
   });
+
+  // ── Top Picks: Cars & Bikes Queries (reusing homepage query & cache) ──
+  const { cityId, stateId } = useLocationStore();
+  const topPicsPayload = useMemo(
+    () => ({
+      pageNo: 1,
+      size: 4,
+      ...(cityId ? { cityId } : {}),
+      ...(stateId ? { stateId } : {}),
+    }),
+    [cityId, stateId]
+  );
+
+  const { data: topCarsData = [], isLoading: isTopCarsLoading } = useQuery(
+    getTopPicsQuery("4-Wheeler", topPicsPayload)
+  );
+
+  const { data: topBikesData = [], isLoading: isTopBikesLoading } = useQuery(
+    getTopPicsQuery("2-Wheeler", topPicsPayload)
+  );
+
+  const topCars = useMemo(() => {
+    return Array.isArray(topCarsData) ? topCarsData : [];
+  }, [topCarsData]);
+
+  const topBikes = useMemo(() => {
+    return Array.isArray(topBikesData) ? topBikesData : [];
+  }, [topBikesData]);
+
+  const topConsultants = useMemo(() => {
+    const list = Array.isArray(homeConsultantsData?.data)
+      ? homeConsultantsData.data
+      : Array.isArray(homeConsultantsData)
+        ? homeConsultantsData
+        : [];
+    return list.slice(0, 4);
+  }, [homeConsultantsData]);
 
   const [knownConsultants, setKnownConsultants] = useState(() => {
     if (typeof window === "undefined") return [];
@@ -425,59 +531,29 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     [knownConsultants, homeConsultantsData]
   );
 
-  // ── Suggestions Formatting: API Response with Local Fallback ──
-  const displaySections = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-
-    // 1. If backend API returned sections with items, use them!
-    const apiSections =
-      apiSuggestResponse?.sections || apiSuggestResponse?.data?.sections;
-    if (Array.isArray(apiSections) && apiSections.length > 0) {
-      const validSections = apiSections.filter(
-        (sec) => Array.isArray(sec.items) && sec.items.length > 0
-      );
-      if (validSections.length > 0) {
-        return validSections;
-      }
-    }
-
-    // 2. Fallback to local suggestions JSON (BRANDS & MODELS ONLY - NO JSON CONSULTANTS)
+  // ── JSON Suggestions from searchSuggestions.json ──
+  const jsonSuggestions = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     if (!query) return [];
 
-    const directMatches = suggestionsData
-      .filter((s) => {
-        if (s.type !== "brand" && s.type !== "model") return false;
-        const labelMatch = (s.label || "").toLowerCase().includes(query);
-        const tokenMatch = Array.isArray(s.searchTokens)
-          ? s.searchTokens.some((t) => t.includes(query))
-          : false;
-        return labelMatch || tokenMatch;
-      })
-      .slice(0, 10);
+    const rawMatches = suggestionsData.filter((s) => {
+      if (s.type !== "brand" && s.type !== "model" && s.type !== "popular") return false;
+      const labelMatch = (s.label || "").toLowerCase().includes(query) || (s.rawLabel || "").toLowerCase().includes(query);
+      const modelMatch = (s.model || "").toLowerCase().includes(query);
+      const brandMatch = (s.brand || "").toLowerCase().includes(query);
+      const tokenMatch = Array.isArray(s.searchTokens)
+        ? s.searchTokens.some((t) => t.includes(query))
+        : false;
+      return labelMatch || modelMatch || brandMatch || tokenMatch;
+    });
 
-    if (directMatches.length > 0) {
-      return [
-        {
-          sectionTitle: "Suggestions",
-          icon: "search",
-          items: directMatches.map((s) => ({
-            id: s.id || s.slug || s.label,
-            title: s.label,
-            subtitle: null,
-            type: "VEHICLE",
-            link: s.link,
-          })),
-        },
-      ];
-    }
-
-    // 3. Fallback: Location-based suggestion synthesis if user typed a city
+    // Location-based suggestion synthesis if user typed a city
     const cleanNoUsed = query.replace(/\bused\b/g, "").replace(/\bsecond\s*hand\b/g, "").trim();
     const matchedCity = KNOWN_CITIES.find((c) =>
       new RegExp(`\\b${c.toLowerCase()}\\b`, "i").test(cleanNoUsed)
     );
 
+    let synthesized = [];
     if (matchedCity) {
       const citySlug = matchedCity.toLowerCase().replace(/\s+/g, "-");
       const isTwoWheeler = /\b(bike|bikes|two[- ]?wheelers?|motorcycles?|scooters?)\b/i.test(query);
@@ -501,21 +577,18 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         }
       }
 
-      const synthesized = [];
       if (matchedBrand) {
         synthesized.push({
           id: `loc_${brandSlug}_${vehicleKind}_${citySlug}`,
-          title: `Used ${matchedBrand} ${vehicleLabel} in ${matchedCity}`,
-          subtitle: `${matchedCity} • Verified Vehicles`,
-          type: "VEHICLE",
+          label: `Used ${matchedBrand} ${vehicleLabel} in ${matchedCity}`,
+          type: "location",
           link: `/search/buy-used-${brandSlug}-${vehicleKind}-${citySlug}`,
         });
         if (!isTwoWheeler) {
           synthesized.push({
             id: `loc_${brandSlug}_bikes_${citySlug}`,
-            title: `Used ${matchedBrand} Bikes in ${matchedCity}`,
-            subtitle: `${matchedCity} • Verified Vehicles`,
-            type: "VEHICLE",
+            label: `Used ${matchedBrand} Bikes in ${matchedCity}`,
+            type: "location",
             link: `/search/buy-used-${brandSlug}-two-wheelers-${citySlug}`,
           });
         }
@@ -523,33 +596,67 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
 
       synthesized.push({
         id: `loc_all_${vehicleKind}_${citySlug}`,
-        title: `Used ${vehicleLabel} in ${matchedCity}`,
-        subtitle: `${matchedCity} • Verified Vehicles`,
-        type: "VEHICLE",
+        label: `Used ${vehicleLabel} in ${matchedCity}`,
+        type: "location",
         link: `/search/buy-used-${vehicleKind}-${citySlug}`,
       });
-
-      return [
-        {
-          sectionTitle: "Popular Searches",
-          icon: "search",
-          items: synthesized,
-        },
-      ];
     }
 
-    return [];
-  }, [searchQuery, apiSuggestResponse, suggestionsData]);
+    const allMatches = [...rawMatches, ...synthesized];
+
+    // Priority sorting: Brand first, Model second, Location third, Popular fourth
+    const typeOrder = { brand: 1, model: 2, location: 3, popular: 4 };
+    allMatches.sort((a, b) => (typeOrder[a.type] || 5) - (typeOrder[b.type] || 5));
+
+    // Deduplicate by label
+    const seen = new Set();
+    const unique = [];
+    for (const item of allMatches) {
+      const key = (item.label || "").toLowerCase().trim();
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        unique.push(item);
+      }
+    }
+
+    return unique.slice(0, 20);
+  }, [searchQuery, suggestionsData]);
+
+  // ── API Sections from Backend Suggest API ──
+  const apiSections = useMemo(() => {
+    const sections =
+      apiSuggestResponse?.sections || apiSuggestResponse?.data?.sections;
+    if (!Array.isArray(sections)) return [];
+    return sections.filter(
+      (sec) => Array.isArray(sec.items) && sec.items.length > 0
+    );
+  }, [apiSuggestResponse]);
+
+  const totalApiItemsCount = useMemo(() => {
+    return apiSections.reduce((acc, sec) => acc + (sec.items?.length || 0), 0);
+  }, [apiSections]);
+
+  const hasApiData = totalApiItemsCount > 0;
 
   const isSearchingSuggestions =
-    isSuggestLoading ||
-    isSuggestFetching ||
-    (searchQuery.trim().length >= 2 && debouncedQuery !== searchQuery.trim());
+    Boolean(searchQuery.trim().length >= 2) &&
+    (isSuggestLoading ||
+      isSuggestFetching ||
+      debouncedQuery !== searchQuery.trim());
+
+  const hasSuggestions = jsonSuggestions.length > 0;
+  const hasApiOrLoading = hasApiData || isSearchingSuggestions;
+
+  const isTwoColumnLayout = !searchQuery.trim()
+    ? true
+    : hasSuggestions && hasApiOrLoading;
 
   // Flattened items for keyboard arrow navigation
   const flatSuggestionItems = useMemo(() => {
-    return displaySections.flatMap((s) => s.items || []);
-  }, [displaySections]);
+    const leftItems = jsonSuggestions.map((item) => ({ ...item, isJson: true }));
+    const rightItems = apiSections.flatMap((s) => s.items || []).map((item) => ({ ...item, isApi: true }));
+    return [...leftItems, ...rightItems];
+  }, [jsonSuggestions, apiSections]);
 
   const openDropdown = useCallback(() => {
     loadSuggestions();
@@ -658,7 +765,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     // 2. Check if an existing suggestion directly matches this search term
     if (flatSuggestionItems.length > 0) {
       const directSuggestion = flatSuggestionItems.find((item) => {
-        const title = (item.title || "").toLowerCase();
+        const title = (item.label || item.title || "").toLowerCase();
         return title === cleanTerm || title.includes(cleanTerm) || cleanTerm.includes(title);
       });
       if (directSuggestion?.link) {
@@ -827,8 +934,9 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
   // ── Handle Click on a Suggestion Item ──
   const handleItemClick = (item) => {
     if (!item) return;
-    saveSearchMutation.mutate(item.title);
-    trackMetaProductSearch(item.title);
+    const titleOrLabel = item.label || item.title || "";
+    saveSearchMutation.mutate(titleOrLabel);
+    trackMetaProductSearch(titleOrLabel);
 
     const isConsultant =
       item.type === "CONSULTATION" || item.type === "consultant";
@@ -839,11 +947,11 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         item.consultantUsername ||
         item.consultationUsername ||
         item.userName ||
-        (item.title ? item.title.toLowerCase().replace(/[^a-z0-9]/g, "") : "");
+        (titleOrLabel ? titleOrLabel.toLowerCase().replace(/[^a-z0-9]/g, "") : "");
 
       saveKnownConsultant({
         id: item.id,
-        title: item.title,
+        title: titleOrLabel,
         username: targetUsername,
         badge: item.badge || "CONSULTANT",
         type: "CONSULTATION",
@@ -854,7 +962,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       } else if (item.link) {
         router.push(item.link);
       } else {
-        router.push(`/search?consultant=${encodeURIComponent(item.title || "")}`);
+        router.push(`/search?consultant=${encodeURIComponent(titleOrLabel)}`);
       }
       closeDropdown();
       return;
@@ -862,10 +970,10 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
 
     if (item.link) {
       router.push(item.link);
-    } else if (item.type === "VEHICLE") {
+    } else if (item.type === "VEHICLE" && item.id) {
       router.push(`/vehicle/details/${item.id}`);
     } else {
-      executeSearch(item.title);
+      executeSearch(titleOrLabel);
     }
     closeDropdown();
   };
@@ -873,9 +981,10 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
   // ── Handle Click on Brand from Mega Menu ──
   const handleBrandClick = (brandName) => {
     if (!brandName) return;
-    saveSearchMutation.mutate(brandName);
-    trackMetaProductSearch(brandName);
-    const slugBrand = brandName.toLowerCase().replace(/\s+/g, "-");
+    const cleanBrand = String(brandName).trim();
+    saveSearchMutation.mutate(cleanBrand);
+    trackMetaProductSearch(cleanBrand);
+    const slugBrand = cleanBrand.toLowerCase().replace(/\s+/g, "-");
     router.push(`/search/buy-used-${slugBrand}-cars`);
     closeDropdown();
   };
@@ -911,6 +1020,259 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     });
     return matched.length > 0 ? matched.slice(0, 6) : apiBrandsList.slice(0, 6);
   }, [apiBrandsList]);
+
+  // ── Render Suggestions Column Content ──
+  const renderSuggestionsContent = () => (
+    <div className="flex flex-col w-full h-full bg-white overscroll-contain">
+      {/* Header */}
+      <div className="p-4 pb-3 border-b border-gray-100/80 bg-white flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 text-fourth font-bold">
+          <Search className="w-4 h-4 text-fourth" />
+          <span className="text-[12px] uppercase tracking-wider">
+            Suggestions
+          </span>
+        </div>
+        {jsonSuggestions.length > 0 && (
+          <span className="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+            {jsonSuggestions.length}
+          </span>
+        )}
+      </div>
+
+      {/* Suggestions List */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-3 space-y-1 overscroll-contain">
+        {jsonSuggestions.length > 0 ? (
+          jsonSuggestions.map((item, idx) => {
+            const isSelected =
+              selectedIndex >= 0 &&
+              (flatSuggestionItems[selectedIndex]?.id === item.id ||
+                flatSuggestionItems[selectedIndex]?.label === item.label);
+
+            return (
+              <div
+                key={item.id || `json-sug-${idx}`}
+                onClick={() => handleItemClick(item)}
+                className={`group flex items-center justify-between py-2 px-3 rounded-xl cursor-pointer transition-colors border-b border-gray-50/80 ${isSelected ? "bg-gray-100" : "hover:bg-gray-50"
+                  }`}
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors">
+                    {item.type === "brand" ? (
+                      <CarFront className="w-4 h-4" />
+                    ) : item.type === "model" ? (
+                      <Car className="w-4 h-4" />
+                    ) : item.type === "location" ? (
+                      <MapPin className="w-4 h-4" />
+                    ) : (
+                      <Search className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="text-[13px] font-semibold text-gray-900 truncate">
+                      {item.label}
+                    </span>
+                    {item.type && (
+                      <span className="text-[10px] text-gray-400 capitalize">
+                        {item.type === "brand"
+                          ? "Brand"
+                          : item.type === "model"
+                            ? "Model"
+                            : item.type === "location"
+                              ? "Location"
+                              : "Popular Search"}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 shrink-0 ml-2 text-gray-300 group-hover:text-gray-500 transition-colors" />
+              </div>
+            );
+          })
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-6 text-center text-gray-400">
+            <Search className="w-7 h-7 mx-auto mb-2 opacity-30 text-gray-400" />
+            <p className="text-[12px] font-medium text-gray-500">
+              No suggestions found
+            </p>
+            <p className="text-[11px] text-gray-400 mt-0.5">
+              Try another keyword
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── Render API Live Results Column Content ──
+  const renderApiResultsContent = () => (
+    <div className="flex flex-col w-full h-full bg-white overscroll-contain">
+      {/* Header */}
+      <div className="p-4 pb-3 border-b border-gray-100/80 bg-white flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 text-fourth font-bold">
+          <CarFront className="w-4 h-4 text-fourth" />
+          <span className="text-[12px] uppercase tracking-wider">
+            Vehicles & Live Results
+          </span>
+        </div>
+        {isSearchingSuggestions ? (
+          <div className="flex items-center gap-1.5 text-[11px] text-fourth font-medium">
+            <div className="w-3 h-3 border-2 border-fourth border-t-transparent rounded-full animate-spin" />
+            <span>Searching vehicles...</span>
+          </div>
+        ) : totalApiItemsCount > 0 ? (
+          <span className="text-[11px] font-medium text-gray-400">
+            {totalApiItemsCount} {totalApiItemsCount === 1 ? "result" : "results"}
+          </span>
+        ) : null}
+      </div>
+
+      {/* API Results Content */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3 overscroll-contain">
+        {isSearchingSuggestions && !hasApiData ? (
+          /* Loading Skeletons */
+          <div className="space-y-3">
+            {[...Array(4)].map((_, idx) => (
+              <div
+                key={`api-skeleton-${idx}`}
+                className="flex items-center justify-between p-2.5 rounded-2xl border border-gray-100 bg-white animate-pulse"
+              >
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <div className="w-12 h-12 rounded-xl bg-gray-200 shrink-0" />
+                  <div className="flex flex-col gap-2 flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-3.5 bg-gray-200 rounded-full"
+                        style={{
+                          width: `${55 + (idx % 3) * 15}%`,
+                          maxWidth: "200px",
+                        }}
+                      />
+                      {idx === 0 && (
+                        <div className="h-3 w-16 bg-fourth/10 rounded-full" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2.5 w-32 bg-gray-100 rounded-full" />
+                      <div className="h-2.5 w-16 bg-gray-200 rounded-full" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="h-2.5 w-10 bg-gray-100 rounded-full" />
+                  <div className="w-3.5 h-3.5 rounded-full bg-gray-100" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : apiSections.length > 0 ? (
+          /* Render API Sections */
+          apiSections.map((sec, secIdx) => (
+            <div key={`api-sec-${secIdx}`} className="space-y-2">
+              {apiSections.length > 1 && (
+                <div className="px-1 py-0.5 flex items-center gap-1.5 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  {sec.icon === "CONSULTATION" ||
+                    sec.sectionTitle?.toLowerCase().includes("consult") ? (
+                    <User className="w-3.5 h-3.5 text-fourth" />
+                  ) : (
+                    <CarFront className="w-3.5 h-3.5 text-fourth" />
+                  )}
+                  <span>{sec.sectionTitle}</span>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {sec.items.map((item, itemIdx) => {
+                  const isSelected =
+                    selectedIndex >= 0 &&
+                    flatSuggestionItems[selectedIndex]?.id === item.id;
+
+                  return (
+                    <div
+                      key={item.id || `api-item-${itemIdx}`}
+                      onClick={() => handleItemClick(item)}
+                      className={`group flex items-center justify-between p-2.5 rounded-2xl border transition-all cursor-pointer shadow-xs ${isSelected
+                        ? "bg-gray-100 border-gray-200 shadow-sm"
+                        : "bg-white hover:bg-gray-50/80 border-gray-100 hover:border-gray-200"
+                        }`}
+                    >
+                      <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                        {item.thumbnailUrl ? (
+                          <img
+                            src={item.thumbnailUrl}
+                            alt={item.title}
+                            className="w-12 h-12 object-cover rounded-xl border border-gray-100 shrink-0"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                            {item.type === "CONSULTATION" ? (
+                              <User className="w-5 h-5 text-fourth" />
+                            ) : (
+                              <CarFront className="w-5 h-5 text-gray-400" />
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex flex-col min-w-0 flex-1 pr-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold text-gray-900 text-[13px] transition-colors truncate">
+                              {item.title}
+                            </span>
+                            {formatSearchBadge(
+                              item.badge,
+                              item.type === "CONSULTATION"
+                            ) && (
+                                <span className="text-[9.5px] font-semibold text-fourth tracking-wider bg-fourth/10 px-2 py-0.5 rounded-full shrink-0">
+                                  {formatSearchBadge(
+                                    item.badge,
+                                    item.type === "CONSULTATION"
+                                  )}
+                                </span>
+                              )}
+                          </div>
+
+                          <div className="flex items-center gap-1.5 text-[11px] text-gray-500 mt-0.5 truncate">
+                            {item.subtitle && (
+                              <span>
+                                {formatSearchSubtitle(item.subtitle)}
+                              </span>
+                            )}
+                            {item.price && (
+                              <span className="font-bold text-gray-900">
+                                • ₹{Number(item.price).toLocaleString("en-IN")}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0 pl-2">
+                        <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">
+                          {item.type === "CONSULTATION"
+                            ? "View Store"
+                            : "Explore"}
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-gray-400">
+            <CarFront className="w-9 h-9 mx-auto mb-2 opacity-25 text-gray-400" />
+            <p className="text-[13px] font-semibold text-gray-600">
+              No vehicles found
+            </p>
+            <p className="text-[11px] text-gray-400 mt-1 max-w-[260px]">
+              Select a search suggestion or press Enter to search
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     /* Exact Search Bar Container as original root element */
@@ -1004,177 +1366,317 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
 
       {/* Search Mega Menu Dropdown */}
       <div
-        className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden overscroll-contain transition-all duration-300 origin-top ${showDropdown
-          ? "opacity-100 scale-y-100 translate-y-0"
-          : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
-          } ${!searchQuery ? "h-[480px]" : "max-h-[400px]"}`}
+        className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden overscroll-contain transition-all duration-300 origin-top ${!searchQuery
+          ? "h-auto max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)]"
+          : "h-[480px] max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)]"
+          } ${showDropdown
+            ? "opacity-100 scale-y-100 translate-y-0"
+            : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+          }`}
         style={{
-          width: !searchQuery ? "1000px" : "600px",
+          width: isTwoColumnLayout ? "1000px" : "560px",
           maxWidth: "95vw",
         }}
       >
         {!searchQuery ? (
-          /* Mega Menu Layout for Empty State (EXACT ORIGINAL DESIGN) */
-          <div className="flex flex-col md:flex-row w-full h-full bg-white overscroll-contain">
-            {/* Left Side - Brands */}
-            <div className="flex-[2.2] border-r border-gray-100 flex flex-col overflow-hidden shrink-0 overscroll-contain">
-              <div className="p-5 pb-0 flex-1 overflow-y-auto scrollbar-hide relative overscroll-contain">
-                {/* Popular Brands Header */}
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2 text-fourth font-bold">
-                    <Flame className="w-4 h-4 text-fourth" />
-                    <span className="text-[13px]">Popular Brands</span>
+          /* Mega Menu Layout for Empty State */
+          <div className="flex flex-col md:flex-row w-full h-full max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)] overflow-y-auto md:overflow-hidden overflow-x-hidden bg-white overscroll-contain">
+            {/* Left Side - Popular Brands, Top Cars & Top Bikes */}
+            <div className="flex-none md:flex-[1.8] border-b md:border-b-0 md:border-r border-gray-100 flex flex-col md:overflow-hidden shrink-0 overscroll-contain">
+              <div className="p-3.5 sm:p-4 flex-1 md:overflow-y-auto scrollbar-hide relative overscroll-contain space-y-3">
+                {/* 1. Popular Brands Header */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-fourth font-bold">
+                      <Flame className="w-4 h-4 text-fourth" />
+                      <span className="text-[12px]">Popular Brands</span>
+                    </div>
+                  </div>
+
+                  {/* Popular Brands Grid */}
+                  <div className="grid grid-cols-6 gap-2">
+                    {apiBrandsList.length === 0 ? (
+                      [...Array(6)].map((_, idx) => (
+                        <div
+                          key={`popular-skeleton-${idx}`}
+                          className="flex flex-col items-center justify-center gap-1.5 p-1.5 rounded-xl border border-gray-100 bg-gray-50/50 animate-pulse"
+                        >
+                          <div className="h-8 w-11 rounded-lg bg-gray-200/80" />
+                          <div className="h-2 w-9 bg-gray-200/80 rounded-full" />
+                        </div>
+                      ))
+                    ) : (
+                      popularBrands.map((brand, idx) => (
+                        <div
+                          key={`popular-${idx}`}
+                          onClick={() => handleBrandClick(brand.makeDisplay || brand.makeName)}
+                          className="flex flex-col items-center justify-center gap-1 p-1.5 rounded-xl border border-gray-100 cursor-pointer hover:border-gray-200 hover:bg-gray-50/80 hover:shadow-xs transition-all group bg-white"
+                        >
+                          {brand.logo ? (
+                            <div className="h-8 w-11 flex items-center justify-center">
+                              <img
+                                src={brand.logo}
+                                alt={brand.makeDisplay}
+                                className="max-h-full max-w-full object-contain"
+                              />
+                            </div>
+                          ) : (
+                            <div className="h-8 w-11 flex items-center justify-center bg-gray-50 rounded text-gray-400">
+                              <CarFront className="w-4 h-4" />
+                            </div>
+                          )}
+                          <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors truncate w-full">
+                            {brand.makeDisplay}
+                          </span>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
 
-                {/* Popular Brands Grid */}
-                <div className="grid grid-cols-6 gap-2 mb-4">
-                  {apiBrandsList.length === 0 ? (
-                    [...Array(6)].map((_, idx) => (
-                      <div
-                        key={`popular-skeleton-${idx}`}
-                        className="flex flex-col items-center justify-center gap-1.5 p-1.5 rounded-xl border border-gray-100 bg-gray-50/50 animate-pulse"
-                      >
-                        <div className="h-9 w-12 rounded-lg bg-gray-200/80" />
-                        <div className="h-2 w-10 bg-gray-200/80 rounded-full" />
-                      </div>
-                    ))
-                  ) : (
-                    popularBrands.map((brand, idx) => (
-                      <div
-                        key={`popular-${idx}`}
-                        onClick={() => handleBrandClick(brand.makeName)}
-                        className="flex flex-col items-center justify-center gap-1 p-1.5 rounded-xl border border-gray-100 cursor-pointer hover:border-fourth hover:shadow-sm transition-all group"
-                      >
-                        {brand.logo ? (
-                          <div className="h-9 w-12 flex items-center justify-center">
-                            <img
-                              src={brand.logo}
-                              alt={brand.makeDisplay}
-                              className="max-h-full max-w-full object-contain"
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-9 w-12 flex items-center justify-center bg-gray-50 rounded text-gray-400">
-                            <CarFront className="w-5 h-5" />
-                          </div>
-                        )}
-                        <span className="text-[10px] font-bold text-gray-900 text-center leading-tight transition-colors">
-                          {brand.makeDisplay}
-                        </span>
-                      </div>
-                    )))
-                  }
-                </div>
+                {/* 2. Top Picks — Cars */}
+                <div className="pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-fourth font-bold">
+                      <Car className="w-4 h-4 text-fourth" />
+                      <span className="text-[12px]">Top Picks — Cars</span>
+                    </div>
+                    <Link
+                      href="/search?vehicleType=FOUR_WHEELER"
+                      onClick={() => closeDropdown()}
+                      className="text-[11px] font-semibold text-fourth hover:text-fourth/80 flex items-center gap-0.5 cursor-pointer transition-colors"
+                    >
+                      View All Cars
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
 
-                {/* All Brands Header */}
-                <div className="flex items-center gap-2 text-fourth font-bold mb-2">
-                  <CarFront className="w-4 h-4 text-fourth" />
-                  <span className="text-[13px]">All Brands</span>
-                </div>
-
-                {/* All Brands List with Alphabet Letters */}
-                <div className="flex flex-col pb-2">
-                  {apiBrandsList.length === 0 ? (
-                    [...Array(7)].map((_, idx) => (
-                      <div
-                        key={`all-brand-skeleton-${idx}`}
-                        className="flex items-center justify-between py-1.5 px-2 border-b border-gray-50 animate-pulse"
-                      >
-                        <div className="flex items-center gap-3 flex-1">
-                          <div className="w-6 h-6 rounded bg-gray-200/60" />
-                          <div className="w-9 h-9 rounded-full bg-gray-200/80 shrink-0" />
-                          <div
-                            className="h-3.5 bg-gray-200/80 rounded-full"
-                            style={{ width: `${80 + (idx % 4) * 25}px` }}
-                          />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="h-2.5 w-8 bg-gray-100 rounded-full" />
-                          <div className="w-3.5 h-3.5 rounded-full bg-gray-100" />
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    apiBrandsList.map((brand, idx) => {
-                      const currentLetter = (
-                        brand.makeDisplay ||
-                        brand.makeName ||
-                        "A"
-                      )
-                        .charAt(0)
-                        .toUpperCase();
-                      const prevLetter =
-                        idx > 0
-                          ? (
-                            apiBrandsList[idx - 1].makeDisplay ||
-                            apiBrandsList[idx - 1].makeName ||
-                            "A"
-                          )
-                            .charAt(0)
-                            .toUpperCase()
-                          : "";
-                      const showLetter = currentLetter !== prevLetter;
-
-                      return (
+                  {/* Cars Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {isTopCarsLoading ? (
+                      [...Array(4)].map((_, idx) => (
                         <div
-                          key={`all-${idx}`}
-                          onClick={() => handleBrandClick(brand.makeName)}
-                          className="flex items-center justify-between py-1 px-2 border-b border-gray-50 hover:bg-fourth/5 cursor-pointer group transition-colors"
+                          key={`car-skel-${idx}`}
+                          className="flex gap-2 p-2 rounded-xl border border-gray-100 bg-gray-50/50 animate-pulse"
                         >
-                          <div className="flex items-center gap-3 flex-1">
-                            {/* Letter indicator */}
-                            <div
-                              className={`w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded ${showLetter
-                                ? "bg-gray-100 text-gray-600"
-                                : "opacity-0"
-                                }`}
-                            >
-                              {currentLetter}
+                          <div className="w-[80px] h-[58px] rounded-lg bg-gray-200/80 shrink-0" />
+                          <div className="flex-1 space-y-1.5 py-1">
+                            <div className="h-3 w-20 bg-gray-200/80 rounded" />
+                            <div className="h-3 w-14 bg-gray-200/80 rounded" />
+                            <div className="h-2 w-16 bg-gray-200/60 rounded" />
+                          </div>
+                        </div>
+                      ))
+                    ) : topCars.length === 0 ? (
+                      <div className="col-span-2 py-3 text-center text-xs text-gray-400">
+                        No cars found in top picks
+                      </div>
+                    ) : (
+                      topCars.slice(0, 4).map((vehicle) => {
+                        const title =
+                          vehicle.title ||
+                          `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
+                          "Vehicle";
+                        const imageSrc =
+                          resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                        const formattedPrice = (() => {
+                          const p = Number(vehicle.price);
+                          if (!p || isNaN(p)) return vehicle.price || "₹-";
+                          if (p >= 100000) {
+                            return `₹${(p / 100000).toFixed(2).replace(/\.00$/, "")} Lakh`;
+                          }
+                          return `₹${p.toLocaleString("en-IN")}`;
+                        })();
+
+                        const city = (
+                          vehicle.address?.city ||
+                          vehicle.cityName ||
+                          vehicle.city ||
+                          vehicle.location ||
+                          ""
+                        )
+                          .split(",")[0]
+                          .trim();
+
+                        const keyDetails = [
+                          vehicle.yearOfMfg || vehicle.year,
+                          vehicle.fuelType || vehicle.fuel,
+                          city,
+                        ]
+                          .filter(Boolean)
+                          .join(" • ");
+
+                        return (
+                          <div
+                            key={`car-${vehicle.id}`}
+                            onClick={() => {
+                              saveSearchMutation.mutate(title);
+                              trackMetaProductSearch(title);
+                              const url = generateVehicleUrl(vehicle);
+                              router.push(url);
+                              closeDropdown();
+                            }}
+                            className="flex gap-2.5 p-2 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/80 hover:shadow-xs cursor-pointer transition-all group bg-white"
+                          >
+                            {/* Thumbnail */}
+                            <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
+                              <img
+                                src={imageSrc}
+                                alt={title}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
+                                }}
+                              />
                             </div>
 
-                            {/* Brand Logo */}
-                            {brand.logo ? (
-                              <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-1.5 shrink-0 group-hover:border-gray-300 transition-colors">
-                                <img
-                                  src={brand.logo}
-                                  alt={brand.makeDisplay}
-                                  className="max-w-full max-h-full object-contain"
-                                />
+                            {/* Details */}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                              <h4 className="text-[12px] font-semibold text-gray-900 truncate">
+                                {title}
+                              </h4>
+                              <div className="text-[12px] font-bold text-gray-900 mt-0.5">
+                                {formattedPrice}
                               </div>
-                            ) : (
-                              <div className="w-9 h-9 flex items-center justify-center bg-gray-50 rounded-full text-gray-400 shrink-0">
-                                <CarFront className="w-4 h-4" />
-                              </div>
-                            )}
-
-                            {/* Brand Name */}
-                            <span className="font-semibold text-gray-900 text-[13px] transition-colors">
-                              {brand.makeDisplay || brand.makeName}
-                            </span>
+                              {keyDetails && (
+                                <p className="text-[10px] text-gray-500 truncate mt-0.5 flex items-center gap-1">
+                                  {keyDetails}
+                                </p>
+                              )}
+                            </div>
                           </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
 
-                          <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">
-                              Explore
-                            </span>
-                            <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
+                {/* 3. Top Picks — Bikes */}
+                <div className="pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-fourth font-bold">
+                      <Bike className="w-4 h-4 text-fourth" />
+                      <span className="text-[12px]">Top Picks — Bikes</span>
+                    </div>
+                    <Link
+                      href="/search?vehicleType=TWO_WHEELER"
+                      onClick={() => closeDropdown()}
+                      className="text-[11px] font-semibold text-fourth hover:text-fourth/80 flex items-center gap-0.5 cursor-pointer transition-colors"
+                    >
+                      View All Bikes
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+
+                  {/* Bikes Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {isTopBikesLoading ? (
+                      [...Array(4)].map((_, idx) => (
+                        <div
+                          key={`bike-skel-${idx}`}
+                          className="flex gap-2 p-2 rounded-xl border border-gray-100 bg-gray-50/50 animate-pulse"
+                        >
+                          <div className="w-[80px] h-[58px] rounded-lg bg-gray-200/80 shrink-0" />
+                          <div className="flex-1 space-y-1.5 py-1">
+                            <div className="h-3 w-20 bg-gray-200/80 rounded" />
+                            <div className="h-3 w-14 bg-gray-200/80 rounded" />
+                            <div className="h-2 w-16 bg-gray-200/60 rounded" />
                           </div>
                         </div>
-                      );
-                    }))
-                  }
+                      ))
+                    ) : topBikes.length === 0 ? (
+                      <div className="col-span-2 py-3 text-center text-xs text-gray-400">
+                        No bikes found in top picks
+                      </div>
+                    ) : (
+                      topBikes.slice(0, 4).map((vehicle) => {
+                        const title =
+                          vehicle.title ||
+                          `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
+                          "Vehicle";
+                        const imageSrc =
+                          resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                        const formattedPrice = (() => {
+                          const p = Number(vehicle.price);
+                          if (!p || isNaN(p)) return vehicle.price || "₹-";
+                          if (p >= 100000) {
+                            return `₹${(p / 100000).toFixed(2).replace(/\.00$/, "")} Lakh`;
+                          }
+                          return `₹${p.toLocaleString("en-IN")}`;
+                        })();
+
+                        const city = (
+                          vehicle.address?.city ||
+                          vehicle.cityName ||
+                          vehicle.city ||
+                          vehicle.location ||
+                          ""
+                        )
+                          .split(",")[0]
+                          .trim();
+
+                        const keyDetails = [
+                          vehicle.yearOfMfg || vehicle.year,
+                          vehicle.fuelType || vehicle.fuel,
+                          city,
+                        ]
+                          .filter(Boolean)
+                          .join(" • ");
+
+                        return (
+                          <div
+                            key={`bike-${vehicle.id}`}
+                            onClick={() => {
+                              saveSearchMutation.mutate(title);
+                              trackMetaProductSearch(title);
+                              const url = generateVehicleUrl(vehicle);
+                              router.push(url);
+                              closeDropdown();
+                            }}
+                            className="flex gap-2.5 p-2 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/80 hover:shadow-xs cursor-pointer transition-all group bg-white"
+                          >
+                            {/* Thumbnail */}
+                            <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
+                              <img
+                                src={imageSrc}
+                                alt={title}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
+                                }}
+                              />
+                            </div>
+
+                            {/* Details */}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                              <h4 className="text-[12px] font-semibold text-gray-900 truncate">
+                                {title}
+                              </h4>
+                              <div className="text-[12px] font-bold text-gray-900 mt-0.5">
+                                {formattedPrice}
+                              </div>
+                              {keyDetails && (
+                                <p className="text-[10px] text-gray-500 truncate mt-0.5 flex items-center gap-1">
+                                  {keyDetails}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Recent & Trending */}
-            <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative border-l border-gray-100/50 overscroll-contain">
-              <div className="p-5 space-y-5 flex-1">
-                {/* Recent Searches */}
+            {/* Right Side - Recent Searches & Top Auto Consultants */}
+            <div className="flex-1 flex flex-col md:overflow-y-auto scrollbar-hide relative overscroll-contain">
+              <div className="p-3.5 sm:p-4 space-y-4 flex-1">
+                {/* 1. Recent Searches */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2 text-fourth font-bold">
+                    <div className="flex items-center gap-1.5 text-fourth font-bold">
                       <History className="w-4 h-4 text-fourth" />
                       <span className="text-[12px]">Recent Searches</span>
                     </div>
@@ -1188,7 +1690,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                     )}
                   </div>
                   <div className="flex flex-col gap-0.5">
-                    {recentSearches.map((item, idx) => {
+                    {recentSearches.slice(0, 6).map((item, idx) => {
                       const consultantInfo = findConsultant(item.search);
                       const isConsultant = Boolean(consultantInfo);
                       const badgeText =
@@ -1229,222 +1731,197 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                               {formatSearchBadge(badgeText, true)}
                             </span>
                           )}
+                          {item.id && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteSingleSearchMutation.mutate(item.id);
+                              }}
+                              className="p-1 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 transition-colors shrink-0 cursor-pointer"
+                              title="Remove from history"
+                              aria-label="Remove recent search"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          )}
                         </div>
                       );
                     })}
                     {recentSearches.length === 0 && (
-                      <span className="text-[11px] text-gray-400 p-1.5">
+                      <span className="text-[11px] text-gray-400 py-1">
                         No recent searches
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Trending Brands */}
-                <div>
-                  <div className="flex items-center gap-2 text-fourth font-bold mb-2">
-                    <TrendingUp className="w-4 h-4 text-fourth" />
-                    <span className="text-[12px]">Trending Brands</span>
+                {/* 2. Top Auto Consultants */}
+                <div className="pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-fourth font-bold">
+                      <Users className="w-4 h-4 text-fourth" />
+                      <span className="text-[12px]">Top Auto Consultants</span>
+                    </div>
+                    <Link
+                      href="/consult/discovery"
+                      onClick={() => closeDropdown()}
+                      className="text-[11px] font-semibold text-fourth hover:text-fourth/80 flex items-center gap-0.5 cursor-pointer transition-colors"
+                    >
+                      Explore All Consultants
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {apiBrandsList.length === 0 ? (
-                      [...Array(5)].map((_, idx) => (
+
+                  <div className="flex flex-col gap-1.5">
+                    {isHomeConsultantsLoading && topConsultants.length === 0 ? (
+                      [...Array(3)].map((_, idx) => (
                         <div
-                          key={`trending-skeleton-${idx}`}
-                          className="flex items-center justify-between p-1.5 rounded-lg animate-pulse"
+                          key={`consultant-skel-${idx}`}
+                          className="flex items-center gap-2.5 p-2 rounded-xl border border-gray-100 bg-gray-50/50 animate-pulse"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gray-200/80 shrink-0" />
-                            <div className="h-3 w-20 bg-gray-200/80 rounded-full" />
+                          <div className="w-9 h-9 rounded-full bg-gray-200/80 shrink-0" />
+                          <div className="flex-1 space-y-1">
+                            <div className="h-3 w-28 bg-gray-200/80 rounded" />
+                            <div className="h-2 w-20 bg-gray-200/60 rounded" />
                           </div>
-                          <div className="h-2.5 w-8 bg-gray-100 rounded-full" />
                         </div>
                       ))
+                    ) : topConsultants.length === 0 ? (
+                      <span className="text-[11px] text-gray-400 py-2 text-center">
+                        No consultants found
+                      </span>
                     ) : (
-                      apiBrandsList.slice(0, 5).map((brand, idx) => (
-                        <div
-                          key={`trending-${idx}`}
-                          onClick={() => handleBrandClick(brand.makeName)}
-                          className="flex items-center justify-between p-1.5 hover:bg-gray-50 cursor-pointer rounded-lg transition-all group"
-                        >
-                          <div className="flex items-center gap-3">
-                            {brand.logo ? (
-                              <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-white rounded-full border border-gray-100 shadow-[0_2px_6px_rgba(0,0,0,0.03)] shrink-0 group-hover:border-gray-200 transition-colors">
-                                <img
-                                  src={brand.logo}
-                                  alt={brand.makeDisplay}
-                                  className="max-w-full max-h-full object-contain"
-                                />
+                      topConsultants.map((consultant, idx) => {
+                        const name =
+                          consultant.consultationName ||
+                          consultant.name ||
+                          "Auto Consultant";
+                        const logo =
+                          consultant.logoUrl || consultant.logo || "/cs.webp";
+                        const city =
+                          consultant.address?.city ||
+                          consultant.address?.town ||
+                          "";
+                        const rating =
+                          consultant.averageRating ?? consultant.rating ?? 0;
+                        const vehicleCount =
+                          consultant.availableVehicles ??
+                          consultant.vehicleCount ??
+                          0;
+
+                        return (
+                          <div
+                            key={consultant.id || `consultant-${idx}`}
+                            onClick={() => {
+                              saveKnownConsultant({
+                                id: consultant.id,
+                                title: name,
+                                username: consultant.username,
+                                badge:
+                                  consultant.tierTitle || "CONSULTANT",
+                                type: "CONSULTATION",
+                              });
+                              saveSearchMutation.mutate(name);
+                              trackMetaProductSearch(name);
+                              router.push(
+                                `/auto-consultant/${consultant.username}`
+                              );
+                              closeDropdown();
+                            }}
+                            className="flex items-center gap-2.5 p-2 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/80 cursor-pointer transition-all group bg-white"
+                          >
+                            {/* Avatar */}
+                            <div className="w-9 h-9 rounded-full border border-gray-100 overflow-hidden bg-white shrink-0 flex items-center justify-center shadow-xs">
+                              <img
+                                src={logo}
+                                alt={name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = "/cs.webp";
+                                }}
+                              />
+                            </div>
+
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[12px] font-semibold capitalize text-gray-900 truncate">
+                                  {name}
+                                </span>
+                                {consultant.tierTitle && (
+                                  <span className="text-[9px] font-medium text-fourth bg-fourth/10 px-1.5 py-0.2 rounded shrink-0">
+                                    {formatSearchBadge(
+                                      consultant.tierTitle,
+                                      true
+                                    )}
+                                  </span>
+                                )}
                               </div>
-                            ) : (
-                              <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm text-gray-400 shrink-0">
-                                <CarFront className="w-4 h-4" />
+                              <div className="flex items-center gap-2 text-[10px] text-gray-500 mt-0.5">
+                                {city && (
+                                  <span className="flex items-center gap-0.5 truncate">
+                                    <MapPin className="w-2.5 h-2.5 text-gray-400 shrink-0" />
+                                    {city}
+                                  </span>
+                                )}
+                                {rating > 0 && (
+                                  <span className="flex items-center gap-0.5 shrink-0 text-amber-600 font-medium">
+                                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                                    {rating}
+                                  </span>
+                                )}
+                                {vehicleCount > 0 && (
+                                  <span className="text-gray-400 shrink-0">
+                                    {vehicleCount} cars
+                                  </span>
+                                )}
                               </div>
-                            )}
-                            <span className="font-semibold text-gray-900 text-[12px] transition-colors">
-                              {brand.makeDisplay}
-                            </span>
+                            </div>
+
+                            <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors shrink-0" />
                           </div>
-                          <span className="text-[10px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">
-                            Explore
-                          </span>
-                        </div>
-                      )))
-                    }
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        ) : isTwoColumnLayout ? (
+          /* Two-Column Search State: Left Side = JSON Suggestions, Right Side = Live API Vehicles */
+          <div className="flex flex-col md:flex-row w-full h-full bg-white overscroll-contain">
+            {/* Left Column - JSON Suggestions */}
+            <div className="w-full md:w-[380px] lg:w-[400px] border-r border-gray-100 flex flex-col shrink-0 h-full overflow-hidden bg-gray-50/40 overscroll-contain">
+              {renderSuggestionsContent()}
+            </div>
+
+            {/* Right Column - API Live Vehicles & Results */}
+            <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-white overscroll-contain">
+              {renderApiResultsContent()}
+            </div>
+          </div>
+        ) : hasApiOrLoading ? (
+          /* Single-Column Search State: Only Live API Results (e.g. consultant "elite motor") */
+          <div className="w-full h-full bg-white overscroll-contain">
+            {renderApiResultsContent()}
+          </div>
+        ) : hasSuggestions ? (
+          /* Single-Column Search State: Only Suggestions when API has 0 vehicles */
+          <div className="w-full h-full bg-white overscroll-contain">
+            {renderSuggestionsContent()}
+          </div>
         ) : (
-          /* Suggestions Section for Active Search (EXACT OLD DESIGN MATCHED WITH API CONTRACT) */
-          <div className="w-full bg-white overflow-y-auto max-h-[350px] p-4 scrollbar-hide h-full overscroll-contain">
-            {isSearchingSuggestions && displaySections.length === 0 ? (
-              /* Search Suggestions Skeleton */
-              <div className="space-y-4">
-                <div className="px-3 py-1 flex items-center gap-2">
-                  <div className="w-3.5 h-3.5 rounded-full bg-gray-200 animate-pulse" />
-                  <div className="h-3 w-24 bg-gray-200 rounded-full animate-pulse" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  {[...Array(4)].map((_, idx) => (
-                    <div
-                      key={`suggest-skeleton-${idx}`}
-                      className="flex items-center justify-between py-2 px-2 border-b border-gray-50 rounded-lg animate-pulse"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        {/* Vehicle Image / Icon box skeleton */}
-                        <div className="w-9 h-9 rounded-lg bg-gray-200/90 shrink-0" />
-
-                        {/* Title and details skeleton */}
-                        <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className="h-3.5 bg-gray-200/90 rounded-full"
-                              style={{ width: `${55 + (idx % 3) * 15}%`, maxWidth: '220px' }}
-                            />
-                            {idx === 0 && (
-                              <div className="h-3 w-14 bg-fourth/10 rounded-full" />
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="h-2.5 w-32 bg-gray-100 rounded-full" />
-                            <div className="h-2.5 w-16 bg-gray-200/70 rounded-full" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Explore Button skeleton */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        <div className="h-2.5 w-10 bg-gray-100 rounded-full" />
-                        <div className="w-3.5 h-3.5 rounded-full bg-gray-100" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : displaySections.length > 0 ? (
-              displaySections.map((sec, secIdx) => (
-                <div key={`sec-${secIdx}`} className="mb-3 last:mb-0">
-                  <div className="px-3 py-1.5 flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                      {sec.sectionTitle?.toLowerCase().includes("vehicle") ||
-                        sec.icon === "VEHICLE" ||
-                        sec.icon === "car" ? (
-                        <CarFront className="w-3.5 h-3.5 text-fourth" />
-                      ) : (
-                        <User className="w-3.5 h-3.5 text-fourth" />
-                      )}
-                      {sec.sectionTitle}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    {sec.items.map((item, itemIdx) => {
-                      const flatIndex = flatSuggestionItems.findIndex(
-                        (fi) => fi.id === item.id
-                      );
-                      const isSelected =
-                        selectedIndex >= 0 && selectedIndex === flatIndex;
-
-                      return (
-                        <div
-                          key={item.id || itemIdx}
-                          onClick={() => handleItemClick(item)}
-                          className={`group flex items-center justify-between py-1.5 px-2 cursor-pointer transition-colors border-b border-gray-50 rounded-lg ${isSelected
-                            ? "bg-fourth/5 border-l-2 border-fourth"
-                            : "hover:bg-fourth/5"
-                            }`}
-                        >
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            {item.thumbnailUrl ? (
-                              <img
-                                src={item.thumbnailUrl}
-                                alt={item.title}
-                                className="w-9 h-9 object-cover rounded-lg border border-gray-100 shrink-0"
-                              />
-                            ) : (
-                              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-colors shadow-sm shrink-0">
-                                {item.type === "CONSULTATION" ? (
-                                  <User className="w-4 h-4 text-fourth" />
-                                ) : (
-                                  <Car className="w-4 h-4 text-gray-400" />
-                                )}
-                              </div>
-                            )}
-
-                            <div className="flex flex-col min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-gray-900 text-[13px] transition-colors truncate">
-                                  {item.title}
-                                </span>
-                                {(() => {
-                                  const formattedBadge = formatSearchBadge(
-                                    item.badge,
-                                    item.type === "CONSULTATION"
-                                  );
-                                  if (!formattedBadge) return null;
-                                  return (
-                                    <span className="text-[9px] font-semibold text-fourth tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded shrink-0">
-                                      {formattedBadge}
-                                    </span>
-                                  );
-                                })()}
-                              </div>
-                              <div className="flex items-center gap-1.5 text-[11px] text-gray-500 truncate">
-                                {item.subtitle && <span>{formatSearchSubtitle(item.subtitle)}</span>}
-                                {item.price && (
-                                  <span className="font-semibold text-gray-900">
-                                    • ₹{Number(item.price).toLocaleString("en-IN")}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">
-                              {item.type === "CONSULTATION"
-                                ? "View Store"
-                                : "Explore"}
-                            </span>
-                            <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))
-            ) : (
-              searchQuery && (
-                <div className="p-6 text-center text-gray-400">
-                  <Search className="w-8 h-8 mx-auto mb-2 opacity-20" />
-                  <p className="text-[12px] font-medium">
-                    No results found for &quot;{searchQuery}&quot;
-                  </p>
-                </div>
-              )
-            )}
+          /* Single-Column Empty State: When neither side has results */
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-gray-400 bg-white">
+            <Search className="w-8 h-8 mx-auto mb-2 opacity-30 text-gray-400" />
+            <p className="text-[13px] font-semibold text-gray-700">
+              No results found for &ldquo;{searchQuery}&rdquo;
+            </p>
+            <p className="text-[11px] text-gray-400 mt-1 max-w-[260px]">
+              Try searching for a vehicle brand, model, city, or auto consultant
+            </p>
           </div>
         )}
       </div>

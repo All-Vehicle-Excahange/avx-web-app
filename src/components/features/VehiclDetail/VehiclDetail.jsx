@@ -253,6 +253,13 @@ export default function VehicleDetails({
   };
 
   const vehicleSummary = vehicleSummaryData || {};
+  const isTierActive = isConsultation
+    ? (vehicleSummary?.isActiveTier !== undefined
+        ? vehicleSummary.isActiveTier !== false
+        : vehicleOverview?.isActiveTier !== undefined
+          ? vehicleOverview.isActiveTier !== false
+          : true)
+    : true;
   const loading = isOverviewLoading || (isConsultation && isSummaryLoading);
 
   useEffect(() => {
@@ -300,12 +307,13 @@ export default function VehicleDetails({
               <VehicleHeader
                 vehicle={vehicleOverview}
                 vehicleSummary={vehicleSummary}
+                isTierActive={isTierActive}
               />
             </div>
 
             <section className="grid grid-cols-1 xl:grid-cols-[2.2fr_1fr] gap-6 items-start">
               <div className="flex flex-col gap-6 min-w-0">
-                <VehicleImageGallery vehicle={vehicleOverview} />
+                <VehicleImageGallery vehicle={vehicleOverview} isTierActive={isTierActive} />
 
                 {!isSold && (
                   <div className="sticky top-16 lg:relative lg:top-0 lg:z-auto z-40 bg-transparent backdrop-blur-lg border-b border-third/40">
@@ -389,6 +397,7 @@ export default function VehicleDetails({
                       open={isInspectionOpen}
                       setOpen={setIsInspectionOpen}
                       inspectionDetails={inspectionDetails}
+                      isTierActive={isTierActive}
                     />
                   </div>
                 )}

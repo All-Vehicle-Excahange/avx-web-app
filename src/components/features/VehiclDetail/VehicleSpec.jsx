@@ -51,6 +51,7 @@ export default function VehicleSpec({
   setOpen,
   vehicle,
   inspectionDetails,
+  isTierActive = true,
 }) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -716,8 +717,11 @@ export default function VehicleSpec({
                             variant="outline"
                             size="sm"
                             showIcon={false}
-                            onClick={handleOpenModal}
+                            onClick={isTierActive ? handleOpenModal : undefined}
                             loading={isCheckingActiveInspection}
+                            disabled={!isTierActive}
+                            className={!isTierActive ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none" : ""}
+                            title={!isTierActive ? "Unavailable" : "Request New Reecomm Inspection"}
                           >
                             Request New Reecomm Inspection
                           </Button>
@@ -776,8 +780,11 @@ export default function VehicleSpec({
                           variant="outline"
                           size="md"
                           showIcon={false}
-                          onClick={handleOpenModal}
+                          onClick={isTierActive ? handleOpenModal : undefined}
                           loading={isCheckingActiveInspection}
+                          disabled={!isTierActive}
+                          className={!isTierActive ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none" : ""}
+                          title={!isTierActive ? "Unavailable" : "Request Reecomm Inspection"}
                         >
                           Request Reecomm Inspection
                         </Button>

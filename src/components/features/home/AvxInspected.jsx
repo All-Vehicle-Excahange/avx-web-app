@@ -137,7 +137,15 @@ export default function AvxInspected() {
         {/* Bottom Button */}
         {vehicles.length >= 4 && (
           <div className="mt-4 flex justify-end">
-            <Button href="/search" variant="outlineAnimated" size="md">
+            <Button
+              href={
+                activeType === "2-Wheeler"
+                  ? "/search/buy-used-two-wheelers?reccomInspected=true"
+                  : "/search/buy-used-cars?reccomInspected=true"
+              }
+              variant="outlineAnimated"
+              size="md"
+            >
               Explore All Vehicles
             </Button>
           </div>

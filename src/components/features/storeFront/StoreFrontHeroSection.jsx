@@ -17,6 +17,7 @@ import {
   Loader2,
   Maximize2,
   PhoneCall,
+  AlertCircle,
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import Image from "next/image";
@@ -48,6 +49,8 @@ export default function StoreFrontHeroSection() {
   const { data: storeDetails, isLoading } = useQuery(
     getStoreFrontByUsernameQuery(id),
   );
+
+  const isActiveTier = storeDetails?.isActiveTier !== false;
 
   const [optimisticFollowState, setOptimisticFollowState] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -358,22 +361,30 @@ export default function StoreFrontHeroSection() {
                 {/* subscribe btn */}
                 <div className="flex-1 lg:w-full">
                   <button
-                    onClick={handleFollowToggle}
+                    onClick={isActiveTier ? handleFollowToggle : undefined}
+                    disabled={!isActiveTier}
                     type="button"
-                    className={`group w-full rounded-full h-10 lg:h-[42px] px-4 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium cursor-pointer transition-all duration-300 ease-in-out ${isFollower
-                      ? "bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
-                      : "bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
-                      }`}
+                    title={!isActiveTier ? "Unavailable" : (isFollower ? "Unsubscribe" : "Subscribe")}
+                    className={`group w-full rounded-full h-10 lg:h-[42px] px-4 border flex items-center justify-center gap-2 text-sm lg:text-base font-medium transition-all duration-300 ease-in-out ${
+                      !isActiveTier
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : isFollower
+                        ? "cursor-pointer bg-fourth text-primary border-fourth hover:bg-transparent hover:text-fourth"
+                        : "cursor-pointer bg-primary text-secondary border-primary hover:bg-transparent hover:text-primary"
+                    }`}
                   >
                     <span className="transition-colors duration-300">
                       {isFollower ? "Unsubscribe" : "Subscribe"}
                     </span>
 
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] lg:text-xs font-semibold transition-all duration-300 ${isFollower
-                        ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
-                        : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
-                        }`}
+                      className={`px-2 py-0.5 rounded-full text-[10px] lg:text-xs font-semibold transition-all duration-300 ${
+                        !isActiveTier
+                          ? "bg-white/10 text-white/40"
+                          : isFollower
+                          ? "bg-primary/10 text-primary group-hover:bg-fourth/10 group-hover:text-primary"
+                          : "bg-secondary/10 text-secondary group-hover:bg-primary/10 group-hover:text-primary"
+                      }`}
                     >
                       {formatFollowerCount(localFollowersCount)}
                     </span>
@@ -382,9 +393,15 @@ export default function StoreFrontHeroSection() {
 
                 {/* Mobile share btn: visible only on mobile/tablet */}
                 <button
-                  onClick={() => setIsShareOpen(true)}
+                  onClick={isActiveTier ? () => setIsShareOpen(true) : undefined}
+                  disabled={!isActiveTier}
                   type="button"
-                  className="lg:hidden flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-white/15 cursor-pointer hover:bg-primary/20 transition-all"
+                  title={!isActiveTier ? "Unavailable" : "Share"}
+                  className={`lg:hidden flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all ${
+                    !isActiveTier
+                      ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                      : "bg-primary/10 text-primary border-white/15 cursor-pointer hover:bg-primary/20"
+                  }`}
                 >
                   <Share2 className="h-4.5 w-4.5" />
                 </button>
@@ -394,18 +411,29 @@ export default function StoreFrontHeroSection() {
               <div className="mt-3 w-full flex lg:hidden gap-2 items-center">
                 <Button
                   variant="ghost"
-                  onClick={handleCallConsultantClick}
-                  className="w-10 h-10 shrink-0 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-0 flex items-center justify-center"
+                  onClick={isActiveTier ? handleCallConsultantClick : undefined}
+                  disabled={!isActiveTier}
+                  className={`w-10 h-10 shrink-0 border shadow-sm px-0 flex items-center justify-center ${
+                    !isActiveTier
+                      ? "!bg-white/10 !text-white/40 !border-white/10 cursor-not-allowed opacity-60"
+                      : "bg-white text-black hover:bg-white/90 border-gray-300"
+                  }`}
                   aria-label="Call Consultant"
+                  title={!isActiveTier ? "Unavailable" : "Call Consultant"}
                 >
                   <PhoneCall className="w-[18px] h-[18px]" />
                 </Button>
 
                 <Button
-                  onClick={handleWhatsAppClick}
-                  disabled={isOpeningWhatsApp}
-                  className="w-10 h-10 shrink-0 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] shadow-sm px-0 flex items-center justify-center"
+                  onClick={isActiveTier ? handleWhatsAppClick : undefined}
+                  disabled={!isActiveTier || isOpeningWhatsApp}
+                  className={`w-10 h-10 shrink-0 border shadow-sm px-0 flex items-center justify-center ${
+                    !isActiveTier
+                      ? "!bg-white/10 !text-white/40 !border-white/10 cursor-not-allowed opacity-60"
+                      : "!bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a]"
+                  }`}
                   aria-label="WhatsApp"
+                  title={!isActiveTier ? "Unavailable" : "WhatsApp"}
                 >
                   {isOpeningWhatsApp ? (
                     <Loader2 className="w-[18px] h-[18px] animate-spin text-white" />
@@ -416,12 +444,20 @@ export default function StoreFrontHeroSection() {
 
                 <Button
                   variant="outline"
-                  href={directionUrl}
+                  href={isActiveTier ? directionUrl : undefined}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 h-10 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-2 overflow-hidden"
+                  disabled={!isActiveTier}
+                  className={`flex-1 h-10 border shadow-sm px-2 overflow-hidden ${
+                    !isActiveTier
+                      ? "!bg-white/10 !text-white/40 !border-white/10 cursor-not-allowed opacity-60 pointer-events-none"
+                      : "bg-white text-black hover:bg-white/90 border border-gray-300"
+                  }`}
+                  title={!isActiveTier ? "Unavailable" : "Get Directions"}
                 >
-                  <span className="font-medium text-sm whitespace-nowrap truncate">Get Directions</span>
+                  <span className="font-medium text-sm whitespace-nowrap truncate">
+                    {!isActiveTier ? "Unavailable" : "Get Directions"}
+                  </span>
                   <CornerUpRight className="w-[18px] h-[18px] shrink-0" />
                 </Button>
               </div>
@@ -430,19 +466,32 @@ export default function StoreFrontHeroSection() {
             {/* CENTER COLUMN */}
             <div className="flex-1 space-y-4">
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-3xl font-semibold text-primary leading-tight capitalize">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-tight capitalize">
                     {storeDetails.consultationName || "Auto Consultant"}
                   </h1>
 
                   <button
-                    onClick={() => setIsShareOpen(true)}
+                    onClick={isActiveTier ? () => setIsShareOpen(true) : undefined}
+                    disabled={!isActiveTier}
                     type="button"
-                    className="hidden lg:inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all cursor-pointer shadow-sm"
+                    title={!isActiveTier ? "Unavailable" : "Share Storefront"}
+                    className={`hidden lg:inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all shadow-sm ${
+                      !isActiveTier
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : "bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 cursor-pointer"
+                    }`}
                     aria-label="Share Storefront"
                   >
                     <Share2 className="h-3.5 w-3.5" />
                   </button>
+
+                  {!isActiveTier && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-medium">
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      Consultant Currently Unavailable
+                    </span>
+                  )}
                 </div>
 
                 <p className="flex items-center gap-1.5 text-third mt-1">
@@ -532,37 +581,56 @@ export default function StoreFrontHeroSection() {
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={handleCallConsultantClick}
-                    className="h-9 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-4"
+                    onClick={isActiveTier ? handleCallConsultantClick : undefined}
+                    disabled={!isActiveTier}
+                    className={`h-9 border shadow-sm px-4 ${
+                      !isActiveTier
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : "bg-white text-black hover:bg-white/90 border-gray-300"
+                    }`}
+                    title={!isActiveTier ? "Unavailable" : "Call Consultant"}
                   >
                     <PhoneCall className="w-4 h-4 shrink-0" />
-                    <span className="whitespace-nowrap text-[13px] ">Call Consultant</span>
+                    <span className="whitespace-nowrap text-[13px]">Call Consultant</span>
                   </Button>
 
                   <Button
                     size="sm"
-                    onClick={handleWhatsAppClick}
-                    disabled={isOpeningWhatsApp}
-                    className="h-9 !bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white shadow-sm transition-all duration-200 px-4"
+                    onClick={isActiveTier ? handleWhatsAppClick : undefined}
+                    disabled={!isActiveTier || isOpeningWhatsApp}
+                    className={`h-9 border shadow-sm transition-all duration-200 px-4 ${
+                      !isActiveTier
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : "!bg-[#25D366] !text-white !border-[#25D366] hover:!bg-[#20bd5a] hover:!border-[#20bd5a] hover:!text-white"
+                    }`}
+                    title={!isActiveTier ? "Unavailable" : "WhatsApp"}
                   >
                     {isOpeningWhatsApp ? (
                       <Loader2 className="w-4 h-4 animate-spin text-white" />
                     ) : (
                       <FaWhatsapp className="w-4 h-4 shrink-0 text-white" />
                     )}
-                    <span className="text-white whitespace-nowrap text-[13px]">WhatsApp</span>
+                    <span className="whitespace-nowrap text-[13px]">WhatsApp</span>
                   </Button>
                 </div>
 
                 <Button
                   size="sm"
                   variant="ghost"
-                  href={directionUrl}
+                  href={isActiveTier ? directionUrl : undefined}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full h-9 bg-white text-black hover:bg-white/90 border border-gray-300 shadow-sm px-4"
+                  disabled={!isActiveTier}
+                  className={`w-full h-9 border shadow-sm px-4 ${
+                    !isActiveTier
+                      ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                      : "bg-white text-black hover:bg-white/90 border border-gray-300"
+                  }`}
+                  title={!isActiveTier ? "Unavailable" : "Get Directions"}
                 >
-                  <span className="whitespace-nowrap text-[13px] ">Get Directions</span>
+                  <span className="whitespace-nowrap text-[13px]">
+                    {!isActiveTier ? "Unavailable" : "Get Directions"}
+                  </span>
                   <CornerUpRight className="w-4 h-4 shrink-0" />
                 </Button>
               </div>

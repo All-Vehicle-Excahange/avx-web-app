@@ -47,6 +47,7 @@ const ENDPOINT = {
   addNewTown: "/util/address/town",
   getAndCheckEligbleForReview: "/vehicles/inquiry/review-details",
   recentSearch: "/users/recent-search",
+  getConsultantRankings: "/users/profile/consultant-rankings",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -618,7 +619,9 @@ export const getAndCheckEligbleForReview = async (inquiryId) => {
 
 export const saveRecentSearch = async (searchStr) => {
   try {
-    const res = await axiosInstance.post(`${ENDPOINT.recentSearch}/${encodeURIComponent(searchStr)}`);
+    const clean = String(searchStr || "").replace(/\//g, " ").replace(/\s+/g, " ").trim();
+    if (!clean) return null;
+    const res = await axiosInstance.post(`${ENDPOINT.recentSearch}/${encodeURIComponent(clean)}`);
     return handleResponse(res);
   } catch (error) {
     throw error;
@@ -637,6 +640,36 @@ export const getRecentSearches = async () => {
 export const deleteAllRecentSearches = async () => {
   try {
     const res = await axiosInstance.delete(ENDPOINT.recentSearch);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteRecentSearchById = async (id) => {
+  try {
+    const res = await axiosInstance.delete(`${ENDPOINT.recentSearch}/${id}`);
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getConsultantRankings = async (data = {}) => {
+  try {
+    const { fromDate, toDate, cityId, rankBy = "INQUIRIES", pageNo = 1, size = 10 } = data;
+
+    const res = await axiosInstance.get(ENDPOINT.getConsultantRankings, {
+      params: {
+        ...(fromDate ? { fromDate } : {}),
+        ...(toDate ? { toDate } : {}),
+        ...(cityId ? { cityId } : {}),
+        rankBy,
+        pageNo,
+        size,
+      },
+    });
+
     return handleResponse(res);
   } catch (error) {
     throw error;

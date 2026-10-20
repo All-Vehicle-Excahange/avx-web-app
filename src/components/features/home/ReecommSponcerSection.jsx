@@ -165,7 +165,15 @@ export default function ReecommSponcerSection() {
 
       {cardData.length >= 4 && (
         <div className="mt-8 flex justify-end">
-          <Button href="/search" variant="outlineAnimated" size="md">
+          <Button
+            href={
+              activeType === "2-Wheeler"
+                ? "/search/buy-used-two-wheelers"
+                : "/search/buy-used-cars"
+            }
+            variant="outlineAnimated"
+            size="md"
+          >
             Explore All Vehicles
           </Button>
         </div>

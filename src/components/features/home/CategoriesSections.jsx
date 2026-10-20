@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Car, Bike } from "lucide-react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
@@ -41,7 +41,6 @@ const categoriesByType = {
     { id: "compact-suvs", label: "Compact SUVs", icon: Car, iconUrl: "/icons/car_COMPACT SUVS.svg" },
     { id: "fullsize-suvs-muvs", label: "SUVs & MUVs", icon: Car, iconUrl: "/icons/car_FULL SIZE SUV.svg" },
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car, iconUrl: "/icons/car_PREMIUM LUXURY.svg" },
-
   ],
   "2-Wheeler": [
     {
@@ -85,56 +84,28 @@ const categoriesByType = {
 
 const CategoriesSections = () => {
   const [activeType, setActiveType] = useState("4-Wheeler");
-  const [active, setActive] = useState("urban-rides");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { cityId, stateId } = useLocationStore();
-  const checkedCategories = React.useRef(new Set());
-  const hasManuallySelected = React.useRef(false);
-  const checkedFourWheelerEmpty = React.useRef(false);
 
-  const selectedTag = vehicleTagMap[activeType]?.[active];
-  const queryPayload = {
-    pageNo: 1,
-    size: 4,
-    vehicleTag: selectedTag,
-    ...(cityId ? { cityId } : {}),
-    ...(stateId ? { stateId } : {}),
-  };
-
-  const { data: vehicles = [], isLoading } = useQuery(
-    getVehiclesByTagQuery(activeType, queryPayload),
+  const currentCategories = useMemo(
+    () => categoriesByType[activeType] || [],
+    [activeType],
   );
 
-  // Auto-play / switch to next category if currently loaded category is empty
-  useEffect(() => {
-    if (hasManuallySelected.current) return;
+  // Active category: user selection, or first category for this vehicle type (e.g. urban-rides for 4-Wheeler)
+  const active = selectedCategory || currentCategories[0]?.id;
+  const activeTag = vehicleTagMap[activeType]?.[active];
 
-    if (!isLoading && vehicles.length === 0 && selectedTag) {
-      checkedCategories.current.add(selectedTag);
-
-      const categories = categoriesByType[activeType];
-      const nextCat = categories.find(
-        (c) => !checkedCategories.current.has(vehicleTagMap[activeType]?.[c.id])
-      );
-
-      if (nextCat) {
-        setActive(nextCat.id);
-      } else if (activeType === "4-Wheeler") {
-        checkedFourWheelerEmpty.current = true;
-        setActiveType("2-Wheeler");
-        setActive("scooters");
-      }
-    }
-  }, [vehicles, isLoading, active, activeType, selectedTag]);
-
-  if (
-    !isLoading &&
-    (!Array.isArray(vehicles) || vehicles.length === 0) &&
-    activeType === "2-Wheeler" &&
-    checkedFourWheelerEmpty.current &&
-    !hasManuallySelected.current
-  ) {
-    return null;
-  }
+  // Fetch ONLY the currently active category (lazy-loads on tab click, avoids multiple costly API calls)
+  const { data: vehicles = [], isLoading } = useQuery(
+    getVehiclesByTagQuery(activeType, {
+      pageNo: 1,
+      size: 4,
+      vehicleTag: activeTag,
+      ...(cityId ? { cityId } : {}),
+      ...(stateId ? { stateId } : {}),
+    })
+  );
 
   return (
     <section className="w-full h-full flex flex-col text-primary">
@@ -163,10 +134,8 @@ const CategoriesSections = () => {
               type="button"
               onClick={() => {
                 if (activeType !== "4-Wheeler") {
-                  hasManuallySelected.current = true;
-                  checkedCategories.current.clear();
+                  setSelectedCategory(null);
                   setActiveType("4-Wheeler");
-                  setActive("urban-rides");
                 }
               }}
               className={cn(
@@ -190,10 +159,8 @@ const CategoriesSections = () => {
               type="button"
               onClick={() => {
                 if (activeType !== "2-Wheeler") {
-                  hasManuallySelected.current = true;
-                  checkedCategories.current.clear();
+                  setSelectedCategory(null);
                   setActiveType("2-Wheeler");
-                  setActive("scooters");
                 }
               }}
               className={cn(
@@ -225,8 +192,7 @@ const CategoriesSections = () => {
                 <button
                   key={cat.id}
                   onClick={() => {
-                    hasManuallySelected.current = true;
-                    setActive(cat.id);
+                    setSelectedCategory(cat.id);
                   }}
                   className={cn(
                     "relative flex items-center gap-2 shrink-0 px-5 py-1 text-sm font-semibold rounded-full border transition-all cursor-pointer",
@@ -286,7 +252,15 @@ const CategoriesSections = () => {
         {/* Bottom Button */}
         {vehicles.length >= 4 && (
           <div className="mt-7 flex justify-end">
-            <Button href="/search" variant="outlineAnimated" size="md">
+            <Button
+              href={
+                activeType === "2-Wheeler"
+                  ? `/search/buy-used-two-wheelers${active ? `?category=${active}` : ""}`
+                  : `/search/buy-used-cars${active ? `?category=${active}` : ""}`
+              }
+              variant="outlineAnimated"
+              size="md"
+            >
               Explore All Vehicles
             </Button>
           </div>

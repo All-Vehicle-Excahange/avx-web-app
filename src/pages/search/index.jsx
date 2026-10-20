@@ -148,9 +148,31 @@ export async function getServerSideProps(context) {
   // ?cityName=Palanpur&brand=Ford → /search/buy-used-ford-cars-palanpur (301)
   const slugFromQuery = buildSlugFromSearchQuery(query);
   if (slugFromQuery) {
+    const remainingParams = new URLSearchParams();
+    Object.entries(query).forEach(([key, val]) => {
+      const slugKeys = [
+        "cityName",
+        "city",
+        "brandName",
+        "brand",
+        "maker",
+        "makerName",
+        "model",
+        "modelName",
+        "vehicleType",
+        "budget",
+        "fuelType",
+        "transmission",
+        "bodyType",
+      ];
+      if (!slugKeys.includes(key) && val !== undefined && val !== null && val !== "") {
+        remainingParams.append(key, val);
+      }
+    });
+    const queryString = remainingParams.toString() ? `?${remainingParams.toString()}` : "";
     return {
       redirect: {
-        destination: `/search/${slugFromQuery}`,
+        destination: `/search/${slugFromQuery}${queryString}`,
         permanent: true,
       },
     };
@@ -161,9 +183,17 @@ export async function getServerSideProps(context) {
   const isTwoWheeler = vtLower.includes("2") || vtLower.includes("two");
   const targetSlug = isTwoWheeler ? "buy-used-two-wheelers" : "buy-used-cars";
 
+  const remainingParams = new URLSearchParams();
+  Object.entries(query).forEach(([key, val]) => {
+    if (key !== "vehicleType" && val !== undefined && val !== null && val !== "") {
+      remainingParams.append(key, val);
+    }
+  });
+  const queryString = remainingParams.toString() ? `?${remainingParams.toString()}` : "";
+
   return {
     redirect: {
-      destination: `/search/${targetSlug}`,
+      destination: `/search/${targetSlug}${queryString}`,
       permanent: true,
     },
   };

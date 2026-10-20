@@ -23,6 +23,7 @@ import {
   getHomeFeedConsult,
   getRecentlySold,
   getAndCheckEligbleForReview,
+  getConsultantRankings,
 } from "@/services/user.service";
 import {
   getFilteredVehicles,
@@ -323,7 +324,12 @@ export const getVehiclesByTagQuery = (activeType, payload) => {
         ...payload,
         vehicleType,
       });
-      return res?.data || [];
+      const list = res?.data || [];
+      if (Array.isArray(list)) {
+        list.totalElements = res?.pageResponse?.totalElements ?? list.length;
+        list.pageResponse = res?.pageResponse;
+      }
+      return list;
     },
     staleTime: 10 * 60 * 1000,
     retry: shouldRetry,
@@ -442,6 +448,18 @@ export const getAndCheckEligbleForReviewQuery = (inquiryId, enabled = true) => {
     },
     enabled: !!inquiryId && enabled,
     staleTime: 0,
+    retry: shouldRetry,
+  });
+};
+
+export const getConsultantRankingsQuery = (params = {}) => {
+  return queryOptions({
+    queryKey: ["consultant-rankings", params],
+    queryFn: async () => {
+      const res = await getConsultantRankings(params);
+      return res;
+    },
+    staleTime: 5 * 60 * 1000,
     retry: shouldRetry,
   });
 };

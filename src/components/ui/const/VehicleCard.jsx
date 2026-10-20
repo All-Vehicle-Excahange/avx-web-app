@@ -36,6 +36,7 @@ export default function VehicleCard({
   onWishlistChange,
   source = "search",
   isSold = false,
+  isTierActive = true,
 }) {
   const { push } = useRouter();
   const queryClient = useQueryClient();
@@ -259,7 +260,14 @@ export default function VehicleCard({
     }
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    if (!isTierActive) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      return;
+    }
     handleAdClick();
     let url = generateVehicleUrl(data);
     url += url.includes("?") ? `&source=${source}` : `?source=${source}`;
@@ -288,20 +296,22 @@ export default function VehicleCard({
         text-primary
         w-full
         border-2 border-third/30
-        cursor-pointer
-        ${!isSold ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : "opacity-60 grayscale-[0.2]"}
+        ${isTierActive ? "cursor-pointer" : "cursor-default"}
+        ${!isSold && isTierActive ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : (!isTierActive ? "opacity-90" : "opacity-60 grayscale-[0.2]")}
         transition-shadow duration-300
         h-full md:min-h-[420px]`}
       >
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
-          <NoPrefetchLink
-            href={detailHref}
+          <div
             onClick={(e) => {
-              e.stopPropagation();
+              if (!isTierActive) {
+                e.stopPropagation();
+                e.preventDefault();
+              }
             }}
-            className="relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block"
-            aria-label={`View details for ${mapped.title}`}
+            className={`relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block ${!isTierActive ? "cursor-default pointer-events-none" : "cursor-pointer"
+              }`}
           >
             <div className="relative w-full h-full overflow-hidden rounded-xl">
               {/* Inspection Badge */}
@@ -410,7 +420,7 @@ export default function VehicleCard({
                 )
               ) : null}
             </div>
-          </NoPrefetchLink>
+          </div>
 
           {/* CONTENT */}
           <div className="flex flex-col flex-1 p-2.5 md:p-4 space-y-2 md:space-y-3 justify-between min-h-0 overflow-hidden relative">
@@ -419,21 +429,27 @@ export default function VehicleCard({
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2 min-h-10 md:min-h-14">
                   <h3
-                    className="
-      text-sm font-secondary md:text-xl font-bold 
-      leading-tight tracking-wide 
-      line-clamp-2 overflow-hidden
-      hover:text-fourth transition-colors
-    "
+                    className={`
+                      text-sm font-secondary md:text-xl font-bold 
+                      leading-tight tracking-wide 
+                      line-clamp-2 overflow-hidden
+                      ${isTierActive ? "hover:text-fourth transition-colors cursor-pointer" : "text-primary cursor-default"}
+                    `}
                     title={mapped.title}
                   >
-                    <NoPrefetchLink
-                      href={detailHref}
-                      onClick={(e) => e.stopPropagation()}
-                      title={mapped.title}
-                    >
-                      {mapped.title}
-                    </NoPrefetchLink>
+                    {isTierActive ? (
+                      <NoPrefetchLink
+                        href={detailHref}
+                        onClick={(e) => e.stopPropagation()}
+                        title={mapped.title}
+                      >
+                        {mapped.title}
+                      </NoPrefetchLink>
+                    ) : (
+                      <h3 className="cursor-default select-text">
+                        {mapped.title}
+                      </h3>
+                    )}
                   </h3>
                 </div>
 
@@ -498,20 +514,26 @@ export default function VehicleCard({
 
               <div className="hidden md:block shrink-0">
                 <Button
-                  href={`/vehicle/details/${slug}/${data.id}?source=${source}${data?.sponsored
-                    ? `&sponsored=true&adId=${data.adId || ""}&billingType=${data.billingType || ""}`
-                    : ""
-                    }`}
+                  href={isTierActive ? detailHref : undefined}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleAdClick();
+                    if (isTierActive) {
+                      handleAdClick();
+                    } else {
+                      e.preventDefault();
+                    }
                   }}
+                  disabled={!isTierActive}
                   scroll={true}
                   variant="outline"
                   size="sm"
-                  className="whitespace-nowrap"
+                  className={`whitespace-nowrap ${!isTierActive
+                      ? "!opacity-40 !cursor-not-allowed !bg-white/5 !text-white/40 !border-white/10 pointer-events-none"
+                      : ""
+                    }`}
+                  title={!isTierActive ? "Unavailable" : "View Details"}
                 >
-                  View Details
+                  {!isTierActive ? "Unavailable" : "View Details"}
                 </Button>
               </div>
             </div>
