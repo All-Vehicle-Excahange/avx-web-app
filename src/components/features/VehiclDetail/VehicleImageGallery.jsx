@@ -33,7 +33,7 @@ const slideVariants = {
   }),
 };
 
-export default function VehicleImageGallery({ vehicle }) {
+export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
   const queryClient = useQueryClient();
 
   const vehicleId = vehicle?.id;
@@ -268,12 +268,19 @@ export default function VehicleImageGallery({ vehicle }) {
         <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
           {/* Wishlist Button */}
           <button
-            onClick={handleWishlistToggle}
-            className="bg-black/50 hover:bg-black/70 text-white p-2.5 rounded-full hover:scale-105 transition cursor-pointer border border-white/20  backdrop-blur-md shadow-md"
+            onClick={isTierActive ? handleWishlistToggle : undefined}
+            disabled={!isTierActive}
+            title={!isTierActive ? "Unavailable" : (isFavorite ? "Remove from Wishlist" : "Add to Wishlist")}
+            className={`p-2.5 rounded-full transition border shadow-md backdrop-blur-md ${
+              !isTierActive
+                ? "bg-black/30 text-white/30 border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                : "bg-black/50 hover:bg-black/70 text-white hover:scale-105 cursor-pointer border-white/20"
+            }`}
           >
             <Heart
-              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"
-                }`}
+              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                !isTierActive ? "text-white/30" : isFavorite ? "fill-red-500 text-red-500" : "text-white"
+              }`}
             />
           </button>
         </div>

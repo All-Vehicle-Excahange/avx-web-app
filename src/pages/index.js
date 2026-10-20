@@ -14,6 +14,7 @@ import NavratriShowcaseSection from "@/components/features/home/NavratriShowcase
 import StatsSection from "@/components/features/home/StateSection";
 import StorySection from "@/components/features/home/StorySection";
 import TopPicsSection from "@/components/features/home/TopPicsSection";
+import TwoWheelerSection from "@/components/features/home/TwoWheelerSection";
 import FooterLink from "@/components/layout/FooterLink";
 import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
@@ -182,7 +183,10 @@ function Home() {
       <div className="block md:hidden">
         <SellVehicleBanner fullWidth />
       </div>
-      {/* <Layout> */}
+
+      <Layout>
+        <TwoWheelerSection />
+      </Layout>
 
       <Layout>
         <TopPicsSection />

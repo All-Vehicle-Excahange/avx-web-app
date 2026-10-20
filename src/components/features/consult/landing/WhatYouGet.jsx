@@ -55,7 +55,7 @@ export default function WhatYouGetSpotlight() {
   const active = features[activeFeature];
 
   return (
-    <section className="relative py-28 overflow-hidden">
+    <section className="relative py-10 overflow-hidden">
       <div className="relative z-10 max-w-[1480px] mx-auto w-full">
         {/* HEADER */}
         <motion.div
@@ -88,11 +88,10 @@ export default function WhatYouGetSpotlight() {
                     key={i}
                     onClick={() => setActiveFeature(i)}
                     className={`relative flex-1 group text-left rounded-xl px-5 py-2 transition-all duration-300 border overflow-hidden hover:cursor-pointer
-              ${
-                isActive
-                  ? "border-primary/20 bg-primary/5 "
-                  : "border-transparent bg-transparent hover:border-primary/10 hover:bg-primary/3"
-              }`}
+              ${isActive
+                        ? "border-primary/20 bg-primary/5 "
+                        : "border-transparent bg-transparent hover:border-primary/10 hover:bg-primary/3"
+                      }`}
                   >
                     <div className="flex items-center gap-4">
                       {/* Title */}

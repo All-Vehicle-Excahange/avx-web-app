@@ -325,6 +325,11 @@ h3 {
 
 
 /* custom scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: transparent;
   border-radius: 10px;

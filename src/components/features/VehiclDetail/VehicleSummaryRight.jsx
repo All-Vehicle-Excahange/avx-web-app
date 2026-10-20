@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import { Star, MapPin, Loader2, ExternalLink, Pencil, Phone } from "lucide-react";
+import { Star, MapPin, Loader2, ExternalLink, Pencil, Phone, AlertCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -44,6 +44,14 @@ export default function VehicleSummaryRight({
   const { push } = useRouter();
   const vehicleId = vehicle?.id;
   const vehicleOwnerRole = vehicle?.vehicleOwner?.userRole || "USER";
+  const isConsultant = vehicleOwnerRole === "CONSULTATION";
+  const isTierActive = isConsultant
+    ? (summary?.isActiveTier !== undefined
+      ? summary.isActiveTier !== false
+      : vehicle?.isActiveTier !== undefined
+        ? vehicle.isActiveTier !== false
+        : true)
+    : true;
 
   const rawPrice = Number(vehicle?.price) || 0;
   const rawDisplayPrice = vehicle?.displayPrice ? Number(vehicle?.displayPrice) : null;
@@ -423,24 +431,41 @@ export default function VehicleSummaryRight({
                       </Button>
                     )}
                     {summary?.consultationName && (
-                      <NoPrefetchLink
-                        href={`/auto-consultant/${summary?.username || 1}`}
-                        className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
-                      >
-                        Visit Storefront
-                        <ExternalLink size={11} className="inline" />
-                      </NoPrefetchLink>
+                      isTierActive ? (
+                        <NoPrefetchLink
+                          href={`/auto-consultant/${summary?.username || 1}`}
+                          className="text-xs text-white font-semibold underline underline-offset-2 decoration-blue-400/70 hover:decoration-blue-400 transition-all flex items-center gap-0.5 shrink-0"
+                          title="Visit Storefront"
+                        >
+                          Visit Storefront
+                          <ExternalLink size={11} className="inline" />
+                        </NoPrefetchLink>
+                      ) : (
+                        <span
+                          className="text-xs text-white/40 font-semibold underline underline-offset-2 decoration-white/20 cursor-not-allowed pointer-events-none opacity-50 flex items-center gap-0.5 shrink-0"
+                          title="Unavailable"
+                        >
+                          Visit Storefront
+                          <ExternalLink size={11} className="inline" />
+                        </span>
+                      )
                     )}
                   </div>
                 </div>
 
                 {/* Consultant name — clickable → storefront */}
-                <NoPrefetchLink
-                  href={`/auto-consultant/${summary?.username || 1}`}
-                  className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all capitalize"
-                >
-                  {summary?.consultationName || "Auto Consultant"}
-                </NoPrefetchLink>
+                {isTierActive ? (
+                  <NoPrefetchLink
+                    href={`/auto-consultant/${summary?.username || 1}`}
+                    className="text-xl font-bold text-primary leading-tight -mt-1 hover:underline underline-offset-2 decoration-primary/50 transition-all capitalize"
+                  >
+                    {summary?.consultationName || "Auto Consultant"}
+                  </NoPrefetchLink>
+                ) : (
+                  <h3 className="text-xl font-bold text-primary leading-tight -mt-1 cursor-default select-text capitalize">
+                    {summary?.consultationName || "Auto Consultant"}
+                  </h3>
+                )}
 
                 {/* Stats row */}
                 <div className="space-y-1">
@@ -594,6 +619,21 @@ export default function VehicleSummaryRight({
 
           <div className="border-t border-third/40" />
 
+          {/* UNAVAILABLE NOTICE */}
+          {!isTierActive && (
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-semibold text-amber-300">
+                  Consultant Currently Unavailable
+                </p>
+                <p className="text-[11px] text-amber-200/70 mt-0.5 leading-tight">
+                  Inquiries and Call for this vehicle are temporarily paused.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* ACTION BUTTONS */}
           <div className={`${isOwner ? "hidden lg:grid grid-cols-2" : "flex flex-col"} gap-2 pt-2`}>
             {isOwner ? (
@@ -626,9 +666,13 @@ export default function VehicleSummaryRight({
                       variant="outline"
                       size="sm"
                       showIcon={false}
-                      className="rounded-full text-xs whitespace-nowrap px-1"
-                      onClick={openMakeOffer}
-                      disabled={hasActiveInquiry || vehicle?.isVehicleSold}
+                      className={`rounded-full text-xs whitespace-nowrap px-1 ${!isTierActive
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : ""
+                        }`}
+                      onClick={isTierActive ? openMakeOffer : undefined}
+                      disabled={!isTierActive || hasActiveInquiry || vehicle?.isVehicleSold}
+                      title={!isTierActive ? "Unavailable" : (hasActiveInquiry ? "Offer Already Sent" : "Make An Offer")}
                     >
                       {hasActiveInquiry ? "Offer Already Sent" : "Make An Offer"}
                     </Button>
@@ -636,9 +680,14 @@ export default function VehicleSummaryRight({
                       variant="outline"
                       size="sm"
                       showIcon={false}
-                      className="rounded-full text-xs whitespace-nowrap px-1"
-                      onClick={handleRequestInspectionClick}
+                      className={`rounded-full text-xs whitespace-nowrap px-1 ${!isTierActive
+                        ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                        : ""
+                        }`}
+                      onClick={isTierActive ? handleRequestInspectionClick : undefined}
                       loading={isCheckingInspection}
+                      disabled={!isTierActive}
+                      title={!isTierActive ? "Unavailable" : "Request Inspection"}
                     >
                       Request Inspection
                     </Button>
@@ -650,10 +699,14 @@ export default function VehicleSummaryRight({
                   variant="ghost"
                   size="sm"
                   showIcon={false}
-                  className={`rounded-full w-full ${vehicle?.isVehicleSold ? "hidden lg:flex" : "flex"} items-center justify-center gap-2`}
+                  className={`rounded-full w-full ${vehicle?.isVehicleSold ? "hidden lg:flex" : "flex"} items-center justify-center gap-2 ${!isTierActive
+                    ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                    : ""
+                    }`}
                   loading={loading}
-                  disabled={vehicle?.isVehicleSold}
-                  onClick={handleCallButtonClick}
+                  disabled={!isTierActive || vehicle?.isVehicleSold}
+                  onClick={isTierActive ? handleCallButtonClick : undefined}
+                  title={!isTierActive ? "Unavailable" : (vehicleOwnerRole === "CONSULTATION" ? "Call Consultant" : "Call Seller")}
                 >
                   <Phone size={15} />
                   {vehicle?.isVehicleSold
@@ -714,15 +767,24 @@ export default function VehicleSummaryRight({
               <Phone size={15} />
               Sold Out
             </Button>
+          ) : !isTierActive ? (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-medium">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span>Consultant Currently Unavailable</span>
+            </div>
           ) : (
             <div className="flex items-center gap-1.5">
               <Button
                 variant="outline"
                 size="sm"
                 showIcon={false}
-                className="rounded-full text-[11px] whitespace-nowrap px-2.5"
-                onClick={openMakeOffer}
-                disabled={hasActiveInquiry}
+                className={`rounded-full text-[11px] whitespace-nowrap px-2.5 ${!isTierActive
+                  ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                  : ""
+                  }`}
+                onClick={isTierActive ? openMakeOffer : undefined}
+                disabled={!isTierActive || hasActiveInquiry}
+                title={!isTierActive ? "Unavailable" : (hasActiveInquiry ? "Offer Sent" : "Make An Offer")}
               >
                 {hasActiveInquiry ? "Offer Sent" : "Make An Offer"}
               </Button>
@@ -731,9 +793,14 @@ export default function VehicleSummaryRight({
                 variant="ghost"
                 size="sm"
                 showIcon={false}
-                className="rounded-full text-[11px] whitespace-nowrap px-2.5"
-                onClick={handleRequestInspectionClick}
+                className={`rounded-full text-[11px] whitespace-nowrap px-2.5 ${!isTierActive
+                  ? "!bg-white/5 !text-white/40 !border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+                  : ""
+                  }`}
+                onClick={isTierActive ? handleRequestInspectionClick : undefined}
                 loading={isCheckingInspection}
+                disabled={!isTierActive}
+                title={!isTierActive ? "Unavailable" : "Request Inspection"}
               >
                 Request Inspection
               </Button>

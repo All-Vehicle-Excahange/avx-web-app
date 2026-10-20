@@ -14,6 +14,14 @@ export default function NoPrefetchLink({
   scroll = true,
   ...props
 }) {
+  if (!href) {
+    return (
+      <span onClick={onClick} {...props}>
+        {children}
+      </span>
+    );
+  }
+
   return (
     <Link
       href={href}

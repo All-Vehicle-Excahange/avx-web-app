@@ -6,14 +6,17 @@ import Select, { components } from "react-select";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getStoreFrontInventoryInfiniteQuery } from "@/queries/user.queries";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getStoreFrontInventoryInfiniteQuery, getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import { ArrowUpDown, RefreshCw } from "lucide-react";
 import Image from "next/image";
 
-export default function Inventory() {
+export default function Inventory({ isActiveTier: propIsActiveTier }) {
     const router = useRouter();
     const id = router.query?.id;
+
+    const { data: storeDetails } = useQuery(getStoreFrontByUsernameQuery(id));
+    const isActiveTier = propIsActiveTier !== undefined ? propIsActiveTier : (storeDetails?.isActiveTier !== false);
 
     const [activeType, setActiveType] = useState("all");
 
@@ -161,7 +164,7 @@ export default function Inventory() {
                     ? [...Array(12)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
                     : vehicles.length > 0 ? (
                         vehicles.map((car, index) => (
-                            <VehicleCard key={`${car.id}-${index}`} data={car} />
+                            <VehicleCard key={`${car.id}-${index}`} data={car} isTierActive={isActiveTier} />
                         ))
                     ) : (
                         <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">

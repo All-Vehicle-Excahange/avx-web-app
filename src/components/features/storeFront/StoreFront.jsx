@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import StoreFrontHeroSection from "./StoreFrontHeroSection";
 
 // RIGHT CONTENT
@@ -12,6 +15,11 @@ import Navbar from "@/components/layout/Navbar";
 
 export default function StoreFront() {
   const [activeTab, setActiveTab] = useState("inventory");
+  const router = useRouter();
+  const id = router.query?.id;
+
+  const { data: storeDetails } = useQuery(getStoreFrontByUsernameQuery(id));
+  const isActiveTier = storeDetails?.isActiveTier !== false;
 
   // Fix for page opening from the middle: Scroll to top on mount
   useEffect(() => {
@@ -62,7 +70,7 @@ export default function StoreFront() {
               </div>
 
               {/* TAB CONTENT */}
-              {activeTab === "inventory" && <Inventory />}
+              {activeTab === "inventory" && <Inventory isActiveTier={isActiveTier} />}
               {activeTab === "aboutus" && <AboutUs />}
               {activeTab === "whybuyhere" && <WhyBuyHere />}
               {activeTab === "reviews" && <Review />}
