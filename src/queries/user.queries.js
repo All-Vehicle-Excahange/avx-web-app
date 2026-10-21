@@ -252,12 +252,12 @@ export const getStoreFrontInventoryInfiniteQuery = (payload = {}) => {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const pageInfo = lastPage?.pagination || {};
+      const pageInfo = lastPage?.pageResponse || lastPage?.pagination || {};
       const totalPages = pageInfo.totalPages || 1;
       const nextPage = allPages.length + 1;
       return nextPage <= totalPages ? nextPage : undefined;
     },
-    staleTime: 15 * 60 * 1000,
+    staleTime: 60 * 1000,
     retry: shouldRetry,
   };
 };

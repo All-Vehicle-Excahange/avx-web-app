@@ -70,7 +70,7 @@ export default function StoreFront() {
               </div>
 
               {/* TAB CONTENT */}
-              {activeTab === "inventory" && <Inventory isActiveTier={isActiveTier} />}
+              {activeTab === "inventory" && <Inventory id={id} isActiveTier={isActiveTier} />}
               {activeTab === "aboutus" && <AboutUs />}
               {activeTab === "whybuyhere" && <WhyBuyHere />}
               {activeTab === "reviews" && <Review />}
