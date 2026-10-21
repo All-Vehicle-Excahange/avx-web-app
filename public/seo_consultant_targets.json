@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-17T07:57:25.737Z",
-  "count": 48,
+  "generatedAt": "2026-10-21T09:31:54.187Z",
+  "count": 50,
   "consultants": [
     {
       "name": "Aabad Motors",
@@ -25,7 +25,7 @@
       "alternateNames": [],
       "username": "alenmotor",
       "city": "Palanpur",
-      "state": "Gujarat",
+      "state": "",
       "url": "https://www.reecomm.com/auto-consultant/alenmotor",
       "path": "/auto-consultant/alenmotor",
       "keywords": [
@@ -75,6 +75,29 @@
         "auto consultant kanodar"
       ],
       "consultationId": "1e976ed7-e997-4e26-9cfb-e2d43976e5a5"
+    },
+    {
+      "name": "Car Expo",
+      "primaryName": "Car Expo Auto Consultant",
+      "alternateNames": [
+        "Car Expo",
+        "Car Expo Auto Consult"
+      ],
+      "username": "carexpo",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/carexpo",
+      "path": "/auto-consultant/carexpo",
+      "keywords": [
+        "car expo auto consultant",
+        "car expo auto consultant ahmedabad",
+        "car expo",
+        "car expo ahmedabad",
+        "car expo auto consult",
+        "car expo auto consult ahmedabad",
+        "auto consultant ahmedabad"
+      ],
+      "consultationId": "d0e26925-7b6d-4f71-a430-15fac417dedb"
     },
     {
       "name": "Carspot",
@@ -886,6 +909,23 @@
         "auto consultant palanpur"
       ],
       "consultationId": "8fa84f39-e262-48ac-9879-733b3561da41"
+    },
+    {
+      "name": "Sk Motors",
+      "primaryName": "Sk Motors",
+      "alternateNames": [],
+      "username": "skmotors336148",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "url": "https://www.reecomm.com/auto-consultant/skmotors336148",
+      "path": "/auto-consultant/skmotors336148",
+      "keywords": [
+        "sk motors",
+        "sk motors ahmedabad",
+        "sk motors auto consultant",
+        "auto consultant ahmedabad"
+      ],
+      "consultationId": "4b5fb698-83a0-41cb-bbe7-ccee9b67d66e"
     },
     {
       "name": "Super Auto Consult",
