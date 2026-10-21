@@ -169,6 +169,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
   const [sellDropdownOpen, setSellDropdownOpen] = useState(false);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
+  const { setIsMobileSearchOpen } = useUIStore();
   const { push } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -371,7 +372,7 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
 
             {/* ================= CENTER SEARCH ================= */}
             <div
-              className={`absolute left-1/2 -translate-x-1/2 z-50 ${menuOpen ? "hidden" : "hidden lg:flex"}`}
+              className={`z-50 ${menuOpen ? "hidden" : "lg:absolute lg:left-1/2 lg:-translate-x-1/2"}`}
             >
               <NavbarSearch heroMode={heroMode} scrolled={scrolled} />
             </div>
@@ -599,6 +600,19 @@ export default function Navbar({ heroMode = false, scrolled = false, insideDrawe
                       </div>
                     );
                   })()}
+
+                  {/* MOBILE SEARCH TRIGGER BUTTON (Small Screens < lg) */}
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileSearchOpen(true)}
+                    className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-all cursor-pointer shrink-0 active:scale-95 ${heroMode && !scrolled
+                      ? "bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl border border-white/30 text-white hover:bg-white/20 shadow-xs"
+                      : "bg-gray-100 border border-gray-200/80 text-gray-700 hover:bg-gray-200 shadow-xs"
+                      }`}
+                    aria-label="Open global search"
+                  >
+                    <Search className="w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[2.2]" />
+                  </button>
 
                   {/* ACCOUNT */}
                   <div

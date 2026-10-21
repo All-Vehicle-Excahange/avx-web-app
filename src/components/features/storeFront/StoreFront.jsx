@@ -19,7 +19,11 @@ export default function StoreFront() {
   const id = router.query?.id;
 
   const { data: storeDetails } = useQuery(getStoreFrontByUsernameQuery(id));
-  const isActiveTier = storeDetails?.isActiveTier !== false;
+  const isActiveTier =
+    storeDetails?.isActiveTier !== false &&
+    storeDetails?.isActive !== false &&
+    storeDetails?.active !== false &&
+    storeDetails?.isTierActive !== false;
 
   // Fix for page opening from the middle: Scroll to top on mount
   useEffect(() => {

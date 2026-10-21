@@ -41,6 +41,13 @@ export default function VehicleCard({
   const { push } = useRouter();
   const queryClient = useQueryClient();
 
+  const isCardActive =
+    isTierActive !== false &&
+    data?.isActive !== false &&
+    data?.active !== false &&
+    data?.isActiveTier !== false &&
+    data?.isTierActive !== false;
+
   //  Initial Favorite State From Backend
   const [isFavorite, setIsFavorite] = useState(
     () => data?.isWishlisted || false,
@@ -96,6 +103,7 @@ export default function VehicleCard({
   const debouncedSyncWishlist = useDebouncedCallback(syncWishlist, 1000);
 
   const handleWishlist = () => {
+    if (!isCardActive) return;
     if (!isLoggedIn) {
       pendingAction.current = "wishlist";
       trackWishlistLoginRequired({
@@ -138,7 +146,7 @@ export default function VehicleCard({
   };
 
   const handleCompare = () => {
-    if (!data?.id) return;
+    if (!isCardActive || !data?.id) return;
 
     if (isComparing) {
       addToCompare(data);
@@ -261,7 +269,7 @@ export default function VehicleCard({
   };
 
   const handleCardClick = (e) => {
-    if (!isTierActive) {
+    if (!isCardActive) {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -296,8 +304,8 @@ export default function VehicleCard({
         text-primary
         w-full
         border-2 border-third/30
-        ${isTierActive ? "cursor-pointer" : "cursor-default"}
-        ${!isSold && isTierActive ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : (!isTierActive ? "opacity-90" : "opacity-60 grayscale-[0.2]")}
+        ${isCardActive ? "cursor-pointer" : "cursor-default"}
+        ${!isSold && isCardActive ? "hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.25)]" : (!isCardActive ? "opacity-90" : "opacity-60 grayscale-[0.2]")}
         transition-shadow duration-300
         h-full md:min-h-[420px]`}
       >
@@ -305,12 +313,12 @@ export default function VehicleCard({
           {/* IMAGE */}
           <div
             onClick={(e) => {
-              if (!isTierActive) {
+              if (!isCardActive) {
                 e.stopPropagation();
                 e.preventDefault();
               }
             }}
-            className={`relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block ${!isTierActive ? "cursor-default pointer-events-none" : "cursor-pointer"
+            className={`relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block ${!isCardActive ? "cursor-default" : "cursor-pointer"
               }`}
           >
             <div className="relative w-full h-full overflow-hidden rounded-xl">
@@ -364,17 +372,23 @@ export default function VehicleCard({
               {/* ✅ Compare Button */}
               {!isSold && (
                 <button
+                  type="button"
+                  disabled={!isCardActive}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    if (!isCardActive) return;
                     handleCompare();
                   }}
-                  className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all cursor-pointer z-20 
-                    ${isComparing
-                      ? "bg-fourth text-secondary shadow-lg scale-110"
-                      : "bg-black/50 text-white hover:bg-black/70"
+                  className={`absolute bottom-12 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all z-20 
+                    ${!isCardActive
+                      ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
+                      : isComparing
+                        ? "bg-fourth text-secondary shadow-lg scale-110 cursor-pointer"
+                        : "bg-black/50 text-white hover:bg-black/70 cursor-pointer"
                     }`}
-                  title="Add to compare"
+                  title={!isCardActive ? "Unavailable" : "Add to compare"}
+                  aria-disabled={!isCardActive}
                 >
                   <ArrowLeftRight className="w-4 h-4" />
                 </button>
@@ -383,15 +397,24 @@ export default function VehicleCard({
               {/* ✅ Wishlist Button (Bottom-Right of Image) */}
               {!isSold && (
                 <button
+                  type="button"
+                  disabled={!isCardActive}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation(); // prevent card click
+                    if (!isCardActive) return;
                     handleWishlist();
                   }}
-                  className="absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-black/50 transition-all cursor-pointer z-20 hover:bg-black/70"
+                  className={`absolute bottom-2 right-2 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all z-20
+                    ${!isCardActive
+                      ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
+                      : "bg-black/50 text-white hover:bg-black/70 cursor-pointer"
+                    }`}
+                  title={!isCardActive ? "Unavailable" : (isFavorite ? "Remove from wishlist" : "Add to wishlist")}
+                  aria-disabled={!isCardActive}
                 >
                   <Heart
-                    className={`w-5 h-5 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
+                    className={`w-5 h-5 transition-colors ${!isCardActive ? "text-white/30" : isFavorite ? "fill-red-500 text-red-500" : "text-white"}`}
                   />
                 </button>
               )}
@@ -514,26 +537,26 @@ export default function VehicleCard({
 
               <div className="hidden md:block shrink-0">
                 <Button
-                  href={isTierActive ? detailHref : undefined}
+                  href={isCardActive ? detailHref : undefined}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (isTierActive) {
+                    if (isCardActive) {
                       handleAdClick();
                     } else {
                       e.preventDefault();
                     }
                   }}
-                  disabled={!isTierActive}
+                  disabled={!isCardActive}
                   scroll={true}
                   variant="outline"
                   size="sm"
-                  className={`whitespace-nowrap ${!isTierActive
+                  className={`whitespace-nowrap ${!isCardActive
                       ? "!opacity-40 !cursor-not-allowed !bg-white/5 !text-white/40 !border-white/10 pointer-events-none"
                       : ""
                     }`}
-                  title={!isTierActive ? "Unavailable" : "View Details"}
+                  title={!isCardActive ? "Unavailable" : "View Details"}
                 >
-                  {!isTierActive ? "Unavailable" : "View Details"}
+                  {!isCardActive ? "Unavailable" : "View Details"}
                 </Button>
               </div>
             </div>

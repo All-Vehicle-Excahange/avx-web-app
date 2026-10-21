@@ -882,8 +882,8 @@ export async function getServerSideProps(context) {
         totalCount = widened.totalCount;
         initialVehicles = widened.initialVehicles;
         seoPlaceName = initialFilters.cityName || seoPlaceName;
-        delete initialFilters.cityId;
-        initialFilters.cityName = "";
+        // Do NOT delete initialFilters.cityId or wipe initialFilters.cityName,
+        // so the page and filter bar retain the user's selected city accurately.
       }
     }
   } catch (e) {

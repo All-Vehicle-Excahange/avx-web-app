@@ -213,6 +213,17 @@ export default function SearchWithCard({
     budgetMid = (mPrice + mxPrice) / 2;
   }
 
+  const rawMaxPriceParam = searchParams.get("maxPrice") || initialFilters.maxPrice;
+  const rawMinPriceParam = searchParams.get("minPrice") || initialFilters.minPrice;
+  if (rawMaxPriceParam && !isNaN(parseFloat(rawMaxPriceParam))) {
+    mxPrice = parseFloat(rawMaxPriceParam);
+  }
+  if (rawMinPriceParam && !isNaN(parseFloat(rawMinPriceParam))) {
+    mPrice = parseFloat(rawMinPriceParam);
+  }
+
+  const hasBudgetOrPrice = Boolean(budget || rawMaxPriceParam || rawMinPriceParam);
+
   // States
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [activeFilterTab, setActiveFilterTab] = useState("Location");
@@ -220,10 +231,10 @@ export default function SearchWithCard({
     return searchParams.get("reccomInspected") === "true";
   });
 
-  const [minPrice, setMinPrice] = useState(() => (budget ? mPrice : 0));
-  const [maxPrice, setMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
-  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (budget ? mPrice : 0));
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (budget ? mxPrice : fallbackMax));
+  const [minPrice, setMinPrice] = useState(() => (hasBudgetOrPrice ? mPrice : 0));
+  const [maxPrice, setMaxPrice] = useState(() => (hasBudgetOrPrice ? (mxPrice || fallbackMax) : fallbackMax));
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(() => (hasBudgetOrPrice ? mPrice : 0));
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(() => (hasBudgetOrPrice ? (mxPrice || fallbackMax) : fallbackMax));
 
   const MAX = serverMaxPrice || (maxPrice > fallbackMax ? maxPrice : fallbackMax);
   const PRICE_STEP = MAX > 2000000 ? 25000 : (MAX > 500000 ? 10000 : 5000);
@@ -473,6 +484,8 @@ export default function SearchWithCard({
     if (initialFilters.stateId) {
       setSelectedStateId(Number(initialFilters.stateId));
       setSelectedStateName(initialFilters.stateName || "");
+    } else if (initialFilters.stateName) {
+      setSelectedStateName(initialFilters.stateName);
     } else {
       setSelectedStateId(null);
       setSelectedStateName("");
@@ -480,6 +493,8 @@ export default function SearchWithCard({
     if (initialFilters.cityId) {
       setSelectedCityId(Number(initialFilters.cityId));
       setSelectedCityName(initialFilters.cityName || "");
+    } else if (initialFilters.cityName) {
+      setSelectedCityName(initialFilters.cityName);
     } else {
       setSelectedCityId(null);
       setSelectedCityName("");
@@ -492,6 +507,13 @@ export default function SearchWithCard({
       const numMax = parseFloat(max);
       const parsedMin = (parseFloat(min) || 0) * 100000;
       const parsedMax = (!max || max.toLowerCase() === "above") ? (serverMaxPrice || fallbackMax) : numMax * 100000;
+      setMinPrice(parsedMin);
+      setMaxPrice(parsedMax);
+      setDebouncedMinPrice(parsedMin);
+      setDebouncedMaxPrice(parsedMax);
+    } else if (initialFilters.maxPrice) {
+      const parsedMax = parseFloat(initialFilters.maxPrice);
+      const parsedMin = parseFloat(initialFilters.minPrice) || 0;
       setMinPrice(parsedMin);
       setMaxPrice(parsedMax);
       setDebouncedMinPrice(parsedMin);
@@ -1085,8 +1107,8 @@ export default function SearchWithCard({
     }
 
     const qBudget = searchParams.get("budget") || initialFilters.budget;
-    const qMinPrice = searchParams.get("minPrice");
-    const qMaxPrice = searchParams.get("maxPrice");
+    const qMinPrice = searchParams.get("minPrice") || initialFilters.minPrice;
+    const qMaxPrice = searchParams.get("maxPrice") || initialFilters.maxPrice;
     if (!qBudget && !qMinPrice && !qMaxPrice && !searchParams.get("price")) {
       userPriceInteractedRef.current = false;
       setMinPrice(0);
@@ -1103,6 +1125,14 @@ export default function SearchWithCard({
         setDebouncedMinPrice(parsedMin);
         setDebouncedMaxPrice(parsedMax);
       }
+    } else if (qMaxPrice || qMinPrice || searchParams.get("price")) {
+      const parsedMin = qMinPrice ? Number(qMinPrice) : 0;
+      const rawMax = qMaxPrice || searchParams.get("price");
+      const parsedMax = rawMax ? Number(rawMax) : (serverMaxPrice || fallbackMax);
+      setMinPrice(parsedMin);
+      setMaxPrice(parsedMax);
+      setDebouncedMinPrice(parsedMin);
+      setDebouncedMaxPrice(parsedMax);
     }
 
     const qRating = searchParams.get("rating");
@@ -1290,12 +1320,23 @@ export default function SearchWithCard({
       try {
         const res = await getState();
         if (res?.data) {
-          setStates(
-            res.data.map((s) => ({
-              label: s.name,
-              value: s.id,
-            })),
-          );
+          const mapped = res.data.map((s) => ({
+            label: s.name,
+            value: s.id,
+          }));
+          setStates(mapped);
+
+          const targetState = selectedStateName || initialFilters.stateName || "";
+          if (targetState && !selectedStateId) {
+            const found = mapped.find(
+              (s) =>
+                s.label.trim().toLowerCase() === targetState.trim().toLowerCase()
+            );
+            if (found) {
+              setSelectedStateId(Number(found.value));
+              setSelectedStateName(found.label);
+            }
+          }
         }
       } catch (err) {
         console.error("Failed to load states:", err);
@@ -1303,7 +1344,7 @@ export default function SearchWithCard({
     };
 
     fetchStates();
-  }, []);
+  }, [selectedStateName, initialFilters.stateName]);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -1315,12 +1356,25 @@ export default function SearchWithCard({
       try {
         const res = await getCities(selectedStateId);
         if (res?.data) {
-          setCities(
-            res.data.map((c) => ({
-              label: c.name,
-              value: c.id,
-            })),
-          );
+          const mapped = res.data.map((c) => ({
+            label: c.name,
+            value: c.id,
+          }));
+          setCities(mapped);
+
+          const targetCity = selectedCityName || initialFilters.cityName || "";
+          if (targetCity) {
+            const found = mapped.find(
+              (c) =>
+                c.label.trim().toLowerCase() === targetCity.trim().toLowerCase() ||
+                c.label.trim().toLowerCase().includes(targetCity.trim().toLowerCase()) ||
+                targetCity.trim().toLowerCase().includes(c.label.trim().toLowerCase())
+            );
+            if (found && (!selectedCityId || selectedCityId !== found.value)) {
+              setSelectedCityId(Number(found.value));
+              setSelectedCityName(found.label);
+            }
+          }
         }
       } catch (err) {
         console.error("Failed to load cities:", err);
@@ -1329,7 +1383,7 @@ export default function SearchWithCard({
     };
 
     fetchCities();
-  }, [selectedStateId]);
+  }, [selectedStateId, selectedCityName, initialFilters.cityName]);
 
   useEffect(() => {
     const fetchTowns = async () => {

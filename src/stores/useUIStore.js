@@ -16,6 +16,9 @@ export const useUIStore = create(
       isSearchDropdownOpen: false,
       setIsSearchDropdownOpen: (isOpen) => set({ isSearchDropdownOpen: isOpen }),
 
+      isMobileSearchOpen: false,
+      setIsMobileSearchOpen: (isOpen) => set({ isMobileSearchOpen: isOpen }),
+
       isAccountPopupOpen: false,
       setIsAccountPopupOpen: (isOpen) => set({ isAccountPopupOpen: isOpen }),
     }),
