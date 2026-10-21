@@ -15,7 +15,14 @@ export default function Inventory({ id: propId, isActiveTier: propIsActiveTier }
     const id = propId || router.query?.id;
 
     const { data: storeDetails } = useQuery(getStoreFrontByUsernameQuery(id));
-    const isActiveTier = propIsActiveTier !== undefined ? propIsActiveTier : (storeDetails?.isActiveTier !== false);
+    const isStoreActive =
+        storeDetails?.isActiveTier !== false &&
+        storeDetails?.isActive !== false &&
+        storeDetails?.active !== false &&
+        storeDetails?.isTierActive !== false;
+    const isActiveTier = propIsActiveTier !== undefined
+        ? (propIsActiveTier && isStoreActive)
+        : isStoreActive;
 
     const [activeType, setActiveType] = useState("all");
     const [isSortOpen, setIsSortOpen] = useState(false);
@@ -101,22 +108,32 @@ export default function Inventory({ id: propId, isActiveTier: propIsActiveTier }
                 <div className="relative w-56 z-50" ref={sortDropdownRef}>
                     <button
                         type="button"
-                        onClick={() => setIsSortOpen((prev) => !prev)}
-                        className="w-full flex items-center justify-between bg-[#111111] border border-[#2f2e2e] hover:border-[#555] rounded-xl px-3.5 py-2.5 text-sm text-white cursor-pointer transition-colors shadow-sm select-none"
+                        disabled={!isActiveTier}
+                        onClick={() => {
+                            if (!isActiveTier) return;
+                            setIsSortOpen((prev) => !prev);
+                        }}
+                        className={`w-full flex items-center justify-between bg-[#111111] rounded-xl px-3.5 py-2.5 text-sm shadow-sm select-none transition-colors ${
+                            !isActiveTier
+                                ? "border border-[#2f2e2e]/50 text-white/40 cursor-not-allowed opacity-50"
+                                : "border border-[#2f2e2e] hover:border-[#555] text-white cursor-pointer"
+                        }`}
+                        title={!isActiveTier ? "Unavailable" : undefined}
+                        aria-disabled={!isActiveTier}
                     >
                         <div className="flex items-center gap-2 min-w-0">
-                            <ArrowUpDown size={14} className="text-[#aaaaaa] shrink-0" />
+                            <ArrowUpDown size={14} className={!isActiveTier ? "text-[#666666] shrink-0" : "text-[#aaaaaa] shrink-0"} />
                             <span className="font-medium truncate">{selectedSort.label}</span>
                         </div>
                         <ChevronDown
                             size={16}
-                            className={`text-[#aaaaaa] transition-transform duration-200 shrink-0 ml-1 ${
-                                isSortOpen ? "rotate-180" : ""
-                            }`}
+                            className={`transition-transform duration-200 shrink-0 ml-1 ${
+                                !isActiveTier ? "text-[#666666]" : "text-[#aaaaaa]"
+                            } ${isSortOpen ? "rotate-180" : ""}`}
                         />
                     </button>
 
-                    {isSortOpen && (
+                    {isSortOpen && isActiveTier && (
                         <div className="absolute right-0 top-full mt-1.5 w-full bg-[#111111] border border-[#2f2e2e] rounded-xl shadow-2xl z-50 overflow-hidden py-1">
                             {sortOptions.map((option) => {
                                 const isSelected = selectedSort.label === option.label;
@@ -124,6 +141,7 @@ export default function Inventory({ id: propId, isActiveTier: propIsActiveTier }
                                     <div
                                         key={option.label}
                                         onClick={() => {
+                                            if (!isActiveTier) return;
                                             setSelectedSort(option);
                                             setIsSortOpen(false);
                                         }}

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { generateSearchIndex } from '@/scripts/generateSearchIndex';
+import { parseSearchIntent } from '@/lib/searchIntent';
 
 const SEARCH_INDEX_PATH = path.join(process.cwd(), 'public', 'search_index.json');
 
@@ -24,12 +25,14 @@ function searchIndexItems(indexItems, queryStr, limit = 10) {
   const q = queryStr.toLowerCase().trim();
   if (q.length < 2) return [];
 
+  const intent = parseSearchIntent(q);
+
   const stopWords = new Set(['in', 'at', 'near', 'by', 'for', 'of', 'and', 'the', 'to', 'a', 'an']);
   const words = q.split(/\s+/).filter((w) => w && !stopWords.has(w));
-  if (words.length === 0) return [];
+  if (words.length === 0 && !intent.hasIntent) return [];
 
-  const isAskingBikes = /\b(bike|bikes|two[- ]?wheeler|two[- ]?wheelers|motorcycle|scooter)\b/i.test(q);
-  const isAskingCars = /\b(car|cars|four[- ]?wheeler|four[- ]?wheelers|suv|sedan|hatchback)\b/i.test(q);
+  const isAskingBikes = intent.isTwoWheeler || /\b(bike|bikes|two[- ]?wheeler|two[- ]?wheelers|motorcycle|scooter)\b/i.test(q);
+  const isAskingCars = !intent.isTwoWheeler && (intent.vehicleType === 'cars' || /\b(car|cars|four[- ]?wheeler|four[- ]?wheelers|suv|sedan|hatchback)\b/i.test(q));
 
   const scored = [];
 
@@ -46,11 +49,62 @@ function searchIndexItems(indexItems, queryStr, limit = 10) {
 
     // Vehicle type penalty / boost
     if (isAskingBikes) {
-      if (isTwoWheeler) score += 300;
-      else score -= 300;
+      if (isTwoWheeler) score += 400;
+      else score -= 600;
     } else if (isAskingCars) {
-      if (!isTwoWheeler) score += 300;
-      else score -= 300;
+      if (!isTwoWheeler) score += 400;
+      else score -= 600;
+    }
+
+    // City Intent alignment & penalty for wrong cities
+    if (intent.cityName) {
+      const intentCityLower = intent.cityName.toLowerCase();
+      if (city === intentCityLower || title.includes(intentCityLower)) {
+        score += 1500;
+        // Prioritize general city page if no brand or model was requested
+        if (!intent.brandName && !intent.modelName && !maker && !model) {
+          score += 500;
+        }
+      } else if (city) {
+        // Mismatched city - penalize heavily so user doesn't see other cities
+        score -= 2000;
+      }
+    }
+
+    // Brand Intent alignment & penalty for wrong makers
+    if (intent.brandName) {
+      const intentBrandLower = intent.brandName.toLowerCase();
+      if (maker === intentBrandLower || title.includes(intentBrandLower)) {
+        score += 1200;
+      } else if (maker) {
+        score -= 1500;
+      }
+    }
+
+    // Model Intent alignment
+    if (intent.modelName) {
+      const intentModelLower = intent.modelName.toLowerCase();
+      if (model === intentModelLower || title.includes(intentModelLower) || slug.includes(intentModelLower)) {
+        score += 1500;
+      }
+    }
+
+    // Fuel Intent alignment
+    if (intent.fuelType) {
+      const intentFuelLower = intent.fuelType.toLowerCase();
+      const itemFuel = (item.params?.fuelType || '').toLowerCase();
+      if (itemFuel === intentFuelLower || title.includes(intentFuelLower) || slug.includes(intentFuelLower)) {
+        score += 1000;
+      }
+    }
+
+    // Body Type alignment
+    if (intent.bodyType) {
+      const intentBodyLower = intent.bodyType.toLowerCase();
+      const itemBody = (item.params?.bodyType || '').toLowerCase();
+      if (itemBody === intentBodyLower || title.includes(intentBodyLower) || slug.includes(intentBodyLower)) {
+        score += 1000;
+      }
     }
 
     // 1. Direct exact keyword match
@@ -88,17 +142,19 @@ function searchIndexItems(indexItems, queryStr, limit = 10) {
     }
 
     // 4. Token match across fields
-    const allWordsMatched = words.every(
-      (w) =>
-        title.includes(w) ||
-        keywords.some((k) => k.includes(w)) ||
-        maker.includes(w) ||
-        model.includes(w) ||
-        city.includes(w) ||
-        slug.includes(w)
-    );
-    if (allWordsMatched) {
-      score += 400;
+    if (words.length > 0) {
+      const allWordsMatched = words.every(
+        (w) =>
+          title.includes(w) ||
+          keywords.some((k) => k.includes(w)) ||
+          maker.includes(w) ||
+          model.includes(w) ||
+          city.includes(w) ||
+          slug.includes(w)
+      );
+      if (allWordsMatched) {
+        score += 400;
+      }
     }
 
     if (score > 200) {
