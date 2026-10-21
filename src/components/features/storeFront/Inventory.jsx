@@ -1,24 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
-import Select, { components } from "react-select";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getStoreFrontInventoryInfiniteQuery, getStoreFrontByUsernameQuery } from "@/queries/user.queries";
-import { ArrowUpDown, RefreshCw } from "lucide-react";
+import { ArrowUpDown, RefreshCw, ChevronDown } from "lucide-react";
 import Image from "next/image";
 
-export default function Inventory({ isActiveTier: propIsActiveTier }) {
+export default function Inventory({ id: propId, isActiveTier: propIsActiveTier }) {
     const router = useRouter();
-    const id = router.query?.id;
+    const id = propId || router.query?.id;
 
     const { data: storeDetails } = useQuery(getStoreFrontByUsernameQuery(id));
     const isActiveTier = propIsActiveTier !== undefined ? propIsActiveTier : (storeDetails?.isActiveTier !== false);
 
     const [activeType, setActiveType] = useState("all");
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const sortDropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (sortDropdownRef.current && !sortDropdownRef.current.contains(e.target)) {
+                setIsSortOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const vehicleTypes = [
         { id: "all", label: "All" },
@@ -43,25 +54,26 @@ export default function Inventory({ isActiveTier: propIsActiveTier }) {
         isFetchingNextPage,
         fetchNextPage,
         hasNextPage,
-    } = useInfiniteQuery(
-        getStoreFrontInventoryInfiniteQuery({
+    } = useInfiniteQuery({
+        ...getStoreFrontInventoryInfiniteQuery({
             id,
             sortBy: selectedSort.value.sortBy,
             direction: selectedSort.value.direction,
             vehicleType: activeType === "all" ? null : activeType,
             size: 12,
-        })
-    );
+        }),
+        enabled: Boolean(id),
+    });
 
     const vehicles =
         inventoryInfiniteData?.pages?.flatMap((page) => page?.data || []) || [];
 
     const totalElements =
+        inventoryInfiniteData?.pages?.[0]?.pageResponse?.totalElements ??
         inventoryInfiniteData?.pages?.[0]?.pagination?.totalElements ??
         inventoryInfiniteData?.pages?.[0]?.pagination?.totalRecords ??
         inventoryInfiniteData?.pages?.[0]?.pagination?.totalItems ??
         inventoryInfiniteData?.pages?.[0]?.pagination?.total ??
-        inventoryInfiniteData?.pages?.[0]?.pageResponse?.totalElements ??
         vehicles.length;
 
     return (
@@ -85,77 +97,51 @@ export default function Inventory({ isActiveTier: propIsActiveTier }) {
                     ))}
                 </div>
 
-                <div className="w-56 z-999">
-                    <Select
-                        instanceId="inventory-sort"
-                        options={sortOptions}
-                        value={selectedSort}
-                        onChange={(option) => {
-                            setSelectedSort(option);
-                        }}
-                        isSearchable={false}
-                        className="text-sm"
-                        components={{
-                            SingleValue: (props) => (
-                                <components.SingleValue {...props}>
-                                    <div className="flex items-center gap-2">
-                                        <ArrowUpDown size={14} className="text-[#aaaaaa]" />
-                                        <span>{props.data.label}</span>
+                {/* Custom Sort Dropdown */}
+                <div className="relative w-56 z-50" ref={sortDropdownRef}>
+                    <button
+                        type="button"
+                        onClick={() => setIsSortOpen((prev) => !prev)}
+                        className="w-full flex items-center justify-between bg-[#111111] border border-[#2f2e2e] hover:border-[#555] rounded-xl px-3.5 py-2.5 text-sm text-white cursor-pointer transition-colors shadow-sm select-none"
+                    >
+                        <div className="flex items-center gap-2 min-w-0">
+                            <ArrowUpDown size={14} className="text-[#aaaaaa] shrink-0" />
+                            <span className="font-medium truncate">{selectedSort.label}</span>
+                        </div>
+                        <ChevronDown
+                            size={16}
+                            className={`text-[#aaaaaa] transition-transform duration-200 shrink-0 ml-1 ${
+                                isSortOpen ? "rotate-180" : ""
+                            }`}
+                        />
+                    </button>
+
+                    {isSortOpen && (
+                        <div className="absolute right-0 top-full mt-1.5 w-full bg-[#111111] border border-[#2f2e2e] rounded-xl shadow-2xl z-50 overflow-hidden py-1">
+                            {sortOptions.map((option) => {
+                                const isSelected = selectedSort.label === option.label;
+                                return (
+                                    <div
+                                        key={option.label}
+                                        onClick={() => {
+                                            setSelectedSort(option);
+                                            setIsSortOpen(false);
+                                        }}
+                                        className={`px-3.5 py-2.5 text-sm cursor-pointer transition-colors flex items-center justify-between ${
+                                            isSelected
+                                                ? "bg-[#2a2a2a] text-white font-medium"
+                                                : "text-gray-300 hover:bg-[#1f1f1f] hover:text-white"
+                                        }`}
+                                    >
+                                        <span>{option.label}</span>
+                                        {isSelected && (
+                                            <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                                        )}
                                     </div>
-                                </components.SingleValue>
-                            )
-                        }}
-                        styles={{
-                            control: (base, state) => ({
-                                ...base,
-                                backgroundColor: "#111111",
-                                borderColor: state.isFocused ? "#444" : "#2f2e2e",
-                                borderRadius: "12px",
-                                padding: "2px 6px",
-                                boxShadow: "none",
-                                cursor: "pointer",
-                                "&:hover": {
-                                    borderColor: "#555",
-                                },
-                            }),
-                            singleValue: (base) => ({
-                                ...base,
-                                color: "#ffffff",
-                            }),
-                            placeholder: (base) => ({
-                                ...base,
-                                color: "#aaaaaa",
-                            }),
-                            menu: (base) => ({
-                                ...base,
-                                backgroundColor: "#111111",
-                                borderRadius: "12px",
-                                overflow: "hidden",
-                                marginTop: "6px",
-                            }),
-                            option: (base, state) => ({
-                                ...base,
-                                backgroundColor: state.isFocused
-                                    ? "#1f1f1f"
-                                    : state.isSelected
-                                        ? "#2a2a2a"
-                                        : "#111111",
-                                color: "#ffffff",
-                                cursor: "pointer",
-                                padding: "10px 14px",
-                            }),
-                            dropdownIndicator: (base) => ({
-                                ...base,
-                                color: "#ffffff",
-                                "&:hover": {
-                                    color: "#cccccc",
-                                },
-                            }),
-                            indicatorSeparator: () => ({
-                                display: "none",
-                            }),
-                        }}
-                    />
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
 
