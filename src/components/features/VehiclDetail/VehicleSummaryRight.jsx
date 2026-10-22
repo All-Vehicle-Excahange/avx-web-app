@@ -13,7 +13,6 @@ import { getInquiryEligibilityQuery } from "@/queries/vehicle.queries";
 import {
   createVehicleCallLead,
   getVehicleOwnerContact,
-  recordInquiryClick,
 } from "@/services/vehicle.service";
 import DownloadAppPopup from "@/components/ui/DownloadAppPopup";
 import RequestAlredySentPopup from "./RequestAlredySentPopup";
@@ -352,11 +351,6 @@ export default function VehicleSummaryRight({
 
   const openMakeOffer = () => {
     if (hasActiveInquiry || vehicle?.isVehicleSold) return;
-
-    const targetVehicleId = vehicleId || vehicle?.id;
-    if (targetVehicleId) {
-      recordInquiryClick(targetVehicleId);
-    }
 
     const vehicleName =
       `${vehicle?.yearOfMfg || ""} ${vehicle?.makerName || ""} ${vehicle?.modelName || ""} ${vehicle?.variantName || ""}`.trim();

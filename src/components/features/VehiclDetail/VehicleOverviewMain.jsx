@@ -53,6 +53,13 @@ export default function VehicleOverview({ vehicle }) {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
+  const maskRegNumber = (regNum) => {
+    if (!regNum || regNum === "NA") return "NA";
+    const cleaned = String(regNum).trim();
+    if (cleaned.length <= 4) return "XXXX";
+    return cleaned.slice(0, -4) + "XXXX";
+  };
+
   const speedometerImage =
     vehicle?.vehicleImages?.find(
       (img) => img.imageKey?.toLowerCase() === "speedometer",
@@ -157,19 +164,30 @@ export default function VehicleOverview({ vehicle }) {
             {
               icon: <BadgeCheck />,
               label: "Reg number",
-              value:
-                vehicle?.fuelType === "ELECTRIC" ||
-                  vehicle?.fuelType === "EV" ? (
-                  <span className="text-green-600 dark:text-green-400 font-semibold  ">
-                    {vehicle?.vehicleDocument?.regNumber || "NA"}
-                  </span>
-                ) : vehicle?.isCommercialVehicle ? (
-                  <span className="text-yellow-600 dark:text-yellow-400 font-semibold  ">
-                    {vehicle?.vehicleDocument?.regNumber || "NA"}
-                  </span>
-                ) : (
-                  vehicle?.vehicleDocument?.regNumber || "NA"
-                ),
+              value: (() => {
+                const masked = maskRegNumber(vehicle?.vehicleDocument?.regNumber);
+                if (
+                  vehicle?.fuelType === "ELECTRIC" ||
+                  vehicle?.fuelType === "EV"
+                ) {
+                  return (
+                    <span className="text-green-600 dark:text-green-400 font-semibold  ">
+                      {masked}
+                    </span>
+                  );
+                }
+                if (
+                  vehicle?.isCommercialVehicle ||
+                  vehicle?.vehicleDocument?.isCommercialVehicle
+                ) {
+                  return (
+                    <span className="text-yellow-600 dark:text-yellow-400 font-semibold  ">
+                      {masked}
+                    </span>
+                  );
+                }
+                return masked;
+              })(),
             },
             {
               icon: isInsuranceActive ? <ShieldCheck /> : <ShieldX />,
