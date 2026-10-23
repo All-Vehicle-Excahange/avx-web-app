@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import NavrariVehicleCard from "@/components/ui/const/NavrariVehicleCard";
 import Button from "@/components/ui/button";
 import { getOfferVehicles } from "@/services/vehicle.service";
-import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 const NavratriShowcaseSection = () => {
   const [vehicle, setVehicle] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [isLive, setIsLive] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,12 +19,16 @@ const NavratriShowcaseSection = () => {
         };
         const res = await getOfferVehicles(data);
 
-        // Hide the section if the backend explicitly sets isLive to false
+        // If backend explicitly sets isLive to false, keep section hidden
         if (res?.data?.isLive === false) {
+          setIsLive(false);
           setVehicle([]);
           setTotalCount(0);
           return;
         }
+
+        const isCampaignLive = res?.data?.isLive === true;
+        setIsLive(isCampaignLive);
 
         const list = Array.isArray(res?.data?.vehicles)
           ? res.data.vehicles
@@ -35,9 +39,10 @@ const NavratriShowcaseSection = () => {
               : [];
 
         setVehicle(list);
-        setTotalCount(res?.pagination?.totalElements || res?.pagination?.total || list.length);
+        setTotalCount(res?.pageResponse?.totalElements || res?.pagination?.total || list.length);
       } catch (error) {
         console.error("Error fetching Navratri vehicles:", error);
+        setIsLive(false);
         setVehicle([]);
         setTotalCount(0);
       } finally {
@@ -48,7 +53,10 @@ const NavratriShowcaseSection = () => {
     fetchVehicles();
   }, []);
 
-  if (!loading && (!Array.isArray(vehicle) || vehicle.length === 0)) return null;
+  // Do not render anything while loading, or if the campaign is not live (isLive === false), or if there are no vehicles
+  if (loading || !isLive || !Array.isArray(vehicle) || vehicle.length === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full relative overflow-hidden bg-gradient-to-br from-[#140E24] via-[#0F0B1A] to-[#120C20] py-6 md:py-10 my-6 md:my-8 rounded-2xl border border-[#F59E0B]/35 shadow-[0_8px_24px_rgba(245,158,11,0.09),0_10px_20px_rgba(0,0,0,0.6)]">
@@ -98,20 +106,17 @@ const NavratriShowcaseSection = () => {
 
         {/* Vehicle Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
-          {loading
-            ? [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
-            : vehicle.map((car) => (
-              <div
-                key={car.id}
-                className="relative rounded-2xl border border-[#F59E0B]/35 shadow-[0_6px_16px_rgba(0,0,0,0.4),0_2px_14px_rgba(245,158,11,0.05)] hover:border-[#FBBF24] transition-all duration-300 overflow-hidden bg-[#161324] group"
-              >
-                {/* Use the newly styled NavrariVehicleCard */}
-                <div className="relative z-0 h-full w-full">
-                  <NavrariVehicleCard data={car} source="navratri-home" />
-                </div>
+          {vehicle.map((car) => (
+            <div
+              key={car.id}
+              className="relative rounded-2xl border border-[#F59E0B]/35 shadow-[0_6px_16px_rgba(0,0,0,0.4),0_2px_14px_rgba(245,158,11,0.05)] hover:border-[#FBBF24] transition-all duration-300 overflow-hidden bg-[#161324] group"
+            >
+              {/* Use the newly styled NavrariVehicleCard */}
+              <div className="relative z-0 h-full w-full">
+                <NavrariVehicleCard data={car} source="navratri-home" />
               </div>
-            ))
-          }
+            </div>
+          ))}
         </div>
 
         {/* Bottom Button (Same height as Explore All Vehicles) */}
