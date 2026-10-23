@@ -86,8 +86,26 @@ function redirectToCanonical(request, pathname, vehicle) {
   return NextResponse.redirect(canonicalUrl, { status: 301 });
 }
 
+const IOS_STORE =
+  "https://apps.apple.com/in/app/reecomm-used-cars-bikes/id6789502528";
+const ANDROID_STORE =
+  "https://play.google.com/store/apps/details?id=com.reecomm.vehicle.marketplace";
+
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
+
+  // Same device routing as GET /api/v1/website/health/app
+  if (pathname === "/download/app") {
+    const ua = request.headers.get("user-agent") || "";
+    let storeUrl = "https://reecomm.com";
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      storeUrl = IOS_STORE;
+    } else if (/Android/i.test(ua)) {
+      storeUrl = ANDROID_STORE;
+    }
+    return NextResponse.redirect(storeUrl, 302);
+  }
+
   const parts = pathname.split("/").filter(Boolean);
 
   if (parts.length === 0) return NextResponse.next();
@@ -174,5 +192,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/vehicle/details/:path*", "/car/:id*", "/c/:id*"],
+  matcher: ["/download/app", "/vehicle/details/:path*", "/car/:id*", "/c/:id*"],
 };
