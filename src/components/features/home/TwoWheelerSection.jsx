@@ -21,12 +21,6 @@ const vehicleTagMap = {
 
 const categories = [
   {
-    id: "scooters",
-    label: "Scooters",
-    icon: Bike,
-    iconUrl: "/icons/bike_Scooter.svg",
-  },
-  {
     id: "commuter-bikes",
     label: "Commuter Bikes",
     icon: Bike,
@@ -43,6 +37,12 @@ const categories = [
     label: "Cruiser & Retro",
     icon: Bike,
     iconUrl: "/icons/bike_Cruiser & Retro.svg",
+  },
+  {
+    id: "scooters",
+    label: "Scooters",
+    icon: Bike,
+    iconUrl: "/icons/bike_Scooter.svg",
   },
   {
     id: "adventure-touring",
