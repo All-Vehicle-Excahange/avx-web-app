@@ -43,12 +43,7 @@ const categoriesByType = {
     { id: "premium-luxury", label: "Premium & Luxury", icon: Car, iconUrl: "/icons/car_PREMIUM LUXURY.svg" },
   ],
   "2-Wheeler": [
-    {
-      id: "scooters",
-      label: "Scooters",
-      icon: Bike,
-      iconUrl: "/icons/bike_Scooter.svg",
-    },
+
     {
       id: "commuter-bikes",
       label: "Commuter Bikes",
@@ -66,6 +61,12 @@ const categoriesByType = {
       label: "Cruiser & Retro",
       icon: Bike,
       iconUrl: "/icons/bike_Cruiser & Retro.svg",
+    },
+    {
+      id: "scooters",
+      label: "Scooters",
+      icon: Bike,
+      iconUrl: "/icons/bike_Scooter.svg",
     },
     {
       id: "adventure-touring",
