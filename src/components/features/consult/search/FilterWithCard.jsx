@@ -1020,8 +1020,7 @@ export default function FilterWithCard({
             </h2>
 
             <button
-              className="flex items-center gap-2 mb-4 px-2 py-2 underline
-    text-sm font-semibold
+              className="flex items-center gap-2 mb-4 px-2 py-2  text-sm font-semibold
     text-primary/60 hover:text-primary
     transition-all duration-200
     cursor-pointer"
