@@ -120,9 +120,11 @@ function SearchContent({
         />
       </Layout>
 
-      <Layout>
-        <ReletedToSearch data={relatedVehicles} loading={isLoading} />
-      </Layout>
+      {pageResponse?.hasDirectVehicles && (
+        <Layout>
+          <ReletedToSearch data={relatedVehicles} loading={isLoading} />
+        </Layout>
+      )}
       <Layout>
         <AutoConsualt
           limit={4}

@@ -593,7 +593,9 @@ export default function SearchWithCard({
       if (typeof maxPrice === "number") payload.maxPrice = maxPrice;
     }
 
-    if (selectedYear.length > 0) payload.mfgYear = Number(selectedYear[0]);
+    if (selectedYear.length > 0) {
+      payload.mfgYears = selectedYear.map(Number).filter((y) => !isNaN(y));
+    }
 
     if (kmDistance > 0) {
       payload.minKmDriven = 0;
@@ -726,9 +728,21 @@ export default function SearchWithCard({
     [currentPage, sortBy, direction, vehicleType],
   );
 
-  const { data: searchData, isFetching: vehiclesLoading } = useQuery(
+  const { data: searchData, isFetching: vehiclesLoading, isError } = useQuery(
     getFilteredVehiclesQuery(debouncedPayload, queryParams),
   );
+
+  useEffect(() => {
+    if (isError && onPageResponseChange) {
+      onPageResponseChange({
+        totalElements: 0,
+        totalPages: 0,
+        currentPage: 1,
+        currentElements: 0,
+        hasDirectVehicles: false,
+      });
+    }
+  }, [isError, onPageResponseChange]);
 
   const { data: consultantData } = useQuery(
     getFilterConsualtQuery(debouncedConsultPayload),
@@ -855,9 +869,21 @@ export default function SearchWithCard({
   }, [newVehicles, currentPage, topPicksPageResponse?.currentPage]);
 
   const vehicles = accumulatedVehicles;
-  const relatedVehicles = Array.isArray(searchData?.similarVehicles)
-    ? searchData.similarVehicles
-    : (searchData?.similarVehicles?.content || []);
+  const relatedVehicles = useMemo(() => {
+    const similar = Array.isArray(searchData?.similarVehicles)
+      ? searchData.similarVehicles
+      : (searchData?.similarVehicles?.content || []);
+    if (similar.length > 0) return similar;
+
+    const topPicks = Array.isArray(searchData?.topPicksVehicles?.vehicles)
+      ? searchData.topPicksVehicles.vehicles
+      : (Array.isArray(searchData?.topPicksVehicles)
+        ? searchData.topPicksVehicles
+        : (searchData?.topPicksVehicles?.content || []));
+    if (topPicks.length > 0) return topPicks;
+
+    return [];
+  }, [searchData]);
   const priceBasedVehicles = Array.isArray(searchData?.priceMatchVehicles?.vehicles)
     ? searchData.priceMatchVehicles.vehicles
     : Array.isArray(searchData?.priceMatchVehicles)
@@ -943,7 +969,9 @@ export default function SearchWithCard({
       }
     }
 
-    const similar = searchData.similarVehicles || [];
+    const similar = (Array.isArray(searchData?.similarVehicles)
+      ? searchData.similarVehicles
+      : (searchData?.similarVehicles?.content || [])) || [];
     const priceBased = Array.isArray(searchData.priceMatchVehicles?.vehicles)
       ? searchData.priceMatchVehicles.vehicles
       : (Array.isArray(searchData.priceMatchVehicles) ? searchData.priceMatchVehicles : []);
