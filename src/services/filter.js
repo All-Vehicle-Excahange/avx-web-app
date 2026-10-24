@@ -16,7 +16,28 @@ const ENDPOINT = {
   getPopularCityAndState: "/util/address/popular-cities-states",
   SearchCityAndState: "/util/address/search-cities-states",
   getAllCities: "/util/address/cities",
-  getFilterConsualt: "/consultation/filter/based-on-vehicles-filter"
+  getFilterConsualt: "/consultation/filter/based-on-vehicles-filter",
+  getBrandsWithModels: "/search/brands-with-models"
+};
+
+export const getBrandsWithModels = async (data = {}, config = {}) => {
+  try {
+    const { bodyType = "FOUR_WHEELER", search, page = 1, limit = 50, sortDir = "asc" } = data;
+
+    const res = await axiosNodeInstance.get(ENDPOINT.getBrandsWithModels, {
+      params: {
+        bodyType,
+        ...(search ? { search: search.trim() } : {}),
+        page,
+        limit,
+        sortDir,
+      },
+      ...config,
+    });
+    return handleNodeResponse(res);
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getMakersByFuelOrBodyType = async (data) => {

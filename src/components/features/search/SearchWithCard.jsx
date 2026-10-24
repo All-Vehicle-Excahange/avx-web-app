@@ -12,6 +12,7 @@ import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
 import { FilterIcon, MapPin, X, SearchX, RefreshCw } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
+import BrandModelFilter from "./BrandModelFilter";
 import PriceBased from "./PriceBased";
 import ReletedToSearch from "./ReletedToSearch";
 import CustomSelect from "@/components/ui/custom-select";
@@ -266,7 +267,11 @@ export default function SearchWithCard({
     let updated = false;
     const resolved = selectedBrands.map((val) => {
       if (isNaN(val)) {
-        const match = brands.find((b) => b.label?.toLowerCase() === String(val).toLowerCase());
+        const cleanVal = String(val).toLowerCase().replace(/[\s-]+/g, "");
+        const match = brands.find((b) => {
+          const cleanLabel = b.label?.toLowerCase().replace(/[\s-]+/g, "");
+          return cleanLabel === cleanVal;
+        });
         if (match) {
           updated = true;
           return String(match.value);
@@ -1515,6 +1520,24 @@ export default function SearchWithCard({
     setSelectedBrands(values);
   };
 
+  const handleBrandsLoaded = useCallback((newBrands) => {
+    setBrands((prev) => {
+      const existing = new Set(prev.map((b) => b.value));
+      const toAdd = newBrands.filter((b) => !existing.has(b.value));
+      if (toAdd.length === 0) return prev;
+      return [...prev, ...toAdd];
+    });
+  }, []);
+
+  const handleModelsLoaded = useCallback((newModels) => {
+    setModels((prev) => {
+      const existing = new Set(prev.map((m) => m.value));
+      const toAdd = newModels.filter((m) => !existing.has(m.value));
+      if (toAdd.length === 0) return prev;
+      return [...prev, ...toAdd];
+    });
+  }, []);
+
   // ── Load Models with search ──
   const prevModelParamsRef = useRef("");
   const loadModels = async (page = 1, searchTerm = modelSearch) => {
@@ -2324,7 +2347,7 @@ export default function SearchWithCard({
             </h2>
 
             <button
-              className="flex items-center gap-2 mb-4 px-2 py-2 underline
+              className="flex items-center gap-2 mb-4 px-2 py-2 
     text-sm font-semibold
     text-primary/60 hover:text-primary
     transition-all duration-200
@@ -2503,46 +2526,23 @@ export default function SearchWithCard({
               </FilterSection>
             </div>
 
-            <FilterSection title="Brand" selectedCount={selectedBrands.length}>
-              <ChipGroup
-                title=""
-                items={brands}
-                selected={selectedBrands}
-                showMore={true}
-                searchable={true}
-                serverPagination={true}
-                hasMore={brandHasMore}
-                onLoadMore={handleLoadMoreBrands}
-                onChange={handleBrandChange}
-                searchValue={brandSearch}
-                onSearchChange={(val) => {
-                  setBrandSearch(val);
-                }}
-                isLoading={brandLoading}
-                allowMultiple={true}
-              />
-            </FilterSection>
-
-            <FilterSection title="Model" selectedCount={selectedModels.length}>
-              <ChipGroup
-                title=""
-                items={models}
-                selected={selectedModels}
-                showMore={true}
-                searchable={true}
-                serverPagination={true}
-                hasMore={modelHasMore}
-                onLoadMore={handleLoadMoreModels}
-                onChange={handleModelChange}
-                searchValue={modelSearch}
-                onSearchChange={setModelSearch}
-                isLoading={modelLoading}
-                allowMultiple={true}
-                customEmptyMessage={
-                  selectedBrands.length === 0
-                    ? "Please select a brand first"
-                    : undefined
-                }
+            <FilterSection
+              title="Brand & Model"
+              selectedCount={selectedBrands.length + selectedModels.length}
+              defaultOpen={true}
+              onClear={() => {
+                setSelectedBrands([]);
+                setSelectedModels([]);
+              }}
+            >
+              <BrandModelFilter
+                selectedBrands={selectedBrands}
+                onBrandChange={setSelectedBrands}
+                selectedModels={selectedModels}
+                onModelChange={setSelectedModels}
+                apiBodyType={apiBodyType}
+                onBrandsLoaded={handleBrandsLoaded}
+                onModelsLoaded={handleModelsLoaded}
               />
             </FilterSection>
 
@@ -2585,7 +2585,11 @@ export default function SearchWithCard({
               />
             </FilterSection>
 
-            <FilterSection title="Year" selectedCount={selectedYear.length}>
+            <FilterSection
+              title="Year"
+              selectedCount={selectedYear.length}
+              onClear={() => handleYearChange([])}
+            >
               <ChipGroup
                 title=""
                 items={years}
@@ -3062,8 +3066,7 @@ export default function SearchWithCard({
                   : 0,
               },
               { name: "Budget", count: 0 },
-              { name: "Brand", count: selectedBrands.length },
-              { name: "Model", count: selectedModels.length },
+              { name: "Brand & Model", count: selectedBrands.length + selectedModels.length },
               { name: "Category", count: selectedCategories.length },
               { name: "Fuel Type", count: selectedFuelTypes.length },
               { name: "Transmission", count: selectedTransmissionTypes.length },
@@ -3248,43 +3251,17 @@ export default function SearchWithCard({
               </div>
             )}
 
-            {/* ── BRAND ── */}
-            {activeFilterTab === "Brand" && (
-              <ChipGroup
-                title=""
-                items={brands}
-                selected={selectedBrands}
-                showMore={true}
-                searchable={true}
-                serverPagination={true}
-                hasMore={brandHasMore}
-                onLoadMore={handleLoadMoreBrands}
-                onChange={handleBrandChange}
-                searchValue={brandSearch}
-                onSearchChange={(val) => setBrandSearch(val)}
-                isLoading={brandLoading}
-                allowMultiple={true}
-                variant="outlineDark"
-              />
-            )}
-
-            {/* ── MODEL ── */}
-            {activeFilterTab === "Model" && (
-              <ChipGroup
-                title=""
-                items={models}
-                selected={selectedModels}
-                showMore={true}
-                searchable={true}
-                serverPagination={true}
-                hasMore={modelHasMore}
-                onLoadMore={handleLoadMoreModels}
-                onChange={handleModelChange}
-                searchValue={modelSearch}
-                onSearchChange={setModelSearch}
-                isLoading={modelLoading}
-                allowMultiple={true}
-                variant="outlineDark"
+            {/* ── BRAND & MODEL ── */}
+            {(activeFilterTab === "Brand & Model" || activeFilterTab === "Brand" || activeFilterTab === "Model") && (
+              <BrandModelFilter
+                selectedBrands={selectedBrands}
+                onBrandChange={setSelectedBrands}
+                selectedModels={selectedModels}
+                onModelChange={setSelectedModels}
+                apiBodyType={apiBodyType}
+                isMobile={true}
+                onBrandsLoaded={handleBrandsLoaded}
+                onModelsLoaded={handleModelsLoaded}
               />
             )}
 

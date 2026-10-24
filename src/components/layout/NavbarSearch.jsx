@@ -608,11 +608,64 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     );
   }, [apiSuggestResponse]);
 
+  // Separate Vehicles and Consultations sections
+  const { vehicleSections, consultationSections } = useMemo(() => {
+    const vSecs = [];
+    const cSecs = [];
+
+    apiSections.forEach((sec) => {
+      const isConsultSection =
+        sec.icon === "CONSULTATION" ||
+        sec.sectionTitle?.toLowerCase().includes("consult");
+
+      const consultItems = [];
+      const vehicleItems = [];
+
+      (sec.items || []).forEach((item) => {
+        if (
+          item.type === "CONSULTATION" ||
+          item.type === "consultant" ||
+          (isConsultSection && item.type !== "VEHICLE")
+        ) {
+          consultItems.push(item);
+        } else {
+          vehicleItems.push(item);
+        }
+      });
+
+      if (vehicleItems.length > 0) {
+        vSecs.push({
+          ...sec,
+          items: vehicleItems,
+        });
+      }
+
+      if (consultItems.length > 0) {
+        cSecs.push({
+          ...sec,
+          items: consultItems,
+        });
+      }
+    });
+
+    return { vehicleSections: vSecs, consultationSections: cSecs };
+  }, [apiSections]);
+
   const totalApiItemsCount = useMemo(() => {
     return apiSections.reduce((acc, sec) => acc + (sec.items?.length || 0), 0);
   }, [apiSections]);
 
+  const totalVehiclesCount = useMemo(() => {
+    return vehicleSections.reduce((acc, sec) => acc + (sec.items?.length || 0), 0);
+  }, [vehicleSections]);
+
+  const totalConsultationsCount = useMemo(() => {
+    return consultationSections.reduce((acc, sec) => acc + (sec.items?.length || 0), 0);
+  }, [consultationSections]);
+
   const hasApiData = totalApiItemsCount > 0;
+  const hasConsultations = consultationSections.length > 0;
+  const hasVehicles = vehicleSections.length > 0;
 
   const isSearchingSuggestions =
     Boolean(searchQuery.trim().length >= 1) &&
@@ -630,9 +683,18 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
   const hasSuggestionsOrLoading = hasSuggestions || isJsonSuggestionsLoading;
   const hasApiOrLoading = hasApiData || isSearchingSuggestions;
 
+  const isThreeColumnLayout = Boolean(
+    searchQuery.trim() &&
+    hasSuggestionsOrLoading &&
+    (hasVehicles || isSearchingSuggestions) &&
+    hasConsultations
+  );
+
   const isTwoColumnLayout = !searchQuery.trim()
     ? true
-    : hasSuggestionsOrLoading && hasApiOrLoading;
+    : isThreeColumnLayout
+      ? false
+      : (hasSuggestionsOrLoading && hasApiOrLoading) || (hasVehicles && hasConsultations);
 
   // Flattened items for keyboard arrow navigation
   const flatSuggestionItems = useMemo(() => {
@@ -1023,7 +1085,180 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     </div>
   );
 
-  // ── Render API Live Results Column Content ──
+  // ── Render Shared API Item Row ──
+  const renderApiItemRow = (item, itemIdx) => {
+    const isSelected =
+      selectedIndex >= 0 &&
+      flatSuggestionItems[selectedIndex]?.id === item.id;
+
+    return (
+      <div
+        key={item.id || `api-item-${itemIdx}`}
+        onClick={() => handleItemClick(item)}
+        className={`group flex items-center justify-between p-2.5 rounded-2xl border transition-all cursor-pointer shadow-xs ${
+          isSelected
+            ? "bg-gray-100 border-gray-200 shadow-sm"
+            : "bg-white hover:bg-gray-50/80 border-gray-100 hover:border-gray-200"
+        }`}
+      >
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          {item.thumbnailUrl ? (
+            <img
+              src={item.thumbnailUrl}
+              alt={item.title}
+              className={`w-11 h-11 object-cover border border-gray-100 shrink-0 ${
+                item.type === "CONSULTATION" ? "rounded-full" : "rounded-xl"
+              }`}
+            />
+          ) : (
+            <div
+              className={`w-11 h-11 bg-gray-100 flex items-center justify-center shrink-0 ${
+                item.type === "CONSULTATION" ? "rounded-full" : "rounded-xl"
+              }`}
+            >
+              {item.type === "CONSULTATION" ? (
+                <User className="w-5 h-5 text-fourth" />
+              ) : (
+                <CarFront className="w-5 h-5 text-gray-400" />
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-col min-w-0 flex-1 pr-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-semibold text-gray-900 text-[12.5px] transition-colors truncate">
+                {item.title}
+              </span>
+              {formatSearchBadge(item.badge, item.type === "CONSULTATION") && (
+                <span className="text-[9px] font-semibold text-fourth tracking-wider bg-fourth/10 px-1.5 py-0.5 rounded-full shrink-0">
+                  {formatSearchBadge(item.badge, item.type === "CONSULTATION")}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1.5 text-[11px] text-gray-500 mt-0.5 truncate">
+              {item.subtitle && <span>{formatSearchSubtitle(item.subtitle)}</span>}
+              {item.price && (
+                <span className="font-bold text-gray-900">
+                  • ₹{Number(item.price).toLocaleString("en-IN")}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 shrink-0 pl-1">
+          <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors whitespace-nowrap">
+            {item.type === "CONSULTATION" ? "View Store" : "Explore"}
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
+        </div>
+      </div>
+    );
+  };
+
+  // ── Render Vehicles Column Content ──
+  const renderVehiclesContent = () => (
+    <div className="flex flex-col w-full h-full bg-white overscroll-contain">
+      {/* Header */}
+      <div className="p-3.5 pb-2.5 border-b border-gray-100/80 bg-white flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 text-fourth font-bold">
+          <CarFront className="w-4 h-4 text-fourth" />
+          <span className="text-[12px] uppercase tracking-wider">
+            Vehicles & Live Results
+          </span>
+        </div>
+        {isSearchingSuggestions ? (
+          <div className="flex items-center gap-1.5 text-[11px] text-fourth font-medium">
+            <div className="w-3 h-3 border-2 border-fourth border-t-transparent rounded-full animate-spin" />
+            <span>Searching...</span>
+          </div>
+        ) : totalVehiclesCount > 0 ? (
+          <span className="text-[11px] font-medium text-gray-400">
+            {totalVehiclesCount} {totalVehiclesCount === 1 ? "result" : "results"}
+          </span>
+        ) : null}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-3 space-y-2.5 overscroll-contain">
+        {isSearchingSuggestions && vehicleSections.length === 0 ? (
+          <div className="space-y-2.5">
+            {[...Array(4)].map((_, idx) => (
+              <div
+                key={`api-v-skeleton-${idx}`}
+                className="flex items-center justify-between p-2.5 rounded-2xl border border-gray-100 bg-white animate-pulse"
+              >
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <div className="w-11 h-11 rounded-xl bg-gray-200 shrink-0" />
+                  <div className="flex flex-col gap-2 flex-1 min-w-0">
+                    <div className="h-3.5 bg-gray-200 rounded-full w-3/4" />
+                    <div className="h-2.5 bg-gray-100 rounded-full w-1/2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : vehicleSections.length > 0 ? (
+          vehicleSections.map((sec, secIdx) => (
+            <div key={`v-sec-${secIdx}`} className="space-y-2">
+              {sec.items.map((item, itemIdx) => renderApiItemRow(item, itemIdx))}
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-6 text-center text-gray-400">
+            <CarFront className="w-8 h-8 mx-auto mb-2 opacity-25 text-gray-400" />
+            <p className="text-[12px] font-semibold text-gray-600">
+              No vehicles found
+            </p>
+            <p className="text-[11px] text-gray-400 mt-0.5 max-w-[220px]">
+              Select a search suggestion or press Enter to search
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── Render Consultations Column Content ──
+  const renderConsultationsContent = () => (
+    <div className="flex flex-col w-full h-full bg-white overscroll-contain">
+      {/* Header */}
+      <div className="p-3.5 pb-2.5 border-b border-gray-100/80 bg-white flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 text-fourth font-bold">
+          <User className="w-4 h-4 text-fourth" />
+          <span className="text-[12px] uppercase tracking-wider">
+            Consultations
+          </span>
+        </div>
+        {totalConsultationsCount > 0 && (
+          <span className="text-[11px] font-medium text-gray-400">
+            {totalConsultationsCount} {totalConsultationsCount === 1 ? "store" : "stores"}
+          </span>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-3 space-y-2.5 overscroll-contain">
+        {consultationSections.length > 0 ? (
+          consultationSections.map((sec, secIdx) => (
+            <div key={`c-sec-${secIdx}`} className="space-y-2">
+              {sec.items.map((item, itemIdx) => renderApiItemRow(item, itemIdx))}
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center p-6 text-center text-gray-400">
+            <User className="w-8 h-8 mx-auto mb-2 opacity-25 text-gray-400" />
+            <p className="text-[12px] font-semibold text-gray-600">
+              No consultations found
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── Render API Live Results Column Content (Fallback for 2-column) ──
   const renderApiResultsContent = () => (
     <div className="flex flex-col w-full h-full bg-white overscroll-contain">
       {/* Header */}
@@ -1101,81 +1336,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
               )}
 
               <div className="space-y-2">
-                {sec.items.map((item, itemIdx) => {
-                  const isSelected =
-                    selectedIndex >= 0 &&
-                    flatSuggestionItems[selectedIndex]?.id === item.id;
-
-                  return (
-                    <div
-                      key={item.id || `api-item-${itemIdx}`}
-                      onClick={() => handleItemClick(item)}
-                      className={`group flex items-center justify-between p-2.5 rounded-2xl border transition-all cursor-pointer shadow-xs ${isSelected
-                        ? "bg-gray-100 border-gray-200 shadow-sm"
-                        : "bg-white hover:bg-gray-50/80 border-gray-100 hover:border-gray-200"
-                        }`}
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                        {item.thumbnailUrl ? (
-                          <img
-                            src={item.thumbnailUrl}
-                            alt={item.title}
-                            className="w-12 h-12 object-cover rounded-xl border border-gray-100 shrink-0"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-                            {item.type === "CONSULTATION" ? (
-                              <User className="w-5 h-5 text-fourth" />
-                            ) : (
-                              <CarFront className="w-5 h-5 text-gray-400" />
-                            )}
-                          </div>
-                        )}
-
-                        <div className="flex flex-col min-w-0 flex-1 pr-2">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-gray-900 text-[13px] transition-colors truncate">
-                              {item.title}
-                            </span>
-                            {formatSearchBadge(
-                              item.badge,
-                              item.type === "CONSULTATION"
-                            ) && (
-                                <span className="text-[9.5px] font-semibold text-fourth tracking-wider bg-fourth/10 px-2 py-0.5 rounded-full shrink-0">
-                                  {formatSearchBadge(
-                                    item.badge,
-                                    item.type === "CONSULTATION"
-                                  )}
-                                </span>
-                              )}
-                          </div>
-
-                          <div className="flex items-center gap-1.5 text-[11px] text-gray-500 mt-0.5 truncate">
-                            {item.subtitle && (
-                              <span>
-                                {formatSearchSubtitle(item.subtitle)}
-                              </span>
-                            )}
-                            {item.price && (
-                              <span className="font-bold text-gray-900">
-                                • ₹{Number(item.price).toLocaleString("en-IN")}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 shrink-0 pl-2">
-                        <span className="text-[11px] text-gray-400 font-medium group-hover:text-gray-600 transition-colors">
-                          {item.type === "CONSULTATION"
-                            ? "View Store"
-                            : "Explore"}
-                        </span>
-                        <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-600 transition-colors" />
-                      </div>
-                    </div>
-                  );
-                })}
+                {sec.items.map((item, itemIdx) => renderApiItemRow(item, itemIdx))}
               </div>
             </div>
           ))
@@ -1289,14 +1450,21 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         <div
           className={`absolute top-[120%] left-1/2 -translate-x-1/2 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-gray-100 rounded-3xl overflow-hidden overscroll-contain transition-all duration-300 origin-top ${!searchQuery
             ? "h-auto max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)]"
-            : "h-[480px] max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)]"
+            : "h-[490px] max-h-[calc(100dvh-85px)] md:max-h-[calc(100vh-115px)]"
             } ${showDropdown
               ? "opacity-100 scale-y-100 translate-y-0"
               : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+            } ${isThreeColumnLayout
+              ? "w-[min(calc(100vw-36px),1220px)] 2xl:w-[min(calc(100vw-60px),1380px)]"
+              : ""
             }`}
           style={{
-            width: isTwoColumnLayout ? "1000px" : "560px",
-            maxWidth: "95vw",
+            width: isThreeColumnLayout
+              ? undefined
+              : isTwoColumnLayout
+                ? "1000px"
+                : "560px",
+            maxWidth: isThreeColumnLayout ? undefined : "95vw",
           }}
         >
           {!searchQuery ? (
@@ -1803,6 +1971,27 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          ) : isThreeColumnLayout ? (
+            /* Three-Column Search State:
+               Column 1 = JSON Suggestions (compact width on 1280px, larger on big screens)
+               Column 2 = Live API Vehicles (flexible middle width)
+               Column 3 = Consultations (small width on 1280px, larger on big screens) */
+            <div className="flex flex-col md:flex-row w-full h-full bg-white overscroll-contain divide-x divide-gray-100">
+              {/* Left Column - JSON Suggestions */}
+              <div className="w-full md:w-[280px] xl:w-[300px] 2xl:w-[340px] flex flex-col shrink-0 h-full overflow-hidden bg-gray-50/40 overscroll-contain">
+                {renderSuggestionsContent()}
+              </div>
+
+              {/* Middle Column - API Live Vehicles */}
+              <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-white overscroll-contain">
+                {renderVehiclesContent()}
+              </div>
+
+              {/* Right Column - Consultations */}
+              <div className="w-full md:w-[300px] xl:w-[320px] 2xl:w-[420px] flex flex-col shrink-0 h-full overflow-hidden bg-white overscroll-contain">
+                {renderConsultationsContent()}
               </div>
             </div>
           ) : isTwoColumnLayout ? (
