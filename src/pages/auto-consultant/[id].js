@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import StoreFrontHeroSkeleton from "@/components/ui/skeleton/StoreFrontHeroSkeleton";
 import axios from "axios";
+import { getClientType } from "@/lib/clientType";
 import {
   buildStorefrontSeo,
   buildStorefrontFaq,
@@ -30,7 +31,13 @@ async function fetchStoreFrontServer(username) {
   try {
     const res = await axios.get(
       `${apiBase()}/consultation/detail-page/by-username/${encodeURIComponent(username)}`,
-      { timeout: 12000, headers: { Accept: "application/json" } },
+      {
+        timeout: 12000,
+        headers: {
+          Accept: "application/json",
+          "X-Client-Type": getClientType(),
+        },
+      },
     );
     return res.data?.data || res.data || null;
   } catch (e) {
@@ -45,7 +52,10 @@ async function fetchStorefrontInventoryServer(username) {
       `${apiBase()}/consultation/detail-page/inventory/${encodeURIComponent(username)}`,
       {
         timeout: 12000,
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          "X-Client-Type": getClientType(),
+        },
         params: {
           pageNo: 1,
           size: 10,

@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { queryClient } from "@/lib/queryClient";
 import { sendDeviceInfo } from "@/lib/device.util";
 import { identifyUser, resetUser } from "@/lib/amplitude";
+import { getClientType } from "@/lib/clientType";
 
 export const useAuthStore = create((set) => ({
   //  AUTH DATA
@@ -204,7 +205,12 @@ export const useAuthStore = create((set) => ({
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+            headers: {
+              "X-Client-Type": getClientType(),
+            },
+          }
         );
 
         if (res.data?.data?.accessToken) {

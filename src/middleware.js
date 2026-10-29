@@ -11,6 +11,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { getClientType } from "@/lib/clientType";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -63,12 +64,15 @@ function buildVehicleSlug(v) {
     .replace(/^-|-$/g, "");
 }
 
-async function fetchVehicle(id) {
+async function fetchVehicle(id, clientType) {
   const backendUrl = process.env.BACKEND_URL || "https://api.reecomm.online";
   const res = await fetch(
     `${backendUrl}/api/v1/website/vehicle/detail-page/${id}`,
     {
-      headers: { Accept: "application/json" },
+      headers: {
+        Accept: "application/json",
+        "X-Client-Type": clientType || "WEB-DESKTOP",
+      },
       signal: AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined,
     }
   );
@@ -93,6 +97,8 @@ const ANDROID_STORE =
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
+  const ua = request.headers.get("user-agent") || "";
+  const clientType = getClientType(ua);
 
   // Same device routing as GET /api/v1/website/health/app
   if (pathname === "/download/app") {
@@ -120,7 +126,7 @@ export async function middleware(request) {
 
     if (UUID_REGEX.test(id) || id.length > 5) {
       try {
-        const vehicle = await fetchVehicle(id);
+        const vehicle = await fetchVehicle(id, clientType);
         if (vehicle?.id) {
           const slugCanon = buildVehicleSlug(vehicle) || "vehicle";
           const canonicalPath = `/vehicle/details/${slugCanon}/${vehicle.id}`;
@@ -166,7 +172,7 @@ export async function middleware(request) {
 
     if (UUID_REGEX.test(maybeId)) {
       try {
-        const vehicle = await fetchVehicle(maybeId);
+        const vehicle = await fetchVehicle(maybeId, clientType);
         if (vehicle?.id) {
           const redirect = redirectToCanonical(request, pathname, vehicle);
           if (redirect) return redirect;

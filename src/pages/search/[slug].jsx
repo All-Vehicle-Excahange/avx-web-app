@@ -29,6 +29,7 @@ import {
   MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
 import { resolveSlugQueryRedirect } from "@/lib/seo";
+import { getClientType } from "@/lib/clientType";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
@@ -369,7 +370,7 @@ function loadRelatedBlogLinks(slug, placeSlug) {
   }
 }
 
-async function fetchLandingListings(apiUrl, filterPath, body) {
+async function fetchLandingListings(apiUrl, filterPath, body, clientType) {
   const listRes = await fetch(
     `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`,
     {
@@ -377,6 +378,7 @@ async function fetchLandingListings(apiUrl, filterPath, body) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "X-Client-Type": clientType || getClientType(),
       },
       body: JSON.stringify(body),
     },
@@ -434,6 +436,7 @@ async function fetchLandingListings(apiUrl, filterPath, body) {
 
 export async function getServerSideProps(context) {
   const { params, query } = context;
+  const clientType = getClientType(context?.req?.headers?.["user-agent"]);
   const slug = params?.slug;
 
   if (!slug || typeof slug !== "string") {
@@ -630,7 +633,12 @@ export async function getServerSideProps(context) {
 
     try {
       const cityRes = await fetch(
-        `${apiUrl}/util/address/search-cities-states?searchText=${encodeURIComponent(searchLocation)}`
+        `${apiUrl}/util/address/search-cities-states?searchText=${encodeURIComponent(searchLocation)}`,
+        {
+          headers: {
+            "X-Client-Type": clientType,
+          },
+        }
       );
       if (cityRes.ok) {
         const cityJson = await cityRes.json();
@@ -715,7 +723,12 @@ export async function getServerSideProps(context) {
             const bodyTypeParam =
               initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
             const modelRes = await fetch(
-              `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&makerId=${id}&bodyType=${bodyTypeParam}`
+              `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&makerId=${id}&bodyType=${bodyTypeParam}`,
+              {
+                headers: {
+                  "X-Client-Type": clientType,
+                },
+              }
             );
             if (modelRes.ok) {
               const modelJson = await modelRes.json();
@@ -772,7 +785,12 @@ export async function getServerSideProps(context) {
         const bodyTypeParam =
           initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
         const modelRes = await fetch(
-          `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&bodyType=${bodyTypeParam}`
+          `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&bodyType=${bodyTypeParam}`,
+          {
+            headers: {
+              "X-Client-Type": clientType,
+            },
+          }
         );
         if (modelRes.ok) {
           const modelJson = await modelRes.json();
@@ -867,7 +885,7 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const listed = await fetchLandingListings(apiUrl, filterPath, body);
+    const listed = await fetchLandingListings(apiUrl, filterPath, body, clientType);
     totalCount = listed.totalCount;
     initialVehicles = listed.initialVehicles;
 
@@ -877,7 +895,7 @@ export async function getServerSideProps(context) {
     if (totalCount < 1 && body.cityId && body.stateId && hasBrandOrModel) {
       const stateBody = { ...body };
       delete stateBody.cityId;
-      const widened = await fetchLandingListings(apiUrl, filterPath, stateBody);
+      const widened = await fetchLandingListings(apiUrl, filterPath, stateBody, clientType);
       if (widened.totalCount > 0) {
         totalCount = widened.totalCount;
         initialVehicles = widened.initialVehicles;
