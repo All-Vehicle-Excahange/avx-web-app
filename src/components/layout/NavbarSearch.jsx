@@ -40,6 +40,7 @@ import { resolveVehicleImageSrc, VEHICLE_IMAGE_FALLBACK } from "@/lib/vehicleIma
 import { generateVehicleUrl } from "@/lib/helper";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { event as metaEvent } from "@/lib/fpixel";
+import { getClientType } from "@/lib/clientType";
 import { trackSearchResults } from "@/lib/gtag";
 import { trackSearchSubmitted } from "@/lib/amplitude";
 import { resolveSearchSlugRedirect } from "@/lib/searchLandingSeo";
@@ -376,7 +377,12 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       if (!debouncedQuery || debouncedQuery.trim().length < 2) return [];
       try {
         const res = await fetch(
-          `/api/v1/website/search?query=${encodeURIComponent(debouncedQuery.trim())}`
+          `/api/v1/website/search?query=${encodeURIComponent(debouncedQuery.trim())}`,
+          {
+            headers: {
+              "X-Client-Type": getClientType(),
+            },
+          }
         );
         if (!res.ok) return [];
         const json = await res.json();

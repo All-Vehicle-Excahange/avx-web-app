@@ -14,6 +14,7 @@ import {
   generateDynamicMetaDescription,
   generateVehicleSlug,
 } from "@/lib/helper";
+import { getClientType } from "@/lib/clientType";
 
 function Index({ seo }) {
   const router = useRouter();
@@ -367,7 +368,10 @@ export async function getStaticProps(context) {
       const res = await fetch(
         `${backendUrl}/api/v1/website/vehicle/detail-page/${id}`,
         {
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+            "X-Client-Type": getClientType(context?.req?.headers?.["user-agent"]),
+          },
           // 4-second timeout — if the API is slow, fall back gracefully
           signal: AbortSignal.timeout(4000),
         },

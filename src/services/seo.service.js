@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getClientType } from "@/lib/clientType";
 
 /**
  * Server-side only SEO service.
@@ -24,8 +25,17 @@ const BASE_URL = getBackendUrl();
 
 const seoAxios = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    "X-Client-Type": getClientType(),
+  },
   timeout: 15000,
+});
+
+seoAxios.interceptors.request.use((config) => {
+  config.headers = config.headers || {};
+  config.headers["X-Client-Type"] = getClientType();
+  return config;
 });
 
 const ENDPOINT = {

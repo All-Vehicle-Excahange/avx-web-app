@@ -3,11 +3,13 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { setupGuestUser } from "@/lib/guest.util";
+import { getClientType } from "@/lib/clientType";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
+    "X-Client-Type": getClientType(),
   },
   withCredentials: true,
 });
@@ -16,12 +18,16 @@ export const axiosNodeInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_NODE_API_URL,
   headers: {
     "Content-Type": "application/json",
+    "X-Client-Type": getClientType(),
   },
   withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
   async (config) => {
+    config.headers = config.headers || {};
+    config.headers["X-Client-Type"] = getClientType();
+
     try {
       const guestId = await setupGuestUser();
 
@@ -30,6 +36,25 @@ axiosInstance.interceptors.request.use(
       }
     } catch (err) {
       console.error("Failed to attach guestId:", err);
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+axiosNodeInstance.interceptors.request.use(
+  async (config) => {
+    config.headers = config.headers || {};
+    config.headers["X-Client-Type"] = getClientType();
+
+    try {
+      const guestId = await setupGuestUser();
+      if (guestId) {
+        config.headers["X-Guest-Id"] = guestId;
+      }
+    } catch (err) {
+      console.error("Failed to attach guestId to node instance:", err);
     }
 
     return config;
@@ -104,7 +129,12 @@ axiosInstance.interceptors.response.use(
             .post(
               `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
               {},
-              { withCredentials: true },
+              {
+                withCredentials: true,
+                headers: {
+                  "X-Client-Type": getClientType(),
+                },
+              },
             )
             .then((res) => {
               refreshPromise = null;
@@ -216,8 +246,13 @@ export const refreshUserToken = async () => {
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-      {},
-      { withCredentials: true },
+              {},
+              {
+                withCredentials: true,
+                headers: {
+                  "X-Client-Type": getClientType(),
+                },
+              },
     );
     if (res.data?.data?.accessToken) {
       const currentUser = useAuthStore.getState().user || {};

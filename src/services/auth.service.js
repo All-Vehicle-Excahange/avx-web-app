@@ -1,4 +1,5 @@
 import axiosInstance, { handleResponse } from "@/lib/axiosInstance";
+import { getClientType } from "@/lib/clientType";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const ENDPOINT = {
@@ -74,7 +75,16 @@ export const login = async ({ phoneNumber, countryCode, otp }) => {
 export const refreshToken = async () => {
   // Use plain axios to avoid triggering the interceptor if this fails (e.g. invalid cookie)
   const axios = require("axios").default;
-  const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}${ENDPOINT.refresh}`, {}, { withCredentials: true });
+  const res = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}${ENDPOINT.refresh}`,
+    {},
+    {
+      withCredentials: true,
+      headers: {
+        "X-Client-Type": getClientType(),
+      },
+    }
+  );
   return res.data;
 };
 
