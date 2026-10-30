@@ -29,7 +29,7 @@ import {
   getFilteredVehicles,
   getFilterConsualt,
 } from "@/services/filter";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, keepPreviousData } from "@tanstack/react-query";
 
 const shouldRetry = (failureCount, error) => {
   if (error?.response?.status === 404 || error?.status === 404) {
@@ -422,6 +422,7 @@ export const getFilteredVehiclesQuery = (body, params) => {
       return res?.data || {};
     },
     staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
     retry: shouldRetry,
   });
 };

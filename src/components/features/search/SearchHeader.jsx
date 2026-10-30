@@ -43,9 +43,12 @@ export default function SearchHeader({
     pathname?.includes("two-wheelers");
 
   const displayTitle = useMemo(() => {
+    const defaultTitle = isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
+    const defaultSuffix = isTwoWheeler ? "Bikes" : "Cars";
+
     // When no filters are active or cleared
     if (activeFilters.length === 0) {
-      return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
+      return defaultTitle;
     }
 
     const activeBrands = activeFilters.filter(f => f.type === "brand").map(f => typeof f === "string" ? f : f.label);
@@ -53,37 +56,52 @@ export default function SearchHeader({
     const activeCats = activeFilters.filter(f => f.type === "category").map(f => typeof f === "string" ? f : f.label);
     const activeBodies = activeFilters.filter(f => f.type === "bodyType").map(f => typeof f === "string" ? f : f.label);
 
-    const hasCoreFilters = activeBrands.length > 0 || activeModels.length > 0 || activeCats.length > 0 || activeBodies.length > 0;
+    // 1. Multiple brands selected → Fall back to generic "Used Cars" / "Used Two Wheelers"
+    // The active filter badge on the right will display "{N} Filters Applied"
+    if (activeBrands.length > 1) {
+      return defaultTitle;
+    }
 
-    let isStale = false;
-    if (seoH1 && hasCoreFilters) {
-      if (activeBrands.length > 0 && !seoH1.toLowerCase().includes(activeBrands[0].toLowerCase())) {
-        isStale = true;
+    // 2. Exactly 1 brand selected
+    if (activeBrands.length === 1) {
+      let isStale = false;
+      if (seoH1) {
+        if (!seoH1.toLowerCase().includes(activeBrands[0].toLowerCase())) {
+          isStale = true;
+        }
+        if (activeModels.length === 1 && !seoH1.toLowerCase().includes(activeModels[0].toLowerCase())) {
+          isStale = true;
+        } else if (activeModels.length > 1) {
+          isStale = true;
+        }
       }
-      if (activeModels.length > 0 && !seoH1.toLowerCase().includes(activeModels[0].toLowerCase())) {
-        isStale = true;
+
+      if (seoH1 && !isStale) {
+        return seoH1;
       }
-    } else if (seoH1 && !hasCoreFilters) {
-       // If no core filters remain (e.g. they unchecked the brand) but the route is not a hub
-       if (searchParams.has("makerIds") || searchParams.has("brand") || searchParams.has("makerId")) {
-         isStale = true;
-       }
+
+      if (activeModels.length === 1) {
+        return `Used ${activeBrands[0]} ${activeModels[0]} ${defaultSuffix}`;
+      }
+
+      return `Used ${activeBrands[0]} ${defaultSuffix}`;
     }
 
-    if (seoH1 && !isStale) {
-      return seoH1;
+    // 3. No brand selected, but model(s) selected
+    if (activeModels.length === 1) {
+      return `Used ${activeModels[0]} ${defaultSuffix}`;
+    }
+    if (activeModels.length > 1) {
+      return defaultTitle;
     }
 
-    if (hasCoreFilters) {
-      const parts = [
-        activeBrands[0] || "",
-        activeModels[0] || "",
-        activeCats[0] || "",
-        activeBodies[0] || ""
-      ].filter(Boolean).join(" ");
-      return `Used ${parts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
+    // 4. Other core filters (category, bodyType)
+    if (activeCats.length > 0 || activeBodies.length > 0) {
+      const parts = [activeCats[0] || "", activeBodies[0] || ""].filter(Boolean).join(" ");
+      return `Used ${parts} ${defaultSuffix}`;
     }
 
+    // 5. Query param fallbacks
     const brandName = brandParam || searchParams.get("brandName") || "";
     const modelName = searchParams.get("model") || searchParams.get("modelName") || "";
     const catName = searchParams.get("category") || searchParams.get("vehicleTag") || "";
@@ -91,10 +109,10 @@ export default function SearchHeader({
 
     const fallbackParts = [brandName, modelName, catName, bodyName].filter(Boolean).join(" ");
     if (fallbackParts) {
-      return `Used ${fallbackParts} ${isTwoWheeler ? "Bikes" : "Cars"}`;
+      return `Used ${fallbackParts} ${defaultSuffix}`;
     }
 
-    return isTwoWheeler ? "Used Two Wheelers" : "Used Cars";
+    return defaultTitle;
   }, [seoH1, activeFilters, isTwoWheeler, brandParam, bodyType, searchParams, pathname]);
 
   /* Close sort dropdown on outside click */

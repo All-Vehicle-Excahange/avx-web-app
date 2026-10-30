@@ -88,7 +88,11 @@ export default function imageKitLoader({ src, width, quality }) {
   path = encodePath(path);
 
   const params = [`w-${bucketedWidth}`, `q-${quality || 75}`, "f-auto"];
-  const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || "/cdn-image";
+  const endpoint =
+    process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ||
+    (typeof window !== "undefined" && window.location.hostname.includes("reecomm.com")
+      ? "/cdn-image"
+      : "https://ik.imagekit.io/reecommKit");
   const cleanEndpoint = endpoint.replace(/\/$/, "");
   return `${cleanEndpoint}/${path}?tr=${params.join(",")}`;
 }
