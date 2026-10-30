@@ -1,4 +1,5 @@
 import { getSeoConsultations } from "@/services/seo.service";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 const BASE_URL = "https://www.reecomm.com";
 const CONSULTATIONS_PER_PAGE = 100;
@@ -38,10 +39,12 @@ export default async function handler(req, res) {
       xml += `    <changefreq>weekly</changefreq>\n`;
       xml += `    <priority>0.7</priority>\n`;
 
-      // SERP thumbnail signal = storefront logo only
+      // SERP thumbnail signal = storefront logo only (public CDN, not private S3)
       if (store.logoUrl) {
+        const logoCdn =
+          getCdnImageUrl(store.logoUrl, { preset: "thumb" }) || store.logoUrl;
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(store.logoUrl)}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(logoCdn)}</image:loc>\n`;
         if (store.consultationName) {
           xml += `      <image:title>${escapeXml(store.consultationName)}</image:title>\n`;
         }

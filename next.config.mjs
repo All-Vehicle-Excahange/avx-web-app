@@ -147,13 +147,10 @@ const nextConfig = {
     ];
   },
   images: {
-    unoptimized: process.env.NODE_ENV !== "production",
-    ...(process.env.NODE_ENV === "production"
-      ? {
-          loader: "custom",
-          loaderFile: "./src/lib/imagekitLoader.js",
-        }
-      : {}),
+    // Always use AWS CloudFront loader so src (and "Open image in new tab")
+    // resolve to image.reecomm.com — not private S3 — in both dev and prod.
+    loader: "custom",
+    loaderFile: "./src/lib/cdnImageLoader.js",
     remotePatterns: [
       {
         protocol: "https",
@@ -161,7 +158,7 @@ const nextConfig = {
       },
     ],
   },
-  // Proxy rewrite rules for ImageKit and Local API
+  // Proxy rewrite rules for CDN and Local API
   async rewrites() {
     return [
       {
@@ -170,21 +167,9 @@ const nextConfig = {
         destination: `${process.env.BACKEND_URL}/api/v1/:path*`,
       },
       {
-        // Local dev environment proxy
+        // Legacy /cdn-image paths (mobile + old links) → AWS CloudFront
         source: "/cdn-image/:path*",
-        destination: "https://ik.imagekit.io/reecommKit/:path*",
-      },
-      {
-        // Production custom subdomain
-        has: [
-          {
-            type: "header",
-            key: "host",
-            value: "image.reecomm.com",
-          },
-        ],
-        source: "/:path*",
-        destination: "https://ik.imagekit.io/reecommKit/:path*",
+        destination: "https://image.reecomm.com/:path*",
       },
     ];
   },

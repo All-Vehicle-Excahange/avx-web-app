@@ -14,6 +14,7 @@ import {
   buildStorefrontItemListSchema,
   formatStorefrontDisplayName,
 } from "@/lib/storefrontSeo";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 function apiBase() {
   const envUrl =
@@ -117,7 +118,9 @@ function StoreFrontPage({ seo }) {
       displayNameForAlt = formatStorefrontDisplayName(fetchedStoreName);
     }
     if (storeDetails.logoUrl) {
-      displayImage = storeDetails.logoUrl;
+      displayImage =
+        getCdnImageUrl(storeDetails.logoUrl, { preset: "thumb" }) ||
+        storeDetails.logoUrl;
     }
   }
 
@@ -299,7 +302,10 @@ export async function getStaticProps(context) {
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || "";
 
   // SERP thumbnail = storefront logo only (fallback: inventory photo, then site logo)
-  const logoUrl = store.logoUrl || firstInventoryImage || null;
+  const rawLogo = store.logoUrl || firstInventoryImage || null;
+  const logoUrl = rawLogo
+    ? getCdnImageUrl(rawLogo, { preset: "thumb" }) || rawLogo
+    : null;
   const storefrontImageUrl = logoUrl || ogFallback;
 
   const prices = vehicles

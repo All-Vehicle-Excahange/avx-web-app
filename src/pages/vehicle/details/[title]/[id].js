@@ -15,6 +15,7 @@ import {
   generateVehicleSlug,
 } from "@/lib/helper";
 import { getClientType } from "@/lib/clientType";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 function Index({ seo }) {
   const router = useRouter();
@@ -219,6 +220,10 @@ function Index({ seo }) {
   // Never leave SERP without an image; prefer vehicle photo over logo
   if (!vehicleImageUrl) {
     vehicleImageUrl = "https://www.reecomm.com/logo/logo1.webp";
+  } else {
+    // Public CDN for OG (private S3 is not fetchable by crawlers)
+    vehicleImageUrl =
+      getCdnImageUrl(vehicleImageUrl, { preset: "detail" }) || vehicleImageUrl;
   }
 
   return (
@@ -405,7 +410,10 @@ export async function getStaticProps(context) {
             v.imageUrl ||
             "";
 
-          if (thumbnail) finalImageUrl = thumbnail;
+          if (thumbnail) {
+            finalImageUrl =
+              getCdnImageUrl(thumbnail, { preset: "detail" }) || thumbnail;
+          }
 
           // Normalize fields expected by SEO helpers
           const vehicleForSeo = {

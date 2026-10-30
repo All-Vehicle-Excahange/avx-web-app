@@ -1,5 +1,6 @@
 import { getSeoVehicles } from "@/services/seo.service";
 import { generateVehicleSlug } from "@/lib/helper";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 const BASE_URL = "https://www.reecomm.com";
 const VEHICLES_PER_PAGE = 100;
@@ -74,8 +75,10 @@ export default async function handler(req, res) {
       xml += `    <priority>0.8</priority>\n`;
 
       for (const imgUrl of collectImages(vehicle)) {
+        const cdnImg =
+          getCdnImageUrl(imgUrl, { preset: "card" }) || imgUrl;
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(cdnImg)}</image:loc>\n`;
         xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
         xml += `      <image:caption>${escapeXml(caption)}</image:caption>\n`;
         xml += `    </image:image>\n`;
