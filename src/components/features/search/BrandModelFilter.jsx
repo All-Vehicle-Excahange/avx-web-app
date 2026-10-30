@@ -18,6 +18,8 @@ export default function BrandModelFilter({
   isMobile = false,
   onBrandsLoaded,
   onModelsLoaded,
+  onModelsByBrandLoaded,
+  allLoadedModels = [],
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [allBrands, setAllBrands] = useState([]);
@@ -30,10 +32,16 @@ export default function BrandModelFilter({
 
   // ── Stable Refs to break re-render dependency cycles ──
   const allBrandsRef = useRef([]);
+  const initialModelsByBrandRef = useRef({});
   const modelsByBrandRef = useRef({});
   const loadingModelsRef = useRef({});
   const onBrandsLoadedRef = useRef(onBrandsLoaded);
   const onModelsLoadedRef = useRef(onModelsLoaded);
+  const onModelsByBrandLoadedRef = useRef(onModelsByBrandLoaded);
+  const onModelChangeRef = useRef(onModelChange);
+  const onBrandChangeRef = useRef(onBrandChange);
+  const selectedModelsRef = useRef(selectedModels);
+  const selectedBrandsRef = useRef(selectedBrands);
   const abortControllerRef = useRef(null);
   const lastSearchKeyRef = useRef("");
 
@@ -44,6 +52,26 @@ export default function BrandModelFilter({
   useEffect(() => {
     onModelsLoadedRef.current = onModelsLoaded;
   }, [onModelsLoaded]);
+
+  useEffect(() => {
+    onModelsByBrandLoadedRef.current = onModelsByBrandLoaded;
+  }, [onModelsByBrandLoaded]);
+
+  useEffect(() => {
+    onModelChangeRef.current = onModelChange;
+  }, [onModelChange]);
+
+  useEffect(() => {
+    onBrandChangeRef.current = onBrandChange;
+  }, [onBrandChange]);
+
+  useEffect(() => {
+    selectedModelsRef.current = selectedModels;
+  }, [selectedModels]);
+
+  useEffect(() => {
+    selectedBrandsRef.current = selectedBrands;
+  }, [selectedBrands]);
 
   useEffect(() => {
     modelsByBrandRef.current = modelsByBrand;
@@ -108,7 +136,9 @@ export default function BrandModelFilter({
               }
             });
             if (Object.keys(modelsMap).length > 0 && isMounted) {
+              initialModelsByBrandRef.current = { ...modelsMap };
               setModelsByBrand((prev) => ({ ...prev, ...modelsMap }));
+              onModelsByBrandLoadedRef.current?.(modelsMap);
             }
           }
         } catch {
@@ -172,12 +202,12 @@ export default function BrandModelFilter({
 
   // 2. Fetch models for a brand on demand
   const fetchModelsForBrand = useCallback(
-    async (brandId) => {
-      if (modelsByBrandRef.current[brandId]) {
+    async (brandId, force = false) => {
+      if (!force && modelsByBrandRef.current[brandId] && modelsByBrandRef.current[brandId].length > 1) {
         return modelsByBrandRef.current[brandId];
       }
       if (loadingModelsRef.current[brandId]) {
-        return [];
+        return modelsByBrandRef.current[brandId] || [];
       }
       loadingModelsRef.current[brandId] = true;
       setLoadingModels((prev) => ({ ...prev, [brandId]: true }));
@@ -194,6 +224,7 @@ export default function BrandModelFilter({
             .map((item) => ({
               value: item.modelId.toString(),
               label: item.modelDisplayName || item.modelName,
+              makerId: brandId.toString(),
               count:
                 typeof item.vehicleCount === "number"
                   ? item.vehicleCount
@@ -214,8 +245,11 @@ export default function BrandModelFilter({
             return a.label.localeCompare(b.label);
           });
 
+          initialModelsByBrandRef.current[brandId] = mapped;
+          modelsByBrandRef.current[brandId] = mapped;
           setModelsByBrand((prev) => ({ ...prev, [brandId]: mapped }));
           onModelsLoadedRef.current?.(mapped);
+          onModelsByBrandLoadedRef.current?.({ [brandId]: mapped });
           return mapped;
         }
         return [];
@@ -260,8 +294,11 @@ export default function BrandModelFilter({
           next.delete(brandId);
         } else {
           next.add(brandId);
-          if (!modelsByBrandRef.current[brandId] && !loadingModelsRef.current[brandId]) {
-            fetchModelsForBrand(brandId);
+          const hasFullModels =
+            (modelsByBrandRef.current[brandId] && modelsByBrandRef.current[brandId].length > 1) ||
+            (initialModelsByBrandRef.current[brandId] && initialModelsByBrandRef.current[brandId].length > 1);
+          if (!hasFullModels && !loadingModelsRef.current[brandId]) {
+            fetchModelsForBrand(brandId, true);
           }
         }
         return next;
@@ -272,102 +309,128 @@ export default function BrandModelFilter({
 
   // 6. Parent Brand Checkbox Toggle
   const handleToggleBrand = useCallback(
-    async (brand) => {
-      const brandId = brand.value;
-      let brandModels = modelsByBrandRef.current[brandId];
+    (brand) => {
+      const brandId = String(brand.value);
+      const isCurrentlySelected = selectedBrands.some((id) => String(id) === brandId);
 
-      if (!brandModels) {
-        brandModels = await fetchModelsForBrand(brandId);
-      }
+      const brandModels =
+        (modelsByBrandRef.current[brandId] && modelsByBrandRef.current[brandId].length > 1)
+          ? modelsByBrandRef.current[brandId]
+          : (initialModelsByBrandRef.current[brandId] && initialModelsByBrandRef.current[brandId].length > 1)
+            ? initialModelsByBrandRef.current[brandId]
+            : brand.models || [];
+      const bModelIds = new Set((brandModels || []).map((m) => String(m.value)));
 
-      const allModelIds = (brandModels || []).map((m) => m.value);
-      const selectedModelsInBrand = (brandModels || []).filter((m) =>
-        selectedModels.includes(m.value),
-      );
-      const hasModelRestrictions = selectedModelsInBrand.length > 0;
+      const hasModelRestrictions =
+        selectedModels.some((id) => bModelIds.has(String(id))) ||
+        (allLoadedModels || []).some(
+          (m) =>
+            String(m.makerId) === brandId &&
+            selectedModels.some((id) => String(id) === String(m.value || m.modelId)),
+        );
       const allModelsSelected =
-        allModelIds.length > 0 &&
-        allModelIds.every((id) => selectedModels.includes(id));
+        brandModels.length > 0 &&
+        brandModels.every((m) => selectedModels.some((id) => String(id) === String(m.value)));
 
-      const isBrandFullyChecked =
-        selectedBrands.includes(brandId) &&
-        (!hasModelRestrictions || allModelsSelected);
+      const isFullyChecked = isCurrentlySelected && (!hasModelRestrictions || allModelsSelected);
 
-      if (isBrandFullyChecked) {
-        const nextBrands = selectedBrands.filter((id) => id !== brandId);
-        const modelIdsToRemove = new Set(allModelIds);
-        const nextModels = selectedModels.filter((id) => !modelIdsToRemove.has(id));
-
+      if (isFullyChecked) {
+        // Deselect only this brand and remove only its models
+        const nextBrands = selectedBrands.filter((id) => String(id) !== brandId);
+        const nextModels = selectedModels.filter(
+          (id) =>
+            !bModelIds.has(String(id)) &&
+            !(allLoadedModels || []).some(
+              (m) => String(m.makerId) === brandId && String(m.value || m.modelId) === String(id),
+            ),
+        );
         onBrandChange?.(nextBrands);
         onModelChange?.(nextModels);
       } else {
-        const nextBrands = selectedBrands.includes(brandId)
-          ? selectedBrands
-          : [...selectedBrands, brandId];
-        const nextModels = Array.from(new Set([...selectedModels, ...allModelIds]));
-
+        // Select this brand fully: add to selectedBrands and clear specific model restrictions for this brand
+        const nextBrands = [...selectedBrands.filter((id) => String(id) !== brandId), brandId];
+        const nextModels = selectedModels.filter(
+          (id) =>
+            !bModelIds.has(String(id)) &&
+            !(allLoadedModels || []).some(
+              (m) => String(m.makerId) === brandId && String(m.value || m.modelId) === String(id),
+            ),
+        );
         onBrandChange?.(nextBrands);
         onModelChange?.(nextModels);
         setExpandedBrands((prev) => new Set(prev).add(brandId));
+        if (!modelsByBrandRef.current[brandId] || modelsByBrandRef.current[brandId].length <= 1) {
+          fetchModelsForBrand(brandId, true);
+        }
       }
     },
-    [fetchModelsForBrand, onBrandChange, onModelChange, selectedBrands, selectedModels],
+    [onBrandChange, onModelChange, selectedBrands, selectedModels, allLoadedModels, fetchModelsForBrand],
   );
 
   // 7. Individual Model Checkbox Toggle
   const handleToggleModel = useCallback(
-    async (brand, model) => {
-      const brandId = brand.value;
-      const modelId = model.value;
+    (brand, model) => {
+      const brandId = String(brand.value);
+      const modelId = String(model.value);
 
-      let brandModels = modelsByBrandRef.current[brandId];
-      if (!brandModels || brandModels.length === 0) {
-        brandModels = await fetchModelsForBrand(brandId);
-      }
-      const allModelIds = (brandModels || []).map((m) => m.value);
+      const brandModels =
+        (modelsByBrandRef.current[brandId] && modelsByBrandRef.current[brandId].length > 1)
+          ? modelsByBrandRef.current[brandId]
+          : (initialModelsByBrandRef.current[brandId] && initialModelsByBrandRef.current[brandId].length > 1)
+            ? initialModelsByBrandRef.current[brandId]
+            : brand.models || [];
+      const allModelIds = (brandModels || []).map((m) => String(m.value));
 
-      const selectedModelsInBrand = (brandModels || []).filter((m) =>
-        selectedModels.includes(m.value),
-      );
-      const hasModelRestrictions = selectedModelsInBrand.length > 0;
+      const hasModelRestrictions =
+        selectedModels.some((id) => allModelIds.includes(String(id))) ||
+        (allLoadedModels || []).some(
+          (m) =>
+            String(m.makerId) === brandId &&
+            selectedModels.some((id) => String(id) === String(m.value || m.modelId)),
+        );
       const isBrandFullySelected =
-        selectedBrands.includes(brandId) && !hasModelRestrictions;
+        selectedBrands.some((id) => String(id) === brandId) && !hasModelRestrictions;
 
       const isModelCurrentlyChecked =
-        selectedModels.includes(modelId) || isBrandFullySelected;
+        selectedModels.some((id) => String(id) === modelId) || isBrandFullySelected;
 
       let nextModels;
-      let nextBrands = [...selectedBrands];
+      let nextBrands = selectedBrands.some((id) => String(id) === brandId)
+        ? [...selectedBrands]
+        : [...selectedBrands, brandId];
 
       if (isModelCurrentlyChecked) {
-        if (isBrandFullySelected) {
-          const remainingModels = allModelIds.filter((id) => id !== modelId);
-          nextModels = Array.from(new Set([...selectedModels, ...remainingModels]));
+        if (isBrandFullySelected && allModelIds.length > 0) {
+          // Unchecking a model from a fully selected brand: select all other models of this brand explicitly
+          const remaining = allModelIds.filter((id) => id !== modelId);
+          nextModels = Array.from(new Set([...selectedModels.map(String), ...remaining]));
         } else {
-          nextModels = selectedModels.filter((id) => id !== modelId);
-        }
-
-        const remainingForThisBrand = (brandModels || []).filter((m) =>
-          nextModels.includes(m.value),
-        );
-        if (remainingForThisBrand.length === 0) {
-          nextBrands = nextBrands.filter((id) => id !== brandId);
-        } else {
-          if (!nextBrands.includes(brandId)) {
-            nextBrands.push(brandId);
+          // Uncheck this model
+          nextModels = selectedModels.filter((id) => String(id) !== modelId);
+          const remainingInBrand = (brandModels || []).filter((m) =>
+            nextModels.some((id) => String(id) === String(m.value)),
+          );
+          if (remainingInBrand.length === 0 && !isBrandFullySelected) {
+            nextBrands = nextBrands.filter((id) => String(id) !== brandId);
           }
         }
       } else {
-        nextModels = Array.from(new Set([...selectedModels, modelId]));
-        if (!nextBrands.includes(brandId)) {
+        // Check this model
+        nextModels = Array.from(new Set([...selectedModels.map(String), modelId]));
+        if (!nextBrands.some((id) => String(id) === brandId)) {
           nextBrands.push(brandId);
         }
+      }
+
+      // Ensure full models for this brand are loaded in background so all models are visible
+      if (!modelsByBrandRef.current[brandId] || modelsByBrandRef.current[brandId].length <= 1) {
+        fetchModelsForBrand(brandId, true);
       }
 
       onModelChange?.(nextModels);
       onBrandChange?.(nextBrands);
     },
-    [fetchModelsForBrand, onBrandChange, onModelChange, selectedBrands, selectedModels],
+    [onBrandChange, onModelChange, selectedBrands, selectedModels, fetchModelsForBrand, allLoadedModels],
   );
 
   // 8. Single Solid Debounced Search Effect (350ms delay + AbortController + Duplicate Guard)
@@ -445,20 +508,17 @@ export default function BrandModelFilter({
               })
               .filter((item) => item.label && item.label.trim() !== "");
 
-            // Cache models and auto-expand brands with matching models
-            const modelsMap = {};
+            // Auto-expand brands with matching models and pre-fetch their full model lists
             const toExpand = [];
             searchResults.forEach((b) => {
               if (b.matchingModels && b.matchingModels.length > 0) {
-                modelsMap[b.value] = b.matchingModels;
                 toExpand.push(b.value);
                 onModelsLoadedRef.current?.(b.matchingModels);
+                if (!modelsByBrandRef.current[b.value] || modelsByBrandRef.current[b.value].length <= 1) {
+                  fetchModelsForBrand(b.value);
+                }
               }
             });
-
-            if (Object.keys(modelsMap).length > 0) {
-              setModelsByBrand((prev) => ({ ...prev, ...modelsMap }));
-            }
             if (toExpand.length > 0) {
               setExpandedBrands((prev) => {
                 const next = new Set(prev);
@@ -574,35 +634,53 @@ export default function BrandModelFilter({
         ) : (
           filteredBrands.map((brand) => {
             const brandId = brand.value;
-            const brandModels = modelsByBrand[brandId] || [];
+            const fullBrandModels =
+              (modelsByBrand[brandId] && modelsByBrand[brandId].length > 1)
+                ? modelsByBrand[brandId]
+                : (initialModelsByBrandRef.current[brandId] && initialModelsByBrandRef.current[brandId].length > 1)
+                  ? initialModelsByBrandRef.current[brandId]
+                  : (brand.models && brand.models.length > 1)
+                    ? brand.models
+                    : (modelsByBrandRef.current[brandId] && modelsByBrandRef.current[brandId].length > 1)
+                      ? modelsByBrandRef.current[brandId]
+                      : modelsByBrand[brandId] || initialModelsByBrandRef.current[brandId] || brand.models || [];
             const isLoadingThisBrandModels = loadingModels[brandId];
 
             const modelsToRender =
               cleanSearch && brand.matchingModels !== undefined
                 ? brand.matchingModels.length > 0
                   ? brand.matchingModels
-                  : brandModels
-                : brandModels;
+                  : fullBrandModels
+                : fullBrandModels;
 
-            const selectedModelsInBrand = brandModels.filter((m) =>
-              selectedModels.includes(m.value),
+            const selectedModelsInBrand = (fullBrandModels || []).filter((m) =>
+              selectedModels.some((id) => String(id) === String(m.value)),
             );
 
             // Determine Parent Checkbox state:
             // 1) Checked: Brand is in selectedBrands AND (all loaded models are checked OR no model restrictions exist)
             // 2) Indeterminate: Some models are checked, but not all
             // 3) Unchecked: Brand not in selectedBrands AND no models checked
-            const hasModelRestrictions = selectedModelsInBrand.length > 0;
+            const hasModelRestrictions =
+              selectedModelsInBrand.length > 0 ||
+              (allLoadedModels || []).some(
+                (m) =>
+                  String(m.makerId) === String(brandId) &&
+                  selectedModels.some((id) => String(id) === String(m.value || m.modelId)),
+              );
+            const isBrandSelected =
+              selectedBrands.some((id) => String(id) === String(brandId)) ||
+              hasModelRestrictions;
             const allModelsSelected =
-              brandModels.length > 0 &&
-              brandModels.every((m) => selectedModels.includes(m.value));
+              fullBrandModels.length > 0 &&
+              fullBrandModels.every((m) => selectedModels.some((id) => String(id) === String(m.value)));
             const someModelsSelected =
               hasModelRestrictions && !allModelsSelected;
 
             const isChecked =
-              selectedBrands.includes(brandId) &&
+              isBrandSelected &&
               (!hasModelRestrictions || allModelsSelected);
-            const isIndeterminate = someModelsSelected;
+            const isIndeterminate = isBrandSelected && someModelsSelected;
 
             const isExpanded =
               expandedBrands.has(brandId) || (cleanSearch && brand.forceExpand);
@@ -644,7 +722,7 @@ export default function BrandModelFilter({
                       aria-label={`Select ${brand.label}`}
                     >
                       {isChecked && <Check size={11} strokeWidth={3} />}
-                      {isIndeterminate && <Minus size={11} strokeWidth={3} />}
+                      {isIndeterminate && <Minus size={11} strokeWidth={3.5} />}
                     </button>
 
                     {/* Logo & Name Area */}
@@ -760,8 +838,8 @@ export default function BrandModelFilter({
                       ) : (
                         sortedModelsToRender.map((model) => {
                           const isModelChecked =
-                            selectedModels.includes(model.value) ||
-                            (!hasModelRestrictions && selectedBrands.includes(brandId));
+                            selectedModels.some((id) => String(id) === String(model.value)) ||
+                            (!hasModelRestrictions && isBrandSelected);
 
                           return (
                             <div

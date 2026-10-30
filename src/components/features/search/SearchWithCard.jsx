@@ -285,6 +285,16 @@ export default function SearchWithCard({
 
   // ── Model states ──
   const [models, setModels] = useState([]);
+  const brandModelsCacheRef = useRef({});
+  const handleModelsByBrandLoaded = useCallback((byBrand) => {
+    if (byBrand && typeof byBrand === "object") {
+      Object.entries(byBrand).forEach(([bId, bModels]) => {
+        if (Array.isArray(bModels) && bModels.length > 0) {
+          brandModelsCacheRef.current[String(bId)] = bModels;
+        }
+      });
+    }
+  }, []);
   const [selectedModels, setSelectedModels] = useState(() => {
     if (modelIdParam) {
       // Support comma-separated multiple modelIds
@@ -407,6 +417,7 @@ export default function SearchWithCard({
   }, [
     selectedBrands,
     selectedModels,
+    models,
     selectedVariants,
     selectedFuelTypes,
     selectedTransmissionTypes,
@@ -557,7 +568,32 @@ export default function SearchWithCard({
     };
   }, [mobileFilterOpen]);
 
-  /* ================= BUILD PAYLOAD ================= */
+  const brandModelSelectedCount = useMemo(() => {
+    const brandIdsWithSpecificModels = new Set();
+    selectedModels.forEach((mId) => {
+      let foundMakerId = null;
+      const foundModel = models.find((m) => String(m.value) === String(mId));
+      if (foundModel && foundModel.makerId) {
+        foundMakerId = String(foundModel.makerId);
+      } else {
+        for (const [bId, bModels] of Object.entries(brandModelsCacheRef.current || {})) {
+          if (Array.isArray(bModels) && bModels.some((m) => String(m.value) === String(mId))) {
+            foundMakerId = String(bId);
+            break;
+          }
+        }
+      }
+      if (foundMakerId) {
+        brandIdsWithSpecificModels.add(foundMakerId);
+      }
+    });
+    const wholeBrandsCount = selectedBrands.filter(
+      (bId) => !brandIdsWithSpecificModels.has(String(bId)),
+    ).length;
+    return wholeBrandsCount + selectedModels.length;
+  }, [selectedBrands, selectedModels, models]);
+
+    /* ================= BUILD PAYLOAD ================= */
   /* ================= BUILD PAYLOAD ================= */
   const buildPayload = () => {
     const payload = {};
@@ -573,11 +609,101 @@ export default function SearchWithCard({
       payload.vehicleTags = selectedCategories;
     }
 
-    if (selectedBrands.length > 0)
-      payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
+    // ── Brand & Model Payload Logic ──
+    // 1. Resolve selected brand IDs
+    const resolvedMakerIds = [];
+    if (selectedBrands.length > 0) {
+      const validMakerIds = new Set();
+      selectedBrands.forEach((b) => {
+        const num = Number(b);
+        if (!isNaN(num) && num > 0) {
+          validMakerIds.add(num);
+        } else {
+          const cleanB = String(b).toLowerCase().trim();
+          const found = brands.find(
+            (br) =>
+              String(br.label).toLowerCase().trim() === cleanB ||
+              String(br.value) === String(b),
+          );
+          if (found && !isNaN(Number(found.value))) {
+            validMakerIds.add(Number(found.value));
+          } else {
+            const TWO_WHEELER_MAKERS = {
+              15005: "Bajaj",
+              15010: "Hero",
+              15017: "OLA",
+              15019: "Royal Enfield",
+              15021: "TVS",
+              15024: "Yamaha",
+            };
+            const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+            const entry = Object.entries(allMakers).find(
+              ([, name]) => name.toLowerCase().trim() === cleanB,
+            );
+            if (entry) validMakerIds.add(Number(entry[0]));
+          }
+        }
+      });
+      if (validMakerIds.size > 0) {
+        resolvedMakerIds.push(...Array.from(validMakerIds));
+      }
+    }
 
-    if (selectedModels.length > 0)
-      payload.modelIds = selectedModels.map(Number);
+    // 2. Resolve explicitly selected model IDs ONLY (never expand unselected models)
+    const explicitModelIds = new Set();
+    if (selectedModels.length > 0) {
+      selectedModels.forEach((m) => {
+        const num = Number(m);
+        if (!isNaN(num) && num > 0) {
+          explicitModelIds.add(num);
+        } else {
+          const cleanM = String(m).toLowerCase().trim();
+          const found = models.find(
+            (md) =>
+              String(md.label).toLowerCase().trim() === cleanM ||
+              String(md.value) === String(m),
+          );
+          if (found && !isNaN(Number(found.value))) {
+            explicitModelIds.add(Number(found.value));
+          }
+        }
+      });
+    }
+
+    // 3. Classify brands: which brands have specific model(s) selected vs which brands are selected as a whole brand
+    const wholeBrandMakerIds = [];
+    if (resolvedMakerIds.length > 0) {
+      resolvedMakerIds.forEach((bId) => {
+        const brandIdStr = String(bId);
+        const cachedModels =
+          brandModelsCacheRef.current[brandIdStr] ||
+          brandModelsCacheRef.current[bId] ||
+          [];
+        const stateModels = models.filter((m) => String(m.makerId) === brandIdStr);
+        const allBrandModels =
+          cachedModels.length > 0 ? cachedModels : stateModels;
+
+        const hasSpecificModel = allBrandModels.some((m) =>
+          explicitModelIds.has(Number(m.value || m.modelId)),
+        );
+
+        // If this brand does NOT have any specific model selected, it's a whole-brand selection
+        if (!hasSpecificModel) {
+          wholeBrandMakerIds.push(bId);
+        }
+      });
+    }
+
+    // 4. Set payload fields according to exact user rules:
+    // A) If models are explicitly selected -> send ONLY those modelIds (never makerId for that brand)
+    if (explicitModelIds.size > 0) {
+      payload.modelIds = Array.from(explicitModelIds);
+    }
+
+    // B) If whole brand(s) are selected (no specific models for them) -> send their makerIds
+    if (wholeBrandMakerIds.length > 0) {
+      payload.makerIds = wholeBrandMakerIds;
+    }
 
     if (selectedVariants.length > 0)
       payload.variantIds = selectedVariants.map(Number);
@@ -629,10 +755,101 @@ export default function SearchWithCard({
     if (selectedCategories.length > 0) {
       payload.vehicleTags = selectedCategories;
     }
-    if (selectedBrands.length > 0)
-      payload.makerIds = selectedBrands.map(Number).filter((n) => !isNaN(n));
-    if (selectedModels.length > 0)
-      payload.modelIds = selectedModels.map(Number);
+    // ── Brand & Model Payload Logic ──
+    // 1. Resolve selected brand IDs
+    const resolvedMakerIds = [];
+    if (selectedBrands.length > 0) {
+      const validMakerIds = new Set();
+      selectedBrands.forEach((b) => {
+        const num = Number(b);
+        if (!isNaN(num) && num > 0) {
+          validMakerIds.add(num);
+        } else {
+          const cleanB = String(b).toLowerCase().trim();
+          const found = brands.find(
+            (br) =>
+              String(br.label).toLowerCase().trim() === cleanB ||
+              String(br.value) === String(b),
+          );
+          if (found && !isNaN(Number(found.value))) {
+            validMakerIds.add(Number(found.value));
+          } else {
+            const TWO_WHEELER_MAKERS = {
+              15005: "Bajaj",
+              15010: "Hero",
+              15017: "OLA",
+              15019: "Royal Enfield",
+              15021: "TVS",
+              15024: "Yamaha",
+            };
+            const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+            const entry = Object.entries(allMakers).find(
+              ([, name]) => name.toLowerCase().trim() === cleanB,
+            );
+            if (entry) validMakerIds.add(Number(entry[0]));
+          }
+        }
+      });
+      if (validMakerIds.size > 0) {
+        resolvedMakerIds.push(...Array.from(validMakerIds));
+      }
+    }
+
+    // 2. Resolve explicitly selected model IDs ONLY (never expand unselected models)
+    const explicitModelIds = new Set();
+    if (selectedModels.length > 0) {
+      selectedModels.forEach((m) => {
+        const num = Number(m);
+        if (!isNaN(num) && num > 0) {
+          explicitModelIds.add(num);
+        } else {
+          const cleanM = String(m).toLowerCase().trim();
+          const found = models.find(
+            (md) =>
+              String(md.label).toLowerCase().trim() === cleanM ||
+              String(md.value) === String(m),
+          );
+          if (found && !isNaN(Number(found.value))) {
+            explicitModelIds.add(Number(found.value));
+          }
+        }
+      });
+    }
+
+    // 3. Classify brands: which brands have specific model(s) selected vs which brands are selected as a whole brand
+    const wholeBrandMakerIds = [];
+    if (resolvedMakerIds.length > 0) {
+      resolvedMakerIds.forEach((bId) => {
+        const brandIdStr = String(bId);
+        const cachedModels =
+          brandModelsCacheRef.current[brandIdStr] ||
+          brandModelsCacheRef.current[bId] ||
+          [];
+        const stateModels = models.filter((m) => String(m.makerId) === brandIdStr);
+        const allBrandModels =
+          cachedModels.length > 0 ? cachedModels : stateModels;
+
+        const hasSpecificModel = allBrandModels.some((m) =>
+          explicitModelIds.has(Number(m.value || m.modelId)),
+        );
+
+        // If this brand does NOT have any specific model selected, it's a whole-brand selection
+        if (!hasSpecificModel) {
+          wholeBrandMakerIds.push(bId);
+        }
+      });
+    }
+
+    // 4. Set payload fields according to exact user rules:
+    // A) If models are explicitly selected -> send ONLY those modelIds (never makerId for that brand)
+    if (explicitModelIds.size > 0) {
+      payload.modelIds = Array.from(explicitModelIds);
+    }
+
+    // B) If whole brand(s) are selected (no specific models for them) -> send their makerIds
+    if (wholeBrandMakerIds.length > 0) {
+      payload.makerIds = wholeBrandMakerIds;
+    }
 
     if (selectedFuelTypes.length > 0)
       payload.fuelTypes = selectedFuelTypes.map((f) => f.toUpperCase());
@@ -753,10 +970,10 @@ export default function SearchWithCard({
     getFilterConsualtQuery(debouncedConsultPayload),
   );
 
-  // Resolve brand and model names for the PPC API
+  // Resolve brand and model names for the PPC API and SEO URL
   const resolvedBrandName = useMemo(() => {
-    if (selectedBrands.length === 0) return "";
-    const makerId = selectedBrands[0];
+    if (selectedBrands.length !== 1) return "";
+    const mId = selectedBrands[0];
     const TWO_WHEELER_MAKERS = {
       15005: "Bajaj",
       15010: "Hero",
@@ -766,29 +983,29 @@ export default function SearchWithCard({
       15024: "Yamaha",
     };
     const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
-    if (allMakers[makerId]) {
-      return allMakers[makerId];
+    if (allMakers[mId]) {
+      return allMakers[mId];
     }
-    const found = brands.find((b) => String(b.value) === String(makerId));
+    const found = brands.find((b) => String(b.value) === String(mId));
     if (found) return found.label;
 
     if (
       initialFilters.makerId &&
-      String(initialFilters.makerId) === String(makerId)
+      String(initialFilters.makerId) === String(mId)
     ) {
-      return initialFilters.brandName || brandParam || "";
+      return initialFilters.brandName || "";
     }
-    return brandParam || "";
+    return "";
   }, [
     selectedBrands,
     brands,
-    brandParam,
     initialFilters.brandName,
     initialFilters.makerId,
   ]);
 
   const resolvedModelName = useMemo(() => {
-    if (selectedModels.length === 0) return "";
+    // Only resolve a single model if exactly 1 brand and exactly 1 model are selected
+    if (selectedBrands.length !== 1 || selectedModels.length !== 1) return "";
     const modelId = selectedModels[0];
     const found = models.find((m) => String(m.value) === String(modelId));
     if (found) return found.label;
@@ -800,7 +1017,7 @@ export default function SearchWithCard({
       return initialFilters.model || "";
     }
     return "";
-  }, [selectedModels, models, initialFilters.model, initialFilters.modelId]);
+  }, [selectedBrands.length, selectedModels, models, initialFilters.model, initialFilters.modelId]);
 
   const mappedVehicleTypeForAds = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
@@ -861,15 +1078,33 @@ export default function SearchWithCard({
 
   useEffect(() => {
     if (currentPage === 1) {
-      setAccumulatedVehicles(newVehicles);
+      const seen = new Set();
+      const unique = (newVehicles || []).filter((v) => {
+        const id = v?.id || v?._id;
+        if (!id) return true;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+      setAccumulatedVehicles(unique);
       lastProcessedPageRef.current = 1;
     } else if (newVehicles.length > 0 && lastProcessedPageRef.current !== currentPage) {
       const responsePage = topPicksPageResponse?.currentPage;
-      if (responsePage && responsePage !== currentPage) {
+      if (typeof responsePage === "number" && responsePage !== currentPage) {
         return;
       }
       lastProcessedPageRef.current = currentPage;
-      setAccumulatedVehicles((prev) => [...prev, ...newVehicles]);
+      setAccumulatedVehicles((prev) => {
+        const seen = new Set(prev.map((v) => v?.id || v?._id).filter(Boolean));
+        const nonDuplicates = (newVehicles || []).filter((v) => {
+          const id = v?.id || v?._id;
+          if (!id) return true;
+          if (seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        });
+        return [...prev, ...nonDuplicates];
+      });
     }
   }, [newVehicles, currentPage, topPicksPageResponse?.currentPage]);
 
@@ -901,8 +1136,9 @@ export default function SearchWithCard({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const brandName = resolvedBrandName;
-    const modelName = resolvedModelName;
+    // Only include brand/model in the slug if exactly 1 brand is selected
+    const brandName = selectedBrands.length === 1 ? (resolvedBrandName || null) : null;
+    const modelName = (selectedBrands.length === 1 && selectedModels.length === 1) ? (resolvedModelName || null) : null;
     const locationName = selectedCityName || selectedStateName;
 
     // Budget
@@ -1517,6 +1753,9 @@ export default function SearchWithCard({
   };
 
   const handleBrandChange = (values) => {
+    isSelfTriggered.current = true;
+    setCurrentPage(1);
+    lastProcessedPageRef.current = 1;
     setSelectedBrands(values);
   };
 
@@ -1530,6 +1769,23 @@ export default function SearchWithCard({
   }, []);
 
   const handleModelsLoaded = useCallback((newModels) => {
+    if (Array.isArray(newModels) && newModels.length > 0) {
+      newModels.forEach((m) => {
+        if (m.makerId) {
+          const bIdStr = String(m.makerId);
+          if (!brandModelsCacheRef.current[bIdStr]) {
+            brandModelsCacheRef.current[bIdStr] = [];
+          }
+          if (
+            !brandModelsCacheRef.current[bIdStr].some(
+              (item) => String(item.value) === String(m.value),
+            )
+          ) {
+            brandModelsCacheRef.current[bIdStr].push(m);
+          }
+        }
+      });
+    }
     setModels((prev) => {
       const existing = new Set(prev.map((m) => m.value));
       const toAdd = newModels.filter((m) => !existing.has(m.value));
@@ -1537,6 +1793,44 @@ export default function SearchWithCard({
       return [...prev, ...toAdd];
     });
   }, []);
+
+
+  // Pre-fetch models for all selected brands to ensure multi-brand filtering never excludes models
+  useEffect(() => {
+    selectedBrands.forEach(async (bId) => {
+      const num = Number(bId);
+      if (!num || isNaN(num) || num <= 0) return;
+      const key = String(num);
+      if (!brandModelsCacheRef.current[key] || brandModelsCacheRef.current[key].length === 0) {
+        try {
+          const res = await getAndSearchModel({
+            maker_id: num,
+            page: 1,
+            limit: 100,
+            bodyType: apiBodyType,
+          });
+          if (res?.success && Array.isArray(res.data)) {
+            const mapped = res.data
+              .map((item) => ({
+                value: item.modelId.toString(),
+                label: item.modelDisplayName || item.modelName,
+                makerId: key,
+              }))
+              .filter((item) => item.label && item.label.trim() !== "");
+
+            brandModelsCacheRef.current[key] = mapped;
+            setModels((prev) => {
+              const existing = new Set(prev.map((m) => String(m.value)));
+              const toAdd = mapped.filter((m) => !existing.has(String(m.value)));
+              return toAdd.length > 0 ? [...prev, ...toAdd] : prev;
+            });
+          }
+        } catch (err) {
+          console.error("Error pre-fetching models for brand", num, err);
+        }
+      }
+    });
+  }, [selectedBrands, apiBodyType]);
 
   // ── Load Models with search ──
   const prevModelParamsRef = useRef("");
@@ -1616,6 +1910,9 @@ export default function SearchWithCard({
   };
 
   const handleModelChange = (values) => {
+    isSelfTriggered.current = true;
+    setCurrentPage(1);
+    lastProcessedPageRef.current = 1;
     setSelectedModels(values);
     // Reset year when model changes
     setSelectedYear([]);
@@ -1965,14 +2262,25 @@ export default function SearchWithCard({
   // ── Real-time filter tag emission ──
   useEffect(() => {
     const tags = [];
-    const brandLabels = brands
-      .filter((b) => selectedBrands.includes(b.value))
-      .map((b) => b.label);
-    const modelLabels = models
-      .filter((m) => selectedModels.includes(m.value))
-      .map((m) => m.label);
+    const brandLabels = selectedBrands.map((bId) => {
+      const found = brands.find((b) => String(b.value) === String(bId));
+      if (found) return found.label;
+      const TWO_WHEELER_MAKERS = {
+        15005: "Bajaj", 15010: "Hero", 15017: "OLA",
+        15019: "Royal Enfield", 15021: "TVS", 15024: "Yamaha",
+      };
+      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      return allMakers[bId] || (String(bId) === String(initialFilters?.makerId) ? initialFilters?.brandName : "") || String(bId);
+    }).filter(Boolean);
+
+    const modelLabels = selectedModels.map((mId) => {
+      const found = models.find((m) => String(m.value) === String(mId));
+      if (found) return found.label;
+      return (String(mId) === String(initialFilters?.modelId) ? initialFilters?.model : "") || String(mId);
+    }).filter(Boolean);
+
     const variantLabels = variants
-      .filter((v) => selectedVariants.includes(v.value))
+      .filter((v) => selectedVariants.some((id) => String(id) === String(v.value)))
       .map((v) => v.label);
 
     if (brandLabels.length > 0) brandLabels.forEach(label => tags.push({ label, type: "brand" }));
@@ -2093,26 +2401,53 @@ export default function SearchWithCard({
       const brandObj = brands.find(
         (b) => String(b.label || "").toLowerCase() === lower,
       );
-      if (brandObj && selectedBrands.includes(brandObj.value)) {
-        setSelectedBrands((prev) =>
-          prev.filter((val) => val !== brandObj.value),
-        );
+      if (brandObj && selectedBrands.some((id) => String(id) === String(brandObj.value))) {
+        setCurrentPage(1);
+        lastProcessedPageRef.current = 1;
+        const brandIdToRemove = String(brandObj.value);
+        const nextBrands = selectedBrands.filter((id) => String(id) !== brandIdToRemove);
+        setSelectedBrands(nextBrands);
+
+        // Remove any models that belong to the removed brand
+        const cachedModels = brandModelsCacheRef.current[brandIdToRemove] || [];
+        const stateModels = models.filter((m) => String(m.makerId) === brandIdToRemove);
+        const brandModelIds = new Set([...cachedModels, ...stateModels].map((m) => String(m.value || m.modelId)));
+        setSelectedModels((prev) => prev.filter((mId) => !brandModelIds.has(String(mId))));
+
+        if (nextBrands.length === 0) {
+          setSelectedModels([]);
+        }
         return;
       }
       if (
         String(resolvedBrandName).toLowerCase() === lower &&
         selectedBrands.length > 0
       ) {
-        setSelectedBrands([]);
+        setCurrentPage(1);
+        lastProcessedPageRef.current = 1;
+        const brandIdToRemove = String(selectedBrands[0]);
+        const nextBrands = selectedBrands.filter((id) => String(id) !== brandIdToRemove);
+        setSelectedBrands(nextBrands);
+
+        const cachedModels = brandModelsCacheRef.current[brandIdToRemove] || [];
+        const stateModels = models.filter((m) => String(m.makerId) === brandIdToRemove);
+        const brandModelIds = new Set([...cachedModels, ...stateModels].map((m) => String(m.value || m.modelId)));
+        setSelectedModels((prev) => prev.filter((mId) => !brandModelIds.has(String(mId))));
+
+        if (nextBrands.length === 0) {
+          setSelectedModels([]);
+        }
         return;
       }
       // 6. Model
       const modelObj = models.find(
         (m) => String(m.label || "").toLowerCase() === lower,
       );
-      if (modelObj && selectedModels.includes(modelObj.value)) {
+      if (modelObj && selectedModels.some((id) => String(id) === String(modelObj.value))) {
+        setCurrentPage(1);
+        lastProcessedPageRef.current = 1;
         setSelectedModels((prev) =>
-          prev.filter((val) => val !== modelObj.value),
+          prev.filter((val) => String(val) !== String(modelObj.value)),
         );
         return;
       }
@@ -2120,7 +2455,9 @@ export default function SearchWithCard({
         String(resolvedModelName).toLowerCase() === lower &&
         selectedModels.length > 0
       ) {
-        setSelectedModels([]);
+        setCurrentPage(1);
+        lastProcessedPageRef.current = 1;
+        setSelectedModels((prev) => prev.filter((val) => String(val) !== String(selectedModels[0])));
         return;
       }
       // 7. Variant
@@ -2272,6 +2609,7 @@ export default function SearchWithCard({
 
     // Reset pagination
     setCurrentPage(1);
+    lastProcessedPageRef.current = 1;
 
     // Reset filter chips immediately
     onFilterChange?.([]);
@@ -2528,21 +2866,26 @@ export default function SearchWithCard({
 
             <FilterSection
               title="Brand & Model"
-              selectedCount={selectedBrands.length + selectedModels.length}
+              selectedCount={brandModelSelectedCount}
               defaultOpen={true}
               onClear={() => {
+                isSelfTriggered.current = true;
+                setCurrentPage(1);
+                lastProcessedPageRef.current = 1;
                 setSelectedBrands([]);
                 setSelectedModels([]);
               }}
             >
               <BrandModelFilter
                 selectedBrands={selectedBrands}
-                onBrandChange={setSelectedBrands}
+                onBrandChange={handleBrandChange}
                 selectedModels={selectedModels}
-                onModelChange={setSelectedModels}
+                onModelChange={handleModelChange}
                 apiBodyType={apiBodyType}
                 onBrandsLoaded={handleBrandsLoaded}
                 onModelsLoaded={handleModelsLoaded}
+                onModelsByBrandLoaded={handleModelsByBrandLoaded}
+                allLoadedModels={models}
               />
             </FilterSection>
 
@@ -3066,7 +3409,7 @@ export default function SearchWithCard({
                   : 0,
               },
               { name: "Budget", count: 0 },
-              { name: "Brand & Model", count: selectedBrands.length + selectedModels.length },
+              { name: "Brand & Model", count: brandModelSelectedCount },
               { name: "Category", count: selectedCategories.length },
               { name: "Fuel Type", count: selectedFuelTypes.length },
               { name: "Transmission", count: selectedTransmissionTypes.length },
@@ -3255,13 +3598,15 @@ export default function SearchWithCard({
             {(activeFilterTab === "Brand & Model" || activeFilterTab === "Brand" || activeFilterTab === "Model") && (
               <BrandModelFilter
                 selectedBrands={selectedBrands}
-                onBrandChange={setSelectedBrands}
+                onBrandChange={handleBrandChange}
                 selectedModels={selectedModels}
-                onModelChange={setSelectedModels}
+                onModelChange={handleModelChange}
                 apiBodyType={apiBodyType}
                 isMobile={true}
                 onBrandsLoaded={handleBrandsLoaded}
                 onModelsLoaded={handleModelsLoaded}
+                onModelsByBrandLoaded={handleModelsByBrandLoaded}
+                allLoadedModels={models}
               />
             )}
 

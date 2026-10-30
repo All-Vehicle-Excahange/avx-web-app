@@ -147,9 +147,13 @@ const nextConfig = {
     ];
   },
   images: {
-    // Only use custom loader in production, fallback to default in dev to avoid missing loader prop error
-    loader: process.env.NODE_ENV === "production" ? "custom" : "default",
-    loaderFile: process.env.NODE_ENV === "production" ? "./src/lib/imagekitLoader.js" : undefined,
+    unoptimized: process.env.NODE_ENV !== "production",
+    ...(process.env.NODE_ENV === "production"
+      ? {
+          loader: "custom",
+          loaderFile: "./src/lib/imagekitLoader.js",
+        }
+      : {}),
     remotePatterns: [
       {
         protocol: "https",
