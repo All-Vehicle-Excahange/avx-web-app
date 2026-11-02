@@ -15,6 +15,7 @@ import {
   PhoneIncoming,
   Rocket,
   CheckCircle2,
+  MessageCircle,
 } from "lucide-react";
 import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { getInquiryKpisQuery } from "@/queries/Seller.queries";
