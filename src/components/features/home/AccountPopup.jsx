@@ -684,11 +684,15 @@ export default function AccountPopup({ open, onClosePopup }) {
                   full
                   size="sm"
                   onClick={handleLogout}
-                  locked={isLoggingOut}
+                  loading={isLoggingOut}
+                  loadingText="Logging out..."
                   className="flex items-center justify-center gap-2"
                 >
                   {isLoggingOut ? (
-                    <Loader2 size={16} className="animate-spin" />
+                    <>
+                      <Loader2 size={16} className="animate-spin shrink-0" />
+                      <span>Logging out...</span>
+                    </>
                   ) : (
                     "Yes, Logout"
                   )}

@@ -992,7 +992,10 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 }`}
             >
               {isLoading ? (
-                <Loader2 size={20} className="animate-spin" />
+                <>
+                  <Loader2 size={18} className="animate-spin shrink-0" />
+                  <span>Sending OTP...</span>
+                </>
               ) : (
                 "GET OTP"
               )}
@@ -1070,8 +1073,9 @@ export default function SignupPopup({ isOpen, onClose, onLogin = () => { }, onSu
                 onClick={handleGoogleSignIn}
                 disabled={isLoading || isGoogleLoading}
                 loading={isGoogleLoading}
+                loadingText="Signing in with Google..."
               >
-                <FcGoogle className="text-xl" /> Continue with Google
+                <FcGoogle className="text-xl shrink-0" /> <span className="whitespace-nowrap">Continue with Google</span>
               </Button>
             </div>
           )}

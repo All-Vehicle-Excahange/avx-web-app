@@ -49,8 +49,10 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
     createdAt,
     isInspected,
     inquiryCloseReason,
+    masked,
   } = inquiry;
 
+  const isMasked = masked === true || inquiry?.masked === true;
   const isPending = inquiryStatus === "PENDING";
   const isApproved = inquiryStatus === "APPROVED";
   const isRejected = inquiryStatus === "REJECTED";
@@ -239,125 +241,143 @@ export default function InquiryCard({ inquiry, onStatusChange, hideReviewButton 
             </p>
           )}
 
-          {/*   Inspection Tip */}
-          {isApproved && !isInspected && (
-            <p className="text-xs flex items-center gap-2 text-yellow-400 font-semibold pt-1">
-              <Clock size={14} />
-              Tip: Reecomm-inspected vehicles close faster
-            </p>
-          )}
-
-          {/*   Pending Section Messages & Buttons */}
-          {isPending && (
-            <div className="pt-2 space-y-2">
-              <p className="text-xs text-third flex items-center gap-2">
-                <Clock size={14} className="text-yellow-400 shrink-0" />
-                <span>
-                  Waiting for response — buyers respond faster within 30 mins
-                </span>
-              </p>
-
-              <p className="text-xs text-third flex items-center gap-2">
-                <MessageCircle size={14} className="text-blue-400 shrink-0" />
-                <span>Chat starts after accepting</span>
-              </p>
-
-              <div className="flex flex-wrap gap-3 pt-3">
-                <Button
-                  showIcon={false}
-                  variant="ghost"
-                  size="md"
-                  onClick={handleApprove}
-                  loading={loadingAction === "APPROVE"}
-                >
-                  <Check size={16} className="mr-2" />
-                  Accept
-                </Button>
-
-                <Button
-                  showIcon={false}
-                  variant="outlineSecondary"
-                  onClick={() => setShowRejectPopup(true)}
-                  loading={loadingAction === "REJECT"}
-                >
-                  <X size={16} className="mr-2" />
-                  Reject
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/*   Approved Section Buttons */}
-          {isApproved && (
-            <div className="flex flex-wrap gap-3 pt-4">
-              {!isInspected && (
-                <Button
-                  showIcon={false}
-                  size="sm"
-                  variant="outlineSecondary"
-                  onClick={() => console.log("Request Inspection")}
-                >
-                  <BadgeCheck size={16} className="mr-2" />
-                  Request Inspection
-                </Button>
-              )}
-
+          {/* If inquiry is masked, hide all action buttons and only show Upgrade Subscription */}
+          {isMasked ? (
+            <div className="flex flex-wrap gap-3 pt-3">
               <Button
+                href="/consult/pricing?mode=upgrade"
                 showIcon={false}
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowClosePopup(true)}
-                loading={loadingAction === "CLOSE"}
               >
                 <Lock size={16} className="mr-2" />
-                Close Inquiry
-              </Button>
-
-              <Button
-                showIcon={false}
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDownloadPopup(true)}
-              >
-                <MessageCircle size={16} className="mr-2" />
-                Open Chat
+                Upgrade Subscription
               </Button>
             </div>
-          )}
-
-          {/*   Rejected Section */}
-          {isRejected && (
-            <p className="text-sm text-red-400 font-semibold pt-2">
-              Inquiry Rejected
-            </p>
-          )}
-
-          {/*   Closed Section */}
-          {isClosed && (
-            <div className="pt-4 flex flex-wrap gap-3">
-              {!inquiryVehicleResponse.isVehicleSold && (
-                <Button
-                  showIcon={false}
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowMarkSoldPopup(true)}
-                  loading={loadingAction === "MARK_SOLD"}
-                >
-                  Mark as Sold
-                </Button>
+          ) : (
+            <>
+              {/*   Inspection Tip */}
+              {isApproved && !isInspected && (
+                <p className="text-xs flex items-center gap-2 text-yellow-400 font-semibold pt-1">
+                  <Clock size={14} />
+                  Tip: Reecomm-inspected vehicles close faster
+                </p>
               )}
-              {!hideReviewButton && (
-                <Button
-                  showIcon={false}
-                  variant="outlineSecondary"
-                  size="sm"
-                  onClick={handleFeedbackClick}
-                  loading={loadingAction === "FEEDBACK"}
-                >
-                  Review
-                </Button>
+
+              {/*   Pending Section Messages & Buttons */}
+              {isPending && (
+                <div className="pt-2 space-y-2">
+                  <p className="text-xs text-third flex items-center gap-2">
+                    <Clock size={14} className="text-yellow-400 shrink-0" />
+                    <span>
+                      Waiting for response — buyers respond faster within 30 mins
+                    </span>
+                  </p>
+
+                  <p className="text-xs text-third flex items-center gap-2">
+                    <MessageCircle size={14} className="text-blue-400 shrink-0" />
+                    <span>Chat starts after accepting</span>
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 pt-3">
+                    <Button
+                      showIcon={false}
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleApprove}
+                      loading={loadingAction === "APPROVE"}
+                    >
+                      <Check size={16} className="mr-2" />
+                      Accept
+                    </Button>
+
+                    <Button
+                      showIcon={false}
+                      variant="outlineSecondary"
+                      size="sm"
+                      onClick={() => setShowRejectPopup(true)}
+                      loading={loadingAction === "REJECT"}
+                    >
+                      <X size={16} className="mr-2" />
+                      Reject
+                    </Button>
+                  </div>
+                </div>
               )}
-            </div>
+
+              {/*   Approved Section Buttons */}
+              {isApproved && (
+                <div className="flex flex-wrap gap-3 pt-4">
+                  {!isInspected && (
+                    <Button
+                      showIcon={false}
+                      size="sm"
+                      variant="outlineSecondary"
+                      onClick={() => console.log("Request Inspection")}
+                    >
+                      <BadgeCheck size={16} className="mr-2" />
+                      Request Inspection
+                    </Button>
+                  )}
+
+                  <Button
+                    showIcon={false}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowClosePopup(true)}
+                    loading={loadingAction === "CLOSE"}
+                  >
+                    <Lock size={16} className="mr-2" />
+                    Close Inquiry
+                  </Button>
+
+                  <Button
+                    showIcon={false}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowDownloadPopup(true)}
+                  >
+                    <MessageCircle size={16} className="mr-2" />
+                    Open Chat
+                  </Button>
+                </div>
+              )}
+
+              {/*   Rejected Section */}
+              {isRejected && (
+                <p className="text-sm text-red-400 font-semibold pt-2">
+                  Inquiry Rejected
+                </p>
+              )}
+
+              {/*   Closed Section */}
+              {isClosed && (
+                <div className="pt-4 flex flex-wrap gap-3">
+                  {!inquiryVehicleResponse.isVehicleSold && (
+                    <Button
+                      showIcon={false}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowMarkSoldPopup(true)}
+                      loading={loadingAction === "MARK_SOLD"}
+                    >
+                      Mark as Sold
+                    </Button>
+                  )}
+                  {!hideReviewButton && (
+                    <Button
+                      showIcon={false}
+                      variant="outlineSecondary"
+                      size="sm"
+                      onClick={handleFeedbackClick}
+                      loading={loadingAction === "FEEDBACK"}
+                    >
+                      Review
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
           )}
 
           {/*   Sold Badge */}

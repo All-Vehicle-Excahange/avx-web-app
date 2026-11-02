@@ -61,11 +61,17 @@ export default function InquiriesComponent() {
   } = useInfiniteQuery(
     getInquiriesInfiniteQuery({
       inquiryStatus: inquiryStatusFilter,
-      pageSize: 6,
+      pageSize: 9,
     })
   );
   const inquiries =
     inquiriesInfiniteData?.pages.flatMap((page) => page.data || []) || [];
+
+  const totalInquiries =
+    inquiriesInfiniteData?.pages?.[0]?.pageResponse?.totalElements ??
+    inquiriesInfiniteData?.pages?.[0]?.pagination?.totalElements ??
+    inquiriesInfiniteData?.pages?.[0]?.totalElements ??
+    inquiries.length;
 
   const handleStatusChange = () => {
     queryClient.invalidateQueries({ queryKey: ["inquiries-infinite"] });
@@ -344,18 +350,25 @@ export default function InquiriesComponent() {
                   />
                 ))}
 
-                {hasNextPage && (
-                  <div className="flex justify-end mt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 pb-2">
+                  <p className="text-xs sm:text-sm text-third font-medium">
+                    Showing <span className="text-primary font-semibold">{inquiries.length}</span> of{" "}
+                    <span className="text-primary font-semibold">{totalInquiries}</span> inquiries
+                  </p>
+
+                  {hasNextPage && (
                     <Button
                       variant="outline"
                       onClick={() => fetchNextPage()}
                       disabled={isFetchingNextPage}
-                      className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                      loading={isFetchingNextPage}
+                      loadingText="Loading..."
+                      className="px-6 py-2 rounded-full text-xs sm:text-sm font-semibold shadow-md hover:bg-primary/10 transition cursor-pointer"
                     >
-                      {isFetchingNextPage ? "Loading..." : "View More"}
+                      View More
                     </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </>
             ) : (
               <div className="rounded-xl border border-dashed border-third/30 p-10 text-center space-y-3 shadow-sm transition-colors duration-200 hover:border-third/40">
@@ -509,18 +522,25 @@ export default function InquiriesComponent() {
                   <CallLeadCard key={lead.id} lead={lead} />
                 ))}
 
-                {hasNextCallLeads && (
-                  <div className="flex justify-end mt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 pb-2">
+                  <p className="text-xs sm:text-sm text-third font-medium">
+                    Showing <span className="text-primary font-semibold">{callLeads.length}</span> of{" "}
+                    <span className="text-primary font-semibold">{totalCallLeads}</span> call leads
+                  </p>
+
+                  {hasNextCallLeads && (
                     <Button
                       variant="outline"
                       onClick={() => fetchNextCallLeads()}
                       disabled={isFetchingNextCallLeads}
-                      className="px-6 py-2 rounded-full text-sm font-semibold shadow-md"
+                      loading={isFetchingNextCallLeads}
+                      loadingText="Loading..."
+                      className="px-6 py-2 rounded-full text-xs sm:text-sm font-semibold shadow-md hover:bg-primary/10 transition cursor-pointer"
                     >
-                      {isFetchingNextCallLeads ? "Loading..." : "View More"}
+                      View More
                     </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </>
             ) : (
               <div className="rounded-xl border border-dashed border-third/30 p-10 text-center space-y-3 shadow-sm transition-colors duration-200 hover:border-third/40">
