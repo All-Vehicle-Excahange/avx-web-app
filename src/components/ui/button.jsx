@@ -11,6 +11,7 @@ export default function Button({
   showIcon = false,
   locked = false,
   loading = false,
+  loadingText,
   className = "",
   disabled = false,
   ...props
@@ -106,20 +107,17 @@ export default function Button({
         </>
       )}
 
-      {loading && (
-        <span className="absolute inset-0 flex items-center justify-center z-20">
-          <Loader2 className="w-4 h-4 animate-spin" />
-        </span>
-      )}
-
       <span
         className={cn(
-          "relative z-10 flex items-center gap-2",
-          loading && "opacity-0",
+          "relative z-10 flex items-center justify-center gap-2",
+          full && "w-full",
         )}
       >
-        {children}
-        {showIcon && !isRounded && !isLocked && (
+        {loading && (
+          <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+        )}
+        {loading && loadingText ? loadingText : children}
+        {showIcon && !isRounded && !isLocked && !loading && (
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
         )}
       </span>

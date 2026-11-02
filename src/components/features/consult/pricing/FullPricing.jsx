@@ -25,6 +25,8 @@ import {
 } from "@/services/subscription.service";
 import DowngradeModal from "./DowngradeModal";
 import BillingSummaryModal from "./BillingSummaryModal";
+import PromoCodeModal from "./PromoCodeModal";
+import PaymentLoadingModal from "./PaymentLoadingModal";
 import { event } from "@/lib/fpixel";
 import {
   trackPlanSelected,
@@ -32,6 +34,7 @@ import {
 } from "@/lib/amplitude";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination } from "swiper/modules";
+import { Tag } from "lucide-react";
 import toast from "react-hot-toast";
 import { getSubscriptionState, getTierRank } from "@/lib/subscriptionHelper";
 import "swiper/css";
@@ -39,6 +42,15 @@ import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
 const staticTierDetails = {
+  FREE: {
+    name: "Free",
+    tagline: "Explore Reecomm with essential entry tools.",
+    color: "#6b7280",
+    bestFor: "Individual consultants starting out",
+    cta: "Get Started",
+    ctaStyle: "border border-[#d1d5db] text-[#111827] hover:bg-[#f9fafb]",
+    highlight: false,
+  },
   BASIC: {
     name: "Basic",
     tagline: "Start building your presence on Reecomm.",
@@ -108,10 +120,14 @@ export default function FullPricing() {
   const [billingModalOpen, setBillingModalOpen] = useState(false);
   const [billingTier, setBillingTier] = useState(null);
   const [billingIs404, setBillingIs404] = useState(false);
+  const [promoModalOpen, setPromoModalOpen] = useState(false);
+  const [paymentInitializing, setPaymentInitializing] = useState(false);
+  const [activationConfig, setActivationConfig] = useState(null);
 
   const { user, isLoggedIn, openLoginPopup } = useAuthStore();
   const queryClient = useQueryClient();
   const pendingTier = useRef(null);
+  const pendingPromoModal = useRef(false);
   let userRole = user?.userRole || user?.role;
   if (!userRole && typeof window !== "undefined") {
     try {
@@ -158,6 +174,10 @@ export default function FullPricing() {
     if (isSellerTierLoading) return;
     if (!isLoggedIn) return;
 
+    // If payment or activation loading modal is currently active, do NOT trigger
+    // background auto-redirects which would compete with the modal and flash the page
+    if (paymentInitializing) return;
+
     const tierStatus = sellerTierData?.userTierStatus;
     const hasTier = !!currentTier;
     const redirect = router.query?.redirect;
@@ -182,6 +202,7 @@ export default function FullPricing() {
     router,
     isRenewMode,
     queryMode,
+    paymentInitializing,
   ]);
 
   const loadRazorpayScript = () => {
@@ -202,9 +223,11 @@ export default function FullPricing() {
     try {
       setPaymentLoading(true);
       setUpgradingTierId(tier.id);
+      setPaymentInitializing(true);
 
       const isScriptLoaded = await loadRazorpayScript();
       if (!isScriptLoaded) {
+        setPaymentInitializing(false);
         toast.error("Razorpay SDK failed to load. Please check your connection.");
         return;
       }
@@ -375,6 +398,13 @@ export default function FullPricing() {
             router.push("/consult/dashboard");
           }
         },
+        modal: {
+          ondismiss: function () {
+            setPaymentLoading(false);
+            setUpgradingTierId(null);
+            setPaymentInitializing(false);
+          },
+        },
         theme: {
           color: "#007bff",
         },
@@ -382,10 +412,29 @@ export default function FullPricing() {
 
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (failResponse) {
+        setPaymentInitializing(false);
         toast.error("Payment failed: " + failResponse.error.description);
       });
       rzp.open();
+
+      // Keep animated loading modal visible until Razorpay checkout modal is rendered in DOM
+      let checkCount = 0;
+      const rzpCheckInterval = setInterval(() => {
+        checkCount++;
+        const rzpContainer =
+          document.querySelector(".razorpay-checkout-frame") ||
+          document.querySelector(".razorpay-container") ||
+          document.querySelector("iframe[src*='razorpay']");
+
+        if (rzpContainer || checkCount >= 30) {
+          clearInterval(rzpCheckInterval);
+          setTimeout(() => {
+            setPaymentInitializing(false);
+          }, 350);
+        }
+      }, 100);
     } catch (error) {
+      setPaymentInitializing(false);
       console.error("Payment error:", error);
       toast.error(
         "Error initiating payment: " +
@@ -400,6 +449,7 @@ export default function FullPricing() {
   };
 
   const handleUpgrade = async (tier) => {
+    if (paymentLoading) return;
     if (!isLoggedIn) {
       // Store which tier the user wanted, then show login popup
       pendingTier.current = tier;
@@ -412,6 +462,20 @@ export default function FullPricing() {
     }
 
     if (!tier?.id) return;
+
+    const targetKey = (tier.title || "").toUpperCase();
+    const isFreePlan =
+      targetKey.includes("FREE") ||
+      (Number(tier.monthlyPrice) === 0 && Number(tier.yearlyPrice) === 0);
+
+    if (isFreePlan) {
+      if (subState === "ACTIVE" && !isRenewMode) {
+        toast.error("You already have an active subscription.");
+        return;
+      }
+      setPromoModalOpen(true);
+      return;
+    }
 
     trackPlanSelected({
       plan_id: tier.id,
@@ -477,23 +541,81 @@ export default function FullPricing() {
   const handleConfirmDowngrade = async () => {
     if (!downgradeData?.targetTierObj) return;
     const { targetTierObj, is404NoActive } = downgradeData;
+    setActivationConfig(null);
+    setBillingTier(targetTierObj);
     setDowngradeModalOpen(false);
+    setPaymentInitializing(true);
     await executePayment(targetTierObj, is404NoActive);
   };
 
   const handleConfirmBilling = async (tierToPay) => {
     const target = tierToPay || billingTier;
     if (!target) return;
+    setActivationConfig(null);
+    setBillingTier(target);
     setBillingModalOpen(false);
+    setPaymentInitializing(true);
     await executePayment(target, billingIs404);
   };
 
-  // After login: resume the pending upgrade automatically
+  const handleRedeemSuccess = () => {
+    setActivationConfig({
+      title: "Activating Free Tier",
+      subtitle: "Configuring your free subscription and setting up your consultation features...",
+      tierName: "Free",
+      isActivation: true,
+    });
+    setPaymentInitializing(true);
+    setPromoModalOpen(false);
+
+    const redirect = router.query?.redirect;
+    const targetUrl = redirect ? `/consult/kyc?redirect=${redirect}` : "/consult/kyc";
+
+    // Prefetch the KYC route in advance so page transition is fast and seamless
+    try {
+      router.prefetch(targetUrl);
+    } catch (e) { }
+
+    // Keep fully animated activation modal visible for 2 seconds for high-tech feedback,
+    // then navigate directly into the KYC form.
+    // CRITICAL: DO NOT set paymentInitializing to false before router.push!
+    // Keeping it true ensures PaymentLoadingModal stays open continuously over the screen
+    // until Next.js loads /consult/kyc and unmounts FullPricing cleanly.
+    setTimeout(async () => {
+      try {
+        await router.push(targetUrl);
+      } catch (err) {
+        console.error("Navigation error to KYC:", err);
+        setPaymentInitializing(false);
+        setActivationConfig(null);
+      }
+    }, 2000);
+  };
+
+  const handleOpenPromoModal = () => {
+    if (!isLoggedIn) {
+      pendingPromoModal.current = true;
+      openLoginPopup({
+        entry_context: "redeem_code",
+        trigger_action: "claim_redeem_code",
+        user_role_intent: "consultant",
+      });
+      return;
+    }
+    setPromoModalOpen(true);
+  };
+
+  // After login: resume the pending action automatically
   useEffect(() => {
-    if (isLoggedIn && pendingTier.current) {
-      const tier = pendingTier.current;
-      pendingTier.current = null;
-      handleUpgrade(tier);
+    if (isLoggedIn) {
+      if (pendingTier.current) {
+        const tier = pendingTier.current;
+        pendingTier.current = null;
+        handleUpgrade(tier);
+      } else if (pendingPromoModal.current) {
+        pendingPromoModal.current = false;
+        setPromoModalOpen(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
@@ -503,14 +625,16 @@ export default function FullPricing() {
       try {
         const res = await getAllTier();
         if (res?.data) {
-          const order = ["BASIC", "PRO", "PREMIUM"];
+          const order = ["FREE", "BASIC", "PRO", "PREMIUM"];
           const filtered = res.data.filter(
             (tier) => tier.title?.toUpperCase() !== "TEST",
           );
           const sorted = [...filtered].sort((a, b) => {
-            const aTitle = a.title?.toUpperCase();
-            const bTitle = b.title?.toUpperCase();
-            return order.indexOf(aTitle) - order.indexOf(bTitle);
+            const aTitle = a.title?.toUpperCase() || "";
+            const bTitle = b.title?.toUpperCase() || "";
+            const aIdx = order.findIndex((o) => aTitle.includes(o));
+            const bIdx = order.findIndex((o) => bTitle.includes(o));
+            return (aIdx === -1 ? 99 : aIdx) - (bIdx === -1 ? 99 : bIdx);
           });
           setTiers(sorted);
         }
@@ -594,6 +718,8 @@ export default function FullPricing() {
     const basePriceOnCard = calculateBaseWithoutGst(rawPrice);
     const formattedPrice = formatPrice(basePriceOnCard);
 
+
+
     const monthlyVal = Number(tier.monthlyPrice) || 0;
     const yearlyVal = Number(tier.yearlyPrice) || 0;
     const totalMonthlyCostForYear = monthlyVal * 12;
@@ -605,7 +731,7 @@ export default function FullPricing() {
       savingsPercent = Math.round(
         ((totalMonthlyCostForYear - yearlyVal) /
           totalMonthlyCostForYear) *
-          100
+        100
       );
     }
 
@@ -625,15 +751,13 @@ export default function FullPricing() {
       return descVal ? `${titleVal} (${descVal})` : titleVal;
     });
 
-    const isButtonDisabled = paymentLoading && upgradingTierId === tier.id;
+    const isButtonDisabled = paymentLoading;
 
     let buttonText = staticDetails.cta;
     const currentRank = getTierRank(currentTier);
     const targetRank = getTierRank(key);
 
-    if (paymentLoading && upgradingTierId === tier.id) {
-      buttonText = "Processing...";
-    } else if (isRenewMode) {
+    if (isRenewMode) {
       if (isCurrentTier) {
         buttonText = "Renew";
       } else {
@@ -647,7 +771,16 @@ export default function FullPricing() {
       }
     } else if (currentRank > targetRank) {
       buttonText = "Downgrade Plan";
+    } else if (key.includes("FREE") || (Number(tier.monthlyPrice) === 0 && Number(tier.yearlyPrice) === 0)) {
+      buttonText = "Claim with Code";
     }
+
+    let loadingLabel = "Getting Started...";
+    if (buttonText === "Renew") loadingLabel = "Renewing...";
+    else if (buttonText === "Downgrade Plan") loadingLabel = "Downgrading...";
+    else if (buttonText === "Claim with Code") loadingLabel = "Claiming...";
+    else if (buttonText === "Get Started") loadingLabel = "Getting Started...";
+    else loadingLabel = `${buttonText}...`;
 
     return (
       <div
@@ -655,16 +788,15 @@ export default function FullPricing() {
         className="group/card relative flex flex-col h-full w-full rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border border-primary/10"
         style={{ background: "transparent" }}
       >
-        <div className="relative p-5 sm:p-7 flex flex-col flex-1">
+        <div className="relative p-5 sm:p-6 lg:p-5 xl:p-6 flex flex-col flex-1">
           {/* Plan name and pills */}
           <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-            <h3 className="text-[22px] sm:text-[24px] font-bold text-primary tracking-tight">
+            <h3 className="text-[20px] sm:text-[22px] xl:text-[24px] font-bold text-primary tracking-tight">
               {staticDetails.name}
             </h3>
             {isCurrentTier && (
-              <span className={`border text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full ${
-                isRenewMode ? "border-yellow-500/40 text-yellow-400 bg-yellow-500/10" : "border-emerald-500/30 text-emerald-500"
-              }`}>
+              <span className={`border text-[10px] font-bold tracking-widest uppercase px-3 py-0.5 rounded-full ${isRenewMode ? "border-yellow-500/40 text-yellow-400 bg-yellow-500/10" : "border-emerald-500/30 text-emerald-500"
+                }`}>
                 {isRenewMode ? (subState === "GRACE_PERIOD" ? "Grace Period" : "Expired") : "Active"}
               </span>
             )}
@@ -709,11 +841,10 @@ export default function FullPricing() {
               <div key={idx}>
                 <li className="flex items-start gap-2.5 sm:gap-3 py-2 sm:py-2.5">
                   <FiCheck
-                    className={`text-[14px] mt-0.5 shrink-0 ${
-                      staticDetails.highlight
-                        ? "text-primary/40"
-                        : "text-primary/40"
-                    }`}
+                    className={`text-[14px] mt-0.5 shrink-0 ${staticDetails.highlight
+                      ? "text-primary/40"
+                      : "text-primary/40"
+                      }`}
                   />
                   <span className="text-[13px] text-primary/70 leading-relaxed">
                     {f}
@@ -734,7 +865,7 @@ export default function FullPricing() {
           )}
 
           {/* Button */}
-          <div className="mt-4 sm:mt-6 pt-1 sm:pt-2 flex justify-start">
+          <div className="mt-auto pt-4 sm:pt-6 flex justify-start">
             {isCurrentTier && !isRenewMode ? (
               <Link href={userRole !== "CONSULTATION" ? "/consult/kyc" : "/consult/dashboard"}>
                 <Button variant="ghost" size="sm" disabled={isButtonDisabled}>
@@ -748,6 +879,7 @@ export default function FullPricing() {
                 className={isCurrentTier && isRenewMode ? "border border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 font-bold" : ""}
                 disabled={isButtonDisabled}
                 loading={paymentLoading && upgradingTierId === tier.id}
+                loadingText={loadingLabel}
                 onClick={() => handleUpgrade(tier)}
               >
                 {buttonText}
@@ -762,19 +894,29 @@ export default function FullPricing() {
   return (
     <div>
       {/* HERO */}
-      <PricingHero yearly={yearly} setYearly={setYearly} />
+      <PricingHero
+        yearly={yearly}
+        setYearly={setYearly}
+      />
 
       {/* CARDS — div NOT section, inline style beats global CSS */}
       <div
         id="pricing-table"
         className="relative z-10 mt-0 mb-0"
-        // style={{ background: "#ffffff" }}
+      // style={{ background: "#ffffff" }}
       >
-        <div className="container mx-auto px-5 sm:px-6 pt-0">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 xl:px-8 pt-0">
           {/* DESKTOP GRID */}
-          <div className="hidden lg:grid lg:grid-cols-3 gap-6 items-stretch">
+          <div
+            className={`hidden lg:grid gap-4 sm:gap-5 xl:gap-6 items-stretch w-full ${tiers.length >= 4
+              ? "lg:grid-cols-4"
+              : tiers.length === 2
+                ? "lg:grid-cols-2 max-w-4xl mx-auto"
+                : "lg:grid-cols-3"
+              }`}
+          >
             {loading
-              ? Array.from({ length: 3 }).map((_, i) => renderSkeletonCard(i))
+              ? Array.from({ length: tiers.length || 3 }).map((_, i) => renderSkeletonCard(i))
               : tiers.map((tier, i) => renderTierCard(tier, i))}
           </div>
 
@@ -816,12 +958,31 @@ export default function FullPricing() {
               </Swiper>
             )}
           </div>
+
+          {/* HAVE A PROMO CODE TRIGGER — CENTERED BELOW TIERS */}
+          <div className="mt-8 sm:mt-10 flex items-center justify-center">
+            <button
+              type="button"
+              disabled={paymentLoading}
+              onClick={handleOpenPromoModal}
+              className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium transition-all group ${
+                paymentLoading
+                  ? "opacity-50 cursor-not-allowed text-fourth/50"
+                  : "text-fourth hover:text-fourth/80 cursor-pointer"
+              }`}
+            >
+              <Tag className="w-3.5 h-3.5 text-fourth transition-transform group-hover:rotate-12" />
+              <span className="underline underline-offset-4 decoration-fourth/40 hover:decoration-fourth">
+                Have a promo code?
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* ADD-ONS — div NOT section, inline style white */}
       <div>
-        <div className=" pb-20">
+        <div className=" pb-10 pt-4">
           <div className="max-w-7xl mx-auto px-5 sm:px-6">
             <div className="text-center mb-12">
               <p className="inline-block px-3 py-1 rounded-full text-[10px] tracking-[0.25em] uppercase text-fourth border border-fourth/20 bg-fourth/5 mt-8 mb-4">
@@ -886,6 +1047,33 @@ export default function FullPricing() {
         tier={billingTier}
         yearly={yearly}
         isLoading={paymentLoading}
+      />
+
+      <PromoCodeModal
+        isOpen={promoModalOpen}
+        onClose={() => setPromoModalOpen(false)}
+        onRedeemSuccess={handleRedeemSuccess}
+      />
+
+      <PaymentLoadingModal
+        isOpen={paymentInitializing}
+        title={activationConfig?.title || "Connecting to Secure Gateway"}
+        subtitle={
+          activationConfig?.subtitle ||
+          "Please wait while we initialize your Razorpay checkout. Do not refresh or close this page."
+        }
+        tierName={activationConfig?.tierName || billingTier?.title}
+        planPrice={
+          activationConfig
+            ? null
+            : billingTier
+              ? yearly
+                ? billingTier.yearlyPrice
+                : billingTier.monthlyPrice
+              : null
+        }
+        yearly={yearly}
+        isActivation={activationConfig?.isActivation || false}
       />
     </div>
   );

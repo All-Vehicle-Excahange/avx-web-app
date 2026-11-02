@@ -1,4 +1,7 @@
-export default function PricingHero({ yearly, setYearly }) {
+export default function PricingHero({
+  yearly,
+  setYearly,
+}) {
   return (
     <section className="relative pt-24 md:pt-30 pb-8 sm:pb-10 lg:pb-12 overflow-hidden">
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
@@ -57,9 +60,11 @@ export default function PricingHero({ yearly, setYearly }) {
         </div>
 
         {/* GST NOTE */}
-        <p className="mt-3.5 text-xs text-white/50 font-medium">
-          *All plan prices are exclusive of 18% GST.
-        </p>
+        <div className="mt-3.5 flex items-center justify-center text-xs">
+          <p className="text-white/50 font-medium">
+            *All plan prices are exclusive of 18% GST.
+          </p>
+        </div>
       </div>
     </section>
   );

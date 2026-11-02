@@ -21,8 +21,10 @@ export const getInquiries = async (payload) => {
     if (payload?.pageNo !== undefined) {
       params.pageNo = payload.pageNo;
     }
-    if (payload?.pageSize !== undefined) {
-      params.size = payload.pageSize;
+    if (payload?.pageSize !== undefined || payload?.size !== undefined) {
+      const s = payload.pageSize ?? payload.size;
+      params.size = s;
+      params.pageSize = s;
     }
 
     const res = await axiosInstance.get(ENDPOINT.getInquiries, {
@@ -46,8 +48,10 @@ export const getMyInquiries = async (payload) => {
     if (payload?.pageNo !== undefined) {
       params.pageNo = payload.pageNo;
     }
-    if (payload?.pageSize !== undefined) {
-      params.size = payload.pageSize;
+    if (payload?.pageSize !== undefined || payload?.size !== undefined) {
+      const s = payload.pageSize ?? payload.size;
+      params.size = s;
+      params.pageSize = s;
     }
 
     const res = await axiosInstance.get(ENDPOINT.getMyInquiries, {

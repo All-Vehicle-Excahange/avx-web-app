@@ -10,7 +10,7 @@ import SayHello from "@/components/features/home/SayHello";
 // import RecentlyVisitedSection from "@/components/features/home/RecentlyVisitedSection";
 import SellVehicleBanner from "@/components/features/home/SellVehicleBanner";
 import ShowcaseSection from "@/components/features/home/ShowcaseSection";
-import NavratriShowcaseSection from "@/components/features/home/NavratriShowcaseSection";
+import DiwaliShowcaseSection from "@/components/features/home/DiwaliShowcaseSection";
 import StatsSection from "@/components/features/home/StateSection";
 import StorySection from "@/components/features/home/StorySection";
 import TopPicsSection from "@/components/features/home/TopPicsSection";
@@ -165,9 +165,9 @@ function Home() {
       </Head>
       <HeroSection fullWidth />
       {/* <RecentlyVisitedSection /> */}
-      <Layout>
-        <NavratriShowcaseSection />
-      </Layout>
+      {/* <Layout>
+        <DiwaliShowcaseSection />
+      </Layout> */}
       <Layout>
         <ShowcaseSection />
       </Layout>

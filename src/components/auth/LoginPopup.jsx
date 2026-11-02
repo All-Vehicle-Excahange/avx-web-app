@@ -887,7 +887,10 @@ function LoginPopup({
               className={`w-full h-11 text-sm font-bold flex items-center justify-center gap-2 ${isGoogleSignupFlow && !acceptedTerms ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isLoading ? (
-                <Loader2 size={20} className="animate-spin" />
+                <>
+                  <Loader2 size={18} className="animate-spin shrink-0" />
+                  <span>Sending OTP...</span>
+                </>
               ) : (
                 "GET OTP"
               )}
@@ -924,8 +927,9 @@ function LoginPopup({
                 onClick={handleGoogleSignIn}
                 disabled={isLoading || isGoogleLoading}
                 loading={isGoogleLoading}
+                loadingText="Signing in with Google..."
               >
-                <FcGoogle className="text-xl" /> Continue with Google
+                <FcGoogle className="text-xl shrink-0" /> <span className="whitespace-nowrap">Continue with Google</span>
               </Button>
             </div>
           )}

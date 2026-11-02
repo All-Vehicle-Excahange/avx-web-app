@@ -1,18 +1,15 @@
 import React from "react";
-import Image from "next/image";
 import Button from "@/components/ui/button";
+import ReecommLogoLockup from "./ReecommLogoLockup";
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Ambient Glow */}
-      <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none" />
-
-      <div className="relative mx-auto w-full py-16 lg:py-20">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
-          {/* LEFT TEXT */}
-          <div className="w-full lg:w-[48%]">
-            <p className="text-sm tracking-[0.4em] uppercase text-third font-semibold mb-6">
+    <section className="relative overflow-hidden w-full">
+      <div className="relative w-full pt-16 sm:pt-20 lg:pt-20 pb-12 sm:pb-16 lg:pb-20">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14">
+          {/* LEFT TEXT - Full Natural Width without artificial side constraints */}
+          <div className="w-full lg:w-[48%] text-left flex flex-col items-start">
+            <p className="text-xs sm:text-sm tracking-[0.4em] uppercase text-third font-semibold mb-3 sm:mb-6">
               About Reecomm
             </p>
 
@@ -20,7 +17,7 @@ export default function HeroSection() {
               className="
                 text-3xl sm:text-4xl lg:text-5xl
                 font-semibold
-                leading-[1.05]
+                leading-[1.1] sm:leading-[1.05]
                 text-primary
                 font-[Montserrat]
               "
@@ -30,7 +27,7 @@ export default function HeroSection() {
               <span className="text-fourth/80">another listing site.</span>
             </h2>
 
-            <p className="mt-8 text-lg text-third max-w-lg leading-relaxed">
+            <p className="mt-5 sm:mt-8 text-base sm:text-lg text-third max-w-xl leading-relaxed">
               The used vehicle market in India is one of the largest in the
               world — and one of the most unstructured. Buyers guess.
               Consultants hustle through WhatsApp groups and referral chains.
@@ -43,23 +40,16 @@ export default function HeroSection() {
             </p>
 
             {/* CTA */}
-            <div className="flex flex-wrap gap-5 mt-10">
+            <div className="flex flex-wrap justify-start gap-4 sm:gap-5 mt-6 sm:mt-10">
               <Button variant="ghost" href={"/search"} size="md">
                 Browse Vehicles
               </Button>
             </div>
           </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="w-full lg:w-[48%] relative h-[260px] sm:h-[340px] md:h-[420px] lg:h-[480px]">
-            <Image
-              src="/about_hero_img.webp"
-              alt="Vehicle"
-              fill
-              className="object-cover rounded-2xl shadow-xl hover:shadow-2xl border border-white/5 transition-all duration-300"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
+          {/* RIGHT INTERACTIVE PARTICLE LOGO CANVAS - Large & Expansive */}
+          <div className="w-full lg:w-[50%] flex items-center justify-center relative mt-6 lg:mt-0">
+            <ReecommLogoLockup maxWidth={900} />
           </div>
         </div>
       </div>

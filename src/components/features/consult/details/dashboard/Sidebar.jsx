@@ -104,7 +104,10 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* <h1 className="text-xl font-bold mt-4 mb-4">Reecomm Dashboard</h1> */}
 
-        <div className="flex-1 space-y-2.5 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 py-1.5">
+        <div
+          className="flex-1 space-y-1.5 overflow-y-auto overflow-x-hidden no-scrollbar sidebar-scroll-hide py-1.5"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {menu.map((m, i) => {
             const isActive =
               !isNotificationsOpen &&
@@ -123,16 +126,16 @@ export default function Sidebar({ isOpen, onClose }) {
                   setIsNotificationsOpen(false);
                   onClose && onClose();
                 }}
-                className={`flex items-center p-3 md:p-2 rounded-lg transition-all duration-300
+                className={`flex items-center md:justify-center md:group-hover:justify-start p-2.5 md:p-2 rounded-lg transition-all duration-300
           ${isActive
-                    ? "bg-primary text-secondary shadow-lg"
+                    ? "bg-primary text-secondary shadow-lg font-semibold"
                     : "hover:bg-primary/10 text-primary"
                   }`}
               >
                 <div className="shrink-0 flex items-center justify-center w-6 h-6">
                   <m.icon size={18} />
                 </div>
-                <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden text-sm">
                   {m.label}
                 </span>
               </Link>
@@ -143,9 +146,9 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="pt-2 border-t border-third/30 space-y-1">
           <button
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className={`flex cursor-pointer items-center w-full text-left p-3 md:p-2 rounded-lg transition-all duration-300
+            className={`flex cursor-pointer items-center md:justify-center md:group-hover:justify-start w-full text-left p-2.5 md:p-2 rounded-lg transition-all duration-300
           ${isNotificationsOpen
-                ? "bg-primary text-secondary shadow-lg"
+                ? "bg-primary text-secondary shadow-lg font-semibold"
                 : "hover:bg-primary/10 text-primary"
               }`}
           >
@@ -157,7 +160,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 </span>
               )}
             </div>
-            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden text-sm">
               Notifications
             </span>
           </button>
@@ -165,17 +168,29 @@ export default function Sidebar({ isOpen, onClose }) {
           <Link
             href="/help"
             onClick={onClose}
-            className="flex items-center p-3 md:p-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-primary"
+            className="flex items-center md:justify-center md:group-hover:justify-start p-2.5 md:p-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-primary"
             title="Help Center"
           >
             <div className="shrink-0 flex items-center justify-center w-6 h-6">
               <HelpCircle size={18} />
             </div>
-            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+            <span className="ml-3 md:ml-0 md:group-hover:ml-3 md:opacity-0 md:group-hover:opacity-100 max-w-full md:max-w-0 md:group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden text-sm">
               Help
             </span>
           </Link>
         </div>
+        <style jsx global>{`
+          .sidebar-scroll-hide::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+          }
+          .sidebar-scroll-hide {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+          }
+        `}</style>
       </aside>
       <NotificationsComponent
         isOpen={isNotificationsOpen}

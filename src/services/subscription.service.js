@@ -2,11 +2,13 @@ import axiosInstance, {
   handleError,
   handleResponse,
 } from "@/lib/axiosInstance";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const ENDPOINT = {
   subscription: "/subscription",
   updagradePlan: "/subscription/upgrade",
   currentTierRemains: "/tier/current/remains",
+  redeem: "/subscription/redeem",
 };
 
 export const createSubscription = async (payload) => {
@@ -105,5 +107,41 @@ export const upgradeSubscription = async (payload) => {
   } catch (error) {
     handleError(error);
     throw error;
+  }
+};
+
+/**
+ * Claim Redeem Code to activate the FREE subscription tier directly without Razorpay.
+ * API Endpoint: POST /api/v1/website/subscription/redeem
+ * Request Headers: USER_ID: <authenticated-user-id>
+ * Payload: { code: string }
+ */
+export const claimRedeemCode = async (code, userId) => {
+  try {
+    const payload = {
+      code: String(code || "").trim(),
+    };
+
+    const headers = {};
+    const uid =
+      userId ||
+      useAuthStore.getState()?.user?.id ||
+      useAuthStore.getState()?.user?.userId;
+
+    if (uid) {
+      headers["USER_ID"] = String(uid);
+    }
+
+    const res = await axiosInstance.post(ENDPOINT.redeem, payload, { headers });
+    return handleResponse(res);
+  } catch (error) {
+    const errData = error?.response?.data;
+    const errorMsg =
+      errData?.message || error?.message || "Failed to claim redeem code";
+    const customErr = new Error(errorMsg);
+    customErr.raw = errData;
+    customErr.status = errData?.status || error?.response?.status;
+    customErr.code = errData?.message;
+    throw customErr;
   }
 };
