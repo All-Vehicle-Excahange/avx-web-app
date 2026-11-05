@@ -58,6 +58,187 @@ const DiyaIcon = ({ className = "w-7 h-7" }) => (
   </svg>
 );
 
+// Hanging Golden Lanterns (Kandils on Golden Chains) for Top-Left Festive Accent
+const HangingFestiveLanterns = ({ className = "" }) => (
+  <svg
+    viewBox="0 0 160 220"
+    fill="none"
+    className={`pointer-events-none select-none ${className}`}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="festiveChainGold" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#FFFBEB" />
+        <stop offset="35%" stopColor="#FDE047" />
+        <stop offset="70%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#B45309" />
+      </linearGradient>
+      <linearGradient id="festiveGlassGlow" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FFFBEB" />
+        <stop offset="30%" stopColor="#FDE047" />
+        <stop offset="70%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#92400E" />
+      </linearGradient>
+      <radialGradient id="festiveCoreLight" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+        <stop offset="40%" stopColor="#FDE047" stopOpacity="0.8" />
+        <stop offset="80%" stopColor="#F59E0B" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
+      </radialGradient>
+      <filter id="festiveGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+
+    {/* Chains */}
+    <line x1="26" y1="0" x2="26" y2="65" stroke="url(#festiveChainGold)" strokeWidth="1.6" strokeDasharray="3 2" />
+    <line x1="82" y1="0" x2="82" y2="118" stroke="url(#festiveChainGold)" strokeWidth="1.8" strokeDasharray="3 2" />
+    <line x1="138" y1="0" x2="138" y2="52" stroke="url(#festiveChainGold)" strokeWidth="1.6" strokeDasharray="3 2" />
+    {/* Swag garlands */}
+    <path d="M 0 16 Q 40 42, 82 22" stroke="url(#festiveChainGold)" strokeWidth="1.2" strokeDasharray="2 2" fill="none" opacity="0.75" />
+    <path d="M 82 22 Q 115 48, 142 18" stroke="url(#festiveChainGold)" strokeWidth="1.2" strokeDasharray="2 2" fill="none" opacity="0.65" />
+
+    {/* LANTERN 1 (Left - Medium) */}
+    <g transform="translate(26, 65)">
+      <circle cx="0" cy="18" r="26" fill="url(#festiveCoreLight)" opacity="0.85" />
+      <polygon points="0,-6 -10,3 10,3" fill="url(#festiveChainGold)" stroke="#FFFBEB" strokeWidth="0.5" />
+      <circle cx="0" cy="-6" r="2.5" fill="#FFFBEB" />
+      <polygon points="0,3 12,18 0,33 -12,18" fill="url(#festiveGlassGlow)" stroke="#FFFBEB" strokeWidth="0.8" opacity="0.95" />
+      <line x1="-12" y1="18" x2="12" y2="18" stroke="#78350F" strokeWidth="0.8" opacity="0.6" />
+      <line x1="0" y1="3" x2="0" y2="33" stroke="#78350F" strokeWidth="0.8" opacity="0.6" />
+      <circle cx="0" cy="18" r="3.5" fill="#FFFFFF" />
+      <polygon points="-6,33 6,33 0,39" fill="url(#festiveChainGold)" />
+      <line x1="0" y1="39" x2="0" y2="50" stroke="url(#festiveChainGold)" strokeWidth="1.2" />
+      <circle cx="0" cy="51" r="2" fill="#FDE047" />
+    </g>
+
+    {/* LANTERN 2 (Center - Majestic Main Lantern) */}
+    <g transform="translate(82, 118)">
+      <circle cx="0" cy="24" r="42" fill="url(#festiveCoreLight)" filter="url(#festiveGlowFilter)" opacity="0.95" />
+      <circle cx="0" cy="-8" r="3" fill="#FFFBEB" />
+      <path d="M -14 5 C -10 -4, 10 -4, 14 5 Z" fill="url(#festiveChainGold)" stroke="#FFFBEB" strokeWidth="0.6" />
+      <polygon points="-14,5 -18,22 -10,42 10,42 18,22 14,5" fill="url(#festiveGlassGlow)" stroke="#FFFBEB" strokeWidth="1" />
+      <line x1="-18" y1="22" x2="18" y2="22" stroke="#78350F" strokeWidth="1" opacity="0.65" />
+      <line x1="-6" y1="5" x2="-8" y2="42" stroke="#78350F" strokeWidth="0.8" opacity="0.5" />
+      <line x1="6" y1="5" x2="8" y2="42" stroke="#78350F" strokeWidth="0.8" opacity="0.5" />
+      <circle cx="0" cy="22" r="5.5" fill="#FFFFFF" />
+      <polygon points="-10,42 10,42 0,50" fill="url(#festiveChainGold)" stroke="#FDE047" strokeWidth="0.5" />
+      <line x1="0" y1="50" x2="0" y2="66" stroke="url(#festiveChainGold)" strokeWidth="1.5" />
+      <circle cx="0" cy="68" r="2.5" fill="#FFFBEB" />
+    </g>
+
+    {/* LANTERN 3 (Right - Small Accent) */}
+    <g transform="translate(138, 52)">
+      <circle cx="0" cy="16" r="22" fill="url(#festiveCoreLight)" opacity="0.8" />
+      <polygon points="0,-5 -8,2 8,2" fill="url(#festiveChainGold)" stroke="#FFFBEB" strokeWidth="0.5" />
+      <circle cx="0" cy="-5" r="2" fill="#FFFBEB" />
+      <polygon points="0,2 10,15 0,28 -10,15" fill="url(#festiveGlassGlow)" stroke="#FFFBEB" strokeWidth="0.8" opacity="0.95" />
+      <line x1="-10" y1="15" x2="10" y2="15" stroke="#78350F" strokeWidth="0.8" opacity="0.5" />
+      <line x1="0" y1="2" x2="0" y2="28" stroke="#78350F" strokeWidth="0.8" opacity="0.5" />
+      <circle cx="0" cy="15" r="3" fill="#FFFFFF" />
+      <polygon points="-5,28 5,28 0,33" fill="url(#festiveChainGold)" />
+      <line x1="0" y1="33" x2="0" y2="44" stroke="url(#festiveChainGold)" strokeWidth="1.2" />
+      <circle cx="0" cy="45" r="1.8" fill="#FDE047" />
+    </g>
+  </svg>
+);
+
+// Majestic Golden Jharokha Arch with Glowing Apex Diya
+const FestiveJharokhaArch = ({
+  className = "",
+  title = "SHUBH DEEPAWALI",
+  subtitle = "SPECIAL FEST",
+}) => (
+  <div className={`relative flex flex-col items-center justify-center ${className}`}>
+    {/* Background SVG Arch Frame */}
+    <svg
+      viewBox="0 0 360 160"
+      className="w-full h-auto drop-shadow-[0_6px_24px_rgba(245,158,11,0.45)]"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="jharokhaGoldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFBEB" />
+          <stop offset="20%" stopColor="#FDE047" />
+          <stop offset="50%" stopColor="#F59E0B" />
+          <stop offset="80%" stopColor="#D97706" />
+          <stop offset="100%" stopColor="#FFFBEB" />
+        </linearGradient>
+        <linearGradient id="jharokhaGlowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FDE047" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.02" />
+        </linearGradient>
+        <filter id="archOuterGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+
+      {/* Ambient Warm Golden Fill Behind Arch */}
+      <path
+        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158 Z"
+        fill="url(#jharokhaGlowGrad)"
+      />
+
+      {/* Outer Glow Arch Outline */}
+      <path
+        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
+        stroke="#F59E0B"
+        strokeWidth="6"
+        opacity="0.4"
+        filter="url(#archOuterGlow)"
+        strokeLinecap="round"
+      />
+
+      {/* Main Golden Sculpted Arch Frame */}
+      <path
+        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
+        stroke="url(#jharokhaGoldBorder)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+
+      {/* Inner Fine Beaded Golden Hairline */}
+      <path
+        d="M 34 158 C 34 138, 50 126, 74 115 C 68 95, 94 73, 126 59 C 136 39, 160 29, 180 29 C 200 29, 224 39, 234 59 C 266 73, 292 95, 286 115 C 310 126, 326 138, 326 158"
+        stroke="url(#jharokhaGoldBorder)"
+        strokeWidth="1.2"
+        strokeDasharray="4 3"
+        opacity="0.85"
+      />
+
+      {/* Corner Finials */}
+      <circle cx="24" cy="158" r="3" fill="#FDE047" />
+      <circle cx="336" cy="158" r="3" fill="#FDE047" />
+    </svg>
+
+    {/* Glowing Diya Sitting Proudly at the Apex Top */}
+    <div className="absolute -top-3 sm:-top-3.5 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+      <DiyaIcon className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow-[0_0_12px_rgba(253,224,71,0.9)]" />
+    </div>
+
+    {/* Content Inside the Arch */}
+    <div className="absolute inset-0 pt-7 sm:pt-8 pb-3 px-6 flex flex-col items-center justify-center text-center pointer-events-none">
+      <span className="font-serif font-black tracking-[0.14em] sm:tracking-[0.18em] text-base sm:text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFFBEB] via-[#FDE047] to-[#D97706] drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)] leading-none">
+        {title}
+      </span>
+      {subtitle && (
+        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-black tracking-[0.24em] text-[#FDE047] uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] mt-1 leading-none">
+          {subtitle}
+        </span>
+      )}
+      {/* Ornate Flourish Divider */}
+      <div className="flex items-center gap-2 mt-1 sm:mt-1.5 opacity-90">
+        <span className="w-5 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-[#FDE047]" />
+        <span className="text-[#FDE047] text-[8px] sm:text-[9px]">❖</span>
+        <span className="w-5 sm:w-8 h-[1px] bg-gradient-to-l from-transparent to-[#FDE047]" />
+      </div>
+    </div>
+  </div>
+);
+
 const DiwaliShowcaseSection = () => {
   const [vehicles, setVehicles] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -135,16 +316,16 @@ const DiwaliShowcaseSection = () => {
     <div className="w-full flex flex-col gap-6 md:gap-8 my-8 md:my-12">
 
       {/* ============================================================== */}
-      {/* 1. PANORAMIC DIWALI HERO BANNER (CLEAN & SIMPLE HD DISPLAY)    */}
+      {/* 1. PANORAMIC DIWALI HERO BANNER                                */}
       {/* ============================================================== */}
       <section
         aria-label="Diwali Festive Hero Banner"
-        className="w-full relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#F59E0B]/35 shadow-[0_4px_16px_rgba(0,0,0,0.3)] bg-black min-h-[380px] xs:min-h-[390px] sm:min-h-[330px] md:min-h-[370px] lg:min-h-[410px] aspect-auto sm:aspect-[1024/341]"
+        className="w-full relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#F59E0B]/40 shadow-[0_6px_28px_rgba(0,0,0,0.4)] bg-gradient-to-r from-[#011b3e] via-[#3d2460] to-[#1f092f] min-h-[390px] xs:min-h-[410px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px]"
       >
         {/* Real-time Simultaneous Firecracker Particle Canvas Animation */}
         <DiwaliFirecrackerCanvas className="z-10 pointer-events-auto" />
 
-        {/* Panoramic Festive Hero Banner Visual (Matching Royal Indigo-to-Magenta Gradient) */}
+        {/* Panoramic Festive Hero Banner Visual */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/diwali/diwali-panoramic-hero-gradient.jpg"
@@ -154,22 +335,29 @@ const DiwaliShowcaseSection = () => {
           />
         </div>
 
-        {/* Mobile-Only Soft Gradient Vignette for Razor-Sharp Text Contrast */}
-        <div className="sm:hidden absolute inset-0 z-5 bg-gradient-to-r from-black/85 via-black/45 to-transparent pointer-events-none" />
+        {/* Festive Royal Indigo-to-Plum Gradient Overlay (Matches Bottom Banner Gradient, Preserving Palace & Light) */}
+        <div className="hidden sm:block absolute inset-0 z-5 bg-gradient-to-r from-[#011b3e]/65 via-[#3d2460]/25 via-transparent to-transparent pointer-events-none" />
+        
+        {/* Mobile Gradient Vignette */}
+        <div className="sm:hidden absolute inset-0 z-5 bg-gradient-to-b from-[#011b3e]/80 via-transparent to-[#1f092f]/80 pointer-events-none" />
 
-        {/* Banner Content (Proper Proportional Height with Crisp Text Drop Shadows) */}
-        <div className="relative z-20 pointer-events-none w-full h-full min-h-[380px] xs:min-h-[390px] sm:min-h-[330px] md:min-h-[370px] lg:min-h-[410px] flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10">
+        {/* Corner Hanging Festive Kandils (Lanterns on Chains) */}
+        <HangingFestiveLanterns className="absolute top-0 left-0 w-28 sm:w-36 md:w-44 h-auto z-15" />
 
-          {/* Top Row: SHUBH DEEPAWALI SPECIAL (Left) + TRUSTED VALUE (Right) */}
-          <div className="flex items-center justify-between gap-2 sm:gap-3 pointer-events-auto">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 rounded-full bg-gradient-to-r from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] border-2 border-[#F59E0B] shadow-[0_2px_12px_rgba(245,158,11,0.4)] shrink-0">
-              <span className="text-xs">🪔</span>
-              <span className="text-[9px] sm:text-xs font-black tracking-[0.15em] sm:tracking-[0.2em] uppercase text-zinc-950">
-                SHUBH DEEPAWALI SPECIAL
-              </span>
+        {/* Banner Content */}
+        <div className="relative z-20 pointer-events-none w-full h-full min-h-[390px] xs:min-h-[410px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px] flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10">
+
+          {/* Top Row: Golden Jharokha Arch Badge (Left) + TRUSTED VALUE (Right) */}
+          <div className="flex items-start justify-between gap-2 sm:gap-3 pointer-events-auto">
+            <div className="pl-6 sm:pl-10 -mt-1 sm:-mt-1.5">
+              <FestiveJharokhaArch
+                title="SHUBH DEEPAWALI"
+                subtitle="SPECIAL FEST"
+                className="w-[180px] sm:w-[210px] md:w-[230px]"
+              />
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-gradient-to-r from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] text-zinc-950 border border-[#F59E0B] shadow-[0_2px_12px_rgba(245,158,11,0.3)] shrink-0">
+            <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-gradient-to-r from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] text-zinc-950 border border-[#F59E0B] shadow-[0_2px_12px_rgba(245,158,11,0.3)] shrink-0">
               <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#DC2626] shrink-0" />
               <div className="flex flex-col text-left leading-none">
                 <span className="text-[9px] sm:text-[10px] font-black tracking-wider uppercase text-zinc-950">TRUSTED VALUE</span>
@@ -178,11 +366,11 @@ const DiwaliShowcaseSection = () => {
             </div>
           </div>
 
-          {/* Headline & Subtitle Area (Crisp & Highlighted with Drop Shadows) */}
-          <div className="max-w-md sm:max-w-xl flex flex-col items-start gap-1.5 sm:gap-3 py-0 sm:py-2">
+          {/* Headline & Subtitle Area (Original Content Restored with Clean Festive Styling) */}
+          <div className="max-w-md sm:max-w-xl flex flex-col items-start gap-1.5 sm:gap-2.5 py-1 sm:py-2">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-[1.12] drop-shadow-[0_3px_12px_rgba(0,0,0,0.95)]">
               Aa Diwali, Ghar Laao{" "}
-              <span className="block text-[#FDE047] drop-shadow-[0_2px_14px_rgba(253,224,71,0.4)]">
+              <span className="block text-[#FDE047] drop-shadow-[0_2px_14px_rgba(253,224,71,0.5)]">
                 Nayi Sawari
               </span>
             </h1>
@@ -199,7 +387,7 @@ const DiwaliShowcaseSection = () => {
             </p>
 
             {/* Bottom Action Capsule: Diya + Text + Explore Festive Offers Button */}
-            <div className="pointer-events-auto w-full sm:w-fit rounded-2xl sm:rounded-full bg-black/75 backdrop-blur-md border border-[#F59E0B]/60 p-2 sm:p-2 sm:pl-3.5 sm:pr-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-5 shadow-[0_4px_22px_rgba(0,0,0,0.6)] mt-2 sm:mt-1">
+            <div className="pointer-events-auto w-full sm:w-fit rounded-2xl sm:rounded-full bg-black/70 backdrop-blur-md border border-[#F59E0B]/60 p-2 sm:p-2 sm:pl-3.5 sm:pr-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-5 shadow-[0_4px_22px_rgba(0,0,0,0.6)] mt-2 sm:mt-1">
               <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <span className="text-base sm:text-lg shrink-0">🪔</span>
                 <span className="text-xs sm:text-sm font-bold text-white sm:whitespace-nowrap leading-tight">
@@ -218,7 +406,7 @@ const DiwaliShowcaseSection = () => {
           </div>
 
           {/* Bottom-Right Corner Badge (Desktop) */}
-          <div className="hidden lg:inline-flex absolute bottom-4 right-6 z-10 items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/75 border border-[#F59E0B]/40 backdrop-blur-md text-xs font-bold text-[#FDE047] shadow-md">
+          <div className="hidden lg:inline-flex absolute bottom-4 right-6 z-10 items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/70 border border-[#F59E0B]/40 backdrop-blur-md text-xs font-bold text-[#FDE047] shadow-md">
             <span>🪔</span>
             <span>Shubh Deepawali</span>
           </div>
