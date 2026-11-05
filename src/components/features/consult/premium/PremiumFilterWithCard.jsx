@@ -150,6 +150,8 @@ export default function FilterWithCard({
 
   // ── Result data ──
   const [premiumConsultants, setPremiumConsultants] = useState([]); // from getPremiumConsult
+  const [searchSessionId, setSearchSessionId] = useState(null);
+  const searchSessionIdRef = useRef(null);
   const [consultantsLoading, setConsultantsLoading] = useState(true);
 
   // Add these two lines
@@ -377,8 +379,18 @@ export default function FilterWithCard({
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
+    if (page === 1) {
+      searchSessionIdRef.current = null;
+      setSearchSessionId(null);
+    }
+    const currentSessionId = page > 1 ? (searchSessionIdRef.current || null) : null;
+    const requestPayload = {
+      ...payload,
+      searchSessionId: currentSessionId,
+    };
+
     const { sortBy, direction } = getSortConfig(sort);
-    const requestKey = JSON.stringify({ page, sortBy, direction, payload });
+    const requestKey = JSON.stringify({ page, sortBy, direction, payload: requestPayload });
     if (prevPayloadRef.current === requestKey) return;
     prevPayloadRef.current = requestKey;
 
@@ -391,19 +403,29 @@ export default function FilterWithCard({
         direction,
       };
 
-      const premiumRes = await getPremiumConsult(requestData, payload);
+      const premiumRes = await getPremiumConsult(requestData, requestPayload);
 
-      if (premiumRes?.pagination) {
-        if (premiumRes.pagination.totalPages !== undefined) {
-          setTotalPages(premiumRes.pagination.totalPages);
+      const newSessionId =
+        premiumRes?.data?.searchSessionId ||
+        premiumRes?.searchSessionId ||
+        null;
+      if (newSessionId) {
+        searchSessionIdRef.current = newSessionId;
+        setSearchSessionId(newSessionId);
+      }
+
+      const pageInfo = premiumRes?.pagination || premiumRes?.data?.pageResponse;
+      if (pageInfo) {
+        if (pageInfo.totalPages !== undefined) {
+          setTotalPages(pageInfo.totalPages);
         }
-        if (premiumRes.pagination.totalElements !== undefined) {
-          setTotalElements(premiumRes.pagination.totalElements);
+        if (pageInfo.totalElements !== undefined) {
+          setTotalElements(pageInfo.totalElements);
         }
         onPageResponseChange?.({
-          totalElements: premiumRes.pagination.totalElements ?? 0,
-          totalPages: premiumRes.pagination.totalPages ?? 0,
-          currentPage: premiumRes.pagination.currentPage ?? page,
+          totalElements: pageInfo.totalElements ?? 0,
+          totalPages: pageInfo.totalPages ?? 0,
+          currentPage: pageInfo.currentPage ?? page,
         });
       } else if (premiumRes?.data && Array.isArray(premiumRes.data)) {
         const total = premiumRes.data.length;
@@ -427,7 +449,9 @@ export default function FilterWithCard({
       const premiumData =
         premiumRes?.success && Array.isArray(premiumRes?.data)
           ? premiumRes.data
-          : [];
+          : (Array.isArray(premiumRes?.data?.consultations)
+              ? premiumRes.data.consultations
+              : []);
 
       const newConsultants = mapToCardFormat(premiumData);
       if (page > 1) {

@@ -245,6 +245,8 @@ export default function SearchWithCard({
   const [totalElements, setTotalElements] = useState(0);
   const [accumulatedVehicles, setAccumulatedVehicles] = useState([]);
   const lastProcessedPageRef = useRef(1);
+  const [searchSessionId, setSearchSessionId] = useState(null);
+  const searchSessionIdRef = useRef(null);
 
   // ── Brand states ──
   const [brands, setBrands] = useState([]);
@@ -886,6 +888,8 @@ export default function SearchWithCard({
       setDebouncedMinPrice(minPrice);
       setDebouncedMaxPrice(maxPrice);
       setCurrentPage(1);
+      setSearchSessionId(null);
+      searchSessionIdRef.current = null;
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (skipFirstFilterTrackRef.current) {
@@ -950,8 +954,15 @@ export default function SearchWithCard({
     [currentPage, sortBy, direction, vehicleType],
   );
 
+  const requestPayload = useMemo(() => {
+    return {
+      ...debouncedPayload,
+      searchSessionId: currentPage > 1 ? (searchSessionId || null) : null,
+    };
+  }, [debouncedPayload, currentPage, searchSessionId]);
+
   const { data: searchData, isFetching: vehiclesLoading, isError } = useQuery(
-    getFilteredVehiclesQuery(debouncedPayload, queryParams),
+    getFilteredVehiclesQuery(requestPayload, queryParams),
   );
 
   useEffect(() => {
@@ -1202,6 +1213,11 @@ export default function SearchWithCard({
   useEffect(() => {
     if (!searchData) return;
 
+    if (searchData.searchSessionId) {
+      setSearchSessionId(searchData.searchSessionId);
+      searchSessionIdRef.current = searchData.searchSessionId;
+    }
+
     if (typeof searchData.maxFilterPrice === "number" && searchData.maxFilterPrice > 0) {
       setServerMaxPrice(searchData.maxFilterPrice);
       if (!userPriceInteractedRef.current && !budget) {
@@ -1265,6 +1281,8 @@ export default function SearchWithCard({
 
   const handlePriceChangeRelease = () => {
     setCurrentPage(1);
+    setSearchSessionId(null);
+    searchSessionIdRef.current = null;
     setDebouncedMinPrice(minPrice);
     setDebouncedMaxPrice(maxPrice);
     setDebouncedPayload(buildPayload());
@@ -2609,6 +2627,8 @@ export default function SearchWithCard({
 
     // Reset pagination
     setCurrentPage(1);
+    setSearchSessionId(null);
+    searchSessionIdRef.current = null;
     lastProcessedPageRef.current = 1;
 
     // Reset filter chips immediately
@@ -2644,6 +2664,8 @@ export default function SearchWithCard({
   // Save/overwrite selected location to localStorage on Apply
   const handleApplyFilter = async () => {
     setCurrentPage(1);
+    setSearchSessionId(null);
+    searchSessionIdRef.current = null;
     setDebouncedPayload(buildPayload());
     setDebouncedConsultPayload(buildConsultPayload());
   };

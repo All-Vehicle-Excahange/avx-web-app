@@ -12,6 +12,7 @@ import {
   CarFront,
   Flame,
   Sparkles,
+  CheckCircle2,
 } from "lucide-react";
 import { useCompareStore } from "@/stores/useCompareStore";
 import Image from "next/image";
@@ -184,21 +185,27 @@ export default function DiwaliVehicleCard({
   };
 
   const baseFuel = formatText(data.fuelType) || formatText(data.fuel);
+  const ownershipDisplay = data.ownership
+    ? `${data.ownership} Owner`
+    : data.seats
+      ? (typeof data.seats === "number" ? `${data.seats} Seater` : data.seats)
+      : "1 Owner";
+
   const mapped = {
     image: resolvedImage,
     title: data.makerName
       ? `${data.makerName} ${data.modelName} ${data.variantName || ""}`.trim()
       : data.title,
-    year: data.yearOfMfg || data.year,
-    transmission: formatText(data.transmissionType) || formatText(data.transmission),
+    year: data.yearOfMfg || data.year || "-",
+    transmission: formatText(data.transmissionType) || formatText(data.transmission) || "-",
     fuel:
       data.cngType &&
         data.cngType !== "NONE" &&
         data.cngType !== "null" &&
         !baseFuel.includes("CNG")
         ? `${baseFuel}+CNG`
-        : baseFuel,
-    seats: data.ownership ? `${data.ownership} Owner` : data.seats,
+        : baseFuel || "-",
+    seats: ownershipDisplay,
     rating: data.avxInspectionRating,
     userName: data.consultantName
       ? data.consultantName
@@ -272,16 +279,16 @@ export default function DiwaliVehicleCard({
     <>
       <div
         onClick={handleCardClick}
-        className={`group/card relative flex flex-col rounded-2xl overflow-hidden w-full border border-[#FB923C]/30 hover:border-[#FB923C]/55 bg-[#120E0A] shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_12px_rgba(251,146,60,0.08)] transition-all duration-200 ${
+        className={`group/card relative flex flex-col rounded-2xl p-2.5 sm:p-3 w-full border-2 border-[#FBBF24]/60 hover:border-[#FBBF24] bg-gradient-to-b from-[#181d52]/95 via-[#34164f]/95 to-[#1c082c]/95 shadow-[0_12px_35px_rgba(10,14,48,0.7),0_0_20px_rgba(110,24,130,0.25)] hover:shadow-[0_18px_45px_rgba(10,14,48,0.85),0_0_30px_rgba(245,158,11,0.4)] transition-all duration-300 ${
           isCardActive ? "cursor-pointer" : "cursor-default"
         } ${!isSold && isCardActive ? "" : "opacity-75 grayscale-[0.2]"}`}
       >
         {/* ============================================================== */}
-        {/* TOP: ROYAL FESTIVE ARCH IMAGE FRAME (NORMAL LIGHT ORANGE ACCENT) */}
+        {/* TOP: VEHICLE IMAGE CONTAINER (INSET ROUNDED STAGING)          */}
         {/* ============================================================== */}
-        <div className="relative w-full h-52 sm:h-56 md:h-60 overflow-hidden bg-gradient-to-b from-[#1E1712] via-[#14100C] to-[#0D0A08]">
+        <div className="relative w-full h-40 sm:h-44 md:h-48 overflow-hidden rounded-xl bg-[#0c1033] shrink-0">
           
-          {/* Inner Vehicle Image (No Zoom On Hover) */}
+          {/* Inner Vehicle Image */}
           <div className="absolute inset-0 z-0">
             {imageSrc ? (
               <Image
@@ -289,7 +296,7 @@ export default function DiwaliVehicleCard({
                 alt={mapped.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 320px"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover group-hover/card:scale-103 transition-transform duration-500 ease-out"
                 onError={() => {
                   if (imageSrc !== VEHICLE_IMAGE_FALLBACK) {
                     setImageSrc(VEHICLE_IMAGE_FALLBACK);
@@ -297,267 +304,159 @@ export default function DiwaliVehicleCard({
                 }}
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A]">
-                <CarFront className="w-12 h-12 text-zinc-500" />
+              <div className="absolute inset-0 flex items-center justify-center bg-[#190432]">
+                <CarFront className="w-12 h-12 text-[#FFD700]/60" />
               </div>
             )}
           </div>
 
-          {/* ========================================================== */}
-          {/* REFINED ROYAL FESTIVE CURVED ARCH (NORMAL LIGHT ORANGE TONES) */}
-          {/* ========================================================== */}
-          <svg
-            viewBox="0 0 300 220"
-            className="absolute inset-0 w-full h-full pointer-events-none z-10"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id={`goldStroke-${data?.id || 'd'}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FEF08A" />
-                <stop offset="35%" stopColor="#FDE047" />
-                <stop offset="70%" stopColor="#FBBF24" />
-                <stop offset="100%" stopColor="#FB923C" />
-              </linearGradient>
-              {/* Refined Subtle Dark Obsidian Mask (No Harsh Reddish Orange) */}
-              <linearGradient id={`festiveCornerTheme-${data?.id || 'd'}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#1E1712" />
-                <stop offset="50%" stopColor="#14100C" />
-                <stop offset="100%" stopColor="#0D0A08" />
-              </linearGradient>
-            </defs>
-
-            {/* Corner Mask: Smooth, Graceful Royal Archway Cutout */}
-            <path
-              d="M 0,0 
-                 L 300,0 
-                 L 300,220 
-                 L 0,220 
-                 Z 
-                 M 8,214 
-                 L 8,36 
-                 C 8,16 45,10 85,14 
-                 C 115,6 138,2 150,2 
-                 C 162,2 185,6 215,14 
-                 C 255,10 292,16 292,36 
-                 L 292,214 
-                 Z"
-              fill={`url(#festiveCornerTheme-${data?.id || 'd'})`}
-              fillRule="evenodd"
-            />
-
-            {/* Graceful Royal Golden Arch Stroke */}
-            <path
-              d="M 8,214 
-                 L 8,36 
-                 C 8,16 45,10 85,14 
-                 C 115,6 138,2 150,2 
-                 C 162,2 185,6 215,14 
-                 C 255,10 292,16 292,36 
-                 L 292,214"
-              fill="none"
-              stroke={`url(#goldStroke-${data?.id || 'd'})`}
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              style={{ filter: "drop-shadow(0px 0px 3px rgba(251, 146, 60, 0.35))" }}
-            />
-
-            {/* Delicate Inner Golden Dashed Filigree */}
-            <path
-              d="M 14,214 
-                 L 14,40 
-                 C 14,22 48,16 86,20 
-                 C 116,12 138,8 150,8 
-                 C 162,8 184,12 214,20 
-                 C 252,16 286,22 286,40 
-                 L 286,214"
-              fill="none"
-              stroke="#FDE047"
-              strokeWidth="1"
-              strokeDasharray="3 3"
-              opacity="0.75"
-            />
-
-            {/* Festive Hanging Fairy Light Drops on Top Corners */}
-            <line x1="24" y1="0" x2="24" y2="16" stroke="#FDE047" strokeWidth="1" opacity="0.85" />
-            <circle cx="24" cy="16" r="2" fill="#FDE047" />
-
-            <line x1="48" y1="0" x2="48" y2="12" stroke="#FDE047" strokeWidth="1" opacity="0.75" />
-            <circle cx="48" cy="12" r="1.8" fill="#FDE047" />
-
-            <line x1="276" y1="0" x2="276" y2="16" stroke="#FDE047" strokeWidth="1" opacity="0.85" />
-            <circle cx="276" cy="16" r="2" fill="#FDE047" />
-
-            <line x1="252" y1="0" x2="252" y2="12" stroke="#FDE047" strokeWidth="1" opacity="0.75" />
-            <circle cx="252" cy="12" r="1.8" fill="#FDE047" />
-
-            {/* Bottom Golden Ornamental Bar */}
-            <line
-              x1="0"
-              y1="216"
-              x2="300"
-              y2="216"
-              stroke={`url(#goldStroke-${data?.id || 'd'})`}
-              strokeWidth="1.5"
-            />
-          </svg>
-
-          {/* Top-Left: Diwali Special Ribbon Badge (Normal Light Orange Gradient) */}
-          <div className="absolute top-2 left-2 z-20 pointer-events-none">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-gradient-to-r from-[#FDE047] via-[#FBBF24] to-[#FB923C] text-zinc-950 shadow-[0_2px_8px_rgba(251,146,60,0.25)]">
-              <Flame className="w-3 h-3 text-[#B45309] fill-[#B45309]" />
-              Diwali Deal
+          {/* Top-Left: 🔥 Diwali Deal Ribbon Badge */}
+          <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-gradient-to-r from-[#dc2626] to-[#991b1b] text-white border border-[#F59E0B]/60 shadow-md">
+              <span className="text-xs">🔥</span>
+              <span>Diwali Deal</span>
             </span>
           </div>
 
           {/* Top-Right: Discount % Badge */}
           {discountPercent ? (
-            <div className="absolute top-2 right-2 z-20 pointer-events-none">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-semibold bg-[#DC2626] text-white border border-[#FDE047]/50 shadow-sm">
+            <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-extrabold bg-[#FDE047] text-zinc-950 shadow-md">
                 {discountPercent}% OFF
               </span>
             </div>
           ) : null}
 
-          {/* Compare Button */}
+          {/* Bottom-Right: Compare & Wishlist Action Buttons (Stacked) */}
           {!isSold && (
-            <button
-              type="button"
-              disabled={!isCardActive}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (!isCardActive) return;
-                handleCompare();
-              }}
-              className={`absolute bottom-11 right-2.5 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all z-20 ${!isCardActive
-                  ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
-                  : isComparing
-                    ? "bg-[#FB923C] text-zinc-950 shadow-lg scale-110 cursor-pointer"
-                    : "bg-black/60 text-white hover:bg-black/85 cursor-pointer border border-[#FB923C]/30"
+            <div className="absolute bottom-2 right-2 flex flex-col gap-1.5 z-20">
+              {/* Compare Button */}
+              <button
+                type="button"
+                disabled={!isCardActive}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isCardActive) return;
+                  handleCompare();
+                }}
+                className={`shrink-0 flex items-center justify-center w-7 h-7 rounded-full transition-all ${
+                  !isCardActive
+                    ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
+                    : isComparing
+                      ? "bg-[#FBBF24] text-zinc-950 font-bold shadow-lg scale-105 cursor-pointer"
+                      : "bg-black/60 backdrop-blur-md text-white hover:bg-black/85 cursor-pointer border border-white/20"
                 }`}
-              title={!isCardActive ? "Unavailable" : "Add to compare"}
-              aria-disabled={!isCardActive}
-            >
-              <ArrowLeftRight className="w-3.5 h-3.5" />
-            </button>
-          )}
+                title={!isCardActive ? "Unavailable" : "Add to compare"}
+                aria-disabled={!isCardActive}
+              >
+                <ArrowLeftRight className="w-3.5 h-3.5" />
+              </button>
 
-          {/* Wishlist Heart Button */}
-          {!isSold && (
-            <button
-              type="button"
-              disabled={!isCardActive}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (!isCardActive) return;
-                handleWishlist();
-              }}
-              className={`absolute bottom-2 right-2.5 shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all z-20 ${!isCardActive
-                  ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
-                  : "bg-black/60 text-white hover:bg-black/85 cursor-pointer border border-[#FB923C]/30"
+              {/* Wishlist Heart Button */}
+              <button
+                type="button"
+                disabled={!isCardActive}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isCardActive) return;
+                  handleWishlist();
+                }}
+                className={`shrink-0 flex items-center justify-center w-7 h-7 rounded-full transition-all ${
+                  !isCardActive
+                    ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
+                    : "bg-black/60 backdrop-blur-md text-white hover:bg-black/85 cursor-pointer border border-white/20"
                 }`}
-              title={!isCardActive ? "Unavailable" : isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-              aria-disabled={!isCardActive}
-            >
-              <Heart
-                className={`w-4 h-4 transition-colors ${!isCardActive ? "text-white/30" : isFavorite ? "fill-[#EF4444] text-[#EF4444]" : "text-white"
+                title={!isCardActive ? "Unavailable" : isFavorite ? "Remove from wishlist" : "Add to wishlist"}
+                aria-disabled={!isCardActive}
+              >
+                <Heart
+                  className={`w-3.5 h-3.5 transition-colors ${
+                    !isCardActive ? "text-white/30" : isFavorite ? "fill-[#EF4444] text-[#EF4444]" : "text-white"
                   }`}
-              />
-            </button>
-          )}
-
-          {/* Inspection / Star Rating Badge */}
-          {mapped.rating && (
-            <div className="absolute bottom-2 left-2.5 z-20 flex items-center gap-1 rounded-full bg-black/70 backdrop-blur-sm px-2 py-0.5 border border-[#FB923C]/30">
-              <Star className="w-3 h-3 text-[#FBBF24] fill-[#FBBF24]" />
-              <span className="text-white text-[10px] font-bold">{mapped.rating}</span>
+                />
+              </button>
             </div>
           )}
         </div>
 
         {/* ============================================================== */}
-        {/* BOTTOM: REFINED SUBTLE DARK OBSIDIAN BACKGROUND (NORMAL LIGHT ORANGE) */}
+        {/* BOTTOM: CARD DETAILS BODY                                      */}
         {/* ============================================================== */}
-        <div className="flex flex-col flex-1 p-3.5 sm:p-4 bg-gradient-to-b from-[#18130E] via-[#120E0A] to-[#0A0807] justify-between gap-3 text-white">
+        <div className="flex flex-col flex-1 pt-3 justify-between gap-2 text-white">
 
-          {/* Vehicle Title & Dealer */}
-          <div className="flex flex-col gap-1.5">
-            <h3
-              className="text-sm sm:text-base font-semibold font-primary tracking-tight text-white line-clamp-1 group-hover/card:text-[#FDE047] transition-colors"
+          {/* 1. Vehicle Title */}
+          <h3
+            className="text-sm sm:text-base font-bold font-primary tracking-tight text-white line-clamp-1 group-hover/card:text-[#FDE047] transition-colors"
+            title={mapped.title}
+          >
+            <NoPrefetchLink
+              href={detailHref}
+              onClick={(e) => e.stopPropagation()}
               title={mapped.title}
             >
-              <NoPrefetchLink
-                href={detailHref}
-                onClick={(e) => e.stopPropagation()}
-                title={mapped.title}
-              >
-                {mapped.title}
-              </NoPrefetchLink>
-            </h3>
+              {mapped.title}
+            </NoPrefetchLink>
+          </h3>
 
-            {/* Dealer & Location with Normal Light Orange / Golden Accents */}
-            <div className="flex items-center justify-between text-xs text-zinc-300 gap-2">
-              <span className="flex items-center gap-1 truncate" title={mapped.userName}>
-                <User className="w-3.5 h-3.5 text-[#FB923C] shrink-0" />
-                <span className="truncate capitalize">{mapped.userName || "Verified Dealer"}</span>
-              </span>
-              <span className="flex items-center gap-1 shrink-0 text-zinc-400 truncate" title={mapped.location}>
-                <MapPinned className="w-3.5 h-3.5 text-[#FB923C] shrink-0" />
-                <span className="truncate">{mapped.location?.split(",")[0] || "India"}</span>
-              </span>
+          {/* 2. Seller / Consultant & Location */}
+          <div className="flex items-center gap-3 text-[11px] text-zinc-300 overflow-hidden whitespace-nowrap">
+            <div className="flex items-center gap-1 min-w-0 truncate">
+              <User className="w-3.5 h-3.5 text-[#FBBF24] shrink-0" />
+              <span className="truncate">{mapped.userName || "Verified Seller"}</span>
+            </div>
+            <div className="flex items-center gap-1 min-w-0 truncate">
+              <MapPinned className="w-3.5 h-3.5 text-[#FBBF24] shrink-0" />
+              <span className="truncate">{mapped.location || "India"}</span>
             </div>
           </div>
 
-          {/* Compact 4-Column Specs Pills (Refined Dark with Light Orange Border) */}
-          <div className="grid grid-cols-4 gap-1 text-[10px] sm:text-[11px] font-normal text-zinc-300">
-            <span className="px-1 py-0.5 rounded-md bg-white/[0.04] border border-[#FB923C]/20 text-center truncate">
-              {mapped.year}
-            </span>
-            <span className="px-1 py-0.5 rounded-md bg-white/[0.04] border border-[#FB923C]/20 text-center truncate">
-              {mapped.transmission}
-            </span>
-            <span className="px-1 py-0.5 rounded-md bg-white/[0.04] border border-[#FB923C]/20 text-center truncate">
-              {mapped.fuel}
-            </span>
-            <span className="px-1 py-0.5 rounded-md bg-white/[0.04] border border-[#FB923C]/20 text-center truncate">
-              {mapped.seats}
-            </span>
+          {/* 3. 4 Outlined Specs Pills: [ Year ] [ Transmission ] [ Fuel ] [ Ownership ] */}
+          <div className="grid grid-cols-4 gap-1.5 mt-0.5">
+            <div className="rounded-md py-1 px-1 text-center text-[10px] sm:text-[11px] font-medium text-purple-200 border border-purple-400/30 bg-purple-950/40 truncate">
+              {mapped.year || "-"}
+            </div>
+            <div className="rounded-md py-1 px-1 text-center text-[10px] sm:text-[11px] font-medium text-purple-200 border border-purple-400/30 bg-purple-950/40 truncate capitalize">
+              {mapped.transmission || "-"}
+            </div>
+            <div className="rounded-md py-1 px-1 text-center text-[10px] sm:text-[11px] font-medium text-purple-200 border border-purple-400/30 bg-purple-950/40 truncate capitalize">
+              {mapped.fuel || "-"}
+            </div>
+            <div className="rounded-md py-1 px-1 text-center text-[10px] sm:text-[11px] font-medium text-purple-200 border border-purple-400/30 bg-purple-950/40 truncate">
+              {mapped.seats || "1 Owner"}
+            </div>
           </div>
 
-          {/* Price, Savings & View Details Button - Clean font-semibold Styling */}
-          <div className="pt-2.5 border-t border-[#FB923C]/20 flex items-center justify-between gap-2 mt-auto">
-
-            {/* Left: 2-Row Clean Price Stack */}
+          {/* 4. Price & View Details CTA */}
+          <div className="pt-2 border-t border-[#FBBF24]/20 flex items-center justify-between gap-2 mt-auto">
+            {/* Left: Price Stack */}
             <div className="flex flex-col min-w-0">
-              {/* Row 1: Main Price - font-semibold, normal warm gold */}
-              <span className="text-lg sm:text-xl font-semibold text-[#FDE047] leading-tight whitespace-nowrap drop-shadow-[0_0_8px_rgba(251,146,60,0.25)]">
+              <span className="text-base sm:text-lg md:text-xl font-black text-[#FDE047] leading-tight whitespace-nowrap drop-shadow-[0_1px_6px_rgba(253,224,71,0.25)]">
                 ₹{mapped.price}
               </span>
-
-              {/* Row 2: Struck Price + Savings Tag Cleanly Underneath */}
               <div className="flex items-center gap-1.5 whitespace-nowrap text-xs mt-0.5">
                 {mapped.rawDisplayPrice && (
-                  <span className="text-zinc-400 line-through font-normal leading-none text-[11px]">
+                  <span className="text-purple-200/50 line-through text-[11px]">
                     ₹{mapped.rawDisplayPrice.toLocaleString("en-IN")}
                   </span>
                 )}
                 {savingsAmount && (
-                  <span className="font-semibold text-emerald-400 leading-none text-[11px]">
+                  <span className="text-[10px] font-bold text-emerald-400">
                     Save ₹{savingsAmount}
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Right: View Details Button - Refined Normal Light Orange Gradient */}
+            {/* Right: View Details Button - Rounded Rectangle */}
             <NoPrefetchLink
               href={detailHref}
               onClick={(e) => {
                 e.stopPropagation();
                 handleAdClick();
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-semibold text-xs text-zinc-950 bg-gradient-to-r from-[#FDE047] via-[#FBBF24] to-[#FB923C] hover:brightness-105 shadow-[0_2px_10px_rgba(251,146,60,0.25)] transition-all duration-200 shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-bold text-xs text-zinc-950 bg-gradient-to-r from-[#FDE047] via-[#FBBF24] to-[#F59E0B] hover:brightness-110 shadow-[0_2px_10px_rgba(245,158,11,0.35)] transition-all duration-200 shrink-0 cursor-pointer"
             >
               <span>View Details</span>
               <ArrowRight className="w-3.5 h-3.5 text-zinc-950" />

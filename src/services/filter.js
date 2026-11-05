@@ -65,11 +65,14 @@ export const getFilteredVehicles = async (data, params = {}) => {
         vehicleTypeVal = "TWO_WHEELER";
       }
     }
-    const { bodyType, ...cleanParams } = params;
+    const { bodyType, searchSessionId: paramSessionId, ...cleanParams } = params;
     let cleanData = data;
     if (data && typeof data === "object") {
       const { bodyType: _, ...restData } = data;
       cleanData = restData;
+    }
+    if (paramSessionId && !cleanData?.searchSessionId) {
+      cleanData = { ...cleanData, searchSessionId: paramSessionId };
     }
     const res = await axiosInstance.post(ENDPOINT.getFilteredVehicles, cleanData, {
       params: {
