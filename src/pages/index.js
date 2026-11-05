@@ -165,9 +165,9 @@ function Home() {
       </Head>
       <HeroSection fullWidth />
       {/* <RecentlyVisitedSection /> */}
-      {/* <Layout>
+      <Layout>
         <DiwaliShowcaseSection />
-      </Layout> */}
+      </Layout>
       <Layout>
         <ShowcaseSection />
       </Layout>

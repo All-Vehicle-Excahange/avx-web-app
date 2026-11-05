@@ -1223,22 +1223,32 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
     <>
       <style>{`
         .dropdown-active button:focus {
-          background-color: rgba(255, 255, 255, 0.1) !important;
-          outline: 1px solid rgba(255, 255, 255, 0.2) !important;
+          background-color: rgba(251, 191, 36, 0.15) !important;
+          outline: 1px solid rgba(251, 191, 36, 0.4) !important;
           outline-offset: -1px;
         }
 
         .lg-glass-dropdown {
-          background: rgba(20, 20, 20, 0.75);
-          backdrop-filter: blur(32px) saturate(180%);
-          -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(18, 10, 28, 0.97);
+          backdrop-filter: blur(32px) saturate(200%);
+          -webkit-backdrop-filter: blur(32px) saturate(200%);
+          border: 1.5px solid rgba(251, 191, 36, 0.45);
           box-shadow:
-            0 24px 64px rgba(0,0,0,0.5),
-            inset 0 1px 0 rgba(255,255,255,0.08);
+            0 24px 64px rgba(0,0,0,0.85),
+            0 0 24px rgba(245, 158, 11, 0.15),
+            inset 0 1px 0 rgba(254, 240, 138, 0.2);
         }
 
-        /* ====== LIQUID GLASS SEARCH BAR – DESKTOP ====== */
+        .lg-glass-dropdown button {
+          color: #ffffff;
+        }
+
+        .lg-glass-dropdown button:hover {
+          background-color: rgba(251, 191, 36, 0.15) !important;
+          color: #fef08a !important;
+        }
+
+        /* ====== ROYAL FESTIVE CAPSULE SEARCH BAR – DESKTOP ====== */
         .lg-glass-bar {
           position: relative;
           width: 100%;
@@ -1246,25 +1256,24 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           border-radius: 56px;
           background: linear-gradient(
             135deg,
-            rgba(255,255,255,0.22) 0%,
-            rgba(255,255,255,0.10) 40%,
-            rgba(255,255,255,0.06) 70%,
-            rgba(255,255,255,0.14) 100%
+            rgba(20, 10, 32, 0.94) 0%,
+            rgba(15, 8, 24, 0.96) 50%,
+            rgba(26, 12, 38, 0.94) 100%
           );
-          backdrop-filter: blur(32px) saturate(180%);
-          -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1.5px solid rgba(255,255,255,0.28);
+          backdrop-filter: blur(28px) saturate(200%);
+          -webkit-backdrop-filter: blur(28px) saturate(200%);
+          border: 1.5px solid rgba(251, 191, 36, 0.65);
           box-shadow:
-            0 2px 0 0 rgba(255,255,255,0.35) inset,
-            0 -1px 0 0 rgba(0,0,0,0.10) inset,
-            0 24px 64px rgba(0,0,0,0.28),
-            0 8px 24px rgba(0,0,0,0.20),
-            0 0 0 0.5px rgba(255,255,255,0.12);
+            0 2px 0 0 rgba(254, 240, 138, 0.35) inset,
+            0 -1px 0 0 rgba(0,0,0,0.5) inset,
+            0 24px 64px rgba(0,0,0,0.7),
+            0 8px 24px rgba(0,0,0,0.5),
+            0 0 24px rgba(245, 158, 11, 0.22);
           overflow: visible;
           transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
-        /* Glossy top-shine reflection */
+        /* 24K Gold top-shine reflection */
         .lg-glass-bar::before {
           content: '';
           position: absolute;
@@ -1272,15 +1281,15 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           border-radius: 56px;
           background: linear-gradient(
             180deg,
-            rgba(255,255,255,0.30) 0%,
-            rgba(255,255,255,0.08) 40%,
-            transparent 60%
+            rgba(254, 240, 138, 0.22) 0%,
+            rgba(245, 158, 11, 0.05) 40%,
+            transparent 70%
           );
           pointer-events: none;
           z-index: 1;
         }
 
-        /* Animated light-sweep reflection – uses opacity pulse, no horizontal overflow */
+        /* Ambient festive golden shimmer */
         .lg-glass-bar::after {
           content: '';
           position: absolute;
@@ -1289,17 +1298,17 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           background: linear-gradient(
             105deg,
             transparent 0%,
-            rgba(255,255,255,0.10) 50%,
+            rgba(254, 240, 138, 0.12) 50%,
             transparent 100%
           );
-          animation: glassPulse 5s ease-in-out infinite;
+          animation: goldPulse 5s ease-in-out infinite;
           pointer-events: none;
           z-index: 2;
         }
 
-        @keyframes glassPulse {
-          0%, 100% { opacity: 0; }
-          50%       { opacity: 1; }
+        @keyframes goldPulse {
+          0%, 100% { opacity: 0.2; }
+          50%       { opacity: 0.8; }
         }
 
         .lg-glass-inner {
@@ -1309,7 +1318,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           height: 70px;
         }
 
-        /* Filter section hover glass highlight */
+        /* Filter section hover / active gold highlights */
         .lg-filter-section {
           flex: 1;
           position: relative;
@@ -1321,7 +1330,7 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           justify-content: center;
           border-radius: 52px;
           cursor: pointer;
-          transition: background 0.25s ease;
+          transition: background 0.25s ease, box-shadow 0.25s ease;
           min-width: 0;
         }
 
@@ -1330,28 +1339,30 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         }
 
         .lg-filter-section:hover {
-          background: rgba(255,255,255,0.14);
+          background: rgba(251, 191, 36, 0.09);
         }
 
         .lg-filter-section.active {
-          background: rgba(255,255,255,0.20);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.05);
+          background: rgba(251, 191, 36, 0.15);
+          box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.4), inset 0 2px 4px rgba(0,0,0,0.25);
         }
 
-        /* Labels – original style: medium-weight, normal case, primary color */
+        /* Labels – Royal festive gold title */
         .lg-label {
-          font-size: 14px;
-          font-weight: 600;
-          color: #fff;
+          font-size: 11.5px;
+          font-weight: 700;
+          color: #FBBF24;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
           white-space: nowrap;
           line-height: 1.2;
         }
 
-        /* Values – original style: text-sm font-medium */
+        /* Values – High contrast crisp pure white */
         .lg-value {
-          font-size: 13px;
-          font-weight: 500;
-          color: rgba(255,255,255,0.85);
+          font-size: 13.5px;
+          font-weight: 600;
+          color: #FFFFFF;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1359,30 +1370,36 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
 
         .lg-value.placeholder {
           font-weight: 400;
-          color: rgba(255,255,255,0.45);
+          color: rgba(255, 255, 255, 0.65);
         }
 
         .lg-value.error {
-          color: #f87171;
-          font-weight: 500;
+          color: #fca5a5;
+          font-weight: 600;
         }
 
-        /* Thin translucent divider */
+        /* Royal gold hairline divider */
         .lg-divider {
           width: 1px;
           height: 36px;
-          background: rgba(255,255,255,0.20);
+          background: linear-gradient(
+            180deg,
+            transparent,
+            rgba(251, 191, 36, 0.45) 25%,
+            rgba(251, 191, 36, 0.45) 75%,
+            transparent
+          );
           flex-shrink: 0;
           margin: 0 2px;
           border-radius: 1px;
         }
 
-        /* Search button */
+        /* Search button – 24K Gold luxury button */
         .lg-search-btn {
           width: 52px;
           height: 52px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.96);
+          background: linear-gradient(135deg, #FDE047 0%, #FBBF24 50%, #F59E0B 100%);
           border: none;
           display: flex;
           align-items: center;
@@ -1390,55 +1407,53 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           cursor: pointer;
           flex-shrink: 0;
           box-shadow:
-            0 4px 16px rgba(0,0,0,0.22),
-            0 1px 0 rgba(255,255,255,0.9) inset;
+            0 4px 18px rgba(245, 158, 11, 0.55),
+            0 1px 0 rgba(255, 255, 255, 0.8) inset;
           transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
-          color: #111;
+          color: #09090b;
         }
 
         .lg-search-btn:hover {
-          background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          color: #fff;
-          transform: scale(1.05);
+          background: linear-gradient(135deg, #FEF08A 0%, #FDE047 50%, #FBBF24 100%);
+          color: #000;
+          transform: scale(1.06);
           box-shadow:
-            0 8px 28px rgba(0,0,0,0.30),
-            0 1px 0 rgba(255,255,255,0.5) inset;
+            0 6px 24px rgba(245, 158, 11, 0.75),
+            0 1px 0 rgba(255, 255, 255, 0.9) inset;
         }
 
         .lg-search-btn:active {
           transform: scale(0.95);
         }
 
-        /* Input inside glass bar – matches .lg-value style */
+        /* Input inside festive capsule – crisp readable white */
         .lg-input {
           width: 100%;
           background: transparent;
           border: none;
           outline: none;
-          font-size: 13px;
-          font-weight: 500;
-          color: rgba(255,255,255,0.85);
+          font-size: 13.5px;
+          font-weight: 600;
+          color: #FFFFFF;
         }
 
         .lg-input::placeholder {
-          color: rgba(255,255,255,0.40);
-          font-weight: 500;
+          color: rgba(255, 255, 255, 0.60);
+          font-weight: 400;
         }
 
         .lg-clear-btn {
           padding: 4px;
           border-radius: 9999px;
-          color: rgba(255, 255, 255, 0.4);
+          color: rgba(251, 191, 36, 0.6);
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
         }
         .lg-clear-btn:hover {
-          background-color: rgba(255, 255, 255, 0.15);
-          color: #fff;
+          background-color: rgba(251, 191, 36, 0.2);
+          color: #FDE047;
           transform: scale(1.1);
         }
       `}</style>

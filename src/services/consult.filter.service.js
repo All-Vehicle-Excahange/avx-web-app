@@ -45,7 +45,12 @@ export const getFilteredConsult = async (data, payload) => {
     if (sortBy) params.sortBy = sortBy;
     if (direction) params.direction = direction;
 
-    const res = await axiosInstance.post(ENDPOINT.getFilteredConsult, payload, {
+    const body = {
+      ...(payload || {}),
+      ...(data?.searchSessionId !== undefined ? { searchSessionId: data.searchSessionId } : {}),
+    };
+
+    const res = await axiosInstance.post(ENDPOINT.getFilteredConsult, body, {
       params,
     });
 
@@ -65,7 +70,12 @@ export const getPremiumConsult = async (data, payload) => {
     if (sortBy) params.sortBy = sortBy;
     if (direction) params.direction = direction;
 
-    const res = await axiosInstance.post(ENDPOINT.getPremiumConsult, payload, {
+    const body = {
+      ...(payload || {}),
+      ...(data?.searchSessionId !== undefined ? { searchSessionId: data.searchSessionId } : {}),
+    };
+
+    const res = await axiosInstance.post(ENDPOINT.getPremiumConsult, body, {
       params,
     });
 

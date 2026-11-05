@@ -174,6 +174,8 @@ export default function FilterWithCard({
   // ── Result data ──
   const [consultants, setConsultants] = useState([]); // from getFilteredConsult
   const [premiumConsultants, setPremiumConsultants] = useState([]); // from getPremiumConsult
+  const [searchSessionId, setSearchSessionId] = useState(null);
+  const searchSessionIdRef = useRef(null);
   const [consultantsLoading, setConsultantsLoading] = useState(true);
 
   const [latitude, setLatitude] = useState(null);
@@ -402,8 +404,18 @@ export default function FilterWithCard({
 
   // ── Fetch both APIs ──
   const fetchConsultants = async (page = currentPage, payload = {}) => {
+    if (page === 1) {
+      searchSessionIdRef.current = null;
+      setSearchSessionId(null);
+    }
+    const currentSessionId = page > 1 ? (searchSessionIdRef.current || null) : null;
+    const requestPayload = {
+      ...payload,
+      searchSessionId: currentSessionId,
+    };
+
     const { sortBy, direction } = getSortConfig(sort);
-    const requestKey = JSON.stringify({ page, sortBy, direction, payload });
+    const requestKey = JSON.stringify({ page, sortBy, direction, payload: requestPayload });
     if (prevPayloadRef.current === requestKey) return;
     prevPayloadRef.current = requestKey;
 
@@ -423,32 +435,47 @@ export default function FilterWithCard({
       };
 
       const [filteredRes, premiumRes] = await Promise.all([
-        getFilteredConsult(requestData, payload),
-        getPremiumConsult(premiumRequestData, payload),
+        getFilteredConsult(requestData, requestPayload),
+        getPremiumConsult(premiumRequestData, requestPayload),
       ]);
+
+      const newSessionId =
+        filteredRes?.data?.searchSessionId ||
+        filteredRes?.searchSessionId ||
+        premiumRes?.data?.searchSessionId ||
+        premiumRes?.searchSessionId ||
+        null;
+      if (newSessionId) {
+        searchSessionIdRef.current = newSessionId;
+        setSearchSessionId(newSessionId);
+      }
 
       const filteredData =
         filteredRes?.success && Array.isArray(filteredRes?.data)
           ? filteredRes.data
-          : [];
+          : (Array.isArray(filteredRes?.data?.consultations)
+              ? filteredRes.data.consultations
+              : []);
 
-      if (filteredRes?.pagination) {
-        const { totalPages, totalElements, currentPage } =
-          filteredRes.pagination;
+      const pageInfo = filteredRes?.pagination || filteredRes?.data?.pageResponse;
+      if (pageInfo) {
+        const { totalPages, totalElements, currentPage } = pageInfo;
 
-        setTotalPages(totalPages);
-        setTotalElements(totalElements);
+        if (totalPages !== undefined) setTotalPages(totalPages);
+        if (totalElements !== undefined) setTotalElements(totalElements);
         onPageResponseChange?.({
-          totalElements,
-          totalPages,
-          currentPage,
+          totalElements: totalElements ?? 0,
+          totalPages: totalPages ?? 0,
+          currentPage: currentPage ?? page,
         });
       }
 
       const premiumData =
         premiumRes?.success && Array.isArray(premiumRes?.data)
           ? premiumRes.data
-          : [];
+          : (Array.isArray(premiumRes?.data?.consultations)
+              ? premiumRes.data.consultations
+              : []);
 
       if (page === 1) {
         setConsultants(mapToCardFormat(filteredData));

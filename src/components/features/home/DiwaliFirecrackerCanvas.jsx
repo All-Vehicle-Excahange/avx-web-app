@@ -35,14 +35,15 @@ const DiwaliFirecrackerCanvas = ({ className = "" }) => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Warm festive golden, amber, and orange colors
+    // Radiant royal festive fireworks: 24k Gold, Ruby Red, Warm Amber & Sparkle White
     const FESTIVE_COLORS = [
-      "#FDE047", // Bright gold
-      "#F59E0B", // Amber gold
-      "#EA580C", // Warm orange
-      "#F97316", // Bright orange
-      "#FEF08A", // Champagne gold
-      "#FB923C", // Festive peach-orange
+      "#FFD700", // 24k Brilliant Gold
+      "#FFF380", // Champagne Gold Sparkle
+      "#F59E0B", // Amber Gold
+      "#EF4444", // Festive Ruby Red
+      "#DC2626", // Crimson Red
+      "#FB923C", // Warm Festive Orange
+      "#FFFFFF", // Sparkle White
     ];
 
     class Rocket {

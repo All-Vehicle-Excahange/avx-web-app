@@ -24,6 +24,7 @@ import {
   getRecentlySold,
   getAndCheckEligbleForReview,
   getConsultantRankings,
+  getDisplayImage,
 } from "@/services/user.service";
 import {
   getFilteredVehicles,
@@ -461,6 +462,19 @@ export const getConsultantRankingsQuery = (params = {}) => {
       return res;
     },
     staleTime: 5 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+
+export const getDisplayImageQuery = (params = { placement: "HOME_PAGE", platform: "WEB" }) => {
+  return queryOptions({
+    queryKey: ["display-images", params],
+    queryFn: async () => {
+      const res = await getDisplayImage(params);
+      return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
     retry: shouldRetry,
   });
 };

@@ -1,8 +1,11 @@
 import Image from "next/image";
 import React from "react";
-import { ShieldCheck, ClipboardList, Globe, Star } from "lucide-react";
+// import { ShieldCheck, ClipboardList, Globe, Star } from "lucide-react";
 import AdSenseAd from "@/components/common/AdSenseAd";
 
+/* ==============================================================
+   OLD "BUY WITH CONFIDENCE" BANNER (COMMENTED OUT FOR DIWALI)
+   ==============================================================
 const features = [
   {
     icon: <ShieldCheck className="w-4 h-4 text-white/80 shrink-0" />,
@@ -76,6 +79,38 @@ function BuyWithConfidenceBanner() {
     </div>
   );
 }
+============================================================== */
+
+// ==============================================================
+// NEW DIWALI SPECIAL OFFER BANNER (PURE IMAGE BANNER)
+// ==============================================================
+function DiwaliSpecialOfferBanner() {
+  return (
+    <div className="w-full">
+      <div
+        className="
+          relative
+          w-full
+          aspect-[1286/864]
+          rounded-xl
+          overflow-hidden
+          border
+          border-amber-500/30
+          shadow-[0_4px_20px_rgba(0,0,0,0.35)]
+         "
+      >
+        <Image
+          src="/images/diwali/vdp.webp"
+          alt="Diwali Special Offer - Gaadi Pasand Hai? Toh Apni Offer Bataiye!"
+          fill
+          priority
+          unoptimized
+          className="object-cover"
+        />
+      </div>
+    </div>
+  );
+}
 
 function SpecialOffer({ isVehicleSold = false }) {
   return (
@@ -83,8 +118,8 @@ function SpecialOffer({ isVehicleSold = false }) {
       <AdSenseAd
         slot={process.env.NEXT_PUBLIC_ADSENSE_VDP_SPECIAL_SLOT}
         mode="fallback"
-        fallback={<BuyWithConfidenceBanner />}
-        className="w-full rounded-xl overflow-hidden min-h-[260px] sm:min-h-[360px] lg:min-h-[220px] xl:min-h-[300px]"
+        fallback={<DiwaliSpecialOfferBanner />}
+        className="w-full rounded-xl overflow-hidden aspect-[1286/864]"
       />
     </div>
   );

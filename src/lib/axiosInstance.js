@@ -183,7 +183,7 @@ export const handleResponse = (response) => {
     success: !api.error,
     message: api.message,
     data: api.data,
-    pagination: api.pageResponse || null,
+    pagination: api.pageResponse || api.data?.pageResponse || null,
     status: api.status,
     statusCode: api.statusCode,
     timestamp: api.timestamp,

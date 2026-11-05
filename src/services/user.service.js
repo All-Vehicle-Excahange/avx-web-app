@@ -48,6 +48,7 @@ const ENDPOINT = {
   getAndCheckEligbleForReview: "/vehicles/inquiry/review-details",
   recentSearch: "/users/recent-search",
   getConsultantRankings: "/users/profile/consultant-rankings",
+  getDisplayImage: "/users/profile/display-image",
 };
 
 export const getUserHomeFeed = async (data) => {
@@ -670,6 +671,18 @@ export const getConsultantRankings = async (data = {}) => {
       },
     });
 
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getDisplayImage = async (params = {}) => {
+  try {
+    const res = await axiosInstance.get(ENDPOINT.getDisplayImage, {
+      params,
+    });
     return handleResponse(res);
   } catch (error) {
     throw error;
