@@ -19,29 +19,31 @@ const fallbackSlidesData = [
   {
     id: "fallback-1",
     desktopImage: "/images/diwali/diwali-hero-1.webp",
+    tabletImage: "/images/diwali/diwali-hero-1.webp",
     mobileImage: "/images/diwali/diwali-hero-1.webp",
+    hasTabletImage: false,
     alt: "Carwali Diwali - Ek chhota sa sapna, apni gaadi ka",
+    redirectUrl: null,
   },
   {
     id: "fallback-2",
     desktopImage: "/images/diwali/diwali-hero-2.webp",
+    tabletImage: "/images/diwali/diwali-hero-2.webp",
     mobileImage: "/images/diwali/diwali-hero-2.webp",
+    hasTabletImage: false,
     alt: "Iss Diwali, kaunsi wali gaadi? - Ek nahi, kayi options",
+    redirectUrl: null,
   },
   {
     id: "fallback-3",
     desktopImage: "/images/diwali/diwali-hero-3.webp",
+    tabletImage: "/images/diwali/diwali-hero-3.webp",
     mobileImage: "/images/diwali/diwali-hero-3.webp",
+    hasTabletImage: false,
     alt: "Pasand dil se. Faisla report se - Reecomm Inspection",
+    redirectUrl: null,
   },
 ];
-
-// Helper to determine if a banner item is designated for mobile screens
-const isMobileBanner = (item) => {
-  const title = (item?.title || "").toLowerCase();
-  const url = (item?.imageUrl || "").toLowerCase();
-  return title.includes("mobile") || url.includes("mobile");
-};
 
 export default function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
@@ -56,67 +58,42 @@ export default function HeroSection() {
   const slidesData = useMemo(() => {
     if (Array.isArray(displayImages) && displayImages.length > 0) {
       const activeBanners = displayImages
-        .filter((item) => !item.status || item.status === "ACTIVE")
+        .filter((item) => {
+          const isActive = !item.status || item.status === "ACTIVE";
+          const hasImage = Boolean(
+            item.webDesktopImageUrl ||
+            item.webTabletImageUrl ||
+            item.webMobileImageUrl ||
+            item.imageUrl
+          );
+          return isActive && hasImage;
+        })
         .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
       if (activeBanners.length > 0) {
-        // Group by displayOrder so corresponding Desktop & Mobile banners pair up
-        const orderMap = new Map();
+        return activeBanners.map((item, idx) => {
+          const desktop =
+            item.webDesktopImageUrl ||
+            item.imageUrl ||
+            item.webTabletImageUrl ||
+            item.webMobileImageUrl ||
+            fallbackSlidesData[idx % fallbackSlidesData.length].desktopImage;
 
-        activeBanners.forEach((item) => {
-          const order = item.displayOrder ?? 0;
-          if (!orderMap.has(order)) {
-            orderMap.set(order, []);
-          }
-          orderMap.get(order).push(item);
+          // If tablet not URL comes in this API, show desktop URL
+          const tablet = item.webTabletImageUrl || desktop;
+          // If mobile not URL comes in this API, show desktop URL
+          const mobile = item.webMobileImageUrl || desktop;
+
+          return {
+            id: item.id || `hero-banner-${item.displayOrder ?? idx + 1}`,
+            desktopImage: desktop,
+            tabletImage: tablet,
+            mobileImage: mobile,
+            hasTabletImage: Boolean(item.webTabletImageUrl),
+            alt: item.title || `Hero banner ${item.displayOrder ?? idx + 1}`,
+            redirectUrl: item.redirectUrl || null,
+          };
         });
-
-        const slides = [];
-
-        orderMap.forEach((group, order) => {
-          const mobileItem = group.find((it) => isMobileBanner(it));
-          const desktopItem = group.find((it) => !isMobileBanner(it));
-
-          if (desktopItem && mobileItem) {
-            slides.push({
-              id: `${desktopItem.id}-${mobileItem.id}`,
-              desktopImage: desktopItem.imageUrl,
-              mobileImage: mobileItem.imageUrl,
-              alt: desktopItem.title || mobileItem.title || `Hero banner ${order}`,
-              redirectUrl: desktopItem.redirectUrl || mobileItem.redirectUrl || null,
-            });
-          } else if (desktopItem) {
-            slides.push({
-              id: desktopItem.id,
-              desktopImage: desktopItem.imageUrl,
-              mobileImage: desktopItem.imageUrl,
-              alt: desktopItem.title || `Hero banner ${order}`,
-              redirectUrl: desktopItem.redirectUrl || null,
-            });
-          } else if (mobileItem) {
-            slides.push({
-              id: mobileItem.id,
-              desktopImage: mobileItem.imageUrl,
-              mobileImage: mobileItem.imageUrl,
-              alt: mobileItem.title || `Hero banner ${order}`,
-              redirectUrl: mobileItem.redirectUrl || null,
-            });
-          } else {
-            group.forEach((item, idx) => {
-              slides.push({
-                id: item.id || `banner-${order}-${idx}`,
-                desktopImage: item.imageUrl,
-                mobileImage: item.imageUrl,
-                alt: item.title || `Hero banner ${order}`,
-                redirectUrl: item.redirectUrl || null,
-              });
-            });
-          }
-        });
-
-        if (slides.length > 0) {
-          return slides;
-        }
       }
     }
     return fallbackSlidesData;
@@ -148,58 +125,63 @@ export default function HeroSection() {
           className="w-full h-full"
           onSlideChange={(swiper) => setActiveSlideIndex(swiper.realIndex)}
         >
-          {slidesData.map((slide, index) => (
-            <SwiperSlide key={slide.id} className="relative w-full h-full overflow-hidden">
-              {slide.redirectUrl ? (
-                <a
-                  href={slide.redirectUrl}
-                  target={slide.redirectUrl.startsWith("http") ? "_blank" : "_self"}
-                  rel="noopener noreferrer"
-                  className="block w-full h-full relative cursor-pointer"
-                >
-                  {/* Desktop / Large Screen Banner */}
+          {slidesData.map((slide, index) => {
+            const isFirst = index === 0;
+            const slideImages = (
+              <>
+                {/* Desktop / Large Screen Banner (lg+ if tablet exists, else md+) */}
+                <Image
+                  src={slide.desktopImage}
+                  fill
+                  unoptimized
+                  className={`${
+                    slide.hasTabletImage ? "hidden lg:block" : "hidden md:block"
+                  } w-full h-full object-cover select-none`}
+                  alt={slide.alt || "Hero background banner"}
+                  priority={isFirst}
+                />
+
+                {/* Tablet Screen Banner (md to lg - only rendered when dedicated tablet image exists) */}
+                {slide.hasTabletImage && (
                   <Image
-                    src={slide.desktopImage}
+                    src={slide.tabletImage}
                     fill
                     unoptimized
-                    className="hidden md:block w-full h-full object-cover select-none"
-                    alt={slide.alt || "Hero background banner"}
-                    priority={index === 0}
+                    className="hidden md:block lg:hidden w-full h-full object-cover select-none"
+                    alt={slide.alt || "Hero background tablet banner"}
+                    priority={isFirst}
                   />
-                  {/* Mobile / Small Screen Banner */}
-                  <Image
-                    src={slide.mobileImage || slide.desktopImage}
-                    fill
-                    unoptimized
-                    className="block md:hidden w-full h-full object-cover select-none"
-                    alt={slide.alt || "Hero background mobile banner"}
-                    priority={index === 0}
-                  />
-                </a>
-              ) : (
-                <>
-                  {/* Desktop / Large Screen Banner */}
-                  <Image
-                    src={slide.desktopImage}
-                    fill
-                    unoptimized
-                    className="hidden md:block w-full h-full object-cover select-none"
-                    alt={slide.alt || "Hero background banner"}
-                    priority={index === 0}
-                  />
-                  {/* Mobile / Small Screen Banner */}
-                  <Image
-                    src={slide.mobileImage || slide.desktopImage}
-                    fill
-                    unoptimized
-                    className="block md:hidden w-full h-full object-cover select-none"
-                    alt={slide.alt || "Hero background mobile banner"}
-                    priority={index === 0}
-                  />
-                </>
-              )}
-            </SwiperSlide>
-          ))}
+                )}
+
+                {/* Mobile Screen Banner (< md) */}
+                <Image
+                  src={slide.mobileImage}
+                  fill
+                  unoptimized
+                  className="block md:hidden w-full h-full object-cover select-none"
+                  alt={slide.alt || "Hero background mobile banner"}
+                  priority={isFirst}
+                />
+              </>
+            );
+
+            return (
+              <SwiperSlide key={slide.id} className="relative w-full h-full overflow-hidden">
+                {slide.redirectUrl ? (
+                  <a
+                    href={slide.redirectUrl}
+                    target={slide.redirectUrl.startsWith("http") ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    className="block w-full h-full relative cursor-pointer"
+                  >
+                    {slideImages}
+                  </a>
+                ) : (
+                  slideImages
+                )}
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
 

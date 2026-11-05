@@ -42,6 +42,171 @@ import {
  * - Balanced 4-col specs pills
  * - Zero hover zoom or border shifts
  */
+// Dedicated Ornate Hanging Diwali Lanterns (Kandil / Lamps with Golden Chains)
+const HangingDiwaliLamps = ({ side = "left" }) => {
+  const isLeft = side === "left";
+  return (
+    <div
+      className={`absolute -top-0.5 ${isLeft ? "left-1 sm:left-1.5" : "right-1 sm:right-1.5"} z-20 pointer-events-none select-none`}
+    >
+      <svg
+        viewBox="0 0 46 68"
+        className={`w-9 sm:w-10 h-14 sm:h-16 filter drop-shadow-[0_2px_8px_rgba(245,158,11,0.7)] group-hover/card:drop-shadow-[0_2px_12px_rgba(253,224,71,0.9)] transition-all duration-300 ${
+          isLeft ? "" : "scale-x-[-1]"
+        }`}
+        fill="none"
+      >
+        <defs>
+          <linearGradient id="kandilBrass" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFFBEB" />
+            <stop offset="30%" stopColor="#FDE047" />
+            <stop offset="70%" stopColor="#F59E0B" />
+            <stop offset="100%" stopColor="#92400E" />
+          </linearGradient>
+
+          <radialGradient id="kandilCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBEB" />
+            <stop offset="35%" stopColor="#FEF08A" />
+            <stop offset="70%" stopColor="#F59E0B" />
+            <stop offset="100%" stopColor="#D97706" />
+          </radialGradient>
+
+          <radialGradient id="kandilHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FDE047" stopOpacity="0.8" />
+            <stop offset="55%" stopColor="#F59E0B" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* Top Draped Garland Chain */}
+        <path
+          d="M 0 1 Q 14 8 26 3 Q 36 0 46 4"
+          stroke="url(#kandilBrass)"
+          strokeWidth="0.9"
+          strokeDasharray="2 1.5"
+          fill="none"
+          opacity="0.8"
+        />
+
+        {/* =================================================== */}
+        {/* LAMP 1: PRIMARY LARGER HANGING LANTERN              */}
+        {/* =================================================== */}
+        {/* Chain 1 */}
+        <line
+          x1="16"
+          y1="0"
+          x2="16"
+          y2="18"
+          stroke="url(#kandilBrass)"
+          strokeWidth="1.1"
+          strokeDasharray="2.5 1.5"
+        />
+
+        {/* Halo Glow */}
+        <circle cx="16" cy="35" r="13" fill="url(#kandilHalo)" />
+
+        {/* Hanging Ring */}
+        <circle cx="16" cy="19" r="1.8" stroke="url(#kandilBrass)" strokeWidth="0.9" />
+
+        {/* Top Brass Cap */}
+        <path
+          d="M 10 24 Q 16 20 22 24 L 23 26 L 9 26 Z"
+          fill="url(#kandilBrass)"
+          stroke="#78350F"
+          strokeWidth="0.5"
+        />
+
+        {/* Glowing Hexagonal Body */}
+        <polygon
+          points="9,26 23,26 26,34 23,44 9,44 6,34"
+          fill="url(#kandilCore)"
+        />
+
+        {/* Brass Jali Cage */}
+        <polygon
+          points="9,26 23,26 26,34 23,44 9,44 6,34"
+          stroke="url(#kandilBrass)"
+          strokeWidth="1.1"
+          fill="none"
+        />
+        <line x1="16" y1="26" x2="16" y2="44" stroke="url(#kandilBrass)" strokeWidth="0.8" />
+        <line x1="9" y1="34" x2="23" y2="34" stroke="url(#kandilBrass)" strokeWidth="0.7" opacity="0.8" />
+        <line x1="12" y1="26" x2="20" y2="44" stroke="url(#kandilBrass)" strokeWidth="0.5" opacity="0.6" />
+        <line x1="20" y1="26" x2="12" y2="44" stroke="url(#kandilBrass)" strokeWidth="0.5" opacity="0.6" />
+
+        {/* Inner Flame Spark */}
+        <circle cx="16" cy="34" r="2.8" fill="#FFFFFF" opacity="0.95" className="animate-pulse" />
+
+        {/* Pedestal Base */}
+        <path
+          d="M 11 44 L 21 44 L 19 48 L 13 48 Z"
+          fill="url(#kandilBrass)"
+          stroke="#78350F"
+          strokeWidth="0.5"
+        />
+
+        {/* Bottom Droplet Finial */}
+        <path
+          d="M 16 48 L 18 53 C 18 54.5 16 56 16 56 C 16 56 14 54.5 14 53 Z"
+          fill="url(#kandilBrass)"
+        />
+
+        {/* =================================================== */}
+        {/* LAMP 2: SECONDARY ACCENT LANTERN (HANGING HIGHER)   */}
+        {/* =================================================== */}
+        {/* Chain 2 */}
+        <line
+          x1="34"
+          y1="0"
+          x2="34"
+          y2="9"
+          stroke="url(#kandilBrass)"
+          strokeWidth="0.9"
+          strokeDasharray="2 1.5"
+        />
+
+        {/* Halo Glow */}
+        <circle cx="34" cy="20" r="9" fill="url(#kandilHalo)" />
+
+        {/* Ring */}
+        <circle cx="34" cy="10" r="1.3" stroke="url(#kandilBrass)" strokeWidth="0.7" />
+
+        {/* Cap */}
+        <path
+          d="M 29 13 Q 34 10 39 13 L 40 15 L 28 15 Z"
+          fill="url(#kandilBrass)"
+        />
+
+        {/* Glowing Body */}
+        <polygon
+          points="29,15 39,15 41,21 39,29 29,29 27,21"
+          fill="url(#kandilCore)"
+        />
+        <polygon
+          points="29,15 39,15 41,21 39,29 29,29 27,21"
+          stroke="url(#kandilBrass)"
+          strokeWidth="0.8"
+          fill="none"
+        />
+        <line x1="34" y1="15" x2="34" y2="29" stroke="url(#kandilBrass)" strokeWidth="0.7" />
+
+        {/* Spark */}
+        <circle cx="34" cy="21" r="1.8" fill="#FFFFFF" opacity="0.9" className="animate-pulse" />
+
+        {/* Base & Droplet */}
+        <path
+          d="M 30 29 L 38 29 L 36 32 L 32 32 Z"
+          fill="url(#kandilBrass)"
+        />
+        <path
+          d="M 34 32 L 35.5 35 C 35.5 36 34 37 34 37 C 34 37 32.5 36 32.5 35 Z"
+          fill="url(#kandilBrass)"
+        />
+      </svg>
+    </div>
+  );
+};
+
 export default function DiwaliVehicleCard({
   data,
   onWishlistChange,
@@ -283,6 +448,10 @@ export default function DiwaliVehicleCard({
           isCardActive ? "cursor-pointer" : "cursor-default"
         } ${!isSold && isCardActive ? "" : "opacity-75 grayscale-[0.2]"}`}
       >
+        {/* Hanging Festive Diwali Lamps on Left & Right Corners of the Card */}
+        <HangingDiwaliLamps side="left" />
+        <HangingDiwaliLamps side="right" />
+
         {/* ============================================================== */}
         {/* TOP: VEHICLE IMAGE CONTAINER (INSET ROUNDED STAGING)          */}
         {/* ============================================================== */}
@@ -311,19 +480,48 @@ export default function DiwaliVehicleCard({
           </div>
 
           {/* Top-Left: 🔥 Diwali Deal Ribbon Badge */}
-          <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-gradient-to-r from-[#dc2626] to-[#991b1b] text-white border border-[#F59E0B]/60 shadow-md">
+          <div className="absolute top-2 left-2 z-20 pointer-events-none">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-gradient-to-r from-[#dc2626] to-[#991b1b] text-white border border-[#F59E0B]/60 shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
               <span className="text-xs">🔥</span>
               <span>Diwali Deal</span>
             </span>
           </div>
 
-          {/* Top-Right: Discount % Badge */}
+          {/* Top-Right: 16-Point Festive Starburst Discount Badge */}
           {discountPercent ? (
-            <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none">
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-extrabold bg-[#FDE047] text-zinc-950 shadow-md">
-                {discountPercent}% OFF
-              </span>
+            <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0 z-20 pointer-events-none flex items-center justify-center filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
+              <div className="relative w-12 h-12 sm:w-13 sm:h-13 flex items-center justify-center">
+                {/* 16-Point Starburst Shape */}
+                <svg
+                  viewBox="0 0 100 100"
+                  className="absolute inset-0 w-full h-full filter drop-shadow-[0_0_6px_rgba(253,224,71,0.55)]"
+                >
+                  <defs>
+                    <linearGradient id="festiveBurstGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FEF08A" />
+                      <stop offset="35%" stopColor="#FDE047" />
+                      <stop offset="70%" stopColor="#F59E0B" />
+                      <stop offset="100%" stopColor="#D97706" />
+                    </linearGradient>
+                  </defs>
+                  <polygon
+                    points="50.0,1.0 57.0,14.7 68.8,4.7 70.0,20.1 84.6,15.4 79.9,30.0 95.3,31.2 85.3,43.0 99.0,50.0 85.3,57.0 95.3,68.8 79.9,70.0 84.6,84.6 70.0,79.9 68.8,95.3 57.0,85.3 50.0,99.0 43.0,85.3 31.2,95.3 30.0,79.9 15.4,84.6 20.1,70.0 4.7,68.8 14.7,57.0 1.0,50.0 14.7,43.0 4.7,31.2 20.1,30.0 15.4,15.4 30.0,20.1 31.2,4.7 43.0,14.7"
+                    fill="url(#festiveBurstGrad)"
+                    stroke="#78350F"
+                    strokeWidth="1.2"
+                  />
+                </svg>
+
+                {/* Text Inside Starburst */}
+                <div className="relative z-10 flex flex-col items-center justify-center text-center leading-[0.85] text-zinc-950 font-black select-none">
+                  <span className="text-[11px] sm:text-[12px] font-black tracking-tight drop-shadow-[0_1px_0_rgba(255,255,255,0.4)]">
+                    {discountPercent}%
+                  </span>
+                  <span className="text-[7px] sm:text-[7.5px] font-black uppercase tracking-wider text-amber-950 mt-0.5">
+                    OFF
+                  </span>
+                </div>
+              </div>
             </div>
           ) : null}
 
