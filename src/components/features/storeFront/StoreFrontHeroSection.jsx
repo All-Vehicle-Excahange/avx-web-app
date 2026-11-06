@@ -333,18 +333,28 @@ export default function StoreFrontHeroSection() {
             className="object-cover object-center block"
             priority
           />
-          <div className="absolute bottom-4 right-4 bg-black/40 hover:bg-black/60 transition backdrop-blur-md rounded-full p-2.5 text-white/90 shadow-lg z-10 opacity-80 hover:opacity-100 flex items-center justify-center">
+          <button
+            type="button"
+            aria-label="View banner image full screen"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (storeDetails?.bannerUrl) {
+                setZoomImage(storeDetails.bannerUrl);
+              }
+            }}
+            className="absolute bottom-4 right-4 bg-black/50 hover:bg-black/70 active:scale-95 transition backdrop-blur-md rounded-full p-2.5 text-white shadow-lg z-40 flex items-center justify-center cursor-pointer pointer-events-auto"
+          >
             <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
-          </div>
+          </button>
         </div>
 
         {/* ================= CONTENT AREA ================= */}
         <div className="px-4 sm:px-6 md:px-10 py-4 relative">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* LEFT COLUMN */}
-            <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0">
+            <div className="flex flex-col items-center -mt-20 z-30 w-full lg:w-48 shrink-0 pointer-events-none">
               <div
-                className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl cursor-pointer"
+                className="relative w-42 h-42 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl cursor-pointer pointer-events-auto"
                 onClick={() => storeDetails?.logoUrl && setZoomImage(storeDetails.logoUrl)}
               >
                 <Image
@@ -357,7 +367,7 @@ export default function StoreFrontHeroSection() {
               </div>
 
               {/* subscribe & share buttons wrapper */}
-              <div className="mt-4 w-full flex flex-row items-center gap-3 lg:block lg:space-y-0">
+              <div className="mt-4 w-full flex flex-row items-center gap-3 lg:block lg:space-y-0 pointer-events-auto">
                 {/* subscribe btn */}
                 <div className="flex-1 lg:w-full">
                   <button
