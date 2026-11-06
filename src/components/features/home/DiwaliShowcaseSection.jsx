@@ -149,95 +149,153 @@ const FestiveJharokhaArch = ({
   className = "",
   title = "SHUBH DEEPAWALI",
   subtitle = "SPECIAL FEST",
-}) => (
-  <div className={`relative flex flex-col items-center justify-center ${className}`}>
-    {/* Background SVG Arch Frame */}
-    <svg
-      viewBox="0 0 360 160"
-      className="w-full h-auto drop-shadow-[0_6px_24px_rgba(245,158,11,0.45)]"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="jharokhaGoldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FFFBEB" />
-          <stop offset="20%" stopColor="#FDE047" />
-          <stop offset="50%" stopColor="#F59E0B" />
-          <stop offset="80%" stopColor="#D97706" />
-          <stop offset="100%" stopColor="#FFFBEB" />
-        </linearGradient>
-        <linearGradient id="jharokhaGlowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#FDE047" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.02" />
-        </linearGradient>
-        <filter id="archOuterGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
+}) => {
+  const words = (title || "").trim().split(/\s+/);
+  const line1 = words.length > 1 ? words[0] : "";
+  const line2 = words.length > 1 ? words.slice(1).join(" ") : words[0] || "";
 
-      {/* Ambient Warm Golden Fill Behind Arch */}
-      <path
-        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158 Z"
-        fill="url(#jharokhaGlowGrad)"
-      />
+  return (
+    <div className={`relative flex flex-col items-center justify-center ${className}`}>
+      {/* Background SVG Arch Frame & Scaled Festive Typography */}
+      <svg
+        viewBox="0 0 360 162"
+        className="w-full h-auto drop-shadow-[0_6px_24px_rgba(245,158,11,0.45)] select-none pointer-events-none"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="jharokhaGoldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFFBEB" />
+            <stop offset="20%" stopColor="#FDE047" />
+            <stop offset="50%" stopColor="#F59E0B" />
+            <stop offset="80%" stopColor="#D97706" />
+            <stop offset="100%" stopColor="#FFFBEB" />
+          </linearGradient>
+          <linearGradient id="jharokhaGlowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FDE047" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.02" />
+          </linearGradient>
+          <linearGradient id="jharokhaTextGold" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FFFBEB" />
+            <stop offset="30%" stopColor="#FEF08A" />
+            <stop offset="70%" stopColor="#F59E0B" />
+            <stop offset="100%" stopColor="#D97706" />
+          </linearGradient>
+          <filter id="archOuterGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <filter id="festiveTextShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodColor="#000000" floodOpacity="0.85" />
+            <feDropShadow dx="0" dy="0" stdDeviation="3.5" floodColor="#F59E0B" floodOpacity="0.5" />
+          </filter>
+        </defs>
 
-      {/* Outer Glow Arch Outline */}
-      <path
-        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
-        stroke="#F59E0B"
-        strokeWidth="6"
-        opacity="0.4"
-        filter="url(#archOuterGlow)"
-        strokeLinecap="round"
-      />
+        {/* Ambient Warm Golden Fill Behind Arch */}
+        <path
+          d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158 Z"
+          fill="url(#jharokhaGlowGrad)"
+        />
 
-      {/* Main Golden Sculpted Arch Frame */}
-      <path
-        d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
-        stroke="url(#jharokhaGoldBorder)"
-        strokeWidth="3.2"
-        strokeLinecap="round"
-      />
+        {/* Outer Glow Arch Outline */}
+        <path
+          d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
+          stroke="#F59E0B"
+          strokeWidth="6"
+          opacity="0.4"
+          filter="url(#archOuterGlow)"
+          strokeLinecap="round"
+        />
 
-      {/* Inner Fine Beaded Golden Hairline */}
-      <path
-        d="M 34 158 C 34 138, 50 126, 74 115 C 68 95, 94 73, 126 59 C 136 39, 160 29, 180 29 C 200 29, 224 39, 234 59 C 266 73, 292 95, 286 115 C 310 126, 326 138, 326 158"
-        stroke="url(#jharokhaGoldBorder)"
-        strokeWidth="1.2"
-        strokeDasharray="4 3"
-        opacity="0.85"
-      />
+        {/* Main Golden Sculpted Arch Frame */}
+        <path
+          d="M 24 158 C 24 135, 42 120, 68 108 C 60 86, 88 62, 122 48 C 134 26, 160 18, 180 18 C 200 18, 226 26, 238 48 C 272 62, 300 86, 292 108 C 318 120, 336 135, 336 158"
+          stroke="url(#jharokhaGoldBorder)"
+          strokeWidth="3.2"
+          strokeLinecap="round"
+        />
 
-      {/* Corner Finials */}
-      <circle cx="24" cy="158" r="3" fill="#FDE047" />
-      <circle cx="336" cy="158" r="3" fill="#FDE047" />
-    </svg>
+        {/* Inner Fine Beaded Golden Hairline */}
+        <path
+          d="M 34 158 C 34 138, 50 126, 74 115 C 68 95, 94 73, 126 59 C 136 39, 160 29, 180 29 C 200 29, 224 39, 234 59 C 266 73, 292 95, 286 115 C 310 126, 326 138, 326 158"
+          stroke="url(#jharokhaGoldBorder)"
+          strokeWidth="1.2"
+          strokeDasharray="4 3"
+          opacity="0.85"
+        />
 
-    {/* Glowing Diya Sitting Proudly at the Apex Top */}
-    <div className="absolute -top-3 sm:-top-3.5 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
-      <DiyaIcon className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow-[0_0_12px_rgba(253,224,71,0.9)]" />
-    </div>
+        {/* Corner Finials */}
+        <circle cx="24" cy="158" r="3" fill="#FDE047" />
+        <circle cx="336" cy="158" r="3" fill="#FDE047" />
 
-    {/* Content Inside the Arch */}
-    <div className="absolute inset-0 pt-7 sm:pt-8 pb-3 px-6 flex flex-col items-center justify-center text-center pointer-events-none">
-      <span className="font-serif font-black tracking-[0.14em] sm:tracking-[0.18em] text-base sm:text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFFBEB] via-[#FDE047] to-[#D97706] drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)] leading-none">
-        {title}
-      </span>
-      {subtitle && (
-        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-black tracking-[0.24em] text-[#FDE047] uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] mt-1 leading-none">
-          {subtitle}
-        </span>
-      )}
-      {/* Ornate Flourish Divider */}
-      <div className="flex items-center gap-2 mt-1 sm:mt-1.5 opacity-90">
-        <span className="w-5 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-[#FDE047]" />
-        <span className="text-[#FDE047] text-[8px] sm:text-[9px]">❖</span>
-        <span className="w-5 sm:w-8 h-[1px] bg-gradient-to-l from-transparent to-[#FDE047]" />
+        {/* Text Inside Arch - 100% Vector Proportional Scaling */}
+        {line1 && (
+          <text
+            x="180"
+            y="67"
+            textAnchor="middle"
+            fill="url(#jharokhaTextGold)"
+            filter="url(#festiveTextShadow)"
+            fontSize="18"
+            fontWeight="900"
+            letterSpacing="4"
+            fontFamily="Cinzel, Georgia, serif, system-ui"
+          >
+            {line1}
+          </text>
+        )}
+
+        <text
+          x="180"
+          y={line1 ? "97" : "85"}
+          textAnchor="middle"
+          fill="url(#jharokhaTextGold)"
+          filter="url(#festiveTextShadow)"
+          fontSize={line1 ? "22" : "24"}
+          fontWeight="900"
+          letterSpacing="3"
+          fontFamily="Cinzel, Georgia, serif, system-ui"
+        >
+          {line2}
+        </text>
+
+        {subtitle && (
+          <g>
+            <text
+              x="180"
+              y="123"
+              textAnchor="middle"
+              fill="#FDE047"
+              filter="url(#festiveTextShadow)"
+              fontSize="9.5"
+              fontWeight="800"
+              letterSpacing="2.8"
+              fontFamily="system-ui, -apple-system, sans-serif"
+            >
+              {subtitle}
+            </text>
+
+            {/* Flanking Golden Accent Lines */}
+            <line x1="78" y1="120" x2="114" y2="120" stroke="#FDE047" strokeWidth="1" opacity="0.8" />
+            <line x1="246" y1="120" x2="282" y2="120" stroke="#FDE047" strokeWidth="1" opacity="0.8" />
+
+            {/* Subtle Center Decorative Diamond Underneath */}
+            <polygon points="180,136 183.5,139.5 180,143 176.5,139.5" fill="#FDE047" opacity="0.9" />
+            <circle cx="166" cy="139.5" r="1.5" fill="#FDE047" opacity="0.65" />
+            <circle cx="194" cy="139.5" r="1.5" fill="#FDE047" opacity="0.65" />
+            <line x1="138" y1="139.5" x2="160" y2="139.5" stroke="#FDE047" strokeWidth="0.8" opacity="0.5" />
+            <line x1="200" y1="139.5" x2="222" y2="139.5" stroke="#FDE047" strokeWidth="0.8" opacity="0.5" />
+          </g>
+        )}
+      </svg>
+
+      {/* Glowing Diya Sitting Proudly at the Apex Top */}
+      <div className="absolute -top-3 sm:-top-3.5 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center pointer-events-none">
+        <DiyaIcon className="w-8 h-8 sm:w-9 sm:h-9 drop-shadow-[0_0_12px_rgba(253,224,71,0.9)]" />
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const DiwaliShowcaseSection = () => {
   const [vehicles, setVehicles] = useState([]);
