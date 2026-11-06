@@ -245,6 +245,7 @@ export default function SearchWithCard({
   const [totalElements, setTotalElements] = useState(0);
   const [accumulatedVehicles, setAccumulatedVehicles] = useState([]);
   const lastProcessedPageRef = useRef(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchSessionId, setSearchSessionId] = useState(null);
   const searchSessionIdRef = useRef(null);
 
@@ -879,15 +880,31 @@ export default function SearchWithCard({
     buildConsultPayload(),
   );
   const skipFirstFilterTrackRef = useRef(true);
+  const isFirstMountRef = useRef(true);
+  const prevPayloadStrRef = useRef(JSON.stringify(buildPayload()));
 
   useEffect(() => {
+    if (isFirstMountRef.current) {
+      isFirstMountRef.current = false;
+      return;
+    }
+
     const handler = setTimeout(() => {
       const nextPayload = buildPayload();
+      const nextPayloadStr = JSON.stringify(nextPayload);
+
+      // Only perform search session reset if the filter payload actually changed
+      if (nextPayloadStr === prevPayloadStrRef.current) {
+        return;
+      }
+      prevPayloadStrRef.current = nextPayloadStr;
+
       setDebouncedPayload(nextPayload);
       setDebouncedConsultPayload(buildConsultPayload());
       setDebouncedMinPrice(minPrice);
       setDebouncedMaxPrice(maxPrice);
       setCurrentPage(1);
+      setIsLoadingMore(false);
       setSearchSessionId(null);
       searchSessionIdRef.current = null;
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -955,15 +972,19 @@ export default function SearchWithCard({
   );
 
   const requestPayload = useMemo(() => {
+    const activeSessionId = searchSessionId || searchSessionIdRef.current || null;
     return {
       ...debouncedPayload,
-      searchSessionId: currentPage > 1 ? (searchSessionId || null) : null,
+      searchSessionId: currentPage > 1 ? activeSessionId : null,
     };
   }, [debouncedPayload, currentPage, searchSessionId]);
 
-  const { data: searchData, isFetching: vehiclesLoading, isError } = useQuery(
-    getFilteredVehiclesQuery(requestPayload, queryParams),
-  );
+  const {
+    data: searchData,
+    isFetching: vehiclesLoading,
+    isError,
+    isPlaceholderData,
+  } = useQuery(getFilteredVehiclesQuery(requestPayload, queryParams));
 
   useEffect(() => {
     if (isError && onPageResponseChange) {
@@ -1099,7 +1120,8 @@ export default function SearchWithCard({
       });
       setAccumulatedVehicles(unique);
       lastProcessedPageRef.current = 1;
-    } else if (newVehicles.length > 0 && lastProcessedPageRef.current !== currentPage) {
+      setIsLoadingMore(false);
+    } else if (!isPlaceholderData && newVehicles.length > 0 && lastProcessedPageRef.current !== currentPage) {
       const responsePage = topPicksPageResponse?.currentPage;
       if (typeof responsePage === "number" && responsePage !== currentPage) {
         return;
@@ -1116,8 +1138,11 @@ export default function SearchWithCard({
         });
         return [...prev, ...nonDuplicates];
       });
+      setIsLoadingMore(false);
+    } else if (!isPlaceholderData && !vehiclesLoading) {
+      setIsLoadingMore(false);
     }
-  }, [newVehicles, currentPage, topPicksPageResponse?.currentPage]);
+  }, [newVehicles, currentPage, isPlaceholderData, vehiclesLoading, topPicksPageResponse?.currentPage]);
 
   const vehicles = accumulatedVehicles;
   const relatedVehicles = useMemo(() => {
@@ -1206,16 +1231,26 @@ export default function SearchWithCard({
   ]);
 
   useEffect(() => {
-    if (onLoadingChange) onLoadingChange(vehiclesLoading);
-  }, [vehiclesLoading, onLoadingChange]);
+    if (onLoadingChange) {
+      if (currentPage === 1) {
+        onLoadingChange(vehiclesLoading);
+      } else {
+        onLoadingChange(false);
+      }
+    }
+  }, [vehiclesLoading, currentPage, onLoadingChange]);
 
   // Sync callbacks & set totalPages and serverMaxPrice when searchData returns
   useEffect(() => {
     if (!searchData) return;
 
     if (searchData.searchSessionId) {
-      setSearchSessionId(searchData.searchSessionId);
       searchSessionIdRef.current = searchData.searchSessionId;
+      // Sync into state during page 1 so future pages (Load More) inherit it,
+      // but do not mutate state while on page > 1 to avoid re-triggering the same page query.
+      if (currentPage === 1 && searchSessionId !== searchData.searchSessionId) {
+        setSearchSessionId(searchData.searchSessionId);
+      }
     }
 
     if (typeof searchData.maxFilterPrice === "number" && searchData.maxFilterPrice > 0) {
@@ -1281,11 +1316,14 @@ export default function SearchWithCard({
 
   const handlePriceChangeRelease = () => {
     setCurrentPage(1);
+    setIsLoadingMore(false);
     setSearchSessionId(null);
     searchSessionIdRef.current = null;
     setDebouncedMinPrice(minPrice);
     setDebouncedMaxPrice(maxPrice);
-    setDebouncedPayload(buildPayload());
+    const newPayload = buildPayload();
+    prevPayloadStrRef.current = JSON.stringify(newPayload);
+    setDebouncedPayload(newPayload);
     setDebouncedConsultPayload(buildConsultPayload());
   };
 
@@ -2627,8 +2665,10 @@ export default function SearchWithCard({
 
     // Reset pagination
     setCurrentPage(1);
+    setIsLoadingMore(false);
     setSearchSessionId(null);
     searchSessionIdRef.current = null;
+    prevPayloadStrRef.current = JSON.stringify({});
     lastProcessedPageRef.current = 1;
 
     // Reset filter chips immediately
@@ -2658,15 +2698,19 @@ export default function SearchWithCard({
   const handlePageChange = (page) => {
     const maxAllowedPage = totalElements > vehicles.length ? totalPages + 1 : totalPages;
     if (page < 1 || page > maxAllowedPage) return;
+    setIsLoadingMore(true);
     setCurrentPage(page);
   };
 
   // Save/overwrite selected location to localStorage on Apply
   const handleApplyFilter = async () => {
     setCurrentPage(1);
+    setIsLoadingMore(false);
     setSearchSessionId(null);
     searchSessionIdRef.current = null;
-    setDebouncedPayload(buildPayload());
+    const newPayload = buildPayload();
+    prevPayloadStrRef.current = JSON.stringify(newPayload);
+    setDebouncedPayload(newPayload);
     setDebouncedConsultPayload(buildConsultPayload());
   };
 
@@ -3344,19 +3388,22 @@ export default function SearchWithCard({
                     <div className="text-sm text-third">
                       Showing <span className="font-semibold text-primary">{displayedCount}</span> of <span className="font-semibold text-primary">{displayTotalElements}</span> vehicles
                     </div>
-                    {displayedCount < displayTotalElements && currentPage <= totalPages && (
-                      <Button
-                        variant="ghost"
-                        className="flex items-center gap-2 px-6 rounded-full"
-                        size="sm"
-                        showIcon={false}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={vehiclesLoading}
-                      >
-                        <RefreshCw className={`w-4 h-4 ${vehiclesLoading ? 'animate-spin' : ''}`} />
-                        {vehiclesLoading ? "Loading..." : "Load More"}
-                      </Button>
-                    )}
+                    {displayedCount < displayTotalElements && currentPage <= totalPages && (() => {
+                      const isButtonLoading = isLoadingMore || (vehiclesLoading && (isPlaceholderData || currentPage > 1));
+                      return (
+                        <Button
+                          variant="ghost"
+                          className="flex items-center gap-2 px-6 rounded-full transition-all duration-200"
+                          size="sm"
+                          showIcon={false}
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={isButtonLoading}
+                        >
+                          <RefreshCw className={`w-4 h-4 ${isButtonLoading ? 'animate-spin' : ''}`} />
+                          {isButtonLoading ? "Loading..." : "Load More"}
+                        </Button>
+                      );
+                    })()}
                   </div>
                 );
               })()}
