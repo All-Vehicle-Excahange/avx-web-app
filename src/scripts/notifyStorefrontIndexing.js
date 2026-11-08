@@ -122,10 +122,14 @@ async function main() {
   let deleted = 0;
   let failed = 0;
 
-  // Priority: Aabad Motors digit drop + clean update (known SERP issue)
+  // Priority: digit slug drop + clean update (Aabad already 308 → clean)
   const priority = [
     ["URL_DELETED", `${BASE_URL}/auto-consultant/aabadmotors487206`],
     ["URL_UPDATED", `${BASE_URL}/auto-consultant/aabadmotors`],
+    ["URL_UPDATED", `${BASE_URL}/auto-consultant/sikotarmotors`],
+    ["URL_UPDATED", `${BASE_URL}/auto-consultant/janvimotors`],
+    ["URL_UPDATED", `${BASE_URL}/auto-consultant/falakcar`],
+    ["URL_UPDATED", `${BASE_URL}/auto-consultant/alenmotor`],
   ];
   for (const [type, url] of priority) {
     const ok = await notify(url, type, indexing);

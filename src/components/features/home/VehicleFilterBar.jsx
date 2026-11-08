@@ -41,6 +41,7 @@ import { trackSearchResults } from "@/lib/gtag";
 import { setPreferredLocation, trackSearchSubmitted } from "@/lib/amplitude";
 import { generateSeoSlug } from "@/lib/seo";
 import { formatSearchBadge, formatSearchSubtitle } from "@/components/layout/NavbarSearch";
+import { persistSelectedLocation } from "@/lib/homePopularSearches";
 
 const trackProductSearch = (searchString, searchType = "filter_bar", locationProps = {}) => {
   const query = String(searchString || "").trim() || "vehicle_search";
@@ -815,6 +816,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
           city: item.cityName,
           state: item.stateName,
         });
+        persistSelectedLocation({
+          city: item.cityName,
+          state: item.stateName,
+          cityId: item.cityId,
+          stateId: item.stateId,
+        });
       }
     }
   };
@@ -1142,16 +1149,28 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
         location: location || undefined,
       };
 
-      // Save/overwrite selected location to localStorage removed
-      if (stateId && cityId && location) {
-        // Location is already encoded in the URL slug
+      // Persist city for homepage popular searches (Palanpur / Ahmedabad / Visnagar / …)
+      if (ampCity) {
+        persistSelectedLocation({
+          city: ampCity,
+          state: ampState || "",
+          cityId: cityId || null,
+          stateId: stateId || null,
+        });
       } else if (locationSuggestions?.length > 0 && location) {
-        // In case they just typed an exact match but didn't click the dropdown
         const locMatch = locationSuggestions.find(
           (l) =>
             `${l.cityName}, ${l.stateName}`.toLowerCase() ===
             location.toLowerCase(),
         );
+        if (locMatch?.cityName) {
+          persistSelectedLocation({
+            city: locMatch.cityName,
+            state: locMatch.stateName || "",
+            cityId: locMatch.cityId || null,
+            stateId: locMatch.stateId || null,
+          });
+        }
       }
 
       if (internalActiveType === "consult") {
@@ -1515,6 +1534,12 @@ export default function VehicleFilterBar({ activeType = "vehicle" }) {
                                 );
                                 setCityId(item.cityId);
                                 setStateId(item.stateId);
+                                persistSelectedLocation({
+                                  city: item.cityName,
+                                  state: item.stateName,
+                                  cityId: item.cityId,
+                                  stateId: item.stateId,
+                                });
                               }
                               openNextAvailableTab("location");
                             }}

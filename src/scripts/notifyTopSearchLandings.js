@@ -9,31 +9,42 @@ const { google } = require("googleapis");
 
 const BASE_URL = "https://www.reecomm.com";
 
-/** GEO money pages from docs/GSC_INDEXING_TRIAGE.md + seoTargetKeywords matrix */
+/**
+ * GEO money pages — week-1 page-1 sprint (GSC report + indexing triage).
+ * Prefer stocked maker/model/city hubs already on SERP pages 2–3.
+ */
 const TOP_LANDINGS = [
   "/search/buy-used-cars",
   "/search/buy-used-two-wheelers",
-  "/search/buy-used-hyundai-creta-cars",
-  "/search/buy-used-hyundai-creta-cars-palanpur",
-  "/search/buy-used-hyundai-creta-cars-kanodar",
-  "/search/buy-used-ford-ecosport-cars",
-  "/search/buy-used-ford-ecosport-cars-palanpur",
+  // Ahmedabad maker / model / GEO / bikes (P0–P1 sprint)
+  "/search/buy-used-cars-ahmedabad",
+  "/search/buy-used-toyota-cars-ahmedabad",
+  "/search/buy-used-toyota-fortuner-cars-ahmedabad",
+  "/search/buy-used-maruti-suzuki-ertiga-cars-ahmedabad",
+  "/search/buy-used-maruti-suzuki-swift-cars-ahmedabad",
+  "/search/buy-used-two-wheelers-ahmedabad",
+  // Gujarat focus cities
   "/search/buy-used-cars-palanpur",
   "/search/buy-used-cars-siddhpur",
   "/search/buy-used-cars-kanodar",
   "/search/buy-used-cars-visnagar",
-  "/search/buy-used-cars-ahmedabad",
-  "/search/buy-used-cars-surat",
+  "/search/buy-used-hyundai-creta-cars",
+  "/search/buy-used-hyundai-creta-cars-palanpur",
+  "/search/buy-used-hyundai-creta-cars-kanodar",
   "/search/buy-used-hyundai-cars-palanpur",
-  "/search/buy-used-toyota-cars",
+  "/search/buy-used-ford-ecosport-cars",
+  "/search/buy-used-ford-ecosport-cars-palanpur",
   "/search/buy-used-honda-amaze-cars-palanpur",
   "/search/buy-used-honda-city-cars-surat",
   "/search/buy-used-maruti-suzuki-ertiga-cars-visnagar",
-  "/search/buy-used-maruti-suzuki-swift-cars-ahmedabad",
   "/search/buy-used-maruti-suzuki-wagon-r-10-cars-palanpur",
   "/search/buy-used-hyundai-santro-xing-cars-siddhpur",
-  "/search/buy-used-two-wheelers-ahmedabad",
+  "/search/buy-used-toyota-cars",
+  // Clean storefronts (digit URLs notified as URL_DELETED separately)
   "/auto-consultant/aabadmotors",
+  "/auto-consultant/sikotarmotors",
+  "/auto-consultant/janvimotors",
+  "/auto-consultant/falakcar",
   "/blog/used-hyundai-creta-palanpur-price-buying-checklist",
   "/blog/how-to-buy-used-car-safely-north-gujarat",
   "/blog/used-maruti-ertiga-visnagar-what-to-check",
@@ -42,6 +53,8 @@ const TOP_LANDINGS = [
   "/blog/auto-consultants-palanpur-reecomm-storefronts",
   "/blog/used-swift-ahmedabad-variants-inspection",
   "/blog/used-honda-city-surat-buyers-shortlist",
+  "/sitemaps/vehicles.xml",
+  "/sitemaps/storefronts.xml",
   "/api/sitemap/search-pages.xml",
   "/api/sitemap/geo-brands.xml",
   "/sitemap.xml",

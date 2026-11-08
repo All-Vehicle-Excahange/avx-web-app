@@ -1,43 +1,82 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const FALLBACK_SEARCHES = [
-  { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
-  { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
-  { label: "Used Hyundai Creta", href: "/search/buy-used-hyundai-creta-cars" },
-  { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
-  {
-    label: "Used Toyota Cars in Ahmedabad",
-    href: "/search/buy-used-toyota-cars-ahmedabad",
-  },
-  { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
-  { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
-  { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
-  {
-    label: "Used Hyundai Creta in Palanpur",
-    href: "/search/buy-used-hyundai-creta-cars-palanpur",
-  },
-  { label: "Used Cars under ₹5 Lakh", href: "/search/buy-used-cars-under-5-lakhs" },
-];
+import {
+  GUJARAT_FALLBACK_SEARCHES,
+  LOCATION_EVENT,
+  buildLocationPopularSearches,
+  normalizeSearchLinks,
+  readStoredLocation,
+  resolvePlaceKey,
+} from "@/lib/homePopularSearches";
 
 export default function HomePopularSearches() {
-  const [searches, setSearches] = useState(FALLBACK_SEARCHES);
+  const [searches, setSearches] = useState(GUJARAT_FALLBACK_SEARCHES);
+  const [placeLabel, setPlaceLabel] = useState("");
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/seo_popular_links.json")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (cancelled || !Array.isArray(data) || data.length < 4) return;
-        const cleaned = data
-          .filter((item) => item?.href && item?.label)
-          .slice(0, 16);
-        if (cleaned.length) setSearches(cleaned);
-      })
-      .catch(() => {});
+
+    async function loadForCity(cityName) {
+      try {
+        const [placeRes, popularRes] = await Promise.all([
+          fetch("/seo_place_links.json"),
+          fetch("/seo_popular_links.json"),
+        ]);
+        const placeLinks = placeRes.ok ? await placeRes.json() : {};
+        const popularLinks = popularRes.ok ? await popularRes.json() : [];
+
+        if (cancelled) return;
+
+        const placeKey = resolvePlaceKey(cityName, placeLinks);
+        if (placeKey && placeLinks[placeKey]?.length) {
+          setSearches(buildLocationPopularSearches(placeKey, placeLinks));
+          setPlaceLabel(
+            placeKey
+              .split("-")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" "),
+          );
+          return;
+        }
+
+        // No place bucket — prefer inventory popular links, else Gujarat mix
+        const cleaned = normalizeSearchLinks(
+          Array.isArray(popularLinks) ? popularLinks : [],
+          14,
+        );
+        if (cleaned.length >= 4) {
+          setSearches(cleaned);
+        } else {
+          setSearches(GUJARAT_FALLBACK_SEARCHES);
+        }
+        setPlaceLabel(cityName ? String(cityName).split(",")[0].trim() : "");
+      } catch {
+        if (!cancelled) {
+          setSearches(GUJARAT_FALLBACK_SEARCHES);
+        }
+      }
+    }
+
+    const stored = readStoredLocation();
+    loadForCity(stored?.city || "");
+
+    const onLocation = (event) => {
+      const city = event?.detail?.city || readStoredLocation()?.city || "";
+      loadForCity(city);
+    };
+
+    const onStorage = (e) => {
+      if (e.key === "avx_selected_location") onLocation();
+    };
+
+    window.addEventListener(LOCATION_EVENT, onLocation);
+    window.addEventListener("storage", onStorage);
+
     return () => {
       cancelled = true;
+      window.removeEventListener(LOCATION_EVENT, onLocation);
+      window.removeEventListener("storage", onStorage);
     };
   }, []);
 
@@ -51,6 +90,11 @@ export default function HomePopularSearches() {
           </p>
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-primary">
             Find Verified Used Cars & Bikes
+            {placeLabel ? (
+              <span className="block text-base md:text-lg font-semibold text-third mt-1 normal-case tracking-normal">
+                Near {placeLabel}
+              </span>
+            ) : null}
           </h2>
         </div>
         <div className="flex flex-wrap gap-2.5">
