@@ -36,8 +36,15 @@ export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = 
       .join(" ") || "Vehicle";
 
   // city / state — prefer summary (CONSULTATION) then fall back to vehicleAddress (USER_SELLER)
-  const cityName =
-    vehicleSummary?.address?.city || vehicle?.vehicleAddress?.city;
+  const cityName = (
+    vehicleSummary?.address?.city ||
+    vehicle?.vehicleAddress?.city ||
+    vehicle?.cityName ||
+    vehicle?.address?.city ||
+    ""
+  )
+    .split(",")[0]
+    .trim();
   const stateName =
     vehicleSummary?.address?.state || vehicle?.vehicleAddress?.state;
   const cityId =
@@ -55,7 +62,34 @@ export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = 
     return Math.round(((max - min) / max) * 100);
   })();
 
-  // Build the query string for search links
+  const isTwoWheeler = String(vehicle?.vehicleType || "")
+    .toUpperCase()
+    .includes("TWO");
+  const kindSlug = isTwoWheeler ? "two-wheelers" : "cars";
+  const kindLabel = isTwoWheeler ? "Two Wheelers" : "Cars";
+  const brandSlug = String(vehicle?.makerName || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+  const citySlug = cityName
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+
+  // SEO hub URLs (brand × city landings) — preferred over /search?query
+  const brandHubUrl = brandSlug
+    ? `/search/buy-used-${brandSlug}-${kindSlug}`
+    : `/search/buy-used-${kindSlug}`;
+  const brandCityHubUrl =
+    brandSlug && citySlug
+      ? `/search/buy-used-${brandSlug}-${kindSlug}-${citySlug}`
+      : brandHubUrl;
+  const cityHubUrl = citySlug
+    ? `/search/buy-used-${kindSlug}-${citySlug}`
+    : `/search/buy-used-${kindSlug}`;
+
+  // Fallback query-string search (legacy source=search)
   const searchQueryParams = new URLSearchParams();
   if (vehicle?.makerId || vehicle?.makeId)
     searchQueryParams.set("makerId", vehicle.makerId || vehicle.makeId);
@@ -68,7 +102,7 @@ export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = 
 
   return (
     <header className="-mx-4 sm:mx-0 mt-4 sm:mt-0 pt-5 pb-3 sm:pt-4 sm:pb-4 mb-4 sm:mb-0 bg-[linear-gradient(90deg,#313131_0%,#1a1919_45%,#000000_100%)] flex flex-col gap-1.5 shadow-sm">
-      {/* Breadcrumb */}
+      {/* Breadcrumb: Home → Brand hub → Brand×City hub → vehicle */}
       <nav className="text-[10px] sm:text-xs text-third flex items-center gap-1.5 flex-wrap px-4 sm:px-0">
         <Link
           href="/"
@@ -77,7 +111,39 @@ export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = 
           Home
         </Link>
 
-        {source === "search" && (
+        <ChevronRight size={14} className="shrink-0 opacity-60" />
+        <Link
+          href={`/search/buy-used-${kindSlug}`}
+          className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
+        >
+          Used {kindLabel}
+        </Link>
+
+        {vehicle?.makerName && (
+          <>
+            <ChevronRight size={14} className="shrink-0 opacity-60" />
+            <Link
+              href={brandHubUrl}
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
+            >
+              {vehicle.makerName}
+            </Link>
+          </>
+        )}
+
+        {vehicle?.makerName && cityName && (
+          <>
+            <ChevronRight size={14} className="shrink-0 opacity-60" />
+            <Link
+              href={brandCityHubUrl}
+              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
+            >
+              {cityName}
+            </Link>
+          </>
+        )}
+
+        {source === "search" && !vehicle?.makerName && (
           <>
             <ChevronRight size={14} className="shrink-0 opacity-60" />
             <Link
@@ -89,26 +155,14 @@ export default function VehicleHeader({ vehicle, vehicleSummary, isTierActive = 
           </>
         )}
 
-        {source === "home" && vehicle?.makerName && (
-          <>
-            <ChevronRight size={14} className="shrink-0 opacity-60" />
-            <Link
-              href={searchUrl}
-              className="hover:text-white transition-colors duration-200 cursor-pointer uppercase tracking-wide shrink-0"
-            >
-              {vehicle.makerName}
-            </Link>
-          </>
-        )}
-
         <ChevronRight size={14} className="shrink-0 opacity-60" />
         <span className="text-white font-medium uppercase tracking-wide inline-flex items-center gap-1 flex-wrap min-w-0">
           <span>{vehicleNameBase}</span>
-          {cityName && (
+          {cityName && !brandSlug && (
             <span className="inline-flex items-center gap-1">
               <span className="lowercase text-third font-normal">in</span>
               <Link
-                href={searchUrl}
+                href={cityHubUrl}
                 className="hover:text-white transition-colors duration-200 cursor-pointer underline decoration-white/30 hover:decoration-white/80 underline-offset-2"
               >
                 {cityName}

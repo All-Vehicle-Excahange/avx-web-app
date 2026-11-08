@@ -61,10 +61,29 @@ async function notify(url, type, indexing) {
 }
 
 async function fetchStorefrontLocs(page) {
-  const sitemapUrl = `${BASE_URL}/api/sitemap/storefronts/${page}.xml`;
-  const res = await fetch(sitemapUrl);
-  if (!res.ok) throw new Error(`Failed to fetch ${sitemapUrl}: ${res.status}`);
-  const xml = await res.text();
+  // Prefer cron-synced static files; fall back to dynamic API pages
+  const candidates = [
+    `${BASE_URL}/sitemaps/storefronts-${page}.xml`,
+    `${BASE_URL}/api/sitemap/storefronts/${page}.xml`,
+  ];
+  let sitemapUrl = candidates[0];
+  let xml = "";
+  let lastErr = null;
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        lastErr = new Error(`Failed to fetch ${url}: ${res.status}`);
+        continue;
+      }
+      xml = await res.text();
+      sitemapUrl = url;
+      break;
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  if (!xml) throw lastErr || new Error("No storefront sitemap available");
   const locs = [];
   const matches = xml.match(/<loc>(.*?)<\/loc>/g) || [];
   for (const m of matches) {
@@ -121,7 +140,9 @@ async function main() {
   if (alsoSitemaps) {
     for (const url of [
       `${BASE_URL}/sitemap.xml`,
+      `${BASE_URL}/sitemaps/storefronts.xml`,
       `${BASE_URL}/api/sitemap/storefronts.xml`,
+      `${BASE_URL}/api/sitemap/geo-brands.xml`,
       sitemapUrl,
     ]) {
       const ok = await notify(url, "URL_UPDATED", indexing);

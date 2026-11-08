@@ -7,6 +7,10 @@ const FALLBACK_SEARCHES = [
   { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
   { label: "Used Hyundai Creta", href: "/search/buy-used-hyundai-creta-cars" },
   { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
+  {
+    label: "Used Toyota Cars in Ahmedabad",
+    href: "/search/buy-used-toyota-cars-ahmedabad",
+  },
   { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
   { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
   { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },

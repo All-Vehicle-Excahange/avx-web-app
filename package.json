@@ -13,6 +13,8 @@
     "generate:consultant-targets": "node src/scripts/generateConsultantSeoTargets.js",
     "generate:sitemaps": "node src/scripts/generateSitemaps.js",
     "sync:vehicle-sitemap": "node src/scripts/syncVehicleSitemap.js",
+    "sync:storefront-sitemap": "node src/scripts/syncStorefrontSitemap.js",
+    "sync:inventory-sitemaps": "npm run sync:vehicle-sitemap && npm run sync:storefront-sitemap",
     "notify:storefronts": "node src/scripts/notifyStorefrontIndexing.js --page=1 --also-sitemaps",
     "notify:vehicles": "node src/scripts/notifyVehicleIndexing.js --page=1 --also-sitemaps",
     "notify:vehicles:page2": "node src/scripts/notifyVehicleIndexing.js --page=2",
@@ -20,7 +22,7 @@
     "notify:gsc-sitemap": "node src/scripts/submitGscSitemap.js",
     "report:seo-gsc": "node src/scripts/fetchGscPresenceReport.js",
     "notify:seo": "npm run notify:storefronts && npm run notify:vehicles && npm run notify:gsc-sitemap",
-    "sync:seo": "npm run sync:vehicle-sitemap && npm run generate:search-index && npm run notify:seo"
+    "sync:seo": "npm run sync:inventory-sitemaps && npm run generate:search-index && npm run generate:consultant-targets && npm run notify:seo"
   },
   "dependencies": {
     "@amplitude/unified": "^1.1.32",

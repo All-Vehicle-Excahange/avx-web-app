@@ -13,12 +13,15 @@
 const fs = require("fs");
 const path = require("path");
 const { generateVehicleSlug } = require("../lib/vehicleSlug");
+const { getCdnImageUrl } = require("../lib/cdnImage.cjs");
 
 const SITE_URL = "https://www.reecomm.com";
 const PAGE_SIZE = 100;
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 const SITEMAPS_DIR = path.join(PUBLIC_DIR, "sitemaps");
 const ROOT_SITEMAP = path.join(PUBLIC_DIR, "sitemap.xml");
+/** Prefer cover/thumbnail first for Google Images — avoid gallery spam */
+const MAX_IMAGES_PER_VEHICLE = 3;
 
 function getApiBase() {
   const envUrl =
@@ -120,9 +123,11 @@ function buildUrlsetXml(vehicles, nowIso) {
     xml += `    <changefreq>daily</changefreq>\n`;
     xml += `    <priority>0.8</priority>\n`;
 
-    for (const imgUrl of collectImages(vehicle)) {
+    const images = collectImages(vehicle).slice(0, MAX_IMAGES_PER_VEHICLE);
+    for (const imgUrl of images) {
+      const cdnImg = getCdnImageUrl(imgUrl, { preset: "card" }) || imgUrl;
       xml += `    <image:image>\n`;
-      xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
+      xml += `      <image:loc>${escapeXml(cdnImg)}</image:loc>\n`;
       xml += `      <image:title>${escapeXml(title)}</image:title>\n`;
       xml += `      <image:caption>${escapeXml(caption)}</image:caption>\n`;
       xml += `    </image:image>\n`;
@@ -173,6 +178,22 @@ function updateRootSitemapPointer(nowIso) {
     /<!-- Vehicle Listings \(dynamic, paginated INDEX — all pages\) -->/,
     "<!-- Vehicle Listings (cron-synced static INDEX — all SEO-active pages) -->"
   );
+
+  // Refresh lastmod on related dynamic GEO / brand / model / search sitemaps
+  for (const apiPath of [
+    "geo-brands.xml",
+    "brands.xml",
+    "models.xml",
+    "search-pages.xml",
+  ]) {
+    const loc = `${SITE_URL}/api/sitemap/${apiPath}`;
+    root = root.replace(
+      new RegExp(
+        `(<loc>${loc.replace(/\./g, "\\.")}</loc>\\s*<lastmod>)[^<]+(</lastmod>)`
+      ),
+      `$1${nowIso}$2`
+    );
+  }
 
   fs.writeFileSync(ROOT_SITEMAP, root, "utf8");
 }

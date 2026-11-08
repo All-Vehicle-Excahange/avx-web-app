@@ -71,6 +71,12 @@ function pathHasPageCanonical(asPath = "") {
   );
 }
 
+/** Vehicle detail pages set their own og/twitter images — avoid logo competing. */
+function pathHasPageOgImage(asPath = "") {
+  const path = String(asPath).split("?")[0] || "/";
+  return path.startsWith("/vehicle/details");
+}
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const hasFullWidth = Component.fullWidth;
@@ -231,13 +237,33 @@ export default function App({ Component, pageProps }) {
               />
             )}
 
-            {/* Global Open Graph Defaults */}
+            {/* Global Open Graph Defaults (skipped on vehicle details — page sets product images) */}
             <meta key="og:type" property="og:type" content="website" />
-            <meta key="og:image" property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
-            <meta key="og:image:width" property="og:image:width" content="1200" />
-            <meta key="og:image:height" property="og:image:height" content="630" />
+            {!pathHasPageOgImage(router.asPath) && (
+              <>
+                <meta
+                  key="og:image"
+                  property="og:image"
+                  content="https://www.reecomm.com/logo/logo1.webp"
+                />
+                <meta
+                  key="og:image:width"
+                  property="og:image:width"
+                  content="1200"
+                />
+                <meta
+                  key="og:image:height"
+                  property="og:image:height"
+                  content="630"
+                />
+                <meta
+                  key="twitter:image"
+                  name="twitter:image"
+                  content="https://www.reecomm.com/logo/logo1.webp"
+                />
+              </>
+            )}
             <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
-            <meta key="twitter:image" name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
 
             <meta
               key="google-adsense-account"

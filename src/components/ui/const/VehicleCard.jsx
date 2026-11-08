@@ -338,7 +338,11 @@ export default function VehicleCard({
               {imageSrc ? (
                 <Image
                   src={imageSrc}
-                  alt={mapped.title}
+                  alt={`${[mapped.year, mapped.title].filter(Boolean).join(" ")}${
+                    mapped.location && mapped.location !== "-"
+                      ? ` in ${mapped.location.split(",")[0].trim()}`
+                      : ""
+                  } | Reecomm`}
                   fill
                   sizes="(max-width: 768px) 168px, 320px"
                   className="h-full w-full object-cover"

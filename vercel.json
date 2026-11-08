@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/sync-vehicle-sitemap",
       "schedule": "0 15 * * *"
+    },
+    {
+      "path": "/api/cron/sync-inventory-sitemaps",
+      "schedule": "30 15 * * *"
     }
   ]
 }

@@ -281,9 +281,10 @@ export default async function handler(req, res) {
     ];
     staticSeoUrls.forEach((url) => addUrl(url, 0.8, "daily"));
 
-    // 7. Brand and model URLs for consultant cities/states that have live stock
-    let consultantCities = null;
-    let consultantStates = null;
+    // 7. Live inventory + consultant places → GEO brand×city / model×city hubs
+    const stockedCities = new Set();
+    const stockedStates = new Set();
+
     try {
       const consultationCount = await getSeoConsultationCount();
       const consultationPageSize = 100;
@@ -291,28 +292,18 @@ export default async function handler(req, res) {
         1,
         Math.ceil(consultationCount / consultationPageSize),
       );
-      consultantCities = new Set();
-      consultantStates = new Set();
       for (let page = 1; page <= consultationPages && page <= 20; page++) {
         const { data: stores } = await getSeoConsultations(page, consultationPageSize);
         for (const store of stores || []) {
           const citySlug = slugify(String(store.cityName || "").split(",")[0]);
           const stateSlug = slugify(store.stateName || "");
-          if (citySlug) consultantCities.add(citySlug);
-          if (stateSlug) consultantStates.add(stateSlug);
+          if (citySlug) stockedCities.add(citySlug);
+          if (stateSlug) stockedStates.add(stateSlug);
         }
       }
     } catch (placeErr) {
       console.warn("[geo-brands] consultant places failed:", placeErr.message);
-      consultantCities = null;
-      consultantStates = null;
     }
-
-    const placeAllowed = (slug, allowed) => {
-      if (!slug) return false;
-      if (!allowed) return true;
-      return allowed.has(slug);
-    };
 
     try {
       const total = await getSeoVehicleCount();
@@ -335,13 +326,21 @@ export default async function handler(req, res) {
             : "cars";
           if (!brandSlug) continue;
 
+          if (citySlug) stockedCities.add(citySlug);
+          if (stateSlug) stockedStates.add(stateSlug);
+
           addUrl(`/search/buy-used-${brandSlug}-${kind}`, 0.75, "daily");
           if (modelSlug) {
             addUrl(`/search/buy-used-${brandSlug}-${modelSlug}-${kind}`, 0.8, "daily");
           }
-          if (citySlug && placeAllowed(citySlug, consultantCities)) {
+          // Always emit GEO hubs for cities/states with live vehicle stock
+          if (citySlug) {
             addUrl(`/search/buy-used-${brandSlug}-${kind}-${citySlug}`, 0.75, "weekly");
-            addUrl(`/search/buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`, 0.8, "daily");
+            addUrl(
+              `/search/buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`,
+              0.8,
+              "daily"
+            );
             if (modelSlug) {
               addUrl(
                 `/search/buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
@@ -350,7 +349,7 @@ export default async function handler(req, res) {
               );
             }
           }
-          if (stateSlug && placeAllowed(stateSlug, consultantStates)) {
+          if (stateSlug) {
             addUrl(`/search/buy-used-${brandSlug}-${kind}-${stateSlug}`, 0.65, "weekly");
             if (modelSlug) {
               addUrl(
@@ -364,6 +363,21 @@ export default async function handler(req, res) {
       }
     } catch (invErr) {
       console.warn("[geo-brands] inventory inject failed:", invErr.message);
+    }
+
+    // 8. Volume brand × newly stocked cities (beyond static list) when allowlisted / stocked
+    for (const city of stockedCities) {
+      if (cities.includes(city)) continue;
+      for (const b of volumeCarBrands) {
+        const slug = `buy-used-${b.slug}-cars-${city}`;
+        if (slugAllowed(slug)) {
+          addUrl(`/search/${slug}`, 0.7, "weekly");
+        }
+      }
+      const carCity = `buy-used-cars-${city}`;
+      const bikeCity = `buy-used-two-wheelers-${city}`;
+      if (slugAllowed(carCity)) addUrl(`/search/${carCity}`, 0.8, "daily");
+      if (slugAllowed(bikeCity)) addUrl(`/search/${bikeCity}`, 0.75, "weekly");
     }
 
     xml += `</urlset>`;

@@ -1,6 +1,5 @@
 import React from "react";
 import DownloadAppSection from "@/components/features/home/DownloadAppSection";
-import AvxProcess from "@/components/features/VehiclDetail/AvxProcess";
 import VehiclDetail from "@/components/features/VehiclDetail/VehiclDetail";
 import Footer from "@/components/layout/Footer";
 import FooterLink from "@/components/layout/FooterLink";
@@ -17,18 +16,58 @@ import {
 import { getClientType } from "@/lib/clientType";
 import { getCdnImageUrl } from "@/lib/cdnImage";
 
-function Index({ seo }) {
+function toCdnAbsolute(src, preset = "detail") {
+  if (!src || typeof src !== "string") return "";
+  const url = getCdnImageUrl(src, { preset }) || src;
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (url.startsWith("/")) return `https://www.reecomm.com${url}`;
+  return url;
+}
+
+function collectVehicleCdnImages(vehicle) {
+  if (!vehicle || typeof vehicle !== "object") return [];
+  const raw = [
+    vehicle.thumbnailUrl,
+    ...(Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls : []),
+    ...(Array.isArray(vehicle.vehicleImages)
+      ? vehicle.vehicleImages.map((item) => item?.imageUrl)
+      : []),
+    ...(Array.isArray(vehicle.vehiclePhotos)
+      ? vehicle.vehiclePhotos.map((p) =>
+          typeof p === "string" ? p : p?.url || p?.photoUrl
+        )
+      : []),
+    vehicle.imageUrl,
+  ].filter((u) => typeof u === "string" && u.trim());
+
+  return Array.from(
+    new Set(raw.map((u) => toCdnAbsolute(u.trim(), "detail")).filter(Boolean))
+  );
+}
+
+function slugifyPart(value) {
+  return String(value || "")
+    .split(",")[0]
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+}
+
+function Index({ seo, initialOverview = null }) {
   const router = useRouter();
   const { id } = router.query || {};
 
   const { data: vehicleOverview } = useQuery({
     ...getVehicleOverviewQuery(id),
+    initialData: initialOverview || undefined,
     enabled: !!id,
   });
 
-  const vehicle = vehicleOverview || {};
+  // Prefer live query data; fall back to SSR prop so bots always see schema
+  const vehicle = vehicleOverview || initialOverview || {};
 
-  // ─── Determine E-E-A-T Seller Type (AutoDealer vs Person) ──────────
   const isConsultant =
     vehicle.sellerType === "CONSULTANT" ||
     !!vehicle.consultantName ||
@@ -36,8 +75,13 @@ function Index({ seo }) {
   const sellerSchema = isConsultant
     ? {
         "@type": "AutoDealer",
-        name: vehicle.consultantName || vehicle.consultantUsername || "Certified Auto Consultant",
-        ...(vehicle.consultantLogo && { logo: vehicle.consultantLogo }),
+        name:
+          vehicle.consultantName ||
+          vehicle.consultantUsername ||
+          "Certified Auto Consultant",
+        ...(vehicle.consultantLogo && {
+          logo: toCdnAbsolute(vehicle.consultantLogo, "thumb"),
+        }),
       }
     : {
         "@type": "Person",
@@ -48,23 +92,44 @@ function Index({ seo }) {
     .toUpperCase()
     .includes("TWO");
   const vehicleSchemaType = isTwoWheeler ? "Motorcycle" : "Car";
+  const kindSlug = isTwoWheeler ? "two-wheelers" : "cars";
+  const kindLabel = isTwoWheeler ? "Two Wheelers" : "Cars";
 
-  // ─── JSON-LD: Car / Motorcycle Schema ──
-  const images = Array.from(
-    new Set(
-      [
-        vehicle.thumbnailUrl,
-        ...(Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls : []),
-        ...(Array.isArray(vehicle.vehiclePhotos)
-          ? vehicle.vehiclePhotos.map((p) =>
-              typeof p === "string" ? p : p?.url || p?.photoUrl
-            )
-          : []),
-      ].filter(Boolean)
-    )
-  );
+  const images = collectVehicleCdnImages(vehicle);
   const priceNum = Number(vehicle.price);
   const kmNum = Number(vehicle.kmDriven);
+
+  const cityDisplay = (
+    vehicle.cityName ||
+    vehicle.vehicleAddress?.city ||
+    vehicle.address?.city ||
+    ""
+  )
+    .split(",")[0]
+    .trim();
+
+  const displayTitle = seo?.title || "Vehicle Details | Reecomm";
+  const displayDescription =
+    seo?.description ||
+    "View detailed vehicle information, specs, price, and more.";
+  const ogTitle = seo?.ogTitle || seo?.title || displayTitle;
+  const ogDescription =
+    seo?.ogDescription || seo?.description || displayDescription;
+
+  // Authoritative SSR image — do not let client overwrite with a different asset
+  let vehicleImageUrl =
+    seo?.image ||
+    images[0] ||
+    "https://www.reecomm.com/logo/logo1.webp";
+  if (
+    vehicleImageUrl &&
+    !vehicleImageUrl.startsWith("http") &&
+    vehicleImageUrl !== "https://www.reecomm.com/logo/logo1.webp"
+  ) {
+    vehicleImageUrl =
+      toCdnAbsolute(vehicleImageUrl, "detail") || vehicleImageUrl;
+  }
+
   const vehicleSchema = vehicle.id
     ? {
         "@context": "https://schema.org",
@@ -93,10 +158,13 @@ function Index({ seo }) {
             }
           : {}),
         ...(vehicle.ownership != null && vehicle.ownership !== ""
-          ? { numberOfPreviousOwners: Number(vehicle.ownership) || vehicle.ownership }
+          ? {
+              numberOfPreviousOwners:
+                Number(vehicle.ownership) || vehicle.ownership,
+            }
           : {}),
         ...(images.length ? { image: images } : {}),
-        ...(seo?.description ? { description: seo.description } : {}),
+        ...(displayDescription ? { description: displayDescription } : {}),
         ...(seo?.url ? { url: seo.url } : {}),
         ...(vehicle.variantName
           ? { vehicleConfiguration: vehicle.variantName }
@@ -116,22 +184,8 @@ function Index({ seo }) {
       }
     : null;
 
-  // ─── JSON-LD: Canonical Breadcrumb Schema ───────────────────────────
-  const brandSlug = (vehicle.makerName || "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const citySlug = (vehicle.cityName || vehicle.address?.city || "")
-    .split(",")[0]
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]/g, "");
-  const kindSlug = (vehicle.vehicleType || "")
-    .toUpperCase()
-    .includes("TWO")
-    ? "two-wheelers"
-    : "cars";
+  const brandSlug = slugifyPart(vehicle.makerName);
+  const citySlug = slugifyPart(cityDisplay);
 
   const brandSearchUrl = brandSlug
     ? `https://www.reecomm.com/search/buy-used-${brandSlug}-${kindSlug}`
@@ -152,7 +206,7 @@ function Index({ seo }) {
     {
       "@type": "ListItem",
       position: 2,
-      name: kindSlug === "two-wheelers" ? "Used Two Wheelers" : "Used Cars",
+      name: isTwoWheeler ? "Used Two Wheelers" : "Used Cars",
       item: `https://www.reecomm.com/search/buy-used-${kindSlug}`,
     },
   ];
@@ -161,16 +215,16 @@ function Index({ seo }) {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: 3,
-      name: `Used ${vehicle.makerName} ${kindSlug === "two-wheelers" ? "Two Wheelers" : "Cars"}`,
+      name: `Used ${vehicle.makerName} ${kindLabel}`,
       item: brandSearchUrl,
     });
   }
 
-  if (citySlug) {
+  if (citySlug && vehicle.makerName) {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
-      name: `Used ${vehicle.makerName || ""} ${kindSlug === "two-wheelers" ? "Two Wheelers" : "Cars"} in ${vehicle.cityName || vehicle.address?.city || ""}`.trim(),
+      name: `Used ${vehicle.makerName} ${kindLabel} in ${cityDisplay}`,
       item: cityBrandSearchUrl,
     });
   }
@@ -187,44 +241,9 @@ function Index({ seo }) {
     itemListElement: breadcrumbItems,
   };
 
-  // ─── Display SEO Values ─────────────────────────────────────────────
-  // 1. Start with server-provided SEO defaults (or clean title from URL slug)
-  let displayTitle = seo?.title || "Vehicle Details | Reecomm";
-  let displayDescription =
-    seo?.description ||
-    "View detailed vehicle information, specs, price, and more.";
-  let ogTitle = seo?.ogTitle || seo?.title || "Vehicle Details | Reecomm";
-  let ogDescription =
-    seo?.ogDescription ||
-    seo?.description ||
-    "View detailed vehicle information, specs, price, and more.";
-  let vehicleImageUrl = seo?.image || "";
-
-  // 2. If client-side query loads vehicle data, update SEO values dynamically!
-  if (vehicleOverview) {
-    const clientImage =
-      vehicleOverview.thumbnailUrl ||
-      vehicleOverview.imageUrls?.[0] ||
-      vehicleOverview.vehicleImages?.[0]?.imageUrl ||
-      vehicleOverview.vehiclePhotos?.[0]?.url ||
-      vehicleOverview.vehiclePhotos?.[0]?.photoUrl ||
-      "";
-    vehicleImageUrl = clientImage || seo?.image || vehicleImageUrl;
-
-    displayTitle = generateDynamicPageTitle(vehicleOverview);
-    displayDescription = generateDynamicMetaDescription(vehicleOverview);
-    ogTitle = displayTitle;
-    ogDescription = displayDescription;
-  }
-
-  // Never leave SERP without an image; prefer vehicle photo over logo
-  if (!vehicleImageUrl) {
-    vehicleImageUrl = "https://www.reecomm.com/logo/logo1.webp";
-  } else {
-    // Public CDN for OG (private S3 is not fetchable by crawlers)
-    vehicleImageUrl =
-      getCdnImageUrl(vehicleImageUrl, { preset: "detail" }) || vehicleImageUrl;
-  }
+  const ogImageAlt =
+    `${vehicle.yearOfMfg || ""} ${vehicle.makerName || ""} ${vehicle.modelName || ""} ${vehicle.variantName || ""}${cityDisplay ? ` in ${cityDisplay}` : ""}`.trim() ||
+    displayTitle;
 
   return (
     <>
@@ -233,12 +252,10 @@ function Index({ seo }) {
         <meta name="description" content={displayDescription} />
         <meta name="robots" content="index, follow" />
 
-        {/* Canonical URL */}
         {seo?.canonical && (
           <link key="canonical" rel="canonical" href={seo.canonical} />
         )}
 
-        {/* JSON-LD Structured Data: Vehicle Schema */}
         {vehicleSchema && (
           <script
             type="application/ld+json"
@@ -246,43 +263,48 @@ function Index({ seo }) {
           />
         )}
 
-        {/* JSON-LD Structured Data: Breadcrumb */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbSchema),
+          }}
         />
 
-        {/* OpenGraph Tags for WhatsApp, Facebook, LinkedIn sharing */}
         <meta property="og:title" content={ogTitle} />
         <meta property="og:description" content={ogDescription} />
         <meta key="og:type" property="og:type" content="product" />
         <meta property="og:site_name" content="Reecomm" />
         {seo?.url && <meta property="og:url" content={seo.url} />}
         <meta key="og:image" property="og:image" content={vehicleImageUrl} />
-        <meta key="og:image:width" property="og:image:width" content="1200" />
-        <meta key="og:image:height" property="og:image:height" content="630" />
         <meta
           key="og:image:alt"
           property="og:image:alt"
-          content={displayTitle}
+          content={ogImageAlt}
         />
+        <link key="image_src" rel="image_src" href={vehicleImageUrl} />
         {vehicle.price && (
-          <meta property="product:price:amount" content={String(vehicle.price)} />
+          <meta
+            property="product:price:amount"
+            content={String(vehicle.price)}
+          />
         )}
         <meta property="product:price:currency" content="INR" />
 
-        {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={ogTitle} />
         <meta name="twitter:description" content={ogDescription} />
-        <meta key="twitter:image" name="twitter:image" content={vehicleImageUrl} />
+        <meta
+          key="twitter:image"
+          name="twitter:image"
+          content={vehicleImageUrl}
+        />
       </Head>
       <Layout>
-        <VehiclDetail initialOverview={null} initialSummary={null} />
+        <VehiclDetail
+          initialOverview={initialOverview}
+          initialSummary={null}
+        />
       </Layout>
-      {/* <Layout>
-        <AvxProcess />
-      </Layout> */}
       <DownloadAppSection fullWidth />
 
       <FooterLink />
@@ -291,32 +313,14 @@ function Index({ seo }) {
   );
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
 function formatTextCap(text) {
   if (!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  return String(text).replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
-
-function formatPrice(num) {
-  if (!num) return "N/A";
-  if (typeof num === "string" && num.toUpperCase().includes("L")) return num;
-  const val = Number(num);
-  if (isNaN(val)) return num;
-  if (val >= 100000) {
-    return (val / 100000).toFixed(2).replace(/\.00$/, "") + "L";
-  }
-  return val.toLocaleString("en-IN");
-}
-
-// ─── Server-Side Props (slug-based SEO + live thumbnail fetch) ──────────────
 
 export async function getStaticPaths() {
   return {
-    // Generate pages on-demand rather than at build time
     paths: [],
-    // 'blocking' will wait for the HTML to be generated on the first request
-    // before sending it to the browser, ensuring perfect SEO for the first hit
     fallback: "blocking",
   };
 }
@@ -330,15 +334,14 @@ export async function getStaticProps(context) {
     : "https";
   const host = process.env.NEXT_PUBLIC_DOMAIN || "www.reecomm.com";
 
-  // ── Fallback SEO from slug ──────────────────────────────────────────────
   let finalTitle = "Vehicle Details | Reecomm";
   let finalDescription =
     "Reecomm | Buy used vehicles. View detailed specs, photos, price, and contact information.";
   let finalImageUrl = `${protocol}://${host}/logo/logo1.webp`;
   let canonicalSlug = title || "vehicle";
+  let initialOverview = null;
 
   if (title) {
-    // Regex matches slugs like: buy-used-[brand-model]-[year]-[type]-[city]
     const pattern =
       /^buy-used-(.+?)-(\d{4})-(?:cars|two-wheelers|vehicles)-(.+)$/i;
     const match = title.match(pattern);
@@ -363,9 +366,6 @@ export async function getStaticProps(context) {
     }
   }
 
-  // ── Live API fetch: get real vehicle thumbnail for og:image ────────────
-  // WhatsApp / Telegram crawl the initial SSR HTML — client-side updates are
-  // invisible to them, so we MUST resolve the image server-side.
   if (id) {
     try {
       const backendUrl =
@@ -375,11 +375,12 @@ export async function getStaticProps(context) {
         {
           headers: {
             Accept: "application/json",
-            "X-Client-Type": getClientType(context?.req?.headers?.["user-agent"]),
+            "X-Client-Type": getClientType(
+              context?.req?.headers?.["user-agent"]
+            ),
           },
-          // 4-second timeout — if the API is slow, fall back gracefully
           signal: AbortSignal.timeout(4000),
-        },
+        }
       );
 
       if (res.ok) {
@@ -387,11 +388,9 @@ export async function getStaticProps(context) {
         const v = json?.data;
 
         if (v) {
-          // Canonical slug from live address (town-city when town exists)
           const generatedSlug = generateVehicleSlug(v);
           if (generatedSlug) {
             canonicalSlug = generatedSlug;
-            // Permanent redirect when URL slug ≠ canonical (SEO equity)
             if (title && title !== generatedSlug) {
               return {
                 redirect: {
@@ -402,20 +401,6 @@ export async function getStaticProps(context) {
             }
           }
 
-          // Real thumbnail from the vehicle record
-          const thumbnail =
-            v.thumbnailUrl ||
-            v.imageUrls?.[0] ||
-            v.vehicleImages?.[0]?.imageUrl ||
-            v.imageUrl ||
-            "";
-
-          if (thumbnail) {
-            finalImageUrl =
-              getCdnImageUrl(thumbnail, { preset: "detail" }) || thumbnail;
-          }
-
-          // Normalize fields expected by SEO helpers
           const vehicleForSeo = {
             ...v,
             cityName:
@@ -427,21 +412,30 @@ export async function getStaticProps(context) {
             consultantName:
               v.consultantName ||
               v.consultationName ||
-              [
-                v.vehicleOwner?.firstname || "",
-                v.vehicleOwner?.lastname || "",
-              ]
+              [v.vehicleOwner?.firstname || "", v.vehicleOwner?.lastname || ""]
                 .join(" ")
                 .trim(),
           };
 
-          const apiTitle = generateDynamicPageTitle(vehicleForSeo);
-          const apiDescription = generateDynamicMetaDescription(vehicleForSeo);
+          initialOverview = JSON.parse(JSON.stringify(vehicleForSeo));
 
-          // Only override slug-derived text if we got real data
+          const thumbnail =
+            v.thumbnailUrl ||
+            v.imageUrls?.[0] ||
+            v.vehicleImages?.[0]?.imageUrl ||
+            v.imageUrl ||
+            "";
+
+          if (thumbnail) {
+            finalImageUrl =
+              toCdnAbsolute(thumbnail, "detail") ||
+              getCdnImageUrl(thumbnail, { preset: "detail" }) ||
+              thumbnail;
+          }
+
           if (v.makerName && v.modelName) {
-            finalTitle = apiTitle;
-            finalDescription = apiDescription;
+            finalTitle = generateDynamicPageTitle(vehicleForSeo);
+            finalDescription = generateDynamicMetaDescription(vehicleForSeo);
           }
         }
       }
@@ -463,8 +457,8 @@ export async function getStaticProps(context) {
         url: canonicalUrl,
         canonical: canonicalUrl,
       },
+      initialOverview,
     },
-    // ISR: re-generate at most once per 60 s on incoming requests
     revalidate: 60,
   };
 }

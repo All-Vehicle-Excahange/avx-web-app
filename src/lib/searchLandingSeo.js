@@ -2,7 +2,17 @@
  * Search-landing title / meta / H1 builders, slug aliases, intro copy, and FAQ schema.
  */
 
+import { getCdnImageUrl } from "./cdnImage";
+
 const BASE_URL = "https://www.reecomm.com";
+
+function toCdnCardUrl(src) {
+  if (!src || typeof src !== "string") return null;
+  const url = getCdnImageUrl(src, { preset: "card" }) || src;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (url.startsWith("/")) return `${BASE_URL}${url}`;
+  return url;
+}
 
 function cleanJoin(parts) {
   return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
@@ -328,9 +338,17 @@ export function buildSearchLandingSeo({
   isHub = false,
   topModels = [],
   sampleVehicles = [],
+  minPrice = null,
 } = {}) {
   const count =
     typeof totalCount === "number" && totalCount > 0 ? totalCount : 0;
+  const minPriceNum = Number(minPrice);
+  const hasMinPrice = Number.isFinite(minPriceNum) && minPriceNum > 0;
+  const startingFromBit = hasMinPrice
+    ? minPriceNum >= 100000
+      ? ` starting from ₹${(minPriceNum / 100000).toFixed(2).replace(/\.00$/, "")}L`
+      : ` starting from ₹${minPriceNum.toLocaleString("en-IN")}`
+    : "";
   const brandT = (brand || "").trim();
   const modelT = (model || "").trim();
   const cityT = (city || "").trim();
@@ -487,9 +505,23 @@ export function buildSearchLandingSeo({
       title = withBrand(lead);
       // Do not overwrite h1 — visible heading stays unchanged
       const samples = formatSampleClause(sampleVehicles);
-      description = samples
-        ? `${lead}. Includes ${samples}. Compare photos, prices & inspection on Reecomm.`
-        : `${lead}. Compare second hand photos, prices, fuel & inspection reports on Reecomm.`;
+      // CarWale-style: count hub + starting price when inventory has a real min
+      const priceClause = startingFromBit
+        ? `${count} used ${cleanJoin([
+            brandT,
+            modelT,
+            vwLower,
+          ])}${cityT ? ` in ${cityT}` : ""} for sale${startingFromBit}`
+        : "";
+      if (priceClause && samples) {
+        description = `${priceClause} — includes ${samples}. 100% verified second hand listings with photos & inspection on Reecomm.`;
+      } else if (priceClause) {
+        description = `${priceClause} — 100% verified second hand listings with photos & inspection on Reecomm.`;
+      } else if (samples) {
+        description = `${lead}. Includes ${samples}. Compare photos, prices & inspection on Reecomm.`;
+      } else {
+        description = `${lead}. Compare second hand photos, prices, fuel & inspection reports on Reecomm.`;
+      }
     }
   }
 
@@ -882,11 +914,12 @@ export function buildSearchItemListSchema({
     const url = v.id
       ? `${BASE_URL}/vehicle/details/${slug}/${v.id}`
       : canonical;
-    const image =
+    const rawImage =
       v.thumbnailUrl ||
       v.imageUrl ||
       (Array.isArray(v.vehiclePhotos) ? v.vehiclePhotos[0]?.url : null) ||
       null;
+    const image = rawImage ? toCdnCardUrl(rawImage) : null;
     const price = v.price != null ? Number(v.price) : null;
 
     const vehicleItem = {

@@ -45,6 +45,12 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
     ""
   );
 
+  const isTwoWheeler = String(vehicleOverview.vehicleType || "")
+    .toUpperCase()
+    .includes("TWO");
+  const kindSlug = isTwoWheeler ? "two-wheelers" : "cars";
+  const kindLabel = isTwoWheeler ? "Two Wheelers" : "Cars";
+
   const brandSlug = brand.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const modelSlug = model.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
   const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
@@ -56,82 +62,78 @@ export default function SeoInternalLinkHub({ vehicleOverview, vehicleSummary }) 
 
   const links = [];
 
-  // 1. Dynamic Brand + Model + City (e.g. Used Hyundai Creta Cars in Palanpur)
-  if (brandSlug && modelSlug && citySlug) {
-    links.push({
-      label: `Used ${brand} ${model} Cars in ${city}`,
-      href: `/search/buy-used-${brandSlug}-${modelSlug}-cars-${citySlug}`,
-    });
-  }
-
-  // 2. Dynamic Brand + Model + State (e.g. Used Hyundai Creta Cars in Gujarat)
-  if (brandSlug && modelSlug && stateSlug && stateSlug !== citySlug) {
-    links.push({
-      label: `Used ${brand} ${model} Cars in ${state}`,
-      href: `/search/buy-used-${brandSlug}-${modelSlug}-cars-${stateSlug}`,
-    });
-  }
-
-  // 3. Dynamic Brand + Model (e.g. Used Hyundai Creta Cars)
-  if (brandSlug && modelSlug) {
-    links.push({
-      label: `Used ${brand} ${model} Cars`,
-      href: `/search/buy-used-${brandSlug}-${modelSlug}-cars`,
-    });
-  }
-
-  // 4. Dynamic Brand Only (e.g. Buy Used Hyundai Cars)
-  if (brandSlug) {
-    links.push({
-      label: `Buy Used ${brand} Cars`,
-      href: `/search/buy-used-${brandSlug}-cars`,
-    });
-  }
-
-  // 5. Dynamic Brand + State (e.g. Used Hyundai Cars in Gujarat)
-  if (brandSlug && stateSlug && stateSlug !== citySlug) {
-    links.push({
-      label: `Used ${brand} Cars in ${state}`,
-      href: `/search/buy-used-${brandSlug}-cars-${stateSlug}`,
-    });
-  }
-
-  // 6. Dynamic Brand + City (e.g. Used Hyundai Cars in Palanpur)
+  // 1. Brand × City hub (priority for broad GEO SERPs, e.g. Used Toyota Cars in Ahmedabad)
   if (brandSlug && citySlug) {
     links.push({
-      label: `Used ${brand} Cars in ${city}`,
-      href: `/search/buy-used-${brandSlug}-cars-${citySlug}`,
+      label: `Used ${brand} ${kindLabel} in ${city}`,
+      href: `/search/buy-used-${brandSlug}-${kindSlug}-${citySlug}`,
     });
   }
 
-  // 5. Dynamic City Only
+  // 2. Brand + Model + City
+  if (brandSlug && modelSlug && citySlug) {
+    links.push({
+      label: `Used ${brand} ${model} ${kindLabel} in ${city}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-${kindSlug}-${citySlug}`,
+    });
+  }
+
+  // 3. Brand + Model + State
+  if (brandSlug && modelSlug && stateSlug && stateSlug !== citySlug) {
+    links.push({
+      label: `Used ${brand} ${model} ${kindLabel} in ${state}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-${kindSlug}-${stateSlug}`,
+    });
+  }
+
+  // 4. Brand + Model
+  if (brandSlug && modelSlug) {
+    links.push({
+      label: `Used ${brand} ${model} ${kindLabel}`,
+      href: `/search/buy-used-${brandSlug}-${modelSlug}-${kindSlug}`,
+    });
+  }
+
+  // 5. Brand only
+  if (brandSlug) {
+    links.push({
+      label: `Buy Used ${brand} ${kindLabel}`,
+      href: `/search/buy-used-${brandSlug}-${kindSlug}`,
+    });
+  }
+
+  // 6. Brand + State
+  if (brandSlug && stateSlug && stateSlug !== citySlug) {
+    links.push({
+      label: `Used ${brand} ${kindLabel} in ${state}`,
+      href: `/search/buy-used-${brandSlug}-${kindSlug}-${stateSlug}`,
+    });
+  }
+
+  // City only
   if (citySlug) {
     links.push({
-      label: `Used Cars in ${city}`,
-      href: `/search/buy-used-cars-${citySlug}`,
+      label: `Used ${kindLabel} in ${city}`,
+      href: `/search/buy-used-${kindSlug}-${citySlug}`,
     });
   }
 
-  // 6. Dynamic Fuel Type
-  if (fuel) {
-    const fuelSlug = fuel.toLowerCase();
+  // Fuel / body / price — car inventory filters (skip noisy bike fuel labels)
+  if (fuel && !isTwoWheeler) {
     links.push({
       label: `Used ${fuel} Cars`,
       href: `/search/buy-used-${fuelSlug}-cars`,
     });
   }
 
-  // 7. Dynamic Body Type
-  if (body) {
-    const bodySlug = body.toLowerCase().replace(/\s+/g, "-");
+  if (body && !isTwoWheeler) {
     links.push({
       label: `Used ${body} Cars`,
       href: `/search/buy-used-${bodySlug}-cars`,
     });
   }
 
-  // 8. Dynamic Price Band
-  if (priceLakhs > 0) {
+  if (priceLakhs > 0 && !isTwoWheeler) {
     links.push({
       label: `Used Cars under ₹${priceLakhs} Lakhs`,
       href: `/search/buy-used-cars-under-${priceLakhs}-lakhs`,

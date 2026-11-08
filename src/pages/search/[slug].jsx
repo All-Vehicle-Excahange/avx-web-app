@@ -30,6 +30,7 @@ import {
 } from "@/lib/searchLandingSeo";
 import { resolveSlugQueryRedirect } from "@/lib/seo";
 import { getClientType } from "@/lib/clientType";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
@@ -929,6 +930,11 @@ export async function getServerSideProps(context) {
   const resolvedCity = seoPlaceName || initialFilters.cityName || "";
   const topModels = extractTopModels(initialVehicles);
 
+  const prices = (initialVehicles || [])
+    .map((v) => Number(v?.price))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  const minPrice = prices.length ? Math.min(...prices) : null;
+
   const seoBuilt = buildSearchLandingSeo({
     brand: brandName,
     model: resolvedModel,
@@ -940,6 +946,7 @@ export async function getServerSideProps(context) {
     isHub,
     topModels,
     sampleVehicles: initialVehicles,
+    minPrice,
   });
 
   const intro = buildSearchLandingIntro({
@@ -974,8 +981,14 @@ export async function getServerSideProps(context) {
   const firstWithImage = initialVehicles.find(
     (v) => v?.thumbnailUrl || v?.imageUrl
   );
-  const firstVehicleImage =
+  const firstVehicleRaw =
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || null;
+  let firstVehicleImage = firstVehicleRaw
+    ? getCdnImageUrl(firstVehicleRaw, { preset: "card" }) || firstVehicleRaw
+    : null;
+  if (firstVehicleImage && firstVehicleImage.startsWith("/")) {
+    firstVehicleImage = `https://www.reecomm.com${firstVehicleImage}`;
+  }
 
   return {
     props: {
@@ -991,6 +1004,7 @@ export async function getServerSideProps(context) {
         orgSchema,
         initialVehicles,
         totalCount,
+        minPrice,
         placeName: resolvedCity,
         relatedPlaceLinks: loadPlaceLinks(city, `/search/${slug}`),
         relatedBlogLinks: loadRelatedBlogLinks(slug, city),

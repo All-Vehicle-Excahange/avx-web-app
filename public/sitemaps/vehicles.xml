@@ -2,14 +2,18 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://www.reecomm.com/sitemaps/vehicles-1.xml</loc>
-    <lastmod>2026-10-21T09:31:52.608Z</lastmod>
+    <lastmod>2026-11-08T07:16:28.099Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.reecomm.com/sitemaps/vehicles-2.xml</loc>
-    <lastmod>2026-10-21T09:31:52.608Z</lastmod>
+    <lastmod>2026-11-08T07:16:28.099Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.reecomm.com/sitemaps/vehicles-3.xml</loc>
-    <lastmod>2026-10-21T09:31:52.608Z</lastmod>
+    <lastmod>2026-11-08T07:16:28.099Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.reecomm.com/sitemaps/vehicles-4.xml</loc>
+    <lastmod>2026-11-08T07:16:28.099Z</lastmod>
   </sitemap>
 </sitemapindex>
