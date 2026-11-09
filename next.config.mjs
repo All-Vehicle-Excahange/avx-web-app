@@ -147,10 +147,17 @@ const nextConfig = {
     ];
   },
   images: {
-    // Always use AWS CloudFront loader so src (and "Open image in new tab")
-    // resolve to image.reecomm.com — not private S3 — in both dev and prod.
-    loader: "custom",
-    loaderFile: "./src/lib/cdnImageLoader.js",
+    // In production, use AWS CloudFront loader so src resolves to image.reecomm.com.
+    // In development (especially with Turbopack on Windows, ref: vercel/next.js #85429),
+    // loaderFile is not resolved by Turbopack when loader: "custom" is set,
+    // causing Next.js to throw "Image with src ... is missing loader prop".
+    unoptimized: process.env.NODE_ENV !== "production",
+    ...(process.env.NODE_ENV === "production"
+      ? {
+        loader: "custom",
+        loaderFile: "./src/lib/cdnImageLoader.js",
+      }
+      : {}),
     remotePatterns: [
       {
         protocol: "https",
