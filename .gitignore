@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local docs / pitch materials
+/docs/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
