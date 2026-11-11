@@ -117,6 +117,7 @@ function SearchContent({
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
           onLoadingChange={setIsLoading}
+          adsEnabled={false}
         />
       </Layout>
 

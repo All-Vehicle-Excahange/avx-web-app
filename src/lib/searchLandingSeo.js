@@ -188,9 +188,143 @@ export const TIER1_CITIES = [
 
 /**
  * Minimum listings required to index non-hub landing pages.
- * Empty non-hubs get noindex,follow — intentional (do not remove for GSC noise).
+ * Empty / thin non-hubs get noindex,follow — intentional (AdSense + GSC thin crawl).
+ * Hubs stay indexable; AdSense uses a higher bar (MIN_ADSENSE_LISTINGS).
  */
-export const MIN_INDEXABLE_LISTINGS = 1;
+export const MIN_INDEXABLE_LISTINGS = 3;
+
+function placeKey(city = "") {
+  return String(city || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+}
+
+/**
+ * City-specific buyer notes for money hubs — not a token-swap of the same sentence.
+ * Returned as structured paragraphs for SSR SEO body.
+ */
+const CITY_BUYING_NOTES = {
+  ahmedabad: {
+    title: "Buying used vehicles in Ahmedabad",
+    cars: [
+      "Ahmedabad has deep used-car demand across SG Highway, Nikol, Naroda, and satellite towns. Compare year, kilometres, and fuel type carefully — petrol and CNG hatchbacks move fastest for city use, while SUVs sell on weekend highway needs.",
+      "Prefer listings with clear exterior and engine photos, then verify RC match and challans on Vahan before paying. For RTO transfer, budget time for local agent paperwork and confirm hypothecation is cleared if the car was financed.",
+      "Reecomm consultants in and around Ahmedabad can share inspection reports on eligible stock so you shortlist online, then visit only serious matches.",
+    ],
+    bikes: [
+      "Ahmedabad two-wheeler buyers usually shortlist by commute distance and budget for insurance renewal. Check tyre life, chain/sprocket wear, and cold-start behaviour before negotiating.",
+      "Confirm RC ownership and valid insurance on every used bike. Prefer verified consultant listings over informal classifieds when possible.",
+    ],
+  },
+  palanpur: {
+    title: "Buying used vehicles in Palanpur",
+    cars: [
+      "Palanpur and nearby Banaskantha buyers often balance city and highway use on the Ahmedabad–Palanpur corridor. Fair prices depend on year, ownership count, and whether service history is available.",
+      "Ask for RC, insurance, and PUC before a test drive. Many local deals involve consultant yards — use Reecomm storefronts to see live stock and inquire without chasing WhatsApp-only ads.",
+      "Request an inspection when offered: engine health, structure, and OBD checks reduce surprises after payment. Complete transfer at the relevant Banaskantha RTO after agreement.",
+    ],
+    bikes: [
+      "Used bikes in Palanpur sell well for daily town and village commuting. Prioritise clear ownership papers and recent service before negotiating.",
+    ],
+  },
+  visnagar: {
+    title: "Buying used vehicles in Visnagar",
+    cars: [
+      "Visnagar family buyers often look at MPVs and hatchbacks for school and highway runs toward Mehsana or Ahmedabad. Check clutch feel, underbody rust, and third-row wear on people-carriers like the Ertiga.",
+      "Compare at least two similar year/km cars before locking a price. Verify seller name against RC and clear any finance hypothecation in writing.",
+      "Reecomm listings for Visnagar help you compare photos and prices first, then inquire with the consultant managing the vehicle.",
+    ],
+    bikes: [
+      "For Visnagar two-wheelers, inspect brakes, frame welds, and tyre remaining life. Keep budget room for insurance and a basic service after purchase.",
+    ],
+  },
+  siddhpur: {
+    title: "Buying used vehicles in Siddhpur",
+    cars: [
+      "Siddhpur buyers often shortlist value hatchbacks and compact SUVs for town plus pilgrim-route travel. Older cars can be fair deals if structure and engine are sound — do not skip a thorough inspection.",
+      "Match documents carefully: RC, insurance, and challan status. Prefer consultants who can show service records or previous owner details.",
+      "Use Reecomm to compare Siddhpur and nearby Palanpur/Mehsana stock so you are not limited to a single yard.",
+    ],
+    bikes: [
+      "Used bikes around Siddhpur should have matching RC and a clean frame. Test ride on mixed roads before you agree on price.",
+    ],
+  },
+  kanodar: {
+    title: "Buying used vehicles in Kanodar",
+    cars: [
+      "Kanodar sits close to Palanpur inventory — many buyers compare both towns. Focus on ownership history and accident-free structure rather than cosmetic polish alone.",
+      "Confirm insurance validity and ask for a short highway test drive toward Palanpur before finalising.",
+    ],
+    bikes: [
+      "Shortlist Kanodar bikes with clear photos and RC match, then inquire through Reecomm instead of cash-only roadside deals.",
+    ],
+  },
+  surat: {
+    title: "Buying used vehicles in Surat",
+    cars: [
+      "Surat’s used market moves quickly for sedans and compact SUVs used for city and industrial-area commuting. Service history and flood/water-damage checks matter in monsoon-prone years.",
+      "Compare Honda City, Creta-class SUVs, and hatchbacks by year and variant, then verify RC and challans before payment.",
+    ],
+    bikes: [
+      "Surat two-wheeler buyers should check chain stretch, tyre age, and ABS function on newer bikes. Keep insurance renewal in the budget.",
+    ],
+  },
+  mehsana: {
+    title: "Buying used vehicles in Mehsana",
+    cars: [
+      "Mehsana buyers often bridge Visnagar, Unjha, and Ahmedabad stock. Cross-check prices across nearby cities so you do not overpay for similar year/km cars.",
+      "Insist on document match and a proper inspection before negotiating the final amount.",
+    ],
+    bikes: [
+      "For Mehsana bikes, prioritise commuting comfort and paper clarity over cosmetic accessories.",
+    ],
+  },
+  gandhinagar: {
+    title: "Buying used vehicles in Gandhinagar",
+    cars: [
+      "Gandhinagar buyers frequently compare capital-region stock with Ahmedabad yards. Factor commute patterns and parking needs when choosing body type.",
+      "Use verified listings, request inspection where available, and complete RC transfer with correct RTO jurisdiction.",
+    ],
+    bikes: [
+      "Gandhinagar two-wheeler deals should include a cold-start test and tyre/brake check before you pay.",
+    ],
+  },
+};
+
+/**
+ * Structured local buying tips for stocked city landings (AdSense unique-value signal).
+ */
+export function buildCityBuyingNotes(
+  city = "",
+  { isTwoWheeler = false, brand = "", model = "" } = {},
+) {
+  const key = placeKey(city);
+  if (!key) return null;
+  const entry = CITY_BUYING_NOTES[key];
+  const subject = cleanJoin([brand, model]) || (isTwoWheeler ? "bikes" : "cars");
+  if (!entry) {
+    const label = String(city).trim();
+    if (!label) return null;
+    return {
+      title: `Buying used ${subject} in ${label}`,
+      paragraphs: [
+        `When buying used ${subject} in ${label}, shortlist verified consultant listings with clear photos and prices, then confirm RC ownership, insurance, and challan status before payment.`,
+        `Compare at least two similar year and kilometre options, request an inspection when available on Reecomm, and only negotiate after you have seen the vehicle in person.`,
+      ],
+    };
+  }
+  const paragraphs = isTwoWheeler
+    ? entry.bikes?.length
+      ? entry.bikes
+      : entry.cars
+    : entry.cars;
+  return {
+    title: entry.title,
+    paragraphs: paragraphs || [],
+  };
+}
 
 /**
  * Resolve slug to a canonical redirect target, or null.
@@ -716,7 +850,14 @@ export function buildSearchLandingIntro({
   const trustLine =
     " Send an inquiry directly from the listing and verify RC, insurance, and condition before you decide.";
 
-  return `${countLine}${priceBand}${yearBand}${fuelLine}${localLine}${trustLine}`;
+  const howReecomm =
+    count && cityT
+      ? ` Reecomm is a used-vehicle marketplace for verified automotive consultants — browse live ${vw} stock in ${cityT}, compare photos and prices, then inquire securely instead of relying on unverified classifieds.`
+      : count
+        ? ` Reecomm is a used-vehicle marketplace for verified automotive consultants — compare photos, prices, and optional inspection reports, then inquire securely.`
+        : "";
+
+  return `${countLine}${priceBand}${yearBand}${fuelLine}${localLine}${trustLine}${howReecomm}`;
 }
 
 /**
@@ -809,6 +950,19 @@ export function buildSearchLandingFaq({
     items.push({
       question: `Is Reecomm a safer way to buy used ${vw} near ${cityT}?`,
       answer: `Reecomm focuses on verified consultants and structured listings with optional inspection reports — helping reduce the risk of misleading ads. For buyers near ${cityT}, you can shortlist ${subject} online, inquire securely, and verify documents before payment.`,
+    });
+
+    const cityNotes = buildCityBuyingNotes(cityT, {
+      isTwoWheeler,
+      brand: brandT,
+      model: modelT,
+    });
+    const tip =
+      cityNotes?.paragraphs?.[0] ||
+      `In ${cityT}, compare similar year and kilometre ${vw}, confirm RC match, and inspect before you pay.`;
+    items.push({
+      question: `What should ${cityT} buyers verify before paying for a used ${subject}?`,
+      answer: `${tip} Always match the seller name to the RC, check insurance and challans, and use a Reecomm inquiry so the conversation stays on a structured listing.`,
     });
   } else {
     items.push({

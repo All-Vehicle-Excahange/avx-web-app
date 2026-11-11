@@ -3,6 +3,8 @@
 Use with [`REECOMM_GSC_ONE_PAGE_REPORT.md`](./REECOMM_GSC_ONE_PAGE_REPORT.md).  
 **Do not** mass-request the ~14k not-indexed URLs.
 
+**AdSense low-value fix:** see [`ADSENSE_POLICY_FIX.md`](./ADSENSE_POLICY_FIX.md) — deploy, wait 7–14 days, spot-check, then Request review. Do not remove empty-landing `noindex`.
+
 ---
 
 ## Indexed vs not indexed (remember)
@@ -127,7 +129,7 @@ See [`GEO_OFFSITE_GBP_CHECKLIST.md`](./GEO_OFFSITE_GBP_CHECKLIST.md)
 
 - Mass-index empty exotic brand×city pages
 - Expect page 1 for `used cars in surat/pune/bangalore`
-- Remove `noindex` on empty search landings
+- **Do NOT** remove `noindex` on empty / thin search landings (AdSense low-value + thin crawl risk; keep `MIN_INDEXABLE_LISTINGS`)
 - UI redesign of search/VDP
 
 ---

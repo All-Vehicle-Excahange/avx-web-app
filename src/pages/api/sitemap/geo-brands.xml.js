@@ -285,6 +285,12 @@ export default async function handler(req, res) {
     const stockedCities = new Set();
     const stockedStates = new Set();
 
+    // GEO city/state: allowlisted when file present; else volume brands / two-wheelers only
+    const canEmitGeo = (slug, brandSlug, kind) => {
+      if (allowlist) return slugAllowed(slug);
+      return volumeBrandSlugs.has(brandSlug) || kind === "two-wheelers";
+    };
+
     try {
       const consultationCount = await getSeoConsultationCount();
       const consultationPageSize = 100;
@@ -329,34 +335,38 @@ export default async function handler(req, res) {
           if (citySlug) stockedCities.add(citySlug);
           if (stateSlug) stockedStates.add(stateSlug);
 
+          // National brand/model hubs from live stock (always useful)
           addUrl(`/search/buy-used-${brandSlug}-${kind}`, 0.75, "daily");
           if (modelSlug) {
             addUrl(`/search/buy-used-${brandSlug}-${modelSlug}-${kind}`, 0.8, "daily");
           }
-          // Always emit GEO hubs for cities/states with live vehicle stock
+
           if (citySlug) {
-            addUrl(`/search/buy-used-${brandSlug}-${kind}-${citySlug}`, 0.75, "weekly");
-            addUrl(
-              `/search/buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`,
-              0.8,
-              "daily"
-            );
+            const brandCity = `buy-used-${brandSlug}-${kind}-${citySlug}`;
+            const cityHub = `buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`;
+            if (canEmitGeo(brandCity, brandSlug, kind)) {
+              addUrl(`/search/${brandCity}`, 0.75, "weekly");
+            }
+            if (canEmitGeo(cityHub, brandSlug, kind)) {
+              addUrl(`/search/${cityHub}`, 0.8, "daily");
+            }
             if (modelSlug) {
-              addUrl(
-                `/search/buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
-                0.8,
-                "daily"
-              );
+              const modelCity = `buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`;
+              if (canEmitGeo(modelCity, brandSlug, kind)) {
+                addUrl(`/search/${modelCity}`, 0.8, "daily");
+              }
             }
           }
           if (stateSlug) {
-            addUrl(`/search/buy-used-${brandSlug}-${kind}-${stateSlug}`, 0.65, "weekly");
+            const brandState = `buy-used-${brandSlug}-${kind}-${stateSlug}`;
+            if (canEmitGeo(brandState, brandSlug, kind)) {
+              addUrl(`/search/${brandState}`, 0.65, "weekly");
+            }
             if (modelSlug) {
-              addUrl(
-                `/search/buy-used-${brandSlug}-${modelSlug}-${kind}-${stateSlug}`,
-                0.7,
-                "weekly"
-              );
+              const modelState = `buy-used-${brandSlug}-${modelSlug}-${kind}-${stateSlug}`;
+              if (canEmitGeo(modelState, brandSlug, kind)) {
+                addUrl(`/search/${modelState}`, 0.7, "weekly");
+              }
             }
           }
         }

@@ -14,7 +14,10 @@ import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
 import AdSenseAd from "@/components/common/AdSenseAd";
-import { isSearchLandingAdEligible } from "@/lib/adsenseEligibility";
+import {
+  isSearchLandingAdEligible,
+  MIN_ADSENSE_LISTINGS,
+} from "@/lib/adsenseEligibility";
 import fs from "fs";
 import path from "path";
 import {
@@ -27,6 +30,7 @@ import {
   extractTopModels,
   formatVehicleListingLine,
   MIN_INDEXABLE_LISTINGS,
+  buildCityBuyingNotes,
 } from "@/lib/searchLandingSeo";
 import { resolveSlugQueryRedirect } from "@/lib/seo";
 import { getClientType } from "@/lib/clientType";
@@ -228,7 +232,7 @@ function SearchContent({
   const adsEnabled = isSearchLandingAdEligible({
     noindex: seo?.noindex,
     totalCount: seo?.totalCount,
-    minListings: MIN_INDEXABLE_LISTINGS,
+    minListings: MIN_ADSENSE_LISTINGS,
   });
 
   return (
@@ -292,6 +296,7 @@ function SearchContent({
 
       <SearchLandingSeoContent
         intro={seo?.intro}
+        localNotes={seo?.localNotes}
         faqItems={seo?.faqItems}
         vehicles={seo?.initialVehicles}
         cityName={seo?.placeName || initialFilters?.cityName}
@@ -970,6 +975,16 @@ export async function getServerSideProps(context) {
     totalCount,
   });
 
+  const isTwoWheelerLanding = vehicleWord === "Two Wheelers";
+  const localNotes =
+    resolvedCity && totalCount >= MIN_INDEXABLE_LISTINGS
+      ? buildCityBuyingNotes(resolvedCity, {
+          isTwoWheeler: isTwoWheelerLanding,
+          brand: brandName,
+          model: resolvedModel,
+        })
+      : null;
+
   const orgSchema = buildSearchLandingOrgSchema({
     city: resolvedCity,
     brand: brandName,
@@ -999,6 +1014,7 @@ export async function getServerSideProps(context) {
         canonical: `https://www.reecomm.com/search/${slug}`,
         noindex,
         intro,
+        localNotes,
         faqItems,
         faqSchema,
         orgSchema,
@@ -1015,7 +1031,7 @@ export async function getServerSideProps(context) {
         adEligible: isSearchLandingAdEligible({
           noindex,
           totalCount,
-          minListings: MIN_INDEXABLE_LISTINGS,
+          minListings: MIN_ADSENSE_LISTINGS,
         }),
       },
       initialFilters,

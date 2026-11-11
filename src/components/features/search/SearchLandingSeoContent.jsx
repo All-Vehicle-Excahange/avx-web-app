@@ -5,6 +5,7 @@ import { formatVehicleListingLine } from "@/lib/searchLandingSeo";
 
 export default function SearchLandingSeoContent({
   intro,
+  localNotes = null,
   faqItems = [],
   vehicles = [],
   cityName = "",
@@ -17,9 +18,13 @@ export default function SearchLandingSeoContent({
   const blogs = (relatedBlogLinks || []).filter(
     (item) => item?.href && item?.label
   );
+  const noteParagraphs = Array.isArray(localNotes?.paragraphs)
+    ? localNotes.paragraphs.filter(Boolean)
+    : [];
 
   if (
     !intro &&
+    noteParagraphs.length === 0 &&
     faqItems.length === 0 &&
     topVehicles.length === 0 &&
     links.length === 0 &&
@@ -35,6 +40,28 @@ export default function SearchLandingSeoContent({
           <p className="text-sm text-primary/80 leading-relaxed font-medium">
             {intro}
           </p>
+        </div>
+      )}
+
+      {noteParagraphs.length > 0 && (
+        <div className="mb-10">
+          <h2 className="text-base md:text-lg font-bold text-primary font-primary mb-4 flex items-center gap-2">
+            <span className="w-1 h-5 bg-fourth rounded-full inline-block"></span>
+            {localNotes?.title ||
+              (cityName
+                ? `Buying tips in ${cityName}`
+                : "How to buy on Reecomm")}
+          </h2>
+          <div className="space-y-3">
+            {noteParagraphs.map((p, idx) => (
+              <p
+                key={`local-note-${idx}`}
+                className="text-sm text-primary/80 leading-relaxed font-medium"
+              >
+                {p}
+              </p>
+            ))}
+          </div>
         </div>
       )}
 

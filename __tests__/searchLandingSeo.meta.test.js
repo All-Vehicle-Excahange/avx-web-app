@@ -1,6 +1,8 @@
 import {
   buildSearchLandingSeo,
   buildSearchItemListSchema,
+  buildCityBuyingNotes,
+  MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
 
 describe("buildSearchLandingSeo brand×city", () => {
@@ -24,6 +26,21 @@ describe("buildSearchLandingSeo brand×city", () => {
     expect(seo.title).toMatch(/11 Used Toyota Cars In Ahmedabad/i);
     expect(seo.description.toLowerCase()).toContain("starting from");
     expect(seo.description).toMatch(/11 used toyota cars in ahmedabad/i);
+  });
+});
+
+describe("index and city notes", () => {
+  test("MIN_INDEXABLE_LISTINGS is 3", () => {
+    expect(MIN_INDEXABLE_LISTINGS).toBe(3);
+  });
+
+  test("Ahmedabad notes are distinct from Palanpur", () => {
+    const a = buildCityBuyingNotes("Ahmedabad");
+    const p = buildCityBuyingNotes("Palanpur");
+    expect(a?.paragraphs?.[0]).toBeTruthy();
+    expect(p?.paragraphs?.[0]).toBeTruthy();
+    expect(a.paragraphs[0]).not.toEqual(p.paragraphs[0]);
+    expect(a.title.toLowerCase()).toContain("ahmedabad");
   });
 });
 

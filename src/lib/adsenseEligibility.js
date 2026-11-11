@@ -1,5 +1,5 @@
 /**
- * AdSense eligibility — monetize inventory pages only (AdSense low-value policy).
+ * AdSense eligibility — monetize inventory-backed pages only (low-value policy).
  * No UI: callers pass `enabled` into AdSenseAd / skip the loader.
  */
 
@@ -8,8 +8,14 @@ export const ADSENSE_LOADER_PREFIXES = [
   "/",
   "/search",
   "/vehicle/details",
-  "/auto-consultant",
 ];
+
+/**
+ * Minimum live listings before search pages may request AdSense units.
+ * Higher than MIN_INDEXABLE_LISTINGS so thin stocked pages stay indexable
+ * without monetizing low-value inventory.
+ */
+export const MIN_ADSENSE_LISTINGS = 5;
 
 /**
  * Whether the current pathname may load adsbygoogle.js.
@@ -19,18 +25,19 @@ export function isAdSenseLoaderPath(pathname = "") {
   const path = String(pathname || "").split("?")[0] || "";
   if (path === "/" || path === "") return true;
   return ADSENSE_LOADER_PREFIXES.some(
-    (prefix) => prefix !== "/" && (path === prefix || path.startsWith(`${prefix}/`))
+    (prefix) =>
+      prefix !== "/" && (path === prefix || path.startsWith(`${prefix}/`)),
   );
 }
 
 /**
  * Search landing eligibility from SSR SEO props.
- * Empty / noindex landings must not show AdSense units.
+ * Empty / noindex / low-inventory landings must not show AdSense units.
  */
 export function isSearchLandingAdEligible({
   noindex = false,
   totalCount = 0,
-  minListings = 1,
+  minListings = MIN_ADSENSE_LISTINGS,
 } = {}) {
   if (noindex) return false;
   const n = Number(totalCount);

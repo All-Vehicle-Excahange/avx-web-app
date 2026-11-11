@@ -114,8 +114,8 @@ export default function SearchWithCard({
   onConsultPayloadChange,
   onLoadingChange,
   initialFilters = {},
-  /** When false, no AdSense rail (empty/noindex landings). Default true for /search index. */
-  adsEnabled = true,
+  /** When false, no AdSense rail (empty/noindex/low-inventory landings). Default off. */
+  adsEnabled = false,
 }) {
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
