@@ -7,6 +7,7 @@
 import { generateSeoSlug } from "./seo.js";
 import { resolveSearchSlugRedirect } from "./searchLandingSeo.js";
 import { MAKER_NAME_MAPPING } from "../data/makers.js";
+import { findModelFamily } from "../data/modelFamilies.js";
 
 export const TWO_WHEELER_MAKERS = {
   15005: "Bajaj",
@@ -339,18 +340,45 @@ export function parseSearchIntent(queryStr) {
     }
   }
 
-  // 5. Model
+  // 5. Model & Family Detection
   let modelName = null;
   let modelSlug = null;
-  const modelKeys = Object.keys(MODEL_CANONICAL_SLUGS).sort((a, b) => b.length - a.length);
-  for (const mKey of modelKeys) {
-    if (new RegExp(`\\b${mKey}\\b`, "i").test(cleanNoUsed)) {
-      modelSlug = MODEL_CANONICAL_SLUGS[mKey];
-      modelName = mKey
-        .split(" ")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" ");
-      break;
+
+  // First check MODEL_FAMILIES (e.g. creta, thar, scorpio, thar-roxx, grand-i10)
+  const matchedFamily = findModelFamily(cleanNoUsed) || findModelFamily(clean);
+  if (matchedFamily) {
+    modelName = matchedFamily.familyName;
+    modelSlug = matchedFamily.key;
+    if (!brandName) {
+      brandName = matchedFamily.brandName;
+      brandSlug = matchedFamily.brandName.toLowerCase().replace(/[\s-]+/g, "-");
+    }
+  }
+
+  // Fallback to MODEL_CANONICAL_SLUGS if not found in families
+  if (!modelName) {
+    const modelKeys = Object.keys(MODEL_CANONICAL_SLUGS).sort((a, b) => b.length - a.length);
+    for (const mKey of modelKeys) {
+      if (new RegExp(`\\b${mKey}\\b`, "i").test(cleanNoUsed)) {
+        modelSlug = MODEL_CANONICAL_SLUGS[mKey];
+        modelName = mKey
+          .split(" ")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(" ");
+
+        // Auto-resolve brand if missing from modelSlug prefix
+        if (!brandName && modelSlug) {
+          for (const [, bName] of Object.entries(ALL_MAKERS)) {
+            const bSlug = bName.toLowerCase().replace(/\s+/g, "-");
+            if (modelSlug.startsWith(`${bSlug}-`)) {
+              brandName = bName;
+              brandSlug = bSlug;
+              break;
+            }
+          }
+        }
+        break;
+      }
     }
   }
 

@@ -480,7 +480,7 @@ export default function SearchHeader({
                 </button>
               ) : (
                 <Link
-                  href="/search"
+                  href={isTwoWheeler ? "/search/buy-used-two-wheelers" : "/search/buy-used-cars"}
                   onClick={() => setShowFilters(false)}
                   className="text-xs font-semibold underline text-primary/80 hover:text-primary transition-colors cursor-pointer ml-1"
                 >

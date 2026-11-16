@@ -1703,7 +1703,7 @@ export default function SearchWithCard({
           }));
           setStates(mapped);
 
-          const targetState = selectedStateName || initialFilters.stateName || "";
+          const targetState = selectedStateName;
           if (targetState && !selectedStateId) {
             const found = mapped.find(
               (s) =>
@@ -1721,7 +1721,7 @@ export default function SearchWithCard({
     };
 
     fetchStates();
-  }, [selectedStateName, initialFilters.stateName]);
+  }, [selectedStateName]);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -1739,7 +1739,7 @@ export default function SearchWithCard({
           }));
           setCities(mapped);
 
-          const targetCity = selectedCityName || initialFilters.cityName || "";
+          const targetCity = selectedCityName;
           if (targetCity) {
             const found = mapped.find(
               (c) =>
@@ -1760,7 +1760,7 @@ export default function SearchWithCard({
     };
 
     fetchCities();
-  }, [selectedStateId, selectedCityName, initialFilters.cityName]);
+  }, [selectedStateId, selectedCityName]);
 
   useEffect(() => {
     const fetchTowns = async () => {
@@ -2622,12 +2622,21 @@ export default function SearchWithCard({
         (selectedTownName &&
           lower.includes(selectedTownName.toLowerCase()))
       ) {
+        if (initialFilters) {
+          initialFilters.cityId = null;
+          initialFilters.cityName = "";
+          initialFilters.stateId = null;
+          initialFilters.stateName = "";
+          initialFilters.location = "";
+        }
         setSelectedCityId(null);
         setSelectedCityName("");
         setSelectedStateId(null);
         setSelectedStateName("");
         setSelectedTownId(null);
         setSelectedTownName("");
+        setCities([]);
+        setTowns([]);
         return;
       }
     },
@@ -2649,6 +2658,7 @@ export default function SearchWithCard({
       resolvedModelName,
       serverMaxPrice,
       fallbackMax,
+      initialFilters,
     ],
   );
 
@@ -2659,7 +2669,31 @@ export default function SearchWithCard({
       apiBodyType === "TWO_WHEELER"
         ? "/search/buy-used-two-wheelers"
         : "/search/buy-used-cars";
+
+    if (initialFilters) {
+      initialFilters.cityId = null;
+      initialFilters.cityName = "";
+      initialFilters.stateId = null;
+      initialFilters.stateName = "";
+      initialFilters.location = "";
+      initialFilters.makerId = null;
+      initialFilters.brand = "";
+      initialFilters.brandName = "";
+      initialFilters.modelId = null;
+      initialFilters.modelIds = [];
+      initialFilters.model = "";
+      initialFilters.budget = null;
+      initialFilters.fuelType = null;
+      initialFilters.transmission = null;
+      initialFilters.bodyType = null;
+      initialFilters.category = null;
+      initialFilters.vehicleTag = null;
+    }
+
     window.history.replaceState(null, "", defaultUrl);
+    if (router?.replace) {
+      router.replace(defaultUrl, undefined, { shallow: true });
+    }
 
     // Reset brand & model
     setSelectedBrands([]);
@@ -2734,7 +2768,7 @@ export default function SearchWithCard({
 
     // Reload brands
     loadBrands(1, "");
-  }, [apiBodyType, fallbackMax, loadBrands, onFilterChange, serverMaxPrice]);
+  }, [apiBodyType, fallbackMax, initialFilters, loadBrands, onFilterChange, router, serverMaxPrice]);
 
   useEffect(() => {
     if (onRemoveFilterHandlerChange) {
@@ -2839,12 +2873,21 @@ export default function SearchWithCard({
                   variant="transparent"
                   onChange={(val) => {
                     if (!val) {
+                      if (initialFilters) {
+                        initialFilters.stateId = null;
+                        initialFilters.stateName = "";
+                        initialFilters.cityId = null;
+                        initialFilters.cityName = "";
+                        initialFilters.location = "";
+                      }
                       setSelectedStateId(null);
                       setSelectedStateName("");
                       setSelectedCityId(null);
                       setSelectedCityName("");
                       setSelectedTownId(null);
                       setSelectedTownName("");
+                      setCities([]);
+                      setTowns([]);
                       return;
                     }
                     const s = states.find(
@@ -2873,10 +2916,16 @@ export default function SearchWithCard({
                   disabled={!selectedStateId}
                   onChange={(val) => {
                     if (!val) {
+                      if (initialFilters) {
+                        initialFilters.cityId = null;
+                        initialFilters.cityName = "";
+                        initialFilters.location = "";
+                      }
                       setSelectedCityId(null);
                       setSelectedCityName("");
                       setSelectedTownId(null);
                       setSelectedTownName("");
+                      setTowns([]);
                       return;
                     }
                     const c = cities.find(
@@ -3587,12 +3636,21 @@ export default function SearchWithCard({
                     variant="default"
                     onChange={(val) => {
                       if (!val) {
+                        if (initialFilters) {
+                          initialFilters.stateId = null;
+                          initialFilters.stateName = "";
+                          initialFilters.cityId = null;
+                          initialFilters.cityName = "";
+                          initialFilters.location = "";
+                        }
                         setSelectedStateId(null);
                         setSelectedStateName("");
                         setSelectedCityId(null);
                         setSelectedCityName("");
                         setSelectedTownId(null);
                         setSelectedTownName("");
+                        setCities([]);
+                        setTowns([]);
                         return;
                       }
                       const s = states.find(
@@ -3623,10 +3681,16 @@ export default function SearchWithCard({
                     disabled={!selectedStateId}
                     onChange={(val) => {
                       if (!val) {
+                        if (initialFilters) {
+                          initialFilters.cityId = null;
+                          initialFilters.cityName = "";
+                          initialFilters.location = "";
+                        }
                         setSelectedCityId(null);
                         setSelectedCityName("");
                         setSelectedTownId(null);
                         setSelectedTownName("");
+                        setTowns([]);
                         return;
                       }
                       const c = cities.find(

@@ -79,9 +79,15 @@ export function generateSeoSlug({ brandName, modelName, cityName, budget, vehicl
 
   let brandModelPart = "";
   if (brand && model) {
-    brandModelPart = `${brand}-${model}-`;
+    if (model.startsWith(`${brand}-`)) {
+      brandModelPart = `${model}-`;
+    } else {
+      brandModelPart = `${brand}-${model}-`;
+    }
   } else if (brand) {
     brandModelPart = `${brand}-`;
+  } else if (model) {
+    brandModelPart = `${model}-`;
   }
 
   let typePart = "";

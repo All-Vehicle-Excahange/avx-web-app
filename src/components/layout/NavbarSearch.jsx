@@ -50,6 +50,7 @@ import {
   parseSearchIntent,
   resolveIntentUrl,
   synthesizeIntentSuggestions,
+  matchKnownCity,
   ALL_MAKERS,
   KNOWN_CITIES,
   MODEL_CANONICAL_SLUGS,
@@ -839,7 +840,23 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       }
     }
 
-    // 1b. Model Family Match (e.g. Scorpio -> Mahindra + all Scorpio models; i10 -> Hyundai + all i10 models)
+    // 1b. Location / Combined Intent Match (e.g. "creta in palanpur", "used cars in palanpur", "scorpio in ahmedabad")
+    // When a location or composite intent is present, parse it first to preserve both city and brand/model!
+    const detectedCity = matchKnownCity(cleanTerm);
+    if (detectedCity) {
+      const intent = parseSearchIntent(cleanTerm);
+      if (intent.hasIntent) {
+        const targetUrl = resolveIntentUrl(intent);
+        if (targetUrl) {
+          router.push(targetUrl);
+          closeDropdown();
+          setIsSearching(false);
+          return;
+        }
+      }
+    }
+
+    // 1c. Model Family Match (e.g. Scorpio -> Mahindra + all Scorpio models; i10 -> Hyundai + all i10 models)
     const matchedFamily = findModelFamily(cleanTerm);
     if (matchedFamily?.targetUrl) {
       router.push(matchedFamily.targetUrl);
@@ -848,26 +865,26 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
       return;
     }
 
-    // 2. Check if an existing suggestion directly matches this search term
-    if (flatSuggestionItems.length > 0) {
-      const directSuggestion = flatSuggestionItems.find((item) => {
-        const title = (item.label || item.title || "").toLowerCase();
-        return title === cleanTerm || title.includes(cleanTerm) || cleanTerm.includes(title);
-      });
-      if (directSuggestion?.link) {
-        router.push(directSuggestion.link);
+    // 2. Search Intent Detection & SEO Canonical Routing (budget, fuel, vehicle type, etc.)
+    const intent = parseSearchIntent(cleanTerm);
+    if (intent.hasIntent) {
+      const targetUrl = resolveIntentUrl(intent);
+      if (targetUrl) {
+        router.push(targetUrl);
         closeDropdown();
         setIsSearching(false);
         return;
       }
     }
 
-    // 3. Search Intent Detection & SEO Canonical Routing
-    const intent = parseSearchIntent(cleanTerm);
-    if (intent.hasIntent) {
-      const targetUrl = resolveIntentUrl(intent);
-      if (targetUrl) {
-        router.push(targetUrl);
+    // 3. Check if an existing suggestion directly matches this search term
+    if (flatSuggestionItems.length > 0) {
+      const directSuggestion = flatSuggestionItems.find((item) => {
+        const title = (item.label || item.title || "").toLowerCase().trim();
+        return title === cleanTerm;
+      });
+      if (directSuggestion?.link) {
+        router.push(directSuggestion.link);
         closeDropdown();
         setIsSearching(false);
         return;
