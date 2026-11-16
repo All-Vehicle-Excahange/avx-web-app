@@ -40,6 +40,7 @@ import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service"
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
 import { generateSeoSlug } from "@/lib/seo";
 import { trackSearchResults } from "@/lib/gtag";
+import { detectFamilyFromSelection } from "@/data/modelFamilies";
 import {
   setPreferredLocation,
   trackFilterApplied,
@@ -187,7 +188,13 @@ export default function SearchWithCard({
       brandParam = rawBrand;
     }
   }
-  const modelIdParam = searchParams.get("modelId") || initialFilters.modelId;
+  const modelIdParam =
+    searchParams.get("modelIds") ||
+    searchParams.get("modelId") ||
+    (Array.isArray(initialFilters.modelIds)
+      ? initialFilters.modelIds.join(",")
+      : initialFilters.modelIds) ||
+    initialFilters.modelId;
   const modelParam = searchParams.get("model") || initialFilters.model;
   const variantIdParam =
     searchParams.get("variantId") || initialFilters.variantId;
@@ -287,8 +294,28 @@ export default function SearchWithCard({
   }, [brands, selectedBrands]);
 
   // ── Model states ──
-  const [models, setModels] = useState([]);
+  const [models, setModels] = useState(() => {
+    if (Array.isArray(initialFilters.modelItems) && initialFilters.modelItems.length > 0) {
+      return initialFilters.modelItems;
+    }
+    return [];
+  });
   const brandModelsCacheRef = useRef({});
+
+  // Seed model cache if initialFilters has modelItems
+  useEffect(() => {
+    if (Array.isArray(initialFilters.modelItems) && initialFilters.modelItems.length > 0) {
+      const bId = String(initialFilters.makerId || "");
+      if (bId) {
+        brandModelsCacheRef.current[bId] = initialFilters.modelItems;
+      }
+      setModels((prev) => {
+        const seen = new Set(prev.map((m) => String(m.value)));
+        const toAdd = initialFilters.modelItems.filter((m) => !seen.has(String(m.value)));
+        return toAdd.length > 0 ? [...toAdd, ...prev] : prev;
+      });
+    }
+  }, [initialFilters.modelItems, initialFilters.makerId]);
   const handleModelsByBrandLoaded = useCallback((byBrand) => {
     if (byBrand && typeof byBrand === "object") {
       Object.entries(byBrand).forEach(([bId, bModels]) => {
@@ -445,6 +472,7 @@ export default function SearchWithCard({
     initialFilters.makerId !== prevInitialFilters.makerId ||
     initialFilters.brandName !== prevInitialFilters.brandName ||
     initialFilters.modelId !== prevInitialFilters.modelId ||
+    JSON.stringify(initialFilters.modelIds) !== JSON.stringify(prevInitialFilters.modelIds) ||
     initialFilters.cityId !== prevInitialFilters.cityId ||
     initialFilters.stateId !== prevInitialFilters.stateId ||
     initialFilters.stateName !== prevInitialFilters.stateName ||
@@ -477,7 +505,14 @@ export default function SearchWithCard({
     setSelectedBrands(activeMakerId ? [String(activeMakerId)] : []);
 
     // Model
-    setSelectedModels(initialFilters.modelId ? [String(initialFilters.modelId)] : []);
+    const activeModelIds = initialFilters.modelIds
+      ? (Array.isArray(initialFilters.modelIds)
+          ? initialFilters.modelIds.map(String)
+          : String(initialFilters.modelIds).split(",").map((s) => s.trim()).filter(Boolean))
+      : initialFilters.modelId
+        ? String(initialFilters.modelId).split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
+    setSelectedModels(activeModelIds);
 
     // Body Type
     setSelectedBodyType(
@@ -1036,20 +1071,31 @@ export default function SearchWithCard({
   ]);
 
   const resolvedModelName = useMemo(() => {
-    // Only resolve a single model if exactly 1 brand and exactly 1 model are selected
-    if (selectedBrands.length !== 1 || selectedModels.length !== 1) return "";
-    const modelId = selectedModels[0];
-    const found = models.find((m) => String(m.value) === String(modelId));
-    if (found) return found.label;
+    if (selectedBrands.length !== 1) return "";
 
-    if (
-      initialFilters.modelId &&
-      String(initialFilters.modelId) === String(modelId)
-    ) {
-      return initialFilters.model || "";
+    // If multiple models are selected, check if they all belong to a model family
+    if (selectedModels.length > 1) {
+      const family = detectFamilyFromSelection(selectedModels, selectedBrands[0]);
+      if (family) {
+        return family.key || family.familyName || "";
+      }
+      return "";
+    }
+
+    if (selectedModels.length === 1) {
+      const modelId = selectedModels[0];
+      const found = models.find((m) => String(m.value) === String(modelId));
+      if (found) return found.label;
+
+      if (
+        initialFilters.modelId &&
+        String(initialFilters.modelId) === String(modelId)
+      ) {
+        return initialFilters.model || "";
+      }
     }
     return "";
-  }, [selectedBrands.length, selectedModels, models, initialFilters.model, initialFilters.modelId]);
+  }, [selectedBrands, selectedModels, models, initialFilters.model, initialFilters.modelId]);
 
   const mappedVehicleTypeForAds = useMemo(() => {
     if (!vehicleType) return "FOUR_WHEELER";
@@ -1375,12 +1421,18 @@ export default function SearchWithCard({
       setSelectedBrands([String(qBrand)]);
     }
 
-    const activeModelId = modelIdParam || initialFilters.modelId;
-    const qModel = searchParams.get("model") || searchParams.get("modelId");
+    const activeModelId = modelIdParam || initialFilters.modelIds || initialFilters.modelId;
+    const qModel = searchParams.get("model") || searchParams.get("modelId") || searchParams.get("modelIds");
     if (qModel?.toLowerCase() === "all") {
       setSelectedModels([]);
     } else if (activeModelId) {
-      setSelectedModels([String(activeModelId)]);
+      const parsedIds = Array.isArray(activeModelId)
+        ? activeModelId.map(String)
+        : String(activeModelId)
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
+      setSelectedModels(parsedIds);
     }
 
     const qBodyType = searchParams.get("bodyType") || initialFilters.bodyType;
@@ -2332,6 +2384,7 @@ export default function SearchWithCard({
     const modelLabels = selectedModels.map((mId) => {
       const found = models.find((m) => String(m.value) === String(mId));
       if (found) return found.label;
+      if (initialFilters?.modelNamesMap?.[mId]) return initialFilters.modelNamesMap[mId];
       return (String(mId) === String(initialFilters?.modelId) ? initialFilters?.model : "") || String(mId);
     }).filter(Boolean);
 

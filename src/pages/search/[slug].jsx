@@ -35,6 +35,10 @@ import {
 import { resolveSlugQueryRedirect } from "@/lib/seo";
 import { getClientType } from "@/lib/clientType";
 import { getCdnImageUrl } from "@/lib/cdnImage";
+import {
+  findModelFamily,
+  findModelFamilyBySlugSegment,
+} from "@/data/modelFamilies";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
@@ -723,7 +727,72 @@ export async function getServerSideProps(context) {
         }
 
         let hasInvalidModelSegment = false;
-        if (modelName) {
+        const matchedFamily =
+          findModelFamilyBySlugSegment(details) ||
+          findModelFamily(modelName) ||
+          findModelFamily(details);
+
+        if (matchedFamily && String(matchedFamily.makerId) === String(id)) {
+          const familyModelIds = matchedFamily.models.map((m) => Number(m.modelId));
+          const familyItems = matchedFamily.models.map((m) => ({
+            value: String(m.modelId),
+            label: m.modelName,
+            makerId: String(id),
+          }));
+          const familyNamesMap = {};
+          matchedFamily.models.forEach((m) => {
+            familyNamesMap[String(m.modelId)] = m.modelName;
+          });
+
+          // Also check API dynamically to pick up any additional models in this family
+          try {
+            const bodyTypeParam =
+              initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
+            const rawModelName = modelName.replace(/-/g, " ");
+            const modelRes = await fetch(
+              `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&makerId=${id}&bodyType=${bodyTypeParam}`,
+              {
+                headers: {
+                  "X-Client-Type": clientType,
+                },
+              }
+            );
+            if (modelRes.ok) {
+              const modelJson = await modelRes.json();
+              if (Array.isArray(modelJson?.data)) {
+                modelJson.data.forEach((m) => {
+                  const mId = m.modelId || m.model_id;
+                  const mName = m.modelName || m.modelDisplayName || m.model_name;
+                  if (mId && mName) {
+                    const normM = normalize(mName);
+                    const normFamily = normalize(matchedFamily.key);
+                    if (normM.includes(normFamily) || normFamily.includes(normM)) {
+                      familyNamesMap[String(mId)] = mName;
+                      if (!familyModelIds.includes(Number(mId))) {
+                        familyModelIds.push(Number(mId));
+                        familyItems.push({
+                          value: String(mId),
+                          label: mName,
+                          makerId: String(id),
+                        });
+                      }
+                    }
+                  }
+                });
+              }
+            }
+          } catch (e) {
+            console.warn("Dynamic family model lookup failed, using config:", e);
+          }
+
+          initialFilters.modelId = familyModelIds.join(",");
+          initialFilters.modelIds = familyModelIds;
+          initialFilters.model = matchedFamily.familyName;
+          initialFilters.modelFamily = matchedFamily.key;
+          initialFilters.modelItems = familyItems;
+          initialFilters.modelNamesMap = familyNamesMap;
+          modelName = matchedFamily.familyName;
+        } else if (modelName) {
           const rawModelName = modelName.replace(/-/g, " ");
           try {
             const bodyTypeParam =
@@ -786,47 +855,72 @@ export async function getServerSideProps(context) {
         }
       }
     } else {
-      const rawModelName = details.replace(/-/g, " ");
-      try {
-        const bodyTypeParam =
-          initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
-        const modelRes = await fetch(
-          `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&bodyType=${bodyTypeParam}`,
-          {
-            headers: {
-              "X-Client-Type": clientType,
-            },
-          }
-        );
-        if (modelRes.ok) {
-          const modelJson = await modelRes.json();
-          const foundModel = modelJson?.data?.find((m) => {
-            const n =
-              m.modelName || m.modelDisplayName || m.model_name || "";
-            return (
-              normalize(n) === normalize(rawModelName)
-            );
-          });
-          if (foundModel) {
-            initialFilters.modelId =
-              foundModel.modelId || foundModel.model_id;
-            initialFilters.model =
-              foundModel.modelName ||
-              foundModel.modelDisplayName ||
-              foundModel.model_name;
-            modelName = initialFilters.model;
-            const mId = foundModel.makerId || foundModel.maker_id;
-            if (mId) {
-              initialFilters.makerId = mId;
-              if (allMakers[mId]) {
-                initialFilters.brandName = allMakers[mId];
-                brandName = allMakers[mId];
+      const matchedFamily = findModelFamily(details);
+      if (matchedFamily) {
+        const familyModelIds = matchedFamily.models.map((m) => Number(m.modelId));
+        const familyItems = matchedFamily.models.map((m) => ({
+          value: String(m.modelId),
+          label: m.modelName,
+          makerId: String(matchedFamily.makerId),
+        }));
+        const familyNamesMap = {};
+        matchedFamily.models.forEach((m) => {
+          familyNamesMap[String(m.modelId)] = m.modelName;
+        });
+
+        initialFilters.makerId = matchedFamily.makerId;
+        initialFilters.brandName = matchedFamily.brandName;
+        brandName = matchedFamily.brandName;
+        initialFilters.modelId = familyModelIds.join(",");
+        initialFilters.modelIds = familyModelIds;
+        initialFilters.model = matchedFamily.familyName;
+        initialFilters.modelFamily = matchedFamily.key;
+        initialFilters.modelItems = familyItems;
+        initialFilters.modelNamesMap = familyNamesMap;
+        modelName = matchedFamily.familyName;
+      } else {
+        const rawModelName = details.replace(/-/g, " ");
+        try {
+          const bodyTypeParam =
+            initialFilters.vehicleType === "two-wheelers" ? "TWO_WHEELER" : "";
+          const modelRes = await fetch(
+            `${nodeApiUrl}/search/models?search=${encodeURIComponent(rawModelName)}&bodyType=${bodyTypeParam}`,
+            {
+              headers: {
+                "X-Client-Type": clientType,
+              },
+            }
+          );
+          if (modelRes.ok) {
+            const modelJson = await modelRes.json();
+            const foundModel = modelJson?.data?.find((m) => {
+              const n =
+                m.modelName || m.modelDisplayName || m.model_name || "";
+              return (
+                normalize(n) === normalize(rawModelName)
+              );
+            });
+            if (foundModel) {
+              initialFilters.modelId =
+                foundModel.modelId || foundModel.model_id;
+              initialFilters.model =
+                foundModel.modelName ||
+                foundModel.modelDisplayName ||
+                foundModel.model_name;
+              modelName = initialFilters.model;
+              const mId = foundModel.makerId || foundModel.maker_id;
+              if (mId) {
+                initialFilters.makerId = mId;
+                if (allMakers[mId]) {
+                  initialFilters.brandName = allMakers[mId];
+                  brandName = allMakers[mId];
+                }
               }
             }
           }
+        } catch (e) {
+          console.error("Model resolution failed:", e);
         }
-      } catch (e) {
-        console.error("Model resolution failed:", e);
       }
     }
   }
@@ -864,11 +958,15 @@ export async function getServerSideProps(context) {
     const body = { avxInspected: false };
     if (initialFilters.cityId) body.cityId = Number(initialFilters.cityId);
     if (initialFilters.stateId) body.stateId = Number(initialFilters.stateId);
-    if (initialFilters.makerId) {
+    if (initialFilters.modelIds && Array.isArray(initialFilters.modelIds) && initialFilters.modelIds.length > 0) {
+      body.modelIds = initialFilters.modelIds.map(Number);
+    } else if (initialFilters.modelId) {
+      body.modelIds = String(initialFilters.modelId)
+        .split(",")
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
+    } else if (initialFilters.makerId) {
       body.makerIds = [Number(initialFilters.makerId)];
-    }
-    if (initialFilters.modelId) {
-      body.modelIds = [Number(initialFilters.modelId)];
     }
     if (initialFilters.category || initialFilters.vehicleTag) {
       body.vehicleTag = String(initialFilters.category || initialFilters.vehicleTag);
