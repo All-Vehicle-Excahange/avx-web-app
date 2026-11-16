@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import { ArrowUpDown, ChevronDown, X, MapPin } from "lucide-react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
+import { findModelFamily } from "@/data/modelFamilies";
 
 /* ================= SORT OPTIONS ================= */
 const sortOptions = [
@@ -72,7 +73,22 @@ export default function SearchHeader({
         if (activeModels.length === 1 && !seoH1.toLowerCase().includes(activeModels[0].toLowerCase())) {
           isStale = true;
         } else if (activeModels.length > 1) {
-          isStale = true;
+          // Check if all active models belong to the family matching seoH1
+          const family = findModelFamily(seoH1);
+          if (
+            family &&
+            family.models.some((m) =>
+              activeModels.some(
+                (am) =>
+                  am.toLowerCase().includes(m.modelName.toLowerCase()) ||
+                  m.modelName.toLowerCase().includes(am.toLowerCase()),
+              ),
+            )
+          ) {
+            isStale = false;
+          } else {
+            isStale = true;
+          }
         }
       }
 
@@ -82,6 +98,13 @@ export default function SearchHeader({
 
       if (activeModels.length === 1) {
         return `Used ${activeBrands[0]} ${activeModels[0]} ${defaultSuffix}`;
+      }
+
+      if (activeModels.length > 1) {
+        const family = findModelFamily(activeModels[0]);
+        if (family) {
+          return `Used ${activeBrands[0]} ${family.familyName} ${defaultSuffix}`;
+        }
       }
 
       return `Used ${activeBrands[0]} ${defaultSuffix}`;

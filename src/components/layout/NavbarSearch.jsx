@@ -45,6 +45,7 @@ import { trackSearchResults } from "@/lib/gtag";
 import { trackSearchSubmitted } from "@/lib/amplitude";
 import { resolveSearchSlugRedirect } from "@/lib/searchLandingSeo";
 import { useUIStore } from "@/stores/useUIStore";
+import { findModelFamily } from "@/data/modelFamilies";
 import {
   parseSearchIntent,
   resolveIntentUrl,
@@ -836,6 +837,15 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
         setIsSearching(false);
         return;
       }
+    }
+
+    // 1b. Model Family Match (e.g. Scorpio -> Mahindra + all Scorpio models; i10 -> Hyundai + all i10 models)
+    const matchedFamily = findModelFamily(cleanTerm);
+    if (matchedFamily?.targetUrl) {
+      router.push(matchedFamily.targetUrl);
+      closeDropdown();
+      setIsSearching(false);
+      return;
     }
 
     // 2. Check if an existing suggestion directly matches this search term
