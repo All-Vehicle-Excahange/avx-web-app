@@ -152,4 +152,69 @@ describe("Search Intent & SEO URL Resolution", () => {
       expect(resolveIntentUrl(intent)).toBe("/search/buy-used-cars-under-10-lakhs");
     });
   });
+
+  describe("Model + Location Search Resolution", () => {
+    test("'creta in palan' auto-detects Hyundai brand and Palanpur city", () => {
+      const intent = parseSearchIntent("creta in palan");
+      expect(intent.brandName).toBe("Hyundai");
+      expect(intent.modelName).toBe("Creta");
+      expect(intent.cityName).toBe("Palanpur");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-hyundai-creta-cars-palanpur");
+
+      const suggestions = synthesizeIntentSuggestions(intent);
+      expect(suggestions[0].label).toBe("Used Hyundai Creta in Palanpur");
+      expect(suggestions[0].link).toBe("/search/buy-used-hyundai-creta-cars-palanpur");
+    });
+
+    test("'creta in palanpur' resolves to Used Hyundai Creta in Palanpur", () => {
+      const intent = parseSearchIntent("creta in palanpur");
+      expect(intent.brandName).toBe("Hyundai");
+      expect(intent.modelName).toBe("Creta");
+      expect(intent.cityName).toBe("Palanpur");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-hyundai-creta-cars-palanpur");
+    });
+
+    test("'used car in palanpur' resolves to /search/buy-used-cars-palanpur", () => {
+      const intent = parseSearchIntent("used car in palanpur");
+      expect(intent.cityName).toBe("Palanpur");
+      expect(intent.vehicleType).toBe("cars");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-cars-palanpur");
+    });
+
+    test("'scorpio in ahmedabad' auto-detects Mahindra and Ahmedabad", () => {
+      const intent = parseSearchIntent("scorpio in ahmedabad");
+      expect(intent.brandName).toBe("Mahindra");
+      expect(intent.modelName).toBe("Scorpio");
+      expect(intent.cityName).toBe("Ahmedabad");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-mahindra-scorpio-cars-ahmedabad");
+    });
+
+    test("'thar in ahmedabad' auto-detects Mahindra Thar and Ahmedabad", () => {
+      const intent = parseSearchIntent("thar in ahmedabad");
+      expect(intent.brandName).toBe("Mahindra");
+      expect(intent.modelName).toBe("Thar");
+      expect(intent.cityName).toBe("Ahmedabad");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-mahindra-thar-cars-ahmedabad");
+    });
+
+    test("'thar roxx in ahmedabad' auto-detects Mahindra Thar Roxx and Ahmedabad", () => {
+      const intent = parseSearchIntent("thar roxx in ahmedabad");
+      expect(intent.brandName).toBe("Mahindra");
+      expect(intent.modelName).toBe("Thar Roxx");
+      expect(intent.cityName).toBe("Ahmedabad");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-mahindra-thar-roxx-cars-ahmedabad");
+    });
+  });
 });
