@@ -3,6 +3,7 @@ import path from "path";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
 import searchSuggestions from "@/data/searchSuggestions.json";
 import { getSeoVehicles, getSeoVehicleCount, getSeoConsultations, getSeoConsultationCount } from "@/services/seo.service";
+import { getCdnImageUrl } from "@/lib/cdnImage";
 
 const BASE_URL = "https://www.reecomm.com";
 
@@ -130,21 +131,26 @@ export default async function handler(req, res) {
       "bihar",
     ];
 
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-
-    const addedLinks = new Set();
+    /** Buffer URLs so inventory pass can attach first listing image for Google Images. */
+    const urlEntries = new Map();
 
     function addUrl(locPath, priority = 0.7, changefreq = "weekly") {
-      if (!addedLinks.has(locPath)) {
-        addedLinks.add(locPath);
-        xml += `  <url>\n`;
-        xml += `    <loc>${BASE_URL}${locPath}</loc>\n`;
-        xml += `    <lastmod>${now}</lastmod>\n`;
-        xml += `    <changefreq>${changefreq}</changefreq>\n`;
-        xml += `    <priority>${priority}</priority>\n`;
-        xml += `  </url>\n`;
+      if (!urlEntries.has(locPath)) {
+        urlEntries.set(locPath, { priority, changefreq, image: null, imageTitle: "" });
+        return;
       }
+      const existing = urlEntries.get(locPath);
+      if (priority > existing.priority) existing.priority = priority;
+      if (changefreq === "daily") existing.changefreq = "daily";
+    }
+
+    function attachLandingImage(locPath, imageUrl, imageTitle = "") {
+      const entry = urlEntries.get(locPath);
+      if (!entry || entry.image || !imageUrl) return;
+      const cdn =
+        getCdnImageUrl(imageUrl, { preset: "detail" }) || imageUrl;
+      entry.image = cdn.startsWith("/") ? `${BASE_URL}${cdn}` : cdn;
+      entry.imageTitle = imageTitle || "";
     }
 
     // 1. Brand-only URLs (hubs — stay indexable even if thin)
@@ -335,37 +341,67 @@ export default async function handler(req, res) {
           if (citySlug) stockedCities.add(citySlug);
           if (stateSlug) stockedStates.add(stateSlug);
 
+          const rawImg =
+            vehicle.thumbnailUrl ||
+            vehicle.imageUrl ||
+            (Array.isArray(vehicle.imageUrls) ? vehicle.imageUrls[0] : null) ||
+            null;
+          const imageTitle = [
+            vehicle.yearOfMfg,
+            vehicle.makerName,
+            vehicle.modelName,
+            "| Reecomm",
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
+
           // National brand/model hubs from live stock (always useful)
-          addUrl(`/search/buy-used-${brandSlug}-${kind}`, 0.75, "daily");
+          const brandHub = `/search/buy-used-${brandSlug}-${kind}`;
+          addUrl(brandHub, 0.75, "daily");
+          attachLandingImage(brandHub, rawImg, imageTitle);
           if (modelSlug) {
-            addUrl(`/search/buy-used-${brandSlug}-${modelSlug}-${kind}`, 0.8, "daily");
+            const modelHub = `/search/buy-used-${brandSlug}-${modelSlug}-${kind}`;
+            addUrl(modelHub, 0.8, "daily");
+            attachLandingImage(modelHub, rawImg, imageTitle);
           }
 
           if (citySlug) {
             const brandCity = `buy-used-${brandSlug}-${kind}-${citySlug}`;
             const cityHub = `buy-used-${kind === "two-wheelers" ? "two-wheelers" : "cars"}-${citySlug}`;
             if (canEmitGeo(brandCity, brandSlug, kind)) {
-              addUrl(`/search/${brandCity}`, 0.75, "weekly");
+              const path = `/search/${brandCity}`;
+              addUrl(path, 0.75, "weekly");
+              attachLandingImage(path, rawImg, imageTitle);
             }
             if (canEmitGeo(cityHub, brandSlug, kind)) {
-              addUrl(`/search/${cityHub}`, 0.8, "daily");
+              const path = `/search/${cityHub}`;
+              addUrl(path, 0.8, "daily");
+              attachLandingImage(path, rawImg, imageTitle);
             }
             if (modelSlug) {
               const modelCity = `buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`;
               if (canEmitGeo(modelCity, brandSlug, kind)) {
-                addUrl(`/search/${modelCity}`, 0.8, "daily");
+                const path = `/search/${modelCity}`;
+                addUrl(path, 0.8, "daily");
+                attachLandingImage(path, rawImg, imageTitle);
               }
             }
           }
           if (stateSlug) {
             const brandState = `buy-used-${brandSlug}-${kind}-${stateSlug}`;
             if (canEmitGeo(brandState, brandSlug, kind)) {
-              addUrl(`/search/${brandState}`, 0.65, "weekly");
+              const path = `/search/${brandState}`;
+              addUrl(path, 0.65, "weekly");
+              attachLandingImage(path, rawImg, imageTitle);
             }
             if (modelSlug) {
               const modelState = `buy-used-${brandSlug}-${modelSlug}-${kind}-${stateSlug}`;
               if (canEmitGeo(modelState, brandSlug, kind)) {
-                addUrl(`/search/${modelState}`, 0.7, "weekly");
+                const path = `/search/${modelState}`;
+                addUrl(path, 0.7, "weekly");
+                attachLandingImage(path, rawImg, imageTitle);
               }
             }
           }
@@ -388,6 +424,28 @@ export default async function handler(req, res) {
       const bikeCity = `buy-used-two-wheelers-${city}`;
       if (slugAllowed(carCity)) addUrl(`/search/${carCity}`, 0.8, "daily");
       if (slugAllowed(bikeCity)) addUrl(`/search/${bikeCity}`, 0.75, "weekly");
+    }
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+    xml += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+
+    for (const [locPath, meta] of urlEntries) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${BASE_URL}${locPath}</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += `    <changefreq>${meta.changefreq}</changefreq>\n`;
+      xml += `    <priority>${meta.priority}</priority>\n`;
+      if (meta.image) {
+        xml += `    <image:image>\n`;
+        xml += `      <image:loc>${escapeXml(meta.image)}</image:loc>\n`;
+        if (meta.imageTitle) {
+          xml += `      <image:title>${escapeXml(meta.imageTitle)}</image:title>\n`;
+          xml += `      <image:caption>${escapeXml(meta.imageTitle)}</image:caption>\n`;
+        }
+        xml += `    </image:image>\n`;
+      }
+      xml += `  </url>\n`;
     }
 
     xml += `</urlset>`;

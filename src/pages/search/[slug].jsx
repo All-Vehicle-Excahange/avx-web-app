@@ -102,8 +102,7 @@ function SlugSearchPage({ seo, initialFilters }) {
           }
         />
         <meta key="og:image" property="og:image" content={ogImage} />
-        <meta key="og:image:width" property="og:image:width" content="1200" />
-        <meta key="og:image:height" property="og:image:height" content="630" />
+        {/* Width/height omitted — CDN detail preset (~1080w) or logo; avoid false 1200×630 claims */}
         <meta key="og:image:alt" property="og:image:alt" content={ogImageAlt} />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -1096,12 +1095,19 @@ export async function getServerSideProps(context) {
   );
   const firstVehicleRaw =
     firstWithImage?.thumbnailUrl || firstWithImage?.imageUrl || null;
+  // Larger OG asset for social / SERP thumbs (detail ~1080w vs card 400w)
   let firstVehicleImage = firstVehicleRaw
-    ? getCdnImageUrl(firstVehicleRaw, { preset: "card" }) || firstVehicleRaw
+    ? getCdnImageUrl(firstVehicleRaw, { preset: "detail" }) || firstVehicleRaw
     : null;
   if (firstVehicleImage && firstVehicleImage.startsWith("/")) {
     firstVehicleImage = `https://www.reecomm.com${firstVehicleImage}`;
   }
+  const listingAltBase = firstWithImage
+    ? formatVehicleListingLine(firstWithImage)
+    : "";
+  const ogImageAlt = firstWithImage
+    ? `${listingAltBase}${resolvedCity ? ` in ${resolvedCity}` : ""} | Reecomm`
+    : `${seoBuilt.title}${seoBuilt.title?.includes("Reecomm") ? "" : " | Reecomm"}`;
 
   return {
     props: {
@@ -1123,9 +1129,7 @@ export async function getServerSideProps(context) {
         relatedPlaceLinks: loadPlaceLinks(city, `/search/${slug}`),
         relatedBlogLinks: loadRelatedBlogLinks(slug, city),
         ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",
-        ogImageAlt: firstWithImage
-          ? `${formatVehicleListingLine(firstWithImage)}${resolvedCity ? ` in ${resolvedCity}` : ""}`
-          : seoBuilt.title,
+        ogImageAlt,
         adEligible: isSearchLandingAdEligible({
           noindex,
           totalCount,

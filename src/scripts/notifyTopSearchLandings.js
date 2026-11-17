@@ -16,13 +16,18 @@ const BASE_URL = "https://www.reecomm.com";
 const TOP_LANDINGS = [
   "/search/buy-used-cars",
   "/search/buy-used-two-wheelers",
+  "/search/buy-used-toyota-cars",
+  "/search/buy-used-hyundai-cars",
+  "/search/buy-used-maruti-suzuki-cars",
   // Ahmedabad maker / model / GEO / bikes (P0–P1 sprint)
   "/search/buy-used-cars-ahmedabad",
+  "/search/buy-used-two-wheelers-ahmedabad",
   "/search/buy-used-toyota-cars-ahmedabad",
   "/search/buy-used-toyota-fortuner-cars-ahmedabad",
   "/search/buy-used-maruti-suzuki-ertiga-cars-ahmedabad",
   "/search/buy-used-maruti-suzuki-swift-cars-ahmedabad",
-  "/search/buy-used-two-wheelers-ahmedabad",
+  "/search/buy-used-hyundai-cars-ahmedabad",
+  "/search/buy-used-maruti-suzuki-cars-ahmedabad",
   // Gujarat focus cities
   "/search/buy-used-cars-palanpur",
   "/search/buy-used-cars-siddhpur",

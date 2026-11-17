@@ -32,12 +32,14 @@ export const GUJARAT_FALLBACK_SEARCHES = [
   { label: "Used Cars for Sale", href: "/search/buy-used-cars" },
   { label: "Used Bikes for Sale", href: "/search/buy-used-two-wheelers" },
   { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
+  { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
+  { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
+  { label: "Used Hyundai Cars", href: "/search/buy-used-hyundai-cars" },
+  { label: "Used Maruti Cars", href: "/search/buy-used-maruti-suzuki-cars" },
   { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
   { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
   { label: "Used Cars in Vadodara", href: "/search/buy-used-cars-vadodara" },
   { label: "Used Cars in Rajkot", href: "/search/buy-used-cars-rajkot" },
-  { label: "Used Cars in Visnagar", href: "/search/buy-used-cars-visnagar" },
-  { label: "Used Cars in Siddhpur", href: "/search/buy-used-cars-siddhpur" },
   {
     label: "Used Toyota Cars in Ahmedabad",
     href: "/search/buy-used-toyota-cars-ahmedabad",
@@ -47,8 +49,8 @@ export const GUJARAT_FALLBACK_SEARCHES = [
     href: "/search/buy-used-hyundai-creta-cars-palanpur",
   },
   {
-    label: "Used Bikes in Ahmedabad",
-    href: "/search/buy-used-two-wheelers-ahmedabad",
+    label: "Used Maruti Cars in Ahmedabad",
+    href: "/search/buy-used-maruti-suzuki-cars-ahmedabad",
   },
 ];
 

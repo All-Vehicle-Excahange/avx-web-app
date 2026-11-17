@@ -2,8 +2,30 @@ import {
   buildSearchLandingSeo,
   buildSearchItemListSchema,
   buildCityBuyingNotes,
+  formatInventoryLead,
   MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
+
+describe("formatInventoryLead", () => {
+  test("brand×city lead without Second Hand suffix", () => {
+    expect(
+      formatInventoryLead({
+        count: 11,
+        brand: "Toyota",
+        place: "Ahmedabad",
+      })
+    ).toBe("11 Used Toyota Cars in Ahmedabad");
+  });
+
+  test("brand-only lead without place", () => {
+    expect(
+      formatInventoryLead({
+        count: 24,
+        brand: "Toyota",
+      })
+    ).toBe("24 Used Toyota Cars");
+  });
+});
 
 describe("buildSearchLandingSeo brand×city", () => {
   test("includes count lead and starting-from price in description", () => {
@@ -23,9 +45,40 @@ describe("buildSearchLandingSeo brand×city", () => {
       ],
     });
 
-    expect(seo.title).toMatch(/11 Used Toyota Cars In Ahmedabad/i);
+    expect(seo.title).toBe("11 Used Toyota Cars in Ahmedabad | Reecomm");
     expect(seo.description.toLowerCase()).toContain("starting from");
     expect(seo.description).toMatch(/11 used toyota cars in ahmedabad/i);
+    expect(seo.description.toLowerCase()).toContain("on reecomm");
+  });
+});
+
+describe("buildSearchLandingSeo brand-only and hub", () => {
+  test("brand-only title uses on Reecomm", () => {
+    const seo = buildSearchLandingSeo({
+      brand: "Toyota",
+      vehicleWord: "Cars",
+      totalCount: 24,
+    });
+    expect(seo.title).toBe("24 Used Toyota Cars on Reecomm");
+    expect(seo.description.toLowerCase()).toContain("on reecomm");
+  });
+
+  test("city-only title uses count and pipe Reecomm", () => {
+    const seo = buildSearchLandingSeo({
+      city: "Ahmedabad",
+      vehicleWord: "Cars",
+      totalCount: 40,
+    });
+    expect(seo.title).toBe("40 Used Cars in Ahmedabad | Reecomm");
+  });
+
+  test("hub title uses on Reecomm", () => {
+    const seo = buildSearchLandingSeo({
+      isHub: true,
+      vehicleWord: "Cars",
+      totalCount: 120,
+    });
+    expect(seo.title).toBe("120 Used Cars for Sale on Reecomm");
   });
 });
 

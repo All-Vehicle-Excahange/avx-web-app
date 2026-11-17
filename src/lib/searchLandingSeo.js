@@ -111,7 +111,8 @@ export function searchPhraseName(brand = "", model = "") {
 
 /**
  * SERP document-title lead (Head / og only — not used for visible H1).
- * Full brand names. Example: "12 Used Maruti Suzuki Cars In Palanpur, Second Hand"
+ * Full brand names. Example: "12 Used Maruti Suzuki Cars in Palanpur"
+ * Brand-only titles append "on Reecomm" in buildSearchLandingSeo; city pages use "| Reecomm".
  */
 export function formatInventoryLead({
   count = 0,
@@ -128,9 +129,9 @@ export function formatInventoryLead({
   const subject = modelT
     ? cleanJoin([brandT, modelT])
     : cleanJoin([brandT, unit]);
-  const where = place ? ` In ${place}` : "";
+  const where = place ? ` in ${place}` : "";
   const prefix = n > 0 ? `${n} Used` : "Used";
-  return `${prefix} ${subject}${where}, Second Hand`.replace(/\s+/g, " ").trim();
+  return `${prefix} ${subject}${where}`.replace(/\s+/g, " ").trim();
 }
 
 export function formatOfficialHeading({
@@ -491,17 +492,17 @@ export function buildSearchLandingSeo({
   const isTwoWheeler = vehicleWord === "Two Wheelers";
   const vw = displayVehicleLabel(vehicleWord, isTwoWheeler);
   const vwLower = isTwoWheeler ? "bikes" : (vehicleWord || "Cars").toLowerCase();
-  const countBit = count > 0 ? `${count}+ ` : "";
+  /** Prefer exact count in meta when known; fall back to N+ only as a soft cue. */
+  const countExact = count > 0 ? `${count} ` : "";
+  const countBit = count > 0 ? `${count} ` : "";
 
-  /** Document title only — prefer keeping count + city when shortening. */
+  /** Document title only — city / model pages use "| Reecomm"; keep count + city when shortening. */
   const withBrand = (core) => {
-    let title = `${core} | Reecomm`;
-    if (title.length <= 65) return title;
-    let shortCore = core
+    let shortCore = String(core || "")
       .replace(/, Second Hand$/i, "")
       .replace(/\s+/g, " ")
       .trim();
-    title = `${shortCore} | Reecomm`;
+    let title = `${shortCore} | Reecomm`;
     if (title.length <= 65) return title;
     shortCore = shortCore
       .replace(` ${vw}`, "")
@@ -510,18 +511,34 @@ export function buildSearchLandingSeo({
     return `${shortCore} | Reecomm`;
   };
 
+  /** Brand-only / hub titles: "... on Reecomm" (no pipe suffix). */
+  const withOnReecomm = (core) => {
+    let shortCore = String(core || "")
+      .replace(/\s+on Reecomm$/i, "")
+      .replace(/, Second Hand$/i, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    let title = `${shortCore} on Reecomm`;
+    if (title.length <= 65) return title;
+    shortCore = shortCore
+      .replace(` ${vw}`, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    return `${shortCore} on Reecomm`;
+  };
+
   if (isHub && !brandT && !modelT && !cityT && !typeT && !budgetT) {
     const hubTitle = isTwoWheeler
       ? count > 0
-        ? `${count} Used Bikes For Sale, Second Hand | Reecomm`
-        : "Buy Used Bikes, Second Hand | Reecomm"
+        ? withOnReecomm(`${count} Used Bikes for Sale`)
+        : "Buy Used Bikes on Reecomm"
       : count > 0
-        ? `${count} Used Cars For Sale, Second Hand | Reecomm`
-        : "Buy Used Cars, Second Hand | Reecomm";
+        ? withOnReecomm(`${count} Used Cars for Sale`)
+        : "Buy Used Cars on Reecomm";
     const hubH1 = isTwoWheeler ? "Buy Used Bikes" : "Buy Used Cars";
     const hubDescription = isTwoWheeler
-      ? `Buy second hand bikes on Reecomm. Browse ${countBit}verified two-wheelers with prices, photos, and inspection reports before you buy.`
-      : `Buy second hand cars across India on Reecomm. Browse ${countBit}verified listings with prices, photos, and inspection reports before you buy.`;
+      ? `Browse ${countBit}used bikes on Reecomm. Compare verified two-wheelers with prices, photos, and inspection reports before you buy.`
+      : `Browse ${countBit}used cars across India on Reecomm. Compare verified listings with prices, photos, and inspection reports before you buy.`;
     return {
       title: hubTitle,
       h1: hubH1,
@@ -530,7 +547,7 @@ export function buildSearchLandingSeo({
     };
   }
 
-  // Brand-only (no city) — title/meta only; H1 stays via formatOfficialHeading
+  // Brand-only (no city) — title ends with "on Reecomm"; H1 stays via formatOfficialHeading
   if (brandT && !modelT && !cityT && !typeT && !budgetT) {
     const lead = formatInventoryLead({
       count,
@@ -540,11 +557,11 @@ export function buildSearchLandingSeo({
     const samples = formatSampleClause(sampleVehicles);
     const description = lead
       ? samples
-        ? `${lead}. Includes ${samples}. Compare second hand ${vwLower} photos, prices & inspection on Reecomm.`
-        : `${lead}. Compare second hand ${brandT} ${vwLower} — photos, prices, fuel type & inspection on Reecomm.`
-      : `Browse verified second hand ${brandT} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`;
+        ? `Browse ${countExact}used ${brandT} ${vwLower} on Reecomm. Includes ${samples}. Compare photos, prices & inspection.`
+        : `Browse ${countExact}used ${brandT} ${vwLower} on Reecomm. Compare photos, prices, fuel type & inspection reports.`
+      : `Browse verified used ${brandT} ${vwLower} for sale on Reecomm. Compare prices, photos, ownership, fuel type, and inspection reports.`;
     return {
-      title: withBrand(lead || `Used ${brandT} ${vw}, Second Hand`),
+      title: withOnReecomm(lead || `Used ${brandT} ${vw}`),
       h1: formatOfficialHeading({
         count,
         brand: brandT,
@@ -559,6 +576,8 @@ export function buildSearchLandingSeo({
   // Visible H1 stays legacy phrasing (no UI change)
   let h1 = "";
   let titleCore = "";
+  /** Brand/model without city also use "on Reecomm". */
+  let useOnReecomm = false;
 
   if (cityT && brandT && modelT) {
     h1 = `Used ${brandT} ${modelT} in ${cityT}`;
@@ -581,8 +600,8 @@ export function buildSearchLandingSeo({
     h1 = `Buy Used ${vw} in ${cityT}`;
     titleCore =
       count > 0
-        ? `${count} Used ${vw} In ${cityT}, Second Hand`
-        : `Used ${vw} In ${cityT}, Second Hand`;
+        ? `${count} Used ${vw} in ${cityT}`
+        : `Used ${vw} in ${cityT}`;
   } else if (brandT && modelT && !cityT) {
     h1 = `Used ${brandT} ${modelT}`;
     titleCore = formatInventoryLead({
@@ -591,6 +610,7 @@ export function buildSearchLandingSeo({
       model: modelT,
       isTwoWheeler,
     });
+    useOnReecomm = true;
   } else {
     h1 = cleanJoin([
       "Used",
@@ -608,15 +628,14 @@ export function buildSearchLandingSeo({
       modelT,
       vw,
       budgetT,
-      cityT ? `In ${cityT}` : "",
-      "Second Hand",
+      cityT ? `in ${cityT}` : "",
     ]).replace(/\s+,/g, ",");
-    if (!/, Second Hand$/i.test(titleCore)) {
-      titleCore = `${titleCore.replace(/\s+Second Hand$/i, "")}, Second Hand`;
-    }
+    useOnReecomm = !cityT;
   }
 
-  let title = withBrand(titleCore || h1);
+  let title = useOnReecomm
+    ? withOnReecomm(titleCore || h1)
+    : withBrand(titleCore || h1);
 
   const subject = cleanJoin([
     brandT.toLowerCase(),
@@ -625,7 +644,7 @@ export function buildSearchLandingSeo({
     cityT ? `in ${cityT}` : "",
   ]);
 
-  let description = `Browse ${countBit}verified second hand ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
+  let description = `Browse ${countBit}used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
 
   if (count > 0 && (brandT || modelT) && !typeT && !budgetT) {
     const lead = formatInventoryLead({
@@ -636,10 +655,10 @@ export function buildSearchLandingSeo({
       isTwoWheeler,
     });
     if (lead) {
-      title = withBrand(lead);
+      title = cityT ? withBrand(lead) : withOnReecomm(lead);
       // Do not overwrite h1 — visible heading stays unchanged
       const samples = formatSampleClause(sampleVehicles);
-      // CarWale-style: count hub + starting price when inventory has a real min
+      // Count hub + starting price when inventory has a real min
       const priceClause = startingFromBit
         ? `${count} used ${cleanJoin([
             brandT,
@@ -648,13 +667,13 @@ export function buildSearchLandingSeo({
           ])}${cityT ? ` in ${cityT}` : ""} for sale${startingFromBit}`
         : "";
       if (priceClause && samples) {
-        description = `${priceClause} — includes ${samples}. 100% verified second hand listings with photos & inspection on Reecomm.`;
+        description = `${priceClause} — includes ${samples}. Verified listings with photos & inspection on Reecomm.`;
       } else if (priceClause) {
-        description = `${priceClause} — 100% verified second hand listings with photos & inspection on Reecomm.`;
+        description = `${priceClause} — verified listings with photos & inspection on Reecomm.`;
       } else if (samples) {
-        description = `${lead}. Includes ${samples}. Compare photos, prices & inspection on Reecomm.`;
+        description = `Browse ${lead.toLowerCase()} on Reecomm. Includes ${samples}. Compare photos, prices & inspection.`;
       } else {
-        description = `${lead}. Compare second hand photos, prices, fuel & inspection reports on Reecomm.`;
+        description = `Browse ${lead.toLowerCase()} on Reecomm. Compare photos, prices, fuel & inspection reports.`;
       }
     }
   }
@@ -671,13 +690,13 @@ export function buildSearchLandingSeo({
       const price = formatShortPrice(v.price);
       return [year, modelName, fuel, owner, price].filter(Boolean).join(", ");
     });
-    description = `Browse ${countBit}second hand ${subject} on Reecomm — ${bits[0]}${bits[1] ? `; ${bits[1]}` : ""}. Compare photos, fuel, ownership & inspection.`;
+    description = `Browse ${countBit}used ${subject} on Reecomm — ${bits[0]}${bits[1] ? `; ${bits[1]}` : ""}. Compare photos, fuel, ownership & inspection.`;
   } else if (!usedInventoryLead) {
     const modelSnippet = formatModelList(topModels);
     if (cityT && modelSnippet) {
-      description = `Browse ${countBit}verified second hand ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos & inspection reports.`;
+      description = `Browse ${countBit}used ${vwLower} in ${cityT} on Reecomm — ${modelSnippet} and more. Compare prices, photos & inspection reports.`;
     } else if (cityT) {
-      description = `Browse ${countBit}verified second hand ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, fuel, ownership & inspection before you buy.`;
+      description = `Browse ${countBit}used ${vwLower} in ${cityT} on Reecomm. Compare prices, photos, fuel, ownership & inspection before you buy.`;
     }
   }
 

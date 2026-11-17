@@ -40,9 +40,9 @@ export default function SearchLandingVehicleLinks({
                 : null) ||
               null;
             const imgSrc = rawImg
-              ? getCdnImageUrl(rawImg, { preset: "thumb" }) || rawImg
+              ? getCdnImageUrl(rawImg, { preset: "card" }) || rawImg
               : null;
-            const alt = `${label}${cityName ? ` in ${cityName}` : ""} | Reecomm`;
+            const alt = `${label}${cityName ? ` in ${cityName}` : ""} on Reecomm`;
 
             return (
               <li key={v.id || href}>

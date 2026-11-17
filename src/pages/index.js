@@ -119,7 +119,7 @@ function Home() {
           }}
         />
 
-        {/* SiteNavigationElement — brand sitelink candidates (five destinations only) */}
+        {/* SiteNavigationElement — brand sitelink candidates (inventory money hubs) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -130,26 +130,26 @@ function Home() {
                 {
                   "@type": "SiteNavigationElement",
                   position: 1,
-                  name: "About Reecomm",
-                  url: "https://www.reecomm.com/aboutus",
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  position: 2,
-                  name: "Buy, Sell or Consult — Start here",
-                  url: "https://www.reecomm.com/start",
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  position: 3,
                   name: "Buy Used Cars",
                   url: "https://www.reecomm.com/search/buy-used-cars",
                 },
                 {
                   "@type": "SiteNavigationElement",
-                  position: 4,
+                  position: 2,
                   name: "Buy Used Bikes",
                   url: "https://www.reecomm.com/search/buy-used-two-wheelers",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 3,
+                  name: "Used Cars in Ahmedabad",
+                  url: "https://www.reecomm.com/search/buy-used-cars-ahmedabad",
+                },
+                {
+                  "@type": "SiteNavigationElement",
+                  position: 4,
+                  name: "Used Toyota Cars",
+                  url: "https://www.reecomm.com/search/buy-used-toyota-cars",
                 },
                 {
                   "@type": "SiteNavigationElement",

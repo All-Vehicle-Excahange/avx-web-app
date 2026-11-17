@@ -13,14 +13,12 @@ import Image from "next/image";
 const DEFAULT_BUY_LINKS = [
   { label: "Buy Used Cars", href: "/search/buy-used-cars" },
   { label: "Buy Used Bikes", href: "/search/buy-used-two-wheelers" },
+  { label: "Used Cars in Ahmedabad", href: "/search/buy-used-cars-ahmedabad" },
+  { label: "Used Bikes in Ahmedabad", href: "/search/buy-used-two-wheelers-ahmedabad" },
+  { label: "Used Toyota Cars", href: "/search/buy-used-toyota-cars" },
+  { label: "Used Hyundai Cars", href: "/search/buy-used-hyundai-cars" },
   { label: "Become a seller", href: "/become-seller" },
   { label: "Become a consultant", href: "/become-consultant" },
-  {
-    label: "Reecomm Inspected Vehicles",
-    href: "/search?reccomInspected=true",
-  },
-  { label: "Budget under ₹3 lakh", href: "/search?budget=0-3" },
-  { label: "Budget ₹3L – ₹8L", href: "/search?budget=3-8" },
   {
     label: "Used car buying guide",
     href: "/blog/how-to-buy-used-car-safely-india",
@@ -104,6 +102,14 @@ const Footer = () => {
         };
         push({ label: "Buy Used Cars", href: "/search/buy-used-cars" });
         push({ label: "Buy Used Bikes", href: "/search/buy-used-two-wheelers" });
+        push({
+          label: "Used Cars in Ahmedabad",
+          href: "/search/buy-used-cars-ahmedabad",
+        });
+        push({
+          label: "Used Toyota Cars",
+          href: "/search/buy-used-toyota-cars",
+        });
         push({ label: "Become a seller", href: "/become-seller" });
         push({ label: "Become a consultant", href: "/become-consultant" });
         geo.forEach(push);
