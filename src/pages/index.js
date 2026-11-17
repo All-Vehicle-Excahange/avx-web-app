@@ -19,6 +19,7 @@ import Footer from "@/components/layout/Footer";
 import Layout from "@/components/layout/Layout";
 import BecameBanner from "@/components/features/home/BecameBanner";
 import Head from "next/head";
+import ReecommInventory from "@/components/features/home/ReecommInventory";
 import ReecommSponcerSection from "@/components/features/home/ReecommSponcerSection";
 import HomePopularSearches from "@/components/features/home/HomePopularSearches";
 import AdSenseAd from "@/components/common/AdSenseAd";
@@ -168,6 +169,10 @@ function Home() {
       <Layout>
         <ShowcaseSection />
       </Layout>
+
+      {/* <Layout>
+        <ReecommInventory />
+      </Layout> */}
 
       <CategoriesSections />
       <AvxInspected />

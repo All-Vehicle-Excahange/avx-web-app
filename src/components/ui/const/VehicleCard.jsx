@@ -109,7 +109,9 @@ export default function VehicleCard({
       trackWishlistLoginRequired({
         vehicle_id: data?.id,
         vehicle_name:
-          `${data?.yearOfMfg || data?.year || ""} ${data?.makerName || ""} ${data?.modelName || ""} ${data?.variantName || ""}`.trim() ||
+          [data?.yearOfMfg || data?.year, data?.makerName, data?.modelName, data?.variantName]
+            .filter((p) => p && String(p).toLowerCase() !== "null" && String(p).toLowerCase() !== "undefined")
+            .join(" ") ||
           data?.title ||
           undefined,
         source: "search",
@@ -189,7 +191,9 @@ export default function VehicleCard({
     image: resolvedImage,
 
     title: data.makerName
-      ? `${data.makerName} ${data.modelName} ${data.variantName}`
+      ? [data.makerName, data.modelName, data.variantName]
+          .filter((part) => part && String(part).toLowerCase() !== "null" && String(part).toLowerCase() !== "undefined")
+          .join(" ")
       : data.title,
 
     year: data.yearOfMfg || data.year,
