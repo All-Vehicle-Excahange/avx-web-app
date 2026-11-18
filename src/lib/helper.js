@@ -97,7 +97,7 @@ export const generateDynamicPageTitle = (vehicle) => {
     .trim();
 
   const locationPart = city ? ` in ${city}` : "";
-  return `Used ${baseName}${locationPart}, Second Hand | Reecomm`;
+  return `Used ${baseName}${locationPart} | Reecomm`;
 };
 
 export const generateDynamicMetaDescription = (vehicle, summary = {}) => {

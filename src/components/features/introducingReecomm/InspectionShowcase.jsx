@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 
 const inspectionHighlights = [
-  "Independent 100+ point technical audit covering engine, transmission & chassis.",
+  "Optional 200-point technical audit covering engine, transmission & chassis.",
   "Digital PDF report with granular rating scores and photographic evidence.",
   "OBD-II computer diagnostics to detect hidden error codes & odometer tampering.",
   "Official 'Reecomm Inspected' trust badge awarded to verified vehicles."

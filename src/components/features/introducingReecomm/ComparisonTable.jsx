@@ -6,7 +6,7 @@ const comparisons = [
   { feature: "Primary Communication Channel", traditional: "WhatsApp Status / Casual Forward Chains", reecomm: "Professional Storefront & In-App Chat" },
   { feature: "Marketplace Listing Type", traditional: "Unverified Facebook / OLX Classified Spam", reecomm: "Verified Vehicle Marketplace" },
   { feature: "Seller Verification", traditional: "Unknown & Unverified Phone Contacts", reecomm: "Verified Consultant & GST Vetted Business" },
-  { feature: "Vehicle Technical Audit", traditional: "No Inspection / Buyers Guess", reecomm: "Standardized 100+ Point Inspection Report" },
+  { feature: "Vehicle Technical Audit", traditional: "No Inspection / Buyers Guess", reecomm: "Optional 200-Point Inspection Report" },
   { feature: "Inquiry Management", traditional: "Random Phone Calls & Lost Chats", reecomm: "Organized Inquiry & Lead Dashboard" },
   { feature: "Reputation & Reviews", traditional: "Zero Public Ratings or Reviews", reecomm: "Verifiable Customer Reviews & Ratings" }
 ];

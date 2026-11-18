@@ -20,9 +20,9 @@ const steps = [
     tag: "Standard — Always Included",
     tagBlue: false,
     color: "rgba(255,254,247,0.15)",
-    short: "200-point inspection report as standard.",
+    short: "Optional 200-point inspection report.",
     detail:
-      "Every Reecomm listing comes with a structured 200-point inspection report as standard. No extra step needed.",
+      "Request a structured 200-point inspection on listings where you want verified condition details. Inspection is optional — not every vehicle is inspected by default.",
     proof: [
       { icon: CheckCircle2, label: "200 checkpoints" },
       { icon: Star, label: "Condition rated" },

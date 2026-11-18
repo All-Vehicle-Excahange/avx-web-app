@@ -28,14 +28,14 @@ function Home() {
   return (
     <>
       <Head>
-        <title>Reecomm — Buy & Sell Used Cars and Bikes in India</title>
+        <title>Reecomm — Used Cars & Bikes in Gujarat | Buy & Sell</title>
         <meta
           name="description"
-          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant — compare prices, photos, and inspections."
+          content="Buy and sell used cars and bikes in Gujarat on Reecomm. Compare verified consultant listings in Ahmedabad, Palanpur, Surat and more — with photos, prices, and optional 200-point inspections."
         />
         <meta
           name="keywords"
-          content="Reecomm, used cars, used bikes, used cars for sale, used bikes for sale, sell used cars, buy used cars, buy used bikes, auto consultant, second hand cars India, car inspection"
+          content="Reecomm, used cars Gujarat, used bikes Ahmedabad, second hand cars Ahmedabad, used cars Palanpur, sell used cars, auto consultant, buy used cars Gujarat"
         />
         <link rel="canonical" href="https://www.reecomm.com/" />
 
@@ -44,11 +44,11 @@ function Home() {
         <meta property="og:url" content="https://www.reecomm.com/" />
         <meta
           property="og:title"
-          content="Reecomm — Buy & Sell Used Cars and Bikes in India"
+          content="Reecomm — Used Cars & Bikes in Gujarat | Buy & Sell"
         />
         <meta
           property="og:description"
-          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant."
+          content="Buy and sell used cars and bikes in Gujarat on Reecomm. Compare verified consultant listings with photos, prices, and optional 200-point inspections."
         />
         <meta property="og:image" content="https://www.reecomm.com/logo/logo1.webp" />
         <meta property="og:image:type" content="image/webp" />
@@ -58,11 +58,11 @@ function Home() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Reecomm — Buy & Sell Used Cars and Bikes in India"
+          content="Reecomm — Used Cars & Bikes in Gujarat | Buy & Sell"
         />
         <meta
           name="twitter:description"
-          content="Reecomm is India's trusted used vehicle marketplace. Sell your car faster, buy verified cars and bikes, or become an auto consultant."
+          content="Buy and sell used cars and bikes in Gujarat on Reecomm. Compare verified consultant listings with photos, prices, and optional 200-point inspections."
         />
         <meta name="twitter:image" content="https://www.reecomm.com/logo/logo1.webp" />
 

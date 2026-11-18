@@ -184,6 +184,8 @@ export const TIER1_CITIES = [
   "Kanodar",
   "Siddhpur",
   "Mehsana",
+  "Patan",
+  "Unjha",
   "Chhota Udepur",
 ];
 
@@ -290,6 +292,27 @@ const CITY_BUYING_NOTES = {
     ],
     bikes: [
       "Gandhinagar two-wheeler deals should include a cold-start test and tyre/brake check before you pay.",
+    ],
+  },
+  patan: {
+    title: "Buying used vehicles in Patan",
+    cars: [
+      "Patan buyers often compare local yards with Mehsana and Palanpur stock for hatchbacks and compact SUVs. Check year, kilometres, and ownership carefully before travelling to view a car.",
+      "Verify RC match, insurance, and challans. Prefer consultant listings on Reecomm so you can shortlist photos and prices first.",
+      "Request an optional 200-point inspection when the listing supports it — especially on older highway cars used between Patan and Ahmedabad.",
+    ],
+    bikes: [
+      "Used bikes in Patan should have clear RC ownership and a cold-start test. Keep budget for insurance renewal and a basic service after purchase.",
+    ],
+  },
+  unjha: {
+    title: "Buying used vehicles in Unjha",
+    cars: [
+      "Unjha sits on the Mehsana corridor — many buyers compare Unjha, Mehsana, and Visnagar inventory for value hatchbacks and MPVs. Cross-check similar year/km cars across nearby cities.",
+      "Insist on document match and a proper inspection before negotiating the final amount. Avoid cash-only deals without RC verification.",
+    ],
+    bikes: [
+      "For Unjha two-wheelers, prioritise commuting comfort, tyre life, and paper clarity. Inquire through Reecomm instead of informal roadside offers.",
     ],
   },
 };

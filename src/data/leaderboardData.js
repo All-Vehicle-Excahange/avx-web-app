@@ -66,7 +66,7 @@ export const CONSULTANT_LEADERBOARD_DATA = [
     id: "c-104",
     rank: 4,
     name: "Shree Umiya Automobiles",
-    tagline: "Verified Cars with 120-Point Inspection",
+    tagline: "Verified Cars with Optional 200-Point Inspection",
     city: "Unjha",
     state: "Gujarat",
     verified: true,

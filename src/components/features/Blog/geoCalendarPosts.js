@@ -777,6 +777,287 @@ export const GEO_CALENDAR_POSTS = [
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
     date: "5 October 2026",
   },
+  {
+    id: 27,
+    slug: "/blog/best-used-cars-under-5-lakh-gujarat",
+    title: "Best Used Cars Under ₹5 Lakh in Gujarat",
+    category: "Buying Guide",
+    description:
+      "Shortlist practical second-hand cars under ₹5 lakh in Gujarat — what to check, which body types fit, and where to compare live stock on Reecomm.",
+    seoTitle: "Best Used Cars Under ₹5 Lakh in Gujarat (2026) | Reecomm",
+    seoDescription:
+      "Find used cars under ₹5 lakh in Gujarat. Compare hatchbacks and compact cars, fair price checks, and verified consultant listings on Reecomm.",
+    moneyUrl: "/search/buy-used-cars-under-5-lakhs",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Best Used Cars Under ₹5 Lakh in Gujarat",
+        url: "https://www.reecomm.com/blog/best-used-cars-under-5-lakh-gujarat",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Under ₹5 lakh in Gujarat, most buyers should shortlist well-kept hatchbacks and older compact cars with clear RC and insurance — not just the lowest sticker. Start with [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs), then narrow by city such as [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) or [used cars in Palanpur](/search/buy-used-cars-palanpur).
+
+      ### What fits the budget
+      Expect older Swift / i10 / Polo-class hatchbacks, early compact sedans, and carefully chosen CNG cars. SUVs rarely land cleanly under ₹5 lakh without compromise. Keep 10–15% aside for transfer, insurance, and first service.
+
+      ### Buying checklist
+      1. Compare three cars in a similar year band.
+      2. Match RC ownership and check challans.
+      3. Request an optional 200-point inspection when available.
+      4. Test drive before you negotiate the final price.
+
+      ### Next step on Reecomm
+      Browse [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs) and inquire with the consultant managing each listing — avoid cash-only roadside deals.
+`,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 28,
+    slug: "/blog/second-hand-cars-ahmedabad-buyers-guide",
+    title: "Best Second Hand Cars in Ahmedabad — Buyer’s Guide",
+    category: "Buying Guide",
+    description:
+      "How to shortlist second-hand cars in Ahmedabad: SG Highway and local yard tips, documents, and live inventory links on Reecomm.",
+    seoTitle: "Best Second Hand Cars in Ahmedabad — Buyer’s Guide | Reecomm",
+    seoDescription:
+      "Buying a second-hand car in Ahmedabad? Compare verified listings, local price checks, and optional inspections on Reecomm.",
+    moneyUrl: "/search/buy-used-cars-ahmedabad",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Best Second Hand Cars in Ahmedabad — Buyer’s Guide",
+        url: "https://www.reecomm.com/blog/second-hand-cars-ahmedabad-buyers-guide",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Ahmedabad buyers should shortlist on [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad), compare year/km/fuel, then verify RC and challans before payment. Popular shortlists often include [used Maruti cars in Ahmedabad](/search/buy-used-maruti-suzuki-cars-ahmedabad) and [used Toyota cars in Ahmedabad](/search/buy-used-toyota-cars-ahmedabad).
+
+      ### Local buying tips
+      Petrol and CNG hatchbacks move fastest for city use; SUVs sell on weekend highway needs. Prefer listings with clear engine and exterior photos. Request an optional 200-point inspection on serious candidates.
+
+      ### Documents
+      Match seller/consultant name to RC, confirm insurance, and clear finance hypothecation in writing before you transfer money.
+
+      ### Start here
+      Open [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) and inquire only on verified consultant stock.
+`,
+    image: "/blog/blog-2.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 29,
+    slug: "/blog/used-swift-price-gujarat",
+    title: "Used Swift Price in Gujarat — What Buyers Should Check",
+    category: "Buying Guide",
+    description:
+      "Understand used Maruti Swift price bands in Gujarat and the checks that matter before you buy — with live listing links on Reecomm.",
+    seoTitle: "Used Swift Price in Gujarat — Buying Guide | Reecomm",
+    seoDescription:
+      "Used Maruti Swift price tips for Gujarat buyers. Compare live Swift listings, ownership checks, and optional inspections on Reecomm.",
+    moneyUrl: "/search/buy-used-maruti-suzuki-swift-cars",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Used Swift Price in Gujarat — What Buyers Should Check",
+        url: "https://www.reecomm.com/blog/used-swift-price-gujarat",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Used Swift prices in Gujarat depend on year, kilometres, ownership, and condition — not a single “market rate.” Compare live stock on [used Maruti Swift cars](/search/buy-used-maruti-suzuki-swift-cars) and city hubs like [used Swift cars in Ahmedabad](/search/buy-used-maruti-suzuki-swift-cars-ahmedabad) when available.
+
+      ### Price thinking
+      Shortlist three Swifts in a narrow year band. Adjust for missing service history, pending insurance, and accident repairs. Negotiate only after you have seen the car and, ideally, an optional 200-point inspection.
+
+      ### Related inventory
+      Also browse [used Maruti cars](/search/buy-used-maruti-suzuki-cars) and [used cars in Gujarat](/search/buy-used-cars-gujarat) so one yard cannot define the price for you.
+`,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 30,
+    slug: "/blog/used-bikes-under-50000-gujarat",
+    title: "Best Used Bikes Under ₹50,000 in Gujarat",
+    category: "Buying Guide",
+    description:
+      "How to buy a used bike under ₹50,000 in Gujarat — paper checks, test rides, and budget two-wheeler links on Reecomm.",
+    seoTitle: "Used Bikes Under ₹50,000 in Gujarat | Reecomm",
+    seoDescription:
+      "Find used bikes under ₹50,000 in Gujarat. Compare verified two-wheeler listings and buying checks on Reecomm.",
+    moneyUrl: "/search/buy-used-two-wheelers-under-50k",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Best Used Bikes Under ₹50,000 in Gujarat",
+        url: "https://www.reecomm.com/blog/used-bikes-under-50000-gujarat",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Under ₹50,000, prioritise clear RC ownership, tyre/brake life, and a cold-start test. Start with [used two-wheelers under ₹50k](/search/buy-used-two-wheelers-under-50k) and [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad).
+
+      ### Checklist
+      1. Match RC name and check insurance.
+      2. Inspect chain/sprocket, tyres, and frame welds.
+      3. Test ride before paying.
+      4. Prefer verified consultant listings on Reecomm over informal cash deals.
+
+      ### Browse
+      Open [used bikes for sale](/search/buy-used-two-wheelers) and filter by your city when stocked.
+`,
+    image: "/blog/blog-2.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 31,
+    slug: "/blog/things-to-check-before-buying-second-hand-car",
+    title: "Things to Check Before Buying a Second Hand Car",
+    category: "Buying Guide",
+    description:
+      "A practical second-hand car checklist: documents, inspection, test drive, and how to use Reecomm inventory safely.",
+    seoTitle: "Things to Check Before Buying a Second Hand Car | Reecomm",
+    seoDescription:
+      "Second-hand car buying checklist for India/Gujarat buyers — RC, insurance, inspection, and verified listings on Reecomm.",
+    moneyUrl: "/search/buy-used-cars",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Things to Check Before Buying a Second Hand Car",
+        url: "https://www.reecomm.com/blog/things-to-check-before-buying-second-hand-car",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Never pay before you verify RC, insurance, challans, and mechanical condition. Shortlist on [used cars for sale](/search/buy-used-cars), then request an optional 200-point inspection on serious candidates.
+
+      ### Must-check list
+      - RC ownership match and open challans
+      - Insurance validity and finance NOC path
+      - Engine, clutch, underbody, and tyre date codes
+      - Accident or flood indicators
+      - Fair price vs two similar cars
+
+      ### Gujarat next steps
+      Compare [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) or [used cars in Palanpur](/search/buy-used-cars-palanpur), inquire on Reecomm, and only negotiate after you have seen the vehicle.
+`,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 32,
+    slug: "/blog/how-to-sell-old-car-gujarat",
+    title: "How to Sell Your Old Car in Gujarat",
+    category: "Selling Guide",
+    description:
+      "Sell an old car in Gujarat with clearer pricing, paperwork tips, and Reecomm seller/consultant paths.",
+    seoTitle: "How to Sell Your Old Car in Gujarat | Reecomm",
+    seoDescription:
+      "Sell your old car in Gujarat faster — prepare documents, set a fair price, and list with Reecomm consultants or as a seller.",
+    moneyUrl: "/become-seller",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "How to Sell Your Old Car in Gujarat",
+        url: "https://www.reecomm.com/blog/how-to-sell-old-car-gujarat",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Prepare RC, insurance, and clear photos first. Then [become a seller on Reecomm](/become-seller) or work with a [verified auto consultant](/become-consultant) who already has buyer demand in your city.
+
+      ### Pricing
+      Check similar live stock such as [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) and [used cars in Palanpur](/search/buy-used-cars-palanpur) before setting an asking price. Honest photos and service history reduce bargaining friction.
+
+      ### Paperwork
+      Clear hypothecation, keep insurance active through transfer, and never hand over RC without a signed agreement and payment confirmation.
+
+      ### Start listing
+      Go to [become a seller](/become-seller) or explore [consultant pricing](/consult/pricing) if you sell regularly.
+`,
+    image: "/blog/blog-2.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
+  {
+    id: 33,
+    slug: "/blog/used-royal-enfield-hunter-350-ahmedabad",
+    title: "Used Royal Enfield Hunter 350 in Ahmedabad — Price & Checks",
+    category: "Buying Guide",
+    description:
+      "Buying a used Hunter 350 in Ahmedabad: what to inspect, fair-price thinking, and two-wheeler inventory links on Reecomm.",
+    seoTitle: "Used Royal Enfield Hunter 350 Ahmedabad | Reecomm",
+    seoDescription:
+      "Used Royal Enfield Hunter 350 in Ahmedabad — compare listings, ownership checks, and buy smarter on Reecomm.",
+    moneyUrl: "/search/buy-used-royal-enfield-two-wheelers-ahmedabad",
+    schemas: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Used Royal Enfield Hunter 350 in Ahmedabad — Price & Checks",
+        url: "https://www.reecomm.com/blog/used-royal-enfield-hunter-350-ahmedabad",
+        datePublished: "2026-11-18",
+        dateModified: "2026-11-18",
+        author: { "@type": "Organization", name: "Reecomm" },
+        publisher: { "@type": "Organization", name: "Reecomm" },
+      },
+    ],
+    content: `
+      ### Quick answer
+      Shortlist used Royal Enfield bikes in Ahmedabad on [used Royal Enfield two-wheelers in Ahmedabad](/search/buy-used-royal-enfield-two-wheelers-ahmedabad) and the city hub [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad). Confirm RC, insurance, and a thorough test ride before paying.
+
+      ### What to check on a Hunter 350
+      - Frame welds and crash damage
+      - Engine noise when hot
+      - Tyre date codes and brake feel
+      - Service history and ownership count
+
+      ### Related browsing
+      Also see [used Royal Enfield two-wheelers](/search/buy-used-royal-enfield-two-wheelers) and [used two-wheelers](/search/buy-used-two-wheelers) for wider stock.
+`,
+    image: "/blog/blog-1.webp",
+    author: { name: "Reecomm Team", avatar: "/dp.jpg" },
+    date: "18 November 2026",
+  },
 ];
 
 /** Map money landing path → related calendar blog posts */

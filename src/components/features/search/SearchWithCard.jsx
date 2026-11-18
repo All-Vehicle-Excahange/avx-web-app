@@ -46,6 +46,10 @@ import {
   trackFilterApplied,
   trackSearchResultsViewed,
 } from "@/lib/amplitude";
+import {
+  pickPrimaryVehicleBucket,
+  resolveDisplayTotalElements,
+} from "@/lib/searchVehicleBucket";
 
 /* ================= MOBILE DETECTION ================= */
 function useIsMobile() {
@@ -1144,15 +1148,12 @@ export default function SearchWithCard({
     }));
   }, [recommendedAdsData]);
 
-  const topPicksPageResponse =
-    searchData?.priceMatchVehicles?.pageResponse ||
-    searchData?.topPicksVehicles?.pageResponse ||
-    null;
-
-  const newVehicles =
-    searchData?.priceMatchVehicles?.vehicles ||
-    searchData?.topPicksVehicles?.vehicles ||
-    [];
+  const primaryBucket = useMemo(
+    () => pickPrimaryVehicleBucket(searchData),
+    [searchData],
+  );
+  const topPicksPageResponse = primaryBucket.pageResponse || null;
+  const newVehicles = primaryBucket.vehicles || [];
 
   useEffect(() => {
     if (currentPage === 1) {
@@ -1313,24 +1314,22 @@ export default function SearchWithCard({
     const priceBased = Array.isArray(searchData.priceMatchVehicles?.vehicles)
       ? searchData.priceMatchVehicles.vehicles
       : (Array.isArray(searchData.priceMatchVehicles) ? searchData.priceMatchVehicles : []);
-    const topPicksPR =
-      searchData.priceMatchVehicles?.pageResponse ||
-      searchData.topPicksVehicles?.pageResponse ||
-      {};
+
+    // Align header count with the same bucket that supplies the visible grid
+    const bucket = pickPrimaryVehicleBucket(searchData);
+    const topPicksPR = bucket.pageResponse || {};
+    const shownVehicles = bucket.vehicles || [];
+    const directTotal = resolveDisplayTotalElements(topPicksPR, shownVehicles);
 
     setTotalPages(topPicksPR.totalPages || 0);
-    if (topPicksPR.totalElements !== undefined) {
-      setTotalElements(topPicksPR.totalElements);
-    }
+    setTotalElements(directTotal);
 
     if (onRelatedChange) onRelatedChange(similar);
-
-    const directTotal = topPicksPR.totalElements !== undefined ? topPicksPR.totalElements : newVehicles.length;
 
     const combinedPageResponse = {
       ...topPicksPR,
       totalElements: directTotal,
-      hasDirectVehicles: (newVehicles.length > 0) || (directTotal > 0),
+      hasDirectVehicles: shownVehicles.length > 0 || directTotal > 0,
     };
 
     if (onPageResponseChange) onPageResponseChange(combinedPageResponse);

@@ -8,7 +8,7 @@ import {
 
 const all24Features = [
   { name: "Vehicle Marketplace", desc: "Browse thousands of pre-owned cars and bikes across India.", icon: Search },
-  { name: "Technical Inspection", desc: "100+ point diagnostic & physical inspection report.", icon: ShieldCheck },
+  { name: "Technical Inspection", desc: "Optional 200-point diagnostic & physical inspection report.", icon: ShieldCheck },
   { name: "Saved Vehicles", desc: "Bookmark favorite listings to compare prices and specs.", icon: Heart },
   { name: "Real-time Notifications", desc: "Push alerts for price drops, new listings & inquiries.", icon: Bell },
   { name: "Direct Buyer Chat", desc: "In-app messaging between buyers and verified consultants.", icon: MessageSquare },

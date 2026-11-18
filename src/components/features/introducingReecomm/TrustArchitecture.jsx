@@ -5,7 +5,7 @@ import { ShieldCheck, CheckCircle2, UserCheck, Star, FileText, Store, Lock } fro
 const trustSignals = [
   { title: "Verified Consultant Badge", desc: "Strict business & identity verification before badge issuance.", icon: ShieldCheck },
   { title: "Verified Vehicle Audit", desc: "Detailed inspection reports verifying chassis, OBD diagnostics & paint.", icon: CheckCircle2 },
-  { title: "Standardized Technical Inspection", desc: "Independent 100+ point inspection checklist for every certified listing.", icon: FileText },
+  { title: "Standardized Technical Inspection", desc: "Optional 200-point inspection checklist available on certified listings — not every vehicle is inspected by default.", icon: FileText },
   { title: "Authentic Buyer Reviews", desc: "Verifiable customer reviews linked directly to completed vehicle transactions.", icon: Star },
   { title: "Transparent Profiles", desc: "Complete consultant history, location verification, and inventory track record.", icon: UserCheck },
   { title: "Professional Digital Storefront", desc: "Dedicated URL showcasing verified stock and real buyer ratings.", icon: Store }

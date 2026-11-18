@@ -38,8 +38,8 @@ export const GUJARAT_FALLBACK_SEARCHES = [
   { label: "Used Maruti Cars", href: "/search/buy-used-maruti-suzuki-cars" },
   { label: "Used Cars in Palanpur", href: "/search/buy-used-cars-palanpur" },
   { label: "Used Cars in Surat", href: "/search/buy-used-cars-surat" },
-  { label: "Used Cars in Vadodara", href: "/search/buy-used-cars-vadodara" },
-  { label: "Used Cars in Rajkot", href: "/search/buy-used-cars-rajkot" },
+  { label: "Used Cars in Gandhinagar", href: "/search/buy-used-cars-gandhinagar" },
+  { label: "Used Cars in Mehsana", href: "/search/buy-used-cars-mehsana" },
   {
     label: "Used Toyota Cars in Ahmedabad",
     href: "/search/buy-used-toyota-cars-ahmedabad",

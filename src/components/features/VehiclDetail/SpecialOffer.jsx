@@ -12,7 +12,7 @@ const features = [
     icon: <ClipboardList className="w-4 h-4 text-white/80 shrink-0" />,
     label: (
       <>
-        Optional 210+ Point <br /> Inspection
+        Optional 200-Point <br /> Inspection
       </>
     ),
   },

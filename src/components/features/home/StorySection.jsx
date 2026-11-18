@@ -212,20 +212,13 @@ export default function StorySection() {
 
           {/* Trustpilot & App Buttons Area */}
           <div className="mt-3 flex flex-col items-center justify-center gap-6 sm:gap-8">
-            {/* Rating Section */}
+            {/* Trust line — avoid unverified aggregate review counts */}
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <span className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                4.2
-                <span className="text-xl md:text-2xl text-gray-500 font-bold">
-                  /5
-                </span>
-              </span>
-              <span className="hidden sm:block text-gray-300 text-2xl font-light">
-                |
-              </span>
-              <span className="text-gray-600 text-sm md:text-base font-medium mt-1 sm:mt-0">
-                Based on <span className="font-bold text-gray-900">5,210</span>{" "}
-                reviews
+              <span className="text-gray-600 text-sm md:text-base font-medium text-center max-w-md">
+                Verified consultants, transparent listings, and optional{" "}
+                <span className="font-bold text-gray-900">200-point</span>{" "}
+                inspections — download the app to leave a review after your
+                purchase.
               </span>
             </div>
 

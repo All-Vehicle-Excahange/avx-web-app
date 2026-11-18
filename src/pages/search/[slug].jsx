@@ -36,13 +36,17 @@ import { resolveSlugQueryRedirect } from "@/lib/seo";
 import { getClientType } from "@/lib/clientType";
 import { getCdnImageUrl } from "@/lib/cdnImage";
 import {
+  pickPrimaryVehicleBucket,
+  resolveDisplayTotalElements,
+} from "@/lib/searchVehicleBucket";
+import {
   findModelFamily,
   findModelFamilyBySlugSegment,
 } from "@/data/modelFamilies";
 
 function SlugSearchPage({ seo, initialFilters }) {
   const [pageResponse, setPageResponse] = useState({
-    totalElements: 0,
+    totalElements: seo?.totalCount ?? 0,
     totalPages: 0,
     currentPage: 1,
     currentElements: 0,
@@ -51,6 +55,16 @@ function SlugSearchPage({ seo, initialFilters }) {
   const [relatedVehicles, setRelatedVehicles] = useState([]);
   const [consultants, setConsultants] = useState([]);
   const [consultPayload, setConsultPayload] = useState(null);
+
+  // Re-seed display count on slug navigation (client fetch will refine)
+  useEffect(() => {
+    setPageResponse({
+      totalElements: seo?.totalCount ?? 0,
+      totalPages: 0,
+      currentPage: 1,
+      currentElements: 0,
+    });
+  }, [seo?.canonical, seo?.totalCount]);
 
   const trackedSearchRef = useRef(null);
   const ogImage =
@@ -394,19 +408,26 @@ async function fetchLandingListings(apiUrl, filterPath, body, clientType) {
   );
   if (!listRes.ok) return { totalCount: 0, initialVehicles: [] };
   const listJson = await listRes.json();
-  const totalCount =
-    listJson?.data?.priceMatchVehicles?.pageResponse?.totalElements ||
-    listJson?.data?.topPicksVehicles?.pageResponse?.totalElements ||
-    listJson?.pageResponse?.totalElements ||
-    listJson?.totalElements ||
-    0;
-  const rawList =
-    listJson?.data?.priceMatchVehicles?.vehicles ||
-    listJson?.data?.topPicksVehicles?.vehicles ||
-    (Array.isArray(listJson?.data) ? listJson.data : null) ||
-    (Array.isArray(listJson?.content) ? listJson.content : null) ||
-    (Array.isArray(listJson?.vehicles) ? listJson.vehicles : null) ||
-    [];
+  const bucket = pickPrimaryVehicleBucket(listJson?.data || listJson);
+  let rawList = bucket.vehicles;
+  if (!rawList.length) {
+    rawList =
+      (Array.isArray(listJson?.data) ? listJson.data : null) ||
+      (Array.isArray(listJson?.content) ? listJson.content : null) ||
+      (Array.isArray(listJson?.vehicles) ? listJson.vehicles : null) ||
+      [];
+  }
+  const totalCount = resolveDisplayTotalElements(
+    bucket.pageResponse?.totalElements != null
+      ? bucket.pageResponse
+      : {
+          totalElements:
+            listJson?.pageResponse?.totalElements ||
+            listJson?.totalElements ||
+            0,
+        },
+    rawList,
+  );
   const initialVehicles = Array.isArray(rawList)
     ? rawList.slice(0, 20).map((v) => ({
         id: v.id || null,

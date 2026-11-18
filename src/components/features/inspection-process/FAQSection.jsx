@@ -9,7 +9,7 @@ export default function FAQSection() {
   const faqs = [
     {
       q: "What does the Reecomm inspection report include?",
-      a: "The report includes a 150+ point evaluation covering engine health, transmission, suspension, brake wear, electrical systems, body panels, exterior paint depth, interior cabin quality, and an on-road test summary.",
+      a: "The report includes a 200-point evaluation covering engine health, transmission, suspension, brake wear, electrical systems, body panels, exterior paint depth, interior cabin quality, and an on-road test summary. Inspection is optional — request it on listings where you want verified condition details.",
     },
     {
       q: "Who performs the vehicle inspections?",
