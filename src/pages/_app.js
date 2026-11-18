@@ -66,6 +66,7 @@ function pathHasPageCanonical(asPath = "") {
     path.startsWith("/help") ||
     path.startsWith("/download") ||
     path.startsWith("/reecomm-works") ||
+    path.startsWith("/press-media") ||
     path.startsWith("/careers") ||
     path.startsWith("/seo-dashboard")
   );

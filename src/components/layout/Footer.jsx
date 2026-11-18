@@ -54,6 +54,7 @@ const footerLinks = {
     { label: "Download the Reecomm app", href: "/download" },
     { label: "About us", href: "/aboutus" },
     { label: "Introducing Reecomm", href: "/introducing-reecomm" },
+    { label: "Press & Media", href: "/press-media" },
     { label: "Inspection process", href: "/inspection-process" },
     { label: "Careers", href: "/careers" },
     { label: "Blog", href: "/blog" },
