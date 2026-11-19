@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { getStoreFrontByUsernameQuery } from "@/queries/user.queries";
 import StoreFrontHeroSection from "./StoreFrontHeroSection";
+import ReecommStoreFrontHeroSection from "./ReecommStoreFrontHeroSection";
 
 // RIGHT CONTENT
 import Inventory from "./Inventory";
@@ -25,6 +26,8 @@ export default function StoreFront() {
     storeDetails?.active !== false &&
     storeDetails?.isTierActive !== false;
 
+  const isAvxTier = Boolean(storeDetails?.isAvxTier === true);
+
   // Fix for page opening from the middle: Scroll to top on mount
   useEffect(() => {
     window.scrollTo({
@@ -41,7 +44,11 @@ export default function StoreFront() {
 
       <main className="px-0 sm:px-4 text-primary pt-12">
         {/* HERO */}
-        <StoreFrontHeroSection />
+        {isAvxTier ? (
+          <ReecommStoreFrontHeroSection />
+        ) : (
+          <StoreFrontHeroSection />
+        )}
 
         <div className="px-1 sm:px-0 py-3">
           <section className="w-full">

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
+import ReecommInventoryCard from "@/components/ui/const/ReecommInventoryCard";
 import { useRouter } from "next/router";
 import Button from "@/components/ui/button";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
@@ -167,9 +168,27 @@ export default function Inventory({ id: propId, isActiveTier: propIsActiveTier }
                 {loading
                     ? [...Array(12)].map((_, i) => <VehicleCardSkeleton key={`skel-${i}`} />)
                     : vehicles.length > 0 ? (
-                        vehicles.map((car, index) => (
-                            <VehicleCard key={`${car.id}-${index}`} data={car} isTierActive={isActiveTier} />
-                        ))
+                        vehicles.map((car, index) => {
+                            const isReecomm = Boolean(
+                                storeDetails?.isAvxTier === true ||
+                                car?.isAvxTier === true
+                            );
+                            const cardKey = car?.id ? `${car.id}-${index}` : index;
+                            return isReecomm ? (
+                                <ReecommInventoryCard
+                                    key={cardKey}
+                                    data={car}
+                                    isTierActive={isActiveTier}
+                                    source="storefront"
+                                />
+                            ) : (
+                                <VehicleCard
+                                    key={cardKey}
+                                    data={car}
+                                    isTierActive={isActiveTier}
+                                />
+                            );
+                        })
                     ) : (
                         <div className="flex flex-col items-center justify-center py-8 sm:py-15 text-center w-full">
                             <div className="relative w-32 h-32 mb-2 opacity-60">

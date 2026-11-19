@@ -19,6 +19,7 @@ import {
   getWhyBuyHereStoreFrontByUserName,
   getFourWheelWithTag,
   getTopPicsFour,
+  getAvxTierVehicles,
   getAvxIsnpectedFourWheel,
   getHomeFeedConsult,
   getRecentlySold,
@@ -347,6 +348,25 @@ export const getTopPicsQuery = (activeType, payload) => {
         vehicleType,
       });
       return res?.data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: shouldRetry,
+  });
+};
+
+export const getAvxTierVehiclesQuery = (activeType, payload) => {
+  return queryOptions({
+    queryKey: ["avx-tier", activeType, payload],
+    queryFn: async () => {
+      const vehicleType =
+        activeType === "2-Wheeler" ? "TWO_WHEELER" : "FOUR_WHEELER";
+      const res = await getAvxTierVehicles({
+        ...payload,
+        vehicleType,
+      });
+      return Array.isArray(res?.data)
+        ? res.data
+        : res?.data?.elements || res?.data?.content || [];
     },
     staleTime: 10 * 60 * 1000,
     retry: shouldRetry,

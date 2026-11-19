@@ -168,7 +168,7 @@ export default function TwoWheelerSection() {
       </div>
 
       {/* Bottom Button */}
-      {!isLoading && vehicles.length > 0 && (
+      {!isLoading && vehicles.length >= 4 && (
         <div className="mt-7 flex justify-end">
           <Button
             href={`/search/buy-used-two-wheelers${active ? `?category=${active}` : ""}`}

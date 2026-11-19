@@ -32,29 +32,9 @@ import {
   VEHICLE_IMAGE_FALLBACK,
 } from "@/lib/vehicleImage";
 
-// Identified as Reecomm Inventory helper:
-// - Temporarily triggered when data.inspectionStatus === "SELF_INSPECTED" (for testing)
-// - Or via official backend keys (isReecommInventory, sellerType === "REECOMM", etc.)
+// Identified strictly as Reecomm Inventory (AVX Tier API):
 export const isReecommInventoryVehicle = (data, isReecommInventory = false) => {
-  return Boolean(
-    data?.inspectionStatus === "SELF_INSPECTED" ||
-    isReecommInventory ||
-    data?.isReecommInventory ||
-    data?.isOwnInventory ||
-    data?.isReecomm ||
-    data?.reecommInventory ||
-    data?.isCompanyInventory ||
-    data?.inventoryType === "REECOMM" ||
-    data?.inventoryType === "OWN" ||
-    data?.inventoryType === "COMPANY" ||
-    data?.sellerType === "REECOMM" ||
-    data?.sellerType === "REECOMM_INVENTORY" ||
-    data?.sellerType === "COMPANY" ||
-    data?.sellerType === "OWN" ||
-    data?.vehicleOwner?.userRole === "REECOMM" ||
-    data?.vehicleOwner?.role === "REECOMM" ||
-    data?.isReecommAssured
-  );
+  return Boolean(isReecommInventory || data?.isAvxTier === true);
 };
 
 export default function ReecommInventoryCard({
@@ -216,8 +196,8 @@ export default function ReecommInventoryCard({
 
     title: data.makerName
       ? [data.makerName, data.modelName, data.variantName]
-          .filter((part) => part && String(part).toLowerCase() !== "null" && String(part).toLowerCase() !== "undefined")
-          .join(" ")
+        .filter((part) => part && String(part).toLowerCase() !== "null" && String(part).toLowerCase() !== "undefined")
+        .join(" ")
       : data.title,
 
     year: data.yearOfMfg || data.year,
@@ -313,30 +293,34 @@ export default function ReecommInventoryCard({
         rounded-2xl overflow-hidden
         text-primary
         w-full
-        border-2
+        border
         ${isCardActive ? "cursor-pointer" : "cursor-default"}
-        border-fourth/40 bg-fourth/40 shadow-xs
+        border-fourth/30
+        bg-gradient-to-b from-[#004f9e]/35 via-[#002855]/55 to-[#00142e]/90
+        backdrop-blur-md
+        shadow-[0_4px_20px_rgba(0,0,0,0.35)]
         ${!isSold && isCardActive
-            ? "hover:border-fourth hover:shadow-[0_12px_36px_-6px_rgba(0,123,255,0.32)]"
+            ? "hover:border-fourth/55 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.45),0_0_14px_rgba(0,123,255,0.14)]"
             : (!isCardActive ? "opacity-90" : "opacity-60 grayscale-[0.2]")
           }
         transition-all duration-300
         h-full md:min-h-[420px]`}
       >
-        {/* Reecomm Inventory Top-Side Corner Shape Badge (ZERO top/left space, anchored to card corner) */}
+        {/* Reecomm Inventory Top-Side Corner Shape Badge (Luminous Sky to Blue-Fourth Gradient) */}
         <div className="absolute top-0 left-0 z-30 pointer-events-none">
-          <div className="flex items-center gap-1.5 pl-3 pr-3.5 py-1.5 border-fourth/40 bg-fourth/40 text-white rounded-tl-2xl rounded-br-2xl shadow-md border-b border-r border-white/20 backdrop-blur-md">
-            <ShieldCheck className="w-3.5 h-3.5 text-white shrink-0" strokeWidth={2.5} />
-            <span className="tracking-wider uppercase font-semibold text-[9px] md:text-[10px] text-white drop-shadow-xs leading-none">
+          <div className="flex items-center gap-1.5 pl-3 pr-3.5 py-1.5 bg-gradient-to-r from-sky-400 via-fourth to-blue-700 text-white rounded-tl-2xl rounded-br-2xl shadow-[0_2px_12px_rgba(0,123,255,0.4)] border-b border-r border-white/30 backdrop-blur-md">
+            <ShieldCheck className="w-3.5 h-3.5 text-white shrink-0 drop-shadow-[0_0_4px_rgba(255,255,255,0.7)]" strokeWidth={2.5} />
+            <span className="tracking-wider uppercase font-bold text-[9px] md:text-[10px] text-white drop-shadow-sm leading-none">
               Reecomm Inventory
             </span>
           </div>
         </div>
 
-        {/* Reecomm Inventory Light Ambient Effect (Fourth Theme Color) */}
-        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-fourth/60 to-transparent pointer-events-none z-20" />
-        <div className="absolute -top-10 -right-10 w-44 h-44 bg-fourth/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-fourth/5 rounded-full blur-2xl pointer-events-none" />
+        {/* Luminous Shimmer & Visible Ambient Light Glows Across Card */}
+        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-sky-300/70 to-transparent pointer-events-none z-20" />
+        <div className="absolute -top-10 -right-10 w-48 h-48 bg-fourth/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -right-8 w-44 h-44 bg-blue-600/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-8 left-1/4 w-52 h-44 bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-row md:flex-col w-full h-full">
           {/* IMAGE */}
@@ -350,7 +334,7 @@ export default function ReecommInventoryCard({
             className={`relative w-42 sm:w-40 min-h-45 md:min-h-0 md:h-52 md:w-full shrink-0 p-2 block ${!isCardActive ? "cursor-default" : "cursor-pointer"
               }`}
           >
-            <div className="relative w-full h-full overflow-hidden rounded-xl">
+            <div className="relative w-full h-full overflow-hidden rounded-xl border border-white/10 shadow-inner">
               {/* Inspection Badge */}
               {data?.inspectionBadgeUrl && (
                 <div className="hidden md:block absolute left-0 z-20 top-8">
@@ -416,8 +400,8 @@ export default function ReecommInventoryCard({
                     ${!isCardActive
                       ? "bg-black/40 text-white/30 cursor-not-allowed opacity-40 shadow-none border border-white/10"
                       : isComparing
-                        ? "bg-fourth text-secondary shadow-lg scale-110 cursor-pointer"
-                        : "bg-black/50 text-white hover:bg-black/70 cursor-pointer"
+                        ? "bg-fourth text-white shadow-[0_0_10px_rgba(0,123,255,0.6)] scale-110 cursor-pointer"
+                        : "bg-black/60 text-white hover:bg-black/80 hover:text-sky-200 cursor-pointer border border-white/10"
                     }`}
                   title={!isCardActive ? "Unavailable" : "Add to compare"}
                   aria-disabled={!isCardActive}
@@ -488,7 +472,7 @@ export default function ReecommInventoryCard({
                       text-sm font-secondary md:text-xl font-bold 
                       leading-tight tracking-wide 
                       line-clamp-2 overflow-hidden
-                      ${isTierActive ? "hover:text-fourth transition-colors cursor-pointer" : "text-primary cursor-default"}
+                      ${isTierActive ? "transition-colors group-hover/card:text-sky-200 cursor-pointer" : "text-primary cursor-default"}
                     `}
                     title={mapped.title}
                   >
@@ -511,7 +495,7 @@ export default function ReecommInventoryCard({
                 {/* USER */}
                 <div className="flex items-center gap-1.5 mt-1">
                   <p className="text-xs md:text-sm text-primary/90 flex items-center gap-1.5 truncate" title={mapped.userName || "john doe"}>
-                    <User className="w-3.5 h-3.5 shrink-0" />{" "}
+                    <User className="w-3.5 h-3.5 text-sky-300/80 shrink-0" />{" "}
                     <span className="truncate capitalize">{mapped.userName || "john doe"}</span>
                   </p>
                   {data?.tierTitle === "PREMIUM" && (
@@ -531,7 +515,7 @@ export default function ReecommInventoryCard({
                   className="text-xs md:text-sm text-primary/90 mt-1 flex items-center gap-1.5"
                   title={mapped.location || "Chhapi, Gujarat"}
                 >
-                  <MapPinned className="w-3.5 h-3.5 shrink-0" />
+                  <MapPinned className="w-3.5 h-3.5 text-sky-300/80 shrink-0" />
                   <span className="truncate capitalize">{mapped.location || "Chhapi, Gujarat"}</span>
                 </p>
               </div>
@@ -542,15 +526,15 @@ export default function ReecommInventoryCard({
               <span>{mapped.year}</span>
 
               <span className="flex items-center gap-1">
-                <Settings2 className="w-4 h-4" /> {mapped.transmission}
+                <Settings2 className="w-4 h-4 text-sky-300/80" /> {mapped.transmission}
               </span>
 
               <span className="flex items-center gap-1">
-                <Fuel className="w-4 h-4" /> {mapped.fuel}
+                <Fuel className="w-4 h-4 text-sky-300/80" /> {mapped.fuel}
               </span>
 
               <span className="flex items-center gap-1">
-                <Users className="w-4 h-4" /> {mapped.seats}
+                <Users className="w-4 h-4 text-sky-300/80" /> {mapped.seats}
               </span>
             </div>
 
@@ -582,9 +566,9 @@ export default function ReecommInventoryCard({
                   scroll={true}
                   variant="outline"
                   size="sm"
-                  className={`whitespace-nowrap ${!isCardActive
+                  className={`whitespace-nowrap border-fourth/30 hover:border-sky-300 hover:bg-fourth/20 hover:text-white text-sky-100 transition-all shadow-xs ${!isCardActive
                     ? "!opacity-40 !cursor-not-allowed !bg-white/5 !text-white/40 !border-white/10 pointer-events-none"
-                    : ""
+                    : "hover:shadow-[0_0_12px_rgba(0,123,255,0.35)]"
                     }`}
                   title={!isCardActive ? "Unavailable" : "View Details"}
                 >
