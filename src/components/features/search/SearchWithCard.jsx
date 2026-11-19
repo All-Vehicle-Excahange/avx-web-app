@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import VehicleCard from "@/components/ui/const/VehicleCard";
+import ReecommInventoryCard, {
+  isReecommInventoryVehicle,
+} from "@/components/ui/const/ReecommInventoryCard";
 import Button from "@/components/ui/button";
 import ChipGroup from "@/components/ui/chipGroup";
 import PromoCardRow from "./PromoCardRow";
@@ -9,7 +12,7 @@ import AdSenseAd from "@/components/common/AdSenseAd";
 import Chip from "@/components/ui/chip";
 import Pagination from "@/components/ui/Pagination";
 import VehicleCardSkeleton from "@/components/ui/skeleton/VehicleCardSkeleton";
-import { FilterIcon, MapPin, X, SearchX, RefreshCw } from "lucide-react";
+import { FilterIcon, MapPin, X, SearchX, RefreshCw, ShieldCheck, Car } from "lucide-react";
 import SponsoredCars from "./SponsoredCars";
 import FilterSection from "./FilterSection";
 import BrandModelFilter from "./BrandModelFilter";
@@ -238,6 +241,32 @@ export default function SearchWithCard({
   const [avxAssumed, setAvxAssumed] = useState(() => {
     return searchParams.get("reccomInspected") === "true";
   });
+  const [isAvxTier, setIsAvxTier] = useState(() => {
+    return (
+      searchParams.get("isAvxTier") === "true" ||
+      searchParams.get("reecommInventory") === "true" ||
+      searchParams.get("sellerType")?.toUpperCase() === "REECOMM"
+    );
+  });
+
+  const handleToggleReecommInventory = () => {
+    setIsAvxTier((prev) => {
+      const next = !prev;
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (next) {
+          url.searchParams.set("reecommInventory", "true");
+        } else {
+          url.searchParams.delete("reecommInventory");
+          url.searchParams.delete("isAvxTier");
+          url.searchParams.delete("sellerType");
+        }
+        window.history.replaceState(null, "", url.toString());
+      }
+      return next;
+    });
+    setCurrentPage(1);
+  };
 
   const [minPrice, setMinPrice] = useState(() => (hasBudgetOrPrice ? mPrice : 0));
   const [maxPrice, setMaxPrice] = useState(() => (hasBudgetOrPrice ? (mxPrice || fallbackMax) : fallbackMax));
@@ -460,6 +489,7 @@ export default function SearchWithCard({
     selectedRating,
     selectedSellerType,
     avxAssumed,
+    isAvxTier,
     minPrice,
     maxPrice,
     kmDistance,
@@ -771,13 +801,17 @@ export default function SearchWithCard({
       payload.maxKmDriven = kmDistance;
     }
 
-    if (selectedSellerType.length > 0)
+    if (
+      selectedSellerType.length > 0 &&
+      selectedSellerType[0].toUpperCase() !== "REECOMM"
+    )
       payload.sellerType = selectedSellerType[0].toUpperCase();
 
     if (selectedRating.length > 0)
       payload.minInspectionRating = parseFloat(selectedRating[0]);
 
     if (avxAssumed) payload.avxInspected = true;
+    if (isAvxTier) payload.isAvxTier = true;
 
     return payload;
   };
@@ -991,6 +1025,7 @@ export default function SearchWithCard({
     selectedRating,
     selectedSellerType,
     avxAssumed,
+    isAvxTier,
     minPrice,
     maxPrice,
     kmDistance,
@@ -1259,7 +1294,13 @@ export default function SearchWithCard({
 
     // Only push if the path actually changed (avoid infinite loops)
     if (newUrl !== window.location.pathname) {
-      window.history.replaceState(null, "", newUrl);
+      const sp = new URLSearchParams(window.location.search);
+      if (isAvxTier) {
+        sp.set("reecommInventory", "true");
+      }
+      const qs = sp.toString();
+      const finalUrl = qs ? `${newUrl}?${qs}` : newUrl;
+      window.history.replaceState(null, "", finalUrl);
     }
   }, [
     resolvedBrandName,
@@ -1274,6 +1315,7 @@ export default function SearchWithCard({
     selectedFuelTypes,
     selectedTransmissionTypes,
     selectedBodyType,
+    isAvxTier,
   ]);
 
   useEffect(() => {
@@ -1383,6 +1425,16 @@ export default function SearchWithCard({
       setAvxAssumed(true);
     } else if (reccomInspectedVal === null) {
       setAvxAssumed(false);
+    }
+
+    const isAvxTierVal =
+      searchParams.get("isAvxTier") ||
+      searchParams.get("reecommInventory") ||
+      (searchParams.get("sellerType")?.toUpperCase() === "REECOMM" ? "true" : null);
+    if (isAvxTierVal === "true") {
+      setIsAvxTier(true);
+    } else if (isAvxTierVal === null) {
+      setIsAvxTier(false);
     }
 
     if (makerId && brandParam) {
@@ -1527,7 +1579,7 @@ export default function SearchWithCard({
     }
 
     const qSeller = searchParams.get("sellerType");
-    if (!qSeller) {
+    if (!qSeller || qSeller.toUpperCase() === "REECOMM") {
       setSelectedSellerType([]);
     } else {
       setSelectedSellerType([qSeller.toUpperCase()]);
@@ -2438,6 +2490,8 @@ export default function SearchWithCard({
         type: "sellerType" 
       });
     }
+
+    if (isAvxTier) tags.push({ label: "Reecomm Inventory", type: "isAvxTier" });
     
     onFilterChange?.(tags);
     setActiveTagCount(tags.length);
@@ -2457,6 +2511,7 @@ export default function SearchWithCard({
     kmDistance,
     selectedRating,
     selectedSellerType,
+    isAvxTier,
     brands,
     models,
     variants,
@@ -2612,6 +2667,19 @@ export default function SearchWithCard({
         setSelectedSellerType([]);
         return;
       }
+      // 12. Reecomm Inventory
+      if (lower.includes("reecomm inventory")) {
+        setIsAvxTier(false);
+        setCurrentPage(1);
+        if (typeof window !== "undefined") {
+          const url = new URL(window.location.href);
+          url.searchParams.delete("reecommInventory");
+          url.searchParams.delete("isAvxTier");
+          url.searchParams.delete("sellerType");
+          window.history.replaceState(null, "", url.toString());
+        }
+        return;
+      }
       // 12. Location (City / State / Town)
       if (
         lower.includes(",") ||
@@ -2731,6 +2799,7 @@ export default function SearchWithCard({
     setSelectedRating([]);
     setSelectedSellerType([]);
     setAvxAssumed(false);
+    setIsAvxTier(false);
 
     // Reset year
     setSelectedYear([]);
@@ -2971,11 +3040,28 @@ export default function SearchWithCard({
                 </span>
 
                 <button
+                  type="button"
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-primary/90" : "bg-white/20"}`}
+                  className={`relative w-12 h-6 rounded-full transition cursor-pointer ${avxAssumed ? "bg-fourth" : "bg-white/20"}`}
                 >
                   <span
-                    className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"}`}
+                    className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${avxAssumed ? "translate-x-6" : "translate-x-0"}`}
+                  />
+                </button>
+              </div>
+
+              <div className="hidden lg:flex items-center justify-between px-4 py-3 rounded-lg border border-white/20 backdrop-blur-md bg-transparent">
+                <span className="text-primary font-semibold text-sm">
+                  Reecomm Inventory
+                </span>
+
+                <button
+                  type="button"
+                  onClick={handleToggleReecommInventory}
+                  className={`relative w-12 h-6 rounded-full transition cursor-pointer ${isAvxTier ? "bg-fourth" : "bg-white/20"}`}
+                >
+                  <span
+                    className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${isAvxTier ? "translate-x-6" : "translate-x-0"}`}
                   />
                 </button>
               </div>
@@ -3254,14 +3340,30 @@ export default function SearchWithCard({
 
               <div className="flex items-center gap-2 px-3 h-10 rounded-xl border border-third/40 shrink-0">
                 <span className="text-sm text-primary font-semibold">
+                  Reecomm Inventory
+                </span>
+                <button
+                  type="button"
+                  onClick={handleToggleReecommInventory}
+                  className={`relative w-9 h-5 rounded-full cursor-pointer ${isAvxTier ? "bg-fourth" : "bg-white/20"}`}
+                >
+                  <span
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-white transition-transform ${isAvxTier ? "translate-x-4" : ""}`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 px-3 h-10 rounded-xl border border-third/40 shrink-0">
+                <span className="text-sm text-primary font-semibold">
                   Reecomm Inspected
                 </span>
                 <button
+                  type="button"
                   onClick={() => setAvxAssumed(!avxAssumed)}
-                  className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-primary" : "bg-white/20"}`}
+                  className={`relative w-9 h-5 rounded-full cursor-pointer ${avxAssumed ? "bg-fourth" : "bg-white/20"}`}
                 >
                   <span
-                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-secondary transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
+                    className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-white transition-transform ${avxAssumed ? "translate-x-4" : ""}`}
                   />
                 </button>
               </div>
@@ -3463,24 +3565,39 @@ export default function SearchWithCard({
               <div className="col-span-full">
                 <div className="flex flex-col items-start gap-2">
                   <p className="mb-2 inline-block text-sm tracking-[0.4em] uppercase text-third font-semibold relative">
-                    Top Vehicle
-                    <span className="absolute left-0 -bottom-2 h-0.5 w-16 bg-linear-to-r from-neutral-100 to-transparent" />
+                    {isAvxTier ? "Reecomm Inventory" : "Top Vehicle"}
+                    <span className={`absolute left-0 -bottom-2 h-0.5 w-16 ${isAvxTier ? "bg-gradient-to-r from-fourth to-transparent" : "bg-linear-to-r from-neutral-100 to-transparent"}`} />
                   </p>
 
                   <h2 className="text-2xl md:text-3xl font-bold font-primary tracking-tight text-primary">
-                    <span className="text-fourth"> Top Vehicle</span> For You
+                    <span className={isAvxTier ? "text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-fourth to-blue-600" : "text-fourth"}>
+                      {" "}{isAvxTier ? "Reecomm Inventory" : "Top Vehicle"}
+                    </span>{" "}
+                    For You
                   </h2>
 
                   <p className="text-third">
-                    Handpicked based on your search — verified listings that
-                    match your budget and preferences.
+                    {isAvxTier
+                      ? "Certified pre-owned vehicles directly inspected and verified by Reecomm."
+                      : "Handpicked based on your search — verified listings that match your budget and preferences."}
                   </p>
                 </div>
               </div>
 
-              {vehicles.map((vehicle, index) => (
-                <VehicleCard key={vehicle?.id ? `${vehicle.id}-${index}` : index} data={vehicle} />
-              ))}
+              {vehicles.map((vehicle, index) => {
+                const isReecomm = isAvxTier || isReecommInventoryVehicle(vehicle);
+                const cardKey = vehicle?.id ? `${vehicle.id}-${index}` : index;
+                return isReecomm ? (
+                  <ReecommInventoryCard
+                    key={cardKey}
+                    data={vehicle}
+                    source="search"
+                    isTierActive={true}
+                  />
+                ) : (
+                  <VehicleCard key={cardKey} data={vehicle} />
+                );
+              })}
 
               {totalElements > 0 && (() => {
                 const displayTotalElements = Math.max(totalElements || 0, vehicles.length);

@@ -5,6 +5,7 @@ const ENDPOINT = {
   getWhereYouLeftOff: "/homefeed/vehicles/history",
   getRecentlySold: "/homefeed/vehicles/recently-sold",
   getHomeFeedConsult: "/homefeed/consultations",
+  getAvxTierVehicles: "/homefeed/vehicles/avx-tier",
   getAvxIsnpectedFourWheel: "/homefeed/vehicles/avx-inspected",
   getTopPicsFour: "/homefeed/vehicles/top-picks",
   getState: "/util/address/states/101",
@@ -84,6 +85,26 @@ export const getRecentlySold = async (data) => {
 
     const res = await axiosInstance.get(ENDPOINT.getRecentlySold, {
       params: { pageNo, size },
+    });
+
+    return handleResponse(res);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAvxTierVehicles = async (data) => {
+  try {
+    const { pageNo, size, vehicleType, cityId, stateId } = data;
+
+    const res = await axiosInstance.get(ENDPOINT.getAvxTierVehicles, {
+      params: {
+        pageNo,
+        size,
+        vehicleType,
+        ...(cityId ? { cityId } : {}),
+        ...(stateId ? { stateId } : {}),
+      },
     });
 
     return handleResponse(res);

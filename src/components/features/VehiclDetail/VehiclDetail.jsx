@@ -54,11 +54,21 @@ export default function VehicleDetails({
   const [activeTab, setActiveTab] = useState("overview");
 
   useLayoutEffect(() => {
-    if ("scrollRestoration" in history) {
+    const original =
+      typeof window !== "undefined" && "scrollRestoration" in history
+        ? history.scrollRestoration
+        : "auto";
+    if (typeof window !== "undefined" && "scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
+    return () => {
+      if (typeof window !== "undefined" && "scrollRestoration" in history) {
+        history.scrollRestoration = original;
+      }
+    };
   }, []);
 
   const scrollToSection = (ref, tab) => {

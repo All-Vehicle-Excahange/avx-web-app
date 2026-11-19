@@ -170,9 +170,9 @@ function Home() {
         <ShowcaseSection />
       </Layout>
 
-      {/* <Layout>
+      <Layout>
         <ReecommInventory />
-      </Layout> */}
+      </Layout>
 
       <CategoriesSections />
       <AvxInspected />

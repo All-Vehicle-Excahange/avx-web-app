@@ -55,9 +55,27 @@ function slugifyPart(value) {
     .replace(/[^\w-]/g, "");
 }
 
-function Index({ seo, initialOverview = null }) {
+function Index({ seo, initialOverview = null, canonicalSlug = null }) {
   const router = useRouter();
-  const { id } = router.query || {};
+  const { id, title } = router.query || {};
+
+  // If the URL slug differs from the backend canonical slug, update the browser URL bar
+  // in place (via replaceState) so it does NOT push a redirect history entry or trap back-button navigation.
+  React.useEffect(() => {
+    if (
+      canonicalSlug &&
+      title &&
+      title !== canonicalSlug &&
+      typeof window !== "undefined"
+    ) {
+      const search = window.location.search || "";
+      window.history.replaceState(
+        null,
+        "",
+        `/vehicle/details/${canonicalSlug}/${id}${search}`
+      );
+    }
+  }, [canonicalSlug, title, id]);
 
   const { data: vehicleOverview } = useQuery({
     ...getVehicleOverviewQuery(id),
@@ -391,14 +409,6 @@ export async function getStaticProps(context) {
           const generatedSlug = generateVehicleSlug(v);
           if (generatedSlug) {
             canonicalSlug = generatedSlug;
-            if (title && title !== generatedSlug) {
-              return {
-                redirect: {
-                  destination: `/vehicle/details/${generatedSlug}/${id}`,
-                  permanent: true,
-                },
-              };
-            }
           }
 
           const vehicleForSeo = {
@@ -458,6 +468,7 @@ export async function getStaticProps(context) {
         canonical: canonicalUrl,
       },
       initialOverview,
+      canonicalSlug,
     },
     revalidate: 60,
   };
