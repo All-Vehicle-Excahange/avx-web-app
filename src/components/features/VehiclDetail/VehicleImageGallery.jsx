@@ -11,7 +11,6 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackWishlistLoginRequired } from "@/lib/amplitude";
-import { VEHICLE_IMAGE_FALLBACK } from "@/lib/vehicleImage";
 import VehicleGalleryModal from "./VehicleGalleryModal";
 
 const optimizeVideoUrl = (src) => {
@@ -184,11 +183,8 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
     return items;
   }, [vehicle]);
 
-  const safeSrc = (src) =>
-    src && failedSrcs.has(src) ? VEHICLE_IMAGE_FALLBACK : src || VEHICLE_IMAGE_FALLBACK;
-
   const markFailed = (src) => {
-    if (!src || src === VEHICLE_IMAGE_FALLBACK) return;
+    if (!src) return;
     setFailedSrcs((prev) => {
       if (prev.has(src)) return prev;
       const next = new Set(prev);
@@ -313,15 +309,35 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
               className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer active:cursor-grabbing"
             >
               {currentItem.type === "image" ? (
-                <Image
-                  src={safeSrc(currentItem.src)}
-                  alt={`${imageAltBase} — photo ${activeIndex + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  className="object-cover pointer-events-none select-none"
-                  priority
-                  onError={() => markFailed(currentItem.src)}
-                />
+                failedSrcs.has(currentItem.src) ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 text-center p-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-12 h-12 text-white/30 mb-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p className="text-xs text-white/40 font-medium">Image unavailable</p>
+                  </div>
+                ) : (
+                  <Image
+                    src={currentItem.src}
+                    alt={`${imageAltBase} — photo ${activeIndex + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 800px"
+                    className="object-cover pointer-events-none select-none"
+                    priority
+                    onError={() => markFailed(currentItem.src)}
+                  />
+                )
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center bg-black"
@@ -392,15 +408,21 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
                     }`}
                 >
                   {item.type === "image" ? (
-                    <Image
-                      src={safeSrc(item.thumbnail)}
-                      width={100}
-                      height={100}
-                      sizes="96px"
-                      alt={`${imageAltBase} — photo ${idx + 1}`}
-                      className="w-full h-full object-cover pointer-events-none select-none"
-                      onError={() => markFailed(item.thumbnail)}
-                    />
+                    failedSrcs.has(item.thumbnail) ? (
+                      <div className="w-full h-full flex items-center justify-center bg-neutral-800 text-white/30 text-[10px]">
+                        No Img
+                      </div>
+                    ) : (
+                      <Image
+                        src={item.thumbnail}
+                        width={100}
+                        height={100}
+                        sizes="96px"
+                        alt={`${imageAltBase} — photo ${idx + 1}`}
+                        className="w-full h-full object-cover pointer-events-none select-none"
+                        onError={() => markFailed(item.thumbnail)}
+                      />
+                    )
                   ) : (
                     <>
                       <VideoThumbnail

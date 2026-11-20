@@ -1,5 +1,13 @@
-/** Fallback when vehicle thumbnail / gallery image fails to load. */
-export const VEHICLE_IMAGE_FALLBACK = "/big_card_car.jpg";
+const isCleanImageUrl = (url) => {
+  if (typeof url !== "string") return false;
+  const trimmed = url.trim();
+  return Boolean(
+    trimmed &&
+      trimmed !== "/big_card_car.jpg" &&
+      trimmed !== "null" &&
+      trimmed !== "undefined"
+  );
+};
 
 /**
  * Best available still image for a vehicle card / compare thumb.
@@ -13,11 +21,11 @@ export function resolveVehicleImageSrc(vehicle) {
     vehicle.image ||
     vehicle.imageUrl ||
     null;
-  if (typeof thumb === "string" && thumb.trim()) return thumb.trim();
+  if (isCleanImageUrl(thumb)) return thumb.trim();
 
   if (Array.isArray(vehicle.vehicleImages) && vehicle.vehicleImages.length) {
     const firstStill = [...vehicle.vehicleImages]
-      .filter((item) => item && !item.isVideo && item.imageUrl)
+      .filter((item) => item && !item.isVideo && isCleanImageUrl(item.imageUrl))
       .sort(
         (a, b) =>
           (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0),
@@ -27,9 +35,9 @@ export function resolveVehicleImageSrc(vehicle) {
 
   if (Array.isArray(vehicle.imageUrls) && vehicle.imageUrls.length) {
     for (const entry of vehicle.imageUrls) {
-      if (typeof entry === "string" && entry.trim()) return entry.trim();
+      if (isCleanImageUrl(entry)) return entry.trim();
       const url = entry?.url || entry?.photoUrl || entry?.imageUrl;
-      if (typeof url === "string" && url.trim()) return url.trim();
+      if (isCleanImageUrl(url)) return url.trim();
     }
   }
 

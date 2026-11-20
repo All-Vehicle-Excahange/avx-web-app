@@ -67,7 +67,7 @@ export default function InventoryComponent() {
     fuel: v.fuelType,
     ownership: v.ownership,
     price: v.price,
-    image: v.thumbnailUrl || "/big_card_car.jpg",
+    image: v.thumbnailUrl || null,
     location: v.address?.city || v.address?.state || "-",
     verificationStatus: v.verificationStatus,
     inspectionStatus: v.inspectionStatus,

@@ -28,7 +28,6 @@ import toast from "react-hot-toast";
 import { event as metaEvent } from "@/lib/fpixel";
 import {
   resolveVehicleImageSrc,
-  VEHICLE_IMAGE_FALLBACK,
 } from "@/lib/vehicleImage";
 
 export default function VehicleCard({
@@ -54,9 +53,10 @@ export default function VehicleCard({
   );
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const resolvedImage = resolveVehicleImageSrc(data);
-  const [imageSrc, setImageSrc] = useState(resolvedImage);
+  const [imageSrc, setImageSrc] = useState(resolvedImage || null);
+
   useEffect(() => {
-    setImageSrc(resolvedImage);
+    setImageSrc(resolvedImage || null);
   }, [resolvedImage]);
   const { addToCompare, compareVehicles } = useCompareStore();
   const isComparing = compareVehicles.some((v) => v.id === data.id);
@@ -351,14 +351,17 @@ export default function VehicleCard({
                   sizes="(max-width: 768px) 168px, 320px"
                   className="h-full w-full object-cover"
                   onError={() => {
-                    if (imageSrc !== VEHICLE_IMAGE_FALLBACK) {
-                      setImageSrc(VEHICLE_IMAGE_FALLBACK);
-                    }
+                    setImageSrc(null);
                   }}
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-[#1B1A1A]">
-                  <CarFront className="w-12 h-12 text-gray-400" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1c1c1e] via-[#161618] to-[#0e0e10] p-3 text-center select-none">
+                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 mb-1.5 text-white/40">
+                    <CarFront className="w-8 h-8 text-white/40" />
+                  </div>
+                  <span className="text-[11px] font-semibold text-white/40 tracking-wide">
+                    No Image Available
+                  </span>
                 </div>
               )}
 

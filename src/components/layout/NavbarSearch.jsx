@@ -36,7 +36,7 @@ import { getAndSearchMakers } from "@/services/filter";
 import { GlobalSearchService } from "@/services/globalSearch.service";
 import { getTopPicsQuery } from "@/queries/user.queries";
 import { useLocationStore } from "@/stores/useLocationStore";
-import { resolveVehicleImageSrc, VEHICLE_IMAGE_FALLBACK } from "@/lib/vehicleImage";
+import { resolveVehicleImageSrc } from "@/lib/vehicleImage";
 import { generateVehicleUrl } from "@/lib/helper";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { event as metaEvent } from "@/lib/fpixel";
@@ -1599,8 +1599,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             vehicle.title ||
                             `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
                             "Vehicle";
-                          const imageSrc =
-                            resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                          const imageSrc = resolveVehicleImageSrc(vehicle);
                           const formattedPrice = (() => {
                             const p = Number(vehicle.price);
                             if (!p || isNaN(p)) return vehicle.price || "₹-";
@@ -1641,15 +1640,24 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                               className="flex gap-2.5 p-2 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/80 hover:shadow-xs cursor-pointer transition-all group bg-white"
                             >
                               {/* Thumbnail */}
-                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
-                                <img
-                                  src={imageSrc}
-                                  alt={title}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
-                                  }}
-                                />
+                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative flex items-center justify-center">
+                                {imageSrc ? (
+                                  <img
+                                    src={imageSrc}
+                                    alt={title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                    }}
+                                  />
+                                ) : null}
+                                <div
+                                  className={`absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 ${
+                                    imageSrc ? "-z-10" : ""
+                                  }`}
+                                >
+                                  <CarFront className="w-5 h-5 text-gray-400" />
+                                </div>
                               </div>
 
                               {/* Details */}
@@ -1716,8 +1724,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             vehicle.title ||
                             `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
                             "Vehicle";
-                          const imageSrc =
-                            resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                          const imageSrc = resolveVehicleImageSrc(vehicle);
                           const formattedPrice = (() => {
                             const p = Number(vehicle.price);
                             if (!p || isNaN(p)) return vehicle.price || "₹-";
@@ -1758,15 +1765,24 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                               className="flex gap-2.5 p-2 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/80 hover:shadow-xs cursor-pointer transition-all group bg-white"
                             >
                               {/* Thumbnail */}
-                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
-                                <img
-                                  src={imageSrc}
-                                  alt={title}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
-                                  }}
-                                />
+                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative flex items-center justify-center">
+                                {imageSrc ? (
+                                  <img
+                                    src={imageSrc}
+                                    alt={title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                    }}
+                                  />
+                                ) : null}
+                                <div
+                                  className={`absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 ${
+                                    imageSrc ? "-z-10" : ""
+                                  }`}
+                                >
+                                  <Bike className="w-5 h-5 text-gray-400" />
+                                </div>
                               </div>
 
                               {/* Details */}
@@ -2309,8 +2325,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             vehicle.title ||
                             `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
                             "Vehicle";
-                          const imageSrc =
-                            resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                          const imageSrc = resolveVehicleImageSrc(vehicle);
                           const formattedPrice = (() => {
                             const p = Number(vehicle.price);
                             if (!p || isNaN(p)) return vehicle.price || "₹-";
@@ -2348,15 +2363,24 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                               }}
                               className="flex gap-2.5 p-2 rounded-xl border border-gray-100 bg-white hover:border-gray-200 active:bg-gray-50 transition-all cursor-pointer group"
                             >
-                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
-                                <img
-                                  src={imageSrc}
-                                  alt={title}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
-                                  }}
-                                />
+                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative flex items-center justify-center">
+                                {imageSrc ? (
+                                  <img
+                                    src={imageSrc}
+                                    alt={title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                    }}
+                                  />
+                                ) : null}
+                                <div
+                                  className={`absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 ${
+                                    imageSrc ? "-z-10" : ""
+                                  }`}
+                                >
+                                  <CarFront className="w-5 h-5 text-gray-400" />
+                                </div>
                               </div>
                               <div className="flex-1 min-w-0 flex flex-col justify-center">
                                 <h4 className="text-[12px] font-semibold text-gray-900 truncate font-primary">
@@ -2418,8 +2442,7 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             vehicle.title ||
                             `${vehicle.yearOfMfg || vehicle.year || ""} ${vehicle.makerName || vehicle.makeName || ""} ${vehicle.modelName || ""}`.trim() ||
                             "Vehicle";
-                          const imageSrc =
-                            resolveVehicleImageSrc(vehicle) || VEHICLE_IMAGE_FALLBACK;
+                          const imageSrc = resolveVehicleImageSrc(vehicle);
                           const formattedPrice = (() => {
                             const p = Number(vehicle.price);
                             if (!p || isNaN(p)) return vehicle.price || "₹-";
@@ -2457,15 +2480,24 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                               }}
                               className="flex gap-2.5 p-2 rounded-xl border border-gray-100 bg-white hover:border-gray-200 active:bg-gray-50 transition-all cursor-pointer group"
                             >
-                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative">
-                                <img
-                                  src={imageSrc}
-                                  alt={title}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.src = VEHICLE_IMAGE_FALLBACK;
-                                  }}
-                                />
+                              <div className="w-[80px] h-[58px] rounded-lg overflow-hidden bg-gray-100 shrink-0 relative flex items-center justify-center">
+                                {imageSrc ? (
+                                  <img
+                                    src={imageSrc}
+                                    alt={title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                    }}
+                                  />
+                                ) : null}
+                                <div
+                                  className={`absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 ${
+                                    imageSrc ? "-z-10" : ""
+                                  }`}
+                                >
+                                  <Bike className="w-5 h-5 text-gray-400" />
+                                </div>
                               </div>
                               <div className="flex-1 min-w-0 flex flex-col justify-center">
                                 <h4 className="text-[12px] font-semibold text-gray-900 truncate font-primary">
