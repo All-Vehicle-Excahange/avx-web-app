@@ -192,8 +192,8 @@ export default function VehicleCard({
 
     title: data.makerName
       ? [data.makerName, data.modelName, data.variantName]
-          .filter((part) => part && String(part).toLowerCase() !== "null" && String(part).toLowerCase() !== "undefined")
-          .join(" ")
+        .filter((part) => part && String(part).toLowerCase() !== "null" && String(part).toLowerCase() !== "undefined")
+        .join(" ")
       : data.title,
 
     year: data.yearOfMfg || data.year,
@@ -342,11 +342,10 @@ export default function VehicleCard({
               {imageSrc ? (
                 <Image
                   src={imageSrc}
-                  alt={`${[mapped.year, mapped.title].filter(Boolean).join(" ")}${
-                    mapped.location && mapped.location !== "-"
-                      ? ` in ${mapped.location.split(",")[0].trim()}`
-                      : ""
-                  } | Reecomm`}
+                  alt={`${[mapped.year, mapped.title].filter(Boolean).join(" ")}${mapped.location && mapped.location !== "-"
+                    ? ` in ${mapped.location.split(",")[0].trim()}`
+                    : ""
+                    } | Reecomm`}
                   fill
                   sizes="(max-width: 768px) 168px, 320px"
                   className="h-full w-full object-cover"
@@ -562,8 +561,8 @@ export default function VehicleCard({
                   variant="outline"
                   size="sm"
                   className={`whitespace-nowrap ${!isCardActive
-                      ? "!opacity-40 !cursor-not-allowed !bg-white/5 !text-white/40 !border-white/10 pointer-events-none"
-                      : ""
+                    ? "!opacity-40 !cursor-not-allowed !bg-white/5 !text-white/40 !border-white/10 pointer-events-none"
+                    : ""
                     }`}
                   title={!isCardActive ? "Unavailable" : "View Details"}
                 >

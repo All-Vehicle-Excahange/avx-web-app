@@ -1,4 +1,4 @@
-const isCleanImageUrl = (url) => {
+export const isCleanImageUrl = (url) => {
   if (typeof url !== "string") return false;
   const trimmed = url.trim();
   return Boolean(
