@@ -12,18 +12,17 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import CompareSkeleton from "@/components/ui/skeleton/CompareSkeleton";
 import {
     resolveVehicleImageSrc,
-    VEHICLE_IMAGE_FALLBACK,
 } from "@/lib/vehicleImage";
 
 function CompareVehicleImage({ vehicle, alt, sizes = "96px" }) {
     const resolved = resolveVehicleImageSrc(vehicle);
-    const [src, setSrc] = useState(resolved || VEHICLE_IMAGE_FALLBACK);
+    const [src, setSrc] = useState(resolved);
 
     useEffect(() => {
-        setSrc(resolved || VEHICLE_IMAGE_FALLBACK);
+        setSrc(resolved);
     }, [resolved]);
 
-    if (!resolved && !src) {
+    if (!src) {
         return (
             <span className="text-[8px] sm:text-[10px] text-primary/40 font-medium">
                 No Img
@@ -41,9 +40,7 @@ function CompareVehicleImage({ vehicle, alt, sizes = "96px" }) {
             sizes={sizes}
             className="w-full h-full object-cover"
             onError={() => {
-                if (src !== VEHICLE_IMAGE_FALLBACK) {
-                    setSrc(VEHICLE_IMAGE_FALLBACK);
-                }
+                setSrc(null);
             }}
         />
     );

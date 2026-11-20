@@ -4,6 +4,7 @@ import {
   Calendar,
   IndianRupee,
   MoreVertical,
+  CarFront,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -34,7 +35,7 @@ export default function TopPerformingCard({ vehicle, rank }) {
 
   const vehicleTitle = `${vehicle.makerName} ${vehicle.modelName} ${vehicle.variantName}`;
   const isShowInspectionBtn = vehicle?.inspectionStatus === "NOT_INSPECTED";
-  const vehicleImage = vehicle.thumbnailUrl || "/big_card_car.jpg";
+  const vehicleImage = vehicle.thumbnailUrl || null;
 
   const listingDate = vehicle.listingDate
     ? new Date(vehicle.listingDate).toLocaleDateString("en-IN", {
@@ -109,18 +110,24 @@ export default function TopPerformingCard({ vehicle, rank }) {
         </div>
 
         {/* IMAGE */}
-        <div className="relative w-full   sm:w-36 h-26 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0">
-          <Image
-            src={vehicleImage}
-            alt={vehicleTitle}
-            fill
-            onClick={() =>
-              push(
-                `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
-              )
-            }
-            className="object-cover cursor-pointer"
-          />
+        <div className="relative w-full sm:w-36 h-26 rounded-xl overflow-hidden border border-third/30 bg-primary/5 shrink-0 flex items-center justify-center">
+          {vehicleImage ? (
+            <Image
+              src={vehicleImage}
+              alt={vehicleTitle}
+              fill
+              onClick={() =>
+                push(
+                  `/vehicle/details/${generateVehicleSlug(vehicle)}/${vehicle.id}`,
+                )
+              }
+              className="object-cover cursor-pointer"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-neutral-900 text-gray-500">
+              <CarFront className="w-7 h-7 text-gray-400" />
+            </div>
+          )}
           {rank && (
             <div className="absolute top-2 left-2 w-7 h-7 rounded-full bg-primary text-secondary text-xs font-bold flex items-center justify-center shadow-md">
               #{rank}
