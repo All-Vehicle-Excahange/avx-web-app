@@ -1,10 +1,10 @@
 "use client"
 
-import { getCdnImageUrl } from "./cdnImage";
+import { getCdnImageUrl, ENABLE_IMAGE_CDN } from "./cdnImage";
 
 /**
- * Next.js custom image loader → AWS CloudFront (image.reecomm.com).
- * Replaces the former ImageKit loader.
+ * Next.js custom image loader → AWS CloudFront (image.reecomm.com) with direct Amazon S3 fallback.
+ * While image.reecomm.com throws 500 errors, loads directly from Amazon S3 (200 OK).
  */
 export default function cdnImageLoader({ src, width, quality }) {
   if (!src || typeof src !== "string") return src || "";
@@ -14,19 +14,25 @@ export default function cdnImageLoader({ src, width, quality }) {
     return `${src}?w=${width || 640}`;
   }
 
-  const cdnUrl = getCdnImageUrl(src, {
-    width: width || 640,
-    quality: quality || 75,
-    format: "auto",
-  });
+  // =========================================================================
+  // CloudFront CDN (image.reecomm.com)
+  // When ENABLE_IMAGE_CDN is true, rewrite through CloudFront CDN.
+  // When false (default), bypasses image.reecomm.com and serves direct S3 URLs.
+  // =========================================================================
+  if (ENABLE_IMAGE_CDN) {
+    const cdnUrl = getCdnImageUrl(src, {
+      width: width || 640,
+      quality: quality || 75,
+      format: "auto",
+      forceCdn: true,
+    });
 
-  // External / unchanged absolute URLs: preserve Next's width hint for cache busting
-  if (
-    cdnUrl === src &&
-    (src.startsWith("http://") || src.startsWith("https://"))
-  ) {
-    return `${src}${src.includes("?") ? "&" : "?"}w=${width || 640}`;
+    if (cdnUrl && cdnUrl !== src) {
+      return cdnUrl;
+    }
   }
 
-  return cdnUrl;
+  // --- DIRECT AMAZON S3 FALLBACK ---
+  // Return the original S3 URL directly so all vehicle images load 100% reliably
+  return `${src}${src.includes("?") ? "&" : "?"}w=${width || 640}`;
 }

@@ -11,6 +11,7 @@ import { useDebouncedCallback } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { event as metaEvent } from "@/lib/fpixel";
 import { trackWishlistLoginRequired } from "@/lib/amplitude";
+import { isCleanImageUrl } from "@/lib/vehicleImage";
 import VehicleGalleryModal from "./VehicleGalleryModal";
 
 const optimizeVideoUrl = (src) => {
@@ -150,12 +151,12 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
     const seen = new Set();
 
     const pushImage = (src, thumbnail) => {
-      if (!src || seen.has(src)) return;
+      if (!isCleanImageUrl(src) || seen.has(src)) return;
       seen.add(src);
       items.push({
         type: "image",
         src,
-        thumbnail: thumbnail || src,
+        thumbnail: isCleanImageUrl(thumbnail) ? thumbnail : src,
       });
     };
 
@@ -169,10 +170,13 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
       );
       for (const item of sorted) {
         if (item.isVideo) {
+          const thumb = isCleanImageUrl(item.videoThumbnailUrl)
+            ? item.videoThumbnailUrl
+            : null;
           items.push({
             type: "video",
             src: item.imageUrl,
-            thumbnail: item.videoThumbnailUrl || item.imageUrl,
+            thumbnail: thumb,
           });
         } else if (item.imageUrl) {
           pushImage(item.imageUrl, item.imageUrl);
@@ -267,16 +271,14 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
             onClick={isTierActive ? handleWishlistToggle : undefined}
             disabled={!isTierActive}
             title={!isTierActive ? "Unavailable" : (isFavorite ? "Remove from Wishlist" : "Add to Wishlist")}
-            className={`p-2.5 rounded-full transition border shadow-md backdrop-blur-md ${
-              !isTierActive
-                ? "bg-black/30 text-white/30 border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
-                : "bg-black/50 hover:bg-black/70 text-white hover:scale-105 cursor-pointer border-white/20"
-            }`}
+            className={`p-2.5 rounded-full transition border shadow-md backdrop-blur-md ${!isTierActive
+              ? "bg-black/30 text-white/30 border-white/10 cursor-not-allowed opacity-50 pointer-events-none"
+              : "bg-black/50 hover:bg-black/70 text-white hover:scale-105 cursor-pointer border-white/20"
+              }`}
           >
             <Heart
-              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                !isTierActive ? "text-white/30" : isFavorite ? "fill-red-500 text-red-500" : "text-white"
-              }`}
+              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${!isTierActive ? "text-white/30" : isFavorite ? "fill-red-500 text-red-500" : "text-white"
+                }`}
             />
           </button>
         </div>
@@ -458,7 +460,20 @@ export default function VehicleImageGallery({ vehicle, isTierActive = true }) {
 }
 
 const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
-  if (providedThumbnail) {
+  const [imgError, setImgError] = useState(false);
+
+  const isVideoFile = (url) => {
+    if (!url || typeof url !== "string") return false;
+    return /\.(mp4|mov|webm|ogg|m4v)(\?.*)?$/i.test(url) || url === videoUrl;
+  };
+
+  const hasValidThumbnail = Boolean(
+    providedThumbnail &&
+    !isVideoFile(providedThumbnail) &&
+    !imgError
+  );
+
+  if (hasValidThumbnail) {
     return (
       <Image
         src={providedThumbnail}
@@ -467,19 +482,22 @@ const VideoThumbnail = ({ videoUrl, providedThumbnail }) => {
         sizes="96px"
         alt="video-thumbnail"
         className="w-full h-full object-cover"
+        onError={() => setImgError(true)}
       />
     );
   }
 
   return (
     <div className="w-full h-full bg-neutral-900 overflow-hidden relative flex items-center justify-center">
-      <video
-        src={videoUrl}
-        preload="metadata"
-        muted
-        playsInline
-        className="w-full h-full object-cover pointer-events-none"
-      />
+      {videoUrl ? (
+        <video
+          src={`${videoUrl}#t=0.001`}
+          preload="metadata"
+          muted
+          playsInline
+          className="w-full h-full object-cover pointer-events-none"
+        />
+      ) : null}
     </div>
   );
 };

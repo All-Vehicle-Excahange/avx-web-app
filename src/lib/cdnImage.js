@@ -7,6 +7,14 @@ export const CDN_BASE = (
   process.env.NEXT_PUBLIC_CDN_IMAGE_BASE || "https://image.reecomm.com"
 ).replace(/\/$/, "");
 
+/**
+ * Global toggle for CloudFront CDN (image.reecomm.com).
+ * - Defaults to false: Falls back directly to Amazon S3 (200 OK) while image.reecomm.com throws 500 error.
+ * - Set NEXT_PUBLIC_ENABLE_IMAGE_CDN="true" in .env to re-enable CDN transforms when AWS Lambda/API Gateway is fixed.
+ */
+export const ENABLE_IMAGE_CDN =
+  process.env.NEXT_PUBLIC_ENABLE_IMAGE_CDN === "true";
+
 /** Centralized size/quality presets for website image contexts. */
 export const IMAGE_PRESETS = {
   thumb: { width: 160, quality: 70 },
@@ -170,6 +178,25 @@ export function getCdnImageUrl(source, options = {}) {
   if (source == null) return "";
   const src = String(source).trim();
   if (!src) return "";
+
+  // S3 Fallback mode: when ENABLE_IMAGE_CDN is false, return direct Amazon S3 URL
+  // so images load with 200 OK without failing on image.reecomm.com (500 error).
+  const isCdnActive = options.forceCdn ?? (ENABLE_IMAGE_CDN || process.env.NODE_ENV === "test");
+  if (!isCdnActive) {
+    if (isReecommCdnUrl(src)) {
+      const key = extractObjectKey(src);
+      return key
+        ? `https://my-avx-bucket.s3.ap-south-1.amazonaws.com/${encodeObjectKey(key)}`
+        : src;
+    }
+    if (!isHttpUrl(src) && !isLocalPublicPath(src)) {
+      const key = encodeObjectKey(extractObjectKey(src));
+      return key
+        ? `https://my-avx-bucket.s3.ap-south-1.amazonaws.com/${key}`
+        : src;
+    }
+    return src;
+  }
 
   // Local public assets — leave for Next / static hosting
   if (isLocalPublicPath(src)) return src;

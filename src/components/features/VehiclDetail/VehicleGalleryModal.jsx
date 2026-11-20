@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Keyboard, Zoom } from "swiper/modules";
 import useEscapeKey from "@/hooks/useEscapeKey";
+import { isCleanImageUrl } from "@/lib/vehicleImage";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,15 +15,27 @@ import "swiper/css/zoom";
 export default function VehicleGalleryModal({ isOpen, onClose, media, initialSlide, imageAltBase }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(initialSlide || 0);
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const [failedSrcs, setFailedSrcs] = useState(() => new Set());
+  const [prevEl, setPrevEl] = useState(null);
+  const [nextEl, setNextEl] = useState(null);
   const swiperRef = useRef(null);
+
+  const markFailed = (src) => {
+    if (!src) return;
+    setFailedSrcs((prev) => {
+      if (prev.has(src)) return prev;
+      const next = new Set(prev);
+      next.add(src);
+      return next;
+    });
+  };
 
   useEscapeKey(isOpen, onClose);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveIndex(initialSlide || 0);
     } else {
       document.body.style.overflow = "auto";
@@ -70,39 +83,51 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
           }}
           spaceBetween={0}
           loop={true}
-          navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-          }}
+          navigation={{ prevEl, nextEl }}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
           keyboard={{ enabled: true }}
           zoom={{ maxRatio: 3, minRatio: 1 }}
           modules={[FreeMode, Navigation, Thumbs, Keyboard, Zoom]}
-          onInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-            swiper.navigation.init();
-            swiper.navigation.update();
-          }}
           className="w-full h-full"
         >
           {media.map((item, idx) => (
-            <SwiperSlide 
-              key={idx} 
+            <SwiperSlide
+              key={idx}
               className="flex items-center justify-center w-full h-full overflow-hidden [&:not(.swiper-slide-zoomed)_.swiper-zoom-container]:cursor-zoom-in [&.swiper-slide-zoomed_.swiper-zoom-container]:cursor-zoom-out"
             >
               {({ isActive }) => (
                 item.type === "image" ? (
-                  <div className="swiper-zoom-container relative w-full h-full">
-                    <Image
-                      src={item.src}
-                      alt={`${imageAltBase} — photo ${idx + 1}`}
-                      fill
-                      className="object-contain select-none"
-                      priority={idx <= 3}
-                      sizes="100vw"
-                    />
-                  </div>
+                  failedSrcs.has(item.src) ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900/90 text-center p-4 select-none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-14 h-14 text-white/30 mb-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={1}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <p className="text-sm text-white/40 font-medium">Image unavailable</p>
+                    </div>
+                  ) : (
+                    <div className="swiper-zoom-container relative w-full h-full">
+                      <Image
+                        src={item.src}
+                        alt={`${imageAltBase} — photo ${idx + 1}`}
+                        fill
+                        className="object-contain select-none"
+                        priority={idx <= 3}
+                        sizes="100vw"
+                        onError={() => markFailed(item.src)}
+                      />
+                    </div>
+                  )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-transparent">
                     <video
@@ -114,7 +139,7 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                       ref={(el) => {
                         if (el) {
                           if (isActive) {
-                            el.play().catch(() => {});
+                            el.play().catch(() => { });
                           } else {
                             el.pause();
                           }
@@ -130,13 +155,13 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
 
         {/* Global Nav Arrows on Far Left/Right edges */}
         <button
-          ref={prevRef}
+          ref={(node) => setPrevEl(node)}
           className="absolute left-0 sm:left-6 top-1/2 -translate-y-1/2 z-20 bg-transparent sm:bg-white/5 text-white p-2 sm:p-3 rounded-full sm:hover:bg-white/20 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer sm:backdrop-blur-sm drop-shadow-lg"
         >
           <ChevronLeft className="w-8 h-8 sm:w-6 sm:h-6" />
         </button>
         <button
-          ref={nextRef}
+          ref={(node) => setNextEl(node)}
           className="absolute right-0 sm:right-6 top-1/2 -translate-y-1/2 z-20 bg-transparent sm:bg-white/5 text-white p-2 sm:p-3 rounded-full sm:hover:bg-white/20 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer sm:backdrop-blur-sm drop-shadow-lg"
         >
           <ChevronRight className="w-8 h-8 sm:w-6 sm:h-6" />
@@ -171,25 +196,42 @@ export default function VehicleGalleryModal({ isOpen, onClose, media, initialSli
                   >
                     {isActive && <div className="absolute inset-0 border-[2px] border-white rounded z-10 pointer-events-none" />}
                     {item.type === "image" ? (
-                      <Image
-                        src={item.thumbnail}
-                        fill
-                        sizes="100px"
-                        alt="thumb"
-                        className="object-cover pointer-events-none"
-                      />
+                      failedSrcs.has(item.thumbnail || item.src) ? (
+                        <div className="w-full h-full flex items-center justify-center bg-neutral-800 text-white/30 text-[10px] font-medium">
+                          No Img
+                        </div>
+                      ) : (
+                        <Image
+                          src={item.thumbnail}
+                          fill
+                          sizes="100px"
+                          alt="thumb"
+                          className="object-cover pointer-events-none"
+                          onError={() => markFailed(item.thumbnail || item.src)}
+                        />
+                      )
                     ) : (
                       <>
-                        {item.thumbnail ? (
+                        {isCleanImageUrl(item.thumbnail) &&
+                          !/\.(mp4|mov|webm|ogg|m4v)(\?.*)?$/i.test(item.thumbnail) &&
+                          item.thumbnail !== item.src &&
+                          !failedSrcs.has(item.thumbnail) ? (
                           <Image
                             src={item.thumbnail}
                             fill
                             sizes="100px"
                             alt="thumb"
                             className="object-cover pointer-events-none"
+                            onError={() => markFailed(item.thumbnail)}
                           />
                         ) : (
-                          <video src={item.src} className="w-full h-full object-cover pointer-events-none" />
+                          <video
+                            src={item.src ? `${item.src}#t=0.001` : undefined}
+                            preload="metadata"
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover pointer-events-none"
+                          />
                         )}
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
                           <Play className="text-white w-4 h-4" />

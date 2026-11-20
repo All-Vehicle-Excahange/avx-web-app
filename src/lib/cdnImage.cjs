@@ -79,10 +79,32 @@ function encodeObjectKey(path) {
     .join("/");
 }
 
+const ENABLE_IMAGE_CDN =
+  process.env.NEXT_PUBLIC_ENABLE_IMAGE_CDN === "true";
+
 function getCdnImageUrl(source, options = {}) {
   if (source == null) return "";
   const src = String(source).trim();
   if (!src) return "";
+
+  // S3 Fallback mode: when ENABLE_IMAGE_CDN is false, return direct Amazon S3 URL
+  const isCdnActive = options.forceCdn ?? (ENABLE_IMAGE_CDN || process.env.NODE_ENV === "test");
+  if (!isCdnActive) {
+    if (isReecommCdnUrl(src)) {
+      const key = extractObjectKey(src);
+      return key
+        ? `https://my-avx-bucket.s3.ap-south-1.amazonaws.com/${encodeObjectKey(key)}`
+        : src;
+    }
+    if (!isHttpUrl(src) && !src.startsWith("/")) {
+      const key = encodeObjectKey(extractObjectKey(src));
+      return key
+        ? `https://my-avx-bucket.s3.ap-south-1.amazonaws.com/${key}`
+        : src;
+    }
+    return src;
+  }
+
   if (isHttpUrl(src) && !isS3Url(src) && !isReecommCdnUrl(src)) return src;
 
   const key = encodeObjectKey(extractObjectKey(src));
