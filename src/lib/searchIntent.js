@@ -134,6 +134,30 @@ export const MODEL_CANONICAL_SLUGS = {
   jupiter: "tvs-jupiter",
 };
 
+export const CITY_STOP_WORDS = new Set([
+  "used", "second", "hand", "buy", "car", "cars", "bike", "bikes",
+  "two", "wheeler", "wheelers", "in", "at", "near", "for", "sale",
+  "all", "auto", "vehicle", "vehicles", "model", "price", "best", "good",
+  "diesel", "die", "petrol", "pet", "cng", "electric", "ev", "suv", "sedan",
+  "under", "lakh", "lakhs",
+]);
+
+/**
+ * Check if a token/term is a known vehicle brand or model (e.g. "thar", "scorpio", "creta")
+ * to prevent model names from being falsely matched as city prefixes (e.g. "thar" -> "Tharad").
+ */
+export function isKnownModelOrBrand(word) {
+  if (!word) return false;
+  const w = String(word).toLowerCase().trim();
+  if (MODEL_CANONICAL_SLUGS[w]) return true;
+  if (findModelFamily(w)) return true;
+  for (const bName of Object.values(ALL_MAKERS)) {
+    const bLower = bName.toLowerCase();
+    if (bLower === w || bLower.replace(/\s+/g, "-") === w) return true;
+  }
+  return false;
+}
+
 /**
  * Match a city name or alias from query string
  */
@@ -145,40 +169,40 @@ export function matchKnownCity(inputText) {
   const inMatch = clean.match(/\b(?:in|at|near)\s+([a-z0-9_-]+)/i);
   if (inMatch && inMatch[1]) {
     const candidate = inMatch[1].trim();
-    if (CITY_ALIASES[candidate]) return CITY_ALIASES[candidate];
-    if (candidate.length >= 3) {
-      const city = KNOWN_CITIES.find((c) =>
-        c.toLowerCase().startsWith(candidate)
+    if (!CITY_STOP_WORDS.has(candidate) && !isKnownModelOrBrand(candidate)) {
+      if (CITY_ALIASES[candidate]) return CITY_ALIASES[candidate];
+      const exactCity = KNOWN_CITIES.find(
+        (c) => c.toLowerCase() === candidate
       );
-      if (city) return city;
+      if (exactCity) return exactCity;
+      if (candidate.length >= 4) {
+        const city = KNOWN_CITIES.find((c) =>
+          c.toLowerCase().startsWith(candidate)
+        );
+        if (city) return city;
+      }
     }
   }
 
-  // 2. Exact match of known city name anywhere in string
+  // 2. Exact match of known city name anywhere in string (as a whole word)
   for (const c of KNOWN_CITIES) {
     const cLower = c.toLowerCase();
+    if (isKnownModelOrBrand(cLower)) continue;
     if (new RegExp(`\\b${cLower}\\b`, "i").test(clean)) return c;
   }
 
-  // 3. Word token matching with alias or prefix (min 3 chars)
+  // 3. Word token matching with alias or exact city name
+  // Note: Blind prefix matching (c.startsWith(word)) is intentionally omitted here
+  // so vehicle models like "thar" do not falsely trigger "Tharad".
   const words = clean.split(/[^a-z0-9]+/i).filter(Boolean);
-  const STOP_WORDS = new Set([
-    "used", "second", "hand", "buy", "car", "cars", "bike", "bikes",
-    "two", "wheeler", "wheelers", "in", "at", "near", "for", "sale",
-    "all", "auto", "vehicle", "vehicles", "model", "price", "best", "good",
-    "diesel", "die", "petrol", "pet", "cng", "electric", "ev", "suv", "sedan",
-    "under", "lakh", "lakhs",
-  ]);
-
   for (const word of words) {
-    if (STOP_WORDS.has(word)) continue;
+    if (CITY_STOP_WORDS.has(word)) continue;
+    if (isKnownModelOrBrand(word)) continue;
     if (CITY_ALIASES[word]) return CITY_ALIASES[word];
-    if (word.length >= 3) {
-      const city = KNOWN_CITIES.find((c) =>
-        c.toLowerCase().startsWith(word)
-      );
-      if (city) return city;
-    }
+    const exactCity = KNOWN_CITIES.find(
+      (c) => c.toLowerCase() === word
+    );
+    if (exactCity) return exactCity;
   }
 
   return null;
@@ -491,6 +515,12 @@ export function synthesizeIntentSuggestions(intent) {
   let primaryLabel = "";
   if (intent.brandName && intent.modelName && intent.cityName) {
     primaryLabel = `Used ${intent.brandName} ${intent.modelName} in ${intent.cityName}`;
+  } else if (intent.brandName && intent.modelName) {
+    primaryLabel = `Used ${intent.brandName} ${intent.modelName}`;
+  } else if (intent.modelName && intent.cityName) {
+    primaryLabel = `Used ${intent.modelName} in ${intent.cityName}`;
+  } else if (intent.modelName) {
+    primaryLabel = `Used ${intent.modelName}`;
   } else if (intent.brandName && intent.fuelType && intent.cityName) {
     primaryLabel = `Used ${intent.fuelType} ${intent.brandName} ${vehicleLabel} in ${intent.cityName}`;
   } else if (intent.brandName && intent.fuelType) {
