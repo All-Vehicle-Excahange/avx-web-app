@@ -216,5 +216,41 @@ describe("Search Intent & SEO URL Resolution", () => {
       const url = resolveIntentUrl(intent);
       expect(url).toBe("/search/buy-used-mahindra-thar-roxx-cars-ahmedabad");
     });
+
+    test("'thar' search resolves ONLY to Mahindra Thar and NEVER falsely applies Tharad city filter", () => {
+      const intent = parseSearchIntent("thar");
+      expect(intent.brandName).toBe("Mahindra");
+      expect(intent.modelName).toBe("Thar");
+      expect(intent.cityName).toBeNull();
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-mahindra-thar-cars");
+
+      const suggestions = synthesizeIntentSuggestions(intent);
+      expect(suggestions.length).toBeGreaterThan(0);
+      expect(suggestions[0].label).toBe("Used Mahindra Thar");
+      expect(suggestions[0].link).toBe("/search/buy-used-mahindra-thar-cars");
+      // Must not contain Tharad anywhere
+      expect(suggestions.some((s) => /tharad/i.test(s.label) || /tharad/i.test(s.link))).toBe(false);
+    });
+
+    test("'tharad' alone resolves to Tharad city landing page without vehicle model", () => {
+      const intent = parseSearchIntent("tharad");
+      expect(intent.cityName).toBe("Tharad");
+      expect(intent.modelName).toBeNull();
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-cars-tharad");
+    });
+
+    test("'thar in tharad' resolves to Mahindra Thar in Tharad when explicitly requested", () => {
+      const intent = parseSearchIntent("thar in tharad");
+      expect(intent.brandName).toBe("Mahindra");
+      expect(intent.modelName).toBe("Thar");
+      expect(intent.cityName).toBe("Tharad");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-mahindra-thar-cars-tharad");
+    });
   });
 });
