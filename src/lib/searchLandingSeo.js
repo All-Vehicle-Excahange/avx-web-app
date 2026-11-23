@@ -31,6 +31,48 @@ export const SEARCH_SLUG_REDIRECTS = {
   "buy-used-cars-sidhpur": "buy-used-cars-siddhpur",
   "buy-used-two-wheelers-sidhpur": "buy-used-two-wheelers-siddhpur",
   "buy-used-bikes-sidhpur": "buy-used-two-wheelers-siddhpur",
+  // Two-wheeler models accidentally routed to -cars
+  "buy-used-activa-cars": "buy-used-honda-activa-two-wheelers",
+  "buy-used-honda-activa-cars": "buy-used-honda-activa-two-wheelers",
+  "buy-used-shine-cars": "buy-used-honda-shine-two-wheelers",
+  "buy-used-honda-shine-cars": "buy-used-honda-shine-two-wheelers",
+  "buy-used-cb-shine-cars": "buy-used-honda-cb-shine-125-two-wheelers",
+  "buy-used-honda-cb-shine-sp-125-cars": "buy-used-honda-cb-shine-sp-125-two-wheelers",
+  "buy-used-access-125-cars": "buy-used-suzuki-access-125-two-wheelers",
+  "buy-used-suzuki-access-125-cars": "buy-used-suzuki-access-125-two-wheelers",
+  "buy-used-jupiter-cars": "buy-used-tvs-jupiter-two-wheelers",
+  "buy-used-tvs-jupiter-cars": "buy-used-tvs-jupiter-two-wheelers",
+  "buy-used-pulsar-cars": "buy-used-bajaj-pulsar-two-wheelers",
+  "buy-used-bajaj-pulsar-cars": "buy-used-bajaj-pulsar-two-wheelers",
+  "buy-used-splendor-cars": "buy-used-hero-splendor-two-wheelers",
+  "buy-used-hero-splendor-cars": "buy-used-hero-splendor-two-wheelers",
+  "buy-used-passion-cars": "buy-used-hero-passion-two-wheelers",
+  "buy-used-hero-passion-cars": "buy-used-hero-passion-two-wheelers",
+  "buy-used-glamour-cars": "buy-used-hero-glamour-two-wheelers",
+  "buy-used-hero-glamour-cars": "buy-used-hero-glamour-two-wheelers",
+  "buy-used-hf-deluxe-cars": "buy-used-hero-hf-deluxe-two-wheelers",
+  "buy-used-hero-hf-deluxe-cars": "buy-used-hero-hf-deluxe-two-wheelers",
+  // Two-wheeler brands accidentally routed to -cars
+  "buy-used-hero-cars": "buy-used-hero-two-wheelers",
+  "buy-used-hero": "buy-used-hero-two-wheelers",
+  "buy-used-hero-electric-cars": "buy-used-hero-electric-two-wheelers",
+  "buy-used-hero-electric": "buy-used-hero-electric-two-wheelers",
+  "buy-used-ktm-cars": "buy-used-ktm-two-wheelers",
+  "buy-used-ktm": "buy-used-ktm-two-wheelers",
+  "buy-used-tvs-cars": "buy-used-tvs-two-wheelers",
+  "buy-used-tvs": "buy-used-tvs-two-wheelers",
+  "buy-used-bajaj-cars": "buy-used-bajaj-two-wheelers",
+  "buy-used-bajaj": "buy-used-bajaj-two-wheelers",
+  "buy-used-royal-enfield-cars": "buy-used-royal-enfield-two-wheelers",
+  "buy-used-royal-enfield": "buy-used-royal-enfield-two-wheelers",
+  "buy-used-yamaha-cars": "buy-used-yamaha-two-wheelers",
+  "buy-used-yamaha": "buy-used-yamaha-two-wheelers",
+  "buy-used-ather-cars": "buy-used-ather-two-wheelers",
+  "buy-used-ather": "buy-used-ather-two-wheelers",
+  "buy-used-ola-cars": "buy-used-ola-two-wheelers",
+  "buy-used-ola": "buy-used-ola-two-wheelers",
+  "buy-used-kawasaki-cars": "buy-used-kawasaki-two-wheelers",
+  "buy-used-kawasaki": "buy-used-kawasaki-two-wheelers",
   // Model-only shortcuts → brand+model
   "buy-used-santro-cars": "buy-used-hyundai-santro-xing-cars",
   "buy-used-santro-cars-siddhpur": "buy-used-hyundai-santro-xing-cars-siddhpur",
@@ -83,7 +125,67 @@ const MODEL_CANONICAL_KEYS = Object.keys(MODEL_CANONICAL).sort(
   (a, b) => b.length - a.length,
 );
 
+const TWO_WHEELER_MODEL_CANONICAL = {
+  "activa-125": "honda-activa-125",
+  "activa-6g": "honda-activa-6g",
+  activa: "honda-activa",
+  "cb-shine": "honda-cb-shine",
+  "sp-125": "honda-sp125",
+  shine: "honda-shine",
+  dio: "honda-dio",
+  unicorn: "honda-unicorn",
+  "access-125": "suzuki-access-125",
+  access: "suzuki-access-125",
+  "burgman-street": "suzuki-burgman-street",
+  burgman: "suzuki-burgman-street",
+  gixxer: "suzuki-gixxer",
+  hayabusa: "suzuki-hayabusa",
+  "jupiter-125": "tvs-jupiter-125",
+  jupiter: "tvs-jupiter",
+  apache: "tvs-apache",
+  ntorq: "tvs-ntorq",
+  raider: "tvs-raider",
+  "super-splendor": "hero-super-splendor",
+  splendor: "hero-splendor",
+  "hf-deluxe": "hero-hf-deluxe",
+  passion: "hero-passion",
+  glamour: "hero-glamour",
+  "pulsar-150": "bajaj-pulsar-150",
+  "pulsar-ns200": "bajaj-pulsar-ns-200",
+  pulsar: "bajaj-pulsar",
+  platina: "bajaj-platina",
+  avenger: "bajaj-avenger",
+  "classic-350": "royal-enfield-classic-350",
+  "bullet-350": "royal-enfield-bullet-350",
+  "hunter-350": "royal-enfield-hunter-350",
+  "meteor-350": "royal-enfield-meteor-350",
+  himalayan: "royal-enfield-himalayan",
+  r15: "yamaha-r15",
+  "mt-15": "yamaha-mt-15",
+  fz: "yamaha-fz",
+  duke: "ktm-duke",
+  rc: "ktm-rc",
+  "ather-450": "ather-450",
+  "s1-pro": "ola-s1-pro",
+};
+
+const TWO_WHEELER_MODEL_CANONICAL_KEYS = Object.keys(
+  TWO_WHEELER_MODEL_CANONICAL
+).sort((a, b) => b.length - a.length);
+
 function resolveModelShortcut(slug) {
+  // 1. Two-Wheeler model shortcuts (with or without brand prefix, or with -cars or -two-wheelers)
+  for (const key of TWO_WHEELER_MODEL_CANONICAL_KEYS) {
+    const match = slug.match(
+      new RegExp(`^buy-used-${key}-(?:cars|two-wheelers)(?:-(.+))?$`)
+    );
+    if (!match) continue;
+    const canonical = TWO_WHEELER_MODEL_CANONICAL[key];
+    const place = match[1] ? `-${match[1]}` : "";
+    return `buy-used-${canonical}-two-wheelers${place}`;
+  }
+
+  // 2. Four-Wheeler model shortcuts (preserved exactly as-is)
   for (const key of MODEL_CANONICAL_KEYS) {
     const match = slug.match(
       new RegExp(`^buy-used-${key}-cars(?:-(.+))?$`),
@@ -387,6 +489,14 @@ export function resolveSearchSlugRedirect(slug) {
 
   const modelShortcut = resolveModelShortcut(slug);
   if (modelShortcut) return modelShortcut;
+
+  // Pure two-wheeler brands accidentally requested with -cars (e.g. buy-used-hero-cars-ahmedabad -> buy-used-hero-two-wheelers-ahmedabad)
+  const twBrandCarsMatch = slug.match(/^buy-used-(hero(?:-electric)?|ktm|tvs|bajaj|royal-enfield|yamaha|ather|ola|kawasaki|harley-davidson|ducati|triumph|aprilia|vespa|jawa|yezdi|benelli)-cars(?:-(.+))?$/);
+  if (twBrandCarsMatch) {
+    const brand = twBrandCarsMatch[1];
+    const city = twBrandCarsMatch[2] ? `-${twBrandCarsMatch[2]}` : "";
+    return `buy-used-${brand}-two-wheelers${city}`;
+  }
 
   const bikeCity = slug.match(/^buy-used-bikes?-(.+)$/);
   if (bikeCity) {

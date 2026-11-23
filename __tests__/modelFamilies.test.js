@@ -185,5 +185,92 @@ describe("Model Families: Common Name vs Particular Name Resolution", () => {
       expect(detectFamilyFromSelection(["244", "339", "647"], "35")?.key).toBe("innova");
     });
   });
+
+  describe("Two-Wheeler Model Families & Sub-Models", () => {
+    test("Common name 'activa' selects Honda and ALL Activa models under makerId 15011", () => {
+      const family = findModelFamily("activa");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("Honda");
+      expect(family.makerId).toBe(15011);
+      expect(family.key).toBe("activa");
+      expect(family.vehicleType).toBe("TWO_WHEELER");
+      expect(family.targetUrl).toBe("/search/buy-used-honda-activa-two-wheelers");
+
+      const modelIds = family.models.map((m) => m.modelId);
+      expect(modelIds).toEqual(expect.arrayContaining([25277, 25278, 25282]));
+      expect(modelIds).toHaveLength(9);
+    });
+
+    test("Particular name 'activa 125' selects ONLY Activa 125 (25278)", () => {
+      const family = findModelFamily("activa 125");
+      expect(family).not.toBeNull();
+      expect(family.key).toBe("activa-125");
+      expect(family.makerId).toBe(15011);
+      expect(family.targetUrl).toBe("/search/buy-used-honda-activa-125-two-wheelers");
+      expect(family.models.map((m) => m.modelId)).toEqual([25278]);
+    });
+
+    test("Particular name 'activa 6g' selects ONLY Activa 6G (25282)", () => {
+      const family = findModelFamily("activa 6g");
+      expect(family).not.toBeNull();
+      expect(family.key).toBe("activa-6g");
+      expect(family.makerId).toBe(15011);
+      expect(family.models.map((m) => m.modelId)).toEqual([25282]);
+    });
+
+    test("Common name 'shine' selects Honda and ALL Shine models under makerId 15011", () => {
+      const family = findModelFamily("shine");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("Honda");
+      expect(family.makerId).toBe(15011);
+      expect(family.key).toBe("shine");
+      expect(family.vehicleType).toBe("TWO_WHEELER");
+      expect(family.targetUrl).toBe("/search/buy-used-honda-shine-two-wheelers");
+
+      const modelIds = family.models.map((m) => m.modelId);
+      expect(modelIds).toEqual(expect.arrayContaining([25308, 25309, 25333, 25334, 25335]));
+      expect(modelIds).toHaveLength(5);
+    });
+
+    test("Particular name 'cb shine' selects ONLY CB Shine models (25308, 25309)", () => {
+      const family = findModelFamily("cb shine");
+      expect(family).not.toBeNull();
+      expect(family.key).toBe("cb-shine");
+      expect(family.makerId).toBe(15011);
+      expect(family.models.map((m) => m.modelId)).toEqual([25308, 25309]);
+    });
+
+    test("Common name 'access 125' selects Suzuki Access 125 under makerId 15020", () => {
+      const family = findModelFamily("access 125");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("Suzuki");
+      expect(family.makerId).toBe(15020);
+      expect(family.targetUrl).toBe("/search/buy-used-suzuki-access-125-two-wheelers");
+    });
+
+    test("Common name 'jupiter' selects TVS Jupiter under makerId 15021", () => {
+      const family = findModelFamily("jupiter");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("TVS");
+      expect(family.makerId).toBe(15021);
+      expect(family.targetUrl).toBe("/search/buy-used-tvs-jupiter-two-wheelers");
+    });
+
+    test("Common name 'pulsar' selects Bajaj Pulsar under makerId 15005", () => {
+      const family = findModelFamily("pulsar");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("Bajaj");
+      expect(family.makerId).toBe(15005);
+      expect(family.targetUrl).toBe("/search/buy-used-bajaj-pulsar-two-wheelers");
+    });
+
+    test("Common name 'classic 350' selects Royal Enfield under makerId 15019", () => {
+      const family = findModelFamily("classic 350");
+      expect(family).not.toBeNull();
+      expect(family.brandName).toBe("Royal Enfield");
+      expect(family.makerId).toBe(15019);
+      expect(family.targetUrl).toBe("/search/buy-used-royal-enfield-classic-350-two-wheelers");
+    });
+  });
 });
 

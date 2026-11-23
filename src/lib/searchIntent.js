@@ -10,15 +10,65 @@ import { MAKER_NAME_MAPPING } from "../data/makers.js";
 import { findModelFamily } from "../data/modelFamilies.js";
 
 export const TWO_WHEELER_MAKERS = {
+  15001: "Ampere",
+  15002: "Aprilia",
+  15003: "Ather",
+  15004: "BMW",
   15005: "Bajaj",
+  15006: "Benelli",
+  15007: "Ducati",
+  15008: "Harley-Davidson",
+  15009: "Hero Electric",
   15010: "Hero",
+  15011: "Honda",
+  15012: "Husqvarna",
+  15013: "Jawa",
+  15014: "KTM",
+  15015: "Kawasaki",
+  15016: "Mahindra",
   15017: "OLA",
+  15018: "Pure EV",
   15019: "Royal Enfield",
+  15020: "Suzuki",
   15021: "TVS",
+  15022: "Triumph",
+  15023: "Vespa",
   15024: "Yamaha",
+  15025: "Yezdi",
 };
 
 export const ALL_MAKERS = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+
+export const PURE_TWO_WHEELER_BRANDS = new Set([
+  "hero",
+  "hero electric",
+  "hero honda",
+  "ktm",
+  "tvs",
+  "bajaj",
+  "royal enfield",
+  "yamaha",
+  "ather",
+  "ather energy",
+  "ola",
+  "ola electric",
+  "kawasaki",
+  "harley-davidson",
+  "harley",
+  "ducati",
+  "triumph",
+  "aprilia",
+  "vespa",
+  "jawa",
+  "yezdi",
+  "benelli",
+  "ampere",
+  "pure ev",
+  "husqvarna",
+  "revolt",
+  "ultraviolette",
+  "tork",
+]);
 
 export const KNOWN_CITIES = [
   "Ahmedabad", "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
@@ -125,14 +175,95 @@ export const MODEL_CANONICAL_SLUGS = {
   sonet: "kia-sonet",
   carens: "kia-carens",
   activa: "honda-activa",
+  "activa 6g": "honda-activa-6g",
+  "activa 125": "honda-activa-125",
   shine: "honda-shine",
+  "cb shine": "honda-cb-shine",
+  "shine 125": "honda-shine-125",
+  "sp 125": "honda-sp125",
+  dio: "honda-dio",
+  unicorn: "honda-unicorn",
   splendor: "hero-splendor",
+  "splendor plus": "hero-splendor",
+  "super splendor": "hero-super-splendor",
+  "hf deluxe": "hero-hf-deluxe",
+  passion: "hero-passion",
+  glamour: "hero-glamour",
+  xpulse: "hero-xpulse",
+  pleasure: "hero-pleasure",
+  destini: "hero-destini",
   pulsar: "bajaj-pulsar",
+  "pulsar 150": "bajaj-pulsar-150",
+  "pulsar ns200": "bajaj-pulsar-ns200",
+  platina: "bajaj-platina",
+  avenger: "bajaj-avenger",
+  dominar: "bajaj-dominar",
+  chetak: "bajaj-chetak",
+  jupiter: "tvs-jupiter",
+  "jupiter 125": "tvs-jupiter-125",
+  apache: "tvs-apache",
+  "apache rtr": "tvs-apache",
+  ntorq: "tvs-ntorq",
+  raider: "tvs-raider",
+  ronin: "tvs-ronin",
+  iqube: "tvs-iqube",
+  access: "suzuki-access",
+  "access 125": "suzuki-access-125",
+  burgman: "suzuki-burgman-street",
+  "burgman street": "suzuki-burgman-street",
+  gixxer: "suzuki-gixxer",
+  hayabusa: "suzuki-hayabusa",
   classic: "royal-enfield-classic",
   "classic 350": "royal-enfield-classic-350",
   bullet: "royal-enfield-bullet",
-  jupiter: "tvs-jupiter",
+  "bullet 350": "royal-enfield-bullet-350",
+  hunter: "royal-enfield-hunter-350",
+  "hunter 350": "royal-enfield-hunter-350",
+  meteor: "royal-enfield-meteor-350",
+  "meteor 350": "royal-enfield-meteor-350",
+  himalayan: "royal-enfield-himalayan",
+  interceptor: "royal-enfield-interceptor-650",
+  "continental gt": "royal-enfield-continental-gt-650",
+  r15: "yamaha-r15",
+  "mt 15": "yamaha-mt-15",
+  fz: "yamaha-fz",
+  "fz s": "yamaha-fz",
+  aerox: "yamaha-aerox",
+  fascino: "yamaha-fascino",
+  rayzr: "yamaha-rayzr",
+  duke: "ktm-duke",
+  "duke 200": "ktm-duke-200",
+  "duke 390": "ktm-duke-390",
+  "duke 250": "ktm-duke-250",
+  "duke 125": "ktm-duke-125",
+  rc: "ktm-rc",
+  "rc 200": "ktm-rc-200",
+  "rc 390": "ktm-rc-390",
+  "450x": "ather-450x",
+  rizta: "ather-rizta",
+  "s1 pro": "ola-s1-pro",
+  "s1 air": "ola-s1-air",
+  "s1 x": "ola-s1-x",
+  "speed 400": "triumph-speed-400",
+  "scrambler 400x": "triumph-scrambler-400x",
+  ninja: "kawasaki-ninja",
+  "ninja 300": "kawasaki-ninja-300",
+  "jawa 42": "jawa-42",
 };
+
+export const KNOWN_TWO_WHEELER_MODELS = new Set([
+  "activa", "activa 6g", "activa 125", "activa 5g", "activa 4g", "activa 3g", "activa 110",
+  "shine", "cb shine", "shine 125", "shine 100", "sp 125", "sp125", "dio", "unicorn",
+  "splendor", "splendor plus", "super splendor", "hf deluxe", "passion", "glamour", "xpulse", "pleasure", "destini",
+  "pulsar", "pulsar 150", "pulsar 125", "pulsar 220f", "pulsar ns200", "pulsar n160", "platina", "avenger", "dominar", "chetak",
+  "jupiter", "jupiter 125", "apache", "apache rtr", "ntorq", "raider", "ronin", "iqube", "radeon",
+  "access", "access 125", "burgman", "burgman street", "gixxer", "hayabusa", "avenis",
+  "classic", "classic 350", "bullet", "bullet 350", "hunter", "hunter 350", "meteor", "meteor 350", "himalayan", "interceptor", "continental gt",
+  "r15", "mt 15", "mt15", "fz", "fz s", "fzs", "aerox", "fascino", "rayzr",
+  "duke", "duke 200", "duke 390", "duke 250", "duke 125", "rc", "rc 200", "rc 390",
+  "450x", "450s", "rizta", "s1", "s1 pro", "s1 air", "s1 x", "speed 400", "scrambler 400x",
+  "ninja", "ninja 300", "ninja 400", "z900", "jawa 42", "perak", "roadster"
+]);
 
 export const CITY_STOP_WORDS = new Set([
   "used", "second", "hand", "buy", "car", "cars", "bike", "bikes",
@@ -329,53 +460,18 @@ export function parseSearchIntent(queryStr) {
   const numericPrice = budgetInfo ? budgetInfo.numericPrice : null;
   const budgetSlug = budgetInfo ? budgetInfo.budgetSlug : null;
 
-  // 2. Vehicle Type
-  const hasBikeWord = /\b(bike|bikes|two[- ]?wheelers?|motorcycles?|scooters?)\b/i.test(clean);
-  const hasCarWord = /\b(car|cars|four[- ]?wheelers?|suv|sedan|hatchback)\b/i.test(clean);
-  const isBikeByBudget = Boolean(budgetInfo && budgetInfo.numericPrice <= 80000 && !hasCarWord);
-  const isTwoWheeler = hasBikeWord || isBikeByBudget;
-  const vehicleType = isTwoWheeler ? "two-wheelers" : "cars";
-
-  // 3. City
-  const cityName = matchKnownCity(clean) || matchKnownCity(cleanNoUsed);
-  const citySlug = cityName ? cityName.toLowerCase().replace(/\s+/g, "-") : null;
-
-  // 4. Brand
-  let brandName = null;
-  let brandSlug = null;
-  for (const [id, bName] of Object.entries(ALL_MAKERS)) {
-    const bLower = bName.toLowerCase();
-    if (bLower === "maruti suzuki") {
-      if (/\bmaruti(?:\s+suzuki)?\b/i.test(cleanNoUsed)) {
-        brandName = bName;
-        brandSlug = "maruti-suzuki";
-        break;
-      }
-    } else if (bLower === "volkswagen") {
-      if (/\b(?:volkswagen|vw)\b/i.test(cleanNoUsed)) {
-        brandName = bName;
-        brandSlug = "volkswagen";
-        break;
-      }
-    } else if (new RegExp(`\\b${bLower}\\b`, "i").test(cleanNoUsed)) {
-      brandName = bName;
-      brandSlug = bName.toLowerCase().replace(/\s+/g, "-");
-      break;
-    }
-  }
-
-  // 5. Model & Family Detection
+  // 2. Model & Family Detection first (so model context accurately informs vehicleType and brand)
   let modelName = null;
   let modelSlug = null;
+  let makerId = null;
 
-  // First check MODEL_FAMILIES (e.g. creta, thar, scorpio, thar-roxx, grand-i10)
+  // Check MODEL_FAMILIES
   const matchedFamily = findModelFamily(cleanNoUsed) || findModelFamily(clean);
   if (matchedFamily) {
     modelName = matchedFamily.familyName;
     modelSlug = matchedFamily.key;
-    if (!brandName) {
-      brandName = matchedFamily.brandName;
-      brandSlug = matchedFamily.brandName.toLowerCase().replace(/[\s-]+/g, "-");
+    if (matchedFamily.makerId) {
+      makerId = matchedFamily.makerId;
     }
   }
 
@@ -389,18 +485,85 @@ export function parseSearchIntent(queryStr) {
           .split(" ")
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
           .join(" ");
+        break;
+      }
+    }
+  }
 
-        // Auto-resolve brand if missing from modelSlug prefix
-        if (!brandName && modelSlug) {
-          for (const [, bName] of Object.entries(ALL_MAKERS)) {
-            const bSlug = bName.toLowerCase().replace(/\s+/g, "-");
-            if (modelSlug.startsWith(`${bSlug}-`)) {
-              brandName = bName;
-              brandSlug = bSlug;
-              break;
-            }
-          }
+  // 3. Vehicle Type Determination
+  const hasBikeWord = /\b(bike|bikes|two[- ]?wheelers?|motorcycles?|scooters?)\b/i.test(clean);
+  const hasCarWord = /\b(car|cars|four[- ]?wheelers?|suv|sedan|hatchback)\b/i.test(clean);
+  const isBikeByBudget = Boolean(budgetInfo && budgetInfo.numericPrice <= 80000 && !hasCarWord);
+  const isBikeByFamily = Boolean(matchedFamily && matchedFamily.vehicleType === "TWO_WHEELER");
+  const isBikeByModel = Boolean(
+    (modelName && KNOWN_TWO_WHEELER_MODELS.has(modelName.toLowerCase())) ||
+    (modelSlug && Array.from(KNOWN_TWO_WHEELER_MODELS).some(m => modelSlug.includes(m))) ||
+    Array.from(KNOWN_TWO_WHEELER_MODELS).some(m => new RegExp(`\\b${m}\\b`, "i").test(cleanNoUsed))
+  );
+  const isBikeByBrand = Boolean(
+    !hasCarWord && Array.from(PURE_TWO_WHEELER_BRANDS).some((b) =>
+      new RegExp(`\\b${b}\\b`, "i").test(cleanNoUsed) || new RegExp(`\\b${b}\\b`, "i").test(clean)
+    )
+  );
+
+  const isTwoWheeler = !hasCarWord && (hasBikeWord || isBikeByBudget || isBikeByFamily || isBikeByModel || isBikeByBrand);
+  const vehicleType = isTwoWheeler ? "two-wheelers" : "cars";
+
+  // 4. City
+  const cityName = matchKnownCity(clean) || matchKnownCity(cleanNoUsed);
+  const citySlug = cityName ? cityName.toLowerCase().replace(/\s+/g, "-") : null;
+
+  // 5. Brand Determination (strict isolation between 2-wheelers and 4-wheelers)
+  let brandName = matchedFamily?.brandName || null;
+  let brandSlug = matchedFamily
+    ? matchedFamily.brandName.toLowerCase().replace(/[\s-]+/g, "-")
+    : null;
+
+  const candidateMakers = isTwoWheeler ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+  if (!brandName) {
+    for (const [id, bName] of Object.entries(candidateMakers)) {
+      const bLower = bName.toLowerCase();
+      if (bLower === "maruti suzuki") {
+        if (/\bmaruti(?:\s+suzuki)?\b/i.test(cleanNoUsed)) {
+          brandName = bName;
+          brandSlug = "maruti-suzuki";
+          makerId = Number(id);
+          break;
         }
+      } else if (bLower === "volkswagen") {
+        if (/\b(?:volkswagen|vw)\b/i.test(cleanNoUsed)) {
+          brandName = bName;
+          brandSlug = "volkswagen";
+          makerId = Number(id);
+          break;
+        }
+      } else if (new RegExp(`\\b${bLower}\\b`, "i").test(cleanNoUsed)) {
+        brandName = bName;
+        brandSlug = bName.toLowerCase().replace(/\s+/g, "-");
+        makerId = Number(id);
+        break;
+      }
+    }
+  }
+
+  // Auto-resolve brand if missing from modelSlug prefix
+  if (!brandName && modelSlug) {
+    for (const [id, bName] of Object.entries(candidateMakers)) {
+      const bSlug = bName.toLowerCase().replace(/\s+/g, "-");
+      if (modelSlug.startsWith(`${bSlug}-`)) {
+        brandName = bName;
+        brandSlug = bSlug;
+        makerId = Number(id);
+        break;
+      }
+    }
+  }
+
+  // Ensure makerId matches the detected vehicle category
+  if (brandName && !makerId) {
+    for (const [id, bName] of Object.entries(candidateMakers)) {
+      if (bName.toLowerCase() === brandName.toLowerCase()) {
+        makerId = Number(id);
         break;
       }
     }
@@ -447,6 +610,7 @@ export function parseSearchIntent(queryStr) {
     citySlug,
     brandName,
     brandSlug,
+    makerId,
     modelName,
     modelSlug,
     fuelType,
