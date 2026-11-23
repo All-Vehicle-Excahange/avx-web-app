@@ -53,6 +53,7 @@ const footerLinks = {
     { label: "Explore vehicles", href: "/start" },
     { label: "Download the Reecomm app", href: "/download" },
     { label: "About us", href: "/aboutus" },
+    { label: "How Reecomm works", href: "/reecomm-works" },
     { label: "Introducing Reecomm", href: "/introducing-reecomm" },
     { label: "Press & Media", href: "/press-media" },
     { label: "Inspection process", href: "/inspection-process" },

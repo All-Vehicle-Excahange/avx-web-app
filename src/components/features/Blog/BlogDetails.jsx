@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 import BlogCard from "./BlogCard";
+import AdSenseAd from "@/components/common/AdSenseAd";
+import { isBlogAdEligible } from "@/lib/adsenseEligibility";
 import { MOCK_POSTS } from "./blogData";
 
 const FALLBACK_SECTION_IMAGES = [
@@ -133,6 +135,8 @@ export default function BlogDetails({ id }) {
       observer.disconnect();
     };
   }, [sections]);
+
+  const adsEnabled = useMemo(() => isBlogAdEligible(post), [post]);
 
   if (!post) {
     return (
@@ -341,6 +345,13 @@ export default function BlogDetails({ id }) {
           ))}
         </div> */}
 
+        <AdSenseAd
+          slot={process.env.NEXT_PUBLIC_ADSENSE_BLOG_INARTICLE_SLOT}
+          enabled={adsEnabled}
+          className="my-8"
+          aria-label="Advertisement"
+        />
+
         {/* 2. TWO-COLUMN MAIN BODY GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-12 items-start">
           {/* SIDEBAR TABLE OF CONTENTS */}
@@ -448,6 +459,13 @@ export default function BlogDetails({ id }) {
             })}
           </div>
         </div>
+
+        <AdSenseAd
+          slot={process.env.NEXT_PUBLIC_ADSENSE_BLOG_END_SLOT}
+          enabled={adsEnabled}
+          className="mt-12 mb-4"
+          aria-label="Advertisement"
+        />
 
         {/* RELATED ARTICLES */}
         {relatedPosts.length > 0 && (

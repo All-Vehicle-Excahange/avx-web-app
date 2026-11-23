@@ -201,7 +201,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 `,
     image: "/blog/blog-2.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
@@ -281,7 +281,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
@@ -366,7 +366,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 
 
       ### Questions to ask every seller or consultant
@@ -465,7 +465,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 
 
       ### Questions to ask every seller or consultant
@@ -548,7 +548,7 @@ export const GEO_CALENDAR_POSTS = [
       Reecomm is a used-vehicle marketplace focused on verified automotive consultants. Buyers compare live cars and bikes with photos and prices, can request inspections on eligible listings, and inquire securely. Consultants publish storefront inventory instead of relying only on informal forwards. That combination is the product’s authentic value — inventory plus structured discovery — not doorway text alone.
 
       ### Maintaining a storefront well
-      Consultants should remove sold cars quickly, keep prices current, and answer inquiries with specifics. Stale storefronts hurt buyers and AdSense/quality perceptions of the domain. Buyers should report mismatches between listing and reality and choose responsive consultants next time.
+      Consultants should remove sold cars quickly, keep prices current, and answer inquiries with specifics. Stale storefronts waste buyer time and damage trust. Buyers should report mismatches between listing and reality and choose responsive consultants next time.
 
 
       ### Practical day-of-purchase checklist
@@ -560,7 +560,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 
 
       ### Questions to ask every seller or consultant
@@ -652,7 +652,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 
 
       ### Questions to ask every seller or consultant
@@ -756,7 +756,7 @@ export const GEO_CALENDAR_POSTS = [
       In the first fortnight, complete RTO transfer steps, update insurance, and fix any agreed deficiencies in writing. Keep invoices. Whether you bought in Palanpur, Ahmedabad, Visnagar, Siddhpur, or Surat, the ownership habits after purchase matter as much as the bargain you negotiated.
 
       ### How this guide ties back to Reecomm
-      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment. Together that is the authentic buyer value AdSense and search quality policies expect from a marketplace, not thin doorway pages alone.
+      Use the linked search hubs and consultant storefronts to gather real inventory, then apply the checklists here. Reecomm’s role is verified discovery and inquiry — your role is verification, inspection, and disciplined payment before any transfer.
 
 
       ### Questions to ask every seller or consultant
@@ -795,7 +795,7 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Best Used Cars Under ₹5 Lakh in Gujarat",
         url: "https://www.reecomm.com/blog/best-used-cars-under-5-lakh-gujarat",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
@@ -804,21 +804,33 @@ export const GEO_CALENDAR_POSTS = [
       ### Quick answer
       Under ₹5 lakh in Gujarat, most buyers should shortlist well-kept hatchbacks and older compact cars with clear RC and insurance — not just the lowest sticker. Start with [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs), then narrow by city such as [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) or [used cars in Palanpur](/search/buy-used-cars-palanpur).
 
-      ### What fits the budget
-      Expect older Swift / i10 / Polo-class hatchbacks, early compact sedans, and carefully chosen CNG cars. SUVs rarely land cleanly under ₹5 lakh without compromise. Keep 10–15% aside for transfer, insurance, and first service.
+      ### What fits this budget in Gujarat
+      Expect older Swift / WagonR / i10 / Polo-class hatchbacks, early compact sedans, and carefully chosen CNG cars. Clean SUVs rarely land under ₹5 lakh without high kilometres, accident history, or pending finance. Decide fuel type first: petrol for shorter city hops, CNG when daily commuting makes fuel cost the priority.
 
-      ### Buying checklist
-      1. Compare three cars in a similar year band.
-      2. Match RC ownership and check challans.
-      3. Request an optional 200-point inspection when available.
-      4. Test drive before you negotiate the final price.
+      Keep 10–15% of your budget aside for RTO transfer, insurance renewal, and a first service. A ₹4.7 lakh ask that leaves you with no buffer is riskier than a ₹4.2 lakh car with paperwork and pads already sorted.
+
+      ### How to shortlist without chasing “deals”
+      1. Open [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs) and filter by city you can actually visit.
+      2. Compare three cars in a similar year and kilometre band — not one bargain against imagination.
+      3. Prefer listings with engine-bay, underbody, and interior photos over washed outdoor-only galleries.
+      4. Inquire on Reecomm so you talk to the consultant managing that exact stock, not a middleman who “knows a guy.”
+
+      Cross-check brand hubs such as [used Maruti cars](/search/buy-used-maruti-suzuki-cars) when hatchbacks dominate your shortlist.
+
+      ### Documents and mechanical checks
+      Match RC name to the seller or authorised consultant, confirm insurance validity, and clear hypothecation before any large payment. Check open challans on Vahan. On the car: cold start, clutch bite, steering pull, AC under load, tyre date codes, and panel gaps that hint at repairs.
+
+      When the listing supports it, request an optional [200-point inspection](/inspection-process) before you negotiate the final number. Walk away from cash-only urgency or “RC later” stories.
+
+      ### City nuance across Gujarat
+      Ahmedabad stock moves faster and prices can sit firmer than North Gujarat towns. Palanpur and nearby hubs sometimes offer older value hatchbacks — insist on structure checks. Use [how Reecomm works](/reecomm-works) so you understand inquiry and verification before you travel for a viewing.
 
       ### Next step on Reecomm
-      Browse [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs) and inquire with the consultant managing each listing — avoid cash-only roadside deals.
+      Browse [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs), shortlist two or three verified listings, inquire, and only then schedule visits. Verified discovery beats roadside bargaining when your budget has little room for surprises.
 `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 28,
@@ -838,7 +850,7 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Best Second Hand Cars in Ahmedabad — Buyer’s Guide",
         url: "https://www.reecomm.com/blog/second-hand-cars-ahmedabad-buyers-guide",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
@@ -847,18 +859,28 @@ export const GEO_CALENDAR_POSTS = [
       ### Quick answer
       Ahmedabad buyers should shortlist on [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad), compare year/km/fuel, then verify RC and challans before payment. Popular shortlists often include [used Maruti cars in Ahmedabad](/search/buy-used-maruti-suzuki-cars-ahmedabad) and [used Toyota cars in Ahmedabad](/search/buy-used-toyota-cars-ahmedabad).
 
-      ### Local buying tips
-      Petrol and CNG hatchbacks move fastest for city use; SUVs sell on weekend highway needs. Prefer listings with clear engine and exterior photos. Request an optional 200-point inspection on serious candidates.
+      ### What Ahmedabad buyers usually need
+      Weekday traffic and heat favour petrol or CNG hatchbacks and compact sedans with strong AC. Weekend highway runs toward Vadodara or North Gujarat push some families toward compact SUVs — but only if the budget and kilometres still make sense. Decide use-case before brand loyalty.
 
-      ### Documents
-      Match seller/consultant name to RC, confirm insurance, and clear finance hypothecation in writing before you transfer money.
+      Prefer listings that show clear engine and exterior photos, odometer close-ups, and honest interior shots. Glossy yard washes without engine photos are a yellow flag.
+
+      ### Local buying tips
+      SG Highway and peripheral yards can feel urgent; do not let Saturday crowds skip your checklist. Compare at least two similar cars on Reecomm before travelling. CNG cars are common — verify kit paperwork and idle quality. Flood-season underbody and cabin moisture checks matter after monsoon.
+
+      Request an optional [200-point inspection](/inspection-process) on any car you are ready to pay for. Read [how Reecomm works](/reecomm-works) if this is your first verified-marketplace purchase.
+
+      ### Documents that stop bad deals
+      Match seller or consultant identity to the RC, confirm insurance, and get a written path to clear finance hypothecation before you transfer money. Photograph the odometer and VIN during the visit. Keep the Reecomm inquiry linked to the exact listing you viewed.
+
+      ### Budget bands that stay practical
+      Under ₹5 lakh, stay in the hatchback lane via [used cars under ₹5 lakh](/search/buy-used-cars-under-5-lakhs). Higher budgets open cleaner Toyota and Maruti family cars — still compare three peers, not one emotional favourite.
 
       ### Start here
-      Open [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) and inquire only on verified consultant stock.
+      Open [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad), inquire only on verified consultant stock, schedule daylight viewings, and negotiate after inspection — not before.
 `,
     image: "/blog/blog-2.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 29,
@@ -878,24 +900,35 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Used Swift Price in Gujarat — What Buyers Should Check",
         url: "https://www.reecomm.com/blog/used-swift-price-gujarat",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
     ],
     content: `
       ### Quick answer
-      Used Swift prices in Gujarat depend on year, kilometres, ownership, and condition — not a single “market rate.” Compare live stock on [used Maruti Swift cars](/search/buy-used-maruti-suzuki-swift-cars) and city hubs like [used Swift cars in Ahmedabad](/search/buy-used-maruti-suzuki-swift-cars-ahmedabad) when available.
+      Used Swift prices in Gujarat depend on year, kilometres, ownership, variant, and condition — not a single “market rate.” Compare live stock on [used Maruti Swift cars](/search/buy-used-maruti-suzuki-swift-cars) and city hubs like [used Swift cars in Ahmedabad](/search/buy-used-maruti-suzuki-swift-cars-ahmedabad) when available.
 
-      ### Price thinking
-      Shortlist three Swifts in a narrow year band. Adjust for missing service history, pending insurance, and accident repairs. Negotiate only after you have seen the car and, ideally, an optional 200-point inspection.
+      ### How to think about Swift pricing
+      Shortlist three Swifts in a narrow year band. Adjust mentally for missing service history, pending insurance, accident repairs, and CNG fitment quality. A lower ask with unknown ownership is rarely cheaper than a slightly higher ask with clean papers.
 
-      ### Related inventory
       Also browse [used Maruti cars](/search/buy-used-maruti-suzuki-cars) and [used cars in Gujarat](/search/buy-used-cars-gujarat) so one yard cannot define the price for you.
+
+      ### Variant and ownership signals
+      Note petrol vs CNG, transmission, and facelift generation. First- or second-owner cars with stamped service records usually deserve a premium over multi-owner cars with gaps. Confirm the RC name matches the person or consultant selling.
+
+      ### Mechanical checks that move the number
+      Cold start, clutch feel in city traffic, steering pull, AC performance, tyre date codes, and underbody rust after monsoon. Panel colour mismatch and overspray around badges often mean repairs that should show up in negotiation — ideally after an optional [inspection](/inspection-process).
+
+      ### Gujarat city context
+      Ahmedabad Swifts can price firmer than smaller towns for similar years. North Gujarat stock may look cheaper — budget travel time and insist on the same paperwork standard. Use [how Reecomm works](/reecomm-works) to inquire on verified listings before you commit to a long drive.
+
+      ### Negotiate only after you have seen the car
+      Agree a ceiling including transfer and insurance. Inquire on two Reecomm listings, visit the stronger candidate first, and only then talk final price. If the seller refuses daylight viewing or independent checks, walk away.
 `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 30,
@@ -915,27 +948,37 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Best Used Bikes Under ₹50,000 in Gujarat",
         url: "https://www.reecomm.com/blog/used-bikes-under-50000-gujarat",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
     ],
     content: `
       ### Quick answer
-      Under ₹50,000, prioritise clear RC ownership, tyre/brake life, and a cold-start test. Start with [used two-wheelers under ₹50k](/search/buy-used-two-wheelers-under-50k) and [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad).
+      Under ₹50,000, prioritise clear RC ownership, tyre and brake life, and a cold-start test over cosmetics. Start with [used two-wheelers under ₹50k](/search/buy-used-two-wheelers-under-50k) and city stock such as [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad).
 
-      ### Checklist
-      1. Match RC name and check insurance.
-      2. Inspect chain/sprocket, tyres, and frame welds.
-      3. Test ride before paying.
-      4. Prefer verified consultant listings on Reecomm over informal cash deals.
+      ### What you can realistically expect
+      Commuter 100–125cc bikes and older scooters dominate this band. Avoid crash-repaired frames sold as “cosmetic scratches.” Keep ₹2,000–5,000 aside for immediate consumables (chain, pads, fluids) so the purchase price is not the whole story.
 
-      ### Browse
-      Open [used bikes for sale](/search/buy-used-two-wheelers) and filter by your city when stocked.
+      ### Paperwork first
+      Match RC name, check insurance, and confirm there is no confusing ownership story. Photograph the frame number and odometer during the meeting. Prefer verified consultant listings on Reecomm over informal cash deals with “RC tomorrow” promises.
+
+      ### Physical checklist
+      1. Cold start and idle stability.
+      2. Chain/sprocket wear, tyre date codes, and brake bite.
+      3. Frame welds, crash damage, and fork oil leaks.
+      4. Test ride on a familiar road before paying.
+      5. Compare two similar bikes so one seller cannot set the market.
+
+      ### How Reecomm helps
+      Open [used bikes for sale](/search/buy-used-two-wheelers), filter by city when stocked, and inquire through the platform. Read [how Reecomm works](/reecomm-works) if you are new to verified two-wheeler listings. For broader city context see [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad).
+
+      ### After you buy
+      Change engine oil if history is unclear, set tyre pressures, and confirm registration transfer steps promptly. Budget bikes punish neglect faster than expensive ones — treat the first service as part of the purchase.
 `,
     image: "/blog/blog-2.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 31,
@@ -955,28 +998,38 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Things to Check Before Buying a Second Hand Car",
         url: "https://www.reecomm.com/blog/things-to-check-before-buying-second-hand-car",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
     ],
     content: `
       ### Quick answer
-      Never pay before you verify RC, insurance, challans, and mechanical condition. Shortlist on [used cars for sale](/search/buy-used-cars), then request an optional 200-point inspection on serious candidates.
+      Never pay before you verify RC, insurance, challans, and mechanical condition. Shortlist on [used cars for sale](/search/buy-used-cars), then request an optional [200-point inspection](/inspection-process) on serious candidates.
 
-      ### Must-check list
-      - RC ownership match and open challans
-      - Insurance validity and finance NOC path
-      - Engine, clutch, underbody, and tyre date codes
-      - Accident or flood indicators
-      - Fair price vs two similar cars
+      ### Documents that must clear
+      - RC ownership match to the person selling (or clear consultant authorisation)
+      - Open challans and hypothecation / finance NOC path
+      - Insurance validity through the transfer window
+      - Consistency between listing claims and physical VIN / engine stamps
 
-      ### Gujarat next steps
-      Compare [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) or [used cars in Palanpur](/search/buy-used-cars-palanpur), inquire on Reecomm, and only negotiate after you have seen the vehicle.
+      Photograph papers and the odometer during the visit. Keep your Reecomm inquiry tied to that listing.
+
+      ### Mechanical and structure checks
+      Engine cold start, clutch and gearbox in traffic, steering pull, brake feel, underbody rust, tyre date codes, and flood or accident indicators (fresh undercoat, mismatched panels, damp carpets). Compare fair price against two similar cars on the same hub — not against a Facebook ask.
+
+      ### Test drive with a purpose
+      Drive 20–30 minutes in real conditions. Listen for noise, feel vibration, and check AC under load. A short parking-lot loop hides problems.
+
+      ### How Reecomm fits the process
+      Browse [used cars for sale](/search/buy-used-cars), learn the flow on [how Reecomm works](/reecomm-works), and inquire only on verified consultant stock. For Gujarat city shortlists use [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) or [used cars in Palanpur](/search/buy-used-cars-palanpur).
+
+      ### Payment discipline
+      Agree the ceiling including transfer costs. Negotiate after inspection findings, not before. Avoid cash-only pressure and unsigned “full payment today” demands. If documents or the car diverge from the listing, stop the deal.
 `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 32,
@@ -996,7 +1049,7 @@ export const GEO_CALENDAR_POSTS = [
         headline: "How to Sell Your Old Car in Gujarat",
         url: "https://www.reecomm.com/blog/how-to-sell-old-car-gujarat",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
@@ -1005,18 +1058,24 @@ export const GEO_CALENDAR_POSTS = [
       ### Quick answer
       Prepare RC, insurance, and clear photos first. Then [become a seller on Reecomm](/become-seller) or work with a [verified auto consultant](/become-consultant) who already has buyer demand in your city.
 
-      ### Pricing
-      Check similar live stock such as [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) and [used cars in Palanpur](/search/buy-used-cars-palanpur) before setting an asking price. Honest photos and service history reduce bargaining friction.
+      ### Prepare the car and paperwork
+      Wash the car, fix small defects that photograph poorly, and gather RC, insurance, PUC, and service invoices. Clear hypothecation early if a loan is closed. Buyers in Gujarat abandon deals quickly when papers are incomplete.
 
-      ### Paperwork
-      Clear hypothecation, keep insurance active through transfer, and never hand over RC without a signed agreement and payment confirmation.
+      ### Price against live stock, not hope
+      Check similar live listings such as [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) and [used cars in Palanpur](/search/buy-used-cars-palanpur) before setting an ask. Honest photos and kilometres reduce endless bargaining. Overpricing by 15–20% usually means weeks of silence.
 
-      ### Start listing
-      Go to [become a seller](/become-seller) or explore [consultant pricing](/consult/pricing) if you sell regularly.
+      ### Choose a selling path
+      Occasional sellers can list via [become a seller](/become-seller). Regular traders should explore [consultant pricing](/consult/pricing) and keep storefront inventory fresh. Explain [how Reecomm works](/reecomm-works) to family decision-makers so expectations stay aligned.
+
+      ### Paperwork and payment safety
+      Keep insurance active through transfer. Never hand over RC without a signed agreement and confirmed payment. Prefer documented inquiry threads over anonymous cash buyers who refuse daylight inspections.
+
+      ### After the sale
+      Complete RTO transfer steps promptly, cancel or transfer insurance correctly, and keep copies of every signed page. A clean exit protects you if the buyer later disputes ownership timing.
 `,
     image: "/blog/blog-2.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
   {
     id: 33,
@@ -1036,7 +1095,7 @@ export const GEO_CALENDAR_POSTS = [
         headline: "Used Royal Enfield Hunter 350 in Ahmedabad — Price & Checks",
         url: "https://www.reecomm.com/blog/used-royal-enfield-hunter-350-ahmedabad",
         datePublished: "2026-11-18",
-        dateModified: "2026-11-18",
+        dateModified: "2026-11-23",
         author: { "@type": "Organization", name: "Reecomm" },
         publisher: { "@type": "Organization", name: "Reecomm" },
       },
@@ -1045,20 +1104,33 @@ export const GEO_CALENDAR_POSTS = [
       ### Quick answer
       Shortlist used Royal Enfield bikes in Ahmedabad on [used Royal Enfield two-wheelers in Ahmedabad](/search/buy-used-royal-enfield-two-wheelers-ahmedabad) and the city hub [used bikes in Ahmedabad](/search/buy-used-two-wheelers-ahmedabad). Confirm RC, insurance, and a thorough test ride before paying.
 
-      ### What to check on a Hunter 350
-      - Frame welds and crash damage
-      - Engine noise when hot
-      - Tyre date codes and brake feel
-      - Service history and ownership count
+      ### Why Hunter 350 buyers in Ahmedabad care about condition
+      The Hunter is popular for city + weekend mix riding. Used examples vary widely: some are carefully serviced, others are dropped and cosmetically patched. Price only makes sense after you compare year, kilometres, ownership count, and crash history against two live peers on Reecomm.
 
-      ### Related browsing
-      Also see [used Royal Enfield two-wheelers](/search/buy-used-royal-enfield-two-wheelers) and [used two-wheelers](/search/buy-used-two-wheelers) for wider stock.
+      ### What to check on a Hunter 350
+      - Frame welds, crash damage, and bent mounts
+      - Engine noise when hot and oil condition
+      - Tyre date codes, spoke/rim condition, and brake feel
+      - Chain stretch, sprocket hooked teeth, and fork seals
+      - Service history stamps and ownership count on RC
+
+      Cold-start the bike, then ride enough distance to feel gearbox and heat behaviour — a parking-lot loop is not enough.
+
+      ### Price thinking
+      Also browse [used Royal Enfield two-wheelers](/search/buy-used-royal-enfield-two-wheelers) and [used two-wheelers](/search/buy-used-two-wheelers) so one seller cannot set the market. Adjust for pending insurance, worn consumables, and any aftermarket exhaust that may hide issues.
+
+      ### How Reecomm helps
+      Inquire on verified listings, ask for clear frame and engine photos if missing, and use [how Reecomm works](/reecomm-works) to understand the buyer flow. Prefer consultants who answer with specifics over “come tomorrow cash” messages.
+
+      ### Before you pay
+      Match RC, photograph frame number and odometer, agree transfer steps in writing, and walk away from bikes that differ from listing photos. A slightly higher clean Hunter beats a cheap crash repair every time.
 `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },
-    date: "18 November 2026",
+    date: "23 November 2026",
   },
 ];
+
 
 /** Map money landing path → related calendar blog posts */
 export function relatedBlogLinksForPath(pathname) {

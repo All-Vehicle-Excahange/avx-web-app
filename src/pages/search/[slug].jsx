@@ -32,6 +32,7 @@ import {
   formatVehicleListingLine,
   MIN_INDEXABLE_LISTINGS,
   buildCityBuyingNotes,
+  buildRelatedInventoryLinks,
 } from "@/lib/searchLandingSeo";
 import { resolveSlugQueryRedirect } from "@/lib/seo";
 import { getClientType } from "@/lib/clientType";
@@ -1095,6 +1096,7 @@ export async function getServerSideProps(context) {
           isTwoWheeler: isTwoWheelerLanding,
           brand: brandName,
           model: resolvedModel,
+          topModels,
         })
       : null;
 
@@ -1125,6 +1127,17 @@ export async function getServerSideProps(context) {
     ? `${listingAltBase}${resolvedCity ? ` in ${resolvedCity}` : ""} | Reecomm`
     : `${seoBuilt.title}${seoBuilt.title?.includes("Reecomm") ? "" : " | Reecomm"}`;
 
+  const placeLinks = loadPlaceLinks(city, `/search/${slug}`);
+  const relatedPlaceLinks = buildRelatedInventoryLinks({
+    brand: brandName,
+    model: resolvedModel,
+    city: resolvedCity,
+    isTwoWheeler: isTwoWheelerLanding,
+    placeLinks,
+    currentPath: `/search/${slug}`,
+    max: 12,
+  });
+
   return {
     props: {
       seo: {
@@ -1142,7 +1155,7 @@ export async function getServerSideProps(context) {
         totalCount,
         minPrice,
         placeName: resolvedCity,
-        relatedPlaceLinks: loadPlaceLinks(city, `/search/${slug}`),
+        relatedPlaceLinks,
         relatedBlogLinks: loadRelatedBlogLinks(slug, city),
         ogImage: firstVehicleImage || "https://www.reecomm.com/logo/logo1.webp",
         ogImageAlt,

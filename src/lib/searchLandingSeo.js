@@ -417,6 +417,57 @@ const CITY_BUYING_NOTES = {
       "For Unjha two-wheelers, prioritise commuting comfort, tyre life, and paper clarity. Inquire through Reecomm instead of informal roadside offers.",
     ],
   },
+  chhapi: {
+    title: "Buying used vehicles in Chhapi",
+    cars: [
+      "Chhapi buyers often compare local stock with nearby Palanpur and Banaskantha yards. Focus on ownership count, year, and highway readiness on the Ahmedabad–Palanpur corridor.",
+      "Shortlist verified listings on Reecomm first, then confirm RC match, insurance, and challans before travelling to view a car.",
+      "Request an optional inspection when available — structure and engine checks matter more than a fresh wash on older hatchbacks.",
+    ],
+    bikes: [
+      "Used bikes in Chhapi should have clear RC ownership and a cold-start test. Prefer consultant listings over informal cash-only offers.",
+    ],
+  },
+  tharad: {
+    title: "Buying used vehicles in Tharad",
+    cars: [
+      "Tharad deals often involve practical hatchbacks and utility cars for town and corridor travel. Compare prices with Palanpur and nearby Banaskantha stock before locking a number.",
+      "Verify RC, insurance, and finance clearance in writing. Use Reecomm inquiries so conversations stay tied to a structured listing.",
+    ],
+    bikes: [
+      "For Tharad two-wheelers, inspect tyres, brakes, and frame welds, then confirm papers before payment.",
+    ],
+  },
+  himatnagar: {
+    title: "Buying used vehicles in Himatnagar",
+    cars: [
+      "Himatnagar buyers frequently bridge Sabarkantha stock with Ahmedabad and Gandhinagar options. Cross-check similar year/km cars so one yard cannot set the market.",
+      "Prefer clear photos, RC match, and inspection when offered. Complete transfer with the correct RTO jurisdiction after agreement.",
+    ],
+    bikes: [
+      "Used bikes around Himatnagar should include a proper test ride and insurance check before you pay.",
+    ],
+  },
+  vadodara: {
+    title: "Buying used vehicles in Vadodara",
+    cars: [
+      "Vadodara’s used market mixes city hatchbacks with highway sedans and compact SUVs toward Ahmedabad and Surat. Service history and flood-year checks matter after heavy monsoon seasons.",
+      "Compare at least two similar listings on Reecomm, verify RC and challans, then negotiate after you have seen the car.",
+    ],
+    bikes: [
+      "Vadodara two-wheeler buyers should check chain stretch, tyre age, and cold-start behaviour before agreeing on price.",
+    ],
+  },
+  rajkot: {
+    title: "Buying used vehicles in Rajkot",
+    cars: [
+      "Rajkot buyers often shortlist durable hatchbacks and compact SUVs for city plus Saurashtra highway use. Check underbody rust and ownership history carefully.",
+      "Use verified consultant stock on Reecomm to compare photos and prices, then inquire before travelling across town.",
+    ],
+    bikes: [
+      "For Rajkot bikes, prioritise paper clarity and a daylight test ride on mixed roads.",
+    ],
+  },
 };
 
 /**
@@ -424,20 +475,24 @@ const CITY_BUYING_NOTES = {
  */
 export function buildCityBuyingNotes(
   city = "",
-  { isTwoWheeler = false, brand = "", model = "" } = {},
+  { isTwoWheeler = false, brand = "", model = "", topModels = [] } = {},
 ) {
   const key = placeKey(city);
   if (!key) return null;
   const entry = CITY_BUYING_NOTES[key];
   const subject = cleanJoin([brand, model]) || (isTwoWheeler ? "bikes" : "cars");
+  const modelSnippet = formatModelList(topModels);
   if (!entry) {
     const label = String(city).trim();
     if (!label) return null;
+    const modelLine = modelSnippet
+      ? ` Live stock near ${label} often includes ${modelSnippet} — compare year, kilometres, and price before you travel.`
+      : ` Compare at least two similar year and kilometre options in and around ${label}.`;
     return {
       title: `Buying used ${subject} in ${label}`,
       paragraphs: [
-        `When buying used ${subject} in ${label}, shortlist verified consultant listings with clear photos and prices, then confirm RC ownership, insurance, and challan status before payment.`,
-        `Compare at least two similar year and kilometre options, request an inspection when available on Reecomm, and only negotiate after you have seen the vehicle in person.`,
+        `When buying used ${subject} near you in ${label}, shortlist verified consultant listings with clear photos and prices, then confirm RC ownership, insurance, and challan status before payment.${modelLine}`,
+        `Request an inspection when available on Reecomm, and only negotiate after you have seen the vehicle in person — avoid cash-only deals without document match.`,
       ],
     };
   }
@@ -450,6 +505,86 @@ export function buildCityBuyingNotes(
     title: entry.title,
     paragraphs: paragraphs || [],
   };
+}
+
+/**
+ * Slugify a display name for search landing paths.
+ */
+export function slugifyLandingSegment(value = "") {
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Inventory-style related links for brand / model / city landings.
+ */
+export function buildRelatedInventoryLinks({
+  brand = "",
+  model = "",
+  city = "",
+  isTwoWheeler = false,
+  placeLinks = [],
+  currentPath = "",
+  max = 12,
+} = {}) {
+  const brandT = String(brand || "").trim();
+  const modelT = String(model || "").trim();
+  const cityT = String(city || "").trim();
+  const brandSlug = slugifyLandingSegment(brandT);
+  const modelSlug = slugifyLandingSegment(modelT);
+  const citySlug = slugifyLandingSegment(cityT);
+  const kind = isTwoWheeler ? "two-wheelers" : "cars";
+  const unit = isTwoWheeler ? "bikes" : "cars";
+  const unitLabel = isTwoWheeler ? "Bikes" : "Cars";
+  const links = [];
+  const seen = new Set();
+
+  const push = (label, href) => {
+    if (!label || !href || href === currentPath || seen.has(href)) return;
+    if (links.length >= max) return;
+    seen.add(href);
+    links.push({ label, href });
+  };
+
+  if (citySlug) {
+    push(
+      `Used ${unit} in ${cityT}`,
+      `/search/buy-used-${isTwoWheeler ? "two-wheelers" : "cars"}-${citySlug}`,
+    );
+  }
+  if (brandSlug && citySlug) {
+    push(
+      `Used ${brandT} ${unitLabel} in ${cityT}`,
+      `/search/buy-used-${brandSlug}-${kind}-${citySlug}`,
+    );
+  }
+  if (brandSlug && modelSlug) {
+    push(
+      `Used ${brandT} ${modelT}`,
+      `/search/buy-used-${brandSlug}-${modelSlug}-${kind}`,
+    );
+  }
+  if (brandSlug) {
+    push(`Used ${brandT} ${unitLabel}`, `/search/buy-used-${brandSlug}-${kind}`);
+  }
+  if (brandSlug && modelSlug && citySlug) {
+    push(
+      `Used ${brandT} ${modelT} in ${cityT}`,
+      `/search/buy-used-${brandSlug}-${modelSlug}-${kind}-${citySlug}`,
+    );
+  }
+
+  for (const item of placeLinks || []) {
+    if (!item?.href || !item?.label) continue;
+    // Prefer sibling GEO links (same place / brand family)
+    push(item.label, item.href);
+  }
+
+  return links.slice(0, max);
 }
 
 /**
@@ -713,7 +848,7 @@ export function buildSearchLandingSeo({
   let useOnReecomm = false;
 
   if (cityT && brandT && modelT) {
-    h1 = `Used ${brandT} ${modelT} in ${cityT}`;
+    h1 = `Used ${brandT} ${modelT} near you in ${cityT}`;
     titleCore = formatInventoryLead({
       count,
       brand: brandT,
@@ -722,7 +857,7 @@ export function buildSearchLandingSeo({
       isTwoWheeler,
     });
   } else if (cityT && brandT && !modelT) {
-    h1 = `Used ${brandT} ${vw} in ${cityT}`;
+    h1 = `Used ${brandT} ${vw} near you in ${cityT}`;
     titleCore = formatInventoryLead({
       count,
       brand: brandT,
@@ -730,7 +865,7 @@ export function buildSearchLandingSeo({
       isTwoWheeler,
     });
   } else if (cityT && !brandT && !modelT && !budgetT) {
-    h1 = `Buy Used ${vw} in ${cityT}`;
+    h1 = `Buy Used ${vw} near you in ${cityT}`;
     titleCore =
       count > 0
         ? `${count} Used ${vw} in ${cityT}`
@@ -777,7 +912,9 @@ export function buildSearchLandingSeo({
     cityT ? `in ${cityT}` : "",
   ]);
 
-  let description = `Browse ${countBit}used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
+  let description = cityT
+    ? `Browse ${countBit}used ${subject} near you in ${cityT} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`
+    : `Browse ${countBit}used ${subject} on Reecomm. Compare prices, photos, ownership & inspection reports before you buy.`;
 
   if (count > 0 && (brandT || modelT) && !typeT && !budgetT) {
     const lead = formatInventoryLead({
@@ -799,14 +936,15 @@ export function buildSearchLandingSeo({
             vwLower,
           ])}${cityT ? ` in ${cityT}` : ""} for sale${startingFromBit}`
         : "";
+      const nearBit = cityT ? " near you" : "";
       if (priceClause && samples) {
-        description = `${priceClause} — includes ${samples}. Verified listings with photos & inspection on Reecomm.`;
+        description = `${priceClause}${nearBit} on Reecomm — includes ${samples}. Photos & inspection.`;
       } else if (priceClause) {
-        description = `${priceClause} — verified listings with photos & inspection on Reecomm.`;
+        description = `${priceClause}${nearBit} on Reecomm — verified listings with photos & inspection.`;
       } else if (samples) {
-        description = `Browse ${lead.toLowerCase()} on Reecomm. Includes ${samples}. Compare photos, prices & inspection.`;
+        description = `Browse ${lead.toLowerCase()}${nearBit} on Reecomm. Includes ${samples}. Compare photos, prices & inspection.`;
       } else {
-        description = `Browse ${lead.toLowerCase()} on Reecomm. Compare photos, prices, fuel & inspection reports.`;
+        description = `Browse ${lead.toLowerCase()}${nearBit} on Reecomm. Compare photos, prices, fuel & inspection reports.`;
       }
     }
   }
@@ -1099,6 +1237,11 @@ export function buildSearchLandingFaq({
   });
 
   if (cityT) {
+    items.push({
+      question: `Are these used ${subject} listings near me in ${cityT}?`,
+      answer: `Yes — this Reecomm page shows used ${whereLabel} from verified consultants so you can shortlist near you in ${cityT}, compare photos and prices, request inspection when available, and inquire before you travel.`,
+    });
+
     items.push({
       question: `Is Reecomm a safer way to buy used ${vw} near ${cityT}?`,
       answer: `Reecomm focuses on verified consultants and structured listings with optional inspection reports — helping reduce the risk of misleading ads. For buyers near ${cityT}, you can shortlist ${subject} online, inquire securely, and verify documents before payment.`,

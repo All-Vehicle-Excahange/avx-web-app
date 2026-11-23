@@ -296,12 +296,18 @@ function pushFilterItem(items, seen, { slug, title, keywords, params, inventoryB
   });
 }
 
+/** Minimum listing hits before a GEO combo enters the sitemap allowlist. */
+const MIN_SITEMAP_LISTINGS = 3;
+
+/** City hubs always keep sitemap entries even if temporarily thin. */
+const ALWAYS_ON_CITY_SLUGS = new Set(["ahmedabad", "palanpur"]);
+
 const FOCUS_CITIES = [
   'Ahmedabad', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata',
   'Pune', 'Jaipur', 'Surat', 'Rajkot', 'Vadodara', 'Palanpur', 'Lucknow', 'Indore',
   'Chandigarh', 'Gandhinagar', 'Visnagar', 'Kanodar', 'Siddhpur', 'Mehsana',
   'Chhota Udepur', 'Nashik', 'Bhopal', 'Patna', 'Ludhiana', 'Nagpur', 'Coimbatore',
-  'Latur', 'Hansi', 'Agra', 'Himatnagar', 'Unjha', 'Tharad',
+  'Latur', 'Hansi', 'Agra', 'Himatnagar', 'Unjha', 'Tharad', 'Chhapi',
 ];
 
 const FOCUS_STATES = [
@@ -1264,11 +1270,33 @@ async function generateSearchIndex() {
       "buy-used-sedan-cars",
       "buy-used-hatchback-cars",
     ].forEach(addSlug);
-    for (const slug of comboHits.keys()) addSlug(slug);
+    // Inventory GEO: only slugs with enough live hits (avoid thin doorway crawl)
+    const stockedCitySlugs = new Set();
+    let comboHitsAboveMin = 0;
+    for (const [slug, count] of comboHits.entries()) {
+      if (count >= MIN_SITEMAP_LISTINGS) {
+        addSlug(slug);
+        comboHitsAboveMin += 1;
+      }
+      const cityHub = slug.match(/^buy-used-(?:cars|two-wheelers)-([a-z0-9-]+)$/);
+      if (cityHub && count >= MIN_SITEMAP_LISTINGS) {
+        stockedCitySlugs.add(cityHub[1]);
+      }
+      const geoTail = slug.match(/-(?:cars|two-wheelers)-([a-z0-9-]+)$/);
+      if (geoTail && count >= MIN_SITEMAP_LISTINGS) {
+        stockedCitySlugs.add(geoTail[1]);
+      }
+    }
     for (const city of FOCUS_CITIES) {
       const c = slugifySegment(city);
-      addSlug(`buy-used-cars-${c}`);
-      addSlug(`buy-used-two-wheelers-${c}`);
+      const carHits = comboHits.get(`buy-used-cars-${c}`) || 0;
+      const bikeHits = comboHits.get(`buy-used-two-wheelers-${c}`) || 0;
+      if (ALWAYS_ON_CITY_SLUGS.has(c) || carHits >= MIN_SITEMAP_LISTINGS) {
+        addSlug(`buy-used-cars-${c}`);
+      }
+      if (ALWAYS_ON_CITY_SLUGS.has(c) || bikeHits >= MIN_SITEMAP_LISTINGS) {
+        addSlug(`buy-used-two-wheelers-${c}`);
+      }
     }
     // National brand + model hubs (always) — inventory-backed GEO comes from comboHits only
     for (const { brandSlug, modelSlug } of POPULAR_CAR_MODELS) {
@@ -1299,7 +1327,7 @@ async function generateSearchIndex() {
       "MG",
       "Nissan",
     ];
-    // Brand × city / state only when inventory-backed (comboHits) — avoid empty thin GEO pages
+    // Brand × state seed for Gujarat volume brands (state pages); city GEO stays comboHits-gated
     for (const brand of volumeBrands) {
       const b = slugifySegment(brand);
       addSlug(`buy-used-${b}-cars`);
@@ -1312,6 +1340,50 @@ async function generateSearchIndex() {
       "utf8",
     );
     console.log(`[Cron] Wrote ${sitemapSlugs.size} sitemap allowlist slugs to ${allowPath}`);
+
+    const citiesWithCuratedNotes = new Set([
+      "ahmedabad",
+      "palanpur",
+      "visnagar",
+      "siddhpur",
+      "kanodar",
+      "surat",
+      "mehsana",
+      "gandhinagar",
+      "patan",
+      "unjha",
+      "chhota-udepur",
+      "chhapi",
+      "tharad",
+      "himatnagar",
+      "vadodara",
+      "rajkot",
+    ]);
+    const coveragePath = path.join(PUBLIC_DIR, "seo_inventory_coverage.json");
+    const topCombos = [...comboHits.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 40)
+      .map(([slug, count]) => ({ slug, count }));
+    fs.writeFileSync(
+      coveragePath,
+      JSON.stringify(
+        {
+          generatedAt: new Date().toISOString(),
+          minSitemapListings: MIN_SITEMAP_LISTINGS,
+          sitemapSlugCount: sitemapSlugs.size,
+          comboHitsAboveMin,
+          stockedCityCount: stockedCitySlugs.size,
+          topCombos,
+          citiesNeedingNotes: [...stockedCitySlugs].filter(
+            (c) => !citiesWithCuratedNotes.has(c),
+          ),
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+    console.log(`[Cron] Wrote inventory coverage report to ${coveragePath}`);
   } catch (popErr) {
     console.warn("[Cron] popular links write skipped:", popErr.message);
   }

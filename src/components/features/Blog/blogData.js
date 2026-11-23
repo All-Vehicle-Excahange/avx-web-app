@@ -150,6 +150,9 @@ export const MOCK_POSTS = [
       Negotiating blind, before inspection, puts you at a structural disadvantage. Every concession you win is a guess. Every concession after inspection is based on fact.
 
       Key Takeaway: Buying a used car safely in India in 2026 is not about luck or instinct. It is about following a process — verified seller, independent inspection, RC check, purpose-driven test drive, and post-inspection negotiation.
+
+      ### Start on Reecomm
+      Shortlist live inventory on [used cars for sale](/search/buy-used-cars), learn the verified inquiry flow on [how Reecomm works](/reecomm-works), and request an optional [inspection](/inspection-process) before you pay. Prefer consultant-managed listings over informal cash-only deals.
     `,
     image: "/blog/blog-1.webp",
     sectionImages: [
@@ -253,6 +256,9 @@ export const MOCK_POSTS = [
       A responsible inspection is also honest about its limits. It does not predict future mechanical failure. It does not verify ownership history or outstanding finance. It is not a warranty. It is a documented record of the vehicle's condition on the day of inspection — nothing more, nothing less.
 
       Use it as one critical input in your buying decision, not as the only one.
+
+      ### Request inspection on Reecomm
+      Shortlist a vehicle on [used cars for sale](/search/buy-used-cars), read the [inspection process](/inspection-process), and follow [how Reecomm works](/reecomm-works) so you know when to inquire and when to inspect before payment.
     `,
     image: "/blog/blog2.webp",
     sectionImages: [
@@ -1672,6 +1678,9 @@ export const MOCK_POSTS = [
 
       ### When OLX still makes sense
       OLX works if you are experienced, can inspect yourself, and verify all documents independently. For most buyers, verified listings save time and reduce fraud risk.
+
+      ### Try Reecomm next
+      Browse [used cars for sale](/search/buy-used-cars), compare [used cars in Ahmedabad](/search/buy-used-cars-ahmedabad) when you buy locally, request an optional [inspection](/inspection-process), and learn the full buyer flow on [how Reecomm works](/reecomm-works).
     `,
     image: "/blog/blog-1.webp",
     author: { name: "Reecomm Team", avatar: "/dp.jpg" },

@@ -1,6 +1,11 @@
 /**
- * AdSense eligibility — monetize inventory-backed pages only (low-value policy).
- * No UI: callers pass `enabled` into AdSenseAd / skip the loader.
+ * AdSense eligibility — monetize inventory-backed / substantial pages only
+ * (low-value content policy). Callers pass `enabled` into AdSenseAd / skip loader.
+ *
+ * Post-deploy review checklist (manual):
+ * 1. Confirm thin search landings stay noindex + ad-ineligible.
+ * 2. Confirm short blog posts do not request ads (isBlogAdEligible).
+ * 3. Wait 3–7 days after content deploy, then AdSense → Request review.
  */
 
 /** Route prefixes where the AdSense JS loader may be injected. */
@@ -8,6 +13,7 @@ export const ADSENSE_LOADER_PREFIXES = [
   "/",
   "/search",
   "/vehicle/details",
+  "/blog",
 ];
 
 /**
@@ -16,6 +22,12 @@ export const ADSENSE_LOADER_PREFIXES = [
  * without monetizing low-value inventory.
  */
 export const MIN_ADSENSE_LISTINGS = 5;
+
+/**
+ * Minimum article body length before blog detail pages may request AdSense.
+ * Keeps doorway / stub posts from monetizing.
+ */
+export const MIN_BLOG_AD_CONTENT_CHARS = 1200;
 
 /**
  * Whether the current pathname may load adsbygoogle.js.
@@ -43,4 +55,17 @@ export function isSearchLandingAdEligible({
   const n = Number(totalCount);
   if (!Number.isFinite(n) || n < minListings) return false;
   return true;
+}
+
+/**
+ * Blog article eligibility — substantial unique body only (no thin stubs).
+ */
+export function isBlogAdEligible(
+  post,
+  { minChars = MIN_BLOG_AD_CONTENT_CHARS } = {},
+) {
+  if (!post || typeof post !== "object") return false;
+  const raw = String(post.content || "");
+  const normalized = raw.replace(/\s+/g, " ").trim();
+  return normalized.length >= minChars;
 }

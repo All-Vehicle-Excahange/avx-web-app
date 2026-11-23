@@ -1,7 +1,9 @@
 import {
   buildSearchLandingSeo,
+  buildSearchLandingFaq,
   buildSearchItemListSchema,
   buildCityBuyingNotes,
+  buildRelatedInventoryLinks,
   formatInventoryLead,
   MIN_INDEXABLE_LISTINGS,
 } from "@/lib/searchLandingSeo";
@@ -94,6 +96,70 @@ describe("index and city notes", () => {
     expect(p?.paragraphs?.[0]).toBeTruthy();
     expect(a.paragraphs[0]).not.toEqual(p.paragraphs[0]);
     expect(a.title.toLowerCase()).toContain("ahmedabad");
+  });
+
+  test("Chhapi and unknown cities get unique local notes", () => {
+    const chhapi = buildCityBuyingNotes("Chhapi");
+    expect(chhapi?.title.toLowerCase()).toContain("chhapi");
+    expect(chhapi?.paragraphs?.length).toBeGreaterThan(0);
+
+    const generic = buildCityBuyingNotes("Modasa", {
+      topModels: ["Swift", "i20"],
+    });
+    expect(generic?.paragraphs?.[0]).toMatch(/near you in Modasa/i);
+    expect(generic?.paragraphs?.[0]).toMatch(/Swift|i20/i);
+  });
+});
+
+describe("near-you city SEO", () => {
+  test("brand×model×city H1 uses near you", () => {
+    const seo = buildSearchLandingSeo({
+      brand: "Hyundai",
+      model: "Creta",
+      city: "Ahmedabad",
+      vehicleWord: "Cars",
+      totalCount: 8,
+    });
+    expect(seo.h1).toBe("Used Hyundai Creta near you in Ahmedabad");
+    expect(seo.description.toLowerCase()).toMatch(/near you/);
+  });
+
+  test("city FAQ includes near-me question", () => {
+    const { items } = buildSearchLandingFaq({
+      brand: "Hyundai",
+      model: "Creta",
+      city: "Ahmedabad",
+      vehicleWord: "Cars",
+      totalCount: 5,
+    });
+    expect(
+      items.some((i) => /near me in Ahmedabad/i.test(i.question)),
+    ).toBe(true);
+  });
+});
+
+describe("buildRelatedInventoryLinks", () => {
+  test("builds brand city hub and parent links", () => {
+    const links = buildRelatedInventoryLinks({
+      brand: "Hyundai",
+      model: "Creta",
+      city: "Ahmedabad",
+      currentPath: "/search/buy-used-hyundai-creta-cars-ahmedabad",
+      placeLinks: [
+        {
+          label: "Used Hyundai i20 in Ahmedabad",
+          href: "/search/buy-used-hyundai-i20-cars-ahmedabad",
+        },
+      ],
+    });
+    const hrefs = links.map((l) => l.href);
+    expect(hrefs).toContain("/search/buy-used-cars-ahmedabad");
+    expect(hrefs).toContain("/search/buy-used-hyundai-cars-ahmedabad");
+    expect(hrefs).toContain("/search/buy-used-hyundai-creta-cars");
+    expect(hrefs).toContain("/search/buy-used-hyundai-i20-cars-ahmedabad");
+    expect(hrefs).not.toContain(
+      "/search/buy-used-hyundai-creta-cars-ahmedabad",
+    );
   });
 });
 

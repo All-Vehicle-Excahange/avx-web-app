@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Search, BookOpen } from "lucide-react";
 import BlogCard from "./BlogCard";
 import CategoryTab from "@/components/ui/tab";
@@ -55,9 +56,31 @@ function BlogList() {
               Insights
             </span>
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-third max-w-xl mx-auto font-secondary leading-relaxed">
-            The latest industry news, interviews, technologies, and resources.
+          <p className="mt-4 text-base sm:text-lg text-third max-w-2xl mx-auto font-secondary leading-relaxed">
+            Practical guides for buying and selling used cars and bikes in India —
+            inspection checklists, RC tips, and links into live verified inventory
+            on Reecomm.
           </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm">
+            <Link
+              href="/search/buy-used-cars"
+              className="px-4 py-2 rounded-xl border border-white/10 text-primary hover:border-fourth hover:text-fourth transition-colors font-semibold"
+            >
+              Browse used cars
+            </Link>
+            <Link
+              href="/inspection-process"
+              className="px-4 py-2 rounded-xl border border-white/10 text-primary hover:border-fourth hover:text-fourth transition-colors font-semibold"
+            >
+              Inspection process
+            </Link>
+            <Link
+              href="/reecomm-works"
+              className="px-4 py-2 rounded-xl border border-white/10 text-primary hover:border-fourth hover:text-fourth transition-colors font-semibold"
+            >
+              How Reecomm works
+            </Link>
+          </div>
         </div>
 
         {/* SEARCH BAR */}
