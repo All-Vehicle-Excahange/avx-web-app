@@ -10,6 +10,7 @@ import ReletedToSearch from "@/components/features/search/ReletedToSearch";
 import AutoConsualt from "@/components/features/search/AutoConsualt";
 import ScrollDownArrow from "@/components/ui/ScrollDownArrow";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
+import { TWO_WHEELER_MAKERS } from "@/lib/searchIntent";
 import { event } from "@/lib/fpixel";
 import SearchLandingSeoContent from "@/components/features/search/SearchLandingSeoContent";
 import SearchLandingVehicleLinks from "@/components/features/search/SearchLandingVehicleLinks";
@@ -707,16 +708,10 @@ export async function getServerSideProps(context) {
     const normalize = (s) => s.toLowerCase().replace(/[\s-]/g, "");
     const detailsNormalized = normalize(details);
 
-    const TWO_WHEELER_MAKERS = {
-      15005: "Bajaj",
-      15010: "Hero",
-      15017: "OLA",
-      15019: "Royal Enfield",
-      15021: "TVS",
-      15024: "Yamaha",
-    };
-    const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
-    const brandEntries = Object.entries(allMakers).sort(
+    const isTwoWheeler = initialFilters.vehicleType === "two-wheelers";
+    const candidateMakers = isTwoWheeler ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+    const allMakers = candidateMakers;
+    const brandEntries = Object.entries(candidateMakers).sort(
       (a, b) => b[1].length - a[1].length
     );
     const brandEntry = brandEntries.find(([, name]) => {

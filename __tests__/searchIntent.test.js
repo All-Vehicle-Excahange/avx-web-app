@@ -253,4 +253,178 @@ describe("Search Intent & SEO URL Resolution", () => {
       expect(url).toBe("/search/buy-used-mahindra-thar-cars-tharad");
     });
   });
+
+  describe("Two-Wheeler Intent & Strict Four-Wheeler Isolation", () => {
+    test("'activa' resolves to Honda Activa two-wheelers with makerId 15011", () => {
+      const intent = parseSearchIntent("activa");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Honda");
+      expect(intent.makerId).toBe(15011);
+      expect(intent.modelName).toBe("Activa");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-honda-activa-two-wheelers");
+
+      const suggestions = synthesizeIntentSuggestions(intent);
+      expect(suggestions[0].label).toBe("Used Honda Activa");
+      expect(suggestions[0].link).toBe("/search/buy-used-honda-activa-two-wheelers");
+    });
+
+    test("'shine' resolves to Honda Shine two-wheelers with makerId 15011", () => {
+      const intent = parseSearchIntent("shine");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Honda");
+      expect(intent.makerId).toBe(15011);
+      expect(intent.modelName).toBe("Shine");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-honda-shine-two-wheelers");
+    });
+
+    test("'access 125' resolves to Suzuki Access 125 two-wheelers with makerId 15020", () => {
+      const intent = parseSearchIntent("access 125");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Suzuki");
+      expect(intent.makerId).toBe(15020);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-suzuki-access-125-two-wheelers");
+    });
+
+    test("'jupiter' resolves to TVS Jupiter two-wheelers with makerId 15021", () => {
+      const intent = parseSearchIntent("jupiter");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("TVS");
+      expect(intent.makerId).toBe(15021);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-tvs-jupiter-two-wheelers");
+    });
+
+    test("'pulsar' resolves to Bajaj Pulsar two-wheelers with makerId 15005", () => {
+      const intent = parseSearchIntent("pulsar");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Bajaj");
+      expect(intent.makerId).toBe(15005);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-bajaj-pulsar-two-wheelers");
+    });
+
+    test("'splendor' resolves to Hero Splendor two-wheelers with makerId 15010", () => {
+      const intent = parseSearchIntent("splendor");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Hero");
+      expect(intent.makerId).toBe(15010);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-hero-splendor-two-wheelers");
+    });
+
+    test("'r15' resolves to Yamaha R15 two-wheelers with makerId 15024", () => {
+      const intent = parseSearchIntent("r15");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Yamaha");
+      expect(intent.makerId).toBe(15024);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-yamaha-r15-two-wheelers");
+    });
+
+    test("Four-Wheeler Honda regression check: 'honda city' stays Cars with makerId 14", () => {
+      const intent = parseSearchIntent("honda city");
+      expect(intent.isTwoWheeler).toBe(false);
+      expect(intent.vehicleType).toBe("cars");
+      expect(intent.brandName).toBe("Honda");
+      expect(intent.makerId).toBe(14);
+      expect(intent.modelName).toBe("City");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-honda-city-cars");
+    });
+
+    test("Four-Wheeler Creta regression check: 'creta' stays Cars with makerId 15", () => {
+      const intent = parseSearchIntent("creta");
+      expect(intent.isTwoWheeler).toBe(false);
+      expect(intent.vehicleType).toBe("cars");
+      expect(intent.brandName).toBe("Hyundai");
+      expect(intent.makerId).toBe(15);
+      expect(intent.modelName).toBe("Creta");
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-hyundai-creta-cars");
+    });
+
+    test("Two-Wheeler Pure Brand: 'hero' resolves to Hero two-wheelers with makerId 15010 and 'Used Hero Bikes'", () => {
+      const intent = parseSearchIntent("hero");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("Hero");
+      expect(intent.makerId).toBe(15010);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-hero-two-wheelers");
+
+      const suggestions = synthesizeIntentSuggestions(intent);
+      expect(suggestions.length).toBeGreaterThan(0);
+      expect(suggestions[0].label).toBe("Used Hero Bikes");
+      expect(suggestions[0].link).toBe("/search/buy-used-hero-two-wheelers");
+    });
+
+    test("Two-Wheeler Pure Brand: 'ktm' resolves to KTM two-wheelers with makerId 15014", () => {
+      const intent = parseSearchIntent("ktm");
+      expect(intent.isTwoWheeler).toBe(true);
+      expect(intent.vehicleType).toBe("two-wheelers");
+      expect(intent.brandName).toBe("KTM");
+      expect(intent.makerId).toBe(15014);
+
+      const url = resolveIntentUrl(intent);
+      expect(url).toBe("/search/buy-used-ktm-two-wheelers");
+
+      const suggestions = synthesizeIntentSuggestions(intent);
+      expect(suggestions[0].label).toBe("Used KTM Bikes");
+    });
+
+    test("Two-Wheeler Pure Brands: 'tvs', 'bajaj', 'royal enfield', 'yamaha' resolve to two-wheelers", () => {
+      const tvs = parseSearchIntent("tvs");
+      expect(tvs.isTwoWheeler).toBe(true);
+      expect(tvs.brandName).toBe("TVS");
+      expect(tvs.makerId).toBe(15021);
+      expect(resolveIntentUrl(tvs)).toBe("/search/buy-used-tvs-two-wheelers");
+
+      const bajaj = parseSearchIntent("bajaj");
+      expect(bajaj.isTwoWheeler).toBe(true);
+      expect(bajaj.brandName).toBe("Bajaj");
+      expect(bajaj.makerId).toBe(15005);
+      expect(resolveIntentUrl(bajaj)).toBe("/search/buy-used-bajaj-two-wheelers");
+
+      const re = parseSearchIntent("royal enfield");
+      expect(re.isTwoWheeler).toBe(true);
+      expect(re.brandName).toBe("Royal Enfield");
+      expect(re.makerId).toBe(15019);
+      expect(resolveIntentUrl(re)).toBe("/search/buy-used-royal-enfield-two-wheelers");
+
+      const yamaha = parseSearchIntent("yamaha");
+      expect(yamaha.isTwoWheeler).toBe(true);
+      expect(yamaha.brandName).toBe("Yamaha");
+      expect(yamaha.makerId).toBe(15024);
+      expect(resolveIntentUrl(yamaha)).toBe("/search/buy-used-yamaha-two-wheelers");
+    });
+
+    test("SEO redirect: 'buy-used-hero-cars' and 'buy-used-ktm-cars' redirect to -two-wheelers", () => {
+      const { resolveSearchSlugRedirect } = require("../src/lib/searchLandingSeo");
+      expect(resolveSearchSlugRedirect("buy-used-hero-cars")).toBe("buy-used-hero-two-wheelers");
+      expect(resolveSearchSlugRedirect("buy-used-hero-cars-ahmedabad")).toBe("buy-used-hero-two-wheelers-ahmedabad");
+      expect(resolveSearchSlugRedirect("buy-used-ktm-cars")).toBe("buy-used-ktm-two-wheelers");
+      expect(resolveSearchSlugRedirect("buy-used-bajaj-cars")).toBe("buy-used-bajaj-two-wheelers");
+      expect(resolveSearchSlugRedirect("buy-used-royal-enfield-cars")).toBe("buy-used-royal-enfield-two-wheelers");
+    });
+  });
 });

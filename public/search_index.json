@@ -96790,24 +96790,24 @@
     }
   },
   {
-    "id": "filter_buy_used_bajaj_cars",
-    "title": "Used Bajaj Cars",
+    "id": "filter_buy_used_bajaj_two_wheelers",
+    "title": "Used Bajaj Bikes",
     "keywords": [
       "bajaj",
-      "used car",
+      "used bike",
       "used bajaj",
-      "used bajaj cars"
+      "used bajaj bikes"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Bajaj",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_bajaj_platina_100_cars",
-    "title": "Used Bajaj PLATINA 100 Cars",
+    "id": "filter_buy_used_bajaj_platina_100_two_wheelers",
+    "title": "Used Bajaj PLATINA 100 Bikes",
     "keywords": [
       "bajaj",
       "platina 100",
@@ -96819,18 +96819,18 @@
     "params": {
       "makerName": "Bajaj",
       "modelName": "PLATINA 100",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-platina-100-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-platina-100-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_bajaj_cars_hyderabad",
-    "title": "Used Bajaj Cars in Hyderabad",
+    "id": "filter_buy_used_bajaj_two_wheelers_hyderabad",
+    "title": "Used Bajaj Bikes in Hyderabad",
     "keywords": [
       "bajaj",
       "hyderabad",
       "used bajaj in hyderabad",
-      "used bajaj cars in hyderabad",
+      "used bajaj bikes in hyderabad",
       "used bajaj near me",
       "used bajaj near hyderabad",
       "second hand bajaj hyderabad"
@@ -96839,12 +96839,12 @@
     "params": {
       "makerName": "Bajaj",
       "city": "Hyderabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-cars-hyderabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-two-wheelers-hyderabad"
     }
   },
   {
-    "id": "filter_buy_used_bajaj_platina_100_cars_hyderabad",
+    "id": "filter_buy_used_bajaj_platina_100_two_wheelers_hyderabad",
     "title": "Used Bajaj PLATINA 100 in Hyderabad",
     "keywords": [
       "bajaj",
@@ -96866,13 +96866,13 @@
       "makerName": "Bajaj",
       "modelName": "PLATINA 100",
       "city": "Hyderabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-platina-100-cars-hyderabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-platina-100-two-wheelers-hyderabad"
     }
   },
   {
-    "id": "filter_buy_used_bajaj_cars_telangana",
-    "title": "Used Bajaj Cars in Telangana",
+    "id": "filter_buy_used_bajaj_two_wheelers_telangana",
+    "title": "Used Bajaj Bikes in Telangana",
     "keywords": [
       "bajaj",
       "telangana",
@@ -96882,12 +96882,12 @@
     "params": {
       "makerName": "Bajaj",
       "state": "Telangana",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-cars-telangana"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-two-wheelers-telangana"
     }
   },
   {
-    "id": "filter_buy_used_bajaj_platina_100_cars_telangana",
+    "id": "filter_buy_used_bajaj_platina_100_two_wheelers_telangana",
     "title": "Used Bajaj PLATINA 100 in Telangana",
     "keywords": [
       "bajaj",
@@ -96902,29 +96902,29 @@
       "makerName": "Bajaj",
       "modelName": "PLATINA 100",
       "state": "Telangana",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-bajaj-platina-100-cars-telangana"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-bajaj-platina-100-two-wheelers-telangana"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars",
-    "title": "Used Yamaha Cars",
+    "id": "filter_buy_used_yamaha_two_wheelers",
+    "title": "Used Yamaha Bikes",
     "keywords": [
       "yamaha",
-      "used car",
+      "used bike",
       "used yamaha",
-      "used yamaha cars"
+      "used yamaha bikes"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Yamaha",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15m_cars",
-    "title": "Used Yamaha R15M Cars",
+    "id": "filter_buy_used_yamaha_r15m_two_wheelers",
+    "title": "Used Yamaha R15M Bikes",
     "keywords": [
       "yamaha",
       "r15m",
@@ -96935,18 +96935,18 @@
     "params": {
       "makerName": "Yamaha",
       "modelName": "R15M",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15m-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15m-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars_palanpur",
-    "title": "Used Yamaha Cars in Palanpur",
+    "id": "filter_buy_used_yamaha_two_wheelers_palanpur",
+    "title": "Used Yamaha Bikes in Palanpur",
     "keywords": [
       "yamaha",
       "palanpur",
       "used yamaha in palanpur",
-      "used yamaha cars in palanpur",
+      "used yamaha bikes in palanpur",
       "used yamaha near me",
       "used yamaha near palanpur",
       "second hand yamaha palanpur"
@@ -96955,12 +96955,12 @@
     "params": {
       "makerName": "Yamaha",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15m_cars_palanpur",
+    "id": "filter_buy_used_yamaha_r15m_two_wheelers_palanpur",
     "title": "Used Yamaha R15M in Palanpur",
     "keywords": [
       "yamaha",
@@ -96980,13 +96980,13 @@
       "makerName": "Yamaha",
       "modelName": "R15M",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15m-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15m-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars_gujarat",
-    "title": "Used Yamaha Cars in Gujarat",
+    "id": "filter_buy_used_yamaha_two_wheelers_gujarat",
+    "title": "Used Yamaha Bikes in Gujarat",
     "keywords": [
       "yamaha",
       "gujarat",
@@ -96996,12 +96996,12 @@
     "params": {
       "makerName": "Yamaha",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers-gujarat"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15m_cars_gujarat",
+    "id": "filter_buy_used_yamaha_r15m_two_wheelers_gujarat",
     "title": "Used Yamaha R15M in Gujarat",
     "keywords": [
       "yamaha",
@@ -97015,29 +97015,29 @@
       "makerName": "Yamaha",
       "modelName": "R15M",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15m-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15m-two-wheelers-gujarat"
     }
   },
   {
-    "id": "filter_buy_used_ktm_cars",
-    "title": "Used KTM Cars",
+    "id": "filter_buy_used_ktm_two_wheelers",
+    "title": "Used KTM Bikes",
     "keywords": [
       "ktm",
-      "used car",
+      "used bike",
       "used ktm",
-      "used ktm cars"
+      "used ktm bikes"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "KTM",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_ktm_rc_200_cars",
-    "title": "Used KTM RC 200 Cars",
+    "id": "filter_buy_used_ktm_rc_200_two_wheelers",
+    "title": "Used KTM RC 200 Bikes",
     "keywords": [
       "ktm",
       "rc 200",
@@ -97049,18 +97049,18 @@
     "params": {
       "makerName": "KTM",
       "modelName": "RC 200",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-rc-200-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-rc-200-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_ktm_cars_palanpur",
-    "title": "Used KTM Cars in Palanpur",
+    "id": "filter_buy_used_ktm_two_wheelers_palanpur",
+    "title": "Used KTM Bikes in Palanpur",
     "keywords": [
       "ktm",
       "palanpur",
       "used ktm in palanpur",
-      "used ktm cars in palanpur",
+      "used ktm bikes in palanpur",
       "used ktm near me",
       "used ktm near palanpur",
       "second hand ktm palanpur"
@@ -97069,12 +97069,12 @@
     "params": {
       "makerName": "KTM",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_ktm_rc_200_cars_palanpur",
+    "id": "filter_buy_used_ktm_rc_200_two_wheelers_palanpur",
     "title": "Used KTM RC 200 in Palanpur",
     "keywords": [
       "ktm",
@@ -97096,13 +97096,13 @@
       "makerName": "KTM",
       "modelName": "RC 200",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-rc-200-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-rc-200-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_ktm_cars_gujarat",
-    "title": "Used KTM Cars in Gujarat",
+    "id": "filter_buy_used_ktm_two_wheelers_gujarat",
+    "title": "Used KTM Bikes in Gujarat",
     "keywords": [
       "ktm",
       "gujarat",
@@ -97112,12 +97112,12 @@
     "params": {
       "makerName": "KTM",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-two-wheelers-gujarat"
     }
   },
   {
-    "id": "filter_buy_used_ktm_rc_200_cars_gujarat",
+    "id": "filter_buy_used_ktm_rc_200_two_wheelers_gujarat",
     "title": "Used KTM RC 200 in Gujarat",
     "keywords": [
       "ktm",
@@ -97132,29 +97132,29 @@
       "makerName": "KTM",
       "modelName": "RC 200",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-rc-200-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-rc-200-two-wheelers-gujarat"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_cars",
-    "title": "Used Royal Enfield Cars",
+    "id": "filter_buy_used_royal_enfield_two_wheelers",
+    "title": "Used Royal Enfield Bikes",
     "keywords": [
       "royal enfield",
-      "used car",
+      "used bike",
       "used royal enfield",
-      "used royal enfield cars"
+      "used royal enfield bikes"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Royal Enfield",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_classic_350_cars",
-    "title": "Used Royal Enfield CLASSIC 350 Cars",
+    "id": "filter_buy_used_royal_enfield_classic_350_two_wheelers",
+    "title": "Used Royal Enfield CLASSIC 350 Bikes",
     "keywords": [
       "royal enfield",
       "classic 350",
@@ -97166,18 +97166,18 @@
     "params": {
       "makerName": "Royal Enfield",
       "modelName": "CLASSIC 350",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-classic-350-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_cars_palanpur",
-    "title": "Used Royal Enfield Cars in Palanpur",
+    "id": "filter_buy_used_royal_enfield_two_wheelers_palanpur",
+    "title": "Used Royal Enfield Bikes in Palanpur",
     "keywords": [
       "royal enfield",
       "palanpur",
       "used royal enfield in palanpur",
-      "used royal enfield cars in palanpur",
+      "used royal enfield bikes in palanpur",
       "used royal enfield near me",
       "used royal enfield near palanpur",
       "second hand royal enfield palanpur"
@@ -97186,12 +97186,12 @@
     "params": {
       "makerName": "Royal Enfield",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_classic_350_cars_palanpur",
+    "id": "filter_buy_used_royal_enfield_classic_350_two_wheelers_palanpur",
     "title": "Used Royal Enfield CLASSIC 350 in Palanpur",
     "keywords": [
       "royal enfield",
@@ -97213,13 +97213,13 @@
       "makerName": "Royal Enfield",
       "modelName": "CLASSIC 350",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-classic-350-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-two-wheelers-palanpur"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_cars_gujarat",
-    "title": "Used Royal Enfield Cars in Gujarat",
+    "id": "filter_buy_used_royal_enfield_two_wheelers_gujarat",
+    "title": "Used Royal Enfield Bikes in Gujarat",
     "keywords": [
       "royal enfield",
       "gujarat",
@@ -97229,12 +97229,12 @@
     "params": {
       "makerName": "Royal Enfield",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-two-wheelers-gujarat"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_classic_350_cars_gujarat",
+    "id": "filter_buy_used_royal_enfield_classic_350_two_wheelers_gujarat",
     "title": "Used Royal Enfield CLASSIC 350 in Gujarat",
     "keywords": [
       "royal enfield",
@@ -97249,8 +97249,8 @@
       "makerName": "Royal Enfield",
       "modelName": "CLASSIC 350",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-classic-350-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-two-wheelers-gujarat"
     }
   },
   {
@@ -97315,8 +97315,8 @@
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v4_cars",
-    "title": "Used Yamaha R15 V4 Cars",
+    "id": "filter_buy_used_yamaha_r15_v4_two_wheelers",
+    "title": "Used Yamaha R15 V4 Bikes",
     "keywords": [
       "yamaha",
       "r15 v4",
@@ -97328,18 +97328,18 @@
     "params": {
       "makerName": "Yamaha",
       "modelName": "R15 V4",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v4-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v4-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars_tiruppur",
-    "title": "Used Yamaha Cars in Tiruppur",
+    "id": "filter_buy_used_yamaha_two_wheelers_tiruppur",
+    "title": "Used Yamaha Bikes in Tiruppur",
     "keywords": [
       "yamaha",
       "tiruppur",
       "used yamaha in tiruppur",
-      "used yamaha cars in tiruppur",
+      "used yamaha bikes in tiruppur",
       "used yamaha near me",
       "used yamaha near tiruppur",
       "second hand yamaha tiruppur"
@@ -97348,12 +97348,12 @@
     "params": {
       "makerName": "Yamaha",
       "city": "Tiruppur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars-tiruppur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers-tiruppur"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v4_cars_tiruppur",
+    "id": "filter_buy_used_yamaha_r15_v4_two_wheelers_tiruppur",
     "title": "Used Yamaha R15 V4 in Tiruppur",
     "keywords": [
       "yamaha",
@@ -97375,13 +97375,13 @@
       "makerName": "Yamaha",
       "modelName": "R15 V4",
       "city": "Tiruppur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v4-cars-tiruppur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v4-two-wheelers-tiruppur"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars_tamil_nadu",
-    "title": "Used Yamaha Cars in Tamil Nadu",
+    "id": "filter_buy_used_yamaha_two_wheelers_tamil_nadu",
+    "title": "Used Yamaha Bikes in Tamil Nadu",
     "keywords": [
       "yamaha",
       "tamil nadu",
@@ -97391,12 +97391,12 @@
     "params": {
       "makerName": "Yamaha",
       "state": "Tamil Nadu",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars-tamil-nadu"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers-tamil-nadu"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v4_cars_tamil_nadu",
+    "id": "filter_buy_used_yamaha_r15_v4_two_wheelers_tamil_nadu",
     "title": "Used Yamaha R15 V4 in Tamil Nadu",
     "keywords": [
       "yamaha",
@@ -97411,8 +97411,8 @@
       "makerName": "Yamaha",
       "modelName": "R15 V4",
       "state": "Tamil Nadu",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v4-cars-tamil-nadu"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v4-two-wheelers-tamil-nadu"
     }
   },
   {
@@ -98337,24 +98337,24 @@
     }
   },
   {
-    "id": "filter_buy_used_hero_cars",
-    "title": "Used Hero Cars",
+    "id": "filter_buy_used_hero_two_wheelers",
+    "title": "Used Hero Bikes",
     "keywords": [
       "hero",
-      "used car",
+      "used bike",
       "used hero",
-      "used hero cars"
+      "used hero bikes"
     ],
     "type": "vehicle_filter",
     "params": {
       "makerName": "Hero",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_hero_splendor_pro_100_cars",
-    "title": "Used Hero SPLENDOR PRO 100 Cars",
+    "id": "filter_buy_used_hero_splendor_pro_100_two_wheelers",
+    "title": "Used Hero SPLENDOR PRO 100 Bikes",
     "keywords": [
       "hero",
       "splendor pro 100",
@@ -98366,18 +98366,18 @@
     "params": {
       "makerName": "Hero",
       "modelName": "SPLENDOR PRO 100",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-splendor-pro-100-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-splendor-pro-100-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_hero_cars_jaipur",
-    "title": "Used Hero Cars in Jaipur",
+    "id": "filter_buy_used_hero_two_wheelers_jaipur",
+    "title": "Used Hero Bikes in Jaipur",
     "keywords": [
       "hero",
       "jaipur",
       "used hero in jaipur",
-      "used hero cars in jaipur",
+      "used hero bikes in jaipur",
       "used hero near me",
       "used hero near jaipur",
       "second hand hero jaipur"
@@ -98386,12 +98386,12 @@
     "params": {
       "makerName": "Hero",
       "city": "Jaipur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-cars-jaipur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-two-wheelers-jaipur"
     }
   },
   {
-    "id": "filter_buy_used_hero_splendor_pro_100_cars_jaipur",
+    "id": "filter_buy_used_hero_splendor_pro_100_two_wheelers_jaipur",
     "title": "Used Hero SPLENDOR PRO 100 in Jaipur",
     "keywords": [
       "hero",
@@ -98413,13 +98413,13 @@
       "makerName": "Hero",
       "modelName": "SPLENDOR PRO 100",
       "city": "Jaipur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-splendor-pro-100-cars-jaipur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-splendor-pro-100-two-wheelers-jaipur"
     }
   },
   {
-    "id": "filter_buy_used_hero_cars_rajasthan",
-    "title": "Used Hero Cars in Rajasthan",
+    "id": "filter_buy_used_hero_two_wheelers_rajasthan",
+    "title": "Used Hero Bikes in Rajasthan",
     "keywords": [
       "hero",
       "rajasthan",
@@ -98429,12 +98429,12 @@
     "params": {
       "makerName": "Hero",
       "state": "Rajasthan",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-cars-rajasthan"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-two-wheelers-rajasthan"
     }
   },
   {
-    "id": "filter_buy_used_hero_splendor_pro_100_cars_rajasthan",
+    "id": "filter_buy_used_hero_splendor_pro_100_two_wheelers_rajasthan",
     "title": "Used Hero SPLENDOR PRO 100 in Rajasthan",
     "keywords": [
       "hero",
@@ -98449,13 +98449,13 @@
       "makerName": "Hero",
       "modelName": "SPLENDOR PRO 100",
       "state": "Rajasthan",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-splendor-pro-100-cars-rajasthan"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-splendor-pro-100-two-wheelers-rajasthan"
     }
   },
   {
-    "id": "filter_buy_used_ktm_duke_250_cars",
-    "title": "Used KTM DUKE 250 Cars",
+    "id": "filter_buy_used_ktm_duke_250_two_wheelers",
+    "title": "Used KTM DUKE 250 Bikes",
     "keywords": [
       "ktm",
       "duke 250",
@@ -98467,18 +98467,18 @@
     "params": {
       "makerName": "KTM",
       "modelName": "DUKE 250",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-duke-250-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-duke-250-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_ktm_cars_ahmedabad",
-    "title": "Used KTM Cars in Ahmedabad",
+    "id": "filter_buy_used_ktm_two_wheelers_ahmedabad",
+    "title": "Used KTM Bikes in Ahmedabad",
     "keywords": [
       "ktm",
       "ahmedabad",
       "used ktm in ahmedabad",
-      "used ktm cars in ahmedabad",
+      "used ktm bikes in ahmedabad",
       "used ktm near me",
       "used ktm near ahmedabad",
       "second hand ktm ahmedabad"
@@ -98487,12 +98487,12 @@
     "params": {
       "makerName": "KTM",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_ktm_duke_250_cars_ahmedabad",
+    "id": "filter_buy_used_ktm_duke_250_two_wheelers_ahmedabad",
     "title": "Used KTM DUKE 250 in Ahmedabad",
     "keywords": [
       "ktm",
@@ -98514,12 +98514,12 @@
       "makerName": "KTM",
       "modelName": "DUKE 250",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-duke-250-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-duke-250-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_ktm_duke_250_cars_gujarat",
+    "id": "filter_buy_used_ktm_duke_250_two_wheelers_gujarat",
     "title": "Used KTM DUKE 250 in Gujarat",
     "keywords": [
       "ktm",
@@ -98534,8 +98534,8 @@
       "makerName": "KTM",
       "modelName": "DUKE 250",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-ktm-duke-250-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-ktm-duke-250-two-wheelers-gujarat"
     }
   },
   {
@@ -99152,13 +99152,13 @@
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_cars_ahmedabad",
-    "title": "Used Royal Enfield Cars in Ahmedabad",
+    "id": "filter_buy_used_royal_enfield_two_wheelers_ahmedabad",
+    "title": "Used Royal Enfield Bikes in Ahmedabad",
     "keywords": [
       "royal enfield",
       "ahmedabad",
       "used royal enfield in ahmedabad",
-      "used royal enfield cars in ahmedabad",
+      "used royal enfield bikes in ahmedabad",
       "used royal enfield near me",
       "used royal enfield near ahmedabad",
       "second hand royal enfield ahmedabad"
@@ -99167,12 +99167,12 @@
     "params": {
       "makerName": "Royal Enfield",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_royal_enfield_classic_350_cars_ahmedabad",
+    "id": "filter_buy_used_royal_enfield_classic_350_two_wheelers_ahmedabad",
     "title": "Used Royal Enfield CLASSIC 350 in Ahmedabad",
     "keywords": [
       "royal enfield",
@@ -99194,13 +99194,13 @@
       "makerName": "Royal Enfield",
       "modelName": "CLASSIC 350",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-royal-enfield-classic-350-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-royal-enfield-classic-350-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v3_cars",
-    "title": "Used Yamaha R15 V3 Cars",
+    "id": "filter_buy_used_yamaha_r15_v3_two_wheelers",
+    "title": "Used Yamaha R15 V3 Bikes",
     "keywords": [
       "yamaha",
       "r15 v3",
@@ -99212,18 +99212,18 @@
     "params": {
       "makerName": "Yamaha",
       "modelName": "R15 V3",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v3-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_cars_ahmedabad",
-    "title": "Used Yamaha Cars in Ahmedabad",
+    "id": "filter_buy_used_yamaha_two_wheelers_ahmedabad",
+    "title": "Used Yamaha Bikes in Ahmedabad",
     "keywords": [
       "yamaha",
       "ahmedabad",
       "used yamaha in ahmedabad",
-      "used yamaha cars in ahmedabad",
+      "used yamaha bikes in ahmedabad",
       "used yamaha near me",
       "used yamaha near ahmedabad",
       "second hand yamaha ahmedabad"
@@ -99232,12 +99232,12 @@
     "params": {
       "makerName": "Yamaha",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v3_cars_ahmedabad",
+    "id": "filter_buy_used_yamaha_r15_v3_two_wheelers_ahmedabad",
     "title": "Used Yamaha R15 V3 in Ahmedabad",
     "keywords": [
       "yamaha",
@@ -99259,12 +99259,12 @@
       "makerName": "Yamaha",
       "modelName": "R15 V3",
       "city": "Ahmedabad",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v3-cars-ahmedabad"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-two-wheelers-ahmedabad"
     }
   },
   {
-    "id": "filter_buy_used_yamaha_r15_v3_cars_gujarat",
+    "id": "filter_buy_used_yamaha_r15_v3_two_wheelers_gujarat",
     "title": "Used Yamaha R15 V3 in Gujarat",
     "keywords": [
       "yamaha",
@@ -99279,8 +99279,8 @@
       "makerName": "Yamaha",
       "modelName": "R15 V3",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-yamaha-r15-v3-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-yamaha-r15-v3-two-wheelers-gujarat"
     }
   },
   {
@@ -99364,7 +99364,7 @@
   },
   {
     "id": "filter_buy_used_honda_cb_shine_sp_125_cars",
-    "title": "Used Honda CB SHINE SP 125 Cars",
+    "title": "Used Honda CB SHINE SP 125 Bikes",
     "keywords": [
       "honda",
       "cb shine sp 125",
@@ -99376,8 +99376,8 @@
     "params": {
       "makerName": "Honda",
       "modelName": "CB SHINE SP 125",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-cb-shine-sp-125-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-cb-shine-sp-125-two-wheelers"
     }
   },
   {
@@ -99423,8 +99423,8 @@
       "makerName": "Honda",
       "modelName": "CB SHINE SP 125",
       "city": "North East Delhi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-cb-shine-sp-125-cars-north-east-delhi"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-cb-shine-sp-125-two-wheelers-north-east-delhi"
     }
   },
   {
@@ -99443,8 +99443,8 @@
       "makerName": "Honda",
       "modelName": "CB SHINE SP 125",
       "state": "Delhi",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-cb-shine-sp-125-cars-delhi"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-cb-shine-sp-125-two-wheelers-delhi"
     }
   },
   {
@@ -99739,8 +99739,8 @@
     }
   },
   {
-    "id": "filter_buy_used_hero_pleasure_100_cars",
-    "title": "Used Hero PLEASURE 100 Cars",
+    "id": "filter_buy_used_hero_pleasure_100_two_wheelers",
+    "title": "Used Hero PLEASURE 100 Bikes",
     "keywords": [
       "hero",
       "pleasure 100",
@@ -99752,18 +99752,18 @@
     "params": {
       "makerName": "Hero",
       "modelName": "PLEASURE 100",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-pleasure-100-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-pleasure-100-two-wheelers"
     }
   },
   {
-    "id": "filter_buy_used_hero_cars_raipur",
-    "title": "Used Hero Cars in Raipur",
+    "id": "filter_buy_used_hero_two_wheelers_raipur",
+    "title": "Used Hero Bikes in Raipur",
     "keywords": [
       "hero",
       "raipur",
       "used hero in raipur",
-      "used hero cars in raipur",
+      "used hero bikes in raipur",
       "used hero near me",
       "used hero near raipur",
       "second hand hero raipur"
@@ -99772,12 +99772,12 @@
     "params": {
       "makerName": "Hero",
       "city": "Raipur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-cars-raipur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-two-wheelers-raipur"
     }
   },
   {
-    "id": "filter_buy_used_hero_pleasure_100_cars_raipur",
+    "id": "filter_buy_used_hero_pleasure_100_two_wheelers_raipur",
     "title": "Used Hero PLEASURE 100 in Raipur",
     "keywords": [
       "hero",
@@ -99799,13 +99799,13 @@
       "makerName": "Hero",
       "modelName": "PLEASURE 100",
       "city": "Raipur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-pleasure-100-cars-raipur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-pleasure-100-two-wheelers-raipur"
     }
   },
   {
-    "id": "filter_buy_used_hero_cars_chhattisgarh",
-    "title": "Used Hero Cars in Chhattisgarh",
+    "id": "filter_buy_used_hero_two_wheelers_chhattisgarh",
+    "title": "Used Hero Bikes in Chhattisgarh",
     "keywords": [
       "hero",
       "chhattisgarh",
@@ -99815,12 +99815,12 @@
     "params": {
       "makerName": "Hero",
       "state": "Chhattisgarh",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-cars-chhattisgarh"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-two-wheelers-chhattisgarh"
     }
   },
   {
-    "id": "filter_buy_used_hero_pleasure_100_cars_chhattisgarh",
+    "id": "filter_buy_used_hero_pleasure_100_two_wheelers_chhattisgarh",
     "title": "Used Hero PLEASURE 100 in Chhattisgarh",
     "keywords": [
       "hero",
@@ -99835,8 +99835,8 @@
       "makerName": "Hero",
       "modelName": "PLEASURE 100",
       "state": "Chhattisgarh",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-hero-pleasure-100-cars-chhattisgarh"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-hero-pleasure-100-two-wheelers-chhattisgarh"
     }
   },
   {
@@ -101562,7 +101562,7 @@
   },
   {
     "id": "filter_buy_used_honda_shine_125_cars",
-    "title": "Used Honda SHINE 125 Cars",
+    "title": "Used Honda SHINE 125 Bikes",
     "keywords": [
       "honda",
       "shine 125",
@@ -101574,8 +101574,8 @@
     "params": {
       "makerName": "Honda",
       "modelName": "SHINE 125",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-shine-125-cars"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-shine-125-two-wheelers"
     }
   },
   {
@@ -101601,8 +101601,8 @@
       "makerName": "Honda",
       "modelName": "SHINE 125",
       "city": "Palanpur",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-shine-125-cars-palanpur"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-shine-125-two-wheelers-palanpur"
     }
   },
   {
@@ -101621,8 +101621,8 @@
       "makerName": "Honda",
       "modelName": "SHINE 125",
       "state": "Gujarat",
-      "vehicleType": "FOUR_WHEELER",
-      "slug": "buy-used-honda-shine-125-cars-gujarat"
+      "vehicleType": "TWO_WHEELER",
+      "slug": "buy-used-honda-shine-125-two-wheelers-gujarat"
     }
   },
   {
@@ -169497,7 +169497,7 @@
   },
   {
     "id": "filter_buy_used_cars_afzalpur",
-    "title": "Used Cars in Afzalpur",
+    "title": "Used Bikes in Afzalpur",
     "keywords": [
       "used car",
       "car",
@@ -169505,9 +169505,9 @@
     ],
     "type": "vehicle_filter",
     "params": {
-      "vehicleType": "FOUR_WHEELER",
+      "vehicleType": "TWO_WHEELER",
       "city": "Afzalpur",
-      "slug": "buy-used-cars-afzalpur"
+      "slug": "buy-used-two-wheelers-afzalpur"
     }
   },
   {
@@ -232362,7 +232362,7 @@
   },
   {
     "id": "filter_buy_used_cars_afzalgarh",
-    "title": "Used Cars in Afzalgarh",
+    "title": "Used Bikes in Afzalgarh",
     "keywords": [
       "used car",
       "car",
@@ -232370,9 +232370,9 @@
     ],
     "type": "vehicle_filter",
     "params": {
-      "vehicleType": "FOUR_WHEELER",
+      "vehicleType": "TWO_WHEELER",
       "city": "Afzalgarh",
-      "slug": "buy-used-cars-afzalgarh"
+      "slug": "buy-used-two-wheelers-afzalgarh"
     }
   },
   {

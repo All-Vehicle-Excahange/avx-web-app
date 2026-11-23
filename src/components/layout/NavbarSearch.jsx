@@ -54,6 +54,8 @@ import {
   ALL_MAKERS,
   KNOWN_CITIES,
   MODEL_CANONICAL_SLUGS,
+  KNOWN_TWO_WHEELER_MODELS,
+  PURE_TWO_WHEELER_BRANDS,
 } from "@/lib/searchIntent";
 import {
   exo,
@@ -115,6 +117,21 @@ export const formatSearchSubtitle = (subtitle) => {
       return trimmed;
     })
     .join(" • ");
+};
+
+export const isBikeSuggestionItem = (item) => {
+  if (!item) return false;
+  if (item.isTwoWheeler || item.vehicleType === "TWO_WHEELER" || item.vehicleType === "two-wheelers") return true;
+  if (item.params?.vehicleType === "TWO_WHEELER" || item.params?.vehicleType === "two-wheelers") return true;
+  if (item.link && item.link.includes("two-wheelers")) return true;
+  const raw = (item.rawLabel || item.label || item.title || "").toLowerCase();
+  const cleaned = raw.replace(/^used\s+/i, "").replace(/\s+(bikes?|cars?|two[- ]?wheelers?)$/i, "").trim();
+  if (PURE_TWO_WHEELER_BRANDS.has(cleaned)) return true;
+  if (item.brand && PURE_TWO_WHEELER_BRANDS.has(item.brand.toLowerCase())) return true;
+  if (item.model && KNOWN_TWO_WHEELER_MODELS.has(item.model.toLowerCase())) return true;
+  if (KNOWN_TWO_WHEELER_MODELS.has(cleaned)) return true;
+  if (Array.from(KNOWN_TWO_WHEELER_MODELS).some((m) => raw.includes(m))) return true;
+  return false;
 };
 
 const ORIGINAL_PLACEHOLDER_TEXTS = [
@@ -237,13 +254,38 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
             if (!formattedLabel.toLowerCase().startsWith("used")) {
               formattedLabel = `Used ${formattedLabel}`;
             }
-            if (s.type === "brand" && !formattedLabel.toLowerCase().includes("car")) {
-              formattedLabel = `${formattedLabel} Cars`;
+
+            const cleanBrandOrModel = (s.rawLabel || s.label || s.brand || s.model || "")
+              .toLowerCase()
+              .trim();
+            const isTwoWheeler =
+              s.vehicleType === "TWO_WHEELER" ||
+              s.vehicleType === "two-wheelers" ||
+              (s.link && s.link.includes("two-wheelers")) ||
+              PURE_TWO_WHEELER_BRANDS.has(cleanBrandOrModel) ||
+              KNOWN_TWO_WHEELER_MODELS.has(cleanBrandOrModel) ||
+              (s.brand && PURE_TWO_WHEELER_BRANDS.has(s.brand.toLowerCase())) ||
+              (s.model && KNOWN_TWO_WHEELER_MODELS.has(s.model.toLowerCase()));
+
+            if (s.type === "brand") {
+              if (isTwoWheeler) {
+                if (
+                  !formattedLabel.toLowerCase().includes("bike") &&
+                  !formattedLabel.toLowerCase().includes("two-wheeler")
+                ) {
+                  formattedLabel = `${formattedLabel} Bikes`;
+                }
+              } else {
+                if (!formattedLabel.toLowerCase().includes("car")) {
+                  formattedLabel = `${formattedLabel} Cars`;
+                }
+              }
             }
             return {
               ...s,
               rawLabel,
               label: formattedLabel,
+              isTwoWheeler,
             };
           });
 
@@ -893,21 +935,28 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
 
     // 4. Known Model Shortcut Match
     if (MODEL_CANONICAL_SLUGS[cleanTerm]) {
-      router.push(`/search/buy-used-${MODEL_CANONICAL_SLUGS[cleanTerm]}-cars`);
+      const isTw = KNOWN_TWO_WHEELER_MODELS.has(cleanTerm);
+      const suffix = isTw ? "two-wheelers" : "cars";
+      router.push(`/search/buy-used-${MODEL_CANONICAL_SLUGS[cleanTerm]}-${suffix}`);
       closeDropdown();
       setIsSearching(false);
       return;
     }
 
-    // 4. Construct search slug (e.g. "kia sonet" -> "buy-used-kia-sonet-cars")
+    // 5. Construct search slug
     const searchSlug = cleanTerm
       .replace(/\bused\b/g, "")
       .trim()
       .replace(/\s+/g, "-");
 
+    const isTwSlug =
+      Array.from(KNOWN_TWO_WHEELER_MODELS).some((m) => cleanTerm.includes(m)) ||
+      Array.from(PURE_TWO_WHEELER_BRANDS).some((b) => cleanTerm.includes(b));
+    const suffix = isTwSlug ? "two-wheelers" : "cars";
+
     const finalSlug = searchSlug
-      ? `buy-used-${searchSlug}-cars`.replace(/-+/g, "-")
-      : "buy-used-cars";
+      ? `buy-used-${searchSlug}-${suffix}`.replace(/-+/g, "-")
+      : isTwSlug ? "buy-used-two-wheelers" : "buy-used-cars";
 
     const resolvedRedirect = resolveSearchSlugRedirect(finalSlug);
     router.push(`/search/${resolvedRedirect || finalSlug}`);
@@ -970,7 +1019,9 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
     saveSearchMutation.mutate(cleanBrand);
     trackMetaProductSearch(cleanBrand);
     const slugBrand = cleanBrand.toLowerCase().replace(/\s+/g, "-");
-    router.push(`/search/buy-used-${slugBrand}-cars`);
+    const isTwBrand = PURE_TWO_WHEELER_BRANDS.has(cleanBrand.toLowerCase());
+    const suffix = isTwBrand ? "two-wheelers" : "cars";
+    router.push(`/search/buy-used-${slugBrand}-${suffix}`);
     closeDropdown();
   };
 
@@ -1047,7 +1098,9 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors">
-                    {item.type === "brand" ? (
+                    {isBikeSuggestionItem(item) ? (
+                      <Bike className="w-4 h-4 text-emerald-600" />
+                    ) : item.type === "brand" ? (
                       <CarFront className="w-4 h-4" />
                     ) : item.type === "model" ? (
                       <Car className="w-4 h-4" />
@@ -2677,7 +2730,9 @@ export default function NavbarSearch({ heroMode = false, scrolled = false }) {
                             >
                               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                                 <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center shrink-0 text-gray-500">
-                                  {item.type === "brand" ? (
+                                  {isBikeSuggestionItem(item) ? (
+                                    <Bike className="w-3.5 h-3.5 text-emerald-600" />
+                                  ) : item.type === "brand" ? (
                                     <CarFront className="w-3.5 h-3.5" />
                                   ) : item.type === "model" ? (
                                     <Car className="w-3.5 h-3.5" />

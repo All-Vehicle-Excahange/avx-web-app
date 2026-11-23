@@ -219,6 +219,11 @@ function parseUrlPath(urlStr) {
           keywords.push(matchGeoBrand[1].replace(/-/g, " "));
         }
 
+        if (params.makerName && TWO_WHEELER_BRANDS.some(b => b.toLowerCase() === params.makerName.toLowerCase())) {
+          params.vehicleType = 'TWO_WHEELER';
+          title = title.replace(/\s*Cars\b/g, ' Bikes').replace(/\s*Two-Wheelers\b/g, ' Bikes');
+        }
+
         if (cityOrStateRaw && !cityOrStateRaw.startsWith("under-")) {
           params.city = toTitleCase(cityOrStateRaw);
           title += ` in ${params.city}`;
@@ -343,15 +348,37 @@ const POPULAR_CAR_MODELS = [
 
 const POPULAR_BIKE_MODELS = [
   { brand: 'Honda', model: 'Activa', brandSlug: 'honda', modelSlug: 'activa' },
+  { brand: 'Honda', model: 'Shine', brandSlug: 'honda', modelSlug: 'shine' },
+  { brand: 'Honda', model: 'CB Shine 125', brandSlug: 'honda', modelSlug: 'cb-shine-125' },
+  { brand: 'Honda', model: 'SP 125', brandSlug: 'honda', modelSlug: 'sp125' },
+  { brand: 'Honda', model: 'Dio', brandSlug: 'honda', modelSlug: 'dio-110' },
+  { brand: 'Honda', model: 'Unicorn', brandSlug: 'honda', modelSlug: 'unicorn-160' },
   { brand: 'Hero', model: 'Splendor', brandSlug: 'hero', modelSlug: 'splendor' },
   { brand: 'Hero', model: 'HF Deluxe', brandSlug: 'hero', modelSlug: 'hf-deluxe' },
+  { brand: 'Hero', model: 'Passion', brandSlug: 'hero', modelSlug: 'passion' },
+  { brand: 'Hero', model: 'Glamour', brandSlug: 'hero', modelSlug: 'glamour' },
   { brand: 'TVS', model: 'Jupiter', brandSlug: 'tvs', modelSlug: 'jupiter' },
+  { brand: 'TVS', model: 'Apache', brandSlug: 'tvs', modelSlug: 'apache' },
+  { brand: 'TVS', model: 'Ntorq', brandSlug: 'tvs', modelSlug: 'ntorq' },
+  { brand: 'TVS', model: 'Raider', brandSlug: 'tvs', modelSlug: 'raider' },
   { brand: 'Bajaj', model: 'Pulsar', brandSlug: 'bajaj', modelSlug: 'pulsar' },
+  { brand: 'Bajaj', model: 'Platina', brandSlug: 'bajaj', modelSlug: 'platina' },
+  { brand: 'Bajaj', model: 'Avenger', brandSlug: 'bajaj', modelSlug: 'avenger' },
   { brand: 'Royal Enfield', model: 'Classic 350', brandSlug: 'royal-enfield', modelSlug: 'classic-350' },
   { brand: 'Royal Enfield', model: 'Bullet', brandSlug: 'royal-enfield', modelSlug: 'bullet' },
+  { brand: 'Royal Enfield', model: 'Hunter 350', brandSlug: 'royal-enfield', modelSlug: 'hunter-350' },
+  { brand: 'Royal Enfield', model: 'Himalayan', brandSlug: 'royal-enfield', modelSlug: 'himalayan' },
+  { brand: 'Yamaha', model: 'R15', brandSlug: 'yamaha', modelSlug: 'r15' },
   { brand: 'Yamaha', model: 'MT 15', brandSlug: 'yamaha', modelSlug: 'mt-15' },
+  { brand: 'Yamaha', model: 'FZ', brandSlug: 'yamaha', modelSlug: 'fz' },
   { brand: 'KTM', model: 'Duke 200', brandSlug: 'ktm', modelSlug: 'duke-200' },
+  { brand: 'KTM', model: 'Duke 390', brandSlug: 'ktm', modelSlug: 'duke-390' },
   { brand: 'Suzuki', model: 'Access', brandSlug: 'suzuki', modelSlug: 'access' },
+  { brand: 'Suzuki', model: 'Burgman Street', brandSlug: 'suzuki', modelSlug: 'burgman-street-125' },
+  { brand: 'Suzuki', model: 'Gixxer', brandSlug: 'suzuki', modelSlug: 'gixxer' },
+  { brand: 'Ather', model: '450X', brandSlug: 'ather', modelSlug: '450x' },
+  { brand: 'OLA', model: 'S1 Pro', brandSlug: 'ola', modelSlug: 's1-pro' },
+  { brand: 'Triumph', model: 'Speed 400', brandSlug: 'triumph', modelSlug: 'speed-400' },
 ];
 
 /**

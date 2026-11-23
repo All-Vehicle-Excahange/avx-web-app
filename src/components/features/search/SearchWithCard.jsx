@@ -38,6 +38,7 @@ import {
   getFilterConsualt,
 } from "@/services/filter";
 import { MAKER_NAME_MAPPING } from "@/data/makers";
+import { TWO_WHEELER_MAKERS } from "@/lib/searchIntent";
 import { getState, getCities, getAllTown } from "@/services/user.service";
 import { getUserCityAndStateByLatLong } from "@/services/consult.filter.service";
 import { addClickEvent, getAddRecomandedVehicle } from "@/services/ppc.service";
@@ -160,15 +161,8 @@ export default function SearchWithCard({
       makerId = rawBrand;
     } else if (rawBrand) {
       // Reverse lookup: Name -> ID
-      const TWO_WHEELER_MAKERS = {
-        15005: "Bajaj",
-        15010: "Hero",
-        15017: "OLA",
-        15019: "Royal Enfield",
-        15021: "TVS",
-        15024: "Yamaha",
-      };
-      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+      const allMakers = candidateMakers;
       const entries = Object.entries(allMakers);
       const found = entries.find(
         ([id, name]) => name.toLowerCase() === rawBrand.toLowerCase(),
@@ -181,15 +175,8 @@ export default function SearchWithCard({
   let brandParam = searchParams.get("brandName") || initialFilters.brandName;
   if (!brandParam) {
     if (isNumeric(rawBrand)) {
-      const TWO_WHEELER_MAKERS = {
-        15005: "Bajaj",
-        15010: "Hero",
-        15017: "OLA",
-        15019: "Royal Enfield",
-        15021: "TVS",
-        15024: "Yamaha",
-      };
-      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+      const allMakers = candidateMakers;
       brandParam = allMakers[rawBrand];
     } else {
       brandParam = rawBrand;
@@ -535,7 +522,19 @@ export default function SearchWithCard({
     );
 
     // Brand
-    const activeMakerId = initialFilters.makerId || initialFilters.brand || initialFilters.brandName;
+    let activeMakerId = initialFilters.makerId;
+    if (!activeMakerId && (initialFilters.brand || initialFilters.brandName)) {
+      const bVal = initialFilters.brand || initialFilters.brandName;
+      if (isNumeric(bVal)) {
+        activeMakerId = bVal;
+      } else {
+        const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+        const found = Object.entries(candidateMakers).find(
+          ([, name]) => name.toLowerCase() === String(bVal).toLowerCase()
+        );
+        if (found) activeMakerId = found[0];
+      }
+    }
     setSelectedBrands(activeMakerId ? [String(activeMakerId)] : []);
 
     // Model
@@ -700,15 +699,8 @@ export default function SearchWithCard({
           if (found && !isNaN(Number(found.value))) {
             validMakerIds.add(Number(found.value));
           } else {
-            const TWO_WHEELER_MAKERS = {
-              15005: "Bajaj",
-              15010: "Hero",
-              15017: "OLA",
-              15019: "Royal Enfield",
-              15021: "TVS",
-              15024: "Yamaha",
-            };
-            const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+            const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+            const allMakers = candidateMakers;
             const entry = Object.entries(allMakers).find(
               ([, name]) => name.toLowerCase().trim() === cleanB,
             );
@@ -850,15 +842,8 @@ export default function SearchWithCard({
           if (found && !isNaN(Number(found.value))) {
             validMakerIds.add(Number(found.value));
           } else {
-            const TWO_WHEELER_MAKERS = {
-              15005: "Bajaj",
-              15010: "Hero",
-              15017: "OLA",
-              15019: "Royal Enfield",
-              15021: "TVS",
-              15024: "Yamaha",
-            };
-            const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+            const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+            const allMakers = candidateMakers;
             const entry = Object.entries(allMakers).find(
               ([, name]) => name.toLowerCase().trim() === cleanB,
             );
@@ -1080,15 +1065,8 @@ export default function SearchWithCard({
   const resolvedBrandName = useMemo(() => {
     if (selectedBrands.length !== 1) return "";
     const mId = selectedBrands[0];
-    const TWO_WHEELER_MAKERS = {
-      15005: "Bajaj",
-      15010: "Hero",
-      15017: "OLA",
-      15019: "Royal Enfield",
-      15021: "TVS",
-      15024: "Yamaha",
-    };
-    const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+    const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+    const allMakers = candidateMakers;
     if (allMakers[mId]) {
       return allMakers[mId];
     }
@@ -2424,11 +2402,8 @@ export default function SearchWithCard({
     const brandLabels = selectedBrands.map((bId) => {
       const found = brands.find((b) => String(b.value) === String(bId));
       if (found) return found.label;
-      const TWO_WHEELER_MAKERS = {
-        15005: "Bajaj", 15010: "Hero", 15017: "OLA",
-        15019: "Royal Enfield", 15021: "TVS", 15024: "Yamaha",
-      };
-      const allMakers = { ...MAKER_NAME_MAPPING, ...TWO_WHEELER_MAKERS };
+      const candidateMakers = apiBodyType === "TWO_WHEELER" ? TWO_WHEELER_MAKERS : MAKER_NAME_MAPPING;
+      const allMakers = candidateMakers;
       return allMakers[bId] || (String(bId) === String(initialFilters?.makerId) ? initialFilters?.brandName : "") || String(bId);
     }).filter(Boolean);
 
