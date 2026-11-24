@@ -97,6 +97,7 @@ function SearchContent({
   const [isLoading, setIsLoading] = useState(true);
   const [removeFilterHandler, setRemoveFilterHandler] = useState(null);
   const [clearAllHandler, setClearAllHandler] = useState(null);
+  const [sortChangeHandler, setSortChangeHandler] = useState(null);
 
   return (
     <>
@@ -105,6 +106,7 @@ function SearchContent({
         activeFilters={activeFilters}
         onRemoveFilter={removeFilterHandler}
         onClearAll={clearAllHandler}
+        onSortChange={sortChangeHandler}
       />
 
       <Layout>
@@ -113,6 +115,7 @@ function SearchContent({
           onFilterChange={setActiveFilters}
           onRemoveFilterHandlerChange={setRemoveFilterHandler}
           onClearAllHandlerChange={setClearAllHandler}
+          onSortChangeHandlerChange={setSortChangeHandler}
           onRelatedChange={setRelatedVehicles}
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
