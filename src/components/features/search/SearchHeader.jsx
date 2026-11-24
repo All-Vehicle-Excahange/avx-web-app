@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { ArrowUpDown, ChevronDown, X, MapPin } from "lucide-react";
 import { useSearchParams, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { findModelFamily } from "@/data/modelFamilies";
 
@@ -21,15 +22,37 @@ export default function SearchHeader({
   activeFilters = [],
   onRemoveFilter,
   onClearAll,
+  onSortChange,
   seoH1,
 }) {
   const [open, setOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showAllChips, setShowAllChips] = useState(false);
-  const [selected, setSelected] = useState(sortOptions[0]);
   const dropdownRef = useRef(null);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const pathname = usePathname();
+
+  const currentSortBy = router?.query?.sortBy || searchParams?.get("sortBy") || "";
+  const currentDirection = router?.query?.direction || searchParams?.get("direction") || "";
+
+  const initialSelected = useMemo(() => {
+    return (
+      sortOptions.find(
+        (opt) => opt.sortBy === (currentSortBy || "") && opt.direction === (currentDirection || ""),
+      ) || sortOptions[0]
+    );
+  }, [currentSortBy, currentDirection]);
+
+  const [selected, setSelected] = useState(initialSelected);
+
+  useEffect(() => {
+    const matched =
+      sortOptions.find(
+        (opt) => opt.sortBy === (currentSortBy || "") && opt.direction === (currentDirection || ""),
+      ) || sortOptions[0];
+    setSelected(matched);
+  }, [currentSortBy, currentDirection]);
 
   const vehicleType = searchParams.get("vehicleType");
   const bodyType = searchParams.get("bodyType");
@@ -137,6 +160,35 @@ export default function SearchHeader({
 
     return defaultTitle;
   }, [seoH1, activeFilters, isTwoWheeler, brandParam, bodyType, searchParams, pathname]);
+
+  const handleSelectSort = (option) => {
+    setSelected(option);
+    setOpen(false);
+
+    if (onSortChange) {
+      onSortChange(option);
+    }
+
+    const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
+    if (option.sortBy) {
+      params.set("sortBy", option.sortBy);
+      params.set("direction", option.direction);
+    } else {
+      params.delete("sortBy");
+      params.delete("direction");
+    }
+    params.delete("sort");
+
+    const queryString = params.toString();
+    const currentPath = router?.asPath
+      ? router.asPath.split("?")[0]
+      : (pathname || "/search");
+    const targetUrl = queryString ? `${currentPath}?${queryString}` : currentPath;
+
+    if (router?.push) {
+      router.push(targetUrl, undefined, { shallow: true });
+    }
+  };
 
   /* Close sort dropdown on outside click */
   useEffect(() => {
@@ -390,13 +442,10 @@ export default function SearchHeader({
                         : (pathname || "/search");
 
                       return (
-                        <Link
+                        <button
+                          type="button"
                           key={option.label}
-                          href={targetUrl}
-                          onClick={() => {
-                            setSelected(option);
-                            setOpen(false);
-                          }}
+                          onClick={() => handleSelectSort(option)}
                           className={`
                             block w-full text-left px-3 py-2
                             text-[12px] cursor-pointer
@@ -408,7 +457,7 @@ export default function SearchHeader({
                           `}
                         >
                           {option.label}
-                        </Link>
+                        </button>
                       );
                     })}
                   </div>

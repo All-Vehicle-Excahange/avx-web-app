@@ -118,6 +118,7 @@ export default function SearchWithCard({
   onFilterChange,
   onRemoveFilterHandlerChange,
   onClearAllHandlerChange,
+  onSortChangeHandlerChange,
   onRelatedChange,
   onConsultChange,
   onConsultPayloadChange,
@@ -194,8 +195,35 @@ export default function SearchWithCard({
     searchParams.get("variantId") || initialFilters.variantId;
   const variantParam = searchParams.get("variant") || initialFilters.variant;
   const budget = searchParams.get("budget") || initialFilters.budget;
-  const sortBy = searchParams.get("sortBy") || initialFilters.sortBy;
-  const direction = searchParams.get("direction") || initialFilters.direction;
+  const initialSortBy = router.query?.sortBy || searchParams?.get("sortBy") || initialFilters.sortBy || "";
+  const initialDirection = router.query?.direction || searchParams?.get("direction") || initialFilters.direction || "";
+
+  const [sortByState, setSortByState] = useState(initialSortBy);
+  const [directionState, setDirectionState] = useState(initialDirection);
+  const prevSortRef = useRef({ sortBy: initialSortBy, direction: initialDirection });
+
+  const activeUrlSortBy = router.query?.sortBy || searchParams?.get("sortBy") || initialFilters.sortBy || "";
+  const activeUrlDirection = router.query?.direction || searchParams?.get("direction") || initialFilters.direction || "";
+
+  useEffect(() => {
+    if (
+      activeUrlSortBy !== prevSortRef.current.sortBy ||
+      activeUrlDirection !== prevSortRef.current.direction
+    ) {
+      prevSortRef.current = { sortBy: activeUrlSortBy, direction: activeUrlDirection };
+      setSortByState(activeUrlSortBy);
+      setDirectionState(activeUrlDirection);
+      setCurrentPage(1);
+      setIsLoadingMore(false);
+      setAccumulatedVehicles([]);
+      lastProcessedPageRef.current = 1;
+      setSearchSessionId(null);
+      searchSessionIdRef.current = null;
+    }
+  }, [activeUrlSortBy, activeUrlDirection]);
+
+  const sortBy = sortByState;
+  const direction = directionState;
   const transmission =
     searchParams.get("transmission") || initialFilters.transmission;
 
@@ -1277,6 +1305,10 @@ export default function SearchWithCard({
       if (isAvxTier) {
         sp.set("reecommInventory", "true");
       }
+      if (sortByState) {
+        sp.set("sortBy", sortByState);
+        if (directionState) sp.set("direction", directionState);
+      }
       const qs = sp.toString();
       const finalUrl = qs ? `${newUrl}?${qs}` : newUrl;
       window.history.replaceState(null, "", finalUrl);
@@ -1322,7 +1354,7 @@ export default function SearchWithCard({
 
     if (typeof searchData.maxFilterPrice === "number" && searchData.maxFilterPrice > 0) {
       setServerMaxPrice(searchData.maxFilterPrice);
-      if (!userPriceInteractedRef.current && !budget) {
+      if (currentPage === 1 && !userPriceInteractedRef.current && !budget) {
         setMaxPrice(searchData.maxFilterPrice);
         setDebouncedMaxPrice(searchData.maxFilterPrice);
       }
@@ -2737,6 +2769,14 @@ export default function SearchWithCard({
       router.replace(defaultUrl, undefined, { shallow: true });
     }
 
+    setSortByState("");
+    setDirectionState("");
+    prevSortRef.current = { sortBy: "", direction: "" };
+    setAccumulatedVehicles([]);
+    lastProcessedPageRef.current = 1;
+    setSearchSessionId(null);
+    searchSessionIdRef.current = null;
+
     // Reset brand & model
     setSelectedBrands([]);
     setSelectedModels([]);
@@ -2824,6 +2864,26 @@ export default function SearchWithCard({
       onClearAllHandlerChange(() => handleClearFilters);
     }
   }, [onClearAllHandlerChange, handleClearFilters]);
+
+  const handleSortChange = useCallback((option) => {
+    const nextSortBy = option?.sortBy || "";
+    const nextDirection = option?.direction || "";
+    prevSortRef.current = { sortBy: nextSortBy, direction: nextDirection };
+    setSortByState(nextSortBy);
+    setDirectionState(nextDirection);
+    setCurrentPage(1);
+    setIsLoadingMore(false);
+    setAccumulatedVehicles([]);
+    lastProcessedPageRef.current = 1;
+    setSearchSessionId(null);
+    searchSessionIdRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    if (onSortChangeHandlerChange) {
+      onSortChangeHandlerChange(() => handleSortChange);
+    }
+  }, [onSortChangeHandlerChange, handleSortChange]);
 
   const handlePageChange = (page) => {
     const maxAllowedPage = totalElements > vehicles.length ? totalPages + 1 : totalPages;

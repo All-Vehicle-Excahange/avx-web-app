@@ -248,6 +248,7 @@ function SearchContent({
   const [isLoading, setIsLoading] = useState(true);
   const [removeFilterHandler, setRemoveFilterHandler] = useState(null);
   const [clearAllHandler, setClearAllHandler] = useState(null);
+  const [sortChangeHandler, setSortChangeHandler] = useState(null);
   const adsEnabled = isSearchLandingAdEligible({
     noindex: seo?.noindex,
     totalCount: seo?.totalCount,
@@ -261,6 +262,7 @@ function SearchContent({
         activeFilters={activeFilters}
         onRemoveFilter={removeFilterHandler}
         onClearAll={clearAllHandler}
+        onSortChange={sortChangeHandler}
         seoH1={seo?.h1}
       />
 
@@ -271,6 +273,7 @@ function SearchContent({
           onFilterChange={setActiveFilters}
           onRemoveFilterHandlerChange={setRemoveFilterHandler}
           onClearAllHandlerChange={setClearAllHandler}
+          onSortChangeHandlerChange={setSortChangeHandler}
           onRelatedChange={setRelatedVehicles}
           onConsultChange={setConsultants}
           onConsultPayloadChange={setConsultPayload}
@@ -395,9 +398,13 @@ function loadRelatedBlogLinks(slug, placeSlug) {
   }
 }
 
-async function fetchLandingListings(apiUrl, filterPath, body, clientType) {
+async function fetchLandingListings(apiUrl, filterPath, body, clientType, sortParams = {}) {
+  let url = `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`;
+  if (sortParams?.sortBy) {
+    url += `&sortBy=${encodeURIComponent(sortParams.sortBy)}&direction=${encodeURIComponent(sortParams.direction || "desc")}`;
+  }
   const listRes = await fetch(
-    `${apiUrl}/vehicle/filter/${filterPath}?pageNo=1&size=10`,
+    url,
     {
       method: "POST",
       headers: {
@@ -1005,7 +1012,13 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const listed = await fetchLandingListings(apiUrl, filterPath, body, clientType);
+    if (query?.sortBy) {
+      initialFilters.sortBy = String(query.sortBy);
+      initialFilters.direction = String(query.direction || "desc");
+    }
+
+    const sortParams = query?.sortBy ? { sortBy: query.sortBy, direction: query.direction } : {};
+    const listed = await fetchLandingListings(apiUrl, filterPath, body, clientType, sortParams);
     totalCount = listed.totalCount;
     initialVehicles = listed.initialVehicles;
 
@@ -1015,7 +1028,7 @@ export async function getServerSideProps(context) {
     if (totalCount < 1 && body.cityId && body.stateId && hasBrandOrModel) {
       const stateBody = { ...body };
       delete stateBody.cityId;
-      const widened = await fetchLandingListings(apiUrl, filterPath, stateBody, clientType);
+      const widened = await fetchLandingListings(apiUrl, filterPath, stateBody, clientType, sortParams);
       if (widened.totalCount > 0) {
         totalCount = widened.totalCount;
         initialVehicles = widened.initialVehicles;
